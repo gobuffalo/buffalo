@@ -8,10 +8,11 @@ import (
 	"testing"
 
 	"github.com/markbates/buffalo/render"
+	"github.com/markbates/going/willy"
 	"github.com/stretchr/testify/require"
 )
 
-func testApp() http.Handler {
+func testApp() *App {
 	a := New(Options{})
 	rt := a.Group("/router/tests")
 
@@ -51,4 +52,34 @@ func Test_Router(t *testing.T) {
 		b, _ := ioutil.ReadAll(res.Body)
 		r.Equal(v, string(b))
 	}
+}
+
+func Test_Router_Group(t *testing.T) {
+	r := require.New(t)
+
+	a := testApp()
+	g := a.Group("/api/v1")
+	g.GET("/users", func(c Context) error {
+		return c.NoContent(201)
+	})
+
+	w := willy.New(a)
+	res := w.Request("/api/v1/users").Get()
+	r.Equal(201, res.Code)
+}
+
+func Test_Router_Group_Middleware(t *testing.T) {
+	r := require.New(t)
+
+	a := testApp()
+	a.Use(func(h Handler) Handler { return h })
+	r.Len(a.middlewareStack.stack, 1)
+
+	g := a.Group("/api/v1")
+	r.Len(a.middlewareStack.stack, 1)
+	r.Len(g.middlewareStack.stack, 1)
+
+	g.Use(func(h Handler) Handler { return h })
+	r.Len(a.middlewareStack.stack, 1)
+	r.Len(g.middlewareStack.stack, 2)
 }
