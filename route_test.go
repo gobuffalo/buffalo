@@ -12,7 +12,7 @@ func Test_App_Routes_without_Root(t *testing.T) {
 	a := New(Options{})
 	r.Nil(a.root)
 
-	a.GET("/foo", func(c Context) error { return nil })
+	a.GET("/foo", voidHandler)
 
 	routes := a.Routes()
 	r.Len(routes, 1)
@@ -29,7 +29,7 @@ func Test_App_Routes_with_Root(t *testing.T) {
 	r.Nil(a.root)
 
 	g := a.Group("/api/v1")
-	g.GET("/foo", func(c Context) error { return nil })
+	g.GET("/foo", voidHandler)
 
 	routes := a.Routes()
 	r.Len(routes, 1)
