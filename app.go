@@ -47,7 +47,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func New(opts Options) *App {
-	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("GO_ENV"), "development"))
+	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("BUFFALO_ENV"), defaults.String(os.Getenv("GO_ENV"), "development")))
 	if opts.Logger == nil {
 		l := log.New()
 		l.Level, _ = log.ParseLevel(defaults.String(opts.LogLevel, "debug"))
