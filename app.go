@@ -48,7 +48,6 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func New(opts Options) *App {
 	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("GO_ENV"), "development"))
-	opts.DefaultContentType = defaults.String(opts.DefaultContentType, "text/html")
 	if opts.Logger == nil {
 		l := log.New()
 		l.Level, _ = log.ParseLevel(defaults.String(opts.LogLevel, "debug"))
