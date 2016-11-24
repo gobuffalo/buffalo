@@ -26,6 +26,9 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ws := &buffaloResponse{
 		ResponseWriter: w,
 	}
+	if a.MethodOverride != nil {
+		a.MethodOverride(r)
+	}
 	a.router.ServeHTTP(ws, r)
 }
 
@@ -35,6 +38,9 @@ func New(opts Options) *App {
 		l := log.New()
 		l.Level, _ = log.ParseLevel(defaults.String(opts.LogLevel, "debug"))
 		opts.Logger = l
+	}
+	if opts.MethodOverride == nil {
+		opts.MethodOverride = MethodOverride
 	}
 	a := &App{
 		Options:         opts,
