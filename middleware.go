@@ -53,9 +53,9 @@ func (ms *middlewareStack) handler(h Handler) Handler {
 	return h
 }
 
-func newMiddlewareStack() middlewareStack {
+func newMiddlewareStack(mws ...MiddlewareFunc) middlewareStack {
 	return middlewareStack{
-		stack: []MiddlewareFunc{RequestLogger},
+		stack: mws,
 		skips: map[string]bool{},
 	}
 }

@@ -12,7 +12,8 @@ import (
 func Test_App_Dev_NotFound(t *testing.T) {
 	r := require.New(t)
 
-	a := New(Options{Env: "development"})
+	a := Standard()
+	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
 	w := willie.New(a)
@@ -27,7 +28,8 @@ func Test_App_Dev_NotFound(t *testing.T) {
 func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	r := require.New(t)
 
-	a := New(Options{Env: "development"})
+	a := Standard()
+	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
 	w := willie.New(a)

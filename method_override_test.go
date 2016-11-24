@@ -12,7 +12,7 @@ import (
 func Test_MethodOverride(t *testing.T) {
 	r := require.New(t)
 
-	a := New(Options{})
+	a := Standard()
 	a.PUT("/", func(c Context) error {
 		return c.Render(200, render.String("you put me!"))
 	})
