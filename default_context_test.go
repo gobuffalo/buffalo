@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
@@ -118,4 +119,42 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 	r.Equal(201, res.Code)
 
 	r.Equal("Mark", user.FirstName)
+}
+
+func Test_DefaultContext_Error_Default(t *testing.T) {
+	r := require.New(t)
+
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/", nil)
+	r.NoError(err)
+	c := DefaultContext{
+		response: res,
+		request:  req,
+		logger:   logrus.New(),
+	}
+
+	c.Error(123, errors.New("Boom!"))
+	r.Equal(123, res.Code)
+	r.Contains(res.Body.String(), "Boom!")
+}
+
+func Test_DefaultContext_Error_JSON(t *testing.T) {
+	r := require.New(t)
+
+	res := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "/", nil)
+	r.NoError(err)
+	req.Header.Set("Content-Type", "application/json")
+
+	c := DefaultContext{
+		response: res,
+		request:  req,
+		logger:   logrus.New(),
+	}
+
+	c.Error(123, errors.New("Boom!"))
+	r.Equal(123, res.Code)
+	r.Contains(res.Body.String(), "Boom!")
+	r.Contains(res.Body.String(), `"error":"Boom!`)
+	r.Contains(res.Body.String(), `"code":123`)
 }

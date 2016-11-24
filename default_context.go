@@ -113,6 +113,17 @@ func (d *DefaultContext) Error(status int, err error) error {
 	d.Logger().Errorln(err)
 	msg := fmt.Sprintf("%+v", err)
 	d.response.WriteHeader(status)
-	_, err = d.response.Write([]byte(msg))
+
+	ct := d.request.Header.Get("Content-Type")
+	switch strings.ToLower(ct) {
+	case "application/json", "text/json", "json":
+		err = json.NewEncoder(d.response).Encode(map[string]interface{}{
+			"error": msg,
+			"code":  status,
+		})
+	case "application/xml", "text/xml", "xml":
+	default:
+		_, err = d.response.Write([]byte(msg))
+	}
 	return err
 }
