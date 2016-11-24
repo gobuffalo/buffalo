@@ -119,32 +119,3 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 
 	r.Equal("Mark", user.FirstName)
 }
-
-// func Test_DefaultContext_Bind_XML(t *testing.T) {
-// 	r := require.New(t)
-//
-// 	user := struct {
-// 		FirstName string `json:"first_name"`
-// 	}{}
-//
-// 	a := New(Options{})
-// 	a.POST("/", func(c Context) error {
-// 		err := c.Bind(&user)
-// 		if err != nil {
-// 			return errors.WithStack(err)
-// 		}
-// 		return c.NoContent(201)
-// 	})
-//
-// 	w := willie.New(a)
-// 	req := w.Request("/")
-// 	req.Headers["Content-Type"] = "application/xml"
-// 	b, err := xml.Marshal(map[string]string{
-// 		"first_name": "Mark",
-// 	})
-// 	r.NoError(err)
-// 	res := req.Post(bytes.NewReader(b))
-// 	r.Equal(201, res.Code)
-//
-// 	r.Equal("Mark", user.FirstName)
-// }
