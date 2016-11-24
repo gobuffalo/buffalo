@@ -21,6 +21,8 @@ func App() http.Handler {
 	})
 	a.Use(func(h buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
+			// wrap all requests in a transaction and set the length
+			// of time doing things in the db to the log.
 			return models.DB.Transaction(func(tx *pop.Connection) error {
 				start := tx.Elapsed
 				defer func() {
