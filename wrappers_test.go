@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/markbates/going/willy"
+	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,7 +16,7 @@ func Test_WrapHandlerFunc(t *testing.T) {
 		res.Write([]byte("hello"))
 	}))
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/foo").Get()
 
 	r.Equal("hello", res.Body.String())
@@ -30,7 +30,7 @@ func Test_WrapHandler(t *testing.T) {
 		res.Write([]byte("hello"))
 	})))
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/foo").Get()
 
 	r.Equal("hello", res.Body.String())

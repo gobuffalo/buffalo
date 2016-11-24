@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/markbates/going/willy"
+	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +15,7 @@ func Test_App_Dev_NotFound(t *testing.T) {
 	a := New(Options{Env: "development"})
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/bad").Get()
 	r.Equal(404, res.Code)
 
@@ -30,7 +30,7 @@ func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	a := New(Options{Env: "development"})
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.JSON("/bad").Get()
 	r.Equal(404, res.Code)
 
@@ -48,7 +48,7 @@ func Test_App_Prod_NotFound(t *testing.T) {
 	a := New(Options{Env: "production"})
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/bad").Get()
 	r.Equal(404, res.Code)
 
@@ -68,7 +68,7 @@ func Test_App_Override_NotFound(t *testing.T) {
 	})
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/bad").Get()
 	r.Equal(404, res.Code)
 

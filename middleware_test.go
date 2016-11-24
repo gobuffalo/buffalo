@@ -3,7 +3,7 @@ package buffalo
 import (
 	"testing"
 
-	"github.com/markbates/going/willy"
+	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -26,7 +26,7 @@ func Test_App_Use(t *testing.T) {
 		return nil
 	})
 
-	w := willy.New(a)
+	w := willie.New(a)
 	w.Request("/").Get()
 	r.Len(log, 3)
 	r.Equal([]string{"start", "handler", "end"}, log)
@@ -70,7 +70,7 @@ func Test_App_Skip(t *testing.T) {
 
 	a.Skip(mw2, h2)
 
-	w := willy.New(a)
+	w := willie.New(a)
 
 	w.Request("/h2").Get()
 	r.Len(log, 3)

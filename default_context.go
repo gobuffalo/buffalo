@@ -1,12 +1,16 @@
 package buffalo
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/gorilla/schema"
 	"github.com/markbates/buffalo/render"
 	"github.com/pkg/errors"
 )
@@ -74,6 +78,21 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	data["params"] = pp
 	err := rr.Render(d.response, data)
 	return err
+}
+
+func (d *DefaultContext) Bind(value interface{}) error {
+	switch strings.ToLower(d.request.Header.Get("Content-Type")) {
+	case "application/json":
+		return json.NewDecoder(d.request.Body).Decode(value)
+	case "application/xml":
+		return xml.NewDecoder(d.request.Body).Decode(value)
+	default:
+		err := d.request.ParseForm()
+		if err != nil {
+			return err
+		}
+		return schema.NewDecoder().Decode(value, d.request.PostForm)
+	}
 }
 
 func (d *DefaultContext) NoContent(status int) error {

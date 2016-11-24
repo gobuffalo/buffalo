@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/markbates/buffalo/render"
-	"github.com/markbates/going/willy"
+	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -64,7 +64,7 @@ func Test_Router_Group(t *testing.T) {
 		return c.NoContent(201)
 	})
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/api/v1/users").Get()
 	r.Equal(201, res.Code)
 }
@@ -98,7 +98,7 @@ func Test_Router_ServeFiles(t *testing.T) {
 	a := New(Options{})
 	a.ServeFiles("/assets", http.Dir(filepath.Dir(tmpFile.Name())))
 
-	w := willy.New(a)
+	w := willie.New(a)
 	res := w.Request("/assets/%s", filepath.Base(tmpFile.Name())).Get()
 
 	r.Equal(200, res.Code)

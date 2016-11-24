@@ -18,8 +18,7 @@ type Context interface {
 	LogField(string, interface{})
 	LogFields(map[string]interface{})
 	Logger() Logger
-
-	// render functions
+	Bind(interface{}) error
 	Render(int, render.Renderer) error
 	Error(int, error) error
 	NoContent(int) error

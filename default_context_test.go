@@ -7,6 +7,8 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/markbates/buffalo/render"
+	"github.com/markbates/willie"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -68,3 +70,81 @@ func Test_DefaultContext_Render(t *testing.T) {
 	r.Equal(123, res.Code)
 	r.Equal("Hello Mark!", res.Body.String())
 }
+
+func Test_DefaultContext_Bind_Default(t *testing.T) {
+	r := require.New(t)
+
+	user := struct {
+		FirstName string `schema:"first_name"`
+	}{}
+
+	a := New(Options{})
+	a.POST("/", func(c Context) error {
+		err := c.Bind(&user)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return c.NoContent(201)
+	})
+
+	w := willie.New(a)
+	uv := url.Values{"first_name": []string{"Mark"}}
+	res := w.Request("/").Post(uv)
+	r.Equal(201, res.Code)
+
+	r.Equal("Mark", user.FirstName)
+}
+
+func Test_DefaultContext_Bind_JSON(t *testing.T) {
+	r := require.New(t)
+
+	user := struct {
+		FirstName string `json:"first_name"`
+	}{}
+
+	a := New(Options{})
+	a.POST("/", func(c Context) error {
+		err := c.Bind(&user)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return c.NoContent(201)
+	})
+
+	w := willie.New(a)
+	res := w.JSON("/").Post(map[string]string{
+		"first_name": "Mark",
+	})
+	r.Equal(201, res.Code)
+
+	r.Equal("Mark", user.FirstName)
+}
+
+// func Test_DefaultContext_Bind_XML(t *testing.T) {
+// 	r := require.New(t)
+//
+// 	user := struct {
+// 		FirstName string `json:"first_name"`
+// 	}{}
+//
+// 	a := New(Options{})
+// 	a.POST("/", func(c Context) error {
+// 		err := c.Bind(&user)
+// 		if err != nil {
+// 			return errors.WithStack(err)
+// 		}
+// 		return c.NoContent(201)
+// 	})
+//
+// 	w := willie.New(a)
+// 	req := w.Request("/")
+// 	req.Headers["Content-Type"] = "application/xml"
+// 	b, err := xml.Marshal(map[string]string{
+// 		"first_name": "Mark",
+// 	})
+// 	r.NoError(err)
+// 	res := req.Post(bytes.NewReader(b))
+// 	r.Equal(201, res.Code)
+//
+// 	r.Equal("Mark", user.FirstName)
+// }
