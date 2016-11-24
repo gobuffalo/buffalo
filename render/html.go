@@ -27,19 +27,23 @@ func (s htmlRenderer) Render(w io.Writer, data interface{}) error {
 		names = append(names, s.HTMLLayout)
 	}
 
-	if len(names) > 1 {
-		lname := names[1]
-		layout := s.templates.Lookup(lname)
-		if layout == nil {
-			b, err := ioutil.ReadFile(lname)
+	for _, n := range names {
+		t := s.templates.Lookup(n)
+		if t == nil {
+			b, err := ioutil.ReadFile(n)
 			if err != nil {
 				return err
 			}
-			layout, err = s.templates.New(names[0]).Parse(string(b))
+			s.templates, err = s.templates.New(n).Parse(string(b))
 			if err != nil {
 				return err
 			}
 		}
+	}
+
+	if len(names) > 1 {
+		lname := names[1]
+		layout := s.templates.Lookup(lname)
 		layout = layout.Funcs(template.FuncMap{
 			"yield": s.yield(names[0], data),
 		})
@@ -50,16 +54,7 @@ func (s htmlRenderer) Render(w io.Writer, data interface{}) error {
 }
 
 func (s htmlRenderer) executeTemplate(name string, w io.Writer, data interface{}) error {
-	b, err := ioutil.ReadFile(name)
-	if err != nil {
-		return err
-	}
-	t, err := s.templates.New(name).Parse(string(b))
-	if err != nil {
-		return err
-	}
-	s.templates = t
-	return t.Execute(w, data)
+	return s.templates.ExecuteTemplate(w, name, data)
 }
 
 func HTML(names ...string) Renderer {
