@@ -11,7 +11,7 @@ import (
 
 type htmlRenderer struct {
 	*Engine
-	name string
+	names []string
 }
 
 func (s htmlRenderer) ContentType() string {
@@ -22,25 +22,31 @@ func (s htmlRenderer) Render(w io.Writer, data interface{}) error {
 	s.moot.Lock()
 	defer s.moot.Unlock()
 
-	if s.name != s.HTMLLayout && s.HTMLLayout != "" {
-		layout := s.templates.Lookup(s.HTMLLayout)
+	names := s.names
+	if s.HTMLLayout != "" {
+		names = append(names, s.HTMLLayout)
+	}
+
+	if len(names) > 1 {
+		lname := names[1]
+		layout := s.templates.Lookup(lname)
 		if layout == nil {
-			b, err := ioutil.ReadFile(s.HTMLLayout)
+			b, err := ioutil.ReadFile(lname)
 			if err != nil {
 				return err
 			}
-			layout, err = s.templates.New(s.name).Parse(string(b))
+			layout, err = s.templates.New(names[0]).Parse(string(b))
 			if err != nil {
 				return err
 			}
 		}
 		layout = layout.Funcs(template.FuncMap{
-			"yield": s.yield(s.name, data),
+			"yield": s.yield(names[0], data),
 		})
 		return layout.Execute(w, data)
 	}
 
-	return s.executeTemplate(s.name, w, data)
+	return s.executeTemplate(names[0], w, data)
 }
 
 func (s htmlRenderer) executeTemplate(name string, w io.Writer, data interface{}) error {
@@ -60,15 +66,15 @@ func (s htmlRenderer) executeTemplate(name string, w io.Writer, data interface{}
 	return t.Execute(w, data)
 }
 
-func HTML(name string) Renderer {
+func HTML(names ...string) Renderer {
 	e := New(&Options{})
-	return e.HTML(name)
+	return e.HTML(names...)
 }
 
-func (e *Engine) HTML(name string) Renderer {
+func (e *Engine) HTML(names ...string) Renderer {
 	hr := htmlRenderer{
 		Engine: e,
-		name:   name,
+		names:  names,
 	}
 	return hr
 }
