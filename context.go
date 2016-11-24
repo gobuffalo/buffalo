@@ -6,6 +6,10 @@ import (
 	"github.com/markbates/buffalo/render"
 )
 
+// Context holds on to information as you
+// pass it down through middleware, Handlers,
+// templates, etc... It strives to make your
+// life a happier one.
 type Context interface {
 	Response() http.ResponseWriter
 	Request() *http.Request
@@ -24,6 +28,8 @@ type Context interface {
 	NoContent(int) error
 }
 
+// ParamValues will most commonly be url.Values,
+// but isn't it great that you set your own? :)
 type ParamValues interface {
 	Get(string) string
 }

@@ -1,0 +1,11 @@
+development:
+  dialect: "sqlite3"
+  database: "./json-crud_development.sqlite"
+
+test:
+  dialect: "sqlite3"
+  database: "./json-crud_test.sqlite"
+
+production:
+  dialect: "sqlite3"
+  database: "./json-crud_production.sqlite"

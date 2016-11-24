@@ -21,9 +21,10 @@ var RequestLogger = func(h Handler) Handler {
 		defer func() {
 			ws := c.Response().(*buffaloResponse)
 			c.LogFields(logrus.Fields{
-				"duration": time.Now().Sub(now),
-				"size":     humanize.Bytes(uint64(ws.size)),
-				"status":   ws.status,
+				"duration":   time.Now().Sub(now),
+				"size":       ws.size,
+				"human_size": humanize.Bytes(uint64(ws.size)),
+				"status":     ws.status,
 			})
 			c.Logger().Info()
 		}()

@@ -15,6 +15,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// DefaultContext is, as its name implies, a default
+// implementation of the Context interface.
 type DefaultContext struct {
 	response    http.ResponseWriter
 	request     *http.Request
@@ -25,44 +27,63 @@ type DefaultContext struct {
 	data        map[string]interface{}
 }
 
+// Response returns the original Response for the request.
 func (d *DefaultContext) Response() http.ResponseWriter {
 	return d.response
 }
 
+// Request returns the original Request.
 func (d *DefaultContext) Request() *http.Request {
 	return d.request
 }
 
+// Params returns all of the parameters for the request,
+// including both named params and query string parameters.
+// These parameters are automatically available in templates
+// as "{{.params}}".
 func (d *DefaultContext) Params() ParamValues {
 	return d.params
 }
 
+// Logger returns the Logger for this context.
 func (d *DefaultContext) Logger() Logger {
 	return d.logger
 }
 
+// Param returns a param, either named or query string,
+// based on the key.
 func (d *DefaultContext) Param(key string) string {
 	return d.Params().Get(key)
 }
 
+// ParamInt tries to convert the requested parameter to
+// an int. It will  return an error if there is a problem.
 func (d *DefaultContext) ParamInt(key string) (int, error) {
 	k := d.Params().Get(key)
 	i, err := strconv.Atoi(k)
-	return i, errors.Wrapf(err, "could not convert %s to an int", k)
+	return i, errors.WithMessage(err, fmt.Sprintf("could not convert %s to an int", k))
 }
 
+// Set a value onto the Context. Any value set onto the Context
+// will be automatically available in templates.
 func (d *DefaultContext) Set(key string, value interface{}) {
 	d.data[key] = value
 }
 
+// Get a value that was previous set onto the Context.
 func (d *DefaultContext) Get(key string) interface{} {
 	return d.data[key]
 }
 
+// Session for the associated Request.
 func (d *DefaultContext) Session() *Session {
 	return d.session
 }
 
+// Render a status code and render.Renderer to the associated Response.
+// The request parameters will be made available to the render.Renderer
+// "{{.params}}". Any values set onto the Context will also automatically
+// be made available to the render.Renderer.
 func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	now := time.Now()
 	defer func() {
@@ -80,6 +101,11 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	return err
 }
 
+// Bind the interface to the request.Body. The type of binding
+// is dependent on the "Content-Type" for the request. If the type
+// is "application/json" it will use "json.NewDecoder". If the type
+// is "application/xml" it will use "xml.NewDecoder". The default
+// binder is "http://www.gorillatoolkit.org/pkg/schema".
 func (d *DefaultContext) Bind(value interface{}) error {
 	switch strings.ToLower(d.request.Header.Get("Content-Type")) {
 	case "application/json", "text/json", "json":
@@ -95,11 +121,15 @@ func (d *DefaultContext) Bind(value interface{}) error {
 	}
 }
 
+// NoContent will be rendered, but a status code will be set.
 func (d *DefaultContext) NoContent(status int) error {
 	d.response.WriteHeader(status)
 	return nil
 }
 
+// LogField adds the key/value pair onto the Logger to be printed out
+// as part of the request logging. This allows you to easily add things
+// like metrics (think DB times) to your request.
 func (d *DefaultContext) LogField(key string, value interface{}) {
 	d.logger = d.logger.WithField(key, value)
 }

@@ -8,6 +8,9 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// App is where it all happens! It holds on to options,
+// the underlying router, the middleware, and more.
+// Without an App you can't do much!
 type App struct {
 	Options
 	router          *httprouter.Router
@@ -28,6 +31,9 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.router.ServeHTTP(ws, r)
 }
 
+// New returns a new instance of App, without any frills
+// or thrills. Most people will want to use Standard which
+// adds some sane, and useful, defaults.
 func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 
@@ -46,6 +52,10 @@ func New(opts Options) *App {
 	return a
 }
 
+// Standard returns a new instace of App with sane defaults,
+// some not so sane defaults, and a few bits and pieces to make
+// your life that much easier. You'll want to use this almost
+// all of the time to build your applications.
 func Standard() *App {
 	a := New(NewOptions())
 	if a.MethodOverride == nil {
