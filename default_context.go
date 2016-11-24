@@ -82,9 +82,9 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 
 func (d *DefaultContext) Bind(value interface{}) error {
 	switch strings.ToLower(d.request.Header.Get("Content-Type")) {
-	case "application/json":
+	case "application/json", "text/json", "json":
 		return json.NewDecoder(d.request.Body).Decode(value)
-	case "application/xml":
+	case "application/xml", "text/xml", "xml":
 		return xml.NewDecoder(d.request.Body).Decode(value)
 	default:
 		err := d.request.ParseForm()
