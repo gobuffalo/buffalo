@@ -50,17 +50,13 @@ func (s htmlRenderer) Render(w io.Writer, data interface{}) error {
 }
 
 func (s htmlRenderer) executeTemplate(name string, w io.Writer, data interface{}) error {
-	var t *template.Template
-
-	if t == nil {
-		b, err := ioutil.ReadFile(name)
-		if err != nil {
-			return err
-		}
-		t, err = s.templates.New(name).Parse(string(b))
-		if err != nil {
-			return err
-		}
+	b, err := ioutil.ReadFile(name)
+	if err != nil {
+		return err
+	}
+	t, err := s.templates.New(name).Parse(string(b))
+	if err != nil {
+		return err
 	}
 	s.templates = t
 	return t.Execute(w, data)
