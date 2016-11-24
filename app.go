@@ -4,11 +4,9 @@ import (
 	"net/http"
 	"os"
 	"sync"
-	"time"
 
 	log "github.com/Sirupsen/logrus"
 
-	humanize "github.com/flosch/go-humanize"
 	gcontext "github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/markbates/going/defaults"
@@ -25,24 +23,9 @@ type App struct {
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer gcontext.Clear(r)
-	now := time.Now()
-	l := a.Logger.WithFields(log.Fields{
-		"method": r.Method,
-		"path":   r.URL,
-	})
-
 	ws := &buffaloResponse{
 		ResponseWriter: w,
-		logger:         l,
 	}
-	defer func() {
-		l = ws.logger.WithFields(log.Fields{
-			"duration": time.Now().Sub(now),
-			"size":     humanize.Bytes(uint64(ws.size)),
-			"status":   ws.status,
-		})
-		l.Info()
-	}()
 	a.router.ServeHTTP(ws, r)
 }
 

@@ -20,14 +20,10 @@ func (a *App) handlerToHandler(h Handler) httprouter.Handle {
 			response: ws,
 			request:  req,
 			params:   params,
-			logger:   ws.logger,
+			logger:   a.Logger,
 			session:  GetSession(req, ws),
 			data:     map[string]interface{}{},
 		}
-
-		defer func() {
-			ws.logger = c.logger
-		}()
 
 		err := a.middlewareStack.handler(h)(c)
 

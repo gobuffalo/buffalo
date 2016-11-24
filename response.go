@@ -8,7 +8,6 @@ import (
 type buffaloResponse struct {
 	status int
 	size   int
-	logger Logger
 	http.ResponseWriter
 }
 
