@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"path"
 	"sort"
 )
@@ -31,6 +32,10 @@ func (a *App) OPTIONS(p string, h Handler) {
 
 func (a *App) PATCH(p string, h Handler) {
 	a.addRoute("PATCH", p, h)
+}
+
+func (a *App) ServeFiles(p string, root http.FileSystem) {
+	a.router.ServeFiles(path.Join(p, "*filepath"), root)
 }
 
 func (a *App) ANY(p string, h Handler) {

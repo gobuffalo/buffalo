@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"testing"
 
 	"github.com/markbates/buffalo/render"
@@ -82,4 +83,24 @@ func Test_Router_Group_Middleware(t *testing.T) {
 	g.Use(func(h Handler) Handler { return h })
 	r.Len(a.middlewareStack.stack, 1)
 	r.Len(g.middlewareStack.stack, 2)
+}
+
+func Test_Router_ServeFiles(t *testing.T) {
+	r := require.New(t)
+
+	tmpFile, err := ioutil.TempFile("", "assets")
+	r.NoError(err)
+
+	af := []byte("hi")
+	_, err = tmpFile.Write(af)
+	r.NoError(err)
+
+	a := New(Options{})
+	a.ServeFiles("/assets", http.Dir(filepath.Dir(tmpFile.Name())))
+
+	w := willy.New(a)
+	res := w.Request("/assets/%s", filepath.Base(tmpFile.Name())).Get()
+
+	r.Equal(200, res.Code)
+	r.Equal(af, res.Body.Bytes())
 }
