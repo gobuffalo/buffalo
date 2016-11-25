@@ -32,7 +32,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // New returns a new instance of App, without any frills
-// or thrills. Most people will want to use Standard which
+// or thrills. Most people will want to use Automatic which
 // adds some sane, and useful, defaults.
 func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
@@ -52,12 +52,12 @@ func New(opts Options) *App {
 	return a
 }
 
-// Standard returns a new instace of App with sane defaults,
+// Automatic returns a new instace of App with sane defaults,
 // some not so sane defaults, and a few bits and pieces to make
 // your life that much easier. You'll want to use this almost
 // all of the time to build your applications.
-func Standard() *App {
-	a := New(NewOptions())
+func Automatic(opts Options) *App {
+	a := New(opts)
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}

@@ -35,7 +35,7 @@ import (
 )
 
 func App() http.Handler {
-	a := buffalo.Standard()
+	a := buffalo.Automatic(buffalo.Options{})
 	a.Env = "development"
 
 	a.ServeFiles("/assets", assetsPath())

@@ -10,7 +10,7 @@ import (
 )
 
 func App() http.Handler {
-	a := buffalo.Standard()
+	a := buffalo.Automatic(buffalo.Options{})
 	a.Use(func(h buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
 			// since this is a JSON-only app, let's make sure the
