@@ -42,7 +42,26 @@ var htmlNotFound = `
 <html>
 <head>
 	<title>404 PAGE NOT FOUND</title>
+	<style>
+		body {
+			font-family: helvetica;
+		}
+		table {
+			width: 100%;
+		}
+		th {
+			text-align: left;
+		}
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		td {
+			margin: 0px;
+			padding: 10px;
+		}
+	</style>
 </head>
+<body>
 <h1>404 Page Not Found!</h1>
 <h3>Could not find path <code>[{{.method}}] {{.path}}</code></h3>
 <hr>
@@ -59,10 +78,11 @@ var htmlNotFound = `
 			<tr>
 				<td>{{.Method}}</td>
 				<td>{{.Path}}</td>
-				<td>{{.HandlerName}}</td>
+				<td><code>{{.HandlerName}}</code></td>
 			</tr>
 		{{end}}
 	</tbody>
 </table>
+</body>
 </html>
 `

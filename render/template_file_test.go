@@ -21,7 +21,7 @@ func Test_TemplateFile(t *testing.T) {
 	_, err = tmpFile.Write([]byte("{{.}}"))
 	r.NoError(err)
 
-	type ji func(string, string) render.Renderer
+	type ji func(string, ...string) render.Renderer
 
 	table := []ji{
 		render.TemplateFile,
