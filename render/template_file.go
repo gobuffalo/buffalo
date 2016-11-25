@@ -2,9 +2,11 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
+	"path/filepath"
 
 	"github.com/pkg/errors"
 )
@@ -27,7 +29,7 @@ func (s templateFileRenderer) Render(w io.Writer, data interface{}) error {
 	for _, n := range names {
 		t := s.templates.Lookup(n)
 		if t == nil {
-			b, err := ioutil.ReadFile(n)
+			b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, n))
 			if err != nil {
 				return err
 			}
@@ -68,7 +70,7 @@ func (s templateFileRenderer) yield(name string, data interface{}) func() templa
 		bb := &bytes.Buffer{}
 		err := s.executeTemplate(name, bb, data)
 		if err != nil {
-			return template.HTML(errors.WithStack(err).Error())
+			return template.HTML(fmt.Sprintf("<pre>%s</pre>", errors.WithStack(err).Error()))
 		}
 		return template.HTML(bb.String())
 	}
