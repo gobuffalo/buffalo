@@ -18,6 +18,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/sessions](https://github.com/gorilla/sessions)
 
+* [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
+
 * [github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
 
 * [github.com/markbates/buffalo/render](https://github.com/markbates/buffalo/render)
