@@ -3,6 +3,8 @@ package buffalo
 import (
 	"net/http"
 
+	"github.com/gorilla/websocket"
+
 	"github.com/markbates/buffalo/render"
 )
 
@@ -26,6 +28,7 @@ type Context interface {
 	Render(int, render.Renderer) error
 	Error(int, error) error
 	NoContent(int) error
+	Websocket() (*websocket.Conn, error)
 }
 
 // ParamValues will most commonly be url.Values,

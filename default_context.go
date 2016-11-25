@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/schema"
+	"github.com/gorilla/websocket"
 	"github.com/markbates/buffalo/render"
 	"github.com/pkg/errors"
 )
@@ -89,15 +90,15 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	defer func() {
 		d.LogField("render", time.Now().Sub(now))
 	}()
-	d.response.Header().Set("Content-Type", rr.ContentType())
-	d.response.WriteHeader(status)
+	d.Response().Header().Set("Content-Type", rr.ContentType())
+	d.Response().WriteHeader(status)
 	data := d.data
 	pp := map[string]string{}
 	for k, v := range d.params {
 		pp[k] = v[0]
 	}
 	data["params"] = pp
-	err := rr.Render(d.response, data)
+	err := rr.Render(d.Response(), data)
 	return err
 }
 
@@ -107,23 +108,23 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "http://www.gorillatoolkit.org/pkg/schema".
 func (d *DefaultContext) Bind(value interface{}) error {
-	switch strings.ToLower(d.request.Header.Get("Content-Type")) {
+	switch strings.ToLower(d.Request().Header.Get("Content-Type")) {
 	case "application/json", "text/json", "json":
-		return json.NewDecoder(d.request.Body).Decode(value)
+		return json.NewDecoder(d.Request().Body).Decode(value)
 	case "application/xml", "text/xml", "xml":
-		return xml.NewDecoder(d.request.Body).Decode(value)
+		return xml.NewDecoder(d.Request().Body).Decode(value)
 	default:
-		err := d.request.ParseForm()
+		err := d.Request().ParseForm()
 		if err != nil {
 			return err
 		}
-		return schema.NewDecoder().Decode(value, d.request.PostForm)
+		return schema.NewDecoder().Decode(value, d.Request().PostForm)
 	}
 }
 
 // NoContent will be rendered, but a status code will be set.
 func (d *DefaultContext) NoContent(status int) error {
-	d.response.WriteHeader(status)
+	d.Response().WriteHeader(status)
 	return nil
 }
 
@@ -142,18 +143,28 @@ func (d *DefaultContext) Error(status int, err error) error {
 	err = errors.WithStack(err)
 	d.Logger().Errorln(err)
 	msg := fmt.Sprintf("%+v", err)
-	d.response.WriteHeader(status)
+	d.Response().WriteHeader(status)
 
-	ct := d.request.Header.Get("Content-Type")
+	ct := d.Request().Header.Get("Content-Type")
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
-		err = json.NewEncoder(d.response).Encode(map[string]interface{}{
+		err = json.NewEncoder(d.Response()).Encode(map[string]interface{}{
 			"error": msg,
 			"code":  status,
 		})
 	case "application/xml", "text/xml", "xml":
 	default:
-		_, err = d.response.Write([]byte(msg))
+		_, err = d.Response().Write([]byte(msg))
 	}
 	return err
+}
+
+func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
+	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
+}
+
+var defaultUpgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
 }
