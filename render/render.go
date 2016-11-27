@@ -19,22 +19,20 @@ type Engine struct {
 
 func New(opts *Options) *Engine {
 	if opts.TemplateFuncs == nil {
-		opts.TemplateFuncs = template.FuncMap{}
+		opts.TemplateFuncs = DefaultHelpers
 	}
-	opts.TemplateFuncs["yield"] = func() template.HTML {
-		return template.HTML("")
+	helpers := template.FuncMap{}
+	for k, v := range DefaultHelpers {
+		helpers[k] = v
 	}
-	opts.TemplateFuncs["partial"] = func(name string) template.HTML {
-		return template.HTML("")
-	}
-	opts.TemplateFuncs["debug"] = func(data interface{}) template.HTML {
-		return template.HTML(fmt.Sprintf("%+v", data))
+	for k, v := range opts.TemplateFuncs {
+		helpers[k] = v
 	}
 
-	opts.templates = template.New("").Funcs(opts.TemplateFuncs)
+	opts.templates = template.New("").Funcs(helpers)
 	if opts.TemplatesPath != "" {
 		var err error
-		opts.templates, err = parseAndCache(opts.TemplatesPath, opts.TemplateFuncs)
+		opts.templates, err = parseAndCache(opts.TemplatesPath, helpers)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -45,6 +43,18 @@ func New(opts *Options) *Engine {
 		moot:    &sync.Mutex{},
 	}
 	return e
+}
+
+var DefaultHelpers = template.FuncMap{
+	"yield": func() template.HTML {
+		return template.HTML("")
+	},
+	"partial": func(name string) template.HTML {
+		return template.HTML("")
+	},
+	"debug": func(data interface{}) template.HTML {
+		return template.HTML(fmt.Sprintf("%+v", data))
+	},
 }
 
 func parseAndCache(templatesPath string, helpers template.FuncMap) (*template.Template, error) {

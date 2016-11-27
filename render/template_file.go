@@ -15,6 +15,7 @@ type templateFileRenderer struct {
 	*Engine
 	contentType string
 	names       []string
+	helpers     template.FuncMap
 }
 
 func (s templateFileRenderer) ContentType() string {
@@ -41,12 +42,10 @@ func (s *templateFileRenderer) Render(w io.Writer, data Data) error {
 		}
 	}
 
-	tm = tm.Funcs(template.FuncMap{
-		"yield":   s.yield(names[0], data),
-		"partial": s.partial(data),
-	})
+	s.helpers["yield"] = s.yield(names[0], data)
+	s.helpers["partial"] = s.partial(data)
 
-	return tm.Execute(w, data)
+	return tm.Funcs(s.helpers).Execute(w, data)
 }
 
 func TemplateFile(c string, names ...string) Renderer {
@@ -55,10 +54,14 @@ func TemplateFile(c string, names ...string) Renderer {
 }
 
 func (e *Engine) TemplateFile(c string, names ...string) Renderer {
+	helpers := e.TemplateFuncs
+	if helpers == nil {
+	}
 	return &templateFileRenderer{
 		Engine:      e,
 		contentType: c,
 		names:       names,
+		helpers:     e.TemplateFuncs,
 	}
 }
 
@@ -96,7 +99,7 @@ func (s templateFileRenderer) Lookup(name string) (*template.Template, error) {
 		if err != nil {
 			return tm, errors.WithStack(fmt.Errorf("could not find template: %s", name))
 		}
-		tm, err = template.New(name).Funcs(s.TemplateFuncs).Parse(string(b))
+		tm, err = template.New(name).Funcs(s.helpers).Parse(string(b))
 		if err != nil {
 			return tm, errors.WithStack(err)
 		}
