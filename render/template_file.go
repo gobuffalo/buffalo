@@ -21,35 +21,32 @@ func (s templateFileRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s templateFileRenderer) Render(w io.Writer, data Data) error {
+func (s *templateFileRenderer) Render(w io.Writer, data Data) error {
 	s.moot.Lock()
 	defer s.moot.Unlock()
 
 	names := s.names
-	for _, n := range names {
-		t := s.templates.Lookup(n)
-		if t == nil {
-			b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, n))
-			if err != nil {
-				return err
-			}
-			s.templates, err = s.templates.New(n).Parse(string(b))
-			if err != nil {
-				return err
-			}
-		}
+
+	tname := names[0]
+	tm, err := s.Lookup(tname)
+	if err != nil {
+		return errors.WithStack(err)
 	}
 
 	if len(names) > 1 {
-		lname := names[1]
-		layout := s.templates.Lookup(lname)
-		layout = layout.Funcs(template.FuncMap{
-			"yield": s.yield(names[0], data),
-		})
-		return layout.Execute(w, data)
+		tname = names[1]
+		tm, err = s.Lookup(tname)
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	}
 
-	return s.executeTemplate(names[0], w, data)
+	tm = tm.Funcs(template.FuncMap{
+		"yield":   s.yield(names[0], data),
+		"partial": s.partial(data),
+	})
+
+	return tm.Execute(w, data)
 }
 
 func TemplateFile(c string, names ...string) Renderer {
@@ -58,7 +55,7 @@ func TemplateFile(c string, names ...string) Renderer {
 }
 
 func (e *Engine) TemplateFile(c string, names ...string) Renderer {
-	return templateFileRenderer{
+	return &templateFileRenderer{
 		Engine:      e,
 		contentType: c,
 		names:       names,
@@ -70,12 +67,43 @@ func (s templateFileRenderer) yield(name string, data Data) func() template.HTML
 		bb := &bytes.Buffer{}
 		err := s.executeTemplate(name, bb, data)
 		if err != nil {
-			return template.HTML(fmt.Sprintf("<pre>%s</pre>", errors.WithStack(err).Error()))
+			return s.htmlError(err)
 		}
 		return template.HTML(bb.String())
 	}
 }
 
+func (s *templateFileRenderer) partial(data Data) func(string) template.HTML {
+	return func(name string) template.HTML {
+		d, f := filepath.Split(name)
+		name = filepath.Join(d, "_"+f)
+		return s.yield(name, data)()
+	}
+}
+
 func (s templateFileRenderer) executeTemplate(name string, w io.Writer, data Data) error {
-	return s.templates.ExecuteTemplate(w, name, data)
+	tm, err := s.Lookup(name)
+	if err != nil {
+		return err
+	}
+	return tm.Execute(w, data)
+}
+
+func (s templateFileRenderer) Lookup(name string) (*template.Template, error) {
+	tm := s.templates.Lookup(name)
+	if tm == nil {
+		b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, name))
+		if err != nil {
+			return tm, errors.WithStack(fmt.Errorf("could not find template: %s", name))
+		}
+		tm, err = template.New(name).Funcs(s.TemplateFuncs).Parse(string(b))
+		if err != nil {
+			return tm, errors.WithStack(err)
+		}
+	}
+	return tm, nil
+}
+
+func (s templateFileRenderer) htmlError(err error) template.HTML {
+	return template.HTML(fmt.Sprintf("<pre>%s</pre>", errors.WithStack(err).Error()))
 }

@@ -163,6 +163,11 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
 }
 
+func (d *DefaultContext) Redirect(status int, url string) error {
+	http.Redirect(d.Response(), d.Request(), url, status)
+	return nil
+}
+
 var defaultUpgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,

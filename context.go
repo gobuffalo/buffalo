@@ -29,6 +29,7 @@ type Context interface {
 	Error(int, error) error
 	NoContent(int) error
 	Websocket() (*websocket.Conn, error)
+	Redirect(int, string) error
 }
 
 // ParamValues will most commonly be url.Values,

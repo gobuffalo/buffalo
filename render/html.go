@@ -9,7 +9,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 	if e.HTMLLayout != "" {
 		names = append(names, e.HTMLLayout)
 	}
-	hr := templateFileRenderer{
+	hr := &templateFileRenderer{
 		Engine:      e,
 		contentType: "text/html",
 		names:       names,
