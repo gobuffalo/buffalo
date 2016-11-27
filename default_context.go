@@ -141,7 +141,7 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 
 func (d *DefaultContext) Error(status int, err error) error {
 	err = errors.WithStack(err)
-	d.Logger().Errorln(err)
+	d.Logger().Error(err)
 	msg := fmt.Sprintf("%+v", err)
 	d.Response().WriteHeader(status)
 

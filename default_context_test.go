@@ -12,7 +12,6 @@ import (
 
 	"golang.org/x/net/websocket"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/markbates/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/pkg/errors"
@@ -68,7 +67,7 @@ func Test_DefaultContext_Render(t *testing.T) {
 		response: res,
 		params:   url.Values{"name": []string{"Mark"}},
 		data:     map[string]interface{}{"greet": "Hello"},
-		logger:   logrus.New(),
+		logger:   &MultiLogger{},
 	}
 
 	err := c.Render(123, render.String("{{.greet}} {{.params.name}}!"))
@@ -136,7 +135,7 @@ func Test_DefaultContext_Error_Default(t *testing.T) {
 	c := DefaultContext{
 		response: res,
 		request:  req,
-		logger:   logrus.New(),
+		logger:   &MultiLogger{},
 	}
 
 	c.Error(123, errors.New("Boom!"))
@@ -155,7 +154,7 @@ func Test_DefaultContext_Error_JSON(t *testing.T) {
 	c := DefaultContext{
 		response: res,
 		request:  req,
-		logger:   logrus.New(),
+		logger:   &MultiLogger{},
 	}
 
 	c.Error(123, errors.New("Boom!"))

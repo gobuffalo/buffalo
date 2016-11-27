@@ -1,9 +1,13 @@
 package buffalo
 
 import (
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sync"
 
+	"github.com/Sirupsen/logrus"
 	gcontext "github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 )
@@ -44,6 +48,12 @@ func New(opts Options) *App {
 		routes:          routes{},
 		middlewareStack: newMiddlewareStack(),
 	}
+	if a.Logger == nil {
+		l := logrus.New()
+		l.Level, _ = logrus.ParseLevel(opts.LogLevel)
+		ml := &MultiLogger{Loggers: []logrus.FieldLogger{l}}
+		a.Logger = ml
+	}
 	if a.NotFound == nil {
 		a.NotFound = a.notFound()
 	}
@@ -57,7 +67,35 @@ func New(opts Options) *App {
 // your life that much easier. You'll want to use this almost
 // all of the time to build your applications.
 func Automatic(opts Options) *App {
+	opts = optionsWithDefaults(opts)
+	if opts.Logger == nil {
+		lvl, _ := logrus.ParseLevel(opts.LogLevel)
+
+		hl := logrus.New()
+		hl.Level = lvl
+		hl.Formatter = &logrus.TextFormatter{}
+		// hl.Out = os.Stdout
+
+		err := os.MkdirAll(opts.LogDir, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		f, err := os.Create(filepath.Join(opts.LogDir, opts.Env+".log"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fl := logrus.New()
+		fl.Level = lvl
+		fl.Formatter = &logrus.JSONFormatter{}
+		fl.Out = f
+
+		ml := &MultiLogger{Loggers: []logrus.FieldLogger{hl, fl}}
+		opts.Logger = ml
+	}
+
 	a := New(opts)
+
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}

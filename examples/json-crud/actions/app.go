@@ -37,9 +37,9 @@ func App() http.Handler {
 	})
 
 	a.GET("/users", UsersList)
-	a.GET("/users/:id", UsersShow)
+	a.GET("/users/:user_id", UsersShow)
 	a.POST("/users", UsersCreate)
-	a.PUT("/users/:id", UsersUpdate)
-	a.DELETE("/users/:id", UsersDelete)
+	a.PUT("/users/:user_id", UsersUpdate)
+	a.DELETE("/users/:user_id", UsersDelete)
 	return a
 }

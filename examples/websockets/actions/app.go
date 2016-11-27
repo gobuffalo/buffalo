@@ -7,8 +7,7 @@ import (
 )
 
 func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{})
-	a.Env = "development"
+	a := buffalo.Automatic(buffalo.Options{Env: "development"})
 
 	a.ServeFiles("/assets", assetsPath())
 	a.GET("/", HomeHandler)

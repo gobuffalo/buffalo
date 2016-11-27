@@ -21,7 +21,7 @@ func UsersList(c buffalo.Context) error {
 
 func UsersShow(c buffalo.Context) error {
 	u := &models.User{}
-	id, err := c.ParamInt("id")
+	id, err := c.ParamInt("user_id")
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -51,7 +51,7 @@ func UsersCreate(c buffalo.Context) error {
 
 func UsersUpdate(c buffalo.Context) error {
 	u := &models.User{}
-	id, err := c.ParamInt("id")
+	id, err := c.ParamInt("user_id")
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -85,7 +85,7 @@ func UsersUpdate(c buffalo.Context) error {
 
 func UsersDelete(c buffalo.Context) error {
 	u := &models.User{}
-	id, err := c.ParamInt("id")
+	id, err := c.ParamInt("user_id")
 	if err != nil {
 		return errors.WithStack(err)
 	}
