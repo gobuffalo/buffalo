@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"html/template"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -62,37 +63,81 @@ var newCmd = &cobra.Command{
 			return err
 		}
 
-		packagePath := strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
-
-		data := map[string]interface{}{
-			"name":        name,
-			"packagePath": packagePath,
-			"actionsPath": filepath.Join(packagePath, "actions"),
+		err = genNewFiles(name, rootPath)
+		if err != nil {
+			return err
 		}
 
-		for fn, tv := range newTemplates {
-			dir := filepath.Dir(fn)
-			err := os.MkdirAll(filepath.Join(rootPath, dir), 0777)
-			if err != nil {
-				return err
-			}
-			t, err := template.New(fn).Parse(tv)
-			if err != nil {
-				return err
-			}
-			fmt.Printf("-- ./%s/%s\n", name, fn)
-			f, err := os.Create(filepath.Join(rootPath, fn))
-			if err != nil {
-				return err
-			}
-			err = t.Execute(f, data)
-			if err != nil {
-				return err
-			}
+		err = installDeps(pwd, rootPath)
+		if err != nil {
+			return err
 		}
-
 		return err
 	},
+}
+
+func installDeps(pwd string, rootPath string) error {
+	defer os.Chdir(pwd)
+	err := os.Chdir(rootPath)
+	if err != nil {
+		return err
+	}
+
+	return runCommands(
+		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
+		exec.Command("glide", "init", "--non-interactive"),
+		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/refresh"),
+		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/"),
+		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/soda"),
+		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/grift"),
+		exec.Command("glide", "rebuild"),
+		exec.Command("refresh", "init"),
+	)
+}
+
+func runCommands(cmds ...*exec.Cmd) error {
+	for _, cmd := range cmds {
+		cmd.Stdin = os.Stdin
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func genNewFiles(name, rootPath string) error {
+	packagePath := strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
+
+	data := map[string]interface{}{
+		"name":        name,
+		"packagePath": packagePath,
+		"actionsPath": filepath.Join(packagePath, "actions"),
+	}
+
+	for fn, tv := range newTemplates {
+		dir := filepath.Dir(fn)
+		err := os.MkdirAll(filepath.Join(rootPath, dir), 0777)
+		if err != nil {
+			return err
+		}
+		t, err := template.New(fn).Parse(tv)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("-- ./%s/%s\n", name, fn)
+		f, err := os.Create(filepath.Join(rootPath, fn))
+		if err != nil {
+			return err
+		}
+		err = t.Execute(f, data)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func init() {

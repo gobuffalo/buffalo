@@ -10,6 +10,7 @@ var newTemplates = map[string]string{
 	"templates/application.html": nApplicationHTML,
 	"assets/application.js":      "",
 	"assets/application.css":     nApplicationCSS,
+	".gitignore":                 nGitignore,
 }
 
 var nMain = `package main
@@ -123,4 +124,12 @@ var nApplicationHTML = `<html>
 var nApplicationCSS = `body {
   font-family: helvetica;
 }
+`
+
+var nGitignore = `vendor/
+**/*.log
+**/*.sqlite
+bin/
+node_modules/
+{{ .name }}
 `
