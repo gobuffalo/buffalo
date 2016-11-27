@@ -18,7 +18,7 @@ func Test_HTML(t *testing.T) {
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
-	_, err = tmpFile.Write([]byte("{{.}}"))
+	_, err = tmpFile.Write([]byte("{{.name}}"))
 	r.NoError(err)
 
 	type ji func(...string) render.Renderer
@@ -34,7 +34,7 @@ func Test_HTML(t *testing.T) {
 			re := j(tmpFile.Name())
 			r.Equal("text/html", re.ContentType())
 			bb := &bytes.Buffer{}
-			err = re.Render(bb, "Mark")
+			err = re.Render(bb, render.Data{"name": "Mark"})
 			r.NoError(err)
 			r.Equal("Mark", strings.TrimSpace(bb.String()))
 		}
@@ -54,7 +54,7 @@ func Test_HTML(t *testing.T) {
 
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, "Mark")
+		err = re.Render(bb, render.Data{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
 	})

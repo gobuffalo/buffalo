@@ -18,7 +18,7 @@ func Test_TemplateFile(t *testing.T) {
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
-	_, err = tmpFile.Write([]byte("{{.}}"))
+	_, err = tmpFile.Write([]byte("{{.name}}"))
 	r.NoError(err)
 
 	type ji func(string, ...string) render.Renderer
@@ -32,7 +32,7 @@ func Test_TemplateFile(t *testing.T) {
 		re := j("foo/bar", tmpFile.Name())
 		r.Equal("foo/bar", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, "Mark")
+		err = re.Render(bb, render.Data{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	}

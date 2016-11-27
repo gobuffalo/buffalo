@@ -4,5 +4,7 @@ import "io"
 
 type Renderer interface {
 	ContentType() string
-	Render(io.Writer, interface{}) error
+	Render(io.Writer, Data) error
 }
+
+type Data map[string]interface{}

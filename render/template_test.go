@@ -21,12 +21,12 @@ func Test_Template(t *testing.T) {
 	}
 
 	for _, j := range table {
-		tmp, err := template.New("").Parse("{{.}}")
+		tmp, err := template.New("").Parse("{{.name}}")
 		r.NoError(err)
 		re := j("foo/bar", tmp)
 		r.Equal("foo/bar", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, "Mark")
+		err = re.Render(bb, render.Data{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	}

@@ -14,7 +14,7 @@ func (s templateRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s templateRenderer) Render(w io.Writer, data interface{}) error {
+func (s templateRenderer) Render(w io.Writer, data Data) error {
 	return s.template.Execute(w, data)
 }
 

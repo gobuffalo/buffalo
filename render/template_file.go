@@ -21,7 +21,7 @@ func (s templateFileRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s templateFileRenderer) Render(w io.Writer, data interface{}) error {
+func (s templateFileRenderer) Render(w io.Writer, data Data) error {
 	s.moot.Lock()
 	defer s.moot.Unlock()
 
@@ -65,7 +65,7 @@ func (e *Engine) TemplateFile(c string, names ...string) Renderer {
 	}
 }
 
-func (s templateFileRenderer) yield(name string, data interface{}) func() template.HTML {
+func (s templateFileRenderer) yield(name string, data Data) func() template.HTML {
 	return func() template.HTML {
 		bb := &bytes.Buffer{}
 		err := s.executeTemplate(name, bb, data)
@@ -76,6 +76,6 @@ func (s templateFileRenderer) yield(name string, data interface{}) func() templa
 	}
 }
 
-func (s templateFileRenderer) executeTemplate(name string, w io.Writer, data interface{}) error {
+func (s templateFileRenderer) executeTemplate(name string, w io.Writer, data Data) error {
 	return s.templates.ExecuteTemplate(w, name, data)
 }

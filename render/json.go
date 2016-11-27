@@ -13,7 +13,7 @@ func (s jsonRenderer) ContentType() string {
 	return "application/json"
 }
 
-func (s jsonRenderer) Render(w io.Writer, data interface{}) error {
+func (s jsonRenderer) Render(w io.Writer, data Data) error {
 	return json.NewEncoder(w).Encode(s.value)
 }
 

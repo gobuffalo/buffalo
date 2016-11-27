@@ -13,7 +13,7 @@ func (s xmlRenderer) ContentType() string {
 	return "application/xml"
 }
 
-func (s xmlRenderer) Render(w io.Writer, data interface{}) error {
+func (s xmlRenderer) Render(w io.Writer, data Data) error {
 	return xml.NewEncoder(w).Encode(s.value)
 }
 

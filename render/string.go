@@ -13,7 +13,7 @@ func (s stringRenderer) ContentType() string {
 	return "text/plain"
 }
 
-func (s stringRenderer) Render(w io.Writer, data interface{}) error {
+func (s stringRenderer) Render(w io.Writer, data Data) error {
 	t, err := template.New("").Parse(s.body)
 	if err != nil {
 		return err
