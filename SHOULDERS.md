@@ -6,6 +6,8 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
+* [github.com/Masterminds/glide](https://github.com/Masterminds/glide)
+
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
@@ -25,6 +27,14 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/buffalo/render](https://github.com/markbates/buffalo/render)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
+
+* [github.com/markbates/going/randx](https://github.com/markbates/going/randx)
+
+* [github.com/markbates/grift](https://github.com/markbates/grift)
+
+* [github.com/markbates/pop](https://github.com/markbates/pop)
+
+* [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 

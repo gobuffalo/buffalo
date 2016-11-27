@@ -12,18 +12,26 @@ import (
 
 var _ = Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
 var _ = Add("shoulders", func(c *Context) error {
-	cmd := exec.Command("go", "list", "-f", `'* {{ join .Deps  "\n"}}'`, ".")
-	b, err := cmd.Output()
-	if err != nil {
-		return err
+	giants := map[string]string{
+		"github.com/markbates/refresh": "github.com/markbates/refresh",
+		"github.com/markbates/grift":   "github.com/markbates/grift",
+		"github.com/markbates/pop":     "github.com/markbates/pop",
+		"github.com/Masterminds/glide": "github.com/Masterminds/glide",
 	}
 
-	list := strings.Split(string(b), "\n")
+	for _, p := range []string{".", "./render"} {
+		cmd := exec.Command("go", "list", "-f", `'* {{ join .Deps  "\n"}}'`, p)
+		b, err := cmd.Output()
+		if err != nil {
+			return err
+		}
 
-	giants := []string{}
-	for _, g := range list {
-		if strings.Contains(g, "github.com") {
-			giants = append(giants, g)
+		list := strings.Split(string(b), "\n")
+
+		for _, g := range list {
+			if strings.Contains(g, "github.com") {
+				giants[g] = g
+			}
 		}
 	}
 
@@ -45,7 +53,7 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 
 Thank you to the following **GIANTS**:
 
-{{ range .}}
-* [{{.}}](https://{{.}})
+{{ range $k, $v := .}}
+* [{{$k}}](https://{{$v}})
 {{ end }}
 `
