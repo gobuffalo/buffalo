@@ -34,6 +34,9 @@ func (s *templateFileRenderer) Render(w io.Writer, data Data) error {
 		return errors.WithStack(err)
 	}
 
+	s.helpers["yield"] = s.yield(names[0], data)
+	s.helpers["partial"] = s.partial
+
 	if len(names) > 1 {
 		tname = names[1]
 		tm, err = s.Lookup(tname)
@@ -41,9 +44,6 @@ func (s *templateFileRenderer) Render(w io.Writer, data Data) error {
 			return errors.WithStack(err)
 		}
 	}
-
-	s.helpers["yield"] = s.yield(names[0], data)
-	s.helpers["partial"] = s.partial(data)
 
 	return tm.Funcs(s.helpers).Execute(w, data)
 }
@@ -55,13 +55,11 @@ func TemplateFile(c string, names ...string) Renderer {
 
 func (e *Engine) TemplateFile(c string, names ...string) Renderer {
 	helpers := e.TemplateFuncs
-	if helpers == nil {
-	}
 	return &templateFileRenderer{
 		Engine:      e,
 		contentType: c,
 		names:       names,
-		helpers:     e.TemplateFuncs,
+		helpers:     helpers,
 	}
 }
 
@@ -76,12 +74,10 @@ func (s templateFileRenderer) yield(name string, data Data) func() template.HTML
 	}
 }
 
-func (s *templateFileRenderer) partial(data Data) func(string) template.HTML {
-	return func(name string) template.HTML {
-		d, f := filepath.Split(name)
-		name = filepath.Join(d, "_"+f)
-		return s.yield(name, data)()
-	}
+func (s *templateFileRenderer) partial(name string, data interface{}) template.HTML {
+	d, f := filepath.Split(name)
+	name = filepath.Join(d, "_"+f)
+	return s.yield(name, data)()
 }
 
 func (s templateFileRenderer) executeTemplate(name string, w io.Writer, data Data) error {
@@ -104,7 +100,7 @@ func (s templateFileRenderer) Lookup(name string) (*template.Template, error) {
 			return tm, errors.WithStack(err)
 		}
 	}
-	return tm, nil
+	return tm.Funcs(s.helpers), nil
 }
 
 func (s templateFileRenderer) htmlError(err error) template.HTML {

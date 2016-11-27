@@ -13,7 +13,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 		Engine:      e,
 		contentType: "text/html",
 		names:       names,
-		helpers:     DefaultHelpers,
+		helpers:     e.TemplateFuncs,
 	}
 	return hr
 }

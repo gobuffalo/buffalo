@@ -7,4 +7,4 @@ type Renderer interface {
 	Render(io.Writer, Data) error
 }
 
-type Data map[string]interface{}
+type Data interface{}

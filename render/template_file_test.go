@@ -33,7 +33,7 @@ func Test_TemplateFile(t *testing.T) {
 		re := j("foo/bar", tmpFile.Name())
 		r.Equal("foo/bar", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, render.Data{"name": "Mark"})
+		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	}
@@ -55,7 +55,7 @@ func Test_TemplateFile_Partial(t *testing.T) {
 	tmpFile, err := os.Create(filepath.Join(tPath, "index.html"))
 	r.NoError(err)
 
-	_, err = tmpFile.Write([]byte(`{{partial "foo.html"}}`))
+	_, err = tmpFile.Write([]byte(`{{partial "foo.html" .}}`))
 	r.NoError(err)
 
 	type ji func(string, ...string) render.Renderer
@@ -68,7 +68,7 @@ func Test_TemplateFile_Partial(t *testing.T) {
 		re := j("foo/bar", "index.html")
 		r.Equal("foo/bar", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, render.Data{"name": "Mark"})
+		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	}

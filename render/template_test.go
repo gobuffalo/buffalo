@@ -26,7 +26,7 @@ func Test_Template(t *testing.T) {
 		re := j("foo/bar", tmp)
 		r.Equal("foo/bar", re.ContentType())
 		bb := &bytes.Buffer{}
-		err = re.Render(bb, render.Data{"name": "Mark"})
+		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	}

@@ -22,7 +22,7 @@ func Test_String(t *testing.T) {
 		re := j("{{.name}}")
 		r.Equal("text/plain", re.ContentType())
 		bb := &bytes.Buffer{}
-		err := re.Render(bb, render.Data{"name": "Mark"})
+		err := re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", bb.String())
 	}

@@ -28,6 +28,7 @@ func New(opts *Options) *Engine {
 	for k, v := range opts.TemplateFuncs {
 		helpers[k] = v
 	}
+	opts.TemplateFuncs = helpers
 
 	opts.templates = template.New("").Funcs(helpers)
 	if opts.TemplatesPath != "" {
