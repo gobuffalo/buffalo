@@ -33,6 +33,8 @@ import (
 )
 
 var force bool
+var skipPop bool
+var dbType = "postgres"
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
@@ -83,16 +85,32 @@ func installDeps(pwd string, rootPath string) error {
 		return err
 	}
 
-	return runCommands(
+	cmds := []*exec.Cmd{
 		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
 		exec.Command("glide", "init", "--non-interactive"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/refresh"),
-		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/"),
-		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/soda"),
+		exec.Command("go", "install", "-v", "github.com/markbates/refresh"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/grift"),
-		exec.Command("glide", "rebuild"),
+		exec.Command("go", "install", "-v", "github.com/markbates/grift"),
 		exec.Command("refresh", "init"),
-	)
+	}
+
+	if !skipPop {
+		cmds = append(cmds,
+			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/"),
+			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/soda"),
+			exec.Command("go", "install", "-v", "github.com/markbates/pop/soda"),
+			exec.Command("soda", "g", "config", "-t", dbType),
+		)
+	}
+
+	err = runCommands(cmds...)
+
+	if err != nil {
+		return err
+	}
+
+	return err
 }
 
 func runCommands(cmds ...*exec.Cmd) error {
@@ -152,5 +170,7 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	newCmd.Flags().BoolVarP(&force, "force", "f", false, "delete and remake if the app already exists")
+	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips add pop/soda to your app")
+	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 
 }
