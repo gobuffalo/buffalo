@@ -19,7 +19,7 @@ var _ = Add("shoulders", func(c *Context) error {
 		"github.com/Masterminds/glide": "github.com/Masterminds/glide",
 	}
 
-	for _, p := range []string{".", "./render"} {
+	for _, p := range []string{".", "./render", "./buffalo/cmd"} {
 		cmd := exec.Command("go", "list", "-f", `'* {{ join .Deps  "\n"}}'`, p)
 		b, err := cmd.Output()
 		if err != nil {

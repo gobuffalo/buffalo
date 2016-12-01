@@ -21,7 +21,7 @@ func (a *App) handlerToHandler(h Handler) httprouter.Handle {
 			request:  req,
 			params:   params,
 			logger:   a.Logger,
-			session:  GetSession(req, ws),
+			session:  a.getSession(req, ws),
 			data:     map[string]interface{}{},
 		}
 

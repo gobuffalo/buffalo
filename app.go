@@ -51,7 +51,7 @@ func New(opts Options) *App {
 	if a.Logger == nil {
 		l := logrus.New()
 		l.Level, _ = logrus.ParseLevel(opts.LogLevel)
-		ml := &MultiLogger{Loggers: []logrus.FieldLogger{l}}
+		ml := &multiLogger{Loggers: []logrus.FieldLogger{l}}
 		a.Logger = ml
 	}
 	if a.NotFound == nil {
@@ -90,7 +90,7 @@ func Automatic(opts Options) *App {
 		fl.Formatter = &logrus.JSONFormatter{}
 		fl.Out = f
 
-		ml := &MultiLogger{Loggers: []logrus.FieldLogger{hl, fl}}
+		ml := &multiLogger{Loggers: []logrus.FieldLogger{hl, fl}}
 		opts.Logger = ml
 	}
 

@@ -67,7 +67,7 @@ func Test_DefaultContext_Render(t *testing.T) {
 		response: res,
 		params:   url.Values{"name": []string{"Mark"}},
 		data:     map[string]interface{}{"greet": "Hello"},
-		logger:   &MultiLogger{},
+		logger:   &multiLogger{},
 	}
 
 	err := c.Render(123, render.String("{{.greet}} {{.params.name}}!"))
@@ -135,7 +135,7 @@ func Test_DefaultContext_Error_Default(t *testing.T) {
 	c := DefaultContext{
 		response: res,
 		request:  req,
-		logger:   &MultiLogger{},
+		logger:   &multiLogger{},
 	}
 
 	c.Error(123, errors.New("Boom!"))
@@ -154,7 +154,7 @@ func Test_DefaultContext_Error_JSON(t *testing.T) {
 	c := DefaultContext{
 		response: res,
 		request:  req,
-		logger:   &MultiLogger{},
+		logger:   &multiLogger{},
 	}
 
 	c.Error(123, errors.New("Boom!"))

@@ -2,19 +2,9 @@ package buffalo
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gorilla/sessions"
 )
-
-// Store is the `github.com/gorilla/sessions` store used to back
-// the session. It defaults to use a cookie store and the ENV variable
-// `SESSION_SECRET`.
-var SessionStore = sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
-
-// SessionName is the name of the session cookie that is set. This defaults
-// to "_buffalo_session".
-var SessionName = "_buffalo_session"
 
 type Session struct {
 	Session *sessions.Session
@@ -44,8 +34,8 @@ func (s *Session) Delete(name interface{}) {
 }
 
 // Get a session using a request and response.
-func GetSession(r *http.Request, w http.ResponseWriter) *Session {
-	session, _ := SessionStore.Get(r, SessionName)
+func (a *App) getSession(r *http.Request, w http.ResponseWriter) *Session {
+	session, _ := a.SessionStore.Get(r, a.SessionName)
 	return &Session{
 		Session: session,
 		req:     r,
