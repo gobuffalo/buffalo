@@ -88,7 +88,7 @@ func installDeps(pwd string, rootPath string) error {
 	cmds := []*exec.Cmd{
 		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
 		exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
-		exec.Command("glide", "init", "--non-interactive", "--all-dependencies", "--skip-import"),
+		exec.Command("glide", "init", "--non-interactive", "--skip-import"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/refresh"),
 		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/refresh"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/grift"),
@@ -116,6 +116,7 @@ func installDeps(pwd string, rootPath string) error {
 
 func runCommands(cmds ...*exec.Cmd) error {
 	for _, cmd := range cmds {
+		fmt.Printf("-> %s", strings.Join(cmd.Args, " "))
 		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
