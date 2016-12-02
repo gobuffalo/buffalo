@@ -16,7 +16,7 @@ func Test_Func(t *testing.T) {
 
 	table := []ji{
 		render.Func,
-		render.New(&render.Options{}).Func,
+		render.New(render.Options{}).Func,
 	}
 
 	for _, j := range table {

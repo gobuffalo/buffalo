@@ -15,7 +15,7 @@ func Test_String(t *testing.T) {
 
 	table := []ji{
 		render.String,
-		render.New(&render.Options{}).String,
+		render.New(render.Options{}).String,
 	}
 
 	for _, j := range table {

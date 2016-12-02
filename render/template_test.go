@@ -17,7 +17,7 @@ func Test_Template(t *testing.T) {
 
 	table := []ji{
 		render.Template,
-		render.New(&render.Options{}).Template,
+		render.New(render.Options{}).Template,
 	}
 
 	for _, j := range table {

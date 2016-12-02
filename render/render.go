@@ -13,11 +13,11 @@ import (
 )
 
 type Engine struct {
-	*Options
+	Options
 	moot *sync.Mutex
 }
 
-func New(opts *Options) *Engine {
+func New(opts Options) *Engine {
 	if opts.TemplateFuncs == nil {
 		opts.TemplateFuncs = defaultHelpers
 	}

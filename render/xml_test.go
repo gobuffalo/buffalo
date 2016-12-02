@@ -16,7 +16,7 @@ func Test_XML(t *testing.T) {
 
 	table := []ji{
 		render.XML,
-		render.New(&render.Options{}).XML,
+		render.New(render.Options{}).XML,
 	}
 
 	type user struct {

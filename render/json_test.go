@@ -16,7 +16,7 @@ func Test_JSON(t *testing.T) {
 
 	table := []ji{
 		render.JSON,
-		render.New(&render.Options{}).JSON,
+		render.New(render.Options{}).JSON,
 	}
 
 	for _, j := range table {

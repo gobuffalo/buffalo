@@ -61,7 +61,7 @@ import (
 var r *render.Engine
 
 func init() {
-	r = render.New(&render.Options{
+	r = render.New(render.Options{
 		TemplatesPath: fromHere("../templates"),
 		HTMLLayout:    "application.html",
 	})

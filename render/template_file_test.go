@@ -26,7 +26,7 @@ func Test_TemplateFile(t *testing.T) {
 
 	table := []ji{
 		render.TemplateFile,
-		render.New(&render.Options{}).TemplateFile,
+		render.New(render.Options{}).TemplateFile,
 	}
 
 	for _, j := range table {
@@ -61,7 +61,7 @@ func Test_TemplateFile_Partial(t *testing.T) {
 	type ji func(string, ...string) render.Renderer
 
 	table := []ji{
-		render.New(&render.Options{TemplatesPath: tPath}).TemplateFile,
+		render.New(render.Options{TemplatesPath: tPath}).TemplateFile,
 	}
 
 	for _, j := range table {

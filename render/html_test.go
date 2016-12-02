@@ -27,7 +27,7 @@ func Test_HTML(t *testing.T) {
 
 		table := []ji{
 			render.HTML,
-			render.New(&render.Options{}).HTML,
+			render.New(render.Options{}).HTML,
 		}
 
 		for _, j := range table {
@@ -50,7 +50,7 @@ func Test_HTML(t *testing.T) {
 		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
 		r.NoError(err)
 
-		re := render.New(&render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name())
+		re := render.New(render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name())
 
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}

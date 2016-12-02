@@ -49,7 +49,7 @@ func (s *templateFileRenderer) Render(w io.Writer, data Data) error {
 }
 
 func TemplateFile(c string, names ...string) Renderer {
-	e := New(&Options{})
+	e := New(Options{})
 	return e.TemplateFile(c, names...)
 }
 

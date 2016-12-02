@@ -1,7 +1,7 @@
 package render
 
 func HTML(names ...string) Renderer {
-	e := New(&Options{})
+	e := New(Options{})
 	return e.HTML(names...)
 }
 
