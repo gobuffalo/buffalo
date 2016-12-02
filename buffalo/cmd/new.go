@@ -97,6 +97,7 @@ func installDeps(pwd string, rootPath string) error {
 
 	if !skipPop {
 		cmds = append(cmds,
+			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop"),
 			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/soda"),
 			exec.Command("go", "install", "-v", "./vendor/github.com/markbates/pop/soda"),
 			exec.Command("soda", "g", "config", "-t", dbType),
