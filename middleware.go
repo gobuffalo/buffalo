@@ -8,9 +8,9 @@ import (
 
 type MiddlewareFunc func(Handler) Handler
 
-func (a *App) Use(mw MiddlewareFunc) {
+func (a *App) Use(mw ...MiddlewareFunc) {
 	stack := a.middlewareStack.stack
-	a.middlewareStack.stack = append(stack, mw)
+	a.middlewareStack.stack = append(stack, mw...)
 }
 
 func (a *App) Skip(mw MiddlewareFunc, handlers ...Handler) {
