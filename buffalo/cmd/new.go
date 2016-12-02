@@ -89,17 +89,17 @@ func installDeps(pwd string, rootPath string) error {
 		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
 		exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
 		exec.Command("glide", "init", "--non-interactive", "--skip-import"),
-		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/refresh"),
+		glideGet("github.com/markbates/refresh"),
 		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/refresh"),
-		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/grift"),
+		glideGet("github.com/markbates/grift"),
 		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/grift"),
 		exec.Command("refresh", "init"),
 	}
 
 	if !skipPop {
 		cmds = append(cmds,
-			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/pop"),
-			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/pop/soda"),
+			glideGet("github.com/markbates/pop"),
+			glideGet("github.com/markbates/pop/soda"),
 			exec.Command("go", "install", "-v", "./vendor/github.com/markbates/pop/soda"),
 			exec.Command("soda", "g", "config", "-t", dbType),
 		)
@@ -114,9 +114,13 @@ func installDeps(pwd string, rootPath string) error {
 	return err
 }
 
+func glideGet(pkg string) *exec.Cmd {
+	return exec.Command("glide", "get", "-u", "--resolve-current", "--non-interactive", "--all-dependencies", pkg)
+}
+
 func runCommands(cmds ...*exec.Cmd) error {
 	for _, cmd := range cmds {
-		fmt.Printf("-> %s", strings.Join(cmd.Args, " "))
+		fmt.Printf("--> %s\n", strings.Join(cmd.Args, " "))
 		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
