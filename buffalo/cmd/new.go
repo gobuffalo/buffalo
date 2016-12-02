@@ -29,10 +29,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/markbates/pop/soda/cmd/generate"
 	"github.com/spf13/cobra"
 )
 
 var force bool
+var verbose bool
 var skipPop bool
 var dbType = "postgres"
 
@@ -60,7 +62,7 @@ var newCmd = &cobra.Command{
 		}
 
 		fmt.Printf("--> ./%s\n", name)
-		err = os.MkdirAll(name, 0777)
+		err = os.MkdirAll(name, 0644)
 		if err != nil {
 			return err
 		}
@@ -86,25 +88,26 @@ func installDeps(pwd string, rootPath string) error {
 	}
 
 	cmds := []*exec.Cmd{
-		// exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
-		// exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
-		// exec.Command("glide", "init", "--non-interactive", "--skip-import"),
-		glideGet("github.com/markbates/refresh/..."),
-		glideInstall("github.com/markbates/refresh"),
-		glideGet("github.com/markbates/grift/..."),
-		glideInstall("github.com/markbates/grift"),
-		exec.Command("go", "get", "-v", "-t", "./..."),
+		goGet("github.com/markbates/refresh/..."),
+		goInstall("github.com/markbates/refresh"),
+		goGet("github.com/markbates/grift/..."),
+		goInstall("github.com/markbates/grift"),
 	}
 
 	if !skipPop {
 		cmds = append(cmds,
-			glideGet("github.com/markbates/pop/..."),
-			glideInstall("github.com/markbates/pop/soda"),
-			exec.Command("soda", "g", "config", "-t", dbType),
+			goGet("github.com/markbates/pop/..."),
+			goInstall("github.com/markbates/pop/soda"),
 		)
 	}
 
+	cmds = append(cmds, appGoGet())
+
 	err = runCommands(cmds...)
+
+	if !skipPop {
+		generate.GenerateConfig(dbType, "./database.yml")
+	}
 
 	if err != nil {
 		return err
@@ -113,14 +116,22 @@ func installDeps(pwd string, rootPath string) error {
 	return err
 }
 
-func glideInstall(pkg string) *exec.Cmd {
-	// return exec.Command("go", "install", "-v", "./vendor" + pkg)
-	return exec.Command("go", "install", "-v", pkg)
+func goInstall(pkg string) *exec.Cmd {
+	args := []string{"install"}
+	if verbose {
+		args = append(args, "-v")
+	}
+	args = append(args, pkg)
+	return exec.Command("go", args...)
 }
 
-func glideGet(pkg string) *exec.Cmd {
-	// return exec.Command("glide", "get", "-u", "--non-interactive", pkg)
-	return exec.Command("go", "get", "-u", "-v", pkg)
+func goGet(pkg string) *exec.Cmd {
+	args := []string{"get", "-u"}
+	if verbose {
+		args = append(args, "-v")
+	}
+	args = append(args, pkg)
+	return exec.Command("go", args...)
 }
 
 func runCommands(cmds ...*exec.Cmd) error {
@@ -148,7 +159,7 @@ func genNewFiles(name, rootPath string) error {
 
 	for fn, tv := range newTemplates {
 		dir := filepath.Dir(fn)
-		err := os.MkdirAll(filepath.Join(rootPath, dir), 0777)
+		err := os.MkdirAll(filepath.Join(rootPath, dir), 0644)
 		if err != nil {
 			return err
 		}
@@ -156,7 +167,7 @@ func genNewFiles(name, rootPath string) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("-- ./%s/%s\n", name, fn)
+		fmt.Printf("--> ./%s/%s\n", name, fn)
 		f, err := os.Create(filepath.Join(rootPath, fn))
 		if err != nil {
 			return err
@@ -169,19 +180,19 @@ func genNewFiles(name, rootPath string) error {
 	return nil
 }
 
+func appGoGet() *exec.Cmd {
+	appArgs := []string{"get", "-t"}
+	if verbose {
+		appArgs = append(appArgs, "-v")
+	}
+	appArgs = append(appArgs, "./...")
+	return exec.Command("go", appArgs...)
+}
+
 func init() {
 	RootCmd.AddCommand(newCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// newCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	newCmd.Flags().BoolVarP(&force, "force", "f", false, "delete and remake if the app already exists")
+	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips add pop/soda to your app")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
-
 }
