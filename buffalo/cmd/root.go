@@ -28,8 +28,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Version = "0.3.0"
-
 var cfgFile string
 
 var RootCmd = &cobra.Command{
