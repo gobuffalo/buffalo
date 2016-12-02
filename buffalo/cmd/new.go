@@ -87,20 +87,18 @@ func installDeps(pwd string, rootPath string) error {
 
 	cmds := []*exec.Cmd{
 		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
-		exec.Command("go", "get", "-u", "-v", "github.com/markbates/refresh"),
-		exec.Command("go", "get", "-u", "-v", "github.com/markbates/grift"),
 		exec.Command("glide", "init", "--non-interactive"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/refresh"),
+		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/refresh"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/grift"),
+		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/grift"),
 		exec.Command("refresh", "init"),
 	}
 
 	if !skipPop {
 		cmds = append(cmds,
-			exec.Command("go", "get", "-u", "-v", "github.com/markbates/pop/soda"),
-			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/"),
 			exec.Command("glide", "get", "-v", "-u", "--non-interactive", "github.com/markbates/pop/soda"),
-			exec.Command("go", "install", "-v", "github.com/markbates/pop/soda"),
+			exec.Command("go", "install", "-v", "./vendor/github.com/markbates/pop/soda"),
 			exec.Command("soda", "g", "config", "-t", dbType),
 		)
 	}
