@@ -10,6 +10,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	gcontext "github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
+	"github.com/markbates/refresh/refresh/web"
 )
 
 // App is where it all happens! It holds on to options,
@@ -32,7 +33,12 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if a.MethodOverride != nil {
 		a.MethodOverride(r)
 	}
-	a.router.ServeHTTP(ws, r)
+	var h http.Handler
+	h = a.router
+	if a.Env == "development" {
+		h = web.ErrorChecker(h)
+	}
+	h.ServeHTTP(ws, r)
 }
 
 // New returns a new instance of App, without any frills
