@@ -9,6 +9,7 @@ import (
 	"github.com/markbates/going/defaults"
 )
 
+// Options are used to configure and define how your application should run.
 type Options struct {
 	// Env is the "environment" in which the App is running. Default is "development".
 	Env string

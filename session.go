@@ -6,6 +6,8 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+// Session wraps the "github.com/gorilla/sessions" API
+// in something a little cleaner and a bit more useable.
 type Session struct {
 	Session *sessions.Session
 	req     *http.Request

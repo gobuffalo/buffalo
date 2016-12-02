@@ -26,14 +26,6 @@ func (m *multiLogger) WithFields(fields map[string]interface{}) Logger {
 	return &multiLogger{Loggers: lgs}
 }
 
-func (m *multiLogger) WithError(err error) Logger {
-	lgs := []logrus.FieldLogger{}
-	for _, l := range m.Loggers {
-		lgs = append(lgs, l.WithError(err))
-	}
-	return &multiLogger{Loggers: lgs}
-}
-
 func (m *multiLogger) Debugf(format string, args ...interface{}) {
 	for _, l := range m.Loggers {
 		l.Debugf(format, args...)

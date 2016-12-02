@@ -17,9 +17,10 @@ var _ = Add("shoulders", func(c *Context) error {
 		"github.com/markbates/grift":   "github.com/markbates/grift",
 		"github.com/markbates/pop":     "github.com/markbates/pop",
 		"github.com/Masterminds/glide": "github.com/Masterminds/glide",
+		"github.com/spf13/cobra":       "github.com/spf13/cobra",
 	}
 
-	for _, p := range []string{".", "./render", "./buffalo/cmd"} {
+	for _, p := range []string{".", "./render"} {
 		cmd := exec.Command("go", "list", "-f", `'* {{ join .Deps  "\n"}}'`, p)
 		b, err := cmd.Output()
 		if err != nil {

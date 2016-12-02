@@ -8,8 +8,15 @@ import (
 	"github.com/markbates/going/randx"
 )
 
+// RequestLogger can be be overridden to a user specified
+// function that can be used to log the request.
 var RequestLogger = RequestLoggerFunc
 
+// RequestLoggerFunc is the default implementation of the RequestLogger.
+// By default it will log a uniq "request_id", the HTTP Method of the request,
+// the path that was requested, the duration (time) it took to process the
+// request, the size of the response (and the "human" size), and the status
+// code of the response.
 func RequestLoggerFunc(h Handler) Handler {
 	return func(c Context) error {
 		now := time.Now()

@@ -6,13 +6,36 @@ import (
 	"strings"
 )
 
+// MiddlewareFunc defines the interface for a piece of Buffalo
+// Middleware.
+/*
+	func DoSomething(next Handler) Handler {
+		return func(c Context) error {
+			// do something before calling the next handler
+			err := next(c)
+			// do something after call the handler
+			return err
+		}
+	}
+*/
 type MiddlewareFunc func(Handler) Handler
 
+// Use the specified Middleware for the App.
+// When defined on an `*App` the specified middleware will be
+// inherited by any `Group` calls that are made on that on
+// the App.
 func (a *App) Use(mw ...MiddlewareFunc) {
 	stack := a.middlewareStack.stack
 	a.middlewareStack.stack = append(stack, mw...)
 }
 
+// Skip a specified piece of middleware the specified Handlers.
+// This is useful for things like wrapping your application in an
+// authorization middleare, but skipping it for things the home
+// page, the login page, etc...
+/*
+	a.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
+*/
 func (a *App) Skip(mw MiddlewareFunc, handlers ...Handler) {
 	ms := &a.middlewareStack
 	ms.skip(mw, handlers...)
