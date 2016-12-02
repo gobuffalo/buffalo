@@ -93,6 +93,7 @@ func installDeps(pwd string, rootPath string) error {
 		glideInstall("github.com/markbates/refresh"),
 		glideGet("github.com/markbates/grift/..."),
 		glideInstall("github.com/markbates/grift"),
+		exec.Command("go", "get", "-v", "-t", "./..."),
 	}
 
 	if !skipPop {
