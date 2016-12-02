@@ -15,6 +15,9 @@
 package cmd
 
 import (
+	"html/template"
+	"os"
+
 	"github.com/markbates/refresh/cmd"
 	"github.com/spf13/cobra"
 )
@@ -26,8 +29,24 @@ var devCmd = &cobra.Command{
 	Long: `Runs your Buffalo app in 'development' mode.
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
-	Run: func(c *cobra.Command, args []string) {
-		cmd.Run("./.buffalo.dev.yml")
+	RunE: func(c *cobra.Command, args []string) error {
+		cfgFile := "./.buffalo.dev.yml"
+		_, err := os.Stat(cfgFile)
+		if err != nil {
+			f, err := os.Create(cfgFile)
+			if err != nil {
+				return err
+			}
+			t, err := template.New("").Parse(nRefresh)
+			err = t.Execute(f, map[string]interface{}{
+				"name": "buffalo",
+			})
+			if err != nil {
+				return err
+			}
+		}
+		cmd.Run(cfgFile)
+		return nil
 	},
 }
 

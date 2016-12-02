@@ -62,7 +62,7 @@ var newCmd = &cobra.Command{
 		}
 
 		fmt.Printf("--> ./%s\n", name)
-		err = os.MkdirAll(name, 0644)
+		err = os.MkdirAll(name, 0755)
 		if err != nil {
 			return err
 		}
@@ -159,7 +159,7 @@ func genNewFiles(name, rootPath string) error {
 
 	for fn, tv := range newTemplates {
 		dir := filepath.Dir(fn)
-		err := os.MkdirAll(filepath.Join(rootPath, dir), 0644)
+		err := os.MkdirAll(filepath.Join(rootPath, dir), 0755)
 		if err != nil {
 			return err
 		}
