@@ -2,6 +2,7 @@ package cmd
 
 var newTemplates = map[string]string{
 	"main.go":                    nMain,
+	"refresh.yml":                nRefresh,
 	"actions/app.go":             nApp,
 	"actions/home.go":            nHomeHandler,
 	"actions/home_test.go":       nHomeHandlerTest,
@@ -160,3 +161,17 @@ var _ = Add("routes", func(c *Context) error {
 	table.Render()
 	return nil
 })`
+
+var nRefresh = `app_root: .
+ignored_folders:
+- vendor
+- log
+- tmp
+included_extensions:
+- .go
+- .html
+build_path: /tmp
+build_delay: 200ns
+binary_name: {{.name}}-build
+command_flags: []
+enable_colors: true`
