@@ -1,4 +1,4 @@
-# Buffalo
+# Buffalo [![GoDoc](https://godoc.org/github.com/markbates/buffalo?status.svg)](https://godoc.org/github.com/markbates/buffalo) [![Build Status](https://travis-ci.org/markbates/buffalo.svg?branch=master)](https://travis-ci.org/markbates/buffalo)
 
 ## Shoulders of Giants
 
