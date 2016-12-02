@@ -114,7 +114,7 @@ func installDeps(pwd string, rootPath string) error {
 }
 
 func glideGet(pkg string) *exec.Cmd {
-	return exec.Command("glide", "get", "-u", "--resolve-current", "--non-interactive", "--all-dependencies", pkg)
+	return exec.Command("glide", "get", "-u", "--non-interactive", pkg)
 }
 
 func runCommands(cmds ...*exec.Cmd) error {
