@@ -87,7 +87,8 @@ func installDeps(pwd string, rootPath string) error {
 
 	cmds := []*exec.Cmd{
 		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
-		exec.Command("glide", "init", "--non-interactive"),
+		exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
+		exec.Command("glide", "init", "--non-interactive", "--all-dependencies", "--skip-import"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/refresh"),
 		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/refresh"),
 		exec.Command("glide", "get", "-v", "-u", "--non-interactive", "--all-dependencies", "github.com/markbates/grift"),
