@@ -86,20 +86,20 @@ func installDeps(pwd string, rootPath string) error {
 	}
 
 	cmds := []*exec.Cmd{
-		exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
-		exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
-		exec.Command("glide", "init", "--non-interactive", "--skip-import"),
+		// exec.Command("go", "get", "-u", "-v", "github.com/Masterminds/glide"),
+		// exec.Command("go", "install", "-v", "github.com/Masterminds/glide"),
+		// exec.Command("glide", "init", "--non-interactive", "--skip-import"),
 		glideGet("github.com/markbates/refresh/..."),
-		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/refresh"),
+		glideInstall("github.com/markbates/refresh"),
 		glideGet("github.com/markbates/grift/..."),
-		exec.Command("go", "install", "-v", "./vendor/github.com/markbates/grift"),
+		glideInstall("github.com/markbates/grift"),
 		exec.Command("refresh", "init"),
 	}
 
 	if !skipPop {
 		cmds = append(cmds,
 			glideGet("github.com/markbates/pop/..."),
-			exec.Command("go", "install", "-v", "./vendor/github.com/markbates/pop/soda"),
+			glideInstall("github.com/markbates/pop/soda"),
 			exec.Command("soda", "g", "config", "-t", dbType),
 		)
 	}
@@ -113,8 +113,14 @@ func installDeps(pwd string, rootPath string) error {
 	return err
 }
 
+func glideInstall(pkg string) *exec.Cmd {
+	// return exec.Command("go", "install", "-v", "./vendor" + pkg)
+	return exec.Command("go", "install", "-v", pkg)
+}
+
 func glideGet(pkg string) *exec.Cmd {
-	return exec.Command("glide", "get", "-u", "--non-interactive", pkg)
+	// return exec.Command("glide", "get", "-u", "--non-interactive", pkg)
+	return exec.Command("go", "get", "-u", "-v", pkg)
 }
 
 func runCommands(cmds ...*exec.Cmd) error {
