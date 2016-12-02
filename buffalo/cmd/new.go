@@ -99,7 +99,7 @@ func installDeps(pwd string, rootPath string) error {
 		cmds = append(cmds,
 			glideGet("github.com/markbates/pop/..."),
 			glideInstall("github.com/markbates/pop/soda"),
-			exec.Command("$GOPATH/bin/soda", "g", "config", "-t", dbType),
+			exec.Command("soda", "g", "config", "-t", dbType),
 		)
 	}
 
