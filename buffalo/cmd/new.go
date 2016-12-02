@@ -59,7 +59,7 @@ var newCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Printf("-- ./%s\n", name)
+		fmt.Printf("--> ./%s\n", name)
 		err = os.MkdirAll(name, 0777)
 		if err != nil {
 			return err
@@ -99,7 +99,7 @@ func installDeps(pwd string, rootPath string) error {
 		cmds = append(cmds,
 			glideGet("github.com/markbates/pop/..."),
 			glideInstall("github.com/markbates/pop/soda"),
-			exec.Command("soda", "g", "config", "-t", dbType),
+			exec.Command("$GOPATH/bin/soda", "g", "config", "-t", dbType),
 		)
 	}
 
