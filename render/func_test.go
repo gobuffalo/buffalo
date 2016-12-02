@@ -12,7 +12,7 @@ import (
 func Test_Func(t *testing.T) {
 	r := require.New(t)
 
-	type ji func(string, render.RenderFunc) render.Renderer
+	type ji func(string, render.RendererFunc) render.Renderer
 
 	table := []ji{
 		render.Func,

@@ -135,6 +135,9 @@ func (d *DefaultContext) LogField(key string, value interface{}) {
 	d.logger = d.logger.WithField(key, value)
 }
 
+// LogFields adds the key/value pairs onto the Logger to be printed out
+// as part of the request logging. This allows you to easily add things
+// like metrics (think DB times) to your request.
 func (d *DefaultContext) LogFields(values map[string]interface{}) {
 	d.logger = d.logger.WithFields(values)
 }
@@ -159,10 +162,13 @@ func (d *DefaultContext) Error(status int, err error) error {
 	return err
 }
 
+// Websocket returns an upgraded github.com/gorilla/websocket.Conn
+// that can then be used to work with websockets easily.
 func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
 }
 
+// Redirect a request with the given status to the given URL.
 func (d *DefaultContext) Redirect(status int, url string) error {
 	http.Redirect(d.Response(), d.Request(), url, status)
 	return nil

@@ -19,10 +19,10 @@ type Engine struct {
 
 func New(opts *Options) *Engine {
 	if opts.TemplateFuncs == nil {
-		opts.TemplateFuncs = DefaultHelpers
+		opts.TemplateFuncs = defaultHelpers
 	}
 	helpers := template.FuncMap{}
-	for k, v := range DefaultHelpers {
+	for k, v := range defaultHelpers {
 		helpers[k] = v
 	}
 	for k, v := range opts.TemplateFuncs {
@@ -46,7 +46,7 @@ func New(opts *Options) *Engine {
 	return e
 }
 
-var DefaultHelpers = template.FuncMap{
+var defaultHelpers = template.FuncMap{
 	"yield": func() template.HTML {
 		return template.HTML("")
 	},

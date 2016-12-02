@@ -1,12 +1,6 @@
 package buffalo
 
-import (
-	"time"
-
-	"github.com/Sirupsen/logrus"
-	humanize "github.com/dustin/go-humanize"
-	"github.com/markbates/going/randx"
-)
+import "github.com/Sirupsen/logrus"
 
 type Logger interface {
 	WithField(string, interface{}) Logger
@@ -27,28 +21,8 @@ type Logger interface {
 	Panic(...interface{})
 }
 
-var RequestLogger = func(h Handler) Handler {
-	return func(c Context) error {
-		now := time.Now()
-		c.LogFields(logrus.Fields{
-			"request_id": randx.String(10),
-			"method":     c.Request().Method,
-			"path":       c.Request().URL.String(),
-		})
-		defer func() {
-			ws := c.Response().(*buffaloResponse)
-			c.LogFields(logrus.Fields{
-				"duration":   time.Now().Sub(now),
-				"size":       ws.size,
-				"human_size": humanize.Bytes(uint64(ws.size)),
-				"status":     ws.status,
-			})
-			c.Logger().Info()
-		}()
-		return h(c)
-	}
-}
-
-func NewLogger() Logger {
-	return &multiLogger{Loggers: []logrus.FieldLogger{}}
+func NewLogger(level string) Logger {
+	l := logrus.New()
+	l.Level, _ = logrus.ParseLevel(level)
+	return &multiLogger{Loggers: []logrus.FieldLogger{l}}
 }

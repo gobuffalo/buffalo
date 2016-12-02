@@ -11,26 +11,31 @@ import (
 func (a *App) notFound() http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		if a.Env == "development" {
-			routes := a.Routes()
-			data := map[string]interface{}{
-				"routes": routes,
-				"method": req.Method,
-				"path":   req.URL.String(),
-			}
-			switch req.Header.Get("Content-Type") {
-			case "application/json":
-				res.WriteHeader(404)
-				json.NewEncoder(res).Encode(data)
-				return
-			default:
-				t, err := template.New("not-found").Parse(htmlNotFound)
-				if err != nil {
-					res.WriteHeader(500)
-					res.Write([]byte(errors.WithStack(err).Error()))
-					return
+			err := func() error {
+				routes := a.Routes()
+				data := map[string]interface{}{
+					"routes": routes,
+					"method": req.Method,
+					"path":   req.URL.String(),
 				}
-				res.WriteHeader(404)
-				t.Execute(res, data)
+				switch req.Header.Get("Content-Type") {
+				case "application/json":
+					res.WriteHeader(404)
+					return json.NewEncoder(res).Encode(data)
+				default:
+					t, err := template.New("not-found").Parse(htmlNotFound)
+					if err != nil {
+						res.WriteHeader(500)
+						err = errors.WithStack(err)
+						res.Write([]byte(err.Error()))
+						return err
+					}
+					res.WriteHeader(404)
+					return t.Execute(res, data)
+				}
+			}()
+			if err != nil {
+				a.Logger.Error(err)
 			}
 			return
 		}

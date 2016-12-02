@@ -10,13 +10,18 @@ import (
 )
 
 type Options struct {
-	Env            string
-	LogLevel       string
-	Logger         Logger
+	// Env is the "environment" in which the App is running. Default is "development".
+	Env string
+	// LogLevel defaults to "debug".
+	LogLevel string
+	// Logger to be used with the application. A default one is provided.
+	Logger Logger
+	// LogDir is the path to the directory for storing the JSON log files from the
+	// default Logger
 	LogDir         string
 	NotFound       http.Handler
 	MethodOverride func(r *http.Request)
-	// Store is the `github.com/gorilla/sessions` store used to back
+	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
 	// `SESSION_SECRET`.
 	SessionStore sessions.Store
@@ -26,6 +31,7 @@ type Options struct {
 	prefix      string
 }
 
+// NewOptions returns a new Options instance with sensible defaults
 func NewOptions() Options {
 	return optionsWithDefaults(Options{})
 }

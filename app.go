@@ -19,7 +19,7 @@ type App struct {
 	Options
 	router          *httprouter.Router
 	moot            *sync.Mutex
-	routes          routes
+	routes          RouteList
 	root            *App
 	middlewareStack middlewareStack
 }
@@ -45,14 +45,11 @@ func New(opts Options) *App {
 		Options:         opts,
 		router:          httprouter.New(),
 		moot:            &sync.Mutex{},
-		routes:          routes{},
+		routes:          RouteList{},
 		middlewareStack: newMiddlewareStack(),
 	}
 	if a.Logger == nil {
-		l := logrus.New()
-		l.Level, _ = logrus.ParseLevel(opts.LogLevel)
-		ml := &multiLogger{Loggers: []logrus.FieldLogger{l}}
-		a.Logger = ml
+		a.Logger = NewLogger(opts.LogLevel)
 	}
 	if a.NotFound == nil {
 		a.NotFound = a.notFound()
@@ -66,6 +63,8 @@ func New(opts Options) *App {
 // some not so sane defaults, and a few bits and pieces to make
 // your life that much easier. You'll want to use this almost
 // all of the time to build your applications.
+//
+// https://www.youtube.com/watch?v=BKbOplYmjZM
 func Automatic(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 	if opts.Logger == nil {

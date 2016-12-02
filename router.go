@@ -53,9 +53,8 @@ func (a *App) Group(path string) *App {
 	g.prefix = path
 	g.router = a.router
 	g.middlewareStack = a.middlewareStack
-	if a.root == nil {
-		g.root = a
-	} else {
+	g.root = a
+	if a.root != nil {
 		g.root = a.root
 	}
 	return g
