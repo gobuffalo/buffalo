@@ -30,6 +30,7 @@ var devCmd = &cobra.Command{
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
 	RunE: func(c *cobra.Command, args []string) error {
+		os.Setenv("GO_ENV", "development")
 		cfgFile := "./.buffalo.dev.yml"
 		_, err := os.Stat(cfgFile)
 		if err != nil {

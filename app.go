@@ -31,7 +31,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ResponseWriter: w,
 	}
 	if a.MethodOverride != nil {
-		a.MethodOverride(r)
+		a.MethodOverride(w, r)
 	}
 	var h http.Handler
 	h = a.router
@@ -73,6 +73,9 @@ func New(opts Options) *App {
 // https://www.youtube.com/watch?v=BKbOplYmjZM
 func Automatic(opts Options) *App {
 	opts = optionsWithDefaults(opts)
+	if opts.MethodOverride == nil {
+		opts.MethodOverride = MethodOverrideFunc
+	}
 	if opts.Logger == nil {
 		lvl, _ := logrus.ParseLevel(opts.LogLevel)
 

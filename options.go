@@ -21,7 +21,7 @@ type Options struct {
 	// default Logger
 	LogDir         string
 	NotFound       http.Handler
-	MethodOverride func(r *http.Request)
+	MethodOverride http.HandlerFunc
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
 	// `SESSION_SECRET`.
@@ -38,7 +38,7 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("BUFFALO_ENV"), defaults.String(os.Getenv("GO_ENV"), "development")))
+	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("GO_ENV"), "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	pwd, _ := os.Getwd()
 	opts.LogDir = defaults.String(opts.LogDir, filepath.Join(pwd, "logs"))
