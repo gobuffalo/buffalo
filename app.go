@@ -18,11 +18,12 @@ import (
 // Without an App you can't do much!
 type App struct {
 	Options
-	router          *httprouter.Router
-	moot            *sync.Mutex
-	routes          RouteList
-	root            *App
-	middlewareStack middlewareStack
+	// Middleware returns the current MiddlewareStack for the App/Group.
+	Middleware *MiddlewareStack
+	router     *httprouter.Router
+	moot       *sync.Mutex
+	routes     RouteList
+	root       *App
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -48,11 +49,11 @@ func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
-		Options:         opts,
-		router:          httprouter.New(),
-		moot:            &sync.Mutex{},
-		routes:          RouteList{},
-		middlewareStack: newMiddlewareStack(),
+		Options:    opts,
+		router:     httprouter.New(),
+		moot:       &sync.Mutex{},
+		routes:     RouteList{},
+		Middleware: newMiddlewareStack(),
 	}
 	if a.Logger == nil {
 		a.Logger = NewLogger(opts.LogLevel)

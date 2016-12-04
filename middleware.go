@@ -25,8 +25,29 @@ type MiddlewareFunc func(Handler) Handler
 // inherited by any `Group` calls that are made on that on
 // the App.
 func (a *App) Use(mw ...MiddlewareFunc) {
-	stack := a.middlewareStack.stack
-	a.middlewareStack.stack = append(stack, mw...)
+	a.Middleware.Use(mw...)
+}
+
+// MiddlewareStack manages the middleware stack for an App/Group.
+type MiddlewareStack struct {
+	stack []MiddlewareFunc
+	skips map[string]bool
+}
+
+// clear wipes out the current middleware stack for the App/Group,
+// any middleware previously defined will be removed leaving an empty
+// middleware stack.
+func (ms *MiddlewareStack) Clear() {
+	ms.stack = []MiddlewareFunc{}
+	ms.skips = map[string]bool{}
+}
+
+// Use the specified Middleware for the App.
+// When defined on an `*App` the specified middleware will be
+// inherited by any `Group` calls that are made on that on
+// the App.
+func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
+	ms.stack = append(ms.stack, mw...)
 }
 
 // Skip a specified piece of middleware the specified Handlers.
@@ -34,25 +55,15 @@ func (a *App) Use(mw ...MiddlewareFunc) {
 // authorization middleare, but skipping it for things the home
 // page, the login page, etc...
 /*
-	a.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
+	a.Middleware.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
 */
-func (a *App) Skip(mw MiddlewareFunc, handlers ...Handler) {
-	ms := &a.middlewareStack
-	ms.skip(mw, handlers...)
-}
-
-type middlewareStack struct {
-	stack []MiddlewareFunc
-	skips map[string]bool
-}
-
-func (ms *middlewareStack) skip(mw MiddlewareFunc, handlers ...Handler) {
+func (ms *MiddlewareStack) Skip(mw MiddlewareFunc, handlers ...Handler) {
 	for _, h := range handlers {
 		ms.skips[funcKey(mw, h)] = true
 	}
 }
 
-func (ms *middlewareStack) handler(h Handler) Handler {
+func (ms *MiddlewareStack) handler(h Handler) Handler {
 	if len(ms.stack) > 0 {
 		mh := func(_ Handler) Handler {
 			return h
@@ -76,8 +87,8 @@ func (ms *middlewareStack) handler(h Handler) Handler {
 	return h
 }
 
-func newMiddlewareStack(mws ...MiddlewareFunc) middlewareStack {
-	return middlewareStack{
+func newMiddlewareStack(mws ...MiddlewareFunc) *MiddlewareStack {
+	return &MiddlewareStack{
 		stack: mws,
 		skips: map[string]bool{},
 	}

@@ -32,7 +32,7 @@ func Test_App_Use(t *testing.T) {
 	r.Equal([]string{"start", "handler", "end"}, log)
 }
 
-func Test_App_Skip(t *testing.T) {
+func Test_Middleware_Skip(t *testing.T) {
 	r := require.New(t)
 
 	log := []string{}
@@ -68,7 +68,7 @@ func Test_App_Skip(t *testing.T) {
 	a.GET("/h1", h1)
 	a.GET("/h2", h2)
 
-	a.Skip(mw2, h2)
+	a.Middleware.Skip(mw2, h2)
 
 	w := willie.New(a)
 
@@ -80,4 +80,20 @@ func Test_App_Skip(t *testing.T) {
 	w.Request("/h1").Get()
 	r.Len(log, 5)
 	r.Equal([]string{"mw1 start", "mw2 start", "h1", "mw2 end", "mw1 end"}, log)
+}
+
+func Test_Middleware_Clear(t *testing.T) {
+	r := require.New(t)
+	mws := newMiddlewareStack()
+	mw := func(h Handler) Handler { return h }
+	mws.Use(mw)
+	mws.Skip(mw, voidHandler)
+
+	r.Len(mws.stack, 1)
+	r.Len(mws.skips, 1)
+
+	mws.Clear()
+
+	r.Len(mws.stack, 0)
+	r.Len(mws.skips, 0)
 }

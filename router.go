@@ -75,7 +75,9 @@ func (a *App) Group(path string) *App {
 	g := New(a.Options)
 	g.prefix = path
 	g.router = a.router
-	g.middlewareStack = a.middlewareStack
+	g.Middleware = newMiddlewareStack()
+	g.Middleware.skips = a.Middleware.skips
+	g.Middleware.stack = a.Middleware.stack
 	g.root = a
 	if a.root != nil {
 		g.root = a.root

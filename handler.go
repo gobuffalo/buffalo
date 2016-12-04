@@ -44,7 +44,7 @@ func (a *App) handlerToHandler(h Handler) httprouter.Handle {
 			data:     map[string]interface{}{},
 		}
 
-		err := a.middlewareStack.handler(h)(c)
+		err := a.Middleware.handler(h)(c)
 
 		if err != nil {
 			err := c.Error(500, err)

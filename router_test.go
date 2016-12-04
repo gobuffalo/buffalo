@@ -74,15 +74,15 @@ func Test_Router_Group_Middleware(t *testing.T) {
 
 	a := testApp()
 	a.Use(func(h Handler) Handler { return h })
-	r.Len(a.middlewareStack.stack, 1)
+	r.Len(a.Middleware.stack, 1)
 
 	g := a.Group("/api/v1")
-	r.Len(a.middlewareStack.stack, 1)
-	r.Len(g.middlewareStack.stack, 1)
+	r.Len(a.Middleware.stack, 1)
+	r.Len(g.Middleware.stack, 1)
 
 	g.Use(func(h Handler) Handler { return h })
-	r.Len(a.middlewareStack.stack, 1)
-	r.Len(g.middlewareStack.stack, 2)
+	r.Len(a.Middleware.stack, 1)
+	r.Len(g.Middleware.stack, 2)
 }
 
 func Test_Router_ServeFiles(t *testing.T) {
