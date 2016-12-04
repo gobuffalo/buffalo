@@ -11,7 +11,6 @@ type Logger interface {
 	Infof(string, ...interface{})
 	Printf(string, ...interface{})
 	Warnf(string, ...interface{})
-	Warningf(string, ...interface{})
 	Errorf(string, ...interface{})
 	Fatalf(string, ...interface{})
 	Debug(...interface{})

@@ -50,12 +50,6 @@ func (m *multiLogger) Warnf(format string, args ...interface{}) {
 	}
 }
 
-func (m *multiLogger) Warningf(format string, args ...interface{}) {
-	for _, l := range m.Loggers {
-		l.Warningf(format, args...)
-	}
-}
-
 func (m *multiLogger) Errorf(format string, args ...interface{}) {
 	for _, l := range m.Loggers {
 		l.Errorf(format, args...)
