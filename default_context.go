@@ -84,22 +84,25 @@ func (d *DefaultContext) Session() *Session {
 // Render a status code and render.Renderer to the associated Response.
 // The request parameters will be made available to the render.Renderer
 // "{{.params}}". Any values set onto the Context will also automatically
-// be made available to the render.Renderer.
+// be made available to the render.Renderer. To render "no content" pass
+// in a nil render.Renderer.
 func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	now := time.Now()
 	defer func() {
 		d.LogField("render", time.Now().Sub(now))
 	}()
-	d.Response().Header().Set("Content-Type", rr.ContentType())
 	d.Response().WriteHeader(status)
-	data := d.data
-	pp := map[string]string{}
-	for k, v := range d.params {
-		pp[k] = v[0]
+	if rr != nil {
+		d.Response().Header().Set("Content-Type", rr.ContentType())
+		data := d.data
+		pp := map[string]string{}
+		for k, v := range d.params {
+			pp[k] = v[0]
+		}
+		data["params"] = pp
+		return rr.Render(d.Response(), data)
 	}
-	data["params"] = pp
-	err := rr.Render(d.Response(), data)
-	return err
+	return nil
 }
 
 // Bind the interface to the request.Body. The type of binding
@@ -120,12 +123,6 @@ func (d *DefaultContext) Bind(value interface{}) error {
 		}
 		return schema.NewDecoder().Decode(value, d.Request().PostForm)
 	}
-}
-
-// NoContent will be rendered, but a status code will be set.
-func (d *DefaultContext) NoContent(status int) error {
-	d.Response().WriteHeader(status)
-	return nil
 }
 
 // LogField adds the key/value pair onto the Logger to be printed out

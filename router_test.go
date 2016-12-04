@@ -61,7 +61,7 @@ func Test_Router_Group(t *testing.T) {
 	a := testApp()
 	g := a.Group("/api/v1")
 	g.GET("/users", func(c Context) error {
-		return c.NoContent(201)
+		return c.Render(201, nil)
 	})
 
 	w := willie.New(a)

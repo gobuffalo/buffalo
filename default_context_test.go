@@ -90,7 +90,7 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return c.NoContent(201)
+		return c.Render(201, nil)
 	})
 
 	w := willie.New(a)
@@ -114,7 +114,7 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return c.NoContent(201)
+		return c.Render(201, nil)
 	})
 
 	w := willie.New(a)

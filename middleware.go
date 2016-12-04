@@ -34,7 +34,7 @@ type MiddlewareStack struct {
 	skips map[string]bool
 }
 
-// clear wipes out the current middleware stack for the App/Group,
+// Clear wipes out the current middleware stack for the App/Group,
 // any middleware previously defined will be removed leaving an empty
 // middleware stack.
 func (ms *MiddlewareStack) Clear() {

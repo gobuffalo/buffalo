@@ -27,7 +27,6 @@ type Context interface {
 	Bind(interface{}) error
 	Render(int, render.Renderer) error
 	Error(int, error) error
-	NoContent(int) error
 	Websocket() (*websocket.Conn, error)
 	Redirect(int, string) error
 }

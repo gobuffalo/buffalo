@@ -66,7 +66,7 @@ func (a *App) ANY(p string, h Handler) {
 // This is useful for creating groups of end-points that need to share
 // common functionality, like middleware.
 /*
-	g := a.Group("/api/v1)
+	g := a.Group("/api/v1")
 	g.Use(AuthorizeAPIMiddleware)
 	g.GET("/users, APIUsersHandler)
 	g.GET("/users/:user_id, APIUserShowHandler)
