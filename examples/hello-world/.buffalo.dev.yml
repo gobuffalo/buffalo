@@ -8,7 +8,7 @@ included_extensions:
 - .html
 build_path: /tmp
 build_delay: 200ns
-binary_name: hello_world-build
+binary_name: hello-world-build
 command_flags: []
 enable_colors: true
 log_name: buffalo

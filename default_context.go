@@ -121,7 +121,10 @@ func (d *DefaultContext) Bind(value interface{}) error {
 		if err != nil {
 			return err
 		}
-		return schema.NewDecoder().Decode(value, d.Request().PostForm)
+		dec := schema.NewDecoder()
+		dec.IgnoreUnknownKeys(true)
+		dec.ZeroEmpty(true)
+		return dec.Decode(value, d.Request().PostForm)
 	}
 }
 
@@ -166,8 +169,8 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 }
 
 // Redirect a request with the given status to the given URL.
-func (d *DefaultContext) Redirect(status int, url string) error {
-	http.Redirect(d.Response(), d.Request(), url, status)
+func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
+	http.Redirect(d.Response(), d.Request(), fmt.Sprintf(url, args...), status)
 	return nil
 }
 

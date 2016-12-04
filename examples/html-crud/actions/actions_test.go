@@ -2,7 +2,7 @@ package actions_test
 
 import (
 	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/json-crud/models"
+	"github.com/markbates/buffalo/examples/html-crud/models"
 	"github.com/markbates/pop"
 )
 

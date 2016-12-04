@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/markbates/buffalo/examples/hello_world/actions"
+	"github.com/markbates/buffalo/examples/hello-world/actions"
 )
 
 func main() {

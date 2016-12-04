@@ -12,6 +12,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
+* [github.com/fatih/color](https://github.com/fatih/color)
+
+* [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
+
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
 * [github.com/gorilla/schema](https://github.com/gorilla/schema)
@@ -35,6 +39,16 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
+
+* [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
+
+* [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
+
+* [github.com/mattn/go-colorable](https://github.com/mattn/go-colorable)
+
+* [github.com/mattn/go-isatty](https://github.com/mattn/go-isatty)
+
+* [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 

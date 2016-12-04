@@ -5,7 +5,7 @@ import (
 
 	"github.com/markbates/buffalo"
 	. "github.com/markbates/grift/grift"
-	"github.com/markbates/buffalo/examples/hello_world/actions"
+	"github.com/markbates/buffalo/examples/html-crud/actions"
 	"github.com/olekukonko/tablewriter"
 )
 

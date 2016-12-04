@@ -14,10 +14,12 @@ var DB *pop.Connection
 
 func init() {
 	var err error
-	DB, err = pop.Connect(defaults.String(os.Getenv("GO_ENV"), "development"))
+	env := defaults.String(os.Getenv("GO_ENV"), "development")
+	DB, err = pop.Connect(env)
 	if err != nil {
 		log.Fatal(err)
 	}
+	pop.Debug = env == "development"
 }
 
 var TransactionMW = func(h buffalo.Handler) buffalo.Handler {

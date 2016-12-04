@@ -2,8 +2,7 @@ package actions
 
 import (
 	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/json-crud/models"
-	"github.com/markbates/buffalo/render"
+	"github.com/markbates/buffalo/examples/html-crud/models"
 	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )
@@ -32,11 +31,17 @@ func UsersList(c buffalo.Context) error {
 		return c.Error(404, errors.WithStack(err))
 	}
 
-	return c.Render(200, render.JSON(users))
+	c.Set("users", users)
+	return c.Render(200, r.HTML("users/index.html"))
 }
 
 func UsersShow(c buffalo.Context) error {
-	return c.Render(200, render.JSON(c.Get("user")))
+	return c.Render(200, r.HTML("users/show.html"))
+}
+
+func UsersNew(c buffalo.Context) error {
+	c.Set("user", models.User{})
+	return c.Render(200, r.HTML("users/new.html"))
 }
 
 func UsersCreate(c buffalo.Context) error {
@@ -53,14 +58,19 @@ func UsersCreate(c buffalo.Context) error {
 	}
 	if verrs.HasAny() {
 		c.Set("verrs", verrs.Errors)
-		return c.Render(422, render.JSON(verrs))
+		c.Set("user", u)
+		return c.Render(422, r.HTML("users/new.html"))
 	}
 	err = tx.Create(u)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	return c.Render(201, render.JSON(u))
+	return c.Redirect(301, "/users/%d", u.ID)
+}
+
+func UsersEdit(c buffalo.Context) error {
+	return c.Render(200, r.HTML("users/edit.html"))
 }
 
 func UsersUpdate(c buffalo.Context) error {
@@ -78,7 +88,8 @@ func UsersUpdate(c buffalo.Context) error {
 	}
 	if verrs.HasAny() {
 		c.Set("verrs", verrs.Errors)
-		return c.Render(422, render.JSON(verrs))
+		c.Set("user", u)
+		return c.Render(422, r.HTML("users/edit.html"))
 	}
 	err = tx.Update(u)
 	if err != nil {
@@ -89,7 +100,7 @@ func UsersUpdate(c buffalo.Context) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	return c.Render(200, render.JSON(u))
+	return c.Redirect(301, "/users/%d", u.ID)
 }
 
 func UsersDelete(c buffalo.Context) error {
@@ -101,5 +112,5 @@ func UsersDelete(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	return c.Render(200, render.JSON(u))
+	return c.Redirect(301, "/users")
 }

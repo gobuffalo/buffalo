@@ -20,5 +20,7 @@ var MethodOverride http.HandlerFunc
 func MethodOverrideFunc(res http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		req.Method = defaults.String(req.FormValue("_method"), "POST")
+		req.Form.Del("_method")
+		req.PostForm.Del("_method")
 	}
 }

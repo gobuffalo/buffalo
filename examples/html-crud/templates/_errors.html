@@ -1,0 +1,11 @@
+{{ if .verrs }}
+<div class="errors">
+  <ul>
+    {{ range $k, $v := .verrs }}
+      {{ range $i, $vm := $v}}
+      <li>{{ $vm }}</li>
+      {{ end }}
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

@@ -1,6 +1,6 @@
 development:
   dialect: postgres
-  database: hello_world_development
+  database: hello-world_development
   user: postgres
   password: postgres
   host: 127.0.0.1
@@ -8,14 +8,14 @@ development:
 
 test:
   dialect: postgres
-  database: hello_world_test
+  database: hello-world_test
   user: postgres
   password: postgres
   host: 127.0.0.1
 
 production:
   dialect: postgres
-  database: hello_world_production
+  database: hello-world_production
   user: postgres
   password: postgres
   host: 127.0.0.1

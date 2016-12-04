@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/markbates/going/validate"
@@ -10,7 +11,7 @@ import (
 )
 
 type User struct {
-	ID        int       `json:"id" db:"id"`
+	ID        int       `json:"id" db:"id" schema:"-"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	FirstName string    `json:"first_name" db:"first_name"`
@@ -22,6 +23,10 @@ type User struct {
 func (u User) String() string {
 	b, _ := json.Marshal(u)
 	return string(b)
+}
+
+func (u User) FullName() string {
+	return fmt.Sprintf("%s %s", u.FirstName, u.LastName)
 }
 
 func (u *User) ValidateNew(tx *pop.Connection) (*validate.Errors, error) {

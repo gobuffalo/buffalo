@@ -3,4 +3,4 @@ vendor/
 **/*.sqlite
 bin/
 node_modules/
-hello_world
+hello-world

@@ -101,6 +101,32 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 	r.Equal("Mark", user.FirstName)
 }
 
+func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
+	r := require.New(t)
+
+	user := struct {
+		FirstName string `schema:"first_name"`
+	}{
+		FirstName: "Mark",
+	}
+
+	a := New(Options{})
+	a.POST("/", func(c Context) error {
+		err := c.Bind(&user)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return c.Render(201, nil)
+	})
+
+	w := willie.New(a)
+	uv := url.Values{"first_name": []string{""}}
+	res := w.Request("/").Post(uv)
+	r.Equal(201, res.Code)
+
+	r.Equal("", user.FirstName)
+}
+
 func Test_DefaultContext_Bind_JSON(t *testing.T) {
 	r := require.New(t)
 

@@ -36,6 +36,7 @@ import (
 var force bool
 var verbose bool
 var skipPop bool
+var skipUpdate bool
 var dbType = "postgres"
 
 var newCmd = &cobra.Command{
@@ -126,7 +127,10 @@ func goInstall(pkg string) *exec.Cmd {
 }
 
 func goGet(pkg string) *exec.Cmd {
-	args := []string{"get", "-u"}
+	args := []string{"get"}
+	if !skipUpdate {
+		args = append(args, "-u")
+	}
 	if verbose {
 		args = append(args, "-v")
 	}
@@ -194,5 +198,6 @@ func init() {
 	newCmd.Flags().BoolVarP(&force, "force", "f", false, "delete and remake if the app already exists")
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips add pop/soda to your app")
+	newCmd.Flags().BoolVar(&skipUpdate, "skip-update", false, "skips running -u on go get calls")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 }
