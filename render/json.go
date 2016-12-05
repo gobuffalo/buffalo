@@ -17,10 +17,14 @@ func (s jsonRenderer) Render(w io.Writer, data Data) error {
 	return json.NewEncoder(w).Encode(s.value)
 }
 
+// JSON renders the value using the "application/json"
+// content type.
 func JSON(v interface{}) Renderer {
 	return jsonRenderer{value: v}
 }
 
+// JSON renders the value using the "application/json"
+// content type.
 func (e *Engine) JSON(v interface{}) Renderer {
 	return JSON(v)
 }

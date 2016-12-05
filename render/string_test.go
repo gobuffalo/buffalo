@@ -19,7 +19,7 @@ func Test_String(t *testing.T) {
 	}
 
 	for _, j := range table {
-		re := j("{{.name}}")
+		re := j("{{name}}")
 		r.Equal("text/plain", re.ContentType())
 		bb := &bytes.Buffer{}
 		err := re.Render(bb, map[string]interface{}{"name": "Mark"})

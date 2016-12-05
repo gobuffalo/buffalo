@@ -18,7 +18,7 @@ func Test_HTML(t *testing.T) {
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
-	_, err = tmpFile.Write([]byte("{{.name}}"))
+	_, err = tmpFile.Write([]byte("{{name}}"))
 	r.NoError(err)
 
 	type ji func(...string) render.Renderer

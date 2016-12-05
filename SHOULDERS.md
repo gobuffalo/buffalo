@@ -10,6 +10,14 @@ Thank you to the following **GIANTS**:
 
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
+* [github.com/aymerick/raymond](https://github.com/aymerick/raymond)
+
+* [github.com/aymerick/raymond/ast](https://github.com/aymerick/raymond/ast)
+
+* [github.com/aymerick/raymond/lexer](https://github.com/aymerick/raymond/lexer)
+
+* [github.com/aymerick/raymond/parser](https://github.com/aymerick/raymond/parser)
+
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://github.com/fatih/color)

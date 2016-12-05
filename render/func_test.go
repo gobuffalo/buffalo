@@ -22,12 +22,12 @@ func Test_Func(t *testing.T) {
 	for _, j := range table {
 		bb := &bytes.Buffer{}
 		re := j("foo/bar", func(w io.Writer, data render.Data) error {
-			_, err := w.Write(data.([]byte))
+			_, err := w.Write([]byte(data["name"].(string)))
 			return err
 		})
 
 		r.Equal("foo/bar", re.ContentType())
-		err := re.Render(bb, []byte("Mark"))
+		err := re.Render(bb, render.Data{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", bb.String())
 	}

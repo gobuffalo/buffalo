@@ -16,7 +16,6 @@ var _ = Add("shoulders", func(c *Context) error {
 		"github.com/markbates/refresh": "github.com/markbates/refresh",
 		"github.com/markbates/grift":   "github.com/markbates/grift",
 		"github.com/markbates/pop":     "github.com/markbates/pop",
-		"github.com/Masterminds/glide": "github.com/Masterminds/glide",
 		"github.com/spf13/cobra":       "github.com/spf13/cobra",
 	}
 

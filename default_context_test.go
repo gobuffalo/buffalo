@@ -70,7 +70,7 @@ func Test_DefaultContext_Render(t *testing.T) {
 		logger:   &multiLogger{},
 	}
 
-	err := c.Render(123, render.String("{{.greet}} {{.params.name}}!"))
+	err := c.Render(123, render.String("{{greet}} {{params.name}}!"))
 	r.NoError(err)
 
 	r.Equal(123, res.Code)
