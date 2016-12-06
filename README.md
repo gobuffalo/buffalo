@@ -60,16 +60,16 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Routing
 
-[github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
+[github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter) - This router was chosen for it's speed, plain and simple. It's not without it's quirks, but its insanely fast and effecient, so I'll accept the quirks, for now.
 
 ### Task Runner (Optional)
 
-[github.com/markbates/grift](https://github.com/markbates/grift)
+[github.com/markbates/grift](https://github.com/markbates/grift) - If you're familiar with Rake tasks from Ruby, you'll be right at home using Grift. This package was chosen to allow for the easy running of simple, and common, tasks that most web applications need. Think things like seeding a database, or taking in a CSV file and generating database records. Buffalo shops with an example `routes` task that prints off the defined routes and the function that handles those requests.
 
 ### Models/ORM (Optional)
 
-[github.com/markbates/pop](https://github.com/markbates/pop)
+[github.com/markbates/pop](https://github.com/markbates/pop) - Accessing databases is nothing new in web applications. Pop, and it's command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop, and Soda, share the same core philosphies as Buffalo, so they were a natural choice.
 
 ## Benchmarks
 
-Oh, yeah, everyone wants benchmarks! What would a web framework be without it's benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you.
+Oh, yeah, everyone wants benchmarks! What would a web framework be without it's benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.
