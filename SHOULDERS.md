@@ -6,8 +6,6 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
-* [github.com/Masterminds/glide](https://github.com/Masterminds/glide)
-
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
 * [github.com/aymerick/raymond](https://github.com/aymerick/raymond)
