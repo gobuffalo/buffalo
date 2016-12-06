@@ -70,6 +70,10 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 [github.com/markbates/pop](https://github.com/markbates/pop) - Accessing databases is nothing new in web applications. Pop, and it's command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop, and Soda, share the same core philosphies as Buffalo, so they were a natural choice.
 
+### Sessions, Cookies, Websockets, and more...
+
+[github.com/gorilla](https://github.com/gorilla) - The Gorilla toolkit is a great set of packages designed to improve upon the standard libary for a variety of web related packages. With these high quality packages Buffalo is able to keep its "core" code to a minimum and focus on it's goal of glueing them all together to make your life better.
+
 ## Benchmarks
 
 Oh, yeah, everyone wants benchmarks! What would a web framework be without it's benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.

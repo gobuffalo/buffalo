@@ -35,11 +35,20 @@ import (
 	"net/http"
 
 	"github.com/markbates/buffalo"
+	{{if .withPop -}}
+	"github.com/markbates/buffalo/middleware"
+	"{{.modelsPath}}"
+	{{end -}}
 )
 
 func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{})
-	a.Env = "development"
+	a := buffalo.Automatic(buffalo.Options{
+		Env: "development",
+	})
+
+	{{if .withPop -}}
+	a.Use(middleware.PopTransaction(models.DB))
+	{{end -}}
 
 	a.ServeFiles("/assets", assetsPath())
 	a.GET("/", HomeHandler)
@@ -176,4 +185,27 @@ binary_name: {{.name}}-build
 command_flags: []
 enable_colors: true
 log_name: buffalo
+`
+
+var nModels = `package models
+
+import (
+	"log"
+	"os"
+
+	"github.com/markbates/going/defaults"
+	"github.com/markbates/pop"
+)
+
+var DB *pop.Connection
+
+func init() {
+	var err error
+	env := defaults.String(os.Getenv("GO_ENV"), "development")
+	DB, err = pop.Connect(env)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pop.Debug = env == "development"
+}
 `

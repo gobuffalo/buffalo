@@ -5,6 +5,7 @@ import (
 
 	"github.com/markbates/buffalo"
 	"github.com/markbates/buffalo/examples/html-crud/models"
+	"github.com/markbates/buffalo/middleware"
 )
 
 func App() http.Handler {
@@ -12,7 +13,7 @@ func App() http.Handler {
 	a.Env = "development"
 
 	a.ServeFiles("/assets", assetsPath())
-	a.Use(models.TransactionMW)
+	a.Use(middleware.PopTransaction(models.DB))
 	a.GET("/", func(c buffalo.Context) error {
 		return c.Redirect(http.StatusPermanentRedirect, "/users")
 	})

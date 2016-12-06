@@ -5,6 +5,7 @@ import (
 
 	"github.com/markbates/buffalo"
 	"github.com/markbates/buffalo/examples/json-crud/models"
+	"github.com/markbates/buffalo/middleware"
 )
 
 func App() http.Handler {
@@ -17,7 +18,7 @@ func App() http.Handler {
 			return h(c)
 		}
 	})
-	a.Use(models.TransactionMW)
+	a.Use(middleware.PopTransaction(models.DB))
 
 	a.Use(findUserMW)
 	a.GET("/users", UsersList)

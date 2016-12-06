@@ -104,11 +104,11 @@ func installDeps(pwd string, rootPath string) error {
 
 	cmds = append(cmds, appGoGet())
 
-	err = runCommands(cmds...)
-
 	if !skipPop {
 		generate.GenerateConfig(dbType, "./database.yml")
 	}
+
+	err = runCommands(cmds...)
 
 	if err != nil {
 		return err
@@ -159,6 +159,12 @@ func genNewFiles(name, rootPath string) error {
 		"name":        name,
 		"packagePath": packagePath,
 		"actionsPath": filepath.Join(packagePath, "actions"),
+		"modelsPath":  filepath.Join(packagePath, "models"),
+		"withPop":     !skipPop,
+	}
+
+	if !skipPop {
+		newTemplates["models/models.go"] = nModels
 	}
 
 	for fn, tv := range newTemplates {
