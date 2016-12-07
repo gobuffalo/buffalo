@@ -9,6 +9,8 @@ import (
 func newAppGenerator() *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile("main.go", nMain))
+	g.Add(gentronics.NewFile("Procfile", nProcfile))
+	g.Add(gentronics.NewFile("Procfile.development", nProcfileDev))
 	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
 	g.Add(gentronics.NewFile("actions/app.go", nApp))
 	g.Add(gentronics.NewFile("actions/home.go", nHomeHandler))
@@ -213,3 +215,6 @@ command_flags: []
 enable_colors: true
 log_name: buffalo
 `
+
+const nProcfile = `web: go run main.go`
+const nProcfileDev = `web: buffalo dev`
