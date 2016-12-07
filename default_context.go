@@ -174,6 +174,11 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 	return nil
 }
 
+// Data contains all the values set through Get/Set.
+func (d *DefaultContext) Data() map[string]interface{} {
+	return d.data
+}
+
 var defaultUpgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
