@@ -1,6 +1,10 @@
 package cmd
 
-import "github.com/markbates/gentronics"
+import (
+	"os/exec"
+
+	"github.com/markbates/gentronics"
+)
 
 func newAppGenerator() *gentronics.Generator {
 	g := gentronics.New()
@@ -16,9 +20,23 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewFile("assets/application.js", ""))
 	g.Add(gentronics.NewFile("assets/application.css", nApplicationCSS))
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
+	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
+	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
+	g.Add(gentronics.NewCommand(goGet("github.com/markbates/grift/...")))
+	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/grift")))
 	g.Add(newJQueryGenerator())
 	g.Add(newSodaGenerator())
+	g.Add(gentronics.NewCommand(appGoGet()))
 	return g
+}
+
+func appGoGet() *exec.Cmd {
+	appArgs := []string{"get", "-t"}
+	if verbose {
+		appArgs = append(appArgs, "-v")
+	}
+	appArgs = append(appArgs, "./...")
+	return exec.Command("go", appArgs...)
 }
 
 const nMain = `package main

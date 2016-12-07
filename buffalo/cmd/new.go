@@ -28,7 +28,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/markbates/pop/soda/cmd/generate"
 	"github.com/spf13/cobra"
 )
 
@@ -62,59 +61,8 @@ var newCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Printf("--> ./%s\n", name)
-		err = os.MkdirAll(name, 0755)
-		if err != nil {
-			return err
-		}
-
-		err = genNewFiles(name, rootPath)
-		if err != nil {
-			return err
-		}
-
-		err = installDeps(pwd, rootPath)
-		if err != nil {
-			return err
-		}
-		return err
+		return genNewFiles(name, rootPath)
 	},
-}
-
-func installDeps(pwd string, rootPath string) error {
-	defer os.Chdir(pwd)
-	err := os.Chdir(rootPath)
-	if err != nil {
-		return err
-	}
-
-	cmds := []*exec.Cmd{
-		goGet("github.com/markbates/refresh/..."),
-		goInstall("github.com/markbates/refresh"),
-		goGet("github.com/markbates/grift/..."),
-		goInstall("github.com/markbates/grift"),
-	}
-
-	if !skipPop {
-		cmds = append(cmds,
-			goGet("github.com/markbates/pop/..."),
-			goInstall("github.com/markbates/pop/soda"),
-		)
-	}
-
-	cmds = append(cmds, appGoGet())
-
-	if !skipPop {
-		generate.GenerateConfig(dbType, "./database.yml")
-	}
-
-	err = runCommands(cmds...)
-
-	if err != nil {
-		return err
-	}
-
-	return err
 }
 
 func goInstall(pkg string) *exec.Cmd {
@@ -138,20 +86,6 @@ func goGet(pkg string) *exec.Cmd {
 	return exec.Command("go", args...)
 }
 
-func runCommands(cmds ...*exec.Cmd) error {
-	for _, cmd := range cmds {
-		fmt.Printf("--> %s\n", strings.Join(cmd.Args, " "))
-		cmd.Stdin = os.Stdin
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		err := cmd.Run()
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func genNewFiles(name, rootPath string) error {
 	packagePath := strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
 
@@ -167,16 +101,6 @@ func genNewFiles(name, rootPath string) error {
 
 	g := newAppGenerator()
 	return g.Run(rootPath, data)
-
-}
-
-func appGoGet() *exec.Cmd {
-	appArgs := []string{"get", "-t"}
-	if verbose {
-		appArgs = append(appArgs, "-v")
-	}
-	appArgs = append(appArgs, "./...")
-	return exec.Command("go", appArgs...)
 }
 
 func init() {

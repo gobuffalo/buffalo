@@ -1,18 +1,40 @@
 package cmd
 
-import "github.com/markbates/gentronics"
+import (
+	"github.com/markbates/gentronics"
+	"github.com/markbates/pop/soda/cmd/generate"
+)
 
 func newSodaGenerator() *gentronics.Generator {
 	g := gentronics.New()
 
-	f := gentronics.NewFile("models/models.go", nModels)
-	f.Should = func(data gentronics.Data) bool {
+	should := func(data gentronics.Data) bool {
 		if _, ok := data["withPop"]; ok {
 			return ok
 		}
 		return false
 	}
+
+	f := gentronics.NewFile("models/models.go", nModels)
+	f.Should = should
 	g.Add(f)
+
+	c := gentronics.NewCommand(goGet("github.com/markbates/pop/..."))
+	c.Should = should
+	g.Add(c)
+
+	c = gentronics.NewCommand(goInstall("github.com/markbates/pop/soda"))
+	c.Should = should
+	g.Add(c)
+
+	g.Add(&gentronics.Func{
+		Should: should,
+		Runner: func(rootPath string, data gentronics.Data) error {
+			generate.GenerateConfig(data["dbType"].(string), "./database.yml")
+			return nil
+		},
+	})
+
 	return g
 }
 
