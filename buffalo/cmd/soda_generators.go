@@ -7,8 +7,8 @@ func newSodaGenerator() *gentronics.Generator {
 
 	f := gentronics.NewFile("models/models.go", nModels)
 	f.Should = func(data gentronics.Data) bool {
-		if p, ok := data["withPop"]; ok {
-			return p.(bool)
+		if _, ok := data["withPop"]; ok {
+			return ok
 		}
 		return false
 	}

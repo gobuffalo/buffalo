@@ -36,6 +36,7 @@ var force bool
 var verbose bool
 var skipPop bool
 var skipUpdate bool
+var skipJQuery bool
 var dbType = "postgres"
 
 var newCmd = &cobra.Command{
@@ -160,6 +161,7 @@ func genNewFiles(name, rootPath string) error {
 		"actionsPath": filepath.Join(packagePath, "actions"),
 		"modelsPath":  filepath.Join(packagePath, "models"),
 		"withPop":     !skipPop,
+		"skipJQuery":  skipJQuery,
 		"dbType":      dbType,
 	}
 
@@ -181,7 +183,8 @@ func init() {
 	RootCmd.AddCommand(newCmd)
 	newCmd.Flags().BoolVarP(&force, "force", "f", false, "delete and remake if the app already exists")
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
-	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips add pop/soda to your app")
+	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips adding pop/soda to your app")
+	newCmd.Flags().BoolVar(&skipJQuery, "skip-jquery", false, "skips adding jQuery to your app")
 	newCmd.Flags().BoolVar(&skipUpdate, "skip-update", false, "skips running -u on go get calls")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 }
