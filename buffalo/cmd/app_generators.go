@@ -1,21 +1,26 @@
 package cmd
 
-var newTemplates = map[string]string{
-	"main.go":                    nMain,
-	".buffalo.dev.yml":           nRefresh,
-	"actions/app.go":             nApp,
-	"actions/home.go":            nHomeHandler,
-	"actions/home_test.go":       nHomeHandlerTest,
-	"actions/render.go":          nRender,
-	"grifts/routes.go":           nGriftRoutes,
-	"templates/index.html":       nIndexHTML,
-	"templates/application.html": nApplicationHTML,
-	"assets/application.js":      "",
-	"assets/application.css":     nApplicationCSS,
-	".gitignore":                 nGitignore,
+import "github.com/markbates/gentronics"
+
+func newAppGenerator() *gentronics.Generator {
+	g := gentronics.New()
+	g.Add(gentronics.NewFile("main.go", nMain))
+	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
+	g.Add(gentronics.NewFile("actions/app.go", nApp))
+	g.Add(gentronics.NewFile("actions/home.go", nHomeHandler))
+	g.Add(gentronics.NewFile("actions/home_test.go", nHomeHandlerTest))
+	g.Add(gentronics.NewFile("actions/render.go", nRender))
+	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
+	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
+	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
+	g.Add(gentronics.NewFile("assets/application.js", ""))
+	g.Add(gentronics.NewFile("assets/application.css", nApplicationCSS))
+	g.Add(gentronics.NewFile(".gitignore", nGitignore))
+	g.Add(newSodaGenerator())
+	return g
 }
 
-var nMain = `package main
+const nMain = `package main
 
 import (
 	"log"
@@ -29,7 +34,7 @@ func main() {
 }
 
 `
-var nApp = `package actions
+const nApp = `package actions
 
 import (
 	"net/http"
@@ -57,7 +62,7 @@ func App() http.Handler {
 }
 `
 
-var nRender = `package actions
+const nRender = `package actions
 
 import (
 	"net/http"
@@ -86,7 +91,7 @@ func fromHere(p string) string {
 }
 `
 
-var nHomeHandler = `package actions
+const nHomeHandler = `package actions
 
 import "github.com/markbates/buffalo"
 
@@ -95,7 +100,7 @@ func HomeHandler(c buffalo.Context) error {
 }
 `
 
-var nHomeHandlerTest = `package actions_test
+const nHomeHandlerTest = `package actions_test
 
 import (
 	"testing"
@@ -116,9 +121,9 @@ func Test_HomeHandler(t *testing.T) {
 }
 `
 
-var nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
+const nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
 
-var nApplicationHTML = `<html>
+const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
   <title>Buffalo - {{ .name }}</title>
@@ -132,12 +137,12 @@ var nApplicationHTML = `<html>
 </html>
 `
 
-var nApplicationCSS = `body {
+const nApplicationCSS = `body {
   font-family: helvetica;
 }
 `
 
-var nGitignore = `vendor/
+const nGitignore = `vendor/
 **/*.log
 **/*.sqlite
 bin/
@@ -145,7 +150,7 @@ node_modules/
 {{ .name }}
 `
 
-var nGriftRoutes = `package grifts
+const nGriftRoutes = `package grifts
 
 import (
 	"os"
@@ -171,7 +176,7 @@ var _ = Add("routes", func(c *Context) error {
 	return nil
 })`
 
-var nRefresh = `app_root: .
+const nRefresh = `app_root: .
 ignored_folders:
 - vendor
 - log
@@ -185,27 +190,4 @@ binary_name: {{.name}}-build
 command_flags: []
 enable_colors: true
 log_name: buffalo
-`
-
-var nModels = `package models
-
-import (
-	"log"
-	"os"
-
-	"github.com/markbates/going/defaults"
-	"github.com/markbates/pop"
-)
-
-var DB *pop.Connection
-
-func init() {
-	var err error
-	env := defaults.String(os.Getenv("GO_ENV"), "development")
-	DB, err = pop.Connect(env)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pop.Debug = env == "development"
-}
 `

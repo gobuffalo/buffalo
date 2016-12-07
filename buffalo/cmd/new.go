@@ -23,7 +23,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -161,33 +160,12 @@ func genNewFiles(name, rootPath string) error {
 		"actionsPath": filepath.Join(packagePath, "actions"),
 		"modelsPath":  filepath.Join(packagePath, "models"),
 		"withPop":     !skipPop,
+		"dbType":      dbType,
 	}
 
-	if !skipPop {
-		newTemplates["models/models.go"] = nModels
-	}
+	g := newAppGenerator()
+	return g.Run(rootPath, data)
 
-	for fn, tv := range newTemplates {
-		dir := filepath.Dir(fn)
-		err := os.MkdirAll(filepath.Join(rootPath, dir), 0755)
-		if err != nil {
-			return err
-		}
-		t, err := template.New(fn).Parse(tv)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("--> ./%s/%s\n", name, fn)
-		f, err := os.Create(filepath.Join(rootPath, fn))
-		if err != nil {
-			return err
-		}
-		err = t.Execute(f, data)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func appGoGet() *exec.Cmd {
