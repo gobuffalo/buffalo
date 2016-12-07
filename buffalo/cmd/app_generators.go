@@ -16,17 +16,7 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewFile("assets/application.js", ""))
 	g.Add(gentronics.NewFile("assets/application.css", nApplicationCSS))
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
-	jf := &gentronics.RemoteFile{
-		File: gentronics.NewFile("assets/jquery.js", ""),
-	}
-	jf.RemotePath = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
-	jf.Should = func(data gentronics.Data) bool {
-		if p, ok := data["skipJQuery"]; ok {
-			return !p.(bool)
-		}
-		return true
-	}
-	g.Add(jf)
+	g.Add(newJQueryGenerator())
 	g.Add(newSodaGenerator())
 	return g
 }
@@ -143,6 +133,9 @@ const nApplicationHTML = `<html>
 <body>
   {{"{{"}} yield {{"}}"}}
 
+	{{if .withJQuery -}}
+  <script src="/assets/jquery.js" type="text/javascript" charset="utf-8"></script>
+	{{end -}}
   <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

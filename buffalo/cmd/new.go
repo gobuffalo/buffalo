@@ -161,7 +161,7 @@ func genNewFiles(name, rootPath string) error {
 		"actionsPath": filepath.Join(packagePath, "actions"),
 		"modelsPath":  filepath.Join(packagePath, "models"),
 		"withPop":     !skipPop,
-		"skipJQuery":  skipJQuery,
+		"withJQuery":  !skipJQuery,
 		"dbType":      dbType,
 	}
 
