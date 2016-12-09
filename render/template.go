@@ -21,8 +21,6 @@ func (s templateRenderer) ContentType() string {
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
-	s.moot.Lock()
-	defer s.moot.Unlock()
 	var yield raymond.SafeString
 	var err error
 	for _, name := range s.names {
@@ -44,9 +42,13 @@ func (s *templateRenderer) execute(name string, data Data) (raymond.SafeString, 
 	if err != nil {
 		return raymond.SafeString(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
 	}
-	source.RegisterHelpers(s.TemplateHelpers)
 	source.RegisterHelper("partial", func(name string, options *raymond.Options) raymond.SafeString {
-		p, err := s.partial(name, data)
+		d := data
+		for k, v := range options.Hash() {
+			d[k] = v
+			defer delete(data, k)
+		}
+		p, err := s.partial(name, d)
 		if err != nil {
 			return raymond.SafeString(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error()))
 		}

@@ -6,7 +6,4 @@ type Options struct {
 	HTMLLayout string
 	// TemplatesPath is the location of the templates directory on disk.
 	TemplatesPath string
-	// TemplateHelpers to be used with all rendered templates.
-	// See github.com/aymerick/raymond for more details on helpers.
-	TemplateHelpers map[string]interface{}
 }
