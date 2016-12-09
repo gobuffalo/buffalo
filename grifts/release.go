@@ -22,6 +22,11 @@ var _ = Add("release", func(c *Context) error {
 		return err
 	}
 
+	err = installBin()
+	if err != nil {
+		return err
+	}
+
 	err = dockerTest()
 	if err != nil {
 		return err
@@ -39,6 +44,14 @@ var _ = Add("release", func(c *Context) error {
 
 	return commitAndPush(v)
 })
+
+func installBin() error {
+	cmd := exec.Command("go", "install", "-v", "./buffalo")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
 
 func dockerTest() error {
 	cmd := exec.Command("docker", "build", ".")
