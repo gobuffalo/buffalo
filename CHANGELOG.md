@@ -1,10 +1,16 @@
 # Change Log
 
 ## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...0.4.0)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...0.4.0)
+
+## [v0.4.0.pre](https://github.com/markbates/buffalo/tree/v0.4.0.pre) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.0.pre)
 
 ## [v0.4.0](https://github.com/markbates/buffalo/tree/v0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.0)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.0)
+
+## [v0.4.1.pre](https://github.com/markbates/buffalo/tree/v0.4.1.pre) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.1.pre)
 
 ## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
 **Closed issues:**
