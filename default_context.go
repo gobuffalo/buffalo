@@ -91,9 +91,9 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	defer func() {
 		d.LogField("render", time.Now().Sub(now))
 	}()
-	d.Response().WriteHeader(status)
 	if rr != nil {
 		d.Response().Header().Set("Content-Type", rr.ContentType())
+		d.Response().WriteHeader(status)
 		data := d.data
 		pp := map[string]string{}
 		for k, v := range d.params {
@@ -102,6 +102,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		data["params"] = pp
 		return rr.Render(d.Response(), data)
 	}
+	d.Response().WriteHeader(status)
 	return nil
 }
 

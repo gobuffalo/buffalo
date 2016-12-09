@@ -30,3 +30,11 @@ func (w *buffaloResponse) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	}
 	return nil, nil, errors.WithStack(errors.New("does not implement http.Hijack"))
 }
+
+func (w *buffaloResponse) Flush() {
+	w.ResponseWriter.(http.Flusher).Flush()
+}
+
+func (w *buffaloResponse) CloseNotify() <-chan bool {
+	return w.ResponseWriter.(http.CloseNotifier).CloseNotify()
+}
