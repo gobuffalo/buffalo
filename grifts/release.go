@@ -21,7 +21,6 @@ var _ = Add("release", func(c *Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("### v -> %+v\n", v)
 
 	err = tagRelease(v)
 	if err != nil {
