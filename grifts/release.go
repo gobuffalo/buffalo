@@ -22,6 +22,11 @@ var _ = Add("release", func(c *Context) error {
 		return err
 	}
 
+	err = dockerTest()
+	if err != nil {
+		return err
+	}
+
 	err = tagRelease(v)
 	if err != nil {
 		return err
@@ -34,6 +39,14 @@ var _ = Add("release", func(c *Context) error {
 
 	return commitAndPush(v)
 })
+
+func dockerTest() error {
+	cmd := exec.Command("docker", "build", ".")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
 
 func tagRelease(v string) error {
 	token := os.Getenv("GITHUB_TOKEN")
