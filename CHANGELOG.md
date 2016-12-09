@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.2)
+
 ## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...0.4.0)
 
