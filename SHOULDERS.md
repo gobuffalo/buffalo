@@ -24,6 +24,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
+* [github.com/gorilla/mux](https://github.com/gorilla/mux)
+
 * [github.com/gorilla/schema](https://github.com/gorilla/schema)
 
 * [github.com/gorilla/securecookie](https://github.com/gorilla/securecookie)
@@ -32,9 +34,9 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
 
-* [github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
-
 * [github.com/markbates/buffalo/render](https://github.com/markbates/buffalo/render)
+
+* [github.com/markbates/buffalo/render/helpers](https://github.com/markbates/buffalo/render/helpers)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 

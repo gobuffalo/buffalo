@@ -25,7 +25,9 @@ func New(opts Options) *Engine {
 
 // See github.com/aymerick/raymond for more details on helpers.
 func (e *Engine) RegisterHelper(name string, helper interface{}) {
-	raymond.RegisterHelper(name, helper)
+	e.RegisterHelpers(map[string]interface{}{
+		name: helper,
+	})
 }
 
 // See github.com/aymerick/raymond for more details on helpers.
