@@ -18,16 +18,15 @@ func App() http.Handler {
 		return c.Redirect(http.StatusPermanentRedirect, "/users")
 	})
 
-	a.GET("/user/new", UsersNew)
-
 	g := a.Group("/users")
 	g.Use(findUserMW)
 	g.GET("/", UsersList)
-	g.GET("/:user_id", UsersShow)
-	g.GET("/:user_id/edit", UsersEdit)
+	g.GET("/new", UsersNew)
+	g.GET("/{user_id}", UsersShow)
+	g.GET("/{user_id}/edit", UsersEdit)
 	g.POST("/", UsersCreate)
-	g.PUT("/:user_id", UsersUpdate)
-	g.DELETE("/:user_id", UsersDelete)
+	g.PUT("/{user_id}", UsersUpdate)
+	g.DELETE("/{user_id}", UsersDelete)
 
 	return a
 }

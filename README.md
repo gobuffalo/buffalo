@@ -60,7 +60,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Routing
 
-[github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter) - This router was chosen for it's speed, plain and simple. It's not without it's quirks, but its insanely fast and effecient, so I'll accept the quirks, for now.
+[github.com/gorilla/mux](https://github.com/gorilla/mux) - This router was chosen because of it's stability and flexibility. There might be faster routers out there, but this one is definitely the most powerful!
 
 ### Task Runner (Optional)
 

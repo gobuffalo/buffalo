@@ -47,7 +47,7 @@ func (a *App) PATCH(p string, h Handler) {
 	a.ServeFiles("/assets", http.Dir("path/to/assets"))
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
-	a.router.ServeFiles(path.Join(p, "*filepath"), root)
+	a.router.PathPrefix(p).Handler(http.StripPrefix(p, http.FileServer(root)))
 }
 
 // ANY accepts a request across any HTTP method for the specified path
@@ -105,5 +105,5 @@ func (a *App) addRoute(method string, url string, h Handler) {
 		a.routes = routes
 	}
 
-	a.router.Handle(method, url, a.handlerToHandler(h))
+	a.router.Handle(url, a.handlerToHandler(h)).Methods(method)
 }

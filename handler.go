@@ -3,7 +3,7 @@ package buffalo
 import (
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 )
 
 // Handler is the basis for all of Buffalo. A Handler
@@ -27,12 +27,13 @@ import (
 */
 type Handler func(Context) error
 
-func (a *App) handlerToHandler(h Handler) httprouter.Handle {
-	return func(res http.ResponseWriter, req *http.Request, p httprouter.Params) {
+func (a *App) handlerToHandler(h Handler) http.Handler {
+	hf := func(res http.ResponseWriter, req *http.Request) {
 		ws := res.(*buffaloResponse)
 		params := req.URL.Query()
-		for _, v := range p {
-			params.Set(v.Key, v.Value)
+		vars := mux.Vars(req)
+		for k, v := range vars {
+			params.Set(k, v)
 		}
 
 		c := &DefaultContext{
@@ -51,4 +52,5 @@ func (a *App) handlerToHandler(h Handler) httprouter.Handle {
 			a.Logger.Error(err)
 		}
 	}
+	return http.HandlerFunc(hf)
 }

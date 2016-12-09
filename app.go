@@ -9,7 +9,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	gcontext "github.com/gorilla/context"
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
 )
 
@@ -20,7 +20,7 @@ type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
 	Middleware *MiddlewareStack
-	router     *httprouter.Router
+	router     *mux.Router
 	moot       *sync.Mutex
 	routes     RouteList
 	root       *App
@@ -50,7 +50,7 @@ func New(opts Options) *App {
 
 	a := &App{
 		Options:    opts,
-		router:     httprouter.New(),
+		router:     mux.NewRouter(),
 		moot:       &sync.Mutex{},
 		routes:     RouteList{},
 		Middleware: newMiddlewareStack(),
@@ -61,7 +61,7 @@ func New(opts Options) *App {
 	if a.NotFound == nil {
 		a.NotFound = a.notFound()
 	}
-	a.router.NotFound = a.NotFound
+	a.router.NotFoundHandler = a.NotFound
 
 	return a
 }
@@ -113,7 +113,7 @@ func Automatic(opts Options) *App {
 	if a.NotFound == nil {
 		a.NotFound = a.notFound()
 	}
-	a.router.NotFound = a.NotFound
+	a.router.NotFoundHandler = a.NotFound
 
 	return a
 }
