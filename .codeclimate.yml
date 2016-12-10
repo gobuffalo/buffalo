@@ -2,33 +2,22 @@
 engines:
   golint:
     enabled: true
-  csslint:
+    checks:
+      GoLint/Naming/MixedCaps:
+        enabled: false
+  govet:
     enabled: true
-  duplication:
-    enabled: true
-    config:
-      languages:
-      - ruby
-      - javascript
-      - python
-      - php
-  eslint:
+  gofmt:
     enabled: true
   fixme:
     enabled: true
 ratings:
   paths:
-  - "**.css"
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
-  - "**.go"
+    - "**.go"
 exclude_paths:
   - "examples/**/*"
   - "grifts/**/*"
   - "**/*_test.go"
   - "*_test.go"
+  - "**_test.go"
+  - "middleware_test.go"
