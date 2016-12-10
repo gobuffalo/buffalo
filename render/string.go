@@ -7,6 +7,7 @@ import (
 )
 
 type stringRenderer struct {
+	*Engine
 	body string
 }
 
@@ -15,7 +16,12 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	b, err := raymond.Render(s.body, data)
+	t, err := raymond.Parse(s.body)
+	if err != nil {
+		return err
+	}
+	t.RegisterHelpers(s.Helpers)
+	b, err := t.Exec(data)
 	if err != nil {
 		return err
 	}
@@ -27,7 +33,10 @@ func (s stringRenderer) Render(w io.Writer, data Data) error {
 // the github.com/aymerick/raymond package and return
 // "text/plain" as the content type.
 func String(s string) Renderer {
-	return stringRenderer{body: s}
+	return stringRenderer{
+		Engine: New(Options{}),
+		body:   s,
+	}
 }
 
 // String renderer that will run the string through

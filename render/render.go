@@ -1,8 +1,10 @@
 package render
 
 import (
-	"github.com/aymerick/raymond"
+	"sync"
+
 	"github.com/markbates/buffalo/render/helpers"
+	"github.com/markbates/inflect"
 )
 
 // Engine used to power all defined renderers.
@@ -11,15 +13,27 @@ import (
 // the defaults.
 type Engine struct {
 	Options
+	moot *sync.Mutex
 }
 
 // New render.Engine ready to go with your Options
-// and some defaults we think you might like.
+// and some defaults we think you might like. Engines
+// have the following helpers added to them:
+// https://github.com/markbates/buffalo/blob/master/render/helpers/helpers.go#L1
+// https://github.com/markbates/inflect/blob/master/helpers.go#L3
 func New(opts Options) *Engine {
+	if opts.Helpers == nil {
+		opts.Helpers = map[string]interface{}{}
+	}
+	h := opts.Helpers
+
 	e := &Engine{
 		Options: opts,
+		moot:    &sync.Mutex{},
 	}
 	e.RegisterHelpers(helpers.Helpers)
+	e.RegisterHelpers(inflect.Helpers)
+	e.RegisterHelpers(h)
 	return e
 }
 
@@ -29,9 +43,9 @@ func New(opts Options) *Engine {
 	e.RegisterHelper("upcase", strings.ToUpper)
 */
 func (e *Engine) RegisterHelper(name string, helper interface{}) {
-	e.RegisterHelpers(map[string]interface{}{
-		name: helper,
-	})
+	e.moot.Lock()
+	defer e.moot.Unlock()
+	e.Helpers[name] = helper
 }
 
 // RegisterHelpers adds helpers to a template with the given name.
@@ -44,10 +58,7 @@ func (e *Engine) RegisterHelper(name string, helper interface{}) {
 	e.RegisterHelpers(h)
 */
 func (e *Engine) RegisterHelpers(helpers map[string]interface{}) {
-	defer func() {
-		// Since raymond panics(!!) when a helper is already registered
-		// let's recover and move on.
-		recover()
-	}()
-	raymond.RegisterHelpers(helpers)
+	for k, v := range helpers {
+		e.RegisterHelper(k, v)
+	}
 }

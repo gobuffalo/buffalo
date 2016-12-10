@@ -70,6 +70,7 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 	if err != nil {
 		return t, errors.WithMessage(errors.WithStack(err), name)
 	}
+	t.RegisterHelpers(s.Helpers)
 	return t, err
 }
 
