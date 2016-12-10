@@ -21,6 +21,9 @@ func (s *sse) Bytes() []byte {
 	return []byte(s.String())
 }
 
+// EventSource is designed to work with JavaScript EventSource objects.
+// see https://developer.mozilla.org/en-US/docs/Web/API/EventSource for
+// more details
 type EventSource struct {
 	w  http.ResponseWriter
 	fl http.Flusher
@@ -36,14 +39,21 @@ func (es *EventSource) Write(t string, d interface{}) error {
 	return nil
 }
 
+// Flush messages down the pipe. If messages aren't flushed they
+// won't be sent.
 func (es *EventSource) Flush() {
 	es.fl.Flush()
 }
 
+// CloseNotify return true across the channel when the connection
+// in the browser has been severed.
 func (es *EventSource) CloseNotify() <-chan bool {
 	return es.w.(http.CloseNotifier).CloseNotify()
 }
 
+// NewEventSource returns a new EventSource instance while ensuring
+// that the http.ResponseWriter is able to handle EventSource messages.
+// It also makes sure to set the proper response heads.
 func NewEventSource(w http.ResponseWriter) (*EventSource, error) {
 	es := &EventSource{w: w}
 	var ok bool

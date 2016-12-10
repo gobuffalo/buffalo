@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// Test_App_Use tests that middleware gets added
 func Test_App_Use(t *testing.T) {
 	r := require.New(t)
 
@@ -32,6 +33,7 @@ func Test_App_Use(t *testing.T) {
 	r.Equal([]string{"start", "handler", "end"}, log)
 }
 
+// Test_Middleware_Skip tests that middleware gets skipped
 func Test_Middleware_Skip(t *testing.T) {
 	r := require.New(t)
 
@@ -82,6 +84,7 @@ func Test_Middleware_Skip(t *testing.T) {
 	r.Equal([]string{"mw1 start", "mw2 start", "h1", "mw2 end", "mw1 end"}, log)
 }
 
+// Test_Middleware_Clear confirms that middle gets cleared
 func Test_Middleware_Clear(t *testing.T) {
 	r := require.New(t)
 	mws := newMiddlewareStack()

@@ -9,6 +9,8 @@ import (
 
 // Helpers that are automatically injected into templates.
 /*
+yield - renders the content of a template into a layout.
+partial - renders the content of a partial into a template.
 js_escape - escapes a string to be valid in JavaScript.
 html_escape - escapes any HTML characters in a string.
 json - converts the interface to JSON.
@@ -23,6 +25,7 @@ var Helpers = map[string]interface{}{
 	"content_of":  ContentOf,
 }
 
+// ToJSON converts an interface into a string.
 func ToJSON(v interface{}) string {
 	b, err := json.Marshal(v)
 	if err != nil {
