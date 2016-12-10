@@ -121,7 +121,7 @@ func commitAndPush(v string) error {
 		return err
 	}
 
-	cmd = exec.Command("git", "push", "origin")
+	cmd = exec.Command("git", "push", "origin", "master")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
