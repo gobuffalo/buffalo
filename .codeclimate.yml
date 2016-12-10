@@ -26,6 +26,9 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
+  - "**.go"
 exclude_paths:
   - "examples/**/*"
+  - "grifts/**/*"
   - "**/*_test.go"
+  - "*_test.go"
