@@ -6,4 +6,6 @@ type Options struct {
 	HTMLLayout string
 	// TemplatesPath is the location of the templates directory on disk.
 	TemplatesPath string
+	// Helpers to be rendered with the templates
+	Helpers map[string]interface{}
 }
