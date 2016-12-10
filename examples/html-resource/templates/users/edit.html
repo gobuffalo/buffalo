@@ -1,0 +1,7 @@
+<h1>Edit User</h1>
+
+{{ partial "errors.html" }}
+<form action="/users/{{ user.ID }}" method="POST" accept-charset="utf-8">
+  <input type="hidden" name="_method" id="_method" value="PUT" />
+  {{ partial "users/form.html" }}
+</form>

@@ -1,0 +1,9 @@
+{{# if verrs }}
+<div class="errors">
+  <ul>
+    {{#each verrs as |v k|}}
+      <li>{{ v }}</li>
+    {{/each}}
+  </ul>
+</div>
+{{/if}}
