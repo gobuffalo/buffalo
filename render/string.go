@@ -1,7 +1,6 @@
 package render
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/aymerick/raymond"
@@ -16,7 +15,6 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	fmt.Printf("### data -> %+v\n", data)
 	b, err := raymond.Render(s.body, data)
 	if err != nil {
 		return err
