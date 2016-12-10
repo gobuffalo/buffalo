@@ -7,6 +7,16 @@ import (
 	"github.com/aymerick/raymond"
 )
 
+// Helpers that are automatically injected into templates.
+/*
+yield - renders the content of a template into a layout.
+partial - renders the content of a partial into a template.
+js_escape - escapes a string to be valid in JavaScript.
+html_escape - escapes any HTML characters in a string.
+json - converts the interface to JSON.
+content_for - stores a block of templating code to be re-used later in the template.
+content_of - retrieves a stored block for templating and renders it.
+*/
 var Helpers = map[string]interface{}{
 	"js_escape":   template.JSEscapeString,
 	"html_escape": template.HTMLEscapeString,
@@ -15,6 +25,7 @@ var Helpers = map[string]interface{}{
 	"content_of":  ContentOf,
 }
 
+// ToJSON converts an interface into a string.
 func ToJSON(v interface{}) string {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -23,6 +34,12 @@ func ToJSON(v interface{}) string {
 	return string(b)
 }
 
+// ContentFor stores a block of templating code to be re-used later in the template.
+/*
+	{{content_for "buttons"}}
+		<button>hi</button>
+	{{/content_for}}
+*/
 func ContentFor(name string, options *raymond.Options) string {
 	ctx := options.Ctx().(map[string]interface{})
 	body := options.Fn()
@@ -30,6 +47,10 @@ func ContentFor(name string, options *raymond.Options) string {
 	return ""
 }
 
+// ContentOf retrieves a stored block for templating and renders it.
+/*
+	{{content_of "buttons"}}
+*/
 func ContentOf(name string, options *raymond.Options) raymond.SafeString {
 	ctx := options.Ctx().(map[string]interface{})
 	if s, ok := ctx[name]; ok {

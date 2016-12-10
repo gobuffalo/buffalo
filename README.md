@@ -1,4 +1,4 @@
-# Buffalo [![GoDoc](https://godoc.org/github.com/markbates/buffalo?status.svg)](https://godoc.org/github.com/markbates/buffalo) [![Build Status](https://travis-ci.org/markbates/buffalo.svg?branch=master)](https://travis-ci.org/markbates/buffalo)
+# Buffalo [![GoDoc](https://godoc.org/github.com/markbates/buffalo?status.svg)](https://godoc.org/github.com/markbates/buffalo) [![Build Status](https://travis-ci.org/markbates/buffalo.svg?branch=master)](https://travis-ci.org/markbates/buffalo) [![Code Climate](https://codeclimate.com/github/markbates/buffalo/badges/gpa.svg)](https://codeclimate.com/github/markbates/buffalo)
 
 Buffalo is Go web framework. Yeah, I hate the word "framework" too! Buffalo is different though. Buffalo doesn't want to re-invent wheels like routing and templating. Buffalo is glue that wraps all of the best packages available and makes them all play nicely together.
 

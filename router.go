@@ -1,9 +1,13 @@
 package buffalo
 
 import (
+	"fmt"
 	"net/http"
 	"path"
+	"path/filepath"
 	"sort"
+
+	"github.com/markbates/inflect"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -48,6 +52,41 @@ func (a *App) PATCH(p string, h Handler) {
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
 	a.router.PathPrefix(p).Handler(http.StripPrefix(p, http.FileServer(root)))
+}
+
+// Resource maps an implementation of the Resource interface
+// to the appropriate RESTful mappings. Resource returns the *App
+// associated with this group of mappings so you can set middleware, etc...
+// on that group, just as if you had used the a.Group functionality.
+/*
+	a.Resource("/users", &UsersResource{})
+
+	// Is equal to this:
+
+	ur := &UsersResource{}
+	g := a.Group("/users")
+	g.GET("/", ur.List) // GET /users => ur.List
+	g.GET("/new", ur.New) // GET /users/new => ur.New
+	g.GET("/{user_id}", ur.Show) // GET /users/{user_id} => ur.Show
+	g.GET("/{user_id}/edit", ur.Edit) // GET /users/{user_id}/edit => ur.Edit
+	g.POST("/", ur.Create) // POST /users => ur.Create
+	g.PUT("/{user_id}", ur.Update) PUT /users/{user_id} => ur.Update
+	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
+*/
+func (a *App) Resource(p string, r Resource) *App {
+	base := filepath.Base(p)
+	single := inflect.Singularize(base)
+	g := a.Group(p)
+	p = "/"
+	spath := filepath.Join(p, fmt.Sprintf("{%s_id}", single))
+	g.GET(p, r.List)
+	g.GET(filepath.Join(p, "new"), r.New)
+	g.GET(filepath.Join(spath), r.Show)
+	g.GET(filepath.Join(spath, "edit"), r.Edit)
+	g.POST(p, r.Create)
+	g.PUT(filepath.Join(spath), r.Update)
+	g.DELETE(filepath.Join(spath), r.Destroy)
+	return g
 }
 
 // ANY accepts a request across any HTTP method for the specified path

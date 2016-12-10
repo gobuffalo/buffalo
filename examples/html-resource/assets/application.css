@@ -1,0 +1,16 @@
+body {
+  font-family: helvetica;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
+
+.errors {
+  background-color: #f7bec3;
+  border: 1px solid #eb6371;
+}

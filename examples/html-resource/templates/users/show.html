@@ -1,0 +1,26 @@
+<h1>{{ user.FullName }}</h1>
+
+<p>
+  ID: {{ user.ID }}
+</p>
+<p>
+  First Name: {{ user.FirstName }}
+</p>
+<p>
+  Last Name: {{ user.LastName }}
+</p>
+<p>
+  Email: {{ user.Email }}
+</p>
+<p>
+  Created At: {{ user.CreatedAt }}
+</p>
+<p>
+  Updated At: {{ user.UpdatedAt }}
+</p>
+
+<p>
+  <a href="/users/{{ user.ID }}/edit">Edit</a> |
+  <a href="/users/{{ user.ID }}" data-method="DELETE" data-confirm="Are you sure?">Destroy</a> |
+  <a href="/users">Back to All Users</a>
+</p>

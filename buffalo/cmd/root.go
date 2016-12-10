@@ -29,6 +29,7 @@ import (
 
 var cfgFile string
 
+// RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
 	Use:   "buffalo",
 	Short: "Helps you build your Buffalo applications that much easier!",

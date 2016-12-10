@@ -1,0 +1,26 @@
+<h1>Users</h1>
+
+<a href="/users/new">Create New User</a>
+
+<table>
+  <thead>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {{#each users as |user|}}
+    <tr>
+      <td>{{ user.FirstName }}</td>
+      <td>{{ user.LastName }}</td>
+      <td>{{ user.Email }}</td>
+      <td>
+        <a href="/users/{{ user.ID }}">View</a>
+        <a href="/users/{{ user.ID }}/edit">Edit</a>
+        <a href="/users/{{ user.ID }}" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
