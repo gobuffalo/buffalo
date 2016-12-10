@@ -23,15 +23,5 @@ func App() http.Handler {
 	a.Use(findUserMW("person_id"))
 	a.Resource("/people", &UsersResource{})
 
-	// g := a.Group("/users")
-	// g.Use(findUserMW)
-	// g.GET("/", UsersList)
-	// g.GET("/new", UsersNew)
-	// g.GET("/{user_id}", UsersShow)
-	// g.GET("/{user_id}/edit", UsersEdit)
-	// g.POST("/", UsersCreate)
-	// g.PUT("/{user_id}", UsersUpdate)
-	// g.DELETE("/{user_id}", UsersDelete)
-
 	return a
 }
