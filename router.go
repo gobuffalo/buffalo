@@ -55,7 +55,9 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 }
 
 // Resource maps an implementation of the Resource interface
-// to the appropriate RESTful mappings
+// to the appropriate RESTful mappings. Resource returns the *App
+// associated with this group of mappings so you can set middleware, etc...
+// on that group, just as if you had used the a.Group functionality.
 /*
 	a.Resource("/users", &UsersResource{})
 
@@ -71,7 +73,7 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 	g.PUT("/{user_id}", ur.Update) PUT /users/{user_id} => ur.Update
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
-func (a *App) Resource(p string, r Resource) {
+func (a *App) Resource(p string, r Resource) *App {
 	base := filepath.Base(p)
 	single := inflect.Singularize(base)
 	g := a.Group(p)
@@ -84,6 +86,7 @@ func (a *App) Resource(p string, r Resource) {
 	g.POST(p, r.Create)
 	g.PUT(filepath.Join(spath), r.Update)
 	g.DELETE(filepath.Join(spath), r.Destroy)
+	return g
 }
 
 // ANY accepts a request across any HTTP method for the specified path

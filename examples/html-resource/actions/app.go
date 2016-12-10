@@ -18,10 +18,11 @@ func App() http.Handler {
 		return c.Redirect(http.StatusPermanentRedirect, "/users")
 	})
 
-	a.Use(findUserMW("user_id"))
-	a.Resource("/users", &UsersResource{})
-	a.Use(findUserMW("person_id"))
-	a.Resource("/people", &UsersResource{})
+	g := a.Resource("/users", &UsersResource{})
+	g.Use(findUserMW("user_id"))
+
+	g = a.Resource("/people", &UsersResource{})
+	g.Use(findUserMW("person_id"))
 
 	return a
 }
