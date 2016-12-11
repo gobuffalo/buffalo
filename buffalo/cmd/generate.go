@@ -35,5 +35,6 @@ func init() {
 	generateCmd.AddCommand(generate.RailsJSCmd)
 	generateCmd.AddCommand(generate.BootstrapCmd)
 	generateCmd.AddCommand(generate.BootswatchCmd)
+	generateCmd.AddCommand(generate.ResourceCmd)
 	RootCmd.AddCommand(generateCmd)
 }

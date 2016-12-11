@@ -31,7 +31,7 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(generate.NewBootstrapGenerator())
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
-	g.Add(gentronics.NewCommand(exec.Command("gofmt", "-w", ".")))
+	g.Add(generate.Fmt)
 	return g
 }
 
