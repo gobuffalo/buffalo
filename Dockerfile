@@ -15,4 +15,5 @@ RUN go install ./buffalo
 WORKDIR $GOPATH/src/
 RUN buffalo new --db-type=sqlite3 hello_world
 WORKDIR ./hello_world
-RUN buffalo test -v
+RUN go vet -x ./...
+RUN buffalo test -v -race
