@@ -27,6 +27,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// BootstrapCmd will generate new Bootstrap files. Regardless of whatever
+// other settings you might, this will generate jQuery files as that is a
+// pre-requisite of Bootstrap.
 var BootstrapCmd = &cobra.Command{
 	Use:   "bootstrap",
 	Short: "Generates Bootstrap 3 files",
@@ -37,6 +40,9 @@ var BootstrapCmd = &cobra.Command{
 	},
 }
 
+// NewBootstrapGenerator will generate new Bootstrap files. Regardless of whatever
+// other settings you might, this will generate jQuery files as that is a
+// pre-requisite of Bootstrap.
 func NewBootstrapGenerator() *gentronics.Generator {
 	should := func(data gentronics.Data) bool {
 		if p, ok := data["withBootstrap"]; ok {

@@ -30,6 +30,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Aliases: []string{"r"},
@@ -50,6 +51,7 @@ var ResourceCmd = &cobra.Command{
 	},
 }
 
+// NewResourceGenerator generates a new actions/resource file and a stub test.
 func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["underscore"])), rAction))

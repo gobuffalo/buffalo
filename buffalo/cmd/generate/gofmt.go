@@ -6,6 +6,8 @@ import (
 	"github.com/markbates/gentronics"
 )
 
+// Fmt is command that will use `goimports` if available,
+// or fail back to `gofmt` otherwise.
 var Fmt *gentronics.Command
 
 func init() {

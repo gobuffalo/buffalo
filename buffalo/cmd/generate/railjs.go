@@ -27,6 +27,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RailsJSCmd generates the jQuery UJS file from the Rails project.
 var RailsJSCmd = &cobra.Command{
 	Use:   "railsjs",
 	Short: "Generates an assets/rails.js file",
@@ -38,6 +39,7 @@ https://github.com/rails/jquery-ujs`,
 	},
 }
 
+// NewRailsJSGenerator generates the jQuery UJS file from the Rails project.
 func NewRailsJSGenerator() *gentronics.Generator {
 	g := gentronics.New()
 	jf := &gentronics.RemoteFile{

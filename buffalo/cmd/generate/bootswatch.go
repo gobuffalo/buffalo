@@ -29,12 +29,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// BootswatchCmd will generate new Bootswatch themes. Regardless of whatever
+// other settings you have, this will generate jQuery and Bootstrap files as
+// they are pre-requisites for Bootswatch
 var BootswatchCmd = &cobra.Command{
 	Use:   "bootswatch [theme]",
 	Short: "Generates Bootswatch 3 files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return fmt.Errorf("You must choose a theme! [%s]", strings.Join(BootswatchThemes, ", "))
+			return fmt.Errorf("You must choose a theme! [%s]", strings.Join(bootswatchThemes, ", "))
 		}
 		g, err := NewBootswatchGenerator(args[0])
 		if err != nil {
@@ -46,9 +49,12 @@ var BootswatchCmd = &cobra.Command{
 	},
 }
 
+// NewBootswatchGenerator will generate new Bootswatch themes. Regardless of whatever
+// other settings you have, this will generate jQuery and Bootstrap files as
+// they are pre-requisites for Bootswatch
 func NewBootswatchGenerator(theme string) (*gentronics.Generator, error) {
 	themeFound := false
-	for _, t := range BootswatchThemes {
+	for _, t := range bootswatchThemes {
 		if t == theme {
 			themeFound = true
 			break
@@ -79,4 +85,4 @@ func NewBootswatchGenerator(theme string) (*gentronics.Generator, error) {
 	return g, nil
 }
 
-var BootswatchThemes = []string{"cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti"}
+var bootswatchThemes = []string{"cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti"}

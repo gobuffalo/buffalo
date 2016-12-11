@@ -27,6 +27,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// JQueryCmd will generate jQuery files.
 var JQueryCmd = &cobra.Command{
 	Use:   "jquery",
 	Short: "Generates an assets/jquery.js file",
@@ -38,6 +39,7 @@ var JQueryCmd = &cobra.Command{
 	},
 }
 
+// NewJQueryGenerator will generate jQuery files.
 func NewJQueryGenerator() *gentronics.Generator {
 	should := func(data gentronics.Data) bool {
 		if p, ok := data["withJQuery"]; ok {
