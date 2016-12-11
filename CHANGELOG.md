@@ -1,10 +1,28 @@
 # Change Log
 
-## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.2)
+## [v0.4.3.1](https://github.com/markbates/buffalo/tree/v0.4.3.1) (2016-12-11)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.3...v0.4.3.1)
 
-## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...0.4.0)
+## [v0.4.3](https://github.com/markbates/buffalo/tree/v0.4.3) (2016-12-10)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.2...v0.4.3)
+
+**Closed issues:**
+
+- Add some functions from the strings package as helpers [\#33](https://github.com/markbates/buffalo/issues/33)
+- Add the functions from https://github.com/markbates/inflect as helpers [\#32](https://github.com/markbates/buffalo/issues/32)
+- Add support for mapping "Resources" [\#31](https://github.com/markbates/buffalo/issues/31)
+- "grift release" should run the "docker CI" first. [\#29](https://github.com/markbates/buffalo/issues/29)
+
+**Merged pull requests:**
+
+- added more helpers. closes \#32 closes \#33 [\#34](https://github.com/markbates/buffalo/pull/34) ([markbates](https://github.com/markbates))
+- Working on adding support for a Resource interface [\#30](https://github.com/markbates/buffalo/pull/30) ([markbates](https://github.com/markbates))
+
+## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.2)
+
+## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...v0.4.1)
 
 ## [v0.4.0.pre](https://github.com/markbates/buffalo/tree/v0.4.0.pre) (2016-12-09)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.0.pre)
@@ -13,9 +31,9 @@
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.0)
 
 ## [v0.4.1.pre](https://github.com/markbates/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.1.pre)
+[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.1.pre)
 
-## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
+## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/markbates/buffalo/issues/27)
