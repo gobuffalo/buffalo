@@ -48,6 +48,8 @@ import (
 	"github.com/markbates/pop"
 )
 
+// DB is a connection to your database to be used
+// throughout your application.
 var DB *pop.Connection
 
 func init() {

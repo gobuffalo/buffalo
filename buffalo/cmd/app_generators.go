@@ -29,6 +29,7 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(newJQueryGenerator())
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
+	g.Add(gentronics.NewCommand(exec.Command("gofmt", "-w", ".")))
 	return g
 }
 
@@ -67,6 +68,9 @@ import (
 	{{end -}}
 )
 
+// App is where all routes and middleware for buffalo
+// should be defined. This is the nerve center of your
+// application.
 func App() http.Handler {
 	a := buffalo.Automatic(buffalo.Options{
 		Env: "development",
@@ -116,6 +120,8 @@ const nHomeHandler = `package actions
 
 import "github.com/markbates/buffalo"
 
+// HomeHandler is a default handler to serve up
+// a home page.
 func HomeHandler(c buffalo.Context) error {
 	return c.Render(200, r.HTML("index.html"))
 }

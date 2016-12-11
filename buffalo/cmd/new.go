@@ -34,7 +34,6 @@ import (
 var force bool
 var verbose bool
 var skipPop bool
-var skipUpdate bool
 var skipJQuery bool
 var dbType = "postgres"
 
@@ -76,9 +75,6 @@ func goInstall(pkg string) *exec.Cmd {
 
 func goGet(pkg string) *exec.Cmd {
 	args := []string{"get"}
-	if !skipUpdate {
-		args = append(args, "-u")
-	}
 	if verbose {
 		args = append(args, "-v")
 	}
@@ -109,6 +105,5 @@ func init() {
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&skipJQuery, "skip-jquery", false, "skips adding jQuery to your app")
-	newCmd.Flags().BoolVar(&skipUpdate, "skip-update", false, "skips running -u on go get calls")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 }
