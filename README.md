@@ -6,6 +6,8 @@ Buffalo is "idiomatic", for whatever that is worth. The purpose of a framework i
 
 If you were to look through the Buffalo code base you'll find little code, just enough to assemble the amazing packages that other's have written into one coherent system.
 
+> I :heart: web dev in go again - Brian Ketelsen
+
 ## Installation
 
 ```text
