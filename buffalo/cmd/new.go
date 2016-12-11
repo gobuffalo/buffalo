@@ -28,6 +28,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
 
@@ -35,6 +36,7 @@ var force bool
 var verbose bool
 var skipPop bool
 var skipJQuery bool
+var skipBootstrap bool
 var dbType = "postgres"
 
 var newCmd = &cobra.Command{
@@ -86,13 +88,15 @@ func genNewFiles(name, rootPath string) error {
 	packagePath := strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
 
 	data := map[string]interface{}{
-		"name":        name,
-		"packagePath": packagePath,
-		"actionsPath": filepath.Join(packagePath, "actions"),
-		"modelsPath":  filepath.Join(packagePath, "models"),
-		"withPop":     !skipPop,
-		"withJQuery":  !skipJQuery,
-		"dbType":      dbType,
+		"name":          name,
+		"titleName":     inflect.Titleize(name),
+		"packagePath":   packagePath,
+		"actionsPath":   filepath.Join(packagePath, "actions"),
+		"modelsPath":    filepath.Join(packagePath, "models"),
+		"withPop":       !skipPop,
+		"withJQuery":    !skipJQuery,
+		"withBootstrap": !skipBootstrap,
+		"dbType":        dbType,
 	}
 
 	g := newAppGenerator()
@@ -105,5 +109,6 @@ func init() {
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&skipJQuery, "skip-jquery", false, "skips adding jQuery to your app")
+	newCmd.Flags().BoolVar(&skipBootstrap, "skip-bootstrap", false, "skips adding Bootstrap to your app")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 }

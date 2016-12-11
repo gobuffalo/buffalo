@@ -3,6 +3,7 @@ package cmd
 import (
 	"os/exec"
 
+	"github.com/markbates/buffalo/buffalo/cmd/generate"
 	"github.com/markbates/gentronics"
 )
 
@@ -26,10 +27,11 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/grift/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/grift")))
-	g.Add(newJQueryGenerator())
+	g.Add(generate.NewJQueryGenerator())
+	g.Add(generate.NewBootstrapGenerator())
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
-	g.Add(gentronics.NewCommand(exec.Command("gofmt", "-w", ".")))
+	g.Add(generate.Fmt)
 	return g
 }
 
@@ -153,15 +155,22 @@ const nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
 const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
-  <title>Buffalo - {{ .name }}</title>
+  <title>Buffalo - {{ .titleName }}</title>
+  {{if .withBootstrap -}}
+  <link rel="stylesheet" href="/assets/bootstrap.css" type="text/css" media="all" />
+  {{end -}}
   <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all" />
 </head>
 <body>
+
   {{"{{"}} yield {{"}}"}}
 
-	{{if .withJQuery -}}
+  {{if .withJQuery -}}
   <script src="/assets/jquery.js" type="text/javascript" charset="utf-8"></script>
-	{{end -}}
+  {{end -}}
+  {{if .withBootstrap -}}
+  <script src="/assets/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+  {{end -}}
   <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

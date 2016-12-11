@@ -30,7 +30,8 @@ func newSodaGenerator() *gentronics.Generator {
 	g.Add(&gentronics.Func{
 		Should: should,
 		Runner: func(rootPath string, data gentronics.Data) error {
-			generate.GenerateConfig(data["dbType"].(string), "./database.yml")
+			data["dialect"] = data["dbType"]
+			generate.GenerateConfig("./database.yml", data)
 			return nil
 		},
 	})
