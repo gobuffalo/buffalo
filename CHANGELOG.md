@@ -1,5 +1,26 @@
 # Change Log
 
+## [Unreleased](https://github.com/markbates/buffalo/tree/HEAD)
+
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.4...HEAD)
+
+**Closed issues:**
+
+- Add a "resource" generator [\#41](https://github.com/markbates/buffalo/issues/41)
+- Add "bootstrap" to the "new" generator \(optional\) [\#24](https://github.com/markbates/buffalo/issues/24)
+
+## [v0.4.4](https://github.com/markbates/buffalo/tree/v0.4.4) (2016-12-11)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.3.1...v0.4.4)
+
+**Closed issues:**
+
+- generated code should pass govet and golint [\#39](https://github.com/markbates/buffalo/issues/39)
+- Run gofmt on generated code [\#38](https://github.com/markbates/buffalo/issues/38)
+
+**Merged pull requests:**
+
+- Generators [\#40](https://github.com/markbates/buffalo/pull/40) ([markbates](https://github.com/markbates))
+
 ## [v0.4.3.1](https://github.com/markbates/buffalo/tree/v0.4.3.1) (2016-12-11)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.3...v0.4.3.1)
 
@@ -19,10 +40,7 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/markbates/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.2)
-
-## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...v0.4.1)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...v0.4.2)
 
 ## [v0.4.0.pre](https://github.com/markbates/buffalo/tree/v0.4.0.pre) (2016-12-09)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.0.pre)
@@ -31,7 +49,10 @@
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.0)
 
 ## [v0.4.1.pre](https://github.com/markbates/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.1.pre)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.1.pre)
+
+## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.1)
 
 ## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
 **Closed issues:**
