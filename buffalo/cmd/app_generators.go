@@ -71,12 +71,14 @@ import (
 	{{end -}}
 )
 
+var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+
 // App is where all routes and middleware for buffalo
 // should be defined. This is the nerve center of your
 // application.
 func App() http.Handler {
 	a := buffalo.Automatic(buffalo.Options{
-		Env: "development",
+		Env: ENV,
 	})
 
 	{{if .withPop -}}
