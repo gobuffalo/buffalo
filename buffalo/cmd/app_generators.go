@@ -231,5 +231,5 @@ enable_colors: true
 log_name: buffalo
 `
 
-const nProcfile = `web: go run main.go`
+const nProcfile = `web: {{.name}}`
 const nProcfileDev = `web: buffalo dev`
