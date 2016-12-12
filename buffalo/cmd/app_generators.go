@@ -47,10 +47,13 @@ func appGoGet() *exec.Cmd {
 const nMain = `package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"{{.actionsPath}}"
+	"github.com/markbates/going/defaults"
 )
 
 func main() {
@@ -63,12 +66,14 @@ const nApp = `package actions
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/markbates/buffalo"
 	{{if .withPop -}}
 	"github.com/markbates/buffalo/middleware"
 	"{{.modelsPath}}"
 	{{end -}}
+	"github.com/markbates/going/defaults"
 )
 
 var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
