@@ -44,6 +44,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/grift](https://github.com/markbates/grift)
 
+* [github.com/markbates/inflect](https://github.com/markbates/inflect)
+
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
@@ -56,9 +58,27 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mattn/go-isatty](https://github.com/mattn/go-isatty)
 
+* [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
+
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
+
+* [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
+
+* [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
+
+* [github.com/shurcooL/github_flavored_markdown](https://github.com/shurcooL/github_flavored_markdown)
+
+* [github.com/shurcooL/highlight_diff](https://github.com/shurcooL/highlight_diff)
+
+* [github.com/shurcooL/highlight_go](https://github.com/shurcooL/highlight_go)
+
+* [github.com/shurcooL/sanitized_anchor_name](https://github.com/shurcooL/sanitized_anchor_name)
+
+* [github.com/sourcegraph/annotate](https://github.com/sourcegraph/annotate)
+
+* [github.com/sourcegraph/syntaxhighlight](https://github.com/sourcegraph/syntaxhighlight)
 
 * [github.com/spf13/cobra](https://github.com/spf13/cobra)
 
