@@ -43,8 +43,30 @@ var _ = Add("shoulders", func(c *Context) error {
 	if err != nil {
 		return err
 	}
-	return t.Execute(f, giants)
+	err = t.Execute(f, giants)
+	if err != nil {
+		return err
+	}
+
+	return commitAndPushShoulders()
 })
+
+func commitAndPushShoulders() error {
+	cmd := exec.Command("git", "commit", "SHOULDERS.md", "-m", "Updated SHOULDERS.md")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
+
+	cmd = exec.Command("git", "push", "origin", "master")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
 
 var shouldersTemplate = `
 # Buffalo Stands on the Shoulders of Giants

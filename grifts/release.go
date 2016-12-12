@@ -17,6 +17,11 @@ import (
 
 var _ = Desc("release", "Generates a CHANGELOG and creates a new GitHub release based on what is in the version.go file.")
 var _ = Add("release", func(c *Context) error {
+	err := Run("shoulders", c)
+	if err != nil {
+		return err
+	}
+
 	v, err := findVersion()
 	if err != nil {
 		return err
