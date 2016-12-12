@@ -43,7 +43,7 @@ https://github.com/rails/jquery-ujs`,
 func NewRailsJSGenerator() *gentronics.Generator {
 	g := gentronics.New()
 	jf := &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "rails.js"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "js", "rails.js"), ""),
 	}
 	jf.RemotePath = "https://raw.githubusercontent.com/rails/jquery-ujs/master/src/rails.js"
 	g.Add(jf)

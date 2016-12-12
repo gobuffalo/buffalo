@@ -77,7 +77,7 @@ func NewBootswatchGenerator(theme string) (*gentronics.Generator, error) {
 		},
 	})
 	jf := &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "bootstrap.css"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "css", "bootstrap.css"), ""),
 	}
 	jf.RemotePath = fmt.Sprintf("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/%s/bootstrap.min.css", theme)
 	g.Add(jf)

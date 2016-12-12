@@ -20,8 +20,8 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
-	g.Add(gentronics.NewFile("assets/application.js", ""))
-	g.Add(gentronics.NewFile("assets/application.css", nApplicationCSS))
+	g.Add(gentronics.NewFile("assets/js/application.js", ""))
+	g.Add(gentronics.NewFile("assets/css/application.css", nApplicationCSS))
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
@@ -165,21 +165,21 @@ const nApplicationHTML = `<html>
   <meta charset="utf-8">
   <title>Buffalo - {{ .titleName }}</title>
   {{if .withBootstrap -}}
-  <link rel="stylesheet" href="/assets/bootstrap.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" media="all" />
   {{end -}}
-  <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
 </head>
 <body>
 
   {{"{{"}} yield {{"}}"}}
 
   {{if .withJQuery -}}
-  <script src="/assets/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/assets/js/jquery.js" type="text/javascript" charset="utf-8"></script>
   {{end -}}
   {{if .withBootstrap -}}
-  <script src="/assets/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/assets/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
   {{end -}}
-  <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
 `

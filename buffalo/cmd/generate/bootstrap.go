@@ -52,14 +52,14 @@ func NewBootstrapGenerator() *gentronics.Generator {
 	}
 	g := gentronics.New()
 	jf := &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "bootstrap.css"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "css", "bootstrap.css"), ""),
 	}
 	jf.Should = should
 	jf.RemotePath = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 	g.Add(jf)
 
 	jf = &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "bootstrap.js"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "js", "bootstrap.js"), ""),
 	}
 	jf.Should = should
 	jf.RemotePath = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"

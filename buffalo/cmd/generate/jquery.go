@@ -50,14 +50,14 @@ func NewJQueryGenerator() *gentronics.Generator {
 
 	g := gentronics.New()
 	jf := &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "jquery.js"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "js", "jquery.js"), ""),
 	}
 	jf.Should = should
 	jf.RemotePath = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
 	g.Add(jf)
 
 	jm := &gentronics.RemoteFile{
-		File: gentronics.NewFile(filepath.Join("assets", "jquery.map"), ""),
+		File: gentronics.NewFile(filepath.Join("assets", "js", "jquery.map"), ""),
 	}
 	jm.Should = should
 	jm.RemotePath = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.map"
