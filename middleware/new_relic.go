@@ -8,6 +8,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+// NewRelic returns a piece of buffalo.Middleware that can
+// be used to report requests to NewRelic. You must pass in your
+// NewRelic key and a name for your application. If the key
+// passed in is blank, i.e. loading from an ENV, then the middleware
+// is skipped and the chain continues on like normal. Useful
+// for development.
 func NewRelic(key, name string) buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		if key == "" {
