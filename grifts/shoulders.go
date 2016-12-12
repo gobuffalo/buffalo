@@ -61,7 +61,7 @@ func commitAndPushShoulders() error {
 		return err
 	}
 
-	cmd = exec.Command("git", "push", "origin", "master")
+	cmd = exec.Command("git", "push", "origin")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
