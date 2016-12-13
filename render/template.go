@@ -65,6 +65,16 @@ func (s *templateRenderer) execute(name string, data Data) (raymond.SafeString, 
 }
 
 func (s *templateRenderer) source(name string) (*raymond.Template, error) {
+	var t *raymond.Template
+	var ok bool
+	var err error
+	if s.CacheTemplates {
+		s.moot.Lock()
+		defer s.moot.Unlock()
+		if t, ok = s.templateCache[name]; ok {
+			return t, nil
+		}
+	}
 	b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, name))
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
@@ -75,11 +85,15 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 		b = bytes.Replace(b, []byte("&#34;"), []byte("\""), -1)
 	}
 	source := string(b)
-	t, err := raymond.Parse(source)
+	t, err = raymond.Parse(source)
 	if err != nil {
 		return t, errors.Errorf("Error parsing %s: %+v", name, errors.WithStack(err))
 	}
 	t.RegisterHelpers(s.Helpers)
+	if s.CacheTemplates {
+		s.moot.Lock()
+		s.templateCache[name] = t
+	}
 	return t, err
 }
 
