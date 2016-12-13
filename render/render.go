@@ -3,6 +3,7 @@ package render
 import (
 	"sync"
 
+	"github.com/aymerick/raymond"
 	"github.com/markbates/buffalo/render/helpers"
 	"github.com/markbates/inflect"
 )
@@ -13,7 +14,8 @@ import (
 // the defaults.
 type Engine struct {
 	Options
-	moot *sync.Mutex
+	templateCache map[string]*raymond.Template
+	moot          *sync.Mutex
 }
 
 // New render.Engine ready to go with your Options
@@ -28,8 +30,9 @@ func New(opts Options) *Engine {
 	h := opts.Helpers
 
 	e := &Engine{
-		Options: opts,
-		moot:    &sync.Mutex{},
+		Options:       opts,
+		templateCache: map[string]*raymond.Template{},
+		moot:          &sync.Mutex{},
 	}
 	e.RegisterHelpers(helpers.Helpers)
 	e.RegisterHelpers(inflect.Helpers)
