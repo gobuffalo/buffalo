@@ -31,8 +31,8 @@ func Test_Markdown(t *testing.T) {
 		r := require.New(st)
 
 		table := []ji{
-			render.Markdown,
-			render.New(render.Options{}).Markdown,
+			render.HTML,
+			render.New(render.Options{}).HTML,
 		}
 
 		for _, j := range table {
@@ -55,7 +55,7 @@ func Test_Markdown(t *testing.T) {
 		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
 		r.NoError(err)
 
-		re := render.New(render.Options{HTMLLayout: layout.Name()}).Markdown(tmpFile.Name())
+		re := render.New(render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name())
 
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}
