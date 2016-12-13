@@ -1,13 +1,26 @@
 # Change Log
 
-## [Unreleased](https://github.com/markbates/buffalo/tree/HEAD)
-
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.4...HEAD)
+## [v0.4.5](https://github.com/markbates/buffalo/tree/v0.4.5) (2016-12-13)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.4...v0.4.5)
 
 **Closed issues:**
 
+- generate SHOULDERS.md when deploying a new release. [\#52](https://github.com/markbates/buffalo/issues/52)
+- generate js & css files into sub directory of assets [\#49](https://github.com/markbates/buffalo/issues/49)
+- PORT should be settable via an ENV var [\#47](https://github.com/markbates/buffalo/issues/47)
+- define ENV at the top of actions/app.go [\#46](https://github.com/markbates/buffalo/issues/46)
+- Add NewRelic middleware [\#45](https://github.com/markbates/buffalo/issues/45)
+- Procfile should use the project name by default [\#44](https://github.com/markbates/buffalo/issues/44)
 - Add a "resource" generator [\#41](https://github.com/markbates/buffalo/issues/41)
 - Add "bootstrap" to the "new" generator \(optional\) [\#24](https://github.com/markbates/buffalo/issues/24)
+- add a markdown renderer [\#13](https://github.com/markbates/buffalo/issues/13)
+
+**Merged pull requests:**
+
+- Shoulders [\#53](https://github.com/markbates/buffalo/pull/53) ([markbates](https://github.com/markbates))
+- add a markdown renderer closes \#13 [\#51](https://github.com/markbates/buffalo/pull/51) ([markbates](https://github.com/markbates))
+- generate js & css files into sub directory of assets  [\#50](https://github.com/markbates/buffalo/pull/50) ([markbates](https://github.com/markbates))
+- A bunch of fixes [\#48](https://github.com/markbates/buffalo/pull/48) ([markbates](https://github.com/markbates))
 
 ## [v0.4.4](https://github.com/markbates/buffalo/tree/v0.4.4) (2016-12-11)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.3.1...v0.4.4)
