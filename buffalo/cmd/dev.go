@@ -25,7 +25,7 @@ import (
 // devCmd represents the dev command
 var devCmd = &cobra.Command{
 	Use:   "dev",
-	Short: "Runs your Buffalo app in 'development' mode.",
+	Short: "Runs your Buffalo app in 'development' mode",
 	Long: `Runs your Buffalo app in 'development' mode.
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,

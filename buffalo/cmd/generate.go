@@ -27,6 +27,7 @@ import (
 
 var generateCmd = &cobra.Command{
 	Use:     "generate",
+	Short:   "A collection of generators to make life easier",
 	Aliases: []string{"g"},
 }
 
