@@ -16,4 +16,6 @@ WORKDIR $GOPATH/src/
 RUN buffalo new --db-type=sqlite3 hello_world
 WORKDIR ./hello_world
 RUN go vet -x ./...
+RUN buffalo db create -a
+RUN buffalo db migrate -e test
 RUN buffalo test -race
