@@ -5,9 +5,11 @@ import (
 	"io"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 
 	"github.com/aymerick/raymond"
 	"github.com/pkg/errors"
+	"github.com/shurcooL/github_flavored_markdown"
 )
 
 type templateRenderer struct {
@@ -66,7 +68,11 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
 	}
-	t, err := raymond.Parse(string(b))
+	if strings.ToLower(filepath.Ext(name)) == ".md" {
+		b = github_flavored_markdown.Markdown(b)
+	}
+	source := string(b)
+	t, err := raymond.Parse(source)
 	if err != nil {
 		return t, errors.WithMessage(errors.WithStack(err), name)
 	}
