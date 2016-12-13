@@ -69,10 +69,8 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 	var ok bool
 	var err error
 	if s.CacheTemplates {
-		s.moot.Lock()
-		defer s.moot.Unlock()
 		if t, ok = s.templateCache[name]; ok {
-			return t, nil
+			return t.Clone(), nil
 		}
 	}
 	b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, name))
@@ -91,10 +89,9 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 	}
 	t.RegisterHelpers(s.Helpers)
 	if s.CacheTemplates {
-		s.moot.Lock()
 		s.templateCache[name] = t
 	}
-	return t, err
+	return t.Clone(), err
 }
 
 func (s *templateRenderer) partial(name string, data Data) (raymond.SafeString, error) {

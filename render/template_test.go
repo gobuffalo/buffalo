@@ -73,3 +73,32 @@ func Test_Template_Partial(t *testing.T) {
 		r.Equal("Foo -> Mark", strings.TrimSpace(bb.String()))
 	}
 }
+
+func Test_Template_WithCaching(t *testing.T) {
+	r := require.New(t)
+
+	tmpFile, err := ioutil.TempFile("", "test")
+	r.NoError(err)
+	defer os.Remove(tmpFile.Name())
+
+	_, err = tmpFile.Write([]byte("{{name}}"))
+	r.NoError(err)
+
+	type ji func(string, ...string) render.Renderer
+
+	table := []ji{
+		render.Template,
+		render.New(render.Options{
+			CacheTemplates: true,
+		}).Template,
+	}
+
+	for _, j := range table {
+		re := j("foo/bar", tmpFile.Name())
+		r.Equal("foo/bar", re.ContentType())
+		bb := &bytes.Buffer{}
+		err = re.Render(bb, render.Data{"name": "Mark"})
+		r.NoError(err)
+		r.Equal("Mark", strings.TrimSpace(bb.String()))
+	}
+}
