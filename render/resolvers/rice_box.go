@@ -8,14 +8,17 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 )
 
+// RiceBox uses the go.rice package to resolve files
 type RiceBox struct {
 	Box *rice.Box
 }
 
+// Read data from the rice.Box
 func (r *RiceBox) Read(name string) ([]byte, error) {
 	return r.Box.Bytes(name)
 }
 
+// Resolve the file from the rice.Box
 func (r *RiceBox) Resolve(name string) (string, error) {
 	var p string
 	var err error
