@@ -228,10 +228,14 @@ const nRefresh = `app_root: .
 ignored_folders:
 - vendor
 - log
+- logs
+- assets
+- grifts
 - tmp
 included_extensions:
 - .go
 - .html
+- .md
 build_path: /tmp
 build_delay: 200ns
 binary_name: {{.name}}-build
