@@ -5,6 +5,7 @@ import (
 
 	"github.com/aymerick/raymond"
 	"github.com/markbates/buffalo/render/helpers"
+	"github.com/markbates/buffalo/render/resolvers"
 	"github.com/markbates/inflect"
 )
 
@@ -28,6 +29,9 @@ func New(opts Options) *Engine {
 		opts.Helpers = map[string]interface{}{}
 	}
 	h := opts.Helpers
+	if opts.FileResolver == nil {
+		opts.FileResolver = &resolvers.SimpleResolver{}
+	}
 
 	e := &Engine{
 		Options:       opts,

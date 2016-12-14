@@ -100,30 +100,32 @@ func App() http.Handler {
 const nRender = `package actions
 
 import (
+	"log"
 	"net/http"
-	"path"
-	"runtime"
 
 	"github.com/markbates/buffalo/render"
+	"github.com/markbates/buffalo/render/resolvers"
 )
 
 var r *render.Engine
+var resolver = &resolvers.GoPathResolver{
+	Path: "{{.packagePath}}",
+}
 
 func init() {
 	r = render.New(render.Options{
-		TemplatesPath: fromHere("../templates"),
-		HTMLLayout:    "application.html",
+		HTMLLayout:     "application.html",
 		CacheTemplates: ENV == "production",
+		FileResolver:   resolver,
 	})
 }
 
 func assetsPath() http.Dir {
-	return http.Dir(fromHere("../assets"))
-}
-
-func fromHere(p string) string {
-	_, filename, _, _ := runtime.Caller(1)
-	return path.Join(path.Dir(filename), p)
+	p, err := resolver.Resolve("assets")
+	if err != nil {
+		log.Println(err)
+	}
+	return http.Dir(p)
 }
 `
 
