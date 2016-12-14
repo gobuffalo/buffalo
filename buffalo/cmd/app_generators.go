@@ -100,16 +100,16 @@ func App() http.Handler {
 const nRender = `package actions
 
 import (
-	"log"
 	"net/http"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/markbates/buffalo/render"
 	"github.com/markbates/buffalo/render/resolvers"
 )
 
 var r *render.Engine
-var resolver = &resolvers.GoPathResolver{
-	Path: "{{.packagePath}}",
+var resolver = &resolvers.RiceBox{
+	Box: rice.MustFindBox("../templates"),
 }
 
 func init() {
@@ -120,12 +120,9 @@ func init() {
 	})
 }
 
-func assetsPath() http.Dir {
-	p, err := resolver.Resolve("assets")
-	if err != nil {
-		log.Println(err)
-	}
-	return http.Dir(p)
+func assetsPath() http.FileSystem {
+	box := rice.MustFindBox("../assets")
+	return box.HTTPBox()
 }
 `
 
