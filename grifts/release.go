@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -127,6 +128,26 @@ func commitAndPush(v string) error {
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
+}
+
+func updateGoBuffalo(v string) error {
+	bv := map[string]string{
+		"version": v,
+		"token":   os.Getenv("GOBUFF_VERSION_TOKEN"),
+	}
+	pr, pw := io.Pipe()
+	json.NewEncoder(pw).Encode(bv)
+	res, err := http.Post("http://gobuffalo.io/version", "application/json", pr)
+	if err != nil {
+		return err
+	}
+
+	code := res.StatusCode
+	if code < 200 || code >= 300 {
+		return fmt.Errorf("got a not successful status code from gobuffalo! %d", code)
+	}
+
+	return nil
 }
 
 func findVersion() (string, error) {
