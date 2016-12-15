@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"path/filepath"
 	"strings"
 
@@ -73,7 +72,7 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 			return t.Clone(), nil
 		}
 	}
-	b, err := ioutil.ReadFile(filepath.Join(s.TemplatesPath, name))
+	b, err := s.FileResolver.Read(filepath.Join(s.TemplatesPath, name))
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
 	}
