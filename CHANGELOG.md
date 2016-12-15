@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.4.6](https://github.com/markbates/buffalo/tree/v0.4.6) (2016-12-15)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.5...v0.4.6)
+
+**Closed issues:**
+
+- Go Get Errors [\#61](https://github.com/markbates/buffalo/issues/61)
+- `buffalo db` should forward to `soda` [\#58](https://github.com/markbates/buffalo/issues/58)
+- markdown rendering breaks some raymond parsing [\#55](https://github.com/markbates/buffalo/issues/55)
+- add template caching [\#54](https://github.com/markbates/buffalo/issues/54)
+
+**Merged pull requests:**
+
+- Added a resolvers package to help find and resolve files. [\#62](https://github.com/markbates/buffalo/pull/62) ([markbates](https://github.com/markbates))
+- `buffalo db` should forward to `soda` closes \#58 [\#60](https://github.com/markbates/buffalo/pull/60) ([markbates](https://github.com/markbates))
+- small bug fixes to template caching [\#57](https://github.com/markbates/buffalo/pull/57) ([markbates](https://github.com/markbates))
+- add template caching closes \#54 [\#56](https://github.com/markbates/buffalo/pull/56) ([markbates](https://github.com/markbates))
+
 ## [v0.4.5](https://github.com/markbates/buffalo/tree/v0.4.5) (2016-12-13)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.4...v0.4.5)
 
@@ -53,21 +70,21 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/markbates/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...v0.4.2)
-
-## [v0.4.0.pre](https://github.com/markbates/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.0.pre)
-
-## [v0.4.0](https://github.com/markbates/buffalo/tree/v0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.0)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.2)
 
 ## [v0.4.1.pre](https://github.com/markbates/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.1.pre)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.1.pre)
 
-## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.1)
+## [v0.4.0](https://github.com/markbates/buffalo/tree/v0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0.pre...v0.4.0)
+
+## [v0.4.0.pre](https://github.com/markbates/buffalo/tree/v0.4.0.pre) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.0.pre)
 
 ## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...0.4.0)
+
+## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/markbates/buffalo/issues/27)
