@@ -6,6 +6,10 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
+* [github.com/GeertJohan/go.rice](https://github.com/GeertJohan/go.rice)
+
+* [github.com/GeertJohan/go.rice/embedded](https://github.com/GeertJohan/go.rice/embedded)
+
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
 * [github.com/aymerick/raymond](https://github.com/aymerick/raymond)
@@ -15,6 +19,8 @@ Thank you to the following **GIANTS**:
 * [github.com/aymerick/raymond/lexer](https://github.com/aymerick/raymond/lexer)
 
 * [github.com/aymerick/raymond/parser](https://github.com/aymerick/raymond/parser)
+
+* [github.com/daaku/go.zipexe](https://github.com/daaku/go.zipexe)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
@@ -34,9 +40,13 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
 
+* [github.com/kardianos/osext](https://github.com/kardianos/osext)
+
 * [github.com/markbates/buffalo/render](https://github.com/markbates/buffalo/render)
 
 * [github.com/markbates/buffalo/render/helpers](https://github.com/markbates/buffalo/render/helpers)
+
+* [github.com/markbates/buffalo/render/resolvers](https://github.com/markbates/buffalo/render/resolvers)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 
