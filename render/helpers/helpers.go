@@ -9,17 +9,6 @@ import (
 )
 
 // Helpers that are automatically injected into templates.
-/*
-yield - renders the content of a template into a layout.
-partial - renders the content of a partial into a template.
-js_escape - escapes a string to be valid in JavaScript.
-html_escape - escapes any HTML characters in a string.
-json - converts the interface to JSON.
-content_for - stores a block of templating code to be re-used later in the template.
-content_of - retrieves a stored block for templating and renders it.
-upcase - strings.ToUpper.
-downcase - strings.ToLower.
-*/
 var Helpers = map[string]interface{}{
 	"js_escape":   template.JSEscapeString,
 	"html_escape": template.HTMLEscapeString,

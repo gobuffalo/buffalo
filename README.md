@@ -8,6 +8,10 @@ If you were to look through the Buffalo code base you'll find little code, just 
 
 > I :heart: web dev in go again - Brian Ketelsen
 
+## Documentation
+
+Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documentation, examples, and more.
+
 ## Installation
 
 ```text
