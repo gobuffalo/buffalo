@@ -47,11 +47,10 @@ var newCmd = &cobra.Command{
 			return errors.New("You must enter a name for your new application.")
 		}
 		name := args[0]
-		pwd, err := os.Getwd()
+		rootPath, err := rootPath(name)
 		if err != nil {
 			return err
 		}
-		rootPath := filepath.Join(pwd, name)
 
 		s, _ := os.Stat(rootPath)
 		if s != nil {
@@ -64,6 +63,19 @@ var newCmd = &cobra.Command{
 
 		return genNewFiles(name, rootPath)
 	},
+}
+
+func rootPath(name string) (string, error) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	rootPath := filepath.Join(pwd, name)
+	return rootPath, nil
+}
+
+func packagePath(rootPath string) string {
+	return strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
 }
 
 func goInstall(pkg string) *exec.Cmd {
@@ -85,7 +97,7 @@ func goGet(pkg string) *exec.Cmd {
 }
 
 func genNewFiles(name, rootPath string) error {
-	packagePath := strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
+	packagePath := packagePath(rootPath)
 
 	data := map[string]interface{}{
 		"name":          name,
