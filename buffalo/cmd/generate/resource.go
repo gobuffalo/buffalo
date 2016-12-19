@@ -46,6 +46,15 @@ var ResourceCmd = &cobra.Command{
 			"plural":   inflect.Pluralize(name),
 			"camel":    inflect.Camelize(name),
 			"under":    inflect.Underscore(name),
+			"actions": map[string]string{
+				"List":    "Get",
+				"Show":    "Get",
+				"New":     "Get",
+				"Create":  "Post",
+				"Edit":    "Get",
+				"Update":  "Put",
+				"Destroy": "Delete",
+			},
 		}
 		return NewResourceGenerator(data).Run(".", data)
 	},
@@ -72,40 +81,14 @@ func init() {
 	App().Resource("/{{under}}", &{{camel}}Resource{&buffalo.BaseResource{}})
 }
 
-// List default implementation. Returns a 404
-func (v *{{camel}}Resource) List(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+{{#each actions}}
+// {{@key}} default implementation.
+func (v *{{camel}}Resource) {{@key}}(c buffalo.Context) error {
+	return c.Render(200, r.String("{{camel}}#{{@key}}"))
 }
 
-// Show default implementation. Returns a 404
-func (v *{{camel}}Resource) Show(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// New default implementation. Returns a 404
-func (v *{{camel}}Resource) New(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// Create default implementation. Returns a 404
-func (v *{{camel}}Resource) Create(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// Edit default implementation. Returns a 404
-func (v *{{camel}}Resource) Edit(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// Update default implementation. Returns a 404
-func (v *{{camel}}Resource) Update(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// Destroy default implementation. Returns a 404
-func (v *{{camel}}Resource) Destroy(c buffalo.Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}`
+{{/each}}
+`
 
 var rActionTest = `package actions_test
 
