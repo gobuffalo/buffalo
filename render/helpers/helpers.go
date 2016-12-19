@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/aymerick/raymond"
+	"github.com/markbates/inflect"
 )
 
 // Helpers that are automatically injected into templates.
@@ -17,6 +18,12 @@ var Helpers = map[string]interface{}{
 	"content_of":  ContentOf,
 	"upcase":      strings.ToUpper,
 	"downcase":    strings.ToLower,
+}
+
+func init() {
+	for k, v := range inflect.Helpers {
+		Helpers[k] = v
+	}
 }
 
 // ToJSON converts an interface into a string.

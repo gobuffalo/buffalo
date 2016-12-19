@@ -41,11 +41,11 @@ var ResourceCmd = &cobra.Command{
 		}
 		name := args[0]
 		data := gentronics.Data{
-			"name":       name,
-			"singular":   inflect.Singularize(name),
-			"plural":     inflect.Pluralize(name),
-			"camel":      inflect.Camelize(name),
-			"underscore": inflect.Underscore(name),
+			"name":     name,
+			"singular": inflect.Singularize(name),
+			"plural":   inflect.Pluralize(name),
+			"camel":    inflect.Camelize(name),
+			"under":    inflect.Underscore(name),
 		}
 		return NewResourceGenerator(data).Run(".", data)
 	},
@@ -54,8 +54,8 @@ var ResourceCmd = &cobra.Command{
 // NewResourceGenerator generates a new actions/resource file and a stub test.
 func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["underscore"])), rAction))
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["underscore"])), rActionTest))
+	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rAction))
+	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
 	g.Add(Fmt)
 	return g
 }
@@ -64,46 +64,46 @@ var rAction = `package actions
 
 import "github.com/markbates/buffalo"
 
-type {{.camel}}Resource struct{
+type {{camel}}Resource struct{
 	buffalo.Resource
 }
 
 func init() {
-	App().Resource("/{{.underscore}}", &{{.camel}}Resource{&buffalo.BaseResource{}})
+	App().Resource("/{{under}}", &{{camel}}Resource{&buffalo.BaseResource{}})
 }
 
 // List default implementation. Returns a 404
-func (v *{{.camel}}Resource) List(c buffalo.Context) error {
+func (v *{{camel}}Resource) List(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // Show default implementation. Returns a 404
-func (v *{{.camel}}Resource) Show(c buffalo.Context) error {
+func (v *{{camel}}Resource) Show(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // New default implementation. Returns a 404
-func (v *{{.camel}}Resource) New(c buffalo.Context) error {
+func (v *{{camel}}Resource) New(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // Create default implementation. Returns a 404
-func (v *{{.camel}}Resource) Create(c buffalo.Context) error {
+func (v *{{camel}}Resource) Create(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // Edit default implementation. Returns a 404
-func (v *{{.camel}}Resource) Edit(c buffalo.Context) error {
+func (v *{{camel}}Resource) Edit(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // Update default implementation. Returns a 404
-func (v *{{.camel}}Resource) Update(c buffalo.Context) error {
+func (v *{{camel}}Resource) Update(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
 // Destroy default implementation. Returns a 404
-func (v *{{.camel}}Resource) Destroy(c buffalo.Context) error {
+func (v *{{camel}}Resource) Destroy(c buffalo.Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }`
 
@@ -115,37 +115,37 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_{{.camel}}Resource_List(t *testing.T) {
+func Test_{{camel}}Resource_List(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_Show(t *testing.T) {
+func Test_{{camel}}Resource_Show(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_New(t *testing.T) {
+func Test_{{camel}}Resource_New(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_Create(t *testing.T) {
+func Test_{{camel}}Resource_Create(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_Edit(t *testing.T) {
+func Test_{{camel}}Resource_Edit(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_Update(t *testing.T) {
+func Test_{{camel}}Resource_Update(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-func Test_{{.camel}}Resource_Destroy(t *testing.T) {
+func Test_{{camel}}Resource_Destroy(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }

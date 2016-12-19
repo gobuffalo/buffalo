@@ -6,7 +6,6 @@ import (
 	"github.com/aymerick/raymond"
 	"github.com/markbates/buffalo/render/helpers"
 	"github.com/markbates/buffalo/render/resolvers"
-	"github.com/markbates/inflect"
 )
 
 // Engine used to power all defined renderers.
@@ -39,7 +38,6 @@ func New(opts Options) *Engine {
 		moot:          &sync.Mutex{},
 	}
 	e.RegisterHelpers(helpers.Helpers)
-	e.RegisterHelpers(inflect.Helpers)
 	e.RegisterHelpers(h)
 	return e
 }

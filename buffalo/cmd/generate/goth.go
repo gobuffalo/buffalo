@@ -45,8 +45,7 @@ var GothCmd = &cobra.Command{
 // NewGothGenerator a actions/goth.go file configured to the specified providers.
 func NewGothGenerator() *gentronics.Generator {
 	g := gentronics.New()
-	f := gentronics.NewFile(filepath.Join("actions", "goth.go"), gGoth)
-	g.Add(f)
+	g.Add(gentronics.NewFile(filepath.Join("actions", "goth.go"), gGoth))
 	g.Add(Fmt)
 	return g
 }
@@ -60,18 +59,18 @@ import (
 	"github.com/markbates/buffalo"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
-	{{ range .providers -}}
-	"github.com/markbates/goth/providers/{{. | downcase}}"
-	{{ end -}}
+	{{#each providers}}
+	"github.com/markbates/goth/providers/{{ downcase . }}"
+	{{/each}}
 )
 
 func init() {
 	gothic.Store = App().SessionStore
 
 	goth.UseProviders(
-		{{ range .providers -}}
-		{{.|downcase}}.New(os.Getenv("{{.|upcase}}_KEY"), os.Getenv("{{.|upcase}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{.|downcase}}/callback")),
-		{{ end -}}
+		{{#each providers}}
+		{{downcase .}}.New(os.Getenv("{{upcase .}}_KEY"), os.Getenv("{{upcase .}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{downcase .}}/callback")),
+		{{/each}}
 	)
 
 	app := App().Group("/auth")

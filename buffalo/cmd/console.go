@@ -79,7 +79,7 @@ func init() {
 var cMain = `
 package main
 
-{{range .packages}}
+{{#each packages}}
 import _ "{{.}}"
-{{end}}
+{{/each}}
 `

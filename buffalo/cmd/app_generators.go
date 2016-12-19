@@ -27,6 +27,8 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/grift/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/grift")))
+	g.Add(gentronics.NewCommand(goGet("github.com/motemen/gore")))
+	g.Add(gentronics.NewCommand(goInstall("github.com/motemen/gore")))
 	g.Add(generate.NewJQueryGenerator())
 	g.Add(generate.NewBootstrapGenerator())
 	g.Add(newSodaGenerator())
@@ -52,7 +54,7 @@ import (
 	"net/http"
 	"os"
 
-	"{{.actionsPath}}"
+	"{{actionsPath}}"
 	"github.com/markbates/going/defaults"
 )
 
@@ -68,10 +70,10 @@ import (
 	"os"
 
 	"github.com/markbates/buffalo"
-	{{if .withPop -}}
+	{{#if withPop }}
 	"github.com/markbates/buffalo/middleware"
-	"{{.modelsPath}}"
-	{{end -}}
+	"{{modelsPath}}"
+	{{/if}}
 	"github.com/markbates/going/defaults"
 )
 
@@ -89,9 +91,9 @@ func App() *buffalo.App {
 			Env: ENV,
 		})
 
-		{{if .withPop -}}
+		{{#if withPop }}
 		app.Use(middleware.PopTransaction(models.DB))
-		{{end -}}
+		{{/if}}
 
 		app.ServeFiles("/assets", assetsPath())
 		app.GET("/", HomeHandler)
@@ -146,7 +148,7 @@ const nHomeHandlerTest = `package actions_test
 import (
 	"testing"
 
-	"{{.actionsPath}}"
+	"{{actionsPath}}"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
@@ -167,22 +169,22 @@ const nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
 const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
-  <title>Buffalo - {{ .titleName }}</title>
-  {{if .withBootstrap -}}
+  <title>Buffalo - {{ titleName }}</title>
+  {{#if withBootstrap }}
   <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" media="all" />
-  {{end -}}
+  {{/if}}
   <link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
 </head>
 <body>
 
-  {{"{{"}} yield {{"}}"}}
+	\{{ yield }}
 
-  {{if .withJQuery -}}
+  {{#if withJQuery }}
   <script src="/assets/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-  {{end -}}
-  {{if .withBootstrap -}}
+  {{/if}}
+  {{#if withBootstrap }}
   <script src="/assets/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-  {{end -}}
+  {{/if}}
   <script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
@@ -198,7 +200,7 @@ const nGitignore = `vendor/
 **/*.sqlite
 bin/
 node_modules/
-{{ .name }}
+{{ name }}
 `
 
 const nGriftRoutes = `package grifts
@@ -207,7 +209,7 @@ import (
 	"os"
 
 	. "github.com/markbates/grift/grift"
-	"{{.actionsPath}}"
+	"{{actionsPath}}"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -240,11 +242,11 @@ included_extensions:
 - .md
 build_path: /tmp
 build_delay: 200ns
-binary_name: {{.name}}-build
+binary_name: {{name}}-build
 command_flags: []
 enable_colors: true
 log_name: buffalo
 `
 
-const nProcfile = `web: {{.name}}`
+const nProcfile = `web: {{name}}`
 const nProcfileDev = `web: buffalo dev`
