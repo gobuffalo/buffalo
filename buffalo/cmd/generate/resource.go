@@ -46,15 +46,7 @@ var ResourceCmd = &cobra.Command{
 			"plural":   inflect.Pluralize(name),
 			"camel":    inflect.Camelize(name),
 			"under":    inflect.Underscore(name),
-			"actions": map[string]string{
-				"List":    "Get",
-				"Show":    "Get",
-				"New":     "Get",
-				"Create":  "Post",
-				"Edit":    "Get",
-				"Update":  "Put",
-				"Destroy": "Delete",
-			},
+			"actions":  []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 		}
 		return NewResourceGenerator(data).Run(".", data)
 	},
@@ -82,9 +74,9 @@ func init() {
 }
 
 {{#each actions}}
-// {{@key}} default implementation.
-func (v *{{camel}}Resource) {{@key}}(c buffalo.Context) error {
-	return c.Render(200, r.String("{{camel}}#{{@key}}"))
+// {{.}} default implementation.
+func (v *{{camel}}Resource) {{.}}(c buffalo.Context) error {
+	return c.Render(200, r.String("{{camel}}#{{.}}"))
 }
 
 {{/each}}
