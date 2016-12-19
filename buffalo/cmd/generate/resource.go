@@ -64,7 +64,13 @@ var rAction = `package actions
 
 import "github.com/markbates/buffalo"
 
-type {{.camel}}Resource struct{}
+type {{.camel}}Resource struct{
+	buffalo.Resource
+}
+
+func init() {
+	App().Resource("/{{.underscore}}", &{{.camel}}Resource{&buffalo.BaseResource{}})
+}
 
 // List default implementation. Returns a 404
 func (v *{{.camel}}Resource) List(c buffalo.Context) error {
