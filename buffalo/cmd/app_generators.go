@@ -60,6 +60,7 @@ import (
 
 func main() {
 	port := defaults.String(os.Getenv("PORT"), "3000")
+	log.Printf("Starting {{name}} on port %s\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), actions.App()))
 }
 
