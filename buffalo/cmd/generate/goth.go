@@ -70,7 +70,7 @@ func init() {
 
 	goth.UseProviders(
 		{{ range .providers -}}
-		{{.|downcase}}.New(os.Getenv("{{.|upcase}}_KEY"), os.Getenv("{{.|upcase}}_SECRET"), fmt.Sprintf("%s%s", HOST, "/auth/{{.|downcase}}/callback")),
+		{{.|downcase}}.New(os.Getenv("{{.|upcase}}_KEY"), os.Getenv("{{.|upcase}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{.|downcase}}/callback")),
 		{{ end -}}
 	)
 
