@@ -37,5 +37,6 @@ func init() {
 	generateCmd.AddCommand(generate.BootstrapCmd)
 	generateCmd.AddCommand(generate.BootswatchCmd)
 	generateCmd.AddCommand(generate.ResourceCmd)
+	generateCmd.AddCommand(generate.GothCmd)
 	RootCmd.AddCommand(generateCmd)
 }

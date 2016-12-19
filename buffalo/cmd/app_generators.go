@@ -65,7 +65,6 @@ func main() {
 const nApp = `package actions
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/markbates/buffalo"
@@ -76,24 +75,31 @@ import (
 	"github.com/markbates/going/defaults"
 )
 
+// ENV is used to help switch settings based on where the
+// application is being run. Default is "development".
 var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+// HOST that the application can be found. Default is "localhost".
+var HOST = defaults.String(os.Getenv("HOST"), "http://127.0.0.1:3000")
+var app *buffalo.App
 
 // App is where all routes and middleware for buffalo
 // should be defined. This is the nerve center of your
 // application.
-func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{
-		Env: ENV,
-	})
+func App() *buffalo.App {
+	if app == nil {
+		app = buffalo.Automatic(buffalo.Options{
+			Env: ENV,
+		})
 
-	{{if .withPop -}}
-	a.Use(middleware.PopTransaction(models.DB))
-	{{end -}}
+		{{if .withPop -}}
+		app.Use(middleware.PopTransaction(models.DB))
+		{{end -}}
 
-	a.ServeFiles("/assets", assetsPath())
-	a.GET("/", HomeHandler)
+		app.ServeFiles("/assets", assetsPath())
+		app.GET("/", HomeHandler)
+	}
 
-	return a
+	return app
 }
 `
 
@@ -202,14 +208,13 @@ const nGriftRoutes = `package grifts
 import (
 	"os"
 
-	"github.com/markbates/buffalo"
 	. "github.com/markbates/grift/grift"
 	"{{.actionsPath}}"
 	"github.com/olekukonko/tablewriter"
 )
 
 var _ = Add("routes", func(c *Context) error {
-	a := actions.App().(*buffalo.App)
+	a := actions.App()
 	routes := a.Routes()
 
 	table := tablewriter.NewWriter(os.Stdout)
