@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.4.7](https://github.com/markbates/buffalo/tree/v0.4.7) (2016-12-19)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.6...v0.4.7)
+
+**Closed issues:**
+
+- Add a generator for Goth [\#65](https://github.com/markbates/buffalo/issues/65)
+- Add a REPL/console [\#63](https://github.com/markbates/buffalo/issues/63)
+
+**Merged pull requests:**
+
+- auto mount a generated resource [\#69](https://github.com/markbates/buffalo/pull/69) ([markbates](https://github.com/markbates))
+- add Host as an option to the App [\#68](https://github.com/markbates/buffalo/pull/68) ([markbates](https://github.com/markbates))
+- Add a generator for Goth closes \#65 [\#66](https://github.com/markbates/buffalo/pull/66) ([markbates](https://github.com/markbates))
+- Add a REPL/console closes \#63 [\#64](https://github.com/markbates/buffalo/pull/64) ([markbates](https://github.com/markbates))
+
 ## [v0.4.6](https://github.com/markbates/buffalo/tree/v0.4.6) (2016-12-15)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.5...v0.4.6)
 
