@@ -72,6 +72,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
+* [github.com/motemen/gore](https://github.com/motemen/gore)
+
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
 * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
