@@ -78,8 +78,6 @@ import (
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
 var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
-// HOST that the application can be found. Default is "localhost".
-var HOST = defaults.String(os.Getenv("HOST"), "http://127.0.0.1:3000")
 var app *buffalo.App
 
 // App is where all routes and middleware for buffalo

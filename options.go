@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -29,7 +30,9 @@ type Options struct {
 	// SessionName is the name of the session cookie that is set. This defaults
 	// to "_buffalo_session".
 	SessionName string
-	prefix      string
+	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
+	Host   string
+	prefix string
 }
 
 // NewOptions returns a new Options instance with sensible defaults
@@ -46,5 +49,6 @@ func optionsWithDefaults(opts Options) Options {
 		opts.SessionStore = sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
+	opts.Host = defaults.String(opts.Host, fmt.Sprintf("http://127.0.0.1:%s", defaults.String(os.Getenv("PORT"), "3000")))
 	return opts
 }
