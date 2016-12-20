@@ -60,10 +60,10 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	f := gentronics.NewFile("webpack.config.js", nWebpack)
 	f.Should = should
 	g.Add(f)
-	f = gentronics.NewFile("assets/src/js/application.js", wApplicationJS)
+	f = gentronics.NewFile("assets/js/application.js", wApplicationJS)
 	f.Should = should
 	g.Add(f)
-	f = gentronics.NewFile("assets/src/css/application.scss", wApplicationCSS)
+	f = gentronics.NewFile("assets/css/application.scss", wApplicationCSS)
 	f.Should = should
 	g.Add(f)
 	c := gentronics.NewCommand(exec.Command("npm", "install", "webpack", "-g"))
@@ -89,13 +89,13 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: [
-    "./assets/src/js/application.js",
-    "./assets/src/css/application.scss",
+    "./assets/js/application.js",
+    "./assets/css/application.scss",
     "./node_modules/jquery-ujs/src/rails.js"
   ],
   output: {
     filename: "application.js",
-    path: "./assets/dist"
+    path: "./public/assets"
   },
   plugins: [
     new webpack.ProvidePlugin({
