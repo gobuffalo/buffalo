@@ -20,6 +20,10 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
+	g.Add(&gentronics.RemoteFile{
+		File:       gentronics.NewFile("public/assets/logo.svg", ""),
+		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
+	})
 	if skipWebpack {
 		g.Add(gentronics.NewFile("assets/js/application.js", ""))
 		g.Add(gentronics.NewFile("assets/css/application.css", ""))
@@ -231,6 +235,7 @@ ignored_folders:
 - log
 - logs
 - assets
+- public
 - grifts
 - tmp
 - node_modules
@@ -239,6 +244,8 @@ included_extensions:
 - .go
 - .html
 - .md
+- .js
+- .tmpl
 build_path: /tmp
 build_delay: 200ns
 binary_name: {{name}}-build
