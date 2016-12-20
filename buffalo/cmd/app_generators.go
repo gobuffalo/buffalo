@@ -20,8 +20,9 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
+	g.Add(gentronics.NewFile("public/assets/.gitignore", ""))
 	g.Add(&gentronics.RemoteFile{
-		File:       gentronics.NewFile("public/assets/logo.svg", ""),
+		File:       gentronics.NewFile("public/images/logo.svg", ""),
 		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
 	})
 	if skipWebpack {
@@ -101,8 +102,10 @@ func App() *buffalo.App {
 		app.Use(middleware.PopTransaction(models.DB))
 		{{/if}}
 
-		app.ServeFiles("/assets", assetsPath())
 		app.GET("/", HomeHandler)
+
+		app.ServeFiles("/assets", assetsPath())
+		app.ServeFiles("/", publicPath())
 	}
 
 	return app
@@ -133,7 +136,12 @@ func init() {
 }
 
 func assetsPath() http.FileSystem {
-	box := rice.MustFindBox("../assets")
+	box := rice.MustFindBox("../public/assets")
+	return box.HTTPBox()
+}
+
+func publicPath() http.FileSystem {
+	box := rice.MustFindBox("../public")
 	return box.HTTPBox()
 }
 `
@@ -176,20 +184,12 @@ const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
   <title>Buffalo - {{ titleName }}</title>
-	{{#if withWebpack}}
-		<link rel="stylesheet" href="/assets/dist/application.css" type="text/css" media="all" />
-	{{else}}
-		<link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
-	{{/if}}
+  <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all" />
 </head>
 <body>
 
-	\{{ yield }}
-	{{#if withWebpack}}
-		<script src="/assets/dist/application.js" type="text/javascript" charset="utf-8"></script>
-	{{else}}
-		<script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
-	{{/if}}
+  \{{ yield }}
+  <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
 `
