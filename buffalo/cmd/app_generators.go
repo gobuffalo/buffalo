@@ -7,7 +7,7 @@ import (
 	"github.com/markbates/gentronics"
 )
 
-func newAppGenerator() *gentronics.Generator {
+func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile("main.go", nMain))
 	g.Add(gentronics.NewFile("Procfile", nProcfile))
@@ -20,8 +20,10 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
-	g.Add(gentronics.NewFile("assets/js/application.js", ""))
-	g.Add(gentronics.NewFile("assets/css/application.css", nApplicationCSS))
+	if skipWebpack {
+		g.Add(gentronics.NewFile("assets/js/application.js", ""))
+		g.Add(gentronics.NewFile("assets/css/application.css", ""))
+	}
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
@@ -29,8 +31,7 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/grift")))
 	g.Add(gentronics.NewCommand(goGet("github.com/motemen/gore")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/motemen/gore")))
-	g.Add(generate.NewJQueryGenerator())
-	g.Add(generate.NewBootstrapGenerator())
+	g.Add(generate.NewWebpackGenerator(data))
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
 	g.Add(generate.Fmt)
@@ -171,29 +172,22 @@ const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
   <title>Buffalo - {{ titleName }}</title>
-  {{#if withBootstrap }}
-  <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" media="all" />
-  {{/if}}
-  <link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
+	{{#if withWebpack}}
+		<link rel="stylesheet" href="/assets/dist/application.css" type="text/css" media="all" />
+	{{else}}
+		<link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
+	{{/if}}
 </head>
 <body>
 
 	\{{ yield }}
-
-  {{#if withJQuery }}
-  <script src="/assets/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-  {{/if}}
-  {{#if withBootstrap }}
-  <script src="/assets/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-  {{/if}}
-  <script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
+	{{#if withWebpack}}
+		<script src="/assets/dist/application.js" type="text/javascript" charset="utf-8"></script>
+	{{else}}
+		<script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
+	{{/if}}
 </body>
 </html>
-`
-
-const nApplicationCSS = `body {
-  font-family: helvetica;
-}
 `
 
 const nGitignore = `vendor/
@@ -201,6 +195,8 @@ const nGitignore = `vendor/
 **/*.sqlite
 bin/
 node_modules/
+.sass-cache/
+assets/dist/
 {{ name }}
 `
 
@@ -237,6 +233,8 @@ ignored_folders:
 - assets
 - grifts
 - tmp
+- node_modules
+- .sass-cache
 included_extensions:
 - .go
 - .html
@@ -250,4 +248,8 @@ log_name: buffalo
 `
 
 const nProcfile = `web: {{name}}`
-const nProcfileDev = `web: buffalo dev`
+const nProcfileDev = `web: buffalo dev
+{{#if withWebpack}}
+assets: webpack --watch
+{{/if}}
+`

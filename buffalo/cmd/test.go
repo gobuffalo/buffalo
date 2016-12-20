@@ -33,7 +33,7 @@ var testCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Run: func(c *cobra.Command, args []string) {
 		os.Setenv("GO_ENV", "test")
-		tt.RootCmd.Run(c, args)
+		tt.Run(tt.GoBuilder(args))
 	},
 }
 
