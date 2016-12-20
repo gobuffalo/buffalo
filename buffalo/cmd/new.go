@@ -107,6 +107,7 @@ func genNewFiles(name, rootPath string) error {
 		"withPop":     !skipPop,
 		"withWebpack": !skipWebpack,
 		"dbType":      dbType,
+		"version":     Version,
 	}
 
 	g := newAppGenerator(data)

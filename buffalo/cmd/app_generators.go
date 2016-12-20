@@ -178,7 +178,43 @@ func Test_HomeHandler(t *testing.T) {
 }
 `
 
-const nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
+const nIndexHTML = `<div class="row">
+  <div class="col-md-2">
+    <img src="/images/logo.svg" alt="" />
+  </div>
+  <div class="col-md-10">
+    <h1>Welcome to Buffalo! [v{{version}}]</h1>
+    <h2>
+      <a href="https://github.com/markbates/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/markbates/buffalo</a>
+    </h2>
+    <h2>
+      <a href="http://gobuffalo.io"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
+    </h2>
+
+    <hr>
+    <h2>Defined Routes</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr text-align="left">
+          <th>METHOD</th>
+          <th>PATH</th>
+          <th>HANDLER</th>
+        </tr>
+      </thead>
+      <tbody>
+        \{{#each routes as |r|}}
+        <tr>
+          <td>\{{r.Method}}</td>
+          <td>\{{r.Path}}</td>
+          <td><code>\{{r.HandlerName}}</code></td>
+        </tr>
+        \{{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+`
 
 const nApplicationHTML = `<html>
 <head>
@@ -188,7 +224,10 @@ const nApplicationHTML = `<html>
 </head>
 <body>
 
-  \{{ yield }}
+  <div class="container">
+    \{{ yield }}
+  </div>
+
   <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
