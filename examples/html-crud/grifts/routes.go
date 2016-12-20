@@ -3,14 +3,13 @@ package grifts
 import (
 	"os"
 
-	"github.com/markbates/buffalo"
-	. "github.com/markbates/grift/grift"
 	"github.com/markbates/buffalo/examples/html-crud/actions"
+	. "github.com/markbates/grift/grift"
 	"github.com/olekukonko/tablewriter"
 )
 
 var _ = Add("routes", func(c *Context) error {
-	a := actions.App().(*buffalo.App)
+	a := actions.App()
 	routes := a.Routes()
 
 	table := tablewriter.NewWriter(os.Stdout)

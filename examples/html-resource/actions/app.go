@@ -2,27 +2,40 @@ package actions
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/markbates/buffalo"
 	"github.com/markbates/buffalo/examples/html-resource/models"
 	"github.com/markbates/buffalo/middleware"
+	"github.com/markbates/going/defaults"
 )
 
-func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{})
-	a.Env = "development"
+// ENV is used to help switch settings based on where the
+// application is being run. Default is "development".
+var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+var app *buffalo.App
 
-	a.ServeFiles("/assets", assetsPath())
-	a.Use(middleware.PopTransaction(models.DB))
-	a.GET("/", func(c buffalo.Context) error {
-		return c.Redirect(http.StatusPermanentRedirect, "/users")
-	})
+// App is where all routes and middleware for buffalo
+// should be defined. This is the nerve center of your
+// application.
+func App() *buffalo.App {
+	if app == nil {
+		app = buffalo.Automatic(buffalo.Options{
+			Env: ENV,
+		})
 
-	g := a.Resource("/users", &UsersResource{})
-	g.Use(findUserMW("user_id"))
+		app.ServeFiles("/assets", assetsPath())
+		app.Use(middleware.PopTransaction(models.DB))
+		app.GET("/", func(c buffalo.Context) error {
+			return c.Redirect(http.StatusPermanentRedirect, "/users")
+		})
 
-	g = a.Resource("/people", &UsersResource{})
-	g.Use(findUserMW("person_id"))
+		g := app.Resource("/users", &UsersResource{})
+		g.Use(findUserMW("user_id"))
 
-	return a
+		g = app.Resource("/people", &UsersResource{})
+		g.Use(findUserMW("person_id"))
+	}
+
+	return app
 }

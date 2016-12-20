@@ -14,22 +14,23 @@ import (
 func Test_UsersList(t *testing.T) {
 	r := require.New(t)
 
-	tx(func(tx *pop.Connection) {
-		w := willie.New(actions.App())
+	tx := models.DB
+	// tx(func(tx *pop.Connection) {
+	w := willie.New(actions.App())
 
-		r.NoError(tx.Create(&models.User{
-			FirstName: "Mark",
-			LastName:  "Bates",
-			Email:     "mark@example.com",
-		}))
+	r.NoError(tx.Create(&models.User{
+		FirstName: "Mark",
+		LastName:  "Bates",
+		Email:     "mark@example.com",
+	}))
 
-		res := w.JSON("/users").Get()
-		r.Equal(200, res.Code)
+	res := w.JSON("/users").Get()
+	r.Equal(200, res.Code)
 
-		users := models.Users{}
-		res.Bind(&users)
-		r.Len(users, 1)
-	})
+	users := models.Users{}
+	res.Bind(&users)
+	r.Len(users, 1)
+	// })
 }
 
 func Test_UsersShow(t *testing.T) {

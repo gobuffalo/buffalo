@@ -1,17 +1,30 @@
 package actions
 
 import (
-	"net/http"
+	"os"
 
 	"github.com/markbates/buffalo"
+	"github.com/markbates/going/defaults"
 )
 
-func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{Env: "development"})
+// ENV is used to help switch settings based on where the
+// application is being run. Default is "development".
+var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+var app *buffalo.App
 
-	a.ServeFiles("/assets", assetsPath())
-	a.GET("/", HomeHandler)
-	a.GET("/socket", SocketHandler)
+// App is where all routes and middleware for buffalo
+// should be defined. This is the nerve center of your
+// application.
+func App() *buffalo.App {
+	if app == nil {
+		app = buffalo.Automatic(buffalo.Options{
+			Env: ENV,
+		})
 
-	return a
+		app.ServeFiles("/assets", assetsPath())
+		app.GET("/", HomeHandler)
+		app.GET("/socket", SocketHandler)
+	}
+
+	return app
 }
