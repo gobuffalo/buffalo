@@ -49,7 +49,12 @@ var _ = Add("release", func(c *Context) error {
 		return err
 	}
 
-	return commitAndPush(v)
+	err = commitAndPush(v)
+	if err != nil {
+		return err
+	}
+
+	return updateGoBuffalo(v)
 })
 
 func installBin() error {
