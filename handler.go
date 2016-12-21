@@ -42,7 +42,9 @@ func (a *App) handlerToHandler(h Handler) http.Handler {
 			params:   params,
 			logger:   a.Logger,
 			session:  a.getSession(req, ws),
-			data:     map[string]interface{}{},
+			data: map[string]interface{}{
+				"routes": a.Routes(),
+			},
 		}
 
 		err := a.Middleware.handler(h)(c)

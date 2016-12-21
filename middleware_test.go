@@ -33,6 +33,42 @@ func Test_App_Use(t *testing.T) {
 	r.Equal([]string{"start", "handler", "end"}, log)
 }
 
+// Test_Middleware_Replace tests that middleware gets added
+func Test_Middleware_Replace(t *testing.T) {
+	r := require.New(t)
+
+	log := []string{}
+	a := New(Options{})
+	mw1 := func(h Handler) Handler {
+		return func(c Context) error {
+			log = append(log, "m1 start")
+			err := h(c)
+			log = append(log, "m1 end")
+			return err
+		}
+	}
+	mw2 := func(h Handler) Handler {
+		return func(c Context) error {
+			log = append(log, "m2 start")
+			err := h(c)
+			log = append(log, "m2 end")
+			return err
+		}
+	}
+	a.Use(mw1)
+	a.Middleware.Replace(mw1, mw2)
+
+	a.GET("/", func(c Context) error {
+		log = append(log, "handler")
+		return nil
+	})
+
+	w := willie.New(a)
+	w.Request("/").Get()
+	r.Len(log, 3)
+	r.Equal([]string{"m2 start", "handler", "m2 end"}, log)
+}
+
 // Test_Middleware_Skip tests that middleware gets skipped
 func Test_Middleware_Skip(t *testing.T) {
 	r := require.New(t)

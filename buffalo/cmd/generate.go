@@ -32,11 +32,8 @@ var generateCmd = &cobra.Command{
 }
 
 func init() {
-	generateCmd.AddCommand(generate.JQueryCmd)
-	generateCmd.AddCommand(generate.RailsJSCmd)
-	generateCmd.AddCommand(generate.BootstrapCmd)
-	generateCmd.AddCommand(generate.BootswatchCmd)
 	generateCmd.AddCommand(generate.ResourceCmd)
 	generateCmd.AddCommand(generate.GothCmd)
+	generateCmd.AddCommand(generate.WebpackCmd)
 	RootCmd.AddCommand(generateCmd)
 }

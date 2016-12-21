@@ -63,6 +63,21 @@ func (ms *MiddlewareStack) Skip(mw MiddlewareFunc, handlers ...Handler) {
 	}
 }
 
+// Replace a piece of middleware with another piece of middleware. Great for
+// testing.
+func (ms *MiddlewareStack) Replace(mw1 MiddlewareFunc, mw2 MiddlewareFunc) {
+	m1k := funcKey(mw1)
+	stack := []MiddlewareFunc{}
+	for _, mw := range ms.stack {
+		if funcKey(mw) == m1k {
+			stack = append(stack, mw2)
+		} else {
+			stack = append(stack, mw)
+		}
+	}
+	ms.stack = stack
+}
+
 func (ms *MiddlewareStack) handler(h Handler) Handler {
 	if len(ms.stack) > 0 {
 		mh := func(_ Handler) Handler {

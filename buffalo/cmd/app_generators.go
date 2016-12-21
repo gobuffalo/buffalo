@@ -7,7 +7,7 @@ import (
 	"github.com/markbates/gentronics"
 )
 
-func newAppGenerator() *gentronics.Generator {
+func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile("main.go", nMain))
 	g.Add(gentronics.NewFile("Procfile", nProcfile))
@@ -20,8 +20,10 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
-	g.Add(gentronics.NewFile("assets/js/application.js", ""))
-	g.Add(gentronics.NewFile("assets/css/application.css", nApplicationCSS))
+	g.Add(&gentronics.RemoteFile{
+		File:       gentronics.NewFile("public/images/logo.svg", ""),
+		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
+	})
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
@@ -29,8 +31,7 @@ func newAppGenerator() *gentronics.Generator {
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/grift")))
 	g.Add(gentronics.NewCommand(goGet("github.com/motemen/gore")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/motemen/gore")))
-	g.Add(generate.NewJQueryGenerator())
-	g.Add(generate.NewBootstrapGenerator())
+	g.Add(generate.NewWebpackGenerator(data))
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
 	g.Add(generate.Fmt)
@@ -96,8 +97,9 @@ func App() *buffalo.App {
 		app.Use(middleware.PopTransaction(models.DB))
 		{{/if}}
 
-		app.ServeFiles("/assets", assetsPath())
 		app.GET("/", HomeHandler)
+
+		app.ServeFiles("/", publicPath())
 	}
 
 	return app
@@ -127,8 +129,8 @@ func init() {
 	})
 }
 
-func assetsPath() http.FileSystem {
-	box := rice.MustFindBox("../assets")
+func publicPath() http.FileSystem {
+	box := rice.MustFindBox("../public")
 	return box.HTTPBox()
 }
 `
@@ -165,35 +167,59 @@ func Test_HomeHandler(t *testing.T) {
 }
 `
 
-const nIndexHTML = `<h1>Welcome to Buffalo!</h1>`
+const nIndexHTML = `<div class="row">
+  <div class="col-md-2">
+    <img src="/images/logo.svg" alt="" />
+  </div>
+  <div class="col-md-10">
+    <h1>Welcome to Buffalo! [v{{version}}]</h1>
+    <h2>
+      <a href="https://github.com/markbates/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/markbates/buffalo</a>
+    </h2>
+    <h2>
+      <a href="http://gobuffalo.io"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
+    </h2>
+
+    <hr>
+    <h2>Defined Routes</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr text-align="left">
+          <th>METHOD</th>
+          <th>PATH</th>
+          <th>HANDLER</th>
+        </tr>
+      </thead>
+      <tbody>
+        \{{#each routes as |r|}}
+        <tr>
+          <td>\{{r.Method}}</td>
+          <td>\{{r.Path}}</td>
+          <td><code>\{{r.HandlerName}}</code></td>
+        </tr>
+        \{{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+`
 
 const nApplicationHTML = `<html>
 <head>
   <meta charset="utf-8">
   <title>Buffalo - {{ titleName }}</title>
-  {{#if withBootstrap }}
-  <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" media="all" />
-  {{/if}}
-  <link rel="stylesheet" href="/assets/css/application.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all" />
 </head>
 <body>
 
-	\{{ yield }}
+  <div class="container">
+    \{{ yield }}
+  </div>
 
-  {{#if withJQuery }}
-  <script src="/assets/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-  {{/if}}
-  {{#if withBootstrap }}
-  <script src="/assets/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-  {{/if}}
-  <script src="/assets/js/application.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
-`
-
-const nApplicationCSS = `body {
-  font-family: helvetica;
-}
 `
 
 const nGitignore = `vendor/
@@ -201,6 +227,7 @@ const nGitignore = `vendor/
 **/*.sqlite
 bin/
 node_modules/
+.sass-cache/
 {{ name }}
 `
 
@@ -235,12 +262,17 @@ ignored_folders:
 - log
 - logs
 - assets
+- public
 - grifts
 - tmp
+- node_modules
+- .sass-cache
 included_extensions:
 - .go
 - .html
 - .md
+- .js
+- .tmpl
 build_path: /tmp
 build_delay: 200ns
 binary_name: {{name}}-build
@@ -250,4 +282,8 @@ log_name: buffalo
 `
 
 const nProcfile = `web: {{name}}`
-const nProcfileDev = `web: buffalo dev`
+const nProcfileDev = `web: buffalo dev
+{{#if withWebpack}}
+assets: webpack --watch
+{{/if}}
+`

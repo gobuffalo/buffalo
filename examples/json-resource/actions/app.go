@@ -1,26 +1,33 @@
 package actions
 
 import (
-	"net/http"
+	"os"
 
 	"github.com/markbates/buffalo"
 	"github.com/markbates/buffalo/examples/json-resource/models"
 	"github.com/markbates/buffalo/middleware"
+	"github.com/markbates/going/defaults"
 )
 
-func App() http.Handler {
-	a := buffalo.Automatic(buffalo.Options{})
-	a.Use(func(h buffalo.Handler) buffalo.Handler {
-		return func(c buffalo.Context) error {
-			// since this is a JSON-only app, let's make sure the
-			// content-type is always json
-			c.Request().Header.Set("Content-Type", "application/json")
-			return h(c)
-		}
-	})
-	a.Use(middleware.PopTransaction(models.DB))
+// ENV is used to help switch settings based on where the
+// application is being run. Default is "development".
+var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+var app *buffalo.App
 
-	g := a.Resource("/users", &UsersResource{})
-	g.Use(findUserMW)
-	return a
+// App is where all routes and middleware for buffalo
+// should be defined. This is the nerve center of your
+// application.
+func App() *buffalo.App {
+	if app == nil {
+		app = buffalo.Automatic(buffalo.Options{
+			Env: ENV,
+		})
+		app.Use(middleware.SetContentType("application/json"))
+		app.Use(middleware.PopTransaction(models.DB))
+
+		g := app.Resource("/users", &UsersResource{})
+		g.Use(findUserMW)
+	}
+
+	return app
 }
