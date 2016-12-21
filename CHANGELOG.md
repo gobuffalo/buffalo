@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.5.0](https://github.com/markbates/buffalo/tree/v0.5.0) (2016-12-21)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.7...v0.5.0)
+
+**Closed issues:**
+
+- Log should output host:port when starting up [\#70](https://github.com/markbates/buffalo/issues/70)
+- add web pack to the "new" generator [\#18](https://github.com/markbates/buffalo/issues/18)
+
+**Merged pull requests:**
+
+- add web pack to the "new" generator closes \#18 [\#71](https://github.com/markbates/buffalo/pull/71) ([markbates](https://github.com/markbates))
+
 ## [v0.4.7](https://github.com/markbates/buffalo/tree/v0.4.7) (2016-12-19)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.6...v0.4.7)
 
@@ -85,7 +97,10 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/markbates/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/markbates/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.2)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...v0.4.2)
+
+## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1.pre...v0.4.1)
 
 ## [v0.4.1.pre](https://github.com/markbates/buffalo/tree/v0.4.1.pre) (2016-12-09)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.0...v0.4.1.pre)
@@ -97,9 +112,6 @@
 [Full Changelog](https://github.com/markbates/buffalo/compare/0.4.0...v0.4.0.pre)
 
 ## [0.4.0](https://github.com/markbates/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.1...0.4.0)
-
-## [v0.4.1](https://github.com/markbates/buffalo/tree/v0.4.1) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/markbates/buffalo/issues/27)
