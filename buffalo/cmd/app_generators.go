@@ -20,15 +20,10 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
-	g.Add(gentronics.NewFile("public/assets/.gitignore", ""))
 	g.Add(&gentronics.RemoteFile{
 		File:       gentronics.NewFile("public/images/logo.svg", ""),
 		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
 	})
-	if skipWebpack {
-		g.Add(gentronics.NewFile("assets/js/application.js", ""))
-		g.Add(gentronics.NewFile("assets/css/application.css", ""))
-	}
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(goInstall("github.com/markbates/refresh")))
@@ -104,7 +99,6 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		app.ServeFiles("/assets", assetsPath())
 		app.ServeFiles("/", publicPath())
 	}
 
@@ -133,11 +127,6 @@ func init() {
 		CacheTemplates: ENV == "production",
 		FileResolver:   resolver,
 	})
-}
-
-func assetsPath() http.FileSystem {
-	box := rice.MustFindBox("../public/assets")
-	return box.HTTPBox()
 }
 
 func publicPath() http.FileSystem {
@@ -239,7 +228,6 @@ const nGitignore = `vendor/
 bin/
 node_modules/
 .sass-cache/
-assets/dist/
 {{ name }}
 `
 

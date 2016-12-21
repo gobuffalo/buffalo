@@ -43,10 +43,11 @@ var WebpackCmd = &cobra.Command{
 // NewWebpackGenerator generates a new actions/resource file and a stub test.
 func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
+	g.Add(gentronics.NewFile("public/assets/application.js", "// generated"))
+	g.Add(gentronics.NewFile("public/assets/application.css", "// generated"))
 	_, err := exec.LookPath("npm")
 	if err != nil {
 		fmt.Println("Could not find npm/node. Skipping webpack generation.")
-		g.Add(gentronics.NewFile("assets/.git-keep", ""))
 		return g
 	}
 
