@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.5.1](https://github.com/markbates/buffalo/tree/v0.5.1) (2016-12-22)
+[Full Changelog](https://github.com/markbates/buffalo/compare/v0.5.0...v0.5.1)
+
+**Closed issues:**
+
+- groups on groups should inherit the prefix of the previous group [\#72](https://github.com/markbates/buffalo/issues/72)
+- Improve resource generator to insert the resource into actions/app.go [\#43](https://github.com/markbates/buffalo/issues/43)
+
 ## [v0.5.0](https://github.com/markbates/buffalo/tree/v0.5.0) (2016-12-21)
 [Full Changelog](https://github.com/markbates/buffalo/compare/v0.4.7...v0.5.0)
 
