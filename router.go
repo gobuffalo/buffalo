@@ -112,7 +112,7 @@ func (a *App) ANY(p string, h Handler) {
 */
 func (a *App) Group(path string) *App {
 	g := New(a.Options)
-	g.prefix = path
+	g.prefix = filepath.Join(a.prefix, path)
 	g.router = a.router
 	g.Middleware = newMiddlewareStack()
 	g.Middleware.skips = a.Middleware.skips

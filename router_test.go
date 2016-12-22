@@ -69,6 +69,24 @@ func Test_Router_Group(t *testing.T) {
 	r.Equal(201, res.Code)
 }
 
+func Test_Router_Group_on_Group(t *testing.T) {
+	r := require.New(t)
+
+	a := testApp()
+	g := a.Group("/api/v1")
+	g.GET("/users", func(c Context) error {
+		return c.Render(201, nil)
+	})
+	f := g.Group("/foo")
+	f.GET("/bar", func(c Context) error {
+		return c.Render(420, nil)
+	})
+
+	w := willie.New(a)
+	res := w.Request("/api/v1/foo/bar").Get()
+	r.Equal(420, res.Code)
+}
+
 func Test_Router_Group_Middleware(t *testing.T) {
 	r := require.New(t)
 
