@@ -21,7 +21,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
 	g.Add(&gentronics.RemoteFile{
-		File:       gentronics.NewFile("public/images/logo.svg", ""),
+		File:       gentronics.NewFile("public/assetsf/images/logo.svg", ""),
 		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
 	})
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
@@ -99,7 +99,7 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		app.ServeFiles("/", publicPath())
+		app.ServeFiles("/assets", assetsPath())
 	}
 
 	return app
@@ -129,8 +129,8 @@ func init() {
 	})
 }
 
-func publicPath() http.FileSystem {
-	box := rice.MustFindBox("../public")
+func assetsPath() http.FileSystem {
+	box := rice.MustFindBox("../public/assets")
 	return box.HTTPBox()
 }
 `
@@ -169,7 +169,7 @@ func Test_HomeHandler(t *testing.T) {
 
 const nIndexHTML = `<div class="row">
   <div class="col-md-2">
-    <img src="/images/logo.svg" alt="" />
+    <img src="/assets/images/logo.svg" alt="" />
   </div>
   <div class="col-md-10">
     <h1>Welcome to Buffalo! [v{{version}}]</h1>
