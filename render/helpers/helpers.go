@@ -2,11 +2,13 @@ package helpers
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"strings"
 
 	"github.com/aymerick/raymond"
 	"github.com/markbates/inflect"
+	"github.com/shurcooL/github_flavored_markdown"
 )
 
 // Helpers that are automatically injected into templates.
@@ -18,6 +20,8 @@ var Helpers = map[string]interface{}{
 	"content_of":  ContentOf,
 	"upcase":      strings.ToUpper,
 	"downcase":    strings.ToLower,
+	"markdown":    Markdown,
+	"debug":       Debug,
 }
 
 func init() {
@@ -58,4 +62,15 @@ func ContentOf(name string, options *raymond.Options) raymond.SafeString {
 		return s.(raymond.SafeString)
 	}
 	return raymond.SafeString("")
+}
+
+// Markdown converts the string into HTML using GitHub flavored markdown.
+func Markdown(body string) raymond.SafeString {
+	b := github_flavored_markdown.Markdown([]byte(body))
+	return raymond.SafeString(string(b))
+}
+
+// Debug by verbosely printing out using 'pre' tags.
+func Debug(v interface{}) raymond.SafeString {
+	return raymond.SafeString(fmt.Sprintf("<pre>%+v</pre>", v))
 }
