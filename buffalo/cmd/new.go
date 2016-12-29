@@ -24,7 +24,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -75,24 +74,6 @@ func rootPath(name string) (string, error) {
 
 func packagePath(rootPath string) string {
 	return strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
-}
-
-func goInstall(pkg string) *exec.Cmd {
-	args := []string{"install"}
-	if verbose {
-		args = append(args, "-v")
-	}
-	args = append(args, pkg)
-	return exec.Command("go", args...)
-}
-
-func goGet(pkg string) *exec.Cmd {
-	args := []string{"get"}
-	if verbose {
-		args = append(args, "-v")
-	}
-	args = append(args, pkg)
-	return exec.Command("go", args...)
 }
 
 func genNewFiles(name, rootPath string) error {
