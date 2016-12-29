@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo/render"
 )
 
 // Context holds on to information as you

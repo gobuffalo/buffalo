@@ -3,7 +3,7 @@ package grifts
 import (
 	"os"
 
-	"github.com/markbates/buffalo/examples/json-resource/actions"
+	"github.com/gobuffalo/buffalo/examples/json-resource/actions"
 	. "github.com/markbates/grift/grift"
 	"github.com/olekukonko/tablewriter"
 )

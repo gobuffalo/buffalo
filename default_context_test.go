@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/net/websocket"
 
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"

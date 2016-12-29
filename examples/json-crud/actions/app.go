@@ -3,9 +3,9 @@ package actions
 import (
 	"os"
 
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/json-crud/models"
-	"github.com/markbates/buffalo/middleware"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/examples/json-crud/models"
+	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/markbates/going/defaults"
 )
 

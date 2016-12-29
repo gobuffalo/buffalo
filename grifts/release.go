@@ -97,7 +97,7 @@ func tagRelease(v string) error {
 		return err
 	}
 
-	res, err := http.Post(fmt.Sprintf("https://api.github.com/repos/markbates/buffalo/releases?access_token=%s", token), "application/json", bytes.NewReader(b))
+	res, err := http.Post(fmt.Sprintf("https://api.github.com/repos/gobuffalo/buffalo/releases?access_token=%s", token), "application/json", bytes.NewReader(b))
 	if err != nil {
 		return err
 	}

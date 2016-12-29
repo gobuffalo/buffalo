@@ -56,7 +56,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/markbates/buffalo"
+	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	{{#each providers}}

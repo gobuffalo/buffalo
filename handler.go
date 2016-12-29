@@ -18,7 +18,7 @@ import (
 	}
 
 	func (c Context) error {
-		return C.Redirect(301, "http://github.com/markbates/buffalo")
+		return C.Redirect(301, "http://github.com/gobuffalo/buffalo")
 	}
 
 	func (c Context) error {

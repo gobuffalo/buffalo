@@ -3,9 +3,9 @@ package middleware_test
 import (
 	"testing"
 
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/middleware"
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/middleware"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )

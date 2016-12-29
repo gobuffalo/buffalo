@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/markbates/buffalo"
+	"github.com/gobuffalo/buffalo"
 	newrelic "github.com/newrelic/go-agent"
 )
 

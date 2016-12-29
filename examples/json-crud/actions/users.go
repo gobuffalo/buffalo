@@ -1,9 +1,9 @@
 package actions
 
 import (
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/json-crud/models"
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/examples/json-crud/models"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )

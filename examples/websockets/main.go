@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/markbates/buffalo/examples/websockets/actions"
+	"github.com/gobuffalo/buffalo/examples/websockets/actions"
 	"github.com/markbates/going/defaults"
 )
 

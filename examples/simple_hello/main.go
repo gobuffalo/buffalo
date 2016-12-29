@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/render"
 )
 
 func main() {

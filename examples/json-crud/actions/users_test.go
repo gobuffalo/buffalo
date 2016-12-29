@@ -3,8 +3,8 @@ package actions_test
 import (
 	"testing"
 
-	"github.com/markbates/buffalo/examples/json-crud/actions"
-	"github.com/markbates/buffalo/examples/json-crud/models"
+	"github.com/gobuffalo/buffalo/examples/json-crud/actions"
+	"github.com/gobuffalo/buffalo/examples/json-crud/models"
 	"github.com/markbates/going/validate"
 	"github.com/markbates/pop"
 	"github.com/markbates/willie"

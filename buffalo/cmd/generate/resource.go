@@ -63,7 +63,7 @@ func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 
 var rAction = `package actions
 
-import "github.com/markbates/buffalo"
+import "github.com/gobuffalo/buffalo"
 
 type {{camel}}Resource struct{
 	buffalo.Resource

@@ -1,6 +1,6 @@
 package render
 
-import "github.com/markbates/buffalo/render/resolvers"
+import "github.com/gobuffalo/buffalo/render/resolvers"
 
 // Options for render.Engine
 type Options struct {

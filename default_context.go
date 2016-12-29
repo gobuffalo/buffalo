@@ -12,7 +12,7 @@ import (
 
 	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/pkg/errors"
 )
 

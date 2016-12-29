@@ -3,7 +3,7 @@ package actions_test
 import (
 	"testing"
 
-	"github.com/markbates/buffalo/examples/websockets/actions"
+	"github.com/gobuffalo/buffalo/examples/websockets/actions"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )

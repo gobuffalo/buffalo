@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/html-crud/models"
-	"github.com/markbates/buffalo/middleware"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/examples/html-crud/models"
+	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/markbates/going/defaults"
 )
 

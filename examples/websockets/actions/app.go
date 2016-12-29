@@ -3,7 +3,7 @@ package actions
 import (
 	"os"
 
-	"github.com/markbates/buffalo"
+	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/going/defaults"
 )
 

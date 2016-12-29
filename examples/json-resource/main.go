@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/markbates/buffalo/examples/json-resource/actions"
+	"github.com/gobuffalo/buffalo/examples/json-resource/actions"
 	"github.com/markbates/going/defaults"
 )
 

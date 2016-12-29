@@ -20,7 +20,7 @@
 
 package main
 
-import "github.com/markbates/buffalo/buffalo/cmd"
+import "github.com/gobuffalo/buffalo/buffalo/cmd"
 
 func main() {
 	cmd.Execute()

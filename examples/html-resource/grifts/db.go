@@ -1,7 +1,7 @@
 package grifts
 
 import (
-	"github.com/markbates/buffalo/examples/html-resource/models"
+	"github.com/gobuffalo/buffalo/examples/html-resource/models"
 	. "github.com/markbates/grift/grift"
 	"github.com/markbates/pop"
 )

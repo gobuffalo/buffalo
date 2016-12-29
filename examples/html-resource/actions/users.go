@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"github.com/markbates/buffalo"
-	"github.com/markbates/buffalo/examples/html-resource/models"
+	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/examples/html-resource/models"
 	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )

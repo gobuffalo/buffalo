@@ -21,7 +21,7 @@
 package cmd
 
 import (
-	"github.com/markbates/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/spf13/cobra"
 )
 

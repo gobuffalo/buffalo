@@ -1,6 +1,6 @@
 package middleware
 
-import "github.com/markbates/buffalo"
+import "github.com/gobuffalo/buffalo"
 
 // SetContentType on the request to desired type. This will
 // override any content type sent by the client.

@@ -3,7 +3,7 @@ package grifts
 import (
 	"os"
 
-	"github.com/markbates/buffalo/examples/hello-world/actions"
+	"github.com/gobuffalo/buffalo/examples/hello-world/actions"
 	. "github.com/markbates/grift/grift"
 	"github.com/olekukonko/tablewriter"
 )

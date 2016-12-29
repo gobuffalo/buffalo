@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/markbates/buffalo/render"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )

@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/markbates/buffalo"
+	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/pop"
 )
 

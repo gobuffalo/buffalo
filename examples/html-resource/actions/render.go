@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/markbates/buffalo/render"
-	"github.com/markbates/buffalo/render/resolvers"
+	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/buffalo/render/resolvers"
 )
 
 var r *render.Engine

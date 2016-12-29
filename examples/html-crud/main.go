@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/markbates/buffalo/examples/html-crud/actions"
+	"github.com/gobuffalo/buffalo/examples/html-crud/actions"
 	"github.com/markbates/going/defaults"
 )
 

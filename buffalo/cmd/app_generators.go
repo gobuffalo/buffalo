@@ -3,7 +3,7 @@ package cmd
 import (
 	"os/exec"
 
-	"github.com/markbates/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/markbates/gentronics"
 )
 
@@ -22,7 +22,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
 	g.Add(&gentronics.RemoteFile{
 		File:       gentronics.NewFile("public/assets/images/logo.svg", ""),
-		RemotePath: "https://raw.githubusercontent.com/markbates/buffalo/master/logo.svg",
+		RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
 	})
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(goGet("github.com/markbates/refresh/...")))
@@ -71,9 +71,9 @@ const nApp = `package actions
 import (
 	"os"
 
-	"github.com/markbates/buffalo"
+	"github.com/gobuffalo/buffalo"
 	{{#if withPop }}
-	"github.com/markbates/buffalo/middleware"
+	"github.com/gobuffalo/buffalo/middleware"
 	"{{modelsPath}}"
 	{{/if}}
 	"github.com/markbates/going/defaults"
@@ -112,8 +112,8 @@ import (
 	"net/http"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/markbates/buffalo/render"
-	"github.com/markbates/buffalo/render/resolvers"
+	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/buffalo/render/resolvers"
 )
 
 var r *render.Engine
@@ -137,7 +137,7 @@ func assetsPath() http.FileSystem {
 
 const nHomeHandler = `package actions
 
-import "github.com/markbates/buffalo"
+import "github.com/gobuffalo/buffalo"
 
 // HomeHandler is a default handler to serve up
 // a home page.
@@ -174,7 +174,7 @@ const nIndexHTML = `<div class="row">
   <div class="col-md-10">
     <h1>Welcome to Buffalo! [v{{version}}]</h1>
     <h2>
-      <a href="https://github.com/markbates/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/markbates/buffalo</a>
+      <a href="https://github.com/gobuffalo/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
     </h2>
     <h2>
       <a href="http://gobuffalo.io"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>

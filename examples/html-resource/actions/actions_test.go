@@ -1,7 +1,7 @@
 package actions_test
 
 import (
-	"github.com/markbates/buffalo/examples/html-resource/models"
+	"github.com/gobuffalo/buffalo/examples/html-resource/models"
 	"github.com/markbates/pop"
 )
 

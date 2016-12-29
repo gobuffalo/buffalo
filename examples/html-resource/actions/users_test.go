@@ -3,8 +3,8 @@ package actions_test
 import (
 	"testing"
 
-	"github.com/markbates/buffalo/examples/html-resource/actions"
-	"github.com/markbates/buffalo/examples/html-resource/models"
+	"github.com/gobuffalo/buffalo/examples/html-resource/actions"
+	"github.com/gobuffalo/buffalo/examples/html-resource/models"
 	"github.com/markbates/pop"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
