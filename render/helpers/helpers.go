@@ -41,7 +41,7 @@ func ToJSON(v interface{}) string {
 
 // ContentFor stores a block of templating code to be re-used later in the template.
 /*
-	{{content_for "buttons"}}
+	{{#content_for "buttons"}}
 		<button>hi</button>
 	{{/content_for}}
 */
