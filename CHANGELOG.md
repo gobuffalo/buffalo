@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.6.0](https://github.com/gobuffalo/buffalo/tree/v0.6.0) (2016-12-29)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.5.1...v0.6.0)
+
 ## [v0.5.1](https://github.com/gobuffalo/buffalo/tree/v0.5.1) (2016-12-22)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.5.0...v0.5.1)
 
@@ -111,15 +114,15 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
 
 ## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
-
-## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.1.pre)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.0.pre)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
+
+## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)
