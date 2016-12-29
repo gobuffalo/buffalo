@@ -37,3 +37,4 @@ func init() {
 	generateCmd.AddCommand(generate.WebpackCmd)
 	RootCmd.AddCommand(generateCmd)
 }
+
