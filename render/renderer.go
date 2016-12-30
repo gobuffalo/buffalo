@@ -17,6 +17,7 @@ type Renderer interface {
 // Renderer interface.
 type Data map[string]interface{}
 
+// ToVelvet converts the render data into a velvet.Context
 func (d Data) ToVelvet() *velvet.Context {
 	return velvet.NewContextWith(d)
 }

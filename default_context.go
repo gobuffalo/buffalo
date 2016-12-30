@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/pkg/errors"
 )
 
