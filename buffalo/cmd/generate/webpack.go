@@ -77,6 +77,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	modules := []string{"webpack", "sass-loader", "css-loader", "style-loader", "node-sass",
 		"babel-loader", "extract-text-webpack-plugin", "babel", "babel-core", "url-loader", "file-loader",
 		"jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
+		"copy-webpack-plugin",
 	}
 	args := []string{"install", "--save"}
 	args = append(args, modules...)
@@ -85,7 +86,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 }
 
 var nWebpack = `var webpack = require("webpack");
-
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
@@ -103,7 +104,16 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery"
     }),
-    new ExtractTextPlugin("application.css")
+    new ExtractTextPlugin("application.css"),
+    new CopyWebpackPlugin([{
+      from: "./assets",
+      to: ""
+    }], {
+      ignore: [
+        "css/*",
+        "js/*",
+      ]
+    })
   ],
   module: {
     loaders: [{
