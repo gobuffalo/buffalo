@@ -46,6 +46,7 @@ var GothCmd = &cobra.Command{
 func NewGothGenerator() *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile(filepath.Join("actions", "goth.go"), gGoth))
+	g.Add(gentronics.NewCommand(GoGet("github.com/markbates/goth/...")))
 	g.Add(Fmt)
 	return g
 }
