@@ -172,13 +172,13 @@ func Test_Resource(t *testing.T) {
 
 	a := Automatic(Options{})
 	a.Resource("/users", &userResource{})
-	a.Resource("/api/v1/people", &userResource{})
+	a.Resource("/api/v1/users", &userResource{})
 
 	ts := httptest.NewServer(a)
 	defer ts.Close()
 
 	c := http.Client{}
-	for _, path := range []string{"/users", "/api/v1/people"} {
+	for _, path := range []string{"/users", "/api/v1/users"} {
 		for _, test := range tests {
 			u := ts.URL + filepath.Join(path, test.Path)
 			req, err := http.NewRequest(test.Method, u, nil)
@@ -200,7 +200,7 @@ func (u *userResource) List(c Context) error {
 }
 
 func (u *userResource) Show(c Context) error {
-	return c.Render(200, render.String("show {{params.user_id}}{{params.person_id}}"))
+	return c.Render(200, render.String("show {{params.user_id}}"))
 }
 
 func (u *userResource) New(c Context) error {
@@ -212,13 +212,13 @@ func (u *userResource) Create(c Context) error {
 }
 
 func (u *userResource) Edit(c Context) error {
-	return c.Render(200, render.String("edit {{params.user_id}}{{params.person_id}}"))
+	return c.Render(200, render.String("edit {{params.user_id}}"))
 }
 
 func (u *userResource) Update(c Context) error {
-	return c.Render(200, render.String("update {{params.user_id}}{{params.person_id}}"))
+	return c.Render(200, render.String("update {{params.user_id}}"))
 }
 
 func (u *userResource) Destroy(c Context) error {
-	return c.Render(200, render.String("destroy {{params.user_id}}{{params.person_id}}"))
+	return c.Render(200, render.String("destroy {{params.user_id}}"))
 }
