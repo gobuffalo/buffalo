@@ -158,7 +158,7 @@ func (d *DefaultContext) Error(status int, err error) error {
 		})
 	case "application/xml", "text/xml", "xml":
 	default:
-		_, err = d.Response().Write([]byte(msg))
+		_, err = d.Response().Write([]byte(fmt.Sprintf("<pre>%+v</pre>", msg)))
 	}
 	return err
 }

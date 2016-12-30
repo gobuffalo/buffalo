@@ -29,7 +29,8 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	for _, name := range s.names {
 		yield, err = s.execute(name, data.ToVelvet())
 		if err != nil {
-			return errors.WithMessage(errors.WithStack(err), name)
+			err = errors.Errorf("error rendering %s:\n%+v", name, err)
+			return err
 		}
 		data["yield"] = yield
 	}
@@ -43,8 +44,13 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 func (s *templateRenderer) execute(name string, data *velvet.Context) (template.HTML, error) {
 	source, err := s.source(name)
 	if err != nil {
-		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+		return "", err
 	}
+	err = source.Helpers.AddMany(s.Helpers)
+	if err != nil {
+		return "", err
+	}
+
 	err = source.Helpers.Add("partial", func(name string, help velvet.HelperContext) (template.HTML, error) {
 		p, err := s.partial(name, help.Context)
 		if err != nil {
