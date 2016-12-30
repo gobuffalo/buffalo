@@ -21,7 +21,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
 	g.Add(&gentronics.RemoteFile{
-		File:       gentronics.NewFile("public/assets/images/logo.svg", ""),
+		File:       gentronics.NewFile("assets/images/logo.svg", ""),
 		RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
 	})
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
