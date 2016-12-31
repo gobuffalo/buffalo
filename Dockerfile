@@ -26,3 +26,4 @@ RUN buffalo db migrate -e test
 RUN buffalo test -race
 RUN buffalo g goth facebook twitter linkedin github
 RUN buffalo test -race
+RUN buffalo build
