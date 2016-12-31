@@ -9,6 +9,7 @@ import (
 
 func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
+	g.Add(gentronics.NewFile("README.md", nREADME))
 	g.Add(gentronics.NewFile("main.go", nMain))
 	g.Add(gentronics.NewFile("Procfile", nProcfile))
 	g.Add(gentronics.NewFile("Procfile.development", nProcfileDev))
@@ -46,6 +47,16 @@ func appGoGet() *exec.Cmd {
 	appArgs = append(appArgs, "./...")
 	return exec.Command("go", appArgs...)
 }
+
+const nREADME = `# {{name}}
+
+## Documentation
+
+To view generated docs for {{name}}, run the below command and point your brower to http://127.0.0.1:6060
+
+ godoc -http=:6060 2>/dev/null &
+ 
+`
 
 const nMain = `package main
 
