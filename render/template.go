@@ -46,10 +46,6 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 	if err != nil {
 		return "", err
 	}
-	err = source.Helpers.AddMany(s.Helpers)
-	if err != nil {
-		return "", err
-	}
 
 	err = source.Helpers.Add("partial", func(name string, help velvet.HelperContext) (template.HTML, error) {
 		p, err := s.partial(name, help.Context)
@@ -90,6 +86,11 @@ func (s *templateRenderer) source(name string) (*velvet.Template, error) {
 	t, err = velvet.Parse(source)
 	if err != nil {
 		return t, errors.Errorf("Error parsing %s: %+v", name, errors.WithStack(err))
+	}
+
+	err = t.Helpers.AddMany(s.Helpers)
+	if err != nil {
+		return nil, err
 	}
 	if s.CacheTemplates {
 		s.templateCache[name] = t
