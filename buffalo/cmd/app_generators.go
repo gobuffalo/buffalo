@@ -14,6 +14,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("Procfile", nProcfile))
 	g.Add(gentronics.NewFile("Procfile.development", nProcfileDev))
 	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
+	g.Add(gentronics.NewFile(".codeclimate.yml", nCodeClimate))
 	g.Add(gentronics.NewFile("actions/app.go", nApp))
 	g.Add(gentronics.NewFile("actions/home.go", nHomeHandler))
 	g.Add(gentronics.NewFile("actions/home_test.go", nHomeHandlerTest))
@@ -344,4 +345,27 @@ const nProcfileDev = `web: buffalo dev
 {{#if withWebpack}}
 assets: webpack --watch
 {{/if}}
+`
+
+const nCodeClimate = `engines:
+  golint:
+    enabled: true
+  govet:
+    enabled: true
+  gofmt:
+    enabled: true
+  fixme:
+    enabled: true
+ ratings:
+   paths:
+    - "**.go"
+ exclude_paths:
+   - "grifts/**/*"
+   - "**/*_test.go"
+   - "*_test.go"
+   - "**_test.go"
+   - "logs/*"
+   - "public/*"
+   - "templates/*"
+
 `
