@@ -1,2 +1,0 @@
-web: buffalo dev
-assets: webpack --watch
