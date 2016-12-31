@@ -48,7 +48,7 @@ func appGoGet() *exec.Cmd {
 	return exec.Command("go", appArgs...)
 }
 
-const nREADME = `# {{name}}
+const nREADME = `# {{name}} 
 
 ## Documentation
  
