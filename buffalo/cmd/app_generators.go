@@ -55,7 +55,18 @@ const nREADME = `# {{name}}
 To view generated docs for {{name}}, run the below command and point your brower to http://127.0.0.1:6060
 
  godoc -http=:6060 2>/dev/null &
+
+## Run in dev
+
+ buffalo dev
  
+## Run Tests
+
+ buffalo test
+
+![alt](http://www.gobuffalo.io/assets/images/logo.svg)
+[Buffalo](http://gobuffalo.io) Powered
+
 `
 
 const nMain = `package main

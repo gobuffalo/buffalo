@@ -1,0 +1,7 @@
+vendor/
+**/*.log
+**/*.sqlite
+bin/
+node_modules/
+.sass-cache/
+test_app
