@@ -284,6 +284,7 @@ const nGitignore = `vendor/
 bin/
 node_modules/
 .sass-cache/
+rice-box.go
 {{ name }}
 `
 
