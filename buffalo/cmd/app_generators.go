@@ -11,8 +11,6 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile("README.md", nREADME))
 	g.Add(gentronics.NewFile("main.go", nMain))
-	g.Add(gentronics.NewFile("Procfile", nProcfile))
-	g.Add(gentronics.NewFile("Procfile.development", nProcfileDev))
 	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
 	g.Add(gentronics.NewFile(".codeclimate.yml", nCodeClimate))
 	g.Add(gentronics.NewFile("actions/app.go", nApp))
@@ -49,24 +47,24 @@ func appGoGet() *exec.Cmd {
 	return exec.Command("go", appArgs...)
 }
 
-const nREADME = `# {{name}} 
+const nREADME = `# {{name}}
 
 ## Documentation
- 
+
 To view generated docs for {{name}}, run the below command and point your brower to http://127.0.0.1:6060/pkg/
- 
+
     godoc -http=:6060 2>/dev/null &
- 
-### Buffalo 
- 
+
+### Buffalo
+
 http://gobuffalo.io/docs/getting-started
- 
+
 ### Pop/Soda
- 
+
 http://gobuffalo.io/docs/db
- 
+
 ## Database Configuration
- 
+
  	development:
  		dialect: postgres
  		database: {{name}}_development
@@ -74,14 +72,14 @@ http://gobuffalo.io/docs/db
  		password: <password>
  		host: 127.0.0.1
  		pool: 5
- 
+
  	test:
  		dialect: postgres
  		database: {{name}}_test
  		user: <username>
  		password: <password>
  		host: 127.0.0.1
- 	
+
  	production:
  		dialect: postgres
  		database: {{name}}_production
@@ -89,23 +87,22 @@ http://gobuffalo.io/docs/db
  		password: <password>
  		host: 127.0.0.1
  		pool: 25
- 
+
  ### Running Migrations
- 
+
     buffalo soda migrate
- 
+
  ## Run Tests
- 
+
     buffalo test
- 
+
  ## Run in dev
- 
+
     buffalo dev
- 
+
 [Powered by Buffalo](http://gobuffalo.io)
 
 `
-
 const nMain = `package main
 
 import (
@@ -338,13 +335,6 @@ binary_name: {{name}}-build
 command_flags: []
 enable_colors: true
 log_name: buffalo
-`
-
-const nProcfile = `web: {{name}}`
-const nProcfileDev = `web: buffalo dev
-{{#if withWebpack}}
-assets: webpack --watch
-{{/if}}
 `
 
 const nCodeClimate = `engines:

@@ -1,9 +1,11 @@
 package buffalo
 
 import (
+	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -25,6 +27,7 @@ type DefaultContext struct {
 	logger      Logger
 	session     *Session
 	contentType string
+	notFound    http.Handler
 	data        map[string]interface{}
 }
 
@@ -92,15 +95,21 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		d.LogField("render", time.Now().Sub(now))
 	}()
 	if rr != nil {
-		d.Response().Header().Set("Content-Type", rr.ContentType())
-		d.Response().WriteHeader(status)
 		data := d.data
 		pp := map[string]string{}
 		for k, v := range d.params {
 			pp[k] = v[0]
 		}
 		data["params"] = pp
-		return rr.Render(d.Response(), data)
+		bb := &bytes.Buffer{}
+		err := rr.Render(bb, data)
+		if err != nil {
+			return err
+		}
+		d.Response().Header().Set("Content-Type", rr.ContentType())
+		d.Response().WriteHeader(status)
+		_, err = io.Copy(d.Response(), bb)
+		return err
 	}
 	d.Response().WriteHeader(status)
 	return nil
@@ -144,6 +153,12 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
+	if status == 404 {
+		req := d.Request()
+		req.URL.Query().Set("error", err.Error())
+		d.notFound.ServeHTTP(d.Response(), req)
+		return nil
+	}
 	err = errors.WithStack(err)
 	d.Logger().Error(err)
 	msg := fmt.Sprintf("%+v", err)
