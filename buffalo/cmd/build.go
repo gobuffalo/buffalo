@@ -38,23 +38,6 @@ var output string
 
 var cleanup = []string{}
 
-func buildTemplates() error {
-	path := filepath.Join("a", "templates.go")
-	cleanup = append(cleanup, path)
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	f.WriteString(`package a
-
-import rice "github.com/GeertJohan/go.rice"
-
-func ignore() {
-	rice.FindBox("../templates")
-}`)
-	return nil
-}
-
 func buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
@@ -82,7 +65,7 @@ func buildAPack() error {
 	if err != nil {
 		return err
 	}
-	return buildTemplates()
+	return nil
 }
 
 func buildAInit() error {
@@ -210,7 +193,7 @@ func buildMain() error {
 }
 
 func cleanupBuild(original_main []byte) {
-	fmt.Println("--> clean up build")
+	fmt.Println("--> cleaning up build")
 	for _, b := range cleanup {
 		fmt.Printf("--> cleaning up %s\n", b)
 		os.RemoveAll(b)
@@ -266,7 +249,7 @@ var buildCmd = &cobra.Command{
 
 		buildArgs := []string{"build", "-v", "-o", output}
 		_, err = exec.LookPath("git")
-		version := time.Now().String()
+		version := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
 		if err == nil {
 			cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
 			out := &bytes.Buffer{}

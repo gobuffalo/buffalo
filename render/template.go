@@ -73,7 +73,7 @@ func (s *templateRenderer) source(name string) (*velvet.Template, error) {
 			return t.Clone(), nil
 		}
 	}
-	b, err := s.FileResolver.Read(filepath.Join(s.TemplatesPath, name))
+	b, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
 	}
