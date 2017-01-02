@@ -9,8 +9,8 @@ import (
 )
 
 var r *render.Engine
-var resolver = &resolvers.RiceBox{
-	Box: rice.MustFindBox("../templates"),
+var resolver = &resolvers.GoPathResolver{
+	Path: "github.com/gobuffalo/buffalo/examples/html-crud/templates",
 }
 
 func init() {
