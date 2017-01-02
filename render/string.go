@@ -3,7 +3,7 @@ package render
 import (
 	"io"
 
-	"github.com/aymerick/raymond"
+	"github.com/gobuffalo/velvet"
 )
 
 type stringRenderer struct {
@@ -16,12 +16,11 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	t, err := raymond.Parse(s.body)
+	t, err := velvet.Parse(s.body)
 	if err != nil {
 		return err
 	}
-	t.RegisterHelpers(s.Helpers)
-	b, err := t.Exec(data)
+	b, err := t.Exec(data.ToVelvet())
 	if err != nil {
 		return err
 	}
