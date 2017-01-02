@@ -8,7 +8,7 @@ type Options struct {
 	HTMLLayout string
 	// TemplatesPath is the location of the templates directory on disk.
 	TemplatesPath string
-	// FileResolver will attempt to file a file and return it's bytes, if possible
+	// FileResolverFunc will attempt to file a file and return it's bytes, if possible
 	FileResolverFunc func() resolvers.FileResolver
 	fileResolver     resolvers.FileResolver
 	// Helpers to be rendered with the templates
@@ -18,6 +18,11 @@ type Options struct {
 	CacheTemplates bool
 }
 
+// Resolver calls the FileResolverFunc and returns the resolver. The resolver
+// is cached, so the function can be called multiple times without penalty.
+// This is necessary because certain resolvers, like the RiceBox one, require
+// a fully initialized state to work properly and can not be run directly from
+// init functions.
 func (o *Options) Resolver() resolvers.FileResolver {
 	if o.fileResolver == nil {
 		o.fileResolver = o.FileResolverFunc()
