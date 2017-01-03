@@ -249,17 +249,18 @@ var buildCmd = &cobra.Command{
 
 		buildArgs := []string{"build", "-v", "-o", output}
 		_, err = exec.LookPath("git")
-		version := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
+		buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
+		version := buildTime
 		if err == nil {
 			cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
 			out := &bytes.Buffer{}
 			cmd.Stdout = out
 			err = cmd.Run()
 			if err == nil && out.String() != "" {
-				version = out.String()
+				version = strings.TrimSpace(out.String())
 			}
 		}
-		buildArgs = append(buildArgs, "-ldflags", fmt.Sprintf("-X main.version=%s", version))
+		buildArgs = append(buildArgs, "-ldflags", fmt.Sprintf("-X main.version=%s -X main.buildTime=%s", version, buildTime))
 
 		cmd := exec.Command("go", buildArgs...)
 		fmt.Printf("--> building %s\n", strings.Join(cmd.Args, " "))
@@ -291,10 +292,10 @@ import (
 )
 
 var version = "unknown"
+var buildTime = "unknown"
 var migrationBox *rice.Box
 
 func main() {
-	fmt.Printf("{{name}} version %s\n\n", version)
 	args := os.Args
 	if len(args) == 1 {
 		original_main()
@@ -304,10 +305,17 @@ func main() {
 	case "migrate":
 		migrate()
 	case "start", "run", "serve":
+		printVersion()
 		original_main()
+	case "version":
+		printVersion()
 	default:
 		log.Fatalf("Could not find a command named: %s", c)
 	}
+}
+
+func printVersion() {
+	fmt.Printf("{{name}} version %s (%s)\n\n", version, buildTime)
 }
 
 func migrate() {
