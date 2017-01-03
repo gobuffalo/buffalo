@@ -34,84 +34,71 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var output string
+var outputBinName string
 
-var cleanup = []string{}
+type builder struct {
+	cleanup       []string
+	original_main []byte
+	workDir       string
+}
 
-func buildWebpack() error {
+func (b *builder) clean(name ...string) string {
+	path := filepath.Join(name...)
+	b.cleanup = append(b.cleanup, path)
+	return path
+}
+
+func (b *builder) exec(name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	fmt.Printf("--> running %s\n", strings.Join(cmd.Args, " "))
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
+
+func (b *builder) execQuiet(name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	return cmd.Run()
+}
+
+func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		cmd := exec.Command("webpack")
-		cmd.Stdin = os.Stdin
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		return cmd.Run()
+		return b.exec("webpack")
 	}
 	return nil
 }
 
-func buildAPack() error {
-	cleanup = append(cleanup, "a")
-	err := os.MkdirAll("a", 0766)
+func (b *builder) buildAPack() error {
+	err := os.MkdirAll(b.clean("a"), 0766)
 	if err != nil {
 		return err
 	}
-	err = buildAInit()
+	err = b.buildAInit()
 	if err != nil {
 		return err
 	}
-	err = buildDatabase()
+	err = b.buildDatabase()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func buildAInit() error {
-	path := filepath.Join("a", "a.go")
-	cleanup = append(cleanup, path)
-	a, err := os.Create(path)
+func (b *builder) buildAInit() error {
+	a, err := os.Create(b.clean("a", "a.go"))
 	if err != nil {
 		return err
 	}
-	a.WriteString(`package a
-
-import (
-	"log"
-	"os"
-)
-
-func init() {
-	dropDatabaseYml()
-}
-
-func dropDatabaseYml() {
-	if DB_CONFIG != "" {
-
-		_, err := os.Stat("database.yml")
-		if err == nil {
-			// yaml already exists, don't do anything
-			return
-		}
-		f, err := os.Create("database.yml")
-		if err != nil {
-			log.Fatal(err)
-		}
-		_, err = f.WriteString(DB_CONFIG)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-}`)
+	a.WriteString(aGo)
 	return nil
 }
 
-func buildDatabase() error {
+func (b *builder) buildDatabase() error {
 	bb := &bytes.Buffer{}
-	path := filepath.Join("a", "database.go")
-	dgo, err := os.Create(path)
-	cleanup = append(cleanup, path)
+	dgo, err := os.Create(b.clean("a", "database.go"))
 	if err != nil {
 		return err
 	}
@@ -132,29 +119,28 @@ func buildDatabase() error {
 	return nil
 }
 
-func buildRice() error {
-	pwd, _ := os.Getwd()
-	defer os.Chdir(pwd)
+func (b *builder) buildRice() error {
+	defer os.Chdir(b.workDir)
 	_, err := exec.LookPath("rice")
 	if err == nil {
 		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(pwd, func(path string, info os.FileInfo, err error) error {
+		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
-				if filepath.Base(path) == "node_modules" {
+				base := filepath.Base(path)
+				if base == "node_modules" || base == ".git" {
 					return filepath.SkipDir
 				}
 				err = os.Chdir(path)
 				if err != nil {
 					return err
 				}
-				cmd := exec.Command("rice", "embed-go")
-				err = cmd.Run()
+				err = b.execQuiet("rice", "embed-go")
 				if err == nil {
 					bp := filepath.Join(path, "rice-box.go")
 					_, err := os.Stat(bp)
 					if err == nil {
 						fmt.Printf("--> built rice box %s\n", bp)
-						cleanup = append(cleanup, bp)
+						b.clean(bp)
 					}
 				}
 			}
@@ -167,7 +153,17 @@ func buildRice() error {
 	return nil
 }
 
-func buildMain() error {
+func (b *builder) buildMain() error {
+	new_main := strings.Replace(string(b.original_main), "func main()", "func original_main()", 1)
+	maingo, err := os.Create("main.go")
+	if err != nil {
+		return err
+	}
+	_, err = maingo.WriteString(new_main)
+	if err != nil {
+		return err
+	}
+
 	root, err := rootPath("")
 	if err != nil {
 		return err
@@ -181,9 +177,7 @@ func buildMain() error {
 	if err != nil {
 		return err
 	}
-	path := "buffalo_build_main.go"
-	cleanup = append(cleanup, path)
-	f, err := os.Create(path)
+	f, err := os.Create(b.clean("buffalo_build_main.go"))
 	if err != nil {
 		return err
 	}
@@ -192,14 +186,62 @@ func buildMain() error {
 	return nil
 }
 
-func cleanupBuild(original_main []byte) {
+func (b *builder) cleanupBuild() {
 	fmt.Println("--> cleaning up build")
-	for _, b := range cleanup {
+	for _, b := range b.cleanup {
 		fmt.Printf("--> cleaning up %s\n", b)
 		os.RemoveAll(b)
 	}
 	maingo, _ := os.Create("main.go")
-	maingo.Write(original_main)
+	maingo.Write(b.original_main)
+}
+
+func (b *builder) run() error {
+	err := b.buildMain()
+	if err != nil {
+		return err
+	}
+
+	err = b.buildWebpack()
+	if err != nil {
+		return err
+	}
+
+	err = b.buildAPack()
+	if err != nil {
+		return err
+	}
+
+	err = b.buildMain()
+	if err != nil {
+		return err
+	}
+
+	err = b.buildRice()
+	if err != nil {
+		return err
+	}
+
+	return b.buildBin()
+}
+
+func (b *builder) buildBin() error {
+	buildArgs := []string{"build", "-v", "-o", outputBinName}
+	_, err := exec.LookPath("git")
+	buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
+	version := buildTime
+	if err == nil {
+		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+		out := &bytes.Buffer{}
+		cmd.Stdout = out
+		err = cmd.Run()
+		if err == nil && out.String() != "" {
+			version = strings.TrimSpace(out.String())
+		}
+	}
+	buildArgs = append(buildArgs, "-ldflags", fmt.Sprintf("-X main.version=%s -X main.buildTime=%s", version, buildTime))
+
+	return b.exec("go", buildArgs...)
 }
 
 // buildCmd represents the build command
@@ -214,67 +256,22 @@ var buildCmd = &cobra.Command{
 			return err
 		}
 		maingo.Close()
-		defer cleanupBuild(original_main.Bytes())
-
-		new_main := strings.Replace(original_main.String(), "func main()", "func original_main()", 1)
-		maingo, err = os.Create("main.go")
-		if err != nil {
-			return err
+		pwd, _ := os.Getwd()
+		b := builder{
+			cleanup:       []string{},
+			original_main: original_main.Bytes(),
+			workDir:       pwd,
 		}
-		_, err = maingo.WriteString(new_main)
-		if err != nil {
-			return err
-		}
+		defer b.cleanupBuild()
 
-		err = buildWebpack()
-		if err != nil {
-			return err
-		}
-
-		err = buildAPack()
-		if err != nil {
-			return err
-		}
-
-		err = buildMain()
-		if err != nil {
-			return err
-		}
-
-		err = buildRice()
-		if err != nil {
-			return err
-		}
-		// go build -ldflags "-X main.build =$(git rev-parse --short HEAD)"
-
-		buildArgs := []string{"build", "-v", "-o", output}
-		_, err = exec.LookPath("git")
-		buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
-		version := buildTime
-		if err == nil {
-			cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
-			out := &bytes.Buffer{}
-			cmd.Stdout = out
-			err = cmd.Run()
-			if err == nil && out.String() != "" {
-				version = strings.TrimSpace(out.String())
-			}
-		}
-		buildArgs = append(buildArgs, "-ldflags", fmt.Sprintf("-X main.version=%s -X main.buildTime=%s", version, buildTime))
-
-		cmd := exec.Command("go", buildArgs...)
-		fmt.Printf("--> building %s\n", strings.Join(cmd.Args, " "))
-		cmd.Stdin = os.Stdin
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		return cmd.Run()
+		return b.run()
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(buildCmd)
 	pwd, _ := os.Getwd()
-	buildCmd.Flags().StringVarP(&output, "output", "o", filepath.Join("bin", filepath.Base(pwd)), "set the name of the binary")
+	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", filepath.Join("bin", filepath.Base(pwd)), "set the name of the binary")
 }
 
 var buildMainTmpl = `package main
@@ -353,4 +350,34 @@ func unpackMigrations() (string, error) {
 	})
 
 	return dir, nil
+}`
+
+var aGo = `package a
+
+import (
+	"log"
+	"os"
+)
+
+func init() {
+	dropDatabaseYml()
+}
+
+func dropDatabaseYml() {
+	if DB_CONFIG != "" {
+
+		_, err := os.Stat("database.yml")
+		if err == nil {
+			// yaml already exists, don't do anything
+			return
+		}
+		f, err := os.Create("database.yml")
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = f.WriteString(DB_CONFIG)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }`
