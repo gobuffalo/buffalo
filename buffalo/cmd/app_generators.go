@@ -286,6 +286,7 @@ bin/
 node_modules/
 .sass-cache/
 rice-box.go
+public/assets/
 {{ name }}
 `
 
