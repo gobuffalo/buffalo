@@ -24,9 +24,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -35,6 +37,7 @@ import (
 )
 
 var outputBinName string
+var zipBin bool
 
 type builder struct {
 	cleanup       []string
@@ -119,7 +122,52 @@ func (b *builder) buildDatabase() error {
 	return nil
 }
 
-func (b *builder) buildRice() error {
+func (b *builder) buildRiceZip() error {
+	defer os.Chdir(b.workDir)
+	_, err := exec.LookPath("rice")
+	if err == nil {
+		paths := map[string]bool{}
+		// if rice exists, try and build some cleanup:
+		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				base := filepath.Base(path)
+				if base == "node_modules" || base == ".git" || base == "bin" {
+					return filepath.SkipDir
+				}
+			} else {
+				err = os.Chdir(filepath.Dir(path))
+				if err != nil {
+					return err
+				}
+
+				s, err := ioutil.ReadFile(path)
+				if err != nil {
+					return err
+				}
+				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
+				if rx.Match(s) {
+					gopath := filepath.Join(os.Getenv("GOPATH"), "src")
+					pkg := filepath.Dir(strings.Replace(path, gopath+"/", "", -1))
+					paths[pkg] = true
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+		if len(paths) != 0 {
+			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
+			for k, _ := range paths {
+				args = append(args, "-i", k)
+			}
+			return b.exec("rice", args...)
+		}
+		// rice append --exec example
+	}
+	return nil
+}
+func (b *builder) buildRiceEmbedded() error {
 	defer os.Chdir(b.workDir)
 	_, err := exec.LookPath("rice")
 	if err == nil {
@@ -149,6 +197,7 @@ func (b *builder) buildRice() error {
 		if err != nil {
 			return err
 		}
+		// rice append --exec example
 	}
 	return nil
 }
@@ -217,11 +266,18 @@ func (b *builder) run() error {
 		return err
 	}
 
-	err = b.buildRice()
+	if zipBin {
+		err = b.buildBin()
+		if err != nil {
+			return err
+		}
+		return b.buildRiceZip()
+	}
+
+	err = b.buildRiceEmbedded()
 	if err != nil {
 		return err
 	}
-
 	return b.buildBin()
 }
 
@@ -272,6 +328,7 @@ func init() {
 	RootCmd.AddCommand(buildCmd)
 	pwd, _ := os.Getwd()
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", filepath.Join("bin", filepath.Base(pwd)), "set the name of the binary")
+	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 }
 
 var buildMainTmpl = `package main
