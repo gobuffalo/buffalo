@@ -158,7 +158,7 @@ func (b *builder) buildRiceZip() error {
 		}
 		if len(paths) != 0 {
 			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
-			for k, _ := range paths {
+			for k := range paths {
 				args = append(args, "-i", k)
 			}
 			return b.exec("rice", args...)
