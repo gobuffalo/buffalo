@@ -302,8 +302,9 @@ func (b *builder) buildBin() error {
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
-	Use:   "build",
-	Short: "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
+	Use:     "build",
+	Aliases: []string{"b", "bill"},
+	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
 		original_main := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
