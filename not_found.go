@@ -17,7 +17,7 @@ func (a *App) notFound() http.Handler {
 					"routes": routes,
 					"method": req.Method,
 					"path":   req.URL.String(),
-					"error":  req.Context().Value("error"),
+					"error":  req.URL.Query().Get("error"),
 				}
 				switch req.Header.Get("Content-Type") {
 				case "application/json":
