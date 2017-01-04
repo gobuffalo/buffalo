@@ -5,6 +5,23 @@ import "errors"
 // Resource interface allows for the easy mapping
 // of common RESTful actions to a set of paths. See
 // the a.Resource documentation for more details.
+// NOTE: When skipping Resource handlers, you need to first declare your
+// resource handler as a type of buffalo.Resource for the Skip function to
+// properly recognize and match it.
+/*
+	// Works:
+	var ur Resource
+	cr = &carsResource{&buffaloBaseResource{}}
+	g = a.Resource("/cars", cr)
+	g.Use(SomeMiddleware)
+	g.Middleware.Skip(SomeMiddleware, cr.Show)
+
+	// Doesn't Work:
+	cr := &carsResource{&buffaloBaseResource{}}
+	g = a.Resource("/cars", cr)
+	g.Use(SomeMiddleware)
+	g.Middleware.Skip(SomeMiddleware, cr.Show)
+*/
 type Resource interface {
 	List(Context) error
 	Show(Context) error

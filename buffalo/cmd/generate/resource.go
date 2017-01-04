@@ -70,7 +70,9 @@ type {{camel}}Resource struct{
 }
 
 func init() {
-	App().Resource("/{{under}}", &{{camel}}Resource{&buffalo.BaseResource{}})
+	var resource buffalo.Resource
+	resource = &{{camel}}Resource{&buffalo.BaseResource{}}
+	App().Resource("/{{under}}", resource)
 }
 
 {{#each actions}}
