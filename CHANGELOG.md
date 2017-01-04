@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.7.0](https://github.com/gobuffalo/buffalo/tree/v0.7.0) (2017-01-04)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.6.0...v0.7.0)
+
+**Closed issues:**
+
+- Error When Generating Goth Code [\#79](https://github.com/gobuffalo/buffalo/issues/79)
+- Goth generator does not install required dependencies [\#75](https://github.com/gobuffalo/buffalo/issues/75)
+- Export goGet and goInstall from cmd package [\#73](https://github.com/gobuffalo/buffalo/issues/73)
+
+**Merged pull requests:**
+
+- issue-37: initial commit for codeclimate yml generation [\#83](https://github.com/gobuffalo/buffalo/pull/83) ([briandowns](https://github.com/briandowns))
+- issue-35: readme generator [\#82](https://github.com/gobuffalo/buffalo/pull/82) ([briandowns](https://github.com/briandowns))
+- 0.7.0 [\#81](https://github.com/gobuffalo/buffalo/pull/81) ([markbates](https://github.com/markbates))
+- test the goth generator in docker [\#78](https://github.com/gobuffalo/buffalo/pull/78) ([markbates](https://github.com/markbates))
+- added the CopyWebpackPlugin to copy files from assets directory [\#77](https://github.com/gobuffalo/buffalo/pull/77) ([markbates](https://github.com/markbates))
+- Install required dependencies when using the Goth generator [\#76](https://github.com/gobuffalo/buffalo/pull/76) ([intabulas](https://github.com/intabulas))
+- Make GoGet and GoInstall useable from generators [\#74](https://github.com/gobuffalo/buffalo/pull/74) ([intabulas](https://github.com/intabulas))
+
 ## [v0.6.0](https://github.com/gobuffalo/buffalo/tree/v0.6.0) (2016-12-29)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.5.1...v0.6.0)
 
