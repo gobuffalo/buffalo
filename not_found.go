@@ -17,6 +17,7 @@ func (a *App) notFound() http.Handler {
 					"routes": routes,
 					"method": req.Method,
 					"path":   req.URL.String(),
+					"error":  req.URL.Query().Get("error"),
 				}
 				switch req.Header.Get("Content-Type") {
 				case "application/json":
@@ -88,6 +89,11 @@ var htmlNotFound = `
 		{{end}}
 	</tbody>
 </table>
+{{if .error}}
+<hr>
+<h2>Error</h2>
+<pre>{{.error}}</pre>
+{{end}}
 </body>
 </html>
 `

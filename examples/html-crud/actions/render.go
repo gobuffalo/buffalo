@@ -9,15 +9,16 @@ import (
 )
 
 var r *render.Engine
-var resolver = &resolvers.RiceBox{
-	Box: rice.MustFindBox("../templates"),
-}
 
 func init() {
 	r = render.New(render.Options{
 		HTMLLayout:     "application.html",
 		CacheTemplates: ENV == "production",
-		FileResolver:   resolver,
+		FileResolverFunc: func() resolvers.FileResolver {
+			return &resolvers.RiceBox{
+				Box: rice.MustFindBox("../templates"),
+			}
+		},
 	})
 }
 

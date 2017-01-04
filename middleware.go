@@ -34,6 +34,17 @@ type MiddlewareStack struct {
 	skips map[string]bool
 }
 
+func (ms *MiddlewareStack) clone() *MiddlewareStack {
+	n := newMiddlewareStack()
+	for _, s := range ms.stack {
+		n.stack = append(n.stack, s)
+	}
+	for k, v := range ms.skips {
+		n.skips[k] = v
+	}
+	return n
+}
+
 // Clear wipes out the current middleware stack for the App/Group,
 // any middleware previously defined will be removed leaving an empty
 // middleware stack.
@@ -57,9 +68,27 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 /*
 	a.Middleware.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
 */
+// NOTE: When skipping Resource handlers, you need to first declare your
+// resource handler as a type of buffalo.Resource for the Skip function to
+// properly recognize and match it.
+/*
+	// Works:
+	var ur Resource
+	cr = &carsResource{&buffaloBaseResource{}}
+	g = a.Resource("/cars", cr)
+	g.Use(SomeMiddleware)
+	g.Middleware.Skip(SomeMiddleware, cr.Show)
+
+	// Doesn't Work:
+	cr := &carsResource{&buffaloBaseResource{}}
+	g = a.Resource("/cars", cr)
+	g.Use(SomeMiddleware)
+	g.Middleware.Skip(SomeMiddleware, cr.Show)
+*/
 func (ms *MiddlewareStack) Skip(mw MiddlewareFunc, handlers ...Handler) {
 	for _, h := range handlers {
-		ms.skips[funcKey(mw, h)] = true
+		key := funcKey(mw, h)
+		ms.skips[key] = true
 	}
 }
 
@@ -89,7 +118,8 @@ func (ms *MiddlewareStack) handler(h Handler) Handler {
 		sl := len(ms.stack) - 1
 		for i := sl; i >= 0; i-- {
 			mw := ms.stack[i]
-			if !ms.skips[funcKey(mw, h)] {
+			key := funcKey(mw, h)
+			if !ms.skips[key] {
 				tstack = append(tstack, mw)
 			}
 		}
@@ -112,8 +142,20 @@ func newMiddlewareStack(mws ...MiddlewareFunc) *MiddlewareStack {
 func funcKey(funcs ...interface{}) string {
 	names := []string{}
 	for _, f := range funcs {
-		n := runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name()
+		rv := reflect.ValueOf(f)
+		ptr := rv.Pointer()
+		if n, ok := keyMap[rv.Pointer()]; ok {
+			names = append(names, n)
+			// fmt.Printf("### found %+v -> %+v\n", ptr, n)
+			continue
+		}
+		fnc := runtime.FuncForPC(ptr)
+		n := fnc.Name()
+		// fmt.Printf("### not found %+v -> %+v\n", ptr, n)
+		keyMap[ptr] = n
 		names = append(names, n)
 	}
 	return strings.Join(names, "/")
 }
+
+var keyMap = map[uintptr]string{}

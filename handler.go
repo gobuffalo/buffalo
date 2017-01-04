@@ -42,6 +42,7 @@ func (a *App) handlerToHandler(h Handler) http.Handler {
 			params:   params,
 			logger:   a.Logger,
 			session:  a.getSession(req, ws),
+			notFound: a.notFound(),
 			data: map[string]interface{}{
 				"routes": a.Routes(),
 			},

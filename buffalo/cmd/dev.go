@@ -15,10 +15,13 @@
 package cmd
 
 import (
+	"context"
 	"html/template"
+	"log"
 	"os"
+	"os/exec"
 
-	"github.com/markbates/refresh/cmd"
+	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
 
@@ -29,26 +32,66 @@ var devCmd = &cobra.Command{
 	Long: `Runs your Buffalo app in 'development' mode.
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
-	RunE: func(c *cobra.Command, args []string) error {
+	Run: func(c *cobra.Command, args []string) {
 		os.Setenv("GO_ENV", "development")
-		cfgFile := "./.buffalo.dev.yml"
-		_, err := os.Stat(cfgFile)
-		if err != nil {
-			f, err := os.Create(cfgFile)
+		ctx := context.Background()
+		ctx, cancelFunc := context.WithCancel(ctx)
+		go func() {
+			err := startDevServer(ctx)
 			if err != nil {
-				return err
+				cancelFunc()
+				log.Fatal(err)
 			}
-			t, err := template.New("").Parse(nRefresh)
-			err = t.Execute(f, map[string]interface{}{
-				"name": "buffalo",
-			})
+		}()
+		go func() {
+			err := startWebpack(ctx)
 			if err != nil {
-				return err
+				cancelFunc()
+				log.Fatal(err)
 			}
-		}
-		cmd.Run(cfgFile)
-		return nil
+		}()
+		// wait for the ctx to finish
+		<-ctx.Done()
 	},
+}
+
+func startWebpack(ctx context.Context) error {
+	cfgFile := "./webpack.config.js"
+	_, err := os.Stat(cfgFile)
+	if err != nil {
+		// there's no webpack, so don't do anything
+		return nil
+	}
+	cmd := exec.Command("webpack", "--watch")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
+
+func startDevServer(ctx context.Context) error {
+	cfgFile := "./.buffalo.dev.yml"
+	_, err := os.Stat(cfgFile)
+	if err != nil {
+		f, err := os.Create(cfgFile)
+		if err != nil {
+			return err
+		}
+		t, err := template.New("").Parse(nRefresh)
+		err = t.Execute(f, map[string]interface{}{
+			"name": "buffalo",
+		})
+		if err != nil {
+			return err
+		}
+	}
+	c := &refresh.Configuration{}
+	err = c.Load(cfgFile)
+	if err != nil {
+		return err
+	}
+	r := refresh.New(c)
+	return r.Start()
 }
 
 func init() {

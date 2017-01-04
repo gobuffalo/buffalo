@@ -3,6 +3,7 @@ package buffalo
 import (
 	"testing"
 
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
@@ -118,6 +119,69 @@ func Test_Middleware_Skip(t *testing.T) {
 	w.Request("/h1").Get()
 	r.Len(log, 5)
 	r.Equal([]string{"mw1 start", "mw2 start", "h1", "mw2 end", "mw1 end"}, log)
+}
+
+type carsResource struct {
+	Resource
+}
+
+func (ur *carsResource) Show(c Context) error {
+	return c.Render(200, render.String("show"))
+}
+
+func (ur *carsResource) List(c Context) error {
+	return c.Render(200, render.String("list"))
+}
+
+// Test_Middleware_Skip tests that middleware gets skipped
+func Test_Middleware_Skip_Resource(t *testing.T) {
+	r := require.New(t)
+
+	log := []string{}
+	mw1 := func(h Handler) Handler {
+		return func(c Context) error {
+			log = append(log, "mw1 start")
+			err := h(c)
+			log = append(log, "mw1 end")
+			return err
+		}
+	}
+
+	a := New(Options{})
+	var cr Resource
+	cr = &carsResource{&BaseResource{}}
+	g := a.Resource("/autos", cr)
+	g.Use(mw1)
+
+	var ur Resource
+	ur = &carsResource{&BaseResource{}}
+	g = a.Resource("/cars", ur)
+	g.Use(mw1)
+
+	// fmt.Println("set up skip")
+	g.Middleware.Skip(mw1, ur.Show)
+
+	w := willie.New(a)
+
+	// fmt.Println("make autos call")
+	log = []string{}
+	res := w.Request("/autos/1").Get()
+	r.Len(log, 2)
+	r.Equal("show", res.Body.String())
+
+	// fmt.Println("make list call")
+	log = []string{}
+	res = w.Request("/cars").Get()
+	r.Len(log, 2)
+	r.Equal([]string{"mw1 start", "mw1 end"}, log)
+	r.Equal("list", res.Body.String())
+
+	// fmt.Println("make show call")
+	log = []string{}
+	res = w.Request("/cars/1").Get()
+	r.Len(log, 0)
+	r.Equal("show", res.Body.String())
+
 }
 
 // Test_Middleware_Clear confirms that middle gets cleared

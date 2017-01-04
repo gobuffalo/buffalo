@@ -19,9 +19,15 @@ var RequestLogger = RequestLoggerFunc
 // code of the response.
 func RequestLoggerFunc(h Handler) Handler {
 	return func(c Context) error {
+		var irid interface{}
+		if irid = c.Session().Get("requestor_id"); irid == nil {
+			irid = randx.String(10)
+			c.Session().Set("requestor_id", irid)
+			c.Session().Save()
+		}
 		now := time.Now()
 		c.LogFields(logrus.Fields{
-			"request_id": randx.String(10),
+			"request_id": irid.(string) + "-" + randx.String(10),
 			"method":     c.Request().Method,
 			"path":       c.Request().URL.String(),
 		})

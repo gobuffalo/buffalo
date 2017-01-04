@@ -3,11 +3,12 @@ package render
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io"
 	"path/filepath"
 	"strings"
 
-	"github.com/aymerick/raymond"
+	"github.com/gobuffalo/velvet"
 	"github.com/pkg/errors"
 	"github.com/shurcooL/github_flavored_markdown"
 )
@@ -23,12 +24,13 @@ func (s templateRenderer) ContentType() string {
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
-	var yield raymond.SafeString
+	var yield template.HTML
 	var err error
 	for _, name := range s.names {
-		yield, err = s.execute(name, data)
+		yield, err = s.execute(name, data.ToVelvet())
 		if err != nil {
-			return errors.WithMessage(errors.WithStack(err), name)
+			err = errors.Errorf("error rendering %s:\n%+v", name, err)
+			return err
 		}
 		data["yield"] = yield
 	}
@@ -39,32 +41,31 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	return nil
 }
 
-func (s *templateRenderer) execute(name string, data Data) (raymond.SafeString, error) {
+func (s *templateRenderer) execute(name string, data *velvet.Context) (template.HTML, error) {
 	source, err := s.source(name)
 	if err != nil {
-		return raymond.SafeString(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+		return "", err
 	}
-	source.RegisterHelper("partial", func(name string, options *raymond.Options) raymond.SafeString {
-		d := data
-		for k, v := range options.Hash() {
-			d[k] = v
-			defer delete(data, k)
-		}
-		p, err := s.partial(name, d)
+
+	err = source.Helpers.Add("partial", func(name string, help velvet.HelperContext) (template.HTML, error) {
+		p, err := s.partial(name, help.Context)
 		if err != nil {
-			return raymond.SafeString(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error()))
+			return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
 		}
-		return p
+		return p, nil
 	})
+	if err != nil {
+		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+	}
 	yield, err := source.Exec(data)
 	if err != nil {
-		return raymond.SafeString(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
 	}
-	return raymond.SafeString(yield), nil
+	return template.HTML(yield), nil
 }
 
-func (s *templateRenderer) source(name string) (*raymond.Template, error) {
-	var t *raymond.Template
+func (s *templateRenderer) source(name string) (*velvet.Template, error) {
+	var t *velvet.Template
 	var ok bool
 	var err error
 	if s.CacheTemplates {
@@ -72,7 +73,7 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 			return t.Clone(), nil
 		}
 	}
-	b, err := s.FileResolver.Read(filepath.Join(s.TemplatesPath, name))
+	b, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
 	}
@@ -82,18 +83,22 @@ func (s *templateRenderer) source(name string) (*raymond.Template, error) {
 		b = bytes.Replace(b, []byte("&#34;"), []byte("\""), -1)
 	}
 	source := string(b)
-	t, err = raymond.Parse(source)
+	t, err = velvet.Parse(source)
 	if err != nil {
 		return t, errors.Errorf("Error parsing %s: %+v", name, errors.WithStack(err))
 	}
-	t.RegisterHelpers(s.Helpers)
+
+	err = t.Helpers.AddMany(s.Helpers)
+	if err != nil {
+		return nil, err
+	}
 	if s.CacheTemplates {
 		s.templateCache[name] = t
 	}
 	return t.Clone(), err
 }
 
-func (s *templateRenderer) partial(name string, data Data) (raymond.SafeString, error) {
+func (s *templateRenderer) partial(name string, data *velvet.Context) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
 	return s.execute(name, data)

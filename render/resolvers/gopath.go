@@ -1,6 +1,7 @@
 package resolvers
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -19,11 +20,13 @@ type GoPathResolver struct {
 // very very slow the first you try to find a file, and there is no
 // guarantees of finding the right now.
 func (g *GoPathResolver) Read(name string) ([]byte, error) {
+	fmt.Printf("### name -> %+v\n", name)
 	if g.RecursiveResolver == nil {
 		g.RecursiveResolver = &RecursiveResolver{
 			Path: filepath.Join(os.Getenv("GOPATH"), "src", g.Path),
 		}
 	}
+	fmt.Printf("### g.RecursiveResolver -> %+v\n", g.RecursiveResolver)
 	return g.RecursiveResolver.Read(name)
 }
 
@@ -32,6 +35,7 @@ func (g *GoPathResolver) Read(name string) ([]byte, error) {
 // very very slow the first you try to find a file, and there is no
 // guarantees of finding the right now.
 func (g *GoPathResolver) Resolve(name string) (string, error) {
+	fmt.Printf("### name -> %+v\n", name)
 	if g.RecursiveResolver == nil {
 		g.RecursiveResolver = &RecursiveResolver{
 			Path: filepath.Join(os.Getenv("GOPATH"), "src", g.Path),
