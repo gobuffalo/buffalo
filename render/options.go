@@ -10,7 +10,7 @@ type Options struct {
 	TemplatesPath string
 	// FileResolverFunc will attempt to file a file and return it's bytes, if possible
 	FileResolverFunc func() resolvers.FileResolver
-	fileResolver     resolvers.FileResolver
+	FileResolver     resolvers.FileResolver
 	// Helpers to be rendered with the templates
 	Helpers map[string]interface{}
 	// CacheTemplates reduced overheads, but won't reload changed templates.
@@ -24,8 +24,8 @@ type Options struct {
 // a fully initialized state to work properly and can not be run directly from
 // init functions.
 func (o *Options) Resolver() resolvers.FileResolver {
-	if o.fileResolver == nil {
-		o.fileResolver = o.FileResolverFunc()
+	if o.FileResolver == nil {
+		o.FileResolver = o.FileResolverFunc()
 	}
-	return o.fileResolver
+	return o.FileResolver
 }
