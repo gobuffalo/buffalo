@@ -2,9 +2,9 @@
 
 Buffalo is Go web framework. Yeah, I hate the word "framework" too! Buffalo is different though. Buffalo doesn't want to re-invent wheels like routing and templating. Buffalo is glue that wraps all of the best packages available and makes them all play nicely together.
 
-Buffalo is "idiomatic", for whatever that is worth. The purpose of a framework is not to bend you to it's will, but to rather get out of your way and make your job of building your application easy. That is the goal of Buffalo.
+Buffalo is "idiomatic", for whatever that is worth. The purpose of a framework is not to bend you to its will, but to rather get out of your way and make your job of building your application easy. That is the goal of Buffalo.
 
-If you were to look through the Buffalo code base you'll find little code, just enough to assemble the amazing packages that other's have written into one coherent system.
+If you were to look through the Buffalo code base you'd find little code, just enough to assemble the amazing packages that others have written into one coherent system.
 
 > I :heart: web dev in go again - Brian Ketelsen
 
@@ -20,7 +20,7 @@ $ go get -u github.com/gobuffalo/buffalo/buffalo
 
 ## Generating a new Project
 
-Buffalo aims to make building new web applications in Go as simple as possible, and what could be more simple that a new application generator?
+Buffalo aims to make building new web applications in Go as simple as possible, and what could be more simple than a new application generator?
 
 ```text
 $ buffalo new <name>
@@ -28,7 +28,7 @@ $ buffalo new <name>
 
 That will generate a whole new Buffalo application that is ready to go. It'll even run `go get` for you to make sure you have all of the necessary dependencies needed to run your application.
 
-To see a list of available flags for the `new` command, just check out it's help.
+To see a list of available flags for the `new` command, just check out its help.
 
 ```text
 $ buffalo help new
@@ -66,7 +66,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Routing
 
-[github.com/gorilla/mux](https://github.com/gorilla/mux) - This router was chosen because of it's stability and flexibility. There might be faster routers out there, but this one is definitely the most powerful!
+[github.com/gorilla/mux](https://github.com/gorilla/mux) - This router was chosen because of its stability and flexibility. There might be faster routers out there, but this one is definitely the most powerful!
 
 ### Task Runner (Optional)
 
@@ -74,12 +74,12 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Models/ORM (Optional)
 
-[github.com/markbates/pop](https://github.com/markbates/pop) - Accessing databases is nothing new in web applications. Pop, and it's command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop, and Soda, share the same core philosphies as Buffalo, so they were a natural choice.
+[github.com/markbates/pop](https://github.com/markbates/pop) - Accessing databases is nothing new in web applications. Pop, and its command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop, and Soda, share the same core philosphies as Buffalo, so they were a natural choice.
 
 ### Sessions, Cookies, Websockets, and more...
 
-[github.com/gorilla](https://github.com/gorilla) - The Gorilla toolkit is a great set of packages designed to improve upon the standard libary for a variety of web related packages. With these high quality packages Buffalo is able to keep its "core" code to a minimum and focus on it's goal of glueing them all together to make your life better.
+[github.com/gorilla](https://github.com/gorilla) - The Gorilla toolkit is a great set of packages designed to improve upon the standard libary for a variety of web related packages. With these high quality packages Buffalo is able to keep its "core" code to a minimum and focus on its goal of glueing them all together to make your life better.
 
 ## Benchmarks
 
-Oh, yeah, everyone wants benchmarks! What would a web framework be without it's benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.
+Oh, yeah, everyone wants benchmarks! What would a web framework be without its benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.
