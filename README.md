@@ -62,7 +62,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Templating
 
-[github.com/aymerick/raymond](https://github.com/aymerick/raymond) - This templating package was chosen over the standard Go `html/template` package for a variety of reasons. The biggest of which is that it is significantly more flexible and easier to work with. It also has the added factor of being familiar to those who have worked with "Handlebars" or "Mustache" templates before.
+[github.com/aymerick/raymond](https://github.com/gobuffalo/velvet) - This templating package was chosen over the standard Go `html/template` package for a variety of reasons. The biggest of which is that it is significantly more flexible and easier to work with. It also has the added factor of being familiar to those who have worked with "Handlebars" or "Mustache" templates before.
 
 ### Routing
 
