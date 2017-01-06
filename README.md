@@ -70,7 +70,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Task Runner (Optional)
 
-[github.com/markbates/grift](https://github.com/markbates/grift) - If you're familiar with Rake tasks from Ruby, you'll be right at home using Grift. This package was chosen to allow for the easy running of simple, and common, tasks that most web applications need. Think things like seeding a database, or taking in a CSV file and generating database records. Buffalo shops with an example `routes` task that prints off the defined routes and the function that handles those requests.
+[github.com/markbates/grift](https://github.com/markbates/grift) - If you're familiar with Rake tasks from Ruby, you'll be right at home using Grift. This package was chosen to allow for the easy running of simple, and common, tasks that most web applications need. Think things like seeding a database, or taking in a CSV file and generating database records. Buffalo ships with an example `routes` task that prints off the defined routes and the function that handles those requests.
 
 ### Models/ORM (Optional)
 
