@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"html/template"
 	"log"
 	"os"
@@ -33,6 +34,16 @@ var devCmd = &cobra.Command{
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
 	Run: func(c *cobra.Command, args []string) {
+		defer func() {
+			msg := "There was a problem starting the dev server: %s\n"
+			cause := "Unknown"
+			if r := recover(); r != nil {
+				if err, ok := r.(error); ok {
+					cause = err.Error()
+				}
+			}
+			fmt.Printf(msg, cause)
+		}()
 		os.Setenv("GO_ENV", "development")
 		ctx := context.Background()
 		ctx, cancelFunc := context.WithCancel(ctx)
@@ -78,6 +89,9 @@ func startDevServer(ctx context.Context) error {
 			return err
 		}
 		t, err := template.New("").Parse(nRefresh)
+		if err != nil {
+			return err
+		}
 		err = t.Execute(f, map[string]interface{}{
 			"name": "buffalo",
 		})
