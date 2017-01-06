@@ -23,8 +23,6 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/gobuffalo/velvet"
-	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
 	"os"
@@ -34,6 +32,9 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/gobuffalo/velvet"
+	"github.com/spf13/cobra"
 )
 
 var outputBinName string
