@@ -73,7 +73,9 @@ func rootPath(name string) (string, error) {
 }
 
 func packagePath(rootPath string) string {
-	return strings.Replace(rootPath, filepath.Join(os.Getenv("GOPATH"), "src")+"/", "", 1)
+	gosrcpath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
+	rootPath = strings.Replace(rootPath, "\\", "/", -1)
+	return strings.Replace(rootPath, gosrcpath+"/", "", 1)
 }
 
 func genNewFiles(name, rootPath string) error {
@@ -83,8 +85,8 @@ func genNewFiles(name, rootPath string) error {
 		"name":        name,
 		"titleName":   inflect.Titleize(name),
 		"packagePath": packagePath,
-		"actionsPath": filepath.Join(packagePath, "actions"),
-		"modelsPath":  filepath.Join(packagePath, "models"),
+		"actionsPath": packagePath + "/actions",
+		"modelsPath":  packagePath + "/models",
 		"withPop":     !skipPop,
 		"withWebpack": !skipWebpack,
 		"dbType":      dbType,
