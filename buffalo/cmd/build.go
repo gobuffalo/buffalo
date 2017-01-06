@@ -23,18 +23,17 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/gobuffalo/velvet"
+	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
 	"time"
-	"runtime"
-
-	"github.com/gobuffalo/velvet"
-	"github.com/spf13/cobra"
 )
 
 var outputBinName string
@@ -147,7 +146,7 @@ func (b *builder) buildRiceZip() error {
 				}
 				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
 				if rx.Match(s) {
-					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1) 
+					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
 					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
 					paths[pkg] = true
 				}
@@ -223,7 +222,6 @@ func (b *builder) buildMain() error {
 	ctx.Set("modelsPack", packagePath(root)+"/models")
 	ctx.Set("aPack", packagePath(root)+"/a")
 	ctx.Set("name", filepath.Base(root))
-
 	s, err := velvet.Render(buildMainTmpl, ctx)
 	if err != nil {
 		return err
@@ -330,13 +328,13 @@ var buildCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(buildCmd)
 	pwd, _ := os.Getwd()
-	
-	output := filepath.Join("bin", filepath.Base(pwd)) 
+	output := filepath.Join("bin", filepath.Base(pwd))
+
 	if runtime.GOOS == "windows" {
 		output += ".exe"
 	}
+
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
-	
 	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 }
 
