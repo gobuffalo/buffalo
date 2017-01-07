@@ -30,11 +30,7 @@ var taskCommand = &cobra.Command{
 	RunE: func(c *cobra.Command, args []string) error {
 		_, err := exec.LookPath("grift")
 		if err != nil {
-			return errors.New(`we could not find "grift" in your path
-You must first install "grift" in order to use the Buffalo console:
-
-$ go get github.com/markbates/grift
-`)
+			return errors.New("we could not find \"grift\" in your path.\n You must first install \"grift\" in order to use the Buffalo console:\n\n $ go get github.com/markbates/grift")
 		}
 
 		_, err = os.Stat("grifts")
