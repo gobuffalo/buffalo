@@ -36,7 +36,7 @@ var _ = Add("shoulders", func(c *Context) error {
 		}
 	}
 
-	f, err := os.Create(path.Join(os.Getenv("GOPATH"), "src", "github.com", "markbates", "buffalo", "SHOULDERS.md"))
+	f, err := os.Create(path.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
 	if err != nil {
 		return err
 	}
