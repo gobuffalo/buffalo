@@ -44,11 +44,11 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("GO_ENV"), "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 
+	pwd, _ := os.Getwd()
+	opts.LogDir = defaults.String(opts.LogDir, filepath.Join(pwd, "logs"))
+
 	if opts.Env == "test" {
 		opts.LogDir = os.TempDir()
-	} else {
-		pwd, _ := os.Getwd()
-		opts.LogDir = defaults.String(opts.LogDir, filepath.Join(pwd, "logs"))
 	}
 
 	if opts.SessionStore == nil {
