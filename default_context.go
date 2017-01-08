@@ -61,7 +61,7 @@ func (d *DefaultContext) Param(key string) string {
 }
 
 // ParamInt tries to convert the requested parameter to
-// an int. It will  return an error if there is a problem.
+// an int. It will return an error if there is a problem.
 func (d *DefaultContext) ParamInt(key string) (int, error) {
 	k := d.Params().Get(key)
 	i, err := strconv.Atoi(k)
