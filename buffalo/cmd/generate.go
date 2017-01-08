@@ -35,5 +35,6 @@ func init() {
 	generateCmd.AddCommand(generate.ResourceCmd)
 	generateCmd.AddCommand(generate.GothCmd)
 	generateCmd.AddCommand(generate.WebpackCmd)
+	generateCmd.AddCommand(generate.ActionCmd)
 	RootCmd.AddCommand(generateCmd)
 }
