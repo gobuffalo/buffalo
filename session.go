@@ -14,12 +14,12 @@ type Session struct {
 	res     http.ResponseWriter
 }
 
-// Save the current session
+// Save the current session.
 func (s *Session) Save() error {
 	return s.Session.Save(s.req, s.res)
 }
 
-// Get a value from the current session
+// Get a value from the current session.
 func (s *Session) Get(name interface{}) interface{} {
 	return s.Session.Values[name]
 }

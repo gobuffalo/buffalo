@@ -14,11 +14,11 @@ import (
 // mean returning an error.
 /*
 	func (c Context) error {
-		return C.Render(200, render.String("Hello World!"))
+		return c.Render(200, render.String("Hello World!"))
 	}
 
 	func (c Context) error {
-		return C.Redirect(301, "http://github.com/gobuffalo/buffalo")
+		return c.Redirect(301, "http://github.com/gobuffalo/buffalo")
 	}
 
 	func (c Context) error {
