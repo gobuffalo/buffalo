@@ -102,6 +102,8 @@ func (aa actionAppender) Run(rootPath string, data gentronics.Data) error {
 
 	templatePath := filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace)), fmt.Sprintf("%s.html", inflect.Underscore(aa.ActionName)))
 	os.MkdirAll(filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace))), 0755)
+
+	fmt.Printf("--> templates/%v/%v.html\n", inflect.Underscore(aa.Namespace), inflect.Underscore(aa.ActionName))
 	return ioutil.WriteFile(templatePath, []byte(content), 0755)
 }
 
