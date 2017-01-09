@@ -13,8 +13,9 @@
 package generate
 
 import (
-	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/spf13/cobra"
@@ -22,6 +23,11 @@ import (
 )
 
 func TestGenerateActionArgsComplete(t *testing.T) {
+	dir := os.TempDir()
+	packagePath := filepath.Join(dir, "src", "sample")
+	os.MkdirAll(packagePath, 0755)
+	os.Chdir(packagePath)
+
 	r := require.New(t)
 
 	cmd := cobra.Command{}
@@ -32,8 +38,7 @@ func TestGenerateActionArgsComplete(t *testing.T) {
 	e = ActionCmd.RunE(&cmd, []string{"users"})
 	r.NotNil(e)
 
-	os.Chdir(os.TempDir())
-	os.Mkdir("actions", 666)
+	os.Mkdir("actions", 0755)
 
 	e = ActionCmd.RunE(&cmd, []string{"users", "show"})
 	r.Nil(e)
@@ -41,18 +46,56 @@ func TestGenerateActionArgsComplete(t *testing.T) {
 
 func TestGenerateActionActionsFolderExists(t *testing.T) {
 	dir := os.TempDir()
+	packagePath := filepath.Join(dir, "src", "sample")
+	os.MkdirAll(packagePath, 0755)
+	os.Chdir(packagePath)
 
-	os.Chdir(dir)
-	os.RemoveAll(fmt.Sprintf("%v/actions", dir))
+	os.RemoveAll("actions")
+	os.RemoveAll("templates")
 
 	r := require.New(t)
 	cmd := cobra.Command{}
 
-	e := ActionCmd.RunE(&cmd, []string{"users", "show"})
+	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
 	r.NotNil(e)
 
-	os.Mkdir("actions", 666)
+	os.Mkdir("actions", 0755)
 
-	e = ActionCmd.RunE(&cmd, []string{"users", "show"})
+	e = ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
 	r.Nil(e)
+
+	data, _ := ioutil.ReadFile("actions/users.go")
+	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
+
+	data, _ = ioutil.ReadFile("templates/users/show.html")
+	r.Contains(string(data), "<h1>Users#Show</h1>")
+}
+
+func TestGenerateActionActionsFileExists(t *testing.T) {
+	dir := os.TempDir()
+	packagePath := filepath.Join(dir, "src", "sample")
+	os.MkdirAll(packagePath, 0755)
+	os.Chdir(packagePath)
+
+	os.Mkdir("actions", 0755)
+	r := require.New(t)
+	cmd := cobra.Command{}
+	usersContent := `package actions
+import log
+
+func UsersShow(c buffalo.Context)}{
+    log.Println("Something Here!")
+}
+`
+	ioutil.WriteFile("actions/users.go", []byte(usersContent), 0755)
+
+	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit", "other"})
+	r.Nil(e)
+
+	data, _ := ioutil.ReadFile("actions/users.go")
+	r.Contains(string(data), "log.Println(")
+	r.Contains(string(data), "func UsersEdit")
+	r.Contains(string(data), "func UsersOther")
+
 }
