@@ -53,7 +53,7 @@ var ActionCmd = &cobra.Command{
 			g := gentronics.New()
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rActionFileT))
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
-			g.Add(Fmt)
+			//g.Add(Fmt)
 
 			err = g.Run(".", data)
 
