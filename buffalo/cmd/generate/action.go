@@ -28,6 +28,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var runningTests = false
+
 //ActionCmd is the cmd that generates actions.
 var ActionCmd = &cobra.Command{
 	Use:     "action [name] [actionName...]",
@@ -52,99 +54,88 @@ var ActionCmd = &cobra.Command{
 		g := gentronics.New()
 
 		if !fileExists {
-
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rActionFileT))
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
-
-			err = g.Run(".", data)
-
-			if err != nil {
+			if err = g.Run(".", data); err != nil {
 				return err
 			}
 		}
 
-		if err := generateActionComponents(name, actions); err != nil {
-			return err
+		for _, action := range actions {
+			g.Add(buildActionAppender(name, action))
 		}
 
-		g.Add(Fmt)
-		return g.Run(".", data)
+		if !runningTests {
+			g.Add(Fmt)
+		}
 
+		return g.Run(".", gentronics.Data{})
 	},
 }
 
-func generateActionComponents(name string, actions []string) error {
-
-	actionData := gentronics.Data{
-		"name":  name,
-		"under": inflect.Underscore(name),
-	}
-
-	path := filepath.Join("actions", fmt.Sprintf("%v.go", actionData["under"]))
-	_, err := os.Stat(path)
-	fileExists := err == nil
-	fileContents, _ := ioutil.ReadFile(path)
-
-	for _, action := range actions {
-		actionData["namespace"] = inflect.Camelize(name)
-		actionData["action"] = inflect.Camelize(action)
-		actionData["action_under"] = inflect.Underscore(action)
-
-		if fileExists {
-			funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", actionData["namespace"], actionData["currentAction"])
-			if strings.Contains(string(fileContents), funcSignature) {
-				fmt.Printf("--> [warning] skipping %v%v since it already exists\n", actionData["namespace"], actionData["currentAction"])
-				continue
-			}
-		}
-
-		if err = appendActionToFile(path, actionData); err != nil {
-			return err
-		}
-
-		if err = generateTemplate(actionData); err != nil {
-			return err
-		}
-	}
-
-	return nil
+func buildActionAppender(namespace, action string) gentronics.Runnable {
+	aa := actionAppender{namespace, action, inflect.Underscore(namespace)}
+	return aa
 }
 
-func appendActionToFile(path string, actionData gentronics.Data) error {
+type actionAppender struct {
+	Namespace  string
+	ActionName string
+	FileName   string
+}
+
+func (aa actionAppender) Run(rootPath string, data gentronics.Data) error {
+	path := filepath.Join("actions", fmt.Sprintf("%v.go", aa.FileName))
 	fileContents, _ := ioutil.ReadFile(path)
+
+	funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", inflect.Camelize(aa.Namespace), inflect.Camelize(aa.ActionName))
+	if strings.Contains(string(fileContents), funcSignature) {
+		fmt.Printf("--> [warning] skipping %v%v since it already exists\n", inflect.Camelize(aa.Namespace), inflect.Camelize(aa.ActionName))
+		return nil
+	}
+
+	templateData := map[string]string{
+		"namespace": inflect.Camelize(aa.Namespace),
+		"action":    inflect.Camelize(aa.ActionName),
+	}
+
 	t, _ := raymond.Parse(rActionFuncT)
-	fn, _ := t.Exec(actionData)
+	fn, _ := t.Exec(templateData)
 
 	fileContents = []byte(string(fileContents) + fn)
-	return ioutil.WriteFile(path, fileContents, 0755)
-}
+	err := ioutil.WriteFile(path, fileContents, 0755)
 
-func generateTemplate(actionData gentronics.Data) error {
-	fg := gentronics.New()
-	templatePath := filepath.Join("templates", fmt.Sprintf("%s", actionData["under"]), fmt.Sprintf("%s.html", actionData["action_under"]))
-	fg.Add(gentronics.NewFile(templatePath, rViewT))
-	return fg.Run(".", actionData)
+	if err != nil {
+		return err
+	}
+
+	t, _ = raymond.Parse(rViewT)
+	content, _ := t.Exec(templateData)
+
+	templatePath := filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace)), fmt.Sprintf("%s.html", inflect.Underscore(aa.ActionName)))
+	os.MkdirAll(filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace))), 0755)
+	return ioutil.WriteFile(templatePath, []byte(content), 0755)
 }
 
 const (
 	rActionFileT = `package actions
+    import "github.com/gobuffalo/buffalo"`
 
-import "github.com/gobuffalo/buffalo"
-
-`
 	rViewT       = `<h1>{{namespace}}#{{action}}</h1>`
 	rActionFuncT = `
     
     // {{namespace}}{{action}} default implementation.
     func {{namespace}}{{action}}(c buffalo.Context) error {
-	    return c.Render(200, r.String("{{camel}}#{{.}}"))
+	    return c.Render(200, r.String("OK"))
     }
     `
 
 	rActionTestT = `
-func Test_{{namespace}}{{action}}(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
+    package actions
+    
+    func Test_{{namespace}}{{action}}(t *testing.T) {
+	    r := require.New(t)
+	    r.Fail("Not Implemented!")
+    }
     `
 )

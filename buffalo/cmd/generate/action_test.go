@@ -22,6 +22,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func init() {
+	runningTests = true
+}
+
 func TestGenerateActionArgsComplete(t *testing.T) {
 	dir := os.TempDir()
 	packagePath := filepath.Join(dir, "src", "sample")
@@ -82,20 +86,20 @@ func TestGenerateActionActionsFileExists(t *testing.T) {
 	r := require.New(t)
 	cmd := cobra.Command{}
 	usersContent := `package actions
-import log
+import "log"
 
-func UsersShow(c buffalo.Context)}{
+func UsersShow(c buffalo.Context) error {
     log.Println("Something Here!")
+    return c.Render(200, r.String("OK"))
 }
 `
 	ioutil.WriteFile("actions/users.go", []byte(usersContent), 0755)
 
-	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit", "other"})
+	e := ActionCmd.RunE(&cmd, []string{"users", "show"})
 	r.Nil(e)
 
 	data, _ := ioutil.ReadFile("actions/users.go")
 	r.Contains(string(data), "log.Println(")
-	r.Contains(string(data), "func UsersEdit")
-	r.Contains(string(data), "func UsersOther")
+	r.Contains(string(data), "func UsersShow")
 
 }
