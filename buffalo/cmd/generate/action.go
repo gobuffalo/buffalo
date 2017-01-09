@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/aymerick/raymond"
-	"github.com/bep/inflect"
 	"github.com/markbates/gentronics"
+	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
 
