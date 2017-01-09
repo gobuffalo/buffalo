@@ -114,7 +114,7 @@ const (
     
     // {{namespace}}{{action}} default implementation.
     func {{namespace}}{{action}}(c buffalo.Context) error {
-	    return r.HTML("{{namespace_under}}/{{action_under}}.html")
+	    return c.Render(200, r.HTML("{{namespace_under}}/{{action_under}}.html"))
     }
     `
 

@@ -60,6 +60,7 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
 	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
 	r.Contains(string(data), `r.HTML("users/edit.html")`)
+	r.Contains(string(data), `c.Render(200, r.HTML("users/show.html"))`)
 
 	data, _ = ioutil.ReadFile("templates/users/show.html")
 	r.Contains(string(data), "<h1>Users#Show</h1>")
