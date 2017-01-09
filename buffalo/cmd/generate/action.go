@@ -135,7 +135,7 @@ import "github.com/gobuffalo/buffalo"
     `
 
 	rActionTestT = `
-func Test_{{camel}}Resource_List(t *testing.T) {
+func Test_{{namespace}}{{action}}(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
