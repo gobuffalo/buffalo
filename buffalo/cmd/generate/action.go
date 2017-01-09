@@ -49,11 +49,12 @@ var ActionCmd = &cobra.Command{
 		_, err := os.Stat(filepath.Join("actions", fmt.Sprintf("%v.go", data["under"])))
 		fileExists := err == nil
 
+		g := gentronics.New()
+
 		if !fileExists {
-			g := gentronics.New()
+
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rActionFileT))
 			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
-			//g.Add(Fmt)
 
 			err = g.Run(".", data)
 
@@ -62,7 +63,13 @@ var ActionCmd = &cobra.Command{
 			}
 		}
 
-		return generateActionComponents(name, actions)
+		if err := generateActionComponents(name, actions); err != nil {
+			return err
+		}
+
+		g.Add(Fmt)
+		return g.Run(".", data)
+
 	},
 }
 
