@@ -28,6 +28,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var publicLogo = &gentronics.RemoteFile{
+	File:       gentronics.NewFile("public/assets/images/logo.svg", ""),
+	RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
+}
+
+var assetsLogo = &gentronics.RemoteFile{
+	File:       gentronics.NewFile("assets/images/logo.svg", ""),
+	RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
+}
+
 // WebpackCmd generates a new actions/resource file and a stub test.
 var WebpackCmd = &cobra.Command{
 	Use:   "webpack",
@@ -43,13 +53,6 @@ var WebpackCmd = &cobra.Command{
 // NewWebpackGenerator generates a new actions/resource file and a stub test.
 func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
-	g.Add(gentronics.NewFile("public/assets/application.js", "// generated"))
-	g.Add(gentronics.NewFile("public/assets/application.css", "// generated"))
-	_, err := exec.LookPath("npm")
-	if err != nil {
-		fmt.Println("Could not find npm/node. Skipping webpack generation.")
-		return g
-	}
 
 	should := func(data gentronics.Data) bool {
 		if b, ok := data["withWebpack"]; ok {
@@ -57,21 +60,30 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 		}
 		return false
 	}
+
+	// if we're not using web pack save the logo and return
+	if !should(data) {
+		g.Add(publicLogo)
+		return g
+	}
+
+	// if there's no npm, return!
+	_, err := exec.LookPath("npm")
+	if err != nil {
+		fmt.Println("Could not find npm/node. Skipping webpack generation.")
+		g.Add(publicLogo)
+		return g
+	}
+
 	g.Should = should
-	f := gentronics.NewFile("webpack.config.js", nWebpack)
-	f.Should = should
-	g.Add(f)
-	f = gentronics.NewFile("assets/js/application.js", wApplicationJS)
-	f.Should = should
-	g.Add(f)
-	f = gentronics.NewFile("assets/css/application.scss", wApplicationCSS)
-	f.Should = should
-	g.Add(f)
+	g.Add(assetsLogo)
+	g.Add(gentronics.NewFile("webpack.config.js", nWebpack))
+	g.Add(gentronics.NewFile("public/assets/.gitignore", ""))
+	g.Add(gentronics.NewFile("assets/js/application.js", wApplicationJS))
+	g.Add(gentronics.NewFile("assets/css/application.scss", wApplicationCSS))
 	c := gentronics.NewCommand(exec.Command("npm", "install", "webpack", "-g"))
-	c.Should = should
 	g.Add(c)
 	c = gentronics.NewCommand(exec.Command("npm", "init", "-y"))
-	c.Should = should
 	g.Add(c)
 
 	modules := []string{"webpack", "sass-loader", "css-loader", "style-loader", "node-sass",
