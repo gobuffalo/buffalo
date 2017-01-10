@@ -146,7 +146,7 @@ func (b *builder) buildRiceZip() error {
 					return err
 				}
 				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
-				if rx.Match(s) {
+				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
 					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
 					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
 					paths[pkg] = true
