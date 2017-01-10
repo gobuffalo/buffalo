@@ -27,7 +27,7 @@ import (
 */
 type Handler func(Context) error
 
-func (a *App) handlerToHandler(h Handler) http.Handler {
+func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 	hf := func(res http.ResponseWriter, req *http.Request) {
 		ws := res.(*buffaloResponse)
 		params := req.URL.Query()
@@ -44,7 +44,8 @@ func (a *App) handlerToHandler(h Handler) http.Handler {
 			session:  a.getSession(req, ws),
 			notFound: a.notFound(),
 			data: map[string]interface{}{
-				"routes": a.Routes(),
+				"routes":        a.Routes(),
+				"current_route": info,
 			},
 		}
 
