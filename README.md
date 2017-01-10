@@ -87,8 +87,9 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 ## Contributors
 
 * Mark Bates
+* Antonio Pagano
 * Brian Downs
+* Cody Oss
 * arif emre
 * Mark Lussier
-* Cody Oss
 * Kenny Grant
