@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aymerick/raymond"
 	"github.com/markbates/gentronics"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -33,78 +32,79 @@ var ActionCmd = &cobra.Command{
 		name := args[0]
 		actions := args[1:]
 
-		data := gentronics.Data{"under": inflect.Underscore(name)}
-		_, err := os.Stat(filepath.Join("actions", fmt.Sprintf("%v.go", data["under"])))
-		fileExists := err == nil
+		data := gentronics.Data{
+			"filename":  inflect.Underscore(name),
+			"namespace": inflect.Camelize(name),
+		}
+
+		filePath := filepath.Join("actions", fmt.Sprintf("%v.go", data["filename"]))
+		actionsTemplate := buildActionsTemplate(filePath)
+		actionsToAdd := findActionsToAdd(name, filePath, actions)
+		data["actions"] = actionsToAdd
 
 		g := gentronics.New()
-
-		if !fileExists {
-			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rActionFileT))
-			g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
-			if err = g.Run(".", data); err != nil {
-				return err
-			}
-		}
-
-		for _, action := range actions {
-			g.Add(buildActionAppender(name, action))
-		}
+		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
+		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), rActionTest))
+		addTemplateFiles(actionsToAdd, data)
 
 		if !runningTests {
 			g.Add(Fmt)
 		}
 
-		return g.Run(".", gentronics.Data{})
+		return g.Run(".", data)
 	},
 }
 
-func buildActionAppender(namespace, action string) gentronics.Runnable {
-	aa := actionAppender{namespace, action, inflect.Underscore(namespace)}
-	return aa
-}
-
-type actionAppender struct {
-	Namespace  string
-	ActionName string
-	FileName   string
-}
-
-func (aa actionAppender) Run(rootPath string, data gentronics.Data) error {
-	path := filepath.Join("actions", fmt.Sprintf("%v.go", aa.FileName))
-	fileContents, _ := ioutil.ReadFile(path)
-
-	funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", inflect.Camelize(aa.Namespace), inflect.Camelize(aa.ActionName))
-	if strings.Contains(string(fileContents), funcSignature) {
-		fmt.Printf("--> [warning] skipping %v%v since it already exists\n", inflect.Camelize(aa.Namespace), inflect.Camelize(aa.ActionName))
-		return nil
+func buildActionsTemplate(filePath string) string {
+	actionsTemplate := "package actions"
+	fileContents, err := ioutil.ReadFile(filePath)
+	if err == nil {
+		actionsTemplate = string(fileContents)
 	}
 
-	templateData := map[string]string{
-		"namespace":       inflect.Camelize(aa.Namespace),
-		"action":          inflect.Camelize(aa.ActionName),
-		"namespace_under": inflect.Underscore(aa.Namespace),
-		"action_under":    inflect.Underscore(aa.ActionName),
+	actionsTemplate = actionsTemplate + `
+            
+            {{#each actions as |action|}}
+                // {{namespace}}{{camelize action}} default implementation.
+                func {{namespace}}{{camelize action}}(c buffalo.Context) error {
+                    return c.Render(200, r.HTML("{{filename}}/{{underscore action}}.html"))
+                }
+            {{/each}}
+        `
+	return actionsTemplate
+}
+
+func addTemplateFiles(actionsToAdd []string, data gentronics.Data) {
+	for _, action := range actionsToAdd {
+		vg := gentronics.New()
+		viewPath := filepath.Join("templates", fmt.Sprintf("%s", data["filename"]), fmt.Sprintf("%s.html", inflect.Underscore(action)))
+		vg.Add(gentronics.NewFile(viewPath, rViewT))
+		vg.Run(".", gentronics.Data{
+			"namespace": data["namespace"],
+			"action":    inflect.Camelize(action),
+		})
 	}
+}
 
-	t, _ := raymond.Parse(rActionFuncT)
-	fn, _ := t.Exec(templateData)
-
-	fileContents = []byte(string(fileContents) + fn)
-	err := ioutil.WriteFile(path, fileContents, 0755)
-
+func findActionsToAdd(name, path string, actions []string) []string {
+	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
-		return err
+		fileContents = []byte("")
 	}
 
-	t, _ = raymond.Parse(rViewT)
-	content, _ := t.Exec(templateData)
+	actionsToAdd := []string{}
 
-	templatePath := filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace)), fmt.Sprintf("%s.html", inflect.Underscore(aa.ActionName)))
-	os.MkdirAll(filepath.Join("templates", fmt.Sprintf("%s", inflect.Underscore(aa.Namespace))), 0755)
+	for _, action := range actions {
+		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", inflect.Camelize(name), inflect.Camelize(action))
+		if strings.Contains(string(fileContents), funcSignature) {
+			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", inflect.Camelize(name), inflect.Camelize(action))
+			continue
+		}
 
-	fmt.Printf("--> templates/%v/%v.html\n", inflect.Underscore(aa.Namespace), inflect.Underscore(aa.ActionName))
-	return ioutil.WriteFile(templatePath, []byte(content), 0755)
+		actionsToAdd = append(actionsToAdd, action)
+	}
+
+	return actionsToAdd
 }
 
 const (
