@@ -11,38 +11,38 @@ import (
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
-func (a *App) GET(p string, h Handler) {
-	a.addRoute("GET", p, h)
+func (a *App) GET(p string, h Handler) RouteInfo {
+	return a.addRoute("GET", p, h)
 }
 
 // POST maps an HTTP "POST" request to the path and the specified handler.
-func (a *App) POST(p string, h Handler) {
-	a.addRoute("POST", p, h)
+func (a *App) POST(p string, h Handler) RouteInfo {
+	return a.addRoute("POST", p, h)
 }
 
 // PUT maps an HTTP "PUT" request to the path and the specified handler.
-func (a *App) PUT(p string, h Handler) {
-	a.addRoute("PUT", p, h)
+func (a *App) PUT(p string, h Handler) RouteInfo {
+	return a.addRoute("PUT", p, h)
 }
 
 // DELETE maps an HTTP "DELETE" request to the path and the specified handler.
-func (a *App) DELETE(p string, h Handler) {
-	a.addRoute("DELETE", p, h)
+func (a *App) DELETE(p string, h Handler) RouteInfo {
+	return a.addRoute("DELETE", p, h)
 }
 
 // HEAD maps an HTTP "HEAD" request to the path and the specified handler.
-func (a *App) HEAD(p string, h Handler) {
-	a.addRoute("HEAD", p, h)
+func (a *App) HEAD(p string, h Handler) RouteInfo {
+	return a.addRoute("HEAD", p, h)
 }
 
 // OPTIONS maps an HTTP "OPTIONS" request to the path and the specified handler.
-func (a *App) OPTIONS(p string, h Handler) {
-	a.addRoute("OPTIONS", p, h)
+func (a *App) OPTIONS(p string, h Handler) RouteInfo {
+	return a.addRoute("OPTIONS", p, h)
 }
 
 // PATCH maps an HTTP "PATCH" request to the path and the specified handler.
-func (a *App) PATCH(p string, h Handler) {
-	a.addRoute("PATCH", p, h)
+func (a *App) PATCH(p string, h Handler) RouteInfo {
+	return a.addRoute("PATCH", p, h)
 }
 
 // ServeFiles maps an path to a directory on disk to serve static files.
@@ -122,19 +122,23 @@ func (a *App) Group(path string) *App {
 	return g
 }
 
-func (a *App) addRoute(method string, url string, h Handler) {
+func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
 	url = path.Join(a.prefix, url)
 	hs := funcKey(h)
-	routes := a.Routes()
-	routes = append(routes, route{
+	r := RouteInfo{
 		Method:      method,
 		Path:        url,
 		HandlerName: hs,
-	})
+		Handler:     h,
+	}
 
+	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+
+	routes := a.Routes()
+	routes = append(routes, r)
 	sort.Sort(routes)
 	if a.root != nil {
 		a.root.routes = routes
@@ -142,5 +146,5 @@ func (a *App) addRoute(method string, url string, h Handler) {
 		a.routes = routes
 	}
 
-	a.router.Handle(url, a.handlerToHandler(h)).Methods(method)
+	return r
 }
