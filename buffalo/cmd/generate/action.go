@@ -18,7 +18,7 @@ var runningTests = false
 //ActionCmd is the cmd that generates actions.
 var ActionCmd = &cobra.Command{
 	Use:     "action [name] [actionName...]",
-	Aliases: []string{"a"},
+	Aliases: []string{"a", "actions"},
 	Short:   "Generates new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
@@ -113,7 +113,7 @@ const (
 
 	rViewT       = `<h1>{{namespace}}#{{action}}</h1>`
 	rActionFuncT = `
-    
+
     // {{namespace}}{{action}} default implementation.
     func {{namespace}}{{action}}(c buffalo.Context) error {
 	    return c.Render(200, r.HTML("{{namespace_under}}/{{action_under}}.html"))
@@ -122,7 +122,7 @@ const (
 
 	rActionTestT = `
     package actions
-    
+
     func Test_{{namespace}}{{action}}(t *testing.T) {
 	    r := require.New(t)
 	    r.Fail("Not Implemented!")
