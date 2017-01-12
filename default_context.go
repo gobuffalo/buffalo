@@ -27,7 +27,6 @@ type DefaultContext struct {
 	logger      Logger
 	session     *Session
 	contentType string
-	notFound    http.Handler
 	data        map[string]interface{}
 }
 
@@ -104,12 +103,15 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		bb := &bytes.Buffer{}
 		err := rr.Render(bb, data)
 		if err != nil {
-			return err
+			return httpError{Status: 500, Cause: errors.WithStack(err)}
 		}
 		d.Response().Header().Set("Content-Type", rr.ContentType())
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
-		return err
+		if err != nil {
+			return httpError{Status: 500, Cause: errors.WithStack(err)}
+		}
+		return nil
 	}
 	d.Response().WriteHeader(status)
 	return nil
@@ -129,7 +131,7 @@ func (d *DefaultContext) Bind(value interface{}) error {
 	default:
 		err := d.Request().ParseForm()
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		dec := schema.NewDecoder()
 		dec.IgnoreUnknownKeys(true)
@@ -153,29 +155,7 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
-	if status == 404 {
-		req := d.Request()
-		req.URL.Query().Set("error", err.Error())
-		d.notFound.ServeHTTP(d.Response(), req)
-		return nil
-	}
-	err = errors.WithStack(err)
-	d.Logger().Error(err)
-	msg := fmt.Sprintf("%+v", err)
-	d.Response().WriteHeader(status)
-
-	ct := d.Request().Header.Get("Content-Type")
-	switch strings.ToLower(ct) {
-	case "application/json", "text/json", "json":
-		err = json.NewEncoder(d.Response()).Encode(map[string]interface{}{
-			"error": msg,
-			"code":  status,
-		})
-	case "application/xml", "text/xml", "xml":
-	default:
-		_, err = d.Response().Write([]byte(fmt.Sprintf("<pre>%+v</pre>", msg)))
-	}
-	return err
+	return httpError{Status: status, Cause: errors.WithStack(err)}
 }
 
 // Websocket returns an upgraded github.com/gorilla/websocket.Conn

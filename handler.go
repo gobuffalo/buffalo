@@ -27,33 +27,48 @@ import (
 */
 type Handler func(Context) error
 
+func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Request) Context {
+	ws := res.(*buffaloResponse)
+	params := req.URL.Query()
+	vars := mux.Vars(req)
+	for k, v := range vars {
+		params.Set(k, v)
+	}
+
+	return &DefaultContext{
+		response: ws,
+		request:  req,
+		params:   params,
+		logger:   a.Logger,
+		session:  a.getSession(req, ws),
+		data: map[string]interface{}{
+			"env":           a.Env,
+			"routes":        a.Routes(),
+			"current_route": info,
+		},
+	}
+}
+
 func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 	hf := func(res http.ResponseWriter, req *http.Request) {
-		ws := res.(*buffaloResponse)
-		params := req.URL.Query()
-		vars := mux.Vars(req)
-		for k, v := range vars {
-			params.Set(k, v)
-		}
-
-		c := &DefaultContext{
-			response: ws,
-			request:  req,
-			params:   params,
-			logger:   a.Logger,
-			session:  a.getSession(req, ws),
-			notFound: a.notFound(),
-			data: map[string]interface{}{
-				"routes":        a.Routes(),
-				"current_route": info,
-			},
-		}
-
+		c := a.newContext(info, res, req)
 		err := a.Middleware.handler(h)(c)
 
 		if err != nil {
-			err := c.Error(500, err)
-			a.Logger.Error(err)
+			status := 500
+			if e, ok := err.(httpError); ok {
+				status = e.Status
+			}
+			eh := a.ErrorHandlers.Get(status)
+			err = eh(status, err, c)
+			if err != nil {
+				// things have really hit the fan if we're here!!
+				a.Logger.Error(err)
+				c.Response().WriteHeader(500)
+				c.Response().Write([]byte(err.Error()))
+			}
+			// err := c.Error(500, err)
+			// a.Logger.Error(err)
 		}
 	}
 	return http.HandlerFunc(hf)
