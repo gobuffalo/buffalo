@@ -23,7 +23,6 @@ type Options struct {
 	// LogDir is the path to the directory for storing the JSON log files from the
 	// default Logger
 	LogDir         string
-	NotFound       http.Handler
 	MethodOverride http.HandlerFunc
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
