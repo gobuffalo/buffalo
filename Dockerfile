@@ -1,4 +1,6 @@
-FROM golang
+FROM golang:latest
+
+RUN go version
 
 RUN apt-get update
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
