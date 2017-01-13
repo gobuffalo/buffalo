@@ -20,10 +20,6 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("grifts/routes.go", nGriftRoutes))
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
-	g.Add(&gentronics.RemoteFile{
-		File:       gentronics.NewFile("assets/images/logo.svg", ""),
-		RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
-	})
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/refresh")))
