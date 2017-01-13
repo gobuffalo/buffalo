@@ -33,7 +33,7 @@ var consoleCmd = &cobra.Command{
 	RunE: func(c *cobra.Command, args []string) error {
 		_, err := exec.LookPath("gore")
 		if err != nil {
-			return errors.New("we could not find \"gore\" in your path.You must first install \"gore\" in order to use the Buffalo console:\n\n$ go get -u github.com/motemen/gore")
+			return errors.New("we could not find \"gore\" in your path. You must first install \"gore\" in order to use the Buffalo console:\n\n$ go get -u github.com/motemen/gore")
 		}
 		rootPath, err := rootPath("")
 		if err != nil {
