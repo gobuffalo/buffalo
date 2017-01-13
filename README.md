@@ -50,7 +50,7 @@ The `dev` command will watch your `.go` and `.html` files by default and rebuild
 
 ## Testing your application
 
-Just like running your application, Buffalo doesn't stop you from using the standard Go tools for testing. Buffalo does ship with a `test` command that will run all of your tests will convienently skipping that pesky old `./vendor` directory!
+Just like running your application, Buffalo doesn't stop you from using the standard Go tools for testing. Buffalo does ship with a `test` command that will run all of your tests will conveniently skipping that pesky old `./vendor` directory!
 
 ```text
 $ buffalo test
