@@ -59,7 +59,7 @@ func NewEventSource(w http.ResponseWriter) (*EventSource, error) {
 	var ok bool
 	es.fl, ok = w.(http.Flusher)
 	if !ok {
-		return es, errors.New("Streaming is not supported!!")
+		return es, errors.New("streaming is not supported")
 	}
 
 	es.w.Header().Set("Content-Type", "text/event-stream")
