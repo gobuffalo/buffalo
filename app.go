@@ -73,7 +73,7 @@ func New(opts Options) *App {
 	return a
 }
 
-// Automatic returns a new instace of App with sane defaults,
+// Automatic returns a new instance of App with sane defaults,
 // some not so sane defaults, and a few bits and pieces to make
 // your life that much easier. You'll want to use this almost
 // all of the time to build your applications.

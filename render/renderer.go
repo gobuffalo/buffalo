@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/velvet"
 )
 
-// Renderer interface that must be satisified to be used with
+// Renderer interface that must be satisfied to be used with
 // buffalo.Context.Render
 type Renderer interface {
 	ContentType() string
