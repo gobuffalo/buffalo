@@ -42,7 +42,7 @@ var newCmd = &cobra.Command{
 	Short: "Creates a new Buffalo application",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("You must enter a name for your new application.")
+			return errors.New("you must enter a name for your new application")
 		}
 		name := args[0]
 		rootPath, err := rootPath(name)
@@ -55,7 +55,7 @@ var newCmd = &cobra.Command{
 			if force {
 				os.RemoveAll(rootPath)
 			} else {
-				return fmt.Errorf("%s already exists! Either delete it or use the -f flag to force.\n", name)
+				return fmt.Errorf("%s already exists! Either delete it or use the -f flag to force", name)
 			}
 		}
 

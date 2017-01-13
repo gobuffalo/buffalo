@@ -37,7 +37,7 @@ var ResourceCmd = &cobra.Command{
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("You must specify a resource name!")
+			return errors.New("you must specify a resource name")
 		}
 		name := args[0]
 		data := gentronics.Data{
