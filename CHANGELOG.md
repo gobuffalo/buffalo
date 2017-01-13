@@ -1,5 +1,57 @@
 # Change Log
 
+## [v0.7.1](https://github.com/gobuffalo/buffalo/tree/v0.7.1) (2017-01-13)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.0...v0.7.1)
+
+**Closed issues:**
+
+- Channel for community chat [\#126](https://github.com/gobuffalo/buffalo/issues/126)
+- build\_path does not work for Windows [\#124](https://github.com/gobuffalo/buffalo/issues/124)
+- Installation error [\#120](https://github.com/gobuffalo/buffalo/issues/120)
+- Default js and css file when webpack is skipped [\#116](https://github.com/gobuffalo/buffalo/issues/116)
+- go.rice requirement in build [\#115](https://github.com/gobuffalo/buffalo/issues/115)
+- Warn user about SESSION\_SECRET variable? [\#114](https://github.com/gobuffalo/buffalo/issues/114)
+- Buffalo sub-commands unavailable [\#113](https://github.com/gobuffalo/buffalo/issues/113)
+- Error installing buffalo.  [\#111](https://github.com/gobuffalo/buffalo/issues/111)
+- In `production` mode Buffalo/Velvet templates show traces [\#110](https://github.com/gobuffalo/buffalo/issues/110)
+- buffalo new \<project\> fails looking for golang.org/x/tools/go/gcimporter [\#108](https://github.com/gobuffalo/buffalo/issues/108)
+- missing "public/assets" box on new app without webpack [\#104](https://github.com/gobuffalo/buffalo/issues/104)
+- SHOULDERS update & grift task [\#99](https://github.com/gobuffalo/buffalo/issues/99)
+- \[minor\] dev mode on non-buffalo project results in panic [\#91](https://github.com/gobuffalo/buffalo/issues/91)
+- typo in generated database.yml? [\#87](https://github.com/gobuffalo/buffalo/issues/87)
+- Buffalo dev not starting [\#86](https://github.com/gobuffalo/buffalo/issues/86)
+- Export fileResolver Field in Render Options Struct  [\#84](https://github.com/gobuffalo/buffalo/issues/84)
+- `buffalo task` should forward to `grift` [\#59](https://github.com/gobuffalo/buffalo/issues/59)
+- generate a default .codeclimate.yml file for new projects [\#37](https://github.com/gobuffalo/buffalo/issues/37)
+- generate a README.md for new projects [\#35](https://github.com/gobuffalo/buffalo/issues/35)
+- add a form generator to helper [\#19](https://github.com/gobuffalo/buffalo/issues/19)
+- Don't write test.log files when running tests [\#17](https://github.com/gobuffalo/buffalo/issues/17)
+- Add an "actions" generator [\#16](https://github.com/gobuffalo/buffalo/issues/16)
+
+**Merged pull requests:**
+
+- Add badge for Go Report Card to README [\#132](https://github.com/gobuffalo/buffalo/pull/132) ([stuartellis](https://github.com/stuartellis))
+- Makes our tests run on Go 1.7 and 1.8 [\#131](https://github.com/gobuffalo/buffalo/pull/131) ([apaganobeleno](https://github.com/apaganobeleno))
+- build\_path does not work for Windows closes \#124 [\#130](https://github.com/gobuffalo/buffalo/pull/130) ([markbates](https://github.com/markbates))
+- Edit some typo [\#129](https://github.com/gobuffalo/buffalo/pull/129) ([IvanMenshykov](https://github.com/IvanMenshykov))
+- Passing some issues from codeclimate [\#122](https://github.com/gobuffalo/buffalo/pull/122) ([apaganobeleno](https://github.com/apaganobeleno))
+- Provide a mechanism to map status codes to error handles. Closes \#110 [\#121](https://github.com/gobuffalo/buffalo/pull/121) ([markbates](https://github.com/markbates))
+- Warn user about SESSION\_SECRET variable? closes \#114 [\#119](https://github.com/gobuffalo/buffalo/pull/119) ([markbates](https://github.com/markbates))
+- point people to npm docs if there is an issue running npm [\#118](https://github.com/gobuffalo/buffalo/pull/118) ([markbates](https://github.com/markbates))
+- Default css js files and no logo in assets wo webpack [\#117](https://github.com/gobuffalo/buffalo/pull/117) ([fooflare](https://github.com/fooflare))
+- Return the RouteInfo when mapping an endpoint. Also make it available in the request context [\#109](https://github.com/gobuffalo/buffalo/pull/109) ([markbates](https://github.com/markbates))
+- missing "public/assets" box on new app without webpack closes \#104 [\#107](https://github.com/gobuffalo/buffalo/pull/107) ([markbates](https://github.com/markbates))
+- Using gentronics to generate the templates and the actions [\#106](https://github.com/gobuffalo/buffalo/pull/106) ([apaganobeleno](https://github.com/apaganobeleno))
+- Adds an Actions generator to the cmd package [\#103](https://github.com/gobuffalo/buffalo/pull/103) ([apaganobeleno](https://github.com/apaganobeleno))
+- Cleaning up some docs [\#102](https://github.com/gobuffalo/buffalo/pull/102) ([CodyOss](https://github.com/CodyOss))
+- Avoiding generating log folder when running tests. [\#101](https://github.com/gobuffalo/buffalo/pull/101) ([apaganobeleno](https://github.com/apaganobeleno))
+- \[grift\] changing the task to be pointing the buffalo repo [\#100](https://github.com/gobuffalo/buffalo/pull/100) ([apaganobeleno](https://github.com/apaganobeleno))
+- making buffalo call grift for the tasks [\#98](https://github.com/gobuffalo/buffalo/pull/98) ([apaganobeleno](https://github.com/apaganobeleno))
+- Update build.go [\#93](https://github.com/gobuffalo/buffalo/pull/93) ([arifemre](https://github.com/arifemre))
+- Update new.go [\#92](https://github.com/gobuffalo/buffalo/pull/92) ([arifemre](https://github.com/arifemre))
+- Typo in readme [\#90](https://github.com/gobuffalo/buffalo/pull/90) ([CodyOss](https://github.com/CodyOss))
+- Typos in readme [\#88](https://github.com/gobuffalo/buffalo/pull/88) ([kennygrant](https://github.com/kennygrant))
+
 ## [v0.7.0](https://github.com/gobuffalo/buffalo/tree/v0.7.0) (2017-01-04)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.6.0...v0.7.0)
 
@@ -133,15 +185,15 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
 
 ## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.1.pre)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
+
+## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.0.pre)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
-
-## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)
