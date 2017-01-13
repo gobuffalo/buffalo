@@ -13,7 +13,7 @@ env:
     - GO_DOCKER_TAG=1.8
 
 script:
-  - perl -pi -w -e "s/FROM golang:1.7/FROM golang:$GO_DOCKER_TAG/g" Dockerfile && docker build .
+  - perl -pi -w -e "s/FROM golang:latest/FROM golang:$GO_DOCKER_TAG/g" Dockerfile && docker build .
 
 addons:
   code_climate:
