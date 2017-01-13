@@ -9,7 +9,7 @@ import (
 
 // Engine used to power all defined renderers.
 // This allows you to configure the system to your
-// prefered settings, instead of just getting
+// preferred settings, instead of just getting
 // the defaults.
 type Engine struct {
 	Options

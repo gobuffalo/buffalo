@@ -279,6 +279,7 @@ const nGitignore = `vendor/
 **/*.log
 **/*.sqlite
 bin/
+tmp/
 node_modules/
 .sass-cache/
 rice-box.go
@@ -320,6 +321,7 @@ ignored_folders:
 - public
 - grifts
 - tmp
+- bin
 - node_modules
 - .sass-cache
 included_extensions:
@@ -328,7 +330,7 @@ included_extensions:
 - .md
 - .js
 - .tmpl
-build_path: /tmp
+build_path: tmp
 build_delay: 200ns
 binary_name: {{name}}-build
 command_flags: []
