@@ -12,7 +12,10 @@ import (
 
 func addRoute(method, path, handlerName string) error {
 	routeDefinition := fmt.Sprintf(`app.%v("%v", %v)`, method, path, handlerName)
+	return addInsideAppBlock(routeDefinition)
+}
 
+func addInsideAppBlock(expression string) error {
 	src, err := ioutil.ReadFile("actions/app.go")
 	if err != nil {
 		return err
@@ -32,12 +35,11 @@ func addRoute(method, path, handlerName string) error {
 		return errors.New("could not find desired block on the app.go file")
 	}
 
-	fileLines = append(fileLines[:end], append([]string{routeDefinition}, fileLines[end:]...)...)
+	fileLines = append(fileLines[:end], append([]string{expression}, fileLines[end:]...)...)
 
 	fileContent := strings.Join(fileLines, "\n")
 	err = ioutil.WriteFile("actions/app.go", []byte(fileContent), 0755)
 	return err
-
 }
 
 func findClosingRouteBlockEnd(f *ast.File, fset *token.FileSet, fileLines []string) int {
