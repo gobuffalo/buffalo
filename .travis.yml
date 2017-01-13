@@ -10,7 +10,7 @@ go:
 env:
   matrix:
     - GO_DOCKER_TAG=1.7
-    - GO_DOCKER_TAG=latest
+    - GO_DOCKER_TAG=1.8
 
 script:
   - perl -pi -w -e "s/{{GO_DOCKER_TAG}}/$GO_DOCKER_TAG/g" Dockerfile && docker build .
