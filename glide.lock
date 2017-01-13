@@ -1,0 +1,210 @@
+hash: ba539f1394b5cd7d369885c7a8d11a565745e768d0478f03a33ac2ccb7935af4
+updated: 2017-01-13T16:58:00.364153401-05:00
+imports:
+- name: github.com/aymerick/raymond
+  version: 72acac2207479d21dd45898c2a4264246c818148
+  subpackages:
+  - ast
+  - lexer
+  - parser
+- name: github.com/boltdb/bolt
+  version: a705895fdad108f053eae7ee011ed94a0541ee13
+- name: github.com/daaku/go.zipexe
+  version: a5fe2436ffcb3236e175e5149162b41cd28bd27d
+- name: github.com/daviddengcn/go-colortext
+  version: 805cee6e0d43c72ba1d4e3275965ff41e0da068a
+- name: github.com/dustin/go-humanize
+  version: 7a41df006ff9af79a29f0ffa9c5f21fbe6314a2d
+- name: github.com/fatih/color
+  version: 42c364ba490082e4815b5222728711b3440603eb
+- name: github.com/fsnotify/fsnotify
+  version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
+- name: github.com/GeertJohan/go.rice
+  version: 9fdfd46f9806a9228aae341d65ab75c5235c383c
+  subpackages:
+  - embedded
+- name: github.com/go-sql-driver/mysql
+  version: 2e00b5cd70399450106cec6431c2e2ce3cae5034
+- name: github.com/gobuffalo/envy
+  version: 5056ec9ebe876e444296d535fcf01fb2ddb8a802
+- name: github.com/gobuffalo/velvet
+  version: 2b0c118969b6745ce0f5752fbb8412c85decffb1
+- name: github.com/gorilla/context
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
+- name: github.com/gorilla/mux
+  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/gorilla/schema
+  version: dfd60678a6033f19803293695dcd30f40ed3cd19
+- name: github.com/gorilla/securecookie
+  version: fa5329f913702981df43dcb2a380bac429c810b5
+- name: github.com/gorilla/sessions
+  version: ca9ada44574153444b00d3fd9c8559e4cc95f896
+- name: github.com/gorilla/websocket
+  version: 3ab3a8b8831546bd18fd182c20687ca853b2bb13
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/jmoiron/sqlx
+  version: cac998c4f0959c19c638c523e374fa8e4e0bcfe3
+  subpackages:
+  - reflectx
+- name: github.com/kardianos/osext
+  version: c2c54e542fb797ad986b31721e1baedf214ca413
+- name: github.com/lib/pq
+  version: 8df6253d1317616f36b0c3740eb30c239a7372cb
+  subpackages:
+  - oid
+- name: github.com/markbates/gentronics
+  version: 5b69b919e1fd0e758021b0c2e44ba6f14df00ed9
+- name: github.com/markbates/going
+  version: 0576708c56cea02331f864fe6e157ac7841923e4
+  subpackages:
+  - clam
+  - defaults
+  - randx
+  - validate
+  - validate/validators
+  - wait
+- name: github.com/markbates/grift
+  version: c2aa95989ee351e49c0ac7ecf4f83ffa6ffbf6ee
+  subpackages:
+  - grift
+- name: github.com/markbates/inflect
+  version: 3e74c98c9bcf4148db59b58e94ba545314ae9f61
+- name: github.com/markbates/pop
+  version: 08955d0ca6238cbcf6bd4e1f605067c72b26992c
+  subpackages:
+  - columns
+  - fizz
+  - fizz/translators
+  - soda/cmd
+  - soda/cmd/generate
+- name: github.com/markbates/refresh
+  version: 3b31d64dec02d89d735e1f60c05ed41a43c5207e
+  subpackages:
+  - refresh
+  - refresh/web
+- name: github.com/markbates/tt
+  version: 99bbd60c11dc5540a7a828b906d7828090e88a39
+  subpackages:
+  - cmd
+  - cmd/models
+- name: github.com/markbates/validate
+  version: 2a9b4fec6679aa1384d64216de1e98a1589b65af
+- name: github.com/mattn/anko
+  version: 146636cd1e5f0beab721a722f2b5a0fb4613e515
+  subpackages:
+  - ast
+  - builtins
+  - builtins/encoding/json
+  - builtins/errors
+  - builtins/flag
+  - builtins/fmt
+  - builtins/github.com/daviddengcn/go-colortext
+  - builtins/io
+  - builtins/io/ioutil
+  - builtins/math
+  - builtins/math/rand
+  - builtins/net
+  - builtins/net/http
+  - builtins/net/url
+  - builtins/os
+  - builtins/os/exec
+  - builtins/os/signal
+  - builtins/path
+  - builtins/path/filepath
+  - builtins/regexp
+  - builtins/runtime
+  - builtins/sort
+  - builtins/strings
+  - builtins/time
+  - parser
+  - vm
+- name: github.com/mattn/go-colorable
+  version: d228849504861217f796da67fae4f6e347643f15
+- name: github.com/mattn/go-isatty
+  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+- name: github.com/mattn/go-runewidth
+  version: 737072b4e32b7a5018b4a7125da8d12de90e8045
+- name: github.com/mattn/go-sqlite3
+  version: eff6379ba09b2fca7aa8216f2132d4c170ed9d46
+- name: github.com/mattn/go-zglob
+  version: 1783ae1a9f7ff3a79240e8c249d8b575d70a6528
+  subpackages:
+  - fastwalk
+- name: github.com/microcosm-cc/bluemonday
+  version: e79763773ab6222ca1d5a7cbd9d62d83c1f77081
+- name: github.com/mitchellh/go-homedir
+  version: b8bc1bf767474819792c23f32d8286a45736f1c6
+- name: github.com/newrelic/go-agent
+  version: 7d12ae2201fc160e486197614a6f65afcf3f8170
+  subpackages:
+  - internal
+  - internal/jsonx
+  - internal/logger
+  - internal/sysinfo
+  - internal/utilization
+- name: github.com/olekukonko/tablewriter
+  version: 44e365d423f4f06769182abfeeae2b91be9d529b
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/russross/blackfriday
+  version: 5f33e7b7878355cd2b7e6b8eefc48a5472c69f70
+- name: github.com/satori/go.uuid
+  version: b061729afc07e77a8aa4fad0a2fd840958f1942a
+- name: github.com/serenize/snaker
+  version: 543781d2b79bd95c51ffe70e70a55c946ca211ff
+- name: github.com/sergi/go-diff
+  version: 83532ca1c1caa393179c677b6facf48e61f4ca5d
+  subpackages:
+  - diffmatchpatch
+- name: github.com/shurcooL/github_flavored_markdown
+  version: ee9a372f80c5dd9039b82b41089c9bde01b34c98
+- name: github.com/shurcooL/highlight_diff
+  version: d3b292edd8c8311b9d264e3adc26cdf39695fe9b
+- name: github.com/shurcooL/highlight_go
+  version: 7867c2dec5d03326c952ca98eda2abf907ddfcf3
+- name: github.com/shurcooL/sanitized_anchor_name
+  version: 1dba4b3954bc059efc3991ec364f9f9a35f597d2
+- name: github.com/Sirupsen/logrus
+  version: d26492970760ca5d33129d2d799e34be5c4782eb
+- name: github.com/sourcegraph/annotate
+  version: f4cad6c6324d3f584e1743d8b3e0e017a5f3a636
+- name: github.com/sourcegraph/syntaxhighlight
+  version: c95ac474b7cb9c711f4591b553a2caaa24ea3d37
+- name: github.com/spf13/cobra
+  version: 1dd5ff2e11b6dca62fdcb275eb804b94607d8b06
+- name: github.com/spf13/pflag
+  version: 25f8b5b07aece3207895bf19f7ab517eb3b22a40
+- name: golang.org/x/net
+  version: c427ad74c6d7a814201695e9ffde0c5d400a7674
+  subpackages:
+  - context
+  - html
+  - html/atom
+  - websocket
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+- name: gopkg.in/yaml.v2
+  version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+testImports:
+- name: github.com/ajg/form
+  version: 523a5da1a92f01b01f840b61689c0340a0243532
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/markbates/hmax
+  version: b6c7cb2ab5f435e74dfc81cc9efaf3ce85397f56
+- name: github.com/markbates/willie
+  version: cf7c4a7c06ea6a65b79294bbfb4ae18b580f6ecc
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
+- name: github.com/stretchr/testify
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
+  subpackages:
+  - assert
+  - require

@@ -27,3 +27,4 @@ generated/
 bin/*
 gin-bin
 *.sqlite*
+vendor/

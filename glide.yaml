@@ -1,0 +1,57 @@
+package: github.com/gobuffalo/buffalo
+import:
+- package: github.com/GeertJohan/go.rice
+- package: github.com/Sirupsen/logrus
+  version: ^0.11.0
+- package: github.com/dustin/go-humanize
+- package: github.com/gobuffalo/envy
+- package: github.com/gobuffalo/velvet
+- package: github.com/gorilla/context
+  version: ^1.1.0
+- package: github.com/gorilla/mux
+  version: ^1.1.0
+- package: github.com/gorilla/schema
+- package: github.com/gorilla/sessions
+  version: ^1.1.0
+- package: github.com/gorilla/websocket
+  version: ^1.1.0
+- package: github.com/markbates/gentronics
+- package: github.com/markbates/going
+  subpackages:
+  - defaults
+  - randx
+  - validate
+  - validate/validators
+- package: github.com/markbates/grift
+  subpackages:
+  - grift
+- package: github.com/markbates/inflect
+- package: github.com/markbates/pop
+  version: ^3.11.0
+  subpackages:
+  - soda/cmd
+  - soda/cmd/generate
+- package: github.com/markbates/refresh
+  version: ^1.2.0
+  subpackages:
+  - refresh
+  - refresh/web
+- package: github.com/markbates/tt
+  subpackages:
+  - cmd
+- package: github.com/newrelic/go-agent
+  version: ^1.5.0
+- package: github.com/olekukonko/tablewriter
+- package: github.com/pkg/errors
+  version: ^0.8.0
+- package: github.com/shurcooL/github_flavored_markdown
+- package: github.com/spf13/cobra
+testImport:
+- package: github.com/markbates/willie
+- package: github.com/stretchr/testify
+  version: ^1.1.4
+  subpackages:
+  - require
+- package: golang.org/x/net
+  subpackages:
+  - websocket
