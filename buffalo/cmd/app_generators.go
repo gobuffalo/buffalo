@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"os/exec"
-	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/envy"
 	"github.com/markbates/gentronics"
 )
 
@@ -29,15 +27,20 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/grift")))
 	g.Add(gentronics.NewCommand(generate.GoGet("github.com/motemen/gore")))
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
-	g.Add(gentronics.NewCommand(generate.GoGet("github.com/Masterminds/glide")))
-	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/Masterminds/glide")))
 	g.Add(generate.NewWebpackGenerator(data))
 	g.Add(newSodaGenerator())
+	g.Add(gentronics.NewCommand(appGoGet()))
 	g.Add(generate.Fmt)
-	glide := filepath.Join(envy.Get("GOPATH", ""), "bin", "glide")
-	g.Add(gentronics.NewCommand(exec.Command(glide, "init", "--non-interactive")))
-	g.Add(gentronics.NewCommand(exec.Command(glide, "i")))
 	return g
+}
+
+func appGoGet() *exec.Cmd {
+	appArgs := []string{"get", "-t"}
+	if verbose {
+		appArgs = append(appArgs, "-v")
+	}
+	appArgs = append(appArgs, "./...")
+	return exec.Command("go", appArgs...)
 }
 
 const nREADME = `# {{name}}
