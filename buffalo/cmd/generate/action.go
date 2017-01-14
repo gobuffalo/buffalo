@@ -56,7 +56,7 @@ var ActionCmd = &cobra.Command{
 }
 
 func buildActionsTemplate(filePath string) string {
-	actionsTemplate := "package actions"
+	actionsTemplate := rActionFileT
 	fileContents, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		actionsTemplate = string(fileContents)

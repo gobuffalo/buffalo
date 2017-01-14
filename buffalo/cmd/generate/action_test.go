@@ -57,6 +57,8 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 	r.Nil(e)
 
 	data, _ := ioutil.ReadFile("actions/users.go")
+	r.Contains(string(data), "package actions")
+	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
 	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
 	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
 	r.Contains(string(data), `r.HTML("users/edit.html")`)
