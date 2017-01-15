@@ -9,12 +9,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-type httpError struct {
+type HttpError struct {
 	Status int   `json:"status"`
 	Cause  error `json:"error"`
 }
 
-func (h httpError) Error() string {
+func (h HttpError) Error() string {
 	return h.Cause.Error()
 }
 
@@ -51,6 +51,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		c.Response().Write([]byte(prodErrorTmpl))
 		return nil
 	}
+	err = errors.WithStack(err)
 	c.Logger().Error(err)
 	c.Response().WriteHeader(status)
 

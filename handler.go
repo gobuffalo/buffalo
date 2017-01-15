@@ -56,7 +56,7 @@ func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 
 		if err != nil {
 			status := 500
-			if e, ok := err.(httpError); ok {
+			if e, ok := err.(HttpError); ok {
 				status = e.Status
 			}
 			eh := a.ErrorHandlers.Get(status)
