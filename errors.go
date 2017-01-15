@@ -52,7 +52,6 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		c.Response().Write([]byte(prodErrorTmpl))
 		return nil
 	}
-	err = errors.WithStack(err)
 	c.Logger().Error(err)
 	c.Response().WriteHeader(status)
 
