@@ -9,12 +9,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-type HttpError struct {
+type HTTPError struct {
 	Status int   `json:"status"`
 	Cause  error `json:"error"`
 }
 
-func (h HttpError) Error() string {
+func (h HTTPError) Error() string {
 	return h.Cause.Error()
 }
 

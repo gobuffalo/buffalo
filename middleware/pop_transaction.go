@@ -5,7 +5,6 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/pop"
-	"github.com/pkg/errors"
 )
 
 // PopTransaction is a piece of Buffalo middleware that wraps each
@@ -31,8 +30,8 @@ var PopTransaction = func(db *pop.Connection) buffalo.MiddlewareFunc {
 			})
 			// find out if there is an underlying http error and return it rather than returning
 			// the wrapped transaction error
-			switch rootCause := errors.Cause(err).(type) {
-			case buffalo.HttpError:
+			switch rootCause := err.Cause().(type) {
+			case buffalo.HTTPError:
 				return rootCause
 			default:
 				return err
