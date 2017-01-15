@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// A typed error returned by http Handlers and used for choosing error handlers
+// HTTPError a typed error returned by http Handlers and used for choosing error handlers
 type HTTPError struct {
 	Status int   `json:"status"`
 	Cause  error `json:"error"`
