@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 )
 
 // Handler is the basis for all of Buffalo. A Handler
@@ -56,8 +57,11 @@ func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 
 		if err != nil {
 			status := 500
-			if e, ok := err.(httpError); ok {
-				status = e.Status
+			// unpack root cause and check for HTTPError
+			cause := errors.Cause(err)
+			httpError, ok := cause.(HTTPError)
+			if ok {
+				status = httpError.Status
 			}
 			eh := a.ErrorHandlers.Get(status)
 			err = eh(status, err, c)

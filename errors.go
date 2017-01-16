@@ -9,12 +9,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-type httpError struct {
+// HTTPError a typed error returned by http Handlers and used for choosing error handlers
+type HTTPError struct {
 	Status int   `json:"status"`
 	Cause  error `json:"error"`
 }
 
-func (h httpError) Error() string {
+func (h HTTPError) Error() string {
 	return h.Cause.Error()
 }
 

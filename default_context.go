@@ -103,13 +103,13 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		bb := &bytes.Buffer{}
 		err := rr.Render(bb, data)
 		if err != nil {
-			return httpError{Status: 500, Cause: errors.WithStack(err)}
+			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 		d.Response().Header().Set("Content-Type", rr.ContentType())
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
-			return httpError{Status: 500, Cause: errors.WithStack(err)}
+			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 		return nil
 	}
@@ -155,7 +155,7 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
-	return httpError{Status: status, Cause: errors.WithStack(err)}
+	return HTTPError{Status: status, Cause: errors.WithStack(err)}
 }
 
 // Websocket returns an upgraded github.com/gorilla/websocket.Conn
