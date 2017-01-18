@@ -12,8 +12,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
-* [github.com/aymerick/raymond](https://github.com/aymerick/raymond)
-
 * [github.com/aymerick/raymond/ast](https://github.com/aymerick/raymond/ast)
 
 * [github.com/aymerick/raymond/lexer](https://github.com/aymerick/raymond/lexer)
@@ -28,6 +26,14 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
+* [github.com/gobuffalo/buffalo/render](https://github.com/gobuffalo/buffalo/render)
+
+* [github.com/gobuffalo/buffalo/render/resolvers](https://github.com/gobuffalo/buffalo/render/resolvers)
+
+* [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
+
+* [github.com/gobuffalo/velvet](https://github.com/gobuffalo/velvet)
+
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
 * [github.com/gorilla/mux](https://github.com/gorilla/mux)
@@ -41,12 +47,6 @@ Thank you to the following **GIANTS**:
 * [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
 
 * [github.com/kardianos/osext](https://github.com/kardianos/osext)
-
-* [github.com/gobuffalo/buffalo/render](https://github.com/gobuffalo/buffalo/render)
-
-* [github.com/gobuffalo/buffalo/render/helpers](https://github.com/gobuffalo/buffalo/render/helpers)
-
-* [github.com/gobuffalo/buffalo/render/resolvers](https://github.com/gobuffalo/buffalo/render/resolvers)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 

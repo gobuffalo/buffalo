@@ -11,6 +11,7 @@ import (
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
+	"github.com/pkg/errors"
 )
 
 // App is where it all happens! It holds on to options,
@@ -19,11 +20,12 @@ import (
 type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware *MiddlewareStack
-	router     *mux.Router
-	moot       *sync.Mutex
-	routes     RouteList
-	root       *App
+	Middleware    *MiddlewareStack
+	ErrorHandlers ErrorHandlers
+	router        *mux.Router
+	moot          *sync.Mutex
+	routes        RouteList
+	root          *App
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -50,23 +52,28 @@ func New(opts Options) *App {
 
 	a := &App{
 		Options:    opts,
-		router:     mux.NewRouter(),
-		moot:       &sync.Mutex{},
-		routes:     RouteList{},
 		Middleware: newMiddlewareStack(),
+		ErrorHandlers: ErrorHandlers{
+			404: NotFoundHandler,
+			500: defaultErrorHandler,
+		},
+		router: mux.NewRouter(),
+		moot:   &sync.Mutex{},
+		routes: RouteList{},
 	}
 	if a.Logger == nil {
 		a.Logger = NewLogger(opts.LogLevel)
 	}
-	if a.NotFound == nil {
-		a.NotFound = a.notFound()
-	}
-	a.router.NotFoundHandler = a.NotFound
+	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		c := a.newContext(RouteInfo{}, res, req)
+		err := errors.Errorf("path not found: %s", req.URL.Path)
+		a.ErrorHandlers.Get(404)(404, err, c)
+	})
 
 	return a
 }
 
-// Automatic returns a new instace of App with sane defaults,
+// Automatic returns a new instance of App with sane defaults,
 // some not so sane defaults, and a few bits and pieces to make
 // your life that much easier. You'll want to use this almost
 // all of the time to build your applications.
@@ -83,7 +90,6 @@ func Automatic(opts Options) *App {
 		hl := logrus.New()
 		hl.Level = lvl
 		hl.Formatter = &logrus.TextFormatter{}
-		// hl.Out = os.Stdout
 
 		err := os.MkdirAll(opts.LogDir, 0755)
 		if err != nil {
@@ -110,10 +116,6 @@ func Automatic(opts Options) *App {
 	}
 
 	a.Use(RequestLogger)
-	if a.NotFound == nil {
-		a.NotFound = a.notFound()
-	}
-	a.router.NotFoundHandler = a.NotFound
 
 	return a
 }

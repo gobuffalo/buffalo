@@ -2,46 +2,43 @@ package buffalo
 
 import (
 	"encoding/json"
-	"html/template"
 	"net/http"
 
+	"github.com/gobuffalo/velvet"
 	"github.com/pkg/errors"
 )
 
-func (a *App) notFound() http.Handler {
-	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		if a.Env == "development" {
-			err := func() error {
-				routes := a.Routes()
-				data := map[string]interface{}{
-					"routes": routes,
-					"method": req.Method,
-					"path":   req.URL.String(),
-					"error":  req.URL.Query().Get("error"),
-				}
-				switch req.Header.Get("Content-Type") {
-				case "application/json":
-					res.WriteHeader(404)
-					return json.NewEncoder(res).Encode(data)
-				default:
-					t, err := template.New("not-found").Parse(htmlNotFound)
-					if err != nil {
-						res.WriteHeader(500)
-						err = errors.WithStack(err)
-						res.Write([]byte(err.Error()))
-						return err
-					}
-					res.WriteHeader(404)
-					return t.Execute(res, data)
-				}
-			}()
-			if err != nil {
-				a.Logger.Error(err)
-			}
-			return
-		}
+// NotFoundHandler is the default ErrorHandler for 404 responses.
+// In development mode it attempts to return useful debugging
+// information. In production it defaults to use the http.NotFound
+// handler.
+func NotFoundHandler(status int, err error, c Context) error {
+	env := c.Get("env")
+	req := c.Request()
+	res := c.Response()
+	if env != nil && env.(string) == "production" {
 		http.NotFound(res, req)
-	})
+		return nil
+	}
+	data := map[string]interface{}{
+		"routes": c.Get("routes"),
+		"method": req.Method,
+		"path":   req.URL.String(),
+		"error":  err.Error(),
+	}
+	ct := req.Header.Get("Content-Type")
+	if ct == "application/json" {
+		res.WriteHeader(404)
+		return json.NewEncoder(res).Encode(data)
+	}
+	ctx := velvet.NewContextWith(data)
+	t, err := velvet.Render(htmlNotFound, ctx)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	res.WriteHeader(404)
+	_, err = res.Write([]byte(t))
+	return err
 }
 
 var htmlNotFound = `
@@ -69,7 +66,7 @@ var htmlNotFound = `
 </head>
 <body>
 <h1>404 Page Not Found!</h1>
-<h3>Could not find path <code>[{{.method}}] {{.path}}</code></h3>
+<h3>Could not find path <code>[{{method}}] {{path}}</code></h3>
 <hr>
 <table id="buffalo-routes-table">
 	<thead>
@@ -80,20 +77,20 @@ var htmlNotFound = `
 		</tr>
 	</thead>
 	<tbody>
-		{{range .routes}}
+		{{#each routes as |route|}}
 			<tr>
-				<td>{{.Method}}</td>
-				<td>{{.Path}}</td>
-				<td><code>{{.HandlerName}}</code></td>
+				<td>{{route.Method}}</td>
+				<td>{{route.Path}}</td>
+				<td><code>{{route.HandlerName}}</code></td>
 			</tr>
-		{{end}}
+		{{/each}}
 	</tbody>
 </table>
-{{if .error}}
+{{#if error}}
 <hr>
 <h2>Error</h2>
-<pre>{{.error}}</pre>
-{{end}}
+<pre>{{error}}</pre>
+{{/if}}
 </body>
 </html>
 `

@@ -34,7 +34,7 @@ var GothCmd = &cobra.Command{
 	Short: "Generates a actions/goth.go file configured to the specified providers.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("You must specifiy at least one provider!")
+			return errors.New("you must specify at least one provider")
 		}
 		return NewGothGenerator().Run(".", gentronics.Data{
 			"providers": args,

@@ -22,6 +22,7 @@ package generate
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/markbates/gentronics"
@@ -83,9 +84,28 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("public/assets/.gitignore", ""))
 	g.Add(gentronics.NewFile("assets/js/application.js", wApplicationJS))
 	g.Add(gentronics.NewFile("assets/css/application.scss", wApplicationCSS))
-	c := gentronics.NewCommand(exec.Command("npm", "install", "webpack", "-g"))
-	g.Add(c)
-	c = gentronics.NewCommand(exec.Command("npm", "init", "-y"))
+
+	rf := gentronics.RunFn(func(path string, data gentronics.Data) error {
+		cmd := exec.Command("npm", "install", "webpack", "-g")
+		cmd.Stdin = os.Stdin
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		err := cmd.Run()
+		if err != nil {
+			u := "https://docs.npmjs.com/getting-started/fixing-npm-permissions"
+			fmt.Printf("There was a problem running npm install. You may want to checkout their docs for help!\n%s\n", u)
+			return err
+		}
+		return nil
+	})
+	g.Add(&gentronics.Func{
+		Runner: rf,
+		Should: func(data gentronics.Data) bool {
+			return true
+		},
+	})
+
+	c := gentronics.NewCommand(exec.Command("npm", "init", "-y"))
 	g.Add(c)
 
 	modules := []string{"webpack", "sass-loader", "css-loader", "style-loader", "node-sass",

@@ -2,15 +2,18 @@ sudo: required
 
 services:
   - docker
-
-language: go
+install: false
 
 go:
   - 1.7
-  - master
+
+env:
+  matrix:
+    - GO_DOCKER_TAG=1.7
+    - GO_DOCKER_TAG=1.8
 
 script:
-  - docker build .
+  - perl -pi -w -e "s/FROM golang:latest/FROM golang:$GO_DOCKER_TAG/g" Dockerfile && docker build .
 
 addons:
   code_climate:

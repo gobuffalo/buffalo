@@ -2,10 +2,12 @@ package buffalo
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	"github.com/gobuffalo/envy"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/going/defaults"
 )
@@ -21,7 +23,6 @@ type Options struct {
 	// LogDir is the path to the directory for storing the JSON log files from the
 	// default Logger
 	LogDir         string
-	NotFound       http.Handler
 	MethodOverride http.HandlerFunc
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
@@ -41,7 +42,7 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, defaults.String(os.Getenv("GO_ENV"), "development"))
+	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 
 	pwd, _ := os.Getwd()
@@ -52,9 +53,14 @@ func optionsWithDefaults(opts Options) Options {
 	}
 
 	if opts.SessionStore == nil {
-		opts.SessionStore = sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
+		secret := envy.Get("SESSION_SECRET", "")
+		// In production a SESSION_SECRET must be set!
+		if opts.Env == "production" && secret == "" {
+			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+		}
+		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, fmt.Sprintf("http://127.0.0.1:%s", defaults.String(os.Getenv("PORT"), "3000")))
+	opts.Host = defaults.String(opts.Host, fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000")))
 	return opts
 }
