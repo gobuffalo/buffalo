@@ -1,10 +1,10 @@
 # Buffalo [![GoDoc](https://godoc.org/github.com/gobuffalo/buffalo?status.svg)](https://godoc.org/github.com/gobuffalo/buffalo) [![Build Status](https://travis-ci.org/gobuffalo/buffalo.svg?branch=master)](https://travis-ci.org/gobuffalo/buffalo) [![Code Climate](https://codeclimate.com/github/gobuffalo/buffalo/badges/gpa.svg)](https://codeclimate.com/github/gobuffalo/buffalo) [![Go Report Card](https://goreportcard.com/badge/github.com/gobuffalo/buffalo)](https://goreportcard.com/report/github.com/gobuffalo/buffalo)
 
-Buffalo is Go web framework. Yeah, I hate the word "framework" too! Buffalo is different though. Buffalo doesn't want to re-invent wheels like routing and templating. Buffalo is glue that wraps all of the best packages available and makes them all play nicely together.
+Buffalo is a Go web development eco-system. Designed to make the life of a Go web developer easier.
 
-Buffalo is "idiomatic", for whatever that is worth. The purpose of a framework is not to bend you to its will, but to rather get out of your way and make your job of building your application easy. That is the goal of Buffalo.
+Buffalo starts by generating a web project for you that already has everything from front-end (JavaScript, SCSS, etc...) to back-end (Database, Routing, etc...) already hooked up and ready to run. From there it provides easy APIs to build your web application quickly in Go.
 
-If you were to look through the Buffalo code base you'd find little code, just enough to assemble the amazing packages that others have written into one coherent system.
+Buffalo isn't just a framework, it's a holistic web development environment and project structure that let's developers get straight to the business of, well, building their business.
 
 > I :heart: web dev in go again - Brian Ketelsen
 
