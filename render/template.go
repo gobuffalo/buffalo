@@ -57,6 +57,16 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 	if err != nil {
 		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
 	}
+
+	err = source.Helpers.Add("flash", func(key string) string {
+		flash := data.Get("flash").(func(string) string)
+		return flash(key)
+	})
+
+	if err != nil {
+		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+	}
+
 	yield, err := source.Exec(data)
 	if err != nil {
 		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
