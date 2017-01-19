@@ -34,7 +34,7 @@ func (f *Flash) Delete(key string) {
 
 //Clear Wipes all the flash messages.
 func (f *Flash) Clear() {
-	for k, _ := range f.Session.Session.Values {
+	for k := range f.Session.Session.Values {
 		if strings.HasPrefix(k.(string), "_flash_") {
 			f.Session.Delete(k)
 		}

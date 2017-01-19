@@ -84,6 +84,7 @@ func (d *DefaultContext) Session() *Session {
 	return d.session
 }
 
+// Flash messages for the associated Request.
 func (d *DefaultContext) Flash() *Flash {
 	return d.flash
 }

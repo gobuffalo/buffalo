@@ -37,6 +37,7 @@ func Test_Flash(t *testing.T) {
 	}
 
 	c.Flash().Set("error", "error")
+	c.Flash().Set("success", "success")
 	c.Flash().Set("message", "message")
 	c.Flash().Set("warning", "warning")
 
@@ -50,6 +51,7 @@ func Test_Flash(t *testing.T) {
 
 	r.Equal(session.Get("_flash_error"), nil)
 	r.Equal(session.Get("_flash_message"), "message")
+	r.Equal(session.Get("_flash_success"), "success")
 	r.Equal(session.Get("_flash_warning"), "warning")
 }
 
@@ -66,6 +68,7 @@ func Test_FlashClear(t *testing.T) {
 	}
 
 	c.Flash().Set("error", "error")
+	c.Flash().Set("success", "success")
 	c.Flash().Set("message", "message")
 	c.Flash().Set("warning", "warning")
 
@@ -73,12 +76,14 @@ func Test_FlashClear(t *testing.T) {
 
 	session = a.getSession(req, res)
 	r.Equal(session.Get("_flash_error").(string), "error")
+	r.Equal(session.Get("_flash_success").(string), "success")
 	r.Equal(session.Get("_flash_message").(string), "message")
 	r.Equal(session.Get("_flash_warning").(string), "warning")
 
 	r.Equal(c.Flash().Get("error"), "error")
 	r.Equal(c.Flash().Get("warning"), "warning")
 	r.Equal(c.Flash().Get("message"), "message")
+	r.Equal(c.Flash().Get("success"), "success")
 
 	c.Flash().Clear()
 
@@ -87,9 +92,11 @@ func Test_FlashClear(t *testing.T) {
 	r.Equal(session.Get("_flash_error"), nil)
 	r.Equal(session.Get("_flash_message"), nil)
 	r.Equal(session.Get("_flash_warning"), nil)
+	r.Equal(session.Get("_flash_success"), nil)
 
 	r.Equal(c.Flash().Get("error"), "")
 	r.Equal(c.Flash().Get("message"), "")
 	r.Equal(c.Flash().Get("warning"), "")
+	r.Equal(c.Flash().Get("success"), "")
 
 }
