@@ -58,9 +58,6 @@ func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 		c := a.newContext(info, res, req)
 		err := a.Middleware.handler(h)(c)
 
-		//Persists the flash after storage
-		c.Flash().persist(c.Session())
-
 		if err != nil {
 			status := 500
 			// unpack root cause and check for HTTPError

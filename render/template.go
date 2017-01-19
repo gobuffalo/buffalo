@@ -59,8 +59,14 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 	}
 
 	err = source.Helpers.Add("flash", func(key string) string {
-		flash := data.Get("flash").(func(string) string)
-		return flash(key)
+		flash := data.Get("flash-get").(func(string) []string)
+		fmt.Println(flash(key))
+
+		if len(flash(key)) > 0 {
+			return fmt.Sprintf("%v", flash(key)[0])
+		}
+
+		return ""
 	})
 
 	if err != nil {

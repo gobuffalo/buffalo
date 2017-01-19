@@ -117,6 +117,11 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 
 		bb := &bytes.Buffer{}
 		err := rr.Render(bb, data)
+
+		if d.Flash() != nil {
+			d.Flash().Persist(d.Session())
+		}
+
 		if err != nil {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}

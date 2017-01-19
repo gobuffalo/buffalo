@@ -1,7 +1,9 @@
 package buffalo
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 )
 
@@ -43,11 +45,15 @@ func (f *Flash) Clear() {
 	f.data = map[string][]string{}
 }
 
-//persist the flash inside the session.
-func (f *Flash) persist(session *Session) {
+//Persist the flash inside the session.
+func (f *Flash) Persist(session *Session) {
 	for k, v := range f.data {
 		sessionKey := fmt.Sprintf("%v%v", FlashPrefix, k)
-		session.Set(sessionKey, v)
+		bson, err := json.Marshal(v)
+
+		if err == nil {
+			session.Set(sessionKey, string(bson))
+		}
 	}
 
 	session.Save()
@@ -61,10 +67,16 @@ func newFlash(session *Session) *Flash {
 
 	if session.Session != nil {
 		for k := range session.Session.Values {
-			if strings.HasPrefix(k.(string), FlashPrefix) {
-				sessionName := k.(string)
-				flashName := strings.Replace(sessionName, FlashPrefix, "", 1)
-				result.data[flashName] = session.Get(sessionName).([]string)
+			sessionName := k.(string)
+			if strings.HasPrefix(sessionName, FlashPrefix) {
+				log.Println(k.(string))
+				flashName := strings.Replace(sessionName, FlashPrefix, "", -1)
+
+				var flashes []string
+				err := json.Unmarshal([]byte(session.Get(sessionName).(string)), &flashes)
+				if err == nil {
+					result.data[flashName] = flashes
+				}
 			}
 		}
 	}
