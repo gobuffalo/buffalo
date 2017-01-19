@@ -60,13 +60,39 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 
 	err = source.Helpers.Add("flash", func(key string) string {
 		flash := data.Get("flash-get").(func(string) []string)
-		fmt.Println(flash(key))
 
 		if len(flash(key)) > 0 {
-			return fmt.Sprintf("%v", flash(key)[0])
+			removeFlash := data.Get("flash-delete").(func(string))
+			defer removeFlash(key)
+
+			return strings.Join(flash(key), ", ")
 		}
 
 		return ""
+	})
+
+	err = source.Helpers.Add("flashes", func(help velvet.HelperContext) (template.HTML, error) {
+		out := bytes.Buffer{}
+
+		flashesFn := data.Get("flashes").(func() map[string][]string)
+		flashes := flashesFn()
+
+		removeFlash := data.Get("flash-delete").(func(string))
+
+		for k, v := range flashes {
+			defer removeFlash(k)
+
+			ctx := help.Context.New()
+			ctx.Set("@key", k)
+			ctx.Set("@value", v)
+			s, err := help.BlockWith(ctx)
+			if err != nil {
+				return "", errors.WithStack(err)
+			}
+			out.WriteString(s)
+		}
+
+		return template.HTML(out.String()), err
 	})
 
 	if err != nil {

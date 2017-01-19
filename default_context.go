@@ -111,6 +111,10 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			return d.Flash().Get(key)
 		}
 
+		data["flashes"] = func() map[string][]string {
+			return d.Flash().Data()
+		}
+
 		data["flash-delete"] = func(key string) {
 			d.Flash().Delete(key)
 		}

@@ -3,7 +3,6 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -40,6 +39,11 @@ func (f *Flash) Add(key, value string) {
 	f.data[key] = append(f.data[key], value)
 }
 
+//Data gives access to all the flash messages
+func (f *Flash) Data() map[string][]string {
+	return f.data
+}
+
 //Clear Wipes all the flash messages.
 func (f *Flash) Clear() {
 	f.data = map[string][]string{}
@@ -69,7 +73,6 @@ func newFlash(session *Session) *Flash {
 		for k := range session.Session.Values {
 			sessionName := k.(string)
 			if strings.HasPrefix(sessionName, FlashPrefix) {
-				log.Println(k.(string))
 				flashName := strings.Replace(sessionName, FlashPrefix, "", -1)
 
 				var flashes []string
