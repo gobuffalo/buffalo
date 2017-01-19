@@ -107,9 +107,12 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 		data["params"] = pp
 
-		data["flash"] = func(key string) string {
-			defer d.Flash().Delete(key)
+		data["flash-get"] = func(key string) []string {
 			return d.Flash().Get(key)
+		}
+
+		data["flash-delete"] = func(key string) {
+			d.Flash().Delete(key)
 		}
 
 		bb := &bytes.Buffer{}

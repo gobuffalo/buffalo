@@ -1,8 +1,6 @@
 package buffalo
 
 import (
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,93 +8,66 @@ import (
 
 func Test_FlashSet(t *testing.T) {
 	r := require.New(t)
-	req, _ := http.NewRequest("GET", "/", nil)
-	res := httptest.NewRecorder()
-	a := Automatic(Options{})
+	f := newFlash(&Session{})
 
-	session := a.getSession(req, res)
-	c := DefaultContext{
-		session: session,
-		flash:   newFlash(session),
-	}
-
-	c.Flash().Set("error", "Error!")
-	r.Equal(c.Flash().Get("error"), "Error!")
+	r.Equal(f.data, map[string][]string{})
+	f.Set("error", "something")
+	r.Equal(f.data, map[string][]string{
+		"error": []string{"something"},
+	})
 }
 
-func Test_Flash(t *testing.T) {
+func Test_FlashGet(t *testing.T) {
 	r := require.New(t)
-	req, _ := http.NewRequest("GET", "/", nil)
-	res := httptest.NewRecorder()
-	a := Automatic(Options{})
+	f := newFlash(&Session{})
 
-	session := a.getSession(req, res)
-	c := DefaultContext{
-		session: session,
-		flash:   newFlash(session),
-	}
+	r.Equal(f.data, map[string][]string{})
+	f.Set("error", "something")
+	r.Equal(f.Get("error"), []string{"something"})
+}
 
-	c.Flash().Set("error", "error")
-	c.Flash().Set("success", "success")
-	c.Flash().Set("message", "message")
-	c.Flash().Set("warning", "warning")
+func Test_FlashDelete(t *testing.T) {
+	r := require.New(t)
+	f := newFlash(&Session{})
 
-	session = a.getSession(req, res)
-	r.Equal(session.Get("_flash_error").(string), "error")
-	r.Equal(c.Flash().Get("error"), "error")
+	r.Equal(f.data, map[string][]string{})
+	f.Set("error", "something")
+	r.Equal(f.Get("error"), []string{"something"})
 
-	c.Flash().Delete("error")
-
-	session = a.getSession(req, res)
-
-	r.Equal(session.Get("_flash_error"), nil)
-	r.Equal(session.Get("_flash_message"), "message")
-	r.Equal(session.Get("_flash_success"), "success")
-	r.Equal(session.Get("_flash_warning"), "warning")
+	f.Delete("error")
+	r.Equal(f.Get("error"), []string(nil))
 }
 
 func Test_FlashClear(t *testing.T) {
 	r := require.New(t)
-	req, _ := http.NewRequest("GET", "/", nil)
-	res := httptest.NewRecorder()
-	a := Automatic(Options{})
+	f := newFlash(&Session{})
 
-	session := a.getSession(req, res)
-	c := DefaultContext{
-		session: session,
-		flash:   newFlash(session),
-	}
+	r.Equal(f.data, map[string][]string{})
+	f.Set("error", "something")
+	f.Set("warning", "warning")
+	r.Equal(f.Get("error"), []string{"something"})
+	r.Equal(f.Get("warning"), []string{"warning"})
 
-	c.Flash().Set("error", "error")
-	c.Flash().Set("success", "success")
-	c.Flash().Set("message", "message")
-	c.Flash().Set("warning", "warning")
+	f.Clear()
+	r.Equal(f.data, map[string][]string{})
 
-	session = a.getSession(req, res)
+	r.Equal(f.Get("error"), []string(nil))
+	r.Equal(f.Get("warning"), []string(nil))
+}
 
-	session = a.getSession(req, res)
-	r.Equal(session.Get("_flash_error").(string), "error")
-	r.Equal(session.Get("_flash_success").(string), "success")
-	r.Equal(session.Get("_flash_message").(string), "message")
-	r.Equal(session.Get("_flash_warning").(string), "warning")
+func Test_FlashAdd(t *testing.T) {
+	r := require.New(t)
+	f := newFlash(&Session{})
 
-	r.Equal(c.Flash().Get("error"), "error")
-	r.Equal(c.Flash().Get("warning"), "warning")
-	r.Equal(c.Flash().Get("message"), "message")
-	r.Equal(c.Flash().Get("success"), "success")
+	r.Equal(f.data, map[string][]string{})
 
-	c.Flash().Clear()
+	f.Add("error", "something")
+	r.Equal(f.data, map[string][]string{
+		"error": []string{"something"},
+	})
 
-	session = a.getSession(req, res)
-
-	r.Equal(session.Get("_flash_error"), nil)
-	r.Equal(session.Get("_flash_message"), nil)
-	r.Equal(session.Get("_flash_warning"), nil)
-	r.Equal(session.Get("_flash_success"), nil)
-
-	r.Equal(c.Flash().Get("error"), "")
-	r.Equal(c.Flash().Get("message"), "")
-	r.Equal(c.Flash().Get("warning"), "")
-	r.Equal(c.Flash().Get("success"), "")
-
+	f.Add("error", "other")
+	r.Equal(f.data, map[string][]string{
+		"error": []string{"something", "other"},
+	})
 }
