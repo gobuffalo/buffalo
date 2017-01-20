@@ -107,15 +107,16 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 		data["params"] = pp
 		bb := &bytes.Buffer{}
+
 		err := rr.Render(bb, data)
+		if err != nil {
+			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
+		}
 
 		if d.Flash() != nil {
 			d.Flash().Persist(d.Session())
 		}
 
-		if err != nil {
-			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
-		}
 		d.Response().Header().Set("Content-Type", rr.ContentType())
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
