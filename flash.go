@@ -21,6 +21,8 @@ func (f *Flash) Set(key, value string) {
 
 //Get gets a message from inside the Flash.
 func (f *Flash) Get(key string) []string {
+	defer f.Delete(key)
+
 	return f.data[key]
 }
 
@@ -39,7 +41,7 @@ func (f *Flash) Add(key, value string) {
 	f.data[key] = append(f.data[key], value)
 }
 
-//AllData gives access to all the flash messages
+//All gives access to all the flash messages
 func (f *Flash) All() map[string][]string {
 	defer func() { f.Clear() }()
 	return f.data
@@ -70,12 +72,9 @@ func (f *Flash) Persist(session *Session) {
 	session.Save()
 }
 
+//Errors returns the list of "errors" key inside the flash, this is equivalent to call Get on errors.
 func (f *Flash) Errors() []string {
-	defer func() {
-		f.Delete("errors")
-	}()
-
-	return f.data["errors"]
+	return f.Get("errors")
 }
 
 //newFlash creates a new Flash and loads the session data inside its data.
