@@ -58,47 +58,6 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
 	}
 
-	err = source.Helpers.Add("flash", func(key string) string {
-		flash := data.Get("flash-get").(func(string) []string)
-
-		if len(flash(key)) > 0 {
-			removeFlash := data.Get("flash-delete").(func(string))
-			defer removeFlash(key)
-
-			return strings.Join(flash(key), ", ")
-		}
-
-		return ""
-	})
-
-	err = source.Helpers.Add("flashes", func(help velvet.HelperContext) (template.HTML, error) {
-		out := bytes.Buffer{}
-
-		flashesFn := data.Get("flashes").(func() map[string][]string)
-		flashes := flashesFn()
-
-		removeFlash := data.Get("flash-delete").(func(string))
-
-		for k, v := range flashes {
-			defer removeFlash(k)
-
-			ctx := help.Context.New()
-			ctx.Set("@key", k)
-			ctx.Set("@value", v)
-			s, err := help.BlockWith(ctx)
-			if err != nil {
-				return "", errors.WithStack(err)
-			}
-			out.WriteString(s)
-		}
-
-		return template.HTML(out.String()), err
-	})
-
-	if err != nil {
-		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
-	}
-
 	yield, err := source.Exec(data)
 	if err != nil {
 		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err

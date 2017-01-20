@@ -39,8 +39,9 @@ func (f *Flash) Add(key, value string) {
 	f.data[key] = append(f.data[key], value)
 }
 
-//Data gives access to all the flash messages
-func (f *Flash) Data() map[string][]string {
+//AllData gives access to all the flash messages
+func (f *Flash) All() map[string][]string {
+	defer func() { f.Clear() }()
 	return f.data
 }
 
@@ -51,6 +52,13 @@ func (f *Flash) Clear() {
 
 //Persist the flash inside the session.
 func (f *Flash) Persist(session *Session) {
+	for k := range session.Session.Values {
+		sessionK := k.(string)
+		if strings.HasPrefix(sessionK, FlashPrefix) {
+			session.Delete(sessionK)
+		}
+	}
+
 	for k, v := range f.data {
 		sessionKey := fmt.Sprintf("%v%v", FlashPrefix, k)
 		bson, err := json.Marshal(v)
@@ -59,8 +67,15 @@ func (f *Flash) Persist(session *Session) {
 			session.Set(sessionKey, string(bson))
 		}
 	}
-
 	session.Save()
+}
+
+func (f *Flash) Errors() []string {
+	defer func() {
+		f.Delete("errors")
+	}()
+
+	return f.data["errors"]
 }
 
 //newFlash creates a new Flash and loads the session data inside its data.
