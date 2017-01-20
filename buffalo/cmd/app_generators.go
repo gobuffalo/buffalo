@@ -47,7 +47,7 @@ const nREADME = `# {{name}}
 
 ## Documentation
 
-To view generated docs for {{name}}, run the below command and point your brower to http://127.0.0.1:6060/pkg/
+To view generated docs for {{name}}, run the below command and point your browser to http://127.0.0.1:6060/pkg/
 
     godoc -http=:6060 2>/dev/null &
 
