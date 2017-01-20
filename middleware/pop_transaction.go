@@ -10,7 +10,7 @@ import (
 // PopTransaction is a piece of Buffalo middleware that wraps each
 // request in a transaction that will automatically get committed or
 // rolledback. It will also add a field to the log, "db", that
-// shows the total duration spent during the reques making database
+// shows the total duration spent during the request making database
 // calls.
 var PopTransaction = func(db *pop.Connection) buffalo.MiddlewareFunc {
 	return func(h buffalo.Handler) buffalo.Handler {
