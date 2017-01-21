@@ -60,10 +60,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
-* [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
-
-* [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
-
 * [github.com/mattn/go-colorable](https://github.com/mattn/go-colorable)
 
 * [github.com/mattn/go-isatty](https://github.com/mattn/go-isatty)
