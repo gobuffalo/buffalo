@@ -31,6 +31,7 @@ func TestGenerateActionArgsComplete(t *testing.T) {
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
+	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
 	e = ActionCmd.RunE(&cmd, []string{"users", "show"})
 	r.Nil(e)
@@ -67,10 +68,6 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 
 	data, _ = ioutil.ReadFile("templates/users/show.html")
 	r.Contains(string(data), "<h1>Users#Show</h1>")
-
-	data, _ = ioutil.ReadFile("actions/app.go")
-	r.Contains(string(data), `app.GET("/users/show", UsersShow)`)
-	r.Contains(string(data), `app.GET("/users/edit", UsersEdit)`)
 }
 
 func TestGenerateActionActionsFileExists(t *testing.T) {
