@@ -75,7 +75,7 @@ func App() *buffalo.App {
 
 		app.Use(findUserMW)
 		app.GET("/users", UsersList)
-app.GET("/new/route", UserCoolHandler)
+		app.GET("/new/route", UserCoolHandler)
 	}
 
 	return app

@@ -15,7 +15,7 @@ func addRoute(method, path, handlerName string) error {
 	return addInsideAppBlock(routeDefinition)
 }
 
-func addInsideAppBlock(expression string) error {
+func addInsideAppBlock(expressions ...string) error {
 	src, err := ioutil.ReadFile("actions/app.go")
 	if err != nil {
 		return err
@@ -35,7 +35,10 @@ func addInsideAppBlock(expression string) error {
 		return errors.New("could not find desired block on the app.go file")
 	}
 
-	fileLines = append(fileLines[:end], append([]string{expression}, fileLines[end:]...)...)
+	for i := 0; i < len(expressions); i++ {
+		expressions[i] = fmt.Sprintf("\t\t%s", expressions[i])
+	}
+	fileLines = append(fileLines[:end], append(expressions, fileLines[end:]...)...)
 
 	fileContent := strings.Join(fileLines, "\n")
 	err = ioutil.WriteFile("actions/app.go", []byte(fileContent), 0755)

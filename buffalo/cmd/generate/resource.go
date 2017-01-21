@@ -56,7 +56,16 @@ var ResourceCmd = &cobra.Command{
 func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
 	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rAction))
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rActionTest))
+	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rResourceTest))
+	g.Add(&gentronics.Func{
+		Should: func(data gentronics.Data) bool { return true },
+		Runner: func(root string, data gentronics.Data) error {
+			return addInsideAppBlock("var resource buffalo.Resource",
+				fmt.Sprintf("resource = &%sResource{&buffalo.BaseResource{}}", data["camel"]),
+				fmt.Sprintf("app.Resource(\"/%s\", resource)", data["under"]),
+			)
+		},
+	})
 	g.Add(Fmt)
 	return g
 }
@@ -69,12 +78,6 @@ type {{camel}}Resource struct{
 	buffalo.Resource
 }
 
-func init() {
-	var resource buffalo.Resource
-	resource = &{{camel}}Resource{&buffalo.BaseResource{}}
-	App().Resource("/{{under}}", resource)
-}
-
 {{#each actions}}
 // {{.}} default implementation.
 func (v *{{camel}}Resource) {{.}}(c buffalo.Context) error {
@@ -84,7 +87,7 @@ func (v *{{camel}}Resource) {{.}}(c buffalo.Context) error {
 {{/each}}
 `
 
-var rActionTest = `package actions_test
+var rResourceTest = `package actions_test
 
 import (
 	"testing"

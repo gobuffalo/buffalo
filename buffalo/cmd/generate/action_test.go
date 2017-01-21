@@ -52,6 +52,7 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
+	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
 	e = ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
 	r.Nil(e)
@@ -66,6 +67,10 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 
 	data, _ = ioutil.ReadFile("templates/users/show.html")
 	r.Contains(string(data), "<h1>Users#Show</h1>")
+
+	data, _ = ioutil.ReadFile("actions/app.go")
+	r.Contains(string(data), `app.GET("/users/show", UsersShow)`)
+	r.Contains(string(data), `app.GET("/users/edit", UsersEdit)`)
 }
 
 func TestGenerateActionActionsFileExists(t *testing.T) {
@@ -75,6 +80,7 @@ func TestGenerateActionActionsFileExists(t *testing.T) {
 	os.Chdir(packagePath)
 
 	os.Mkdir("actions", 0755)
+	ioutil.WriteFile("actions/app.go", appGo, 0755)
 	r := require.New(t)
 	cmd := cobra.Command{}
 	usersContent := `package actions
@@ -95,3 +101,20 @@ func UsersShow(c buffalo.Context) error {
 	r.Contains(string(data), "func UsersShow")
 
 }
+
+var appGo = []byte(`
+package actions
+var app *buffalo.App
+func App() *buffalo.App {
+	if app == nil {
+		app = buffalo.Automatic(buffalo.Options{
+			Env: "test",
+		})
+		app.GET("/", func (c buffalo.Context) error {
+			return c.Render(200, r.String("hello"))
+		})
+	}
+
+	return app
+}
+`)
