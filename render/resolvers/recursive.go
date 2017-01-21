@@ -33,8 +33,6 @@ func (r *RecursiveResolver) Resolve(name string) (string, error) {
 	var p string
 	var err error
 	var found bool
-	fmt.Printf("### r.Path -> %+v\n", r.Path)
-	fmt.Printf("### name -> %+v\n", name)
 	err = filepath.Walk(r.Path, func(path string, info os.FileInfo, err error) error {
 		if strings.HasSuffix(path, name) {
 			found = true
