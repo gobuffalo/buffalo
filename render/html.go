@@ -24,7 +24,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 	if e.HTMLLayout != "" {
 		names = append(names, e.HTMLLayout)
 	}
-	hr := &templateRenderer{
+	hr := templateRenderer{
 		Engine:      e,
 		contentType: "text/html",
 		names:       names,
