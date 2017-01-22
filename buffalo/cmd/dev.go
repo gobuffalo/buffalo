@@ -73,7 +73,7 @@ func startWebpack(ctx context.Context) error {
 		// there's no webpack, so don't do anything
 		return nil
 	}
-	cmd := exec.Command("webpack", "--watch")
+	cmd := exec.Command("./node_modules/webpack/bin/webpack.js", "--watch")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
