@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -18,9 +19,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// assert that DefaultContext is implementing Context
+var _ Context = &DefaultContext{}
+var _ context.Context = &DefaultContext{}
+
 // DefaultContext is, as its name implies, a default
 // implementation of the Context interface.
 type DefaultContext struct {
+	context.Context
 	response    http.ResponseWriter
 	request     *http.Request
 	params      url.Values
@@ -74,9 +80,20 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 	d.data[key] = value
 }
 
-// Get a value that was previous set onto the Context.
+// Get is deprecated. Please use Value instead.
 func (d *DefaultContext) Get(key string) interface{} {
-	return d.data[key]
+	d.Logger().Warn("Context#Get is deprecated. Please use Context#Value instead")
+	return d.Value(key)
+}
+
+// Value that has previously stored on the context.
+func (d *DefaultContext) Value(key interface{}) interface{} {
+	if k, ok := key.(string); ok {
+		if v, ok := d.data[k]; ok {
+			return v
+		}
+	}
+	return d.Context.Value(key)
 }
 
 // Session for the associated Request.

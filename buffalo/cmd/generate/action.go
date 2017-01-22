@@ -45,6 +45,16 @@ var ActionCmd = &cobra.Command{
 		g := gentronics.New()
 		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
 		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), rActionTest))
+		g.Add(&gentronics.Func{
+			Should: func(data gentronics.Data) bool { return true },
+			Runner: func(root string, data gentronics.Data) error {
+				routes := []string{}
+				for _, a := range actions {
+					routes = append(routes, fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, a, data["namespace"].(string)+inflect.Camelize(a)))
+				}
+				return addInsideAppBlock(routes...)
+			},
+		})
 		addTemplateFiles(actionsToAdd, data)
 
 		if !runningTests {
@@ -63,14 +73,12 @@ func buildActionsTemplate(filePath string) string {
 	}
 
 	actionsTemplate = actionsTemplate + `
-            
-            {{#each actions as |action|}}
-                // {{namespace}}{{camelize action}} default implementation.
-                func {{namespace}}{{camelize action}}(c buffalo.Context) error {
-                    return c.Render(200, r.HTML("{{filename}}/{{underscore action}}.html"))
-                }
-            {{/each}}
-        `
+{{#each actions as |action|}}
+// {{namespace}}{{camelize action}} default implementation.
+func {{namespace}}{{camelize action}}(c buffalo.Context) error {
+	return c.Render(200, r.HTML("{{filename}}/{{underscore action}}.html"))
+}
+{{/each}}`
 	return actionsTemplate
 }
 
@@ -109,23 +117,23 @@ func findActionsToAdd(name, path string, actions []string) []string {
 
 const (
 	rActionFileT = `package actions
-    import "github.com/gobuffalo/buffalo"`
+import "github.com/gobuffalo/buffalo"`
 
 	rViewT       = `<h1>{{namespace}}#{{action}}</h1>`
 	rActionFuncT = `
+// {{namespace}}{{action}} default implementation.
+func {{namespace}}{{action}}(c buffalo.Context) error {
+	return c.Render(200, r.HTML("{{namespace_under}}/{{action_under}}.html"))
+}
+`
 
-    // {{namespace}}{{action}} default implementation.
-    func {{namespace}}{{action}}(c buffalo.Context) error {
-	    return c.Render(200, r.HTML("{{namespace_under}}/{{action_under}}.html"))
-    }
-    `
+	rActionTest = `package actions_test
 
-	rActionTestT = `
-    package actions
+{{#each actions as |action|}}
+func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
+	r := require.New(t)
+	r.Fail("Not Implemented!")
+}
 
-    func Test_{{namespace}}{{action}}(t *testing.T) {
-	    r := require.New(t)
-	    r.Fail("Not Implemented!")
-    }
-    `
+{{/each}}`
 )

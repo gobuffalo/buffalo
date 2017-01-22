@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http/httptest"
 	"net/url"
@@ -50,11 +51,30 @@ func Test_DefaultContext_ParamInt(t *testing.T) {
 
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
-	c := DefaultContext{data: map[string]interface{}{}}
+	c := DefaultContext{
+		Context: context.Background(),
+		logger:  NewLogger("debug"),
+		data:    map[string]interface{}{},
+	}
 	r.Nil(c.Get("name"))
 
 	c.Set("name", "Mark")
 	r.NotNil(c.Get("name"))
+	r.Equal("Mark", c.Get("name").(string))
+}
+
+func Test_DefaultContext_Value(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{
+		logger:  NewLogger("debug"),
+		Context: context.Background(),
+		data:    map[string]interface{}{},
+	}
+	r.Nil(c.Value("name"))
+
+	c.Set("name", "Mark")
+	r.NotNil(c.Value("name"))
+	r.Equal("Mark", c.Value("name").(string))
 	r.Equal("Mark", c.Get("name").(string))
 }
 
