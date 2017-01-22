@@ -23,7 +23,7 @@ func (s templateRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s *templateRenderer) Render(w io.Writer, data Data) error {
+func (s templateRenderer) Render(w io.Writer, data Data) error {
 	var yield template.HTML
 	var err error
 	for _, name := range s.names {
@@ -41,7 +41,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	return nil
 }
 
-func (s *templateRenderer) execute(name string, data *velvet.Context) (template.HTML, error) {
+func (s templateRenderer) execute(name string, data *velvet.Context) (template.HTML, error) {
 	source, err := s.source(name)
 	if err != nil {
 		return "", err
@@ -65,7 +65,7 @@ func (s *templateRenderer) execute(name string, data *velvet.Context) (template.
 	return template.HTML(yield), nil
 }
 
-func (s *templateRenderer) source(name string) (*velvet.Template, error) {
+func (s templateRenderer) source(name string) (*velvet.Template, error) {
 	var t *velvet.Template
 	var ok bool
 	var err error
@@ -99,7 +99,7 @@ func (s *templateRenderer) source(name string) (*velvet.Template, error) {
 	return t.Clone(), err
 }
 
-func (s *templateRenderer) partial(name string, data *velvet.Context) (template.HTML, error) {
+func (s templateRenderer) partial(name string, data *velvet.Context) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
 	return s.execute(name, data)
@@ -123,7 +123,7 @@ func Template(c string, names ...string) Renderer {
 // and the first file will be the "content" file which will
 // be placed into the "layout" using "{{yield}}".
 func (e *Engine) Template(c string, names ...string) Renderer {
-	return &templateRenderer{
+	return templateRenderer{
 		Engine:      e,
 		contentType: c,
 		names:       names,

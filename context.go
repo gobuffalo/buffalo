@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -13,6 +14,7 @@ import (
 // templates, etc... It strives to make your
 // life a happier one.
 type Context interface {
+	context.Context
 	Response() http.ResponseWriter
 	Request() *http.Request
 	Session() *Session
