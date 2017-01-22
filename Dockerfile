@@ -12,9 +12,11 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t ./...
+RUN go get -v -t github.com/Masterminds/glide
+RUN rm -rf vendor/
+RUN glide i
 
-RUN go test -race ./...
+RUN go test -race $(glide novendor)
 
 RUN go install ./buffalo
 
@@ -29,3 +31,4 @@ RUN buffalo test -race
 RUN buffalo g goth facebook twitter linkedin github
 RUN buffalo test -race
 RUN buffalo build
+RUN buffalo build -z
