@@ -14,7 +14,7 @@ func Test_FlashAdd(t *testing.T) {
 	r := require.New(t)
 	f := newFlash(&Session{})
 
-	r.Equal(f, Flash{})
+	r.Equal(f.data, map[string][]string{})
 
 	f.Add("error", "something")
 	r.Equal(f.data, map[string][]string{
