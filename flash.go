@@ -14,21 +14,19 @@ type Flash struct {
 	data map[string][]string
 }
 
-//Set sets a message inside the Flash.
-func (f *Flash) Set(key, value string) {
-	f.data[key] = []string{value}
-}
-
-//Get gets a message from inside the Flash.
-func (f *Flash) Get(key string) []string {
-	defer f.Delete(key)
-
-	return f.data[key]
-}
-
 //Delete removes a particular key from the Flash.
 func (f *Flash) Delete(key string) {
 	delete(f.data, key)
+}
+
+//Clear removes all keys from the Flash.
+func (f *Flash) Clear() {
+	f.data = map[string][]string{}
+}
+
+//Set allows to set a list of values into a particular key.
+func (f *Flash) Set(key string, values []string) {
+	f.data[key] = values
 }
 
 //Add adds a flash value for a flash key, if the key already has values the list for that value grows.
@@ -39,17 +37,6 @@ func (f *Flash) Add(key, value string) {
 	}
 
 	f.data[key] = append(f.data[key], value)
-}
-
-//All gives access to all the flash messages
-func (f *Flash) All() map[string][]string {
-	defer func() { f.Clear() }()
-	return f.data
-}
-
-//Clear Wipes all the flash messages.
-func (f *Flash) Clear() {
-	f.data = map[string][]string{}
 }
 
 //Persist the flash inside the session.
@@ -64,17 +51,12 @@ func (f *Flash) Persist(session *Session) {
 	for k, v := range f.data {
 		sessionKey := fmt.Sprintf("%v%v", FlashPrefix, k)
 		bson, err := json.Marshal(v)
-
 		if err == nil {
 			session.Set(sessionKey, string(bson))
 		}
 	}
-	session.Save()
-}
 
-//Errors returns the list of "errors" key inside the flash, this is equivalent to call Get on errors.
-func (f *Flash) Errors() []string {
-	return f.Get("errors")
+	session.Save()
 }
 
 //newFlash creates a new Flash and loads the session data inside its data.
