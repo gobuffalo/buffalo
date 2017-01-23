@@ -70,7 +70,7 @@ func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		return b.exec("webpack")
+		return b.exec("./node_modules/webpack/bin/webpack.js")
 	}
 	return nil
 }
@@ -109,6 +109,7 @@ func (b *builder) buildDatabase() error {
 	_, err = os.Stat("database.yml")
 	if err == nil {
 		// copy the database.yml file to the migrations folder so it's available through rice
+		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
 			return err
