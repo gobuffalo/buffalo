@@ -29,20 +29,20 @@ func Test_FlashAdd(t *testing.T) {
 
 func Test_FlashRender(t *testing.T) {
 	tempFolder := os.TempDir()
-	ioutil.WriteFile(tempFolder+"application.html", []byte("{{yield}}"), 0755)
-	ioutil.WriteFile(tempFolder+"show.html", []byte(errorsTPL), 0755)
+	ioutil.WriteFile(tempFolder+"/application.html", []byte("{{yield}}"), 0755)
+	ioutil.WriteFile(tempFolder+"/show.html", []byte(errorsTPL), 0755)
 
 	r := require.New(t)
 	a := Automatic(Options{})
 	rr := render.New(render.Options{
-		HTMLLayout: tempFolder + "application.html",
+		HTMLLayout: tempFolder + "/application.html",
 	})
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("errors", "Error AJ set")
 		c.Flash().Add("errors", "Error DAL set")
 
-		return c.Render(201, rr.HTML(tempFolder+"show.html"))
+		return c.Render(201, rr.HTML(tempFolder+"/show.html"))
 	})
 
 	w := willie.New(a)
@@ -54,17 +54,17 @@ func Test_FlashRender(t *testing.T) {
 
 func Test_FlashRenderEmpty(t *testing.T) {
 	tempFolder := os.TempDir()
-	ioutil.WriteFile(tempFolder+"application.html", []byte("{{yield}}"), 0755)
-	ioutil.WriteFile(tempFolder+"show.html", []byte(errorsTPL), 0755)
+	ioutil.WriteFile(tempFolder+"/application.html", []byte("{{yield}}"), 0755)
+	ioutil.WriteFile(tempFolder+"/show.html", []byte(errorsTPL), 0755)
 
 	r := require.New(t)
 	a := Automatic(Options{})
 	rr := render.New(render.Options{
-		HTMLLayout: tempFolder + "application.html",
+		HTMLLayout: tempFolder + "/application.html",
 	})
 
 	a.GET("/", func(c Context) error {
-		return c.Render(201, rr.HTML(tempFolder+"show.html"))
+		return c.Render(201, rr.HTML(tempFolder+"/show.html"))
 	})
 
 	w := willie.New(a)
@@ -80,18 +80,18 @@ const errorsTPL = `{{#each flash.errors as |k flash|}}
 
 func Test_FlashRenderEntireFlash(t *testing.T) {
 	tempFolder := os.TempDir()
-	ioutil.WriteFile(tempFolder+"application.html", []byte("{{yield}}"), 0755)
-	ioutil.WriteFile(tempFolder+"show.html", []byte(keyTPL), 0755)
+	ioutil.WriteFile(tempFolder+"/application.html", []byte("{{yield}}"), 0755)
+	ioutil.WriteFile(tempFolder+"/show.html", []byte(keyTPL), 0755)
 
 	r := require.New(t)
 	a := Automatic(Options{})
 	rr := render.New(render.Options{
-		HTMLLayout: tempFolder + "application.html",
+		HTMLLayout: tempFolder + "/application.html",
 	})
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("something", "something to say!")
-		return c.Render(201, rr.HTML(tempFolder+"show.html"))
+		return c.Render(201, rr.HTML(tempFolder+"/show.html"))
 	})
 
 	w := willie.New(a)
@@ -106,8 +106,8 @@ const keyTPL = `{{#each flash as |k flash|}}
 
 func Test_FlashRenderCustomKey(t *testing.T) {
 	tempFolder := os.TempDir()
-	ioutil.WriteFile(tempFolder+"application.html", []byte("{{yield}}"), 0755)
-	ioutil.WriteFile(tempFolder+"show.html", []byte(customKeyTPL), 0755)
+	ioutil.WriteFile(tempFolder+"/application.html", []byte("{{yield}}"), 0755)
+	ioutil.WriteFile(tempFolder+"/show.html", []byte(customKeyTPL), 0755)
 
 	r := require.New(t)
 	a := Automatic(Options{})
@@ -117,7 +117,7 @@ func Test_FlashRenderCustomKey(t *testing.T) {
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("something", "something to say!")
-		return c.Render(201, rr.HTML(tempFolder+"show.html"))
+		return c.Render(201, rr.HTML(tempFolder+"/show.html"))
 	})
 
 	w := willie.New(a)
@@ -127,18 +127,18 @@ func Test_FlashRenderCustomKey(t *testing.T) {
 
 func Test_FlashRenderCustomKeyNotDefined(t *testing.T) {
 	tempFolder := os.TempDir()
-	ioutil.WriteFile(tempFolder+"application.html", []byte("{{yield}}"), 0755)
-	ioutil.WriteFile(tempFolder+"show.html", []byte(customKeyTPL), 0755)
+	ioutil.WriteFile(tempFolder+"/application.html", []byte("{{yield}}"), 0755)
+	ioutil.WriteFile(tempFolder+"/show.html", []byte(customKeyTPL), 0755)
 
 	r := require.New(t)
 	a := Automatic(Options{})
 	rr := render.New(render.Options{
-		HTMLLayout: tempFolder + "application.html",
+		HTMLLayout: tempFolder + "/application.html",
 	})
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("other", "something to say!")
-		return c.Render(201, rr.HTML(tempFolder+"show.html"))
+		return c.Render(201, rr.HTML(tempFolder+"/show.html"))
 	})
 
 	w := willie.New(a)
