@@ -278,6 +278,7 @@ const nApplicationHTML = `<html>
 const nGitignore = `vendor/
 **/*.log
 **/*.sqlite
+.idea/
 bin/
 tmp/
 node_modules/
