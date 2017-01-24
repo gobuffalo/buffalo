@@ -29,6 +29,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// WebpackPath is the path to the local install of webpack
 var WebpackPath = filepath.Join("node_modules", ".bin", "webpack")
 
 var publicLogo = &gentronics.RemoteFile{
