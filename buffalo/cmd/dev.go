@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +36,7 @@ This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
 	Run: func(c *cobra.Command, args []string) {
 		defer func() {
-			msg := "There was a problem starting the dev server: %s\n"
+			msg := "There was a problem starting the dev server, Please review the troubleshooting docs: %s\n"
 			cause := "Unknown"
 			if r := recover(); r != nil {
 				if err, ok := r.(error); ok {
@@ -73,7 +74,7 @@ func startWebpack(ctx context.Context) error {
 		// there's no webpack, so don't do anything
 		return nil
 	}
-	cmd := exec.Command("./node_modules/webpack/bin/webpack.js", "--watch")
+	cmd := exec.Command(generate.WebpackPath, "--watch")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
