@@ -23,10 +23,13 @@ package generate
 import (
 	"fmt"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/markbates/gentronics"
 	"github.com/spf13/cobra"
 )
+
+var WebpackPath = filepath.Join("node_modules", ".bin", "webpack")
 
 var publicLogo = &gentronics.RemoteFile{
 	File:       gentronics.NewFile("public/assets/images/logo.svg", ""),

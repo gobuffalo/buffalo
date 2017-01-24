@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -73,7 +74,7 @@ func startWebpack(ctx context.Context) error {
 		// there's no webpack, so don't do anything
 		return nil
 	}
-	cmd := exec.Command("./node_modules/webpack/bin/webpack.js", "--watch")
+	cmd := exec.Command(generate.WebpackPath, "--watch")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
