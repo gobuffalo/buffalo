@@ -36,7 +36,7 @@ This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
 	Run: func(c *cobra.Command, args []string) {
 		defer func() {
-			msg := "There was a problem starting the dev server: %s\n"
+			msg := "There was a problem starting the dev server, Please review the troubleshooting docs: %s\n"
 			cause := "Unknown"
 			if r := recover(); r != nil {
 				if err, ok := r.(error); ok {
