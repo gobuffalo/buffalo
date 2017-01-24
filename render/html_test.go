@@ -58,4 +58,32 @@ func Test_HTML(t *testing.T) {
 		r.NoError(err)
 		r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
 	})
+
+	t.Run("with an alternative layout", func(st *testing.T) {
+		r := require.New(st)
+
+		// first create the default layout
+		layout, err := ioutil.TempFile("", "test")
+		r.NoError(err)
+		defer os.Remove(layout.Name())
+
+		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
+		r.NoError(err)
+
+		// first create the alternative layout
+		altLayout, err := ioutil.TempFile("", "test")
+		r.NoError(err)
+		defer os.Remove(altLayout.Name())
+
+		_, err = altLayout.Write([]byte("<body><!--altLayout-->{{yield}}</body>"))
+		r.NoError(err)
+
+		re := render.New(render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name(), altLayout.Name())
+
+		r.Equal("text/html", re.ContentType())
+		bb := &bytes.Buffer{}
+		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
+		r.NoError(err)
+		r.Equal("<body><!--altLayout-->Mark</body>", strings.TrimSpace(bb.String()))
+	})
 }
