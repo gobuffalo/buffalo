@@ -24,6 +24,9 @@ func (e *Engine) HTML(names ...string) Renderer {
 	if e.HTMLLayout != "" {
 		names = append(names, e.HTMLLayout)
 	}
+	if len(names) > 2 {
+		names = names[:2]
+	}
 	hr := templateRenderer{
 		Engine:      e,
 		contentType: "text/html",

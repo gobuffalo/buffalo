@@ -50,12 +50,35 @@ func Test_HTML(t *testing.T) {
 		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
 		r.NoError(err)
 
-		re := render.New(render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name())
+		re := render.New(render.Options{HTMLLayout: layout.Name()})
 
-		r.Equal("text/html", re.ContentType())
-		bb := &bytes.Buffer{}
-		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-		r.NoError(err)
-		r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+		st.Run("using just the HTMLLayout", func(sst *testing.T) {
+			r := require.New(sst)
+			h := re.HTML(tmpFile.Name())
+
+			r.Equal("text/html", h.ContentType())
+			bb := &bytes.Buffer{}
+			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
+			r.NoError(err)
+			r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+		})
+
+		st.Run("overriding the HTMLLayout", func(sst *testing.T) {
+			r := require.New(sst)
+			nlayout, err := ioutil.TempFile("", "test-layout2")
+			r.NoError(err)
+			defer os.Remove(nlayout.Name())
+
+			_, err = nlayout.Write([]byte("<html>{{yield}}</html>"))
+			r.NoError(err)
+			h := re.HTML(tmpFile.Name(), nlayout.Name())
+
+			r.Equal("text/html", h.ContentType())
+			bb := &bytes.Buffer{}
+			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
+			r.NoError(err)
+			r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
+		})
+
 	})
 }
