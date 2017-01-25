@@ -99,6 +99,52 @@ func UsersShow(c buffalo.Context) error {
 
 }
 
+func TestGenerateNewActionWithExistingActions(t *testing.T) {
+	dir := os.TempDir()
+	packagePath := filepath.Join(dir, "src", "sample")
+	os.MkdirAll(packagePath, 0755)
+	os.Chdir(packagePath)
+
+	os.RemoveAll("actions")
+	os.RemoveAll("templates")
+
+	os.Mkdir("actions", 0755)
+	ioutil.WriteFile("actions/app.go", appGo, 0755)
+	r := require.New(t)
+	cmd := cobra.Command{}
+	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
+	r.Nil(e)
+
+	data, _ := ioutil.ReadFile("actions/users.go")
+	r.Contains(string(data), "package actions")
+	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
+	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
+	r.Contains(string(data), `r.HTML("users/edit.html")`)
+	r.Contains(string(data), `c.Render(200, r.HTML("users/show.html"))`)
+
+	e = ActionCmd.RunE(&cmd, []string{"users", "list"})
+	r.Nil(e)
+
+	data, _ = ioutil.ReadFile("actions/users.go")
+	r.Contains(string(data), "package actions")
+	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
+	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
+	r.Contains(string(data), "func UsersList(c buffalo.Context) error {")
+	r.Contains(string(data), `r.HTML("users/list.html")`)
+	r.Contains(string(data), `c.Render(200, r.HTML("users/list.html"))`)
+
+	data, _ = ioutil.ReadFile("templates/users/list.html")
+	r.Contains(string(data), "<h1>Users#List</h1>")
+
+	data, _ = ioutil.ReadFile("actions/users_test.go")
+	r.Contains(string(data), "package actions_test")
+	r.Contains(string(data), "func Test_Users_Show(t *testing.T) {")
+	r.Contains(string(data), "func Test_Users_Edit(t *testing.T) {")
+	r.Contains(string(data), "func Test_Users_List(t *testing.T) {")
+}
+
 var appGo = []byte(`
 package actions
 var app *buffalo.App

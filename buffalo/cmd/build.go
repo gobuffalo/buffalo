@@ -33,6 +33,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/gobuffalo/velvet"
 	"github.com/spf13/cobra"
 )
@@ -70,7 +71,7 @@ func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		return b.exec("./node_modules/webpack/bin/webpack.js")
+		return b.exec(generate.WebpackPath)
 	}
 	return nil
 }
