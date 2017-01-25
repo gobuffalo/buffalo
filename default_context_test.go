@@ -18,6 +18,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func basicContext() DefaultContext {
+	return DefaultContext{
+		Context: context.Background(),
+		logger:  NewLogger("debug"),
+		data:    make(map[string]interface{}),
+		flash:   &Flash{data: make(map[string][]string)},
+	}
+}
+
 func Test_DefaultContext_Param(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{
@@ -51,11 +60,7 @@ func Test_DefaultContext_ParamInt(t *testing.T) {
 
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
-	c := DefaultContext{
-		Context: context.Background(),
-		logger:  NewLogger("debug"),
-		data:    map[string]interface{}{},
-	}
+	c := basicContext()
 	r.Nil(c.Get("name"))
 
 	c.Set("name", "Mark")
@@ -65,11 +70,7 @@ func Test_DefaultContext_GetSet(t *testing.T) {
 
 func Test_DefaultContext_Value(t *testing.T) {
 	r := require.New(t)
-	c := DefaultContext{
-		logger:  NewLogger("debug"),
-		Context: context.Background(),
-		data:    map[string]interface{}{},
-	}
+	c := basicContext()
 	r.Nil(c.Value("name"))
 
 	c.Set("name", "Mark")
@@ -81,13 +82,11 @@ func Test_DefaultContext_Value(t *testing.T) {
 func Test_DefaultContext_Render(t *testing.T) {
 	r := require.New(t)
 
+	c := basicContext()
 	res := httptest.NewRecorder()
-	c := DefaultContext{
-		response: res,
-		params:   url.Values{"name": []string{"Mark"}},
-		data:     map[string]interface{}{"greet": "Hello"},
-		logger:   &multiLogger{},
-	}
+	c.response = res
+	c.params = url.Values{"name": []string{"Mark"}}
+	c.Set("greet", "Hello")
 
 	err := c.Render(123, render.String("{{greet}} {{params.name}}!"))
 	r.NoError(err)

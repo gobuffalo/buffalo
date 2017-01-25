@@ -34,6 +34,7 @@ type DefaultContext struct {
 	session     *Session
 	contentType string
 	data        map[string]interface{}
+	flash       *Flash
 }
 
 // Response returns the original Response for the request.
@@ -100,6 +101,11 @@ func (d *DefaultContext) Session() *Session {
 	return d.session
 }
 
+// Flash messages for the associated Request.
+func (d *DefaultContext) Flash() *Flash {
+	return d.flash
+}
+
 // Render a status code and render.Renderer to the associated Response.
 // The request parameters will be made available to the render.Renderer
 // "{{.params}}". Any values set onto the Context will also automatically
@@ -117,17 +123,25 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			pp[k] = v[0]
 		}
 		data["params"] = pp
+		data["flash"] = d.Flash().data
 		bb := &bytes.Buffer{}
+
 		err := rr.Render(bb, data)
 		if err != nil {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
+
 		d.Response().Header().Set("Content-Type", rr.ContentType())
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
+
+		if d.Session() != nil {
+			d.Flash().Clear()
+		}
+
 		return nil
 	}
 	d.Response().WriteHeader(status)
@@ -183,6 +197,8 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 
 // Redirect a request with the given status to the given URL.
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
+	d.Flash().Persist(d.Session())
+
 	http.Redirect(d.Response(), d.Request(), fmt.Sprintf(url, args...), status)
 	return nil
 }
