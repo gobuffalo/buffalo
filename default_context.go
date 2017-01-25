@@ -131,15 +131,16 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 
+		if d.Session() != nil {
+			d.Flash().Clear()
+			d.Flash().Persist(d.Session())
+		}
+
 		d.Response().Header().Set("Content-Type", rr.ContentType())
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
-		}
-
-		if d.Session() != nil {
-			d.Flash().Clear()
 		}
 
 		return nil
