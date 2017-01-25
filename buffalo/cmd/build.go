@@ -33,6 +33,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/gobuffalo/velvet"
 	"github.com/spf13/cobra"
 )
@@ -70,7 +71,7 @@ func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		return b.exec("webpack")
+		return b.exec(generate.WebpackPath)
 	}
 	return nil
 }
@@ -109,6 +110,7 @@ func (b *builder) buildDatabase() error {
 	_, err = os.Stat("database.yml")
 	if err == nil {
 		// copy the database.yml file to the migrations folder so it's available through rice
+		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
 			return err

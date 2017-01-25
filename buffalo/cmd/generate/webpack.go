@@ -22,12 +22,15 @@ package generate
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/markbates/gentronics"
 	"github.com/spf13/cobra"
 )
+
+// WebpackPath is the path to the local install of webpack
+var WebpackPath = filepath.Join("node_modules", ".bin", "webpack")
 
 var publicLogo = &gentronics.RemoteFile{
 	File:       gentronics.NewFile("public/assets/images/logo.svg", ""),
@@ -84,32 +87,6 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("public/assets/.gitignore", ""))
 	g.Add(gentronics.NewFile("assets/js/application.js", wApplicationJS))
 	g.Add(gentronics.NewFile("assets/css/application.scss", wApplicationCSS))
-
-	// if there's no webpack, install it!
-	_, err = exec.LookPath("webpack")
-	if err != nil {
-		fmt.Println("Could not find npm/webpack, installing globally.")
-
-		rf := gentronics.RunFn(func(path string, data gentronics.Data) error {
-			cmd := exec.Command("npm", "install", "webpack", "-g")
-			cmd.Stdin = os.Stdin
-			cmd.Stderr = os.Stderr
-			cmd.Stdout = os.Stdout
-			err := cmd.Run()
-			if err != nil {
-				u := "https://docs.npmjs.com/getting-started/fixing-npm-permissions"
-				fmt.Printf("There was a problem running npm install. You may want to checkout their docs for help!\n%s\n", u)
-				return err
-			}
-			return nil
-		})
-		g.Add(&gentronics.Func{
-			Runner: rf,
-			Should: func(data gentronics.Data) bool {
-				return true
-			},
-		})
-	}
 
 	c := gentronics.NewCommand(exec.Command("npm", "init", "-y"))
 	g.Add(c)
