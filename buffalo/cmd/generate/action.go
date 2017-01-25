@@ -147,7 +147,7 @@ func {{namespace}}{{action}}(c buffalo.Context) error {
 }
 `
 
-	rTestFileT  = `package actions_test
+	rTestFileT = `package actions_test
 	`
 	rTestFuncT = `
 func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
