@@ -123,6 +123,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			pp[k] = v[0]
 		}
 		data["params"] = pp
+		data["flash"] = d.Flash().data
 		bb := &bytes.Buffer{}
 
 		err := rr.Render(bb, data)
@@ -130,7 +131,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 
-		if d.Flash() != nil {
+		if d.Session() != nil {
 			d.Flash().Clear()
 			d.Flash().Persist(d.Session())
 		}
