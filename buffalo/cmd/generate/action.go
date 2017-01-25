@@ -39,12 +39,14 @@ var ActionCmd = &cobra.Command{
 
 		filePath := filepath.Join("actions", fmt.Sprintf("%v.go", data["filename"]))
 		actionsTemplate := buildActionsTemplate(filePath)
+		testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", data["filename"]))
+		testsTemplate := buildTestsTemplate(testFilePath)
 		actionsToAdd := findActionsToAdd(name, filePath, actions)
 		data["actions"] = actionsToAdd
 
 		g := gentronics.New()
 		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
-		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), rActionTest))
+		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
 		g.Add(&gentronics.Func{
 			Should: func(data gentronics.Data) bool { return true },
 			Runner: func(root string, data gentronics.Data) error {
@@ -80,6 +82,24 @@ func {{namespace}}{{camelize action}}(c buffalo.Context) error {
 }
 {{/each}}`
 	return actionsTemplate
+}
+
+func buildTestsTemplate(filePath string) string {
+	testsTemplate := rTestFileT
+	fileContents, err := ioutil.ReadFile(filePath)
+	if err == nil {
+		testsTemplate = string(fileContents)
+	}
+
+	testsTemplate = testsTemplate + `
+{{#each actions as |action|}}
+func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
+	r := require.New(t)
+	r.Fail("Not Implemented!")
+}
+
+{{/each}}`
+	return testsTemplate
 }
 
 func addTemplateFiles(actionsToAdd []string, data gentronics.Data) {
@@ -127,13 +147,12 @@ func {{namespace}}{{action}}(c buffalo.Context) error {
 }
 `
 
-	rActionTest = `package actions_test
-
-{{#each actions as |action|}}
+	rTestFileT  = `package actions_test
+	`
+	rTestFuncT = `
 func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
-
-{{/each}}`
+`
 )
