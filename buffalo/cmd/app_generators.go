@@ -13,6 +13,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("main.go", nMain))
 	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
 	g.Add(gentronics.NewFile(".codeclimate.yml", nCodeClimate))
+	g.Add(gentronics.NewFile(".travis.yml", nTravis))
 	g.Add(gentronics.NewFile("actions/app.go", nApp))
 	g.Add(gentronics.NewFile("actions/home.go", nHomeHandler))
 	g.Add(gentronics.NewFile("actions/home_test.go", nHomeHandlerTest))
@@ -360,4 +361,19 @@ ratings:
   paths:
     - "**.go"
 
+`
+
+const nTravis = `language: go
+env:
+- GO_ENV=test
+
+before_script:
+  - psql -c 'create database {{name}}_test;' -U postgres
+  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
+
+go:
+  - 1.7.x
+  - master
+
+go_import_path: {{ packagePath }}
 `
