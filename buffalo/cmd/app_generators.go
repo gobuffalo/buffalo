@@ -13,7 +13,11 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("main.go", nMain))
 	g.Add(gentronics.NewFile(".buffalo.dev.yml", nRefresh))
 	g.Add(gentronics.NewFile(".codeclimate.yml", nCodeClimate))
-	g.Add(gentronics.NewFile(".travis.yml", nTravis))
+
+	if data["ciProvider"] == "travis" {
+		g.Add(gentronics.NewFile(".travis.yml", nTravis))
+	}
+
 	g.Add(gentronics.NewFile("actions/app.go", nApp))
 	g.Add(gentronics.NewFile("actions/home.go", nHomeHandler))
 	g.Add(gentronics.NewFile("actions/home_test.go", nHomeHandlerTest))

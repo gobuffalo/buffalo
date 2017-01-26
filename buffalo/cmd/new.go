@@ -39,6 +39,7 @@ var verbose bool
 var skipPop bool
 var skipWebpack bool
 var dbType = "postgres"
+var ciProvider = "travis"
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
@@ -133,6 +134,7 @@ func genNewFiles(name, rootPath string) error {
 		"withWebpack": !skipWebpack,
 		"dbType":      dbType,
 		"version":     Version,
+		"ciProvider":  ciProvider,
 	}
 
 	g := newAppGenerator(data)
@@ -146,6 +148,7 @@ func init() {
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&skipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
+	newCmd.Flags().StringVar(&ciProvider, "ci-provider", "travis", "specify the type of ci file you would like buffalo to generate [travis, none]")
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
