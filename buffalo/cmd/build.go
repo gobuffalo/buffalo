@@ -32,6 +32,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"archive/zip"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/gobuffalo/velvet"
@@ -40,6 +41,7 @@ import (
 
 var outputBinName string
 var zipBin bool
+var extractAssets bool
 
 type builder struct {
 	cleanup       []string
@@ -205,6 +207,78 @@ func (b *builder) buildRiceEmbedded() error {
 	return nil
 }
 
+func (b *builder) disableAssetsHandling() error {
+	return nil
+}
+
+func (b *builder) buildAssetsArchive() error {
+	defer os.Chdir(b.workDir)
+	fmt.Printf("--> build assets archive\n")
+
+	pwd, _ := os.Getwd()
+	target := filepath.Join("bin", filepath.Base(pwd)) + "-assets.zip"
+	source := filepath.Join(pwd, "public", "assets")
+
+	zipfile, err := os.Create(target)
+	if err != nil {
+		return err
+	}
+	defer zipfile.Close()
+
+	archive := zip.NewWriter(zipfile)
+	defer archive.Close()
+
+	info, err := os.Stat(source)
+	if err != nil {
+		return err
+	}
+
+	var baseDir string
+	if info.IsDir() {
+		baseDir = filepath.Base(source)
+	}
+
+	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		if baseDir != "" {
+			header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+		}
+
+		if info.IsDir() {
+			header.Name += "/"
+		} else {
+			header.Method = zip.Deflate
+		}
+
+		writer, err := archive.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		_, err = io.Copy(writer, file)
+		return err
+	})
+
+	return err
+}
+
 func (b *builder) buildMain() error {
 	new_main := strings.Replace(string(b.original_main), "func main()", "func original_main()", 1)
 	maingo, err := os.Create("main.go")
@@ -267,6 +341,18 @@ func (b *builder) run() error {
 	err = b.buildMain()
 	if err != nil {
 		return err
+	}
+
+	if extractAssets {
+		err = b.buildAssetsArchive()
+		if err != nil {
+			return err
+		}
+		err = b.disableAssetsHandling()
+		if err != nil {
+			return err
+		}
+		return b.buildBin() 
 	}
 
 	if zipBin {
@@ -339,6 +425,7 @@ func init() {
 
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
 	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
+	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 }
 
 var buildMainTmpl = `package main
