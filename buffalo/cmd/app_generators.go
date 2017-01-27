@@ -148,6 +148,7 @@ func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.Automatic(buffalo.Options{
 			Env: ENV,
+			SessionName: "_{{name}}_session",
 		})
 
 		{{#if withPop }}
