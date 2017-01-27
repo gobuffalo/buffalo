@@ -373,6 +373,7 @@ env:
 
 before_script:
   - psql -c 'create database {{name}}_test;' -U postgres
+	- mysql -e 'CREATE DATABASE {{name}}_test;'
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go:
