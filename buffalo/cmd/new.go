@@ -78,12 +78,7 @@ var newCmd = &cobra.Command{
 }
 
 func validDbType() bool {
-	switch dbType {
-	case "postgres", "mysql", "sqlite3":
-		return true
-	default:
-		return false
-	}
+	return dbType == "postgres" || dbType == "mysql" || dbType == "sqlite3"
 }
 
 func validateInGoPath(name string) error {
