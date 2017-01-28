@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"archive/zip"
 	"bytes"
 	"fmt"
 	"io"
@@ -32,7 +33,6 @@ import (
 	"runtime"
 	"strings"
 	"time"
-	"archive/zip"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/gobuffalo/velvet"
@@ -342,10 +342,10 @@ func (b *builder) cleanupBuild() {
 func (b *builder) cleanupTarget() {
 	fmt.Println("--> cleaning up target dir")
 	files, _ := ioutil.ReadDir("bin")
-    for _, f := range files {
-        fmt.Printf("----> cleaning up %s\n", f.Name())
-        os.RemoveAll("bin/" + f.Name())
-    }
+	for _, f := range files {
+		fmt.Printf("----> cleaning up %s\n", f.Name())
+		os.RemoveAll("bin/" + f.Name())
+	}
 }
 
 func (b *builder) run() error {
@@ -378,7 +378,7 @@ func (b *builder) run() error {
 		if err != nil {
 			return err
 		}
-		return b.buildBin() 
+		return b.buildBin()
 	}
 
 	if zipBin {
