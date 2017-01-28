@@ -46,6 +46,7 @@ var extractAssets bool
 type builder struct {
 	cleanup       []string
 	original_main []byte
+	original_app  []byte
 	workDir       string
 }
 
@@ -208,6 +209,20 @@ func (b *builder) buildRiceEmbedded() error {
 }
 
 func (b *builder) disableAssetsHandling() error {
+	defer os.Chdir(b.workDir)
+	fmt.Printf("--> disable self assets handling\n")
+
+	new_app := strings.Replace(string(b.original_app), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
+
+	appgo, err := os.Create("actions/app.go")
+	if err != nil {
+		return err
+	}
+	_, err = appgo.WriteString(new_app)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -215,9 +230,8 @@ func (b *builder) buildAssetsArchive() error {
 	defer os.Chdir(b.workDir)
 	fmt.Printf("--> build assets archive\n")
 
-	pwd, _ := os.Getwd()
-	target := filepath.Join("bin", filepath.Base(pwd)) + "-assets.zip"
-	source := filepath.Join(pwd, "public", "assets")
+	target := filepath.Join("bin", filepath.Base(b.workDir)) + "-assets.zip"
+	source := filepath.Join(b.workDir, "public", "assets")
 
 	zipfile, err := os.Create(target)
 	if err != nil {
@@ -315,11 +329,23 @@ func (b *builder) buildMain() error {
 func (b *builder) cleanupBuild() {
 	fmt.Println("--> cleaning up build")
 	for _, b := range b.cleanup {
-		fmt.Printf("--> cleaning up %s\n", b)
+		fmt.Printf("----> cleaning up %s\n", b)
 		os.RemoveAll(b)
 	}
 	maingo, _ := os.Create("main.go")
 	maingo.Write(b.original_main)
+
+	appgo, _ := os.Create("actions/app.go")
+	appgo.Write(b.original_app)
+}
+
+func (b *builder) cleanupTarget() {
+	fmt.Println("--> cleaning up target dir")
+	files, _ := ioutil.ReadDir("bin")
+    for _, f := range files {
+        fmt.Printf("----> cleaning up %s\n", f.Name())
+        os.RemoveAll("bin/" + f.Name())
+    }
 }
 
 func (b *builder) run() error {
@@ -402,14 +428,25 @@ var buildCmd = &cobra.Command{
 			return err
 		}
 		maingo.Close()
+
+		original_app := &bytes.Buffer{}
+		appgo, err := os.Open("actions/app.go")
+		_, err = original_app.ReadFrom(appgo)
+		if err != nil {
+			return err
+		}
+		appgo.Close()
+
 		pwd, _ := os.Getwd()
 		b := builder{
 			cleanup:       []string{},
 			original_main: original_main.Bytes(),
+			original_app:  original_app.Bytes(),
 			workDir:       pwd,
 		}
 		defer b.cleanupBuild()
 
+		b.cleanupTarget()
 		return b.run()
 	},
 }
