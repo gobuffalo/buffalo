@@ -9,6 +9,7 @@ import (
 	"github.com/markbates/pop"
 )
 
+// User model stores information about a user account
 type User struct {
 	ID        int       `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
@@ -24,6 +25,8 @@ func (u User) String() string {
 	return string(b)
 }
 
+// ValidateNew validates the User fields and checks whether a user has
+// already claimed that email address
 func (u *User) ValidateNew(tx *pop.Connection) (*validate.Errors, error) {
 	verrs, err := u.validateCommon(tx)
 	verrs.Append(validate.Validate(
@@ -42,6 +45,8 @@ func (u *User) ValidateNew(tx *pop.Connection) (*validate.Errors, error) {
 	return verrs, err
 }
 
+// ValidateUpdate validates the User fields and confirms that the email has
+// not been claimed by a different user
 func (u *User) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	verrs, err := u.validateCommon(tx)
 	verrs.Append(validate.Validate(

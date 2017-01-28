@@ -12,12 +12,12 @@ import (
 	"path/filepath"
 	"regexp"
 
-	. "github.com/markbates/grift/grift"
+	"github.com/markbates/grift/grift"
 )
 
-var _ = Desc("release", "Generates a CHANGELOG and creates a new GitHub release based on what is in the version.go file.")
-var _ = Add("release", func(c *Context) error {
-	Run("shoulders", c)
+var _ = grift.Desc("release", "Generates a CHANGELOG and creates a new GitHub release based on what is in the version.go file.")
+var _ = grift.Add("release", func(c *grift.Context) error {
+	grift.Run("shoulders", c)
 	v, err := findVersion()
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func dockerTest() error {
 func tagRelease(v string) error {
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
-		return errors.New("GITHUB_TOKEN is not set!!")
+		return errors.New("GITHUB_TOKEN is not set")
 	}
 
 	body := map[string]interface{}{
@@ -143,7 +143,7 @@ func findVersion() (string, error) {
 	re := regexp.MustCompile(`var Version = "(.+)"`)
 	matches := re.FindStringSubmatch(string(vfile))
 	if len(matches) < 2 {
-		return "", errors.New("failed to find the version!")
+		return "", errors.New("failed to find the version")
 	}
 	v := matches[1]
 	return v, nil
