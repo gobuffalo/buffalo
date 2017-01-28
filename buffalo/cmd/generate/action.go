@@ -39,12 +39,17 @@ var ActionCmd = &cobra.Command{
 
 		filePath := filepath.Join("actions", fmt.Sprintf("%v.go", data["filename"]))
 		actionsTemplate := buildActionsTemplate(filePath)
+		testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", data["filename"]))
+		testsTemplate := buildTestsTemplate(testFilePath)
 		actionsToAdd := findActionsToAdd(name, filePath, actions)
+		testsToAdd := findTestsToAdd(name, testFilePath, actions)
+
 		data["actions"] = actionsToAdd
+		data["tests"] = testsToAdd
 
 		g := gentronics.New()
 		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
-		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), rActionTest))
+		g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
 		g.Add(&gentronics.Func{
 			Should: func(data gentronics.Data) bool { return true },
 			Runner: func(root string, data gentronics.Data) error {
@@ -82,6 +87,24 @@ func {{namespace}}{{camelize action}}(c buffalo.Context) error {
 	return actionsTemplate
 }
 
+func buildTestsTemplate(filePath string) string {
+	testsTemplate := `package actions`
+	fileContents, err := ioutil.ReadFile(filePath)
+	if err == nil {
+		testsTemplate = string(fileContents)
+	}
+
+	testsTemplate = testsTemplate + `
+{{#each tests as |action|}}
+func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
+	r := require.New(t)
+	r.Fail("Not Implemented!")
+}
+
+{{/each}}`
+	return testsTemplate
+}
+
 func addTemplateFiles(actionsToAdd []string, data gentronics.Data) {
 	for _, action := range actionsToAdd {
 		vg := gentronics.New()
@@ -115,6 +138,27 @@ func findActionsToAdd(name, path string, actions []string) []string {
 	return actionsToAdd
 }
 
+func findTestsToAdd(name, path string, actions []string) []string {
+	fileContents, err := ioutil.ReadFile(path)
+	if err != nil {
+		fileContents = []byte("")
+	}
+
+	actionsToAdd := []string{}
+
+	for _, action := range actions {
+		funcSignature := fmt.Sprintf("func Test_%v_%v(c buffalo.Context) error", inflect.Camelize(name), inflect.Camelize(action))
+		if strings.Contains(string(fileContents), funcSignature) {
+			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", inflect.Camelize(name), inflect.Camelize(action))
+			continue
+		}
+
+		actionsToAdd = append(actionsToAdd, action)
+	}
+
+	return actionsToAdd
+}
+
 const (
 	rActionFileT = `package actions
 import "github.com/gobuffalo/buffalo"`
@@ -126,14 +170,4 @@ func {{namespace}}{{action}}(c buffalo.Context) error {
 	return c.Render(200, r.HTML("{{namespace_under}}/{{action_under}}.html"))
 }
 `
-
-	rActionTest = `package actions_test
-
-{{#each actions as |action|}}
-func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-{{/each}}`
 )

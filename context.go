@@ -32,6 +32,7 @@ type Context interface {
 	Websocket() (*websocket.Conn, error)
 	Redirect(int, string, ...interface{}) error
 	Data() map[string]interface{}
+	Flash() *Flash
 }
 
 // ParamValues will most commonly be url.Values,

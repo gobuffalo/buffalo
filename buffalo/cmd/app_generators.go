@@ -143,6 +143,7 @@ func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.Automatic(buffalo.Options{
 			Env: ENV,
+			SessionName: "_{{name}}_session",
 		})
 
 		{{#if withPop }}
@@ -340,24 +341,24 @@ log_name: buffalo
 `
 
 const nCodeClimate = `engines:
+  fixme:
+    enabled: true
+  gofmt:
+    enabled: true
   golint:
     enabled: true
   govet:
     enabled: true
-  gofmt:
-    enabled: true
-  fixme:
-    enabled: true
- ratings:
-   paths:
+exclude_paths:
+  - grifts/**/*
+  - "**/*_test.go"
+  - "*_test.go"
+  - "**_test.go"
+  - logs/*
+  - public/*
+  - templates/*
+ratings:
+  paths:
     - "**.go"
- exclude_paths:
-   - "grifts/**/*"
-   - "**/*_test.go"
-   - "*_test.go"
-   - "**_test.go"
-   - "logs/*"
-   - "public/*"
-   - "templates/*"
 
 `
