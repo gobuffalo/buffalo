@@ -42,9 +42,9 @@ var outputBinName string
 var zipBin bool
 
 type builder struct {
-	cleanup       []string
-	original_main []byte
-	workDir       string
+	cleanup      []string
+	originalMain []byte
+	workDir      string
 }
 
 func (b *builder) clean(name ...string) string {
@@ -206,12 +206,12 @@ func (b *builder) buildRiceEmbedded() error {
 }
 
 func (b *builder) buildMain() error {
-	new_main := strings.Replace(string(b.original_main), "func main()", "func original_main()", 1)
+	newMain := strings.Replace(string(b.originalMain), "func main()", "func originalMain()", 1)
 	maingo, err := os.Create("main.go")
 	if err != nil {
 		return err
 	}
-	_, err = maingo.WriteString(new_main)
+	_, err = maingo.WriteString(newMain)
 	if err != nil {
 		return err
 	}
@@ -245,7 +245,7 @@ func (b *builder) cleanupBuild() {
 		os.RemoveAll(b)
 	}
 	maingo, _ := os.Create("main.go")
-	maingo.Write(b.original_main)
+	maingo.Write(b.originalMain)
 }
 
 func (b *builder) run() error {
@@ -309,18 +309,18 @@ var buildCmd = &cobra.Command{
 	Aliases: []string{"b", "bill"},
 	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
-		original_main := &bytes.Buffer{}
+		originalMain := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
-		_, err = original_main.ReadFrom(maingo)
+		_, err = originalMain.ReadFrom(maingo)
 		if err != nil {
 			return err
 		}
 		maingo.Close()
 		pwd, _ := os.Getwd()
 		b := builder{
-			cleanup:       []string{},
-			original_main: original_main.Bytes(),
-			workDir:       pwd,
+			cleanup:      []string{},
+			originalMain: originalMain.Bytes(),
+			workDir:      pwd,
 		}
 		defer b.cleanupBuild()
 
@@ -362,7 +362,7 @@ var migrationBox *rice.Box
 func main() {
 	args := os.Args
 	if len(args) == 1 {
-		original_main()
+		originalMain()
 	}
 	c := args[1]
 	switch c {
@@ -370,7 +370,7 @@ func main() {
 		migrate()
 	case "start", "run", "serve":
 		printVersion()
-		original_main()
+		originalMain()
 	case "version":
 		printVersion()
 	default:

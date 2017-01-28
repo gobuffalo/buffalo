@@ -24,6 +24,7 @@ func findUserMW(h buffalo.Handler) buffalo.Handler {
 	}
 }
 
+// UsersList returns all user data in JSON
 func UsersList(c buffalo.Context) error {
 	users := &models.Users{}
 	tx := c.Get("tx").(*pop.Connection)
@@ -35,10 +36,12 @@ func UsersList(c buffalo.Context) error {
 	return c.Render(200, render.JSON(users))
 }
 
+// UsersShow renders one user's JSON data
 func UsersShow(c buffalo.Context) error {
 	return c.Render(200, render.JSON(c.Get("user")))
 }
 
+// UsersCreate creates a user
 func UsersCreate(c buffalo.Context) error {
 	u := &models.User{}
 	err := c.Bind(u)
@@ -63,6 +66,7 @@ func UsersCreate(c buffalo.Context) error {
 	return c.Render(201, render.JSON(u))
 }
 
+// UsersUpdate updates a target user account data
 func UsersUpdate(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)
@@ -92,6 +96,7 @@ func UsersUpdate(c buffalo.Context) error {
 	return c.Render(200, render.JSON(u))
 }
 
+// UsersDelete deletes a target user account
 func UsersDelete(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)

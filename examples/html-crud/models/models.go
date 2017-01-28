@@ -8,6 +8,7 @@ import (
 	"github.com/markbates/pop"
 )
 
+// DB is a sql database connection
 var DB *pop.Connection
 
 func init() {
