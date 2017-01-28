@@ -7,11 +7,11 @@ import (
 	"path"
 	"strings"
 
-	mbgrift "github.com/markbates/grift/grift"
+	"github.com/markbates/grift/grift"
 )
 
-var _ = mbgrift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
-var _ = mbgrift.Add("shoulders", func(c *mbgrift.Context) error {
+var _ = grift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
+var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	giants := map[string]string{
 		"github.com/markbates/refresh": "github.com/markbates/refresh",
 		"github.com/markbates/grift":   "github.com/markbates/grift",
