@@ -91,12 +91,16 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 * lumost
 * Brian Downs
 * Cody Oss
+* amedeiros
+* Brian Scott
 * arif emre
-* Mark Lussier
+* Stanislas Michalak
 * Amós Oviedo
+* Mark Lussier
 * Daniel Heckrath
-* Stuart Ellis
-* Steven Klassen
-* Kenny Grant
+* Michael Henderson
 * Dan Kleiman
 * Ivan Menshykov
+* Kenny Grant
+* Steven Klassen
+* Stuart Ellis
