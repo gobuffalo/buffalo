@@ -212,13 +212,13 @@ func (b *builder) disableAssetsHandling() error {
 	defer os.Chdir(b.workDir)
 	fmt.Printf("--> disable self assets handling\n")
 
-	new_app := strings.Replace(string(b.originalApp), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
+	newApp := strings.Replace(string(b.originalApp), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
 
 	appgo, err := os.Create("actions/app.go")
 	if err != nil {
 		return err
 	}
-	_, err = appgo.WriteString(new_app)
+	_, err = appgo.WriteString(newApp)
 	if err != nil {
 		return err
 	}
