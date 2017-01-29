@@ -4,11 +4,11 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/examples/hello-world/actions"
-	. "github.com/markbates/grift/grift"
+	mbgrift "github.com/markbates/grift/grift"
 	"github.com/olekukonko/tablewriter"
 )
 
-var _ = Add("routes", func(c *Context) error {
+var _ = mbgrift.Add("routes", func(c *mbgrift.Context) error {
 	a := actions.App()
 	routes := a.Routes()
 

@@ -23,9 +23,5 @@ package cmd
 import "github.com/markbates/pop/soda/cmd"
 
 func init() {
-	// for _, c := range cmd.RootCmd.Commands() {
-	// 	dbCmd.AddCommand(c)
-	// }
-
 	RootCmd.AddCommand(cmd.RootCmd)
 }

@@ -4,11 +4,11 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/examples/websockets/actions"
-	. "github.com/markbates/grift/grift"
+	"github.com/markbates/grift/grift"
 	"github.com/olekukonko/tablewriter"
 )
 
-var _ = Add("routes", func(c *Context) error {
+var _ = grift.Add("routes", func(c *grift.Context) error {
 	a := actions.App()
 	routes := a.Routes()
 

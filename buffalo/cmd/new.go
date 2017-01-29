@@ -45,6 +45,10 @@ var newCmd = &cobra.Command{
 	Use:   "new [name]",
 	Short: "Creates a new Buffalo application",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if !validDbType() {
+			return fmt.Errorf("Unknown db-type %s expecting one of postgres, mysql or sqlite3", dbType)
+		}
+
 		if len(args) == 0 {
 			return errors.New("you must enter a name for your new application")
 		}
@@ -72,6 +76,10 @@ var newCmd = &cobra.Command{
 
 		return genNewFiles(name, rootPath)
 	},
+}
+
+func validDbType() bool {
+	return dbType == "postgres" || dbType == "mysql" || dbType == "sqlite3"
 }
 
 func validateInGoPath(name string) error {

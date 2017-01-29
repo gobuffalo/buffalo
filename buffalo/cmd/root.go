@@ -33,8 +33,9 @@ var cfgFile string
 
 // RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
-	Use:   "buffalo",
-	Short: "Helps you build your Buffalo applications that much easier!",
+	SilenceErrors: true,
+	Use:           "buffalo",
+	Short:         "Helps you build your Buffalo applications that much easier!",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Buffalo version %s\n\n", Version)
 	},
@@ -44,7 +45,7 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Printf("Error: %s\n\n", err)
 		os.Exit(-1)
 	}
 }
