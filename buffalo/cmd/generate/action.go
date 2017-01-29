@@ -88,7 +88,14 @@ func {{namespace}}{{camelize action}}(c buffalo.Context) error {
 }
 
 func buildTestsTemplate(filePath string) string {
-	testsTemplate := `package actions`
+	testsTemplate := `package actions_test
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+	`
 	fileContents, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		testsTemplate = string(fileContents)
