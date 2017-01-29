@@ -45,8 +45,8 @@ var extractAssets bool
 
 type builder struct {
 	cleanup       []string
-	original_main []byte
-	original_app  []byte
+	originalMain  []byte
+	originalApp   []byte
 	workDir       string
 }
 
@@ -294,12 +294,12 @@ func (b *builder) buildAssetsArchive() error {
 }
 
 func (b *builder) buildMain() error {
-	new_main := strings.Replace(string(b.original_main), "func main()", "func original_main()", 1)
+	newMain := strings.Replace(string(b.originalMain), "func main()", "func originalMain()", 1)
 	maingo, err := os.Create("main.go")
 	if err != nil {
 		return err
 	}
-	_, err = maingo.WriteString(new_main)
+	_, err = maingo.WriteString(newMain)
 	if err != nil {
 		return err
 	}
@@ -333,10 +333,10 @@ func (b *builder) cleanupBuild() {
 		os.RemoveAll(b)
 	}
 	maingo, _ := os.Create("main.go")
-	maingo.Write(b.original_main)
+	maingo.Write(b.originalMain)
 
 	appgo, _ := os.Create("actions/app.go")
-	appgo.Write(b.original_app)
+	appgo.Write(b.originalApp)
 }
 
 func (b *builder) cleanupTarget() {
@@ -421,17 +421,17 @@ var buildCmd = &cobra.Command{
 	Aliases: []string{"b", "bill"},
 	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
-		original_main := &bytes.Buffer{}
+		originalMain := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
-		_, err = original_main.ReadFrom(maingo)
+		_, err = originalMain.ReadFrom(maingo)
 		if err != nil {
 			return err
 		}
 		maingo.Close()
 
-		original_app := &bytes.Buffer{}
+		originalApp := &bytes.Buffer{}
 		appgo, err := os.Open("actions/app.go")
-		_, err = original_app.ReadFrom(appgo)
+		_, err = originalApp.ReadFrom(appgo)
 		if err != nil {
 			return err
 		}
@@ -440,8 +440,8 @@ var buildCmd = &cobra.Command{
 		pwd, _ := os.Getwd()
 		b := builder{
 			cleanup:       []string{},
-			original_main: original_main.Bytes(),
-			original_app:  original_app.Bytes(),
+			originalMain:  originalMain.Bytes(),
+			originalApp:   originalApp.Bytes(),
 			workDir:       pwd,
 		}
 		defer b.cleanupBuild()
@@ -486,7 +486,7 @@ var migrationBox *rice.Box
 func main() {
 	args := os.Args
 	if len(args) == 1 {
-		original_main()
+		originalMain()
 	}
 	c := args[1]
 	switch c {
@@ -494,7 +494,7 @@ func main() {
 		migrate()
 	case "start", "run", "serve":
 		printVersion()
-		original_main()
+		originalMain()
 	case "version":
 		printVersion()
 	default:
