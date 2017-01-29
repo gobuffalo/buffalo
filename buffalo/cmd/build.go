@@ -44,10 +44,10 @@ var zipBin bool
 var extractAssets bool
 
 type builder struct {
-	cleanup       []string
-	originalMain  []byte
-	originalApp   []byte
-	workDir       string
+	cleanup      []string
+	originalMain []byte
+	originalApp  []byte
+	workDir      string
 }
 
 func (b *builder) clean(name ...string) string {
@@ -212,7 +212,7 @@ func (b *builder) disableAssetsHandling() error {
 	defer os.Chdir(b.workDir)
 	fmt.Printf("--> disable self assets handling\n")
 
-	new_app := strings.Replace(string(b.original_app), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
+	new_app := strings.Replace(string(b.originalApp), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
 
 	appgo, err := os.Create("actions/app.go")
 	if err != nil {
@@ -439,10 +439,10 @@ var buildCmd = &cobra.Command{
 
 		pwd, _ := os.Getwd()
 		b := builder{
-			cleanup:       []string{},
-			originalMain:  originalMain.Bytes(),
-			originalApp:   originalApp.Bytes(),
-			workDir:       pwd,
+			cleanup:      []string{},
+			originalMain: originalMain.Bytes(),
+			originalApp:  originalApp.Bytes(),
+			workDir:      pwd,
 		}
 		defer b.cleanupBuild()
 
