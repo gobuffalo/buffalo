@@ -231,7 +231,8 @@ func (b *builder) buildAssetsArchive() error {
 	fmt.Printf("--> build assets archive\n")
 
 	outputDir := filepath.Dir(outputBinName)
-	target := outputDir + "-assets.zip"
+	assetsName := filepath.Base(outputBinName)
+	target := outputDir + "/" + assetsName + "-assets.zip"
 	source := filepath.Join(b.workDir, "public", "assets")
 
 	zipfile, err := os.Create(target)
@@ -342,7 +343,15 @@ func (b *builder) cleanupBuild() {
 
 func (b *builder) cleanupTarget() {
 	fmt.Println("--> cleaning up target dir")
+
+	// Create output directory if not exists
 	outputDir := filepath.Dir(outputBinName)
+
+	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+		os.MkdirAll(outputDir, 0776)
+		fmt.Printf("----> creating target dir %s\n", outputDir)
+	}
+
 	files, _ := ioutil.ReadDir(outputDir)
 	for _, f := range files {
 		fmt.Printf("----> cleaning up %s\n", f.Name())
@@ -369,13 +378,6 @@ func (b *builder) run() error {
 	err = b.buildMain()
 	if err != nil {
 		return err
-	}
-
-	// Create output directory if not exists
-	outputDir := filepath.Dir(outputBinName)
-
-	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
-		os.Mkdir(outputDir, 0776)
 	}
 
 	if extractAssets {
