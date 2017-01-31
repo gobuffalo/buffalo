@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -82,7 +83,14 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 
 // Get is deprecated. Please use Value instead.
 func (d *DefaultContext) Get(key string) interface{} {
-	d.Logger().Warn("Context#Get is deprecated. Please use Context#Value instead")
+	warningMsg := "Context#Get is deprecated. Please use Context#Value instead."
+
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("Context#Get is deprecated. Please use Context#Value instead. Called from %s:%d\n", file, no)
+	}
+
+	d.Logger().Warn(warningMsg)
 	return d.Value(key)
 }
 
