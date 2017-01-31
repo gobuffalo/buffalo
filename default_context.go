@@ -87,7 +87,7 @@ func (d *DefaultContext) Get(key string) interface{} {
 
 	_, file, no, ok := runtime.Caller(1)
 	if ok {
-		warningMsg = fmt.Sprintf("Context#Get is deprecated. Please use Context#Value instead. Called from %s:%d\n", file, no)
+		warningMsg = fmt.Sprintf("Context#Get is deprecated. Please use Context#Value instead. Called from %s:%d", file, no)
 	}
 
 	d.Logger().Warn(warningMsg)
