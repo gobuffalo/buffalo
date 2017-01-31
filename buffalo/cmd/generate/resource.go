@@ -80,7 +80,7 @@ type {{camel}}Resource struct{
 
 {{#each actions}}
 // {{.}} default implementation.
-func (v *{{camel}}Resource) {{.}}(c buffalo.Context) error {
+func (v {{camel}}Resource) {{.}}(c buffalo.Context) error {
 	return c.Render(200, r.String("{{camel}}#{{.}}"))
 }
 
