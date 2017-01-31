@@ -37,4 +37,14 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Contains(string(fileData), "usersResource = &UsersResource{&buffalo.BaseResource{}}")
 	r.Contains(string(fileData), "app.Resource(\"/users\", usersResource)")
 
+	fileData, _ = ioutil.ReadFile("actions/users.go")
+	r.Contains(string(fileData), "type UsersResource struct {")
+	r.Contains(string(fileData), "func (v *UsersResource) List(c buffalo.Context) error {")
+	r.Contains(string(fileData), "func (v *UsersResource) Destroy(c buffalo.Context) error {")
+
+	fileData, _ = ioutil.ReadFile("actions/users_test.go")
+	r.Contains(string(fileData), "func Test_UsersResource_List")
+	r.Contains(string(fileData), "func Test_UsersResource_Show")
+	r.Contains(string(fileData), "func Test_UsersResource_Create")
+
 }
