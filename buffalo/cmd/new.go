@@ -26,6 +26,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/envy"
@@ -39,6 +40,7 @@ var verbose bool
 var skipPop bool
 var skipWebpack bool
 var dbType = "postgres"
+var goPath string
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
@@ -93,7 +95,25 @@ func validateInGoPath(name string) error {
 		return err
 	}
 
-	if !strings.HasPrefix(root, filepath.Join(gp, "src")) {
+	var gpMultiple []string
+
+	if runtime.GOOS == "windows" {
+		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
+	} else {
+		gpMultiple = strings.Split(gp, ":")
+	}
+	gpMultipleLen := len(gpMultiple)
+	foundInPath := false
+
+	for i := 0; i < gpMultipleLen; i++ {
+		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+			goPath = gpMultiple[i]
+			foundInPath = true
+			break
+		}
+	}
+
+	if !foundInPath {
 		u, err := user.Current()
 		if err != nil {
 			return err
@@ -123,7 +143,7 @@ func rootPath(name string) (string, error) {
 }
 
 func packagePath(rootPath string) string {
-	gosrcpath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
+	gosrcpath := strings.Replace(filepath.Join(goPath, "src"), "\\", "/", -1)
 	rootPath = strings.Replace(rootPath, "\\", "/", -1)
 	return strings.Replace(rootPath, gosrcpath+"/", "", 2)
 }
