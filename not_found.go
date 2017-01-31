@@ -13,7 +13,7 @@ import (
 // information. In production it defaults to use the http.NotFound
 // handler.
 func NotFoundHandler(status int, err error, c Context) error {
-	env := c.Get("env")
+	env := c.Value("env")
 	req := c.Request()
 	res := c.Response()
 	if env != nil && env.(string) == "production" {
@@ -21,7 +21,7 @@ func NotFoundHandler(status int, err error, c Context) error {
 		return nil
 	}
 	data := map[string]interface{}{
-		"routes": c.Get("routes"),
+		"routes": c.Value("routes"),
 		"method": req.Method,
 		"path":   req.URL.String(),
 		"error":  err.Error(),
