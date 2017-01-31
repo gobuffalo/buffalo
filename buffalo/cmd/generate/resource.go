@@ -60,9 +60,9 @@ func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(&gentronics.Func{
 		Should: func(data gentronics.Data) bool { return true },
 		Runner: func(root string, data gentronics.Data) error {
-			return addInsideAppBlock("var resource buffalo.Resource",
-				fmt.Sprintf("resource = &%sResource{&buffalo.BaseResource{}}", data["camel"]),
-				fmt.Sprintf("app.Resource(\"/%s\", resource)", data["under"]),
+			return addInsideAppBlock(fmt.Sprintf("var %sresource buffalo.Resource", data["camel"]),
+				fmt.Sprintf("%sresource = &%sResource{&buffalo.BaseResource{}}", data["camel"], data["camel"]),
+				fmt.Sprintf("app.Resource(\"/%s\", %sresource)", data["under"], data["camel"]),
 			)
 		},
 	})
