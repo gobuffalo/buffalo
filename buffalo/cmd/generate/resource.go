@@ -95,39 +95,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
-
-func Test_{{camel}}Resource_List(t *testing.T) {
+{{#each actions}}
+func Test_{{camel}}Resource_{{camelize .}}(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
-
-func Test_{{camel}}Resource_Show(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-func Test_{{camel}}Resource_New(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-func Test_{{camel}}Resource_Create(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-func Test_{{camel}}Resource_Edit(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-func Test_{{camel}}Resource_Update(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
-
-func Test_{{camel}}Resource_Destroy(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
-}
+{{/each}}
 `
