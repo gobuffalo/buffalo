@@ -41,12 +41,13 @@ var ResourceCmd = &cobra.Command{
 		}
 		name := args[0]
 		data := gentronics.Data{
-			"name":     name,
-			"singular": inflect.Singularize(name),
-			"plural":   inflect.Pluralize(name),
-			"camel":    inflect.Camelize(name),
-			"under":    inflect.Underscore(name),
-			"actions":  []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"name":         name,
+			"singular":     inflect.Singularize(name),
+			"plural":       inflect.Pluralize(name),
+			"camel":        inflect.Camelize(name),
+			"under":        inflect.Underscore(name),
+			"downFirstCap": inflect.CamelizeDownFirst(name),
+			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 		}
 		return NewResourceGenerator(data).Run(".", data)
 	},
@@ -55,14 +56,14 @@ var ResourceCmd = &cobra.Command{
 // NewResourceGenerator generates a new actions/resource file and a stub test.
 func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 	g := gentronics.New()
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["under"])), rAction))
+	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["downFirstCap"])), rAction))
 	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["under"])), rResourceTest))
 	g.Add(&gentronics.Func{
 		Should: func(data gentronics.Data) bool { return true },
 		Runner: func(root string, data gentronics.Data) error {
-			return addInsideAppBlock(fmt.Sprintf("var %sresource buffalo.Resource", data["camel"]),
-				fmt.Sprintf("%sresource = &%sResource{&buffalo.BaseResource{}}", data["camel"], data["camel"]),
-				fmt.Sprintf("app.Resource(\"/%s\", %sresource)", data["under"], data["camel"]),
+			return addInsideAppBlock(fmt.Sprintf("var %sResource buffalo.Resource", data["downFirstCap"]),
+				fmt.Sprintf("%sResource = &%sResource{&buffalo.BaseResource{}}", data["downFirstCap"], data["camel"]),
+				fmt.Sprintf("app.Resource(\"/%s\", %sResource)", data["under"], data["downFirstCap"]),
 			)
 		},
 	})
