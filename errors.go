@@ -66,7 +66,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 	default:
 		data := map[string]interface{}{
-			"routes": c.Get("routes"),
+			"routes": c.Value("routes"),
 			"error":  msg,
 			"status": status,
 			"data":   c.Data(),
