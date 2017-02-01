@@ -23,6 +23,7 @@ func findUserMW(h buffalo.Handler) buffalo.Handler {
 	}
 }
 
+// UsersList renders an html page that shows users
 func UsersList(c buffalo.Context) error {
 	users := &models.Users{}
 	tx := c.Get("tx").(*pop.Connection)
@@ -35,15 +36,18 @@ func UsersList(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/index.html"))
 }
 
+// UsersShow renders an html form for viewing a user
 func UsersShow(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/show.html"))
 }
 
+// UsersNew renders a form for adding a new user
 func UsersNew(c buffalo.Context) error {
 	c.Set("user", models.User{})
 	return c.Render(200, r.HTML("users/new.html"))
 }
 
+// UsersCreate creates a user
 func UsersCreate(c buffalo.Context) error {
 	u := &models.User{}
 	err := c.Bind(u)
@@ -69,10 +73,12 @@ func UsersCreate(c buffalo.Context) error {
 	return c.Redirect(301, "/users/%d", u.ID)
 }
 
+// UsersEdit renders the editing page for a target user
 func UsersEdit(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/edit.html"))
 }
 
+// UsersUpdate updates a target user
 func UsersUpdate(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)
@@ -103,6 +109,7 @@ func UsersUpdate(c buffalo.Context) error {
 	return c.Redirect(301, "/users/%d", u.ID)
 }
 
+// UsersDelete removes a target user
 func UsersDelete(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)

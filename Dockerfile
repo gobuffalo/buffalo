@@ -5,6 +5,7 @@ RUN go version
 RUN apt-get update
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
 RUN apt-get install -y build-essential nodejs
+RUN go get -u github.com/golang/lint/golint
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -15,6 +16,8 @@ ADD . .
 RUN go get -v -t ./...
 
 RUN go test -race ./...
+
+RUN golint -set_exit_status ./...
 
 RUN go install ./buffalo
 

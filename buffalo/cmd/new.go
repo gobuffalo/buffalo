@@ -26,6 +26,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/envy"
@@ -44,6 +45,10 @@ var newCmd = &cobra.Command{
 	Use:   "new [name]",
 	Short: "Creates a new Buffalo application",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if !validDbType() {
+			return fmt.Errorf("Unknown db-type %s expecting one of postgres, mysql or sqlite3", dbType)
+		}
+
 		if len(args) == 0 {
 			return errors.New("you must enter a name for your new application")
 		}
@@ -73,6 +78,10 @@ var newCmd = &cobra.Command{
 	},
 }
 
+func validDbType() bool {
+	return dbType == "postgres" || dbType == "mysql" || dbType == "sqlite3"
+}
+
 func validateInGoPath(name string) error {
 	gp, err := envy.MustGet("GOPATH")
 	if err != nil {
@@ -85,7 +94,24 @@ func validateInGoPath(name string) error {
 		return err
 	}
 
-	if !strings.HasPrefix(root, filepath.Join(gp, "src")) {
+	var gpMultiple []string
+
+	if runtime.GOOS == "windows" {
+		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
+	} else {
+		gpMultiple = strings.Split(gp, ":")
+	}
+	gpMultipleLen := len(gpMultiple)
+	foundInPath := false
+
+	for i := 0; i < gpMultipleLen; i++ {
+		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+			foundInPath = true
+			break
+		}
+	}
+
+	if !foundInPath {
 		u, err := user.Current()
 		if err != nil {
 			return err
@@ -105,6 +131,27 @@ func validateInGoPath(name string) error {
 	return nil
 }
 
+func goPath(root string) string {
+	var gpMultiple []string
+	gp := os.Getenv("GOPATH")
+
+	if runtime.GOOS == "windows" {
+		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
+	} else {
+		gpMultiple = strings.Split(gp, ":")
+	}
+	gpMultipleLen := len(gpMultiple)
+	path := ""
+
+	for i := 0; i < gpMultipleLen; i++ {
+		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+			path = gpMultiple[i]
+			break
+		}
+	}
+	return path
+}
+
 func rootPath(name string) (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -115,7 +162,7 @@ func rootPath(name string) (string, error) {
 }
 
 func packagePath(rootPath string) string {
-	gosrcpath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
+	gosrcpath := strings.Replace(filepath.Join(goPath(rootPath), "src"), "\\", "/", -1)
 	rootPath = strings.Replace(rootPath, "\\", "/", -1)
 	return strings.Replace(rootPath, gosrcpath+"/", "", 2)
 }

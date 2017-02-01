@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// UsersResource allows CRUD with HTTP against the User model
 type UsersResource struct {
 	buffalo.BaseResource
 }
@@ -29,6 +30,7 @@ func findUserMW(n string) buffalo.MiddlewareFunc {
 	}
 }
 
+// List shows all users in an HTML page
 func (ur *UsersResource) List(c buffalo.Context) error {
 	users := &models.Users{}
 	tx := c.Get("tx").(*pop.Connection)
@@ -41,15 +43,18 @@ func (ur *UsersResource) List(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/index.html"))
 }
 
+// Show renders a target user in an HTML page
 func (ur *UsersResource) Show(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/show.html"))
 }
 
+// New renders a form for adding a new user
 func (ur *UsersResource) New(c buffalo.Context) error {
 	c.Set("user", models.User{})
 	return c.Render(200, r.HTML("users/new.html"))
 }
 
+// Create is a JSON API endpoint that adds a new user
 func (ur *UsersResource) Create(c buffalo.Context) error {
 	u := &models.User{}
 	err := c.Bind(u)
@@ -75,10 +80,12 @@ func (ur *UsersResource) Create(c buffalo.Context) error {
 	return c.Redirect(301, "/users/%d", u.ID)
 }
 
+// Edit renders an html form for editing a user
 func (ur *UsersResource) Edit(c buffalo.Context) error {
 	return c.Render(200, r.HTML("users/edit.html"))
 }
 
+// Update is a JSON API endpoint that updates a user
 func (ur *UsersResource) Update(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)
@@ -109,6 +116,7 @@ func (ur *UsersResource) Update(c buffalo.Context) error {
 	return c.Redirect(301, "/users/%d", u.ID)
 }
 
+// Destroy is an API endpoint that deletes a user
 func (ur *UsersResource) Destroy(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)

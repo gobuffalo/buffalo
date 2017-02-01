@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// UsersResource allows CRUD with HTTP against the User model
 type UsersResource struct {
 	buffalo.BaseResource
 }
@@ -28,6 +29,7 @@ func findUserMW(h buffalo.Handler) buffalo.Handler {
 	}
 }
 
+// List renders all users
 func (ur *UsersResource) List(c buffalo.Context) error {
 	users := &models.Users{}
 	tx := c.Get("tx").(*pop.Connection)
@@ -39,10 +41,12 @@ func (ur *UsersResource) List(c buffalo.Context) error {
 	return c.Render(200, render.JSON(users))
 }
 
+// Show renders a target user
 func (ur *UsersResource) Show(c buffalo.Context) error {
 	return c.Render(200, render.JSON(c.Get("user")))
 }
 
+// Create a user
 func (ur *UsersResource) Create(c buffalo.Context) error {
 	u := &models.User{}
 	err := c.Bind(u)
@@ -67,6 +71,7 @@ func (ur *UsersResource) Create(c buffalo.Context) error {
 	return c.Render(201, render.JSON(u))
 }
 
+// Update a target user
 func (ur *UsersResource) Update(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)
@@ -96,6 +101,7 @@ func (ur *UsersResource) Update(c buffalo.Context) error {
 	return c.Render(200, render.JSON(u))
 }
 
+// Destroy removes a target user
 func (ur *UsersResource) Destroy(c buffalo.Context) error {
 	tx := c.Get("tx").(*pop.Connection)
 	u := c.Get("user").(*models.User)
