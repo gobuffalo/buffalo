@@ -26,20 +26,17 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("templates/index.html", nIndexHTML))
 	g.Add(gentronics.NewFile("templates/application.html", nApplicationHTML))
 	g.Add(gentronics.NewFile(".gitignore", nGitignore))
-
-	if installDeps {
-		g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/refresh/...")))
-		g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/refresh")))
-		g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/grift/...")))
-		g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/grift")))
-		g.Add(gentronics.NewCommand(generate.GoGet("github.com/motemen/gore")))
-		g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
-		g.Add(generate.NewWebpackGenerator(data))
-		g.Add(newSodaGenerator())
-		g.Add(gentronics.NewCommand(appGoGet()))
-	}
-
+	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/refresh/...")))
+	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/refresh")))
+	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/grift/...")))
+	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/grift")))
+	g.Add(gentronics.NewCommand(generate.GoGet("github.com/motemen/gore")))
+	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
+	g.Add(generate.NewWebpackGenerator(data))
+	g.Add(newSodaGenerator())
+	g.Add(gentronics.NewCommand(appGoGet()))
 	g.Add(generate.Fmt)
+
 	return g
 }
 
