@@ -91,7 +91,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	c := gentronics.NewCommand(exec.Command("npm", "init", "-y"))
 	g.Add(c)
 
-	modules := []string{"webpack", "sass-loader", "css-loader", "style-loader", "node-sass",
+	modules := []string{"webpack@^1.14.0", "sass-loader", "css-loader", "style-loader", "node-sass",
 		"babel-loader", "extract-text-webpack-plugin", "babel", "babel-core", "url-loader", "file-loader",
 		"jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
 		"copy-webpack-plugin",

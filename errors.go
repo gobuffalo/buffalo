@@ -46,7 +46,7 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 }
 
 func defaultErrorHandler(status int, err error, c Context) error {
-	env := c.Get("env")
+	env := c.Value("env")
 	if env != nil && env.(string) == "production" {
 		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(prodErrorTmpl))
@@ -66,7 +66,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 	default:
 		data := map[string]interface{}{
-			"routes": c.Get("routes"),
+			"routes": c.Value("routes"),
 			"error":  msg,
 			"status": status,
 			"data":   c.Data(),
