@@ -40,7 +40,6 @@ var verbose bool
 var skipPop bool
 var skipWebpack bool
 var dbType = "postgres"
-var goPath string
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
@@ -107,7 +106,6 @@ func validateInGoPath(name string) error {
 
 	for i := 0; i < gpMultipleLen; i++ {
 		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
-			goPath = gpMultiple[i]
 			foundInPath = true
 			break
 		}
@@ -133,6 +131,27 @@ func validateInGoPath(name string) error {
 	return nil
 }
 
+func goPath(root string) string {
+	var gpMultiple []string
+	gp := os.Getenv("GOPATH")
+
+	if runtime.GOOS == "windows" {
+		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
+	} else {
+		gpMultiple = strings.Split(gp, ":")
+	}
+	gpMultipleLen := len(gpMultiple)
+	path := ""
+
+	for i := 0; i < gpMultipleLen; i++ {
+		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+			path = gpMultiple[i]
+			break
+		}
+	}
+	return path
+}
+
 func rootPath(name string) (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -143,7 +162,7 @@ func rootPath(name string) (string, error) {
 }
 
 func packagePath(rootPath string) string {
-	gosrcpath := strings.Replace(filepath.Join(goPath, "src"), "\\", "/", -1)
+	gosrcpath := strings.Replace(filepath.Join(goPath(rootPath), "src"), "\\", "/", -1)
 	rootPath = strings.Replace(rootPath, "\\", "/", -1)
 	return strings.Replace(rootPath, gosrcpath+"/", "", 2)
 }
