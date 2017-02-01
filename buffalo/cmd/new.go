@@ -21,6 +21,7 @@ var skipPop bool
 var skipWebpack bool
 var dbType = "postgres"
 var ciProvider = "none"
+var installDeps = true
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
