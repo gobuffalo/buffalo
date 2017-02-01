@@ -62,7 +62,7 @@ func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 		Should: func(data gentronics.Data) bool { return true },
 		Runner: func(root string, data gentronics.Data) error {
 			return addInsideAppBlock(fmt.Sprintf("var %sResource buffalo.Resource", data["downFirstCap"]),
-				fmt.Sprintf("%sResource = &%sResource{&buffalo.BaseResource{}}", data["downFirstCap"], data["camel"]),
+				fmt.Sprintf("%sResource = %sResource{&buffalo.BaseResource{}}", data["downFirstCap"], data["camel"]),
 				fmt.Sprintf("app.Resource(\"/%s\", %sResource)", data["under"], data["downFirstCap"]),
 			)
 		},
@@ -81,7 +81,7 @@ type {{camel}}Resource struct{
 
 {{#each actions}}
 // {{.}} default implementation.
-func (v *{{camel}}Resource) {{.}}(c buffalo.Context) error {
+func (v {{camel}}Resource) {{.}}(c buffalo.Context) error {
 	return c.Render(200, r.String("{{camel}}#{{.}}"))
 }
 
