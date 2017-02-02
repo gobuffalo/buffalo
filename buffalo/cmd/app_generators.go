@@ -36,6 +36,7 @@ func newAppGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(appGoGet()))
 	g.Add(generate.Fmt)
+
 	return g
 }
 
