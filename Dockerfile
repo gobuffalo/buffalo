@@ -34,5 +34,6 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 RUN buffalo g goth facebook twitter linkedin github
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 RUN buffalo test -race
 RUN buffalo build
