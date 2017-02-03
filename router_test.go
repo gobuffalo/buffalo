@@ -222,3 +222,46 @@ func (u *userResource) Update(c Context) error {
 func (u *userResource) Destroy(c Context) error {
 	return c.Render(200, render.String("destroy {{params.user_id}}"))
 }
+
+func Test_buildRouteName(t *testing.T) {
+	r := require.New(t)
+	cases := map[string]string{
+		"/users":                                     "users_path",
+		"/users/new":                                 "new_users_path",
+		"/users/{user_id}":                           "user_path",
+		"/users/{user_id}/children":                  "user_children_path",
+		"/users/{user_id}/children/{child_id}":       "user_child_path",
+		"/users/{user_id}/children/new":              "new_user_children_path",
+		"/users/{user_id}/children/{child_id}/build": "user_child_build_path",
+	}
+
+	for input, result := range cases {
+		fResult := buildRouteName(input)
+		r.Equal(result, fResult, input)
+	}
+}
+
+func Test_Router_RouteName(t *testing.T) {
+	r := require.New(t)
+	var empty = func(c Context) error {
+		return nil
+	}
+
+	a := testApp()
+
+	cases := map[string]string{
+		"/users":                                     "users_path",
+		"/users/new":                                 "new_users_path",
+		"/users/{user_id}":                           "user_path",
+		"/users/{user_id}/children":                  "user_children_path",
+		"/users/{user_id}/children/{child_id}":       "user_child_path",
+		"/users/{user_id}/children/new":              "new_user_children_path",
+		"/users/{user_id}/children/{child_id}/build": "user_child_build_path",
+	}
+
+	for input, result := range cases {
+		routeInfo := a.GET(input, empty)
+		r.Equal(routeInfo.MuxRoute.GetName(), result)
+	}
+
+}
