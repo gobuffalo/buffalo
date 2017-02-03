@@ -16,8 +16,12 @@ var binderLock = &sync.Mutex{}
 var binders = map[string]BinderFunc{}
 var schemaDecoder *schema.Decoder
 
+// BinderFunc takes a request and binds it to an interface.
+// If there is a problem it should return an error.
 type BinderFunc func(*http.Request, interface{}) error
 
+// RegisterBinder maps a request Content-Type (application/json)
+// to a BinderFunc.
 func RegisterBinder(contentType string, fn BinderFunc) {
 	binderLock.Lock()
 	defer binderLock.Unlock()
