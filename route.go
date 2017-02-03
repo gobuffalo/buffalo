@@ -23,16 +23,12 @@ type RouteInfo struct {
 	HandlerName string     `json:"handler"`
 	MuxRoute    *mux.Route `json:"-"`
 	Handler     Handler    `json:"-"`
+	Name        string     `json:"name"`
 }
 
-//Name adds a name to a particular routeInfo
-func (ri RouteInfo) Name(name string) {
-	ri.MuxRoute.Name(fmt.Sprintf("%s_path", name))
-}
-
-//RouteName returns the name of the underlying mux route
-func (ri RouteInfo) RouteName() string {
-	return ri.MuxRoute.GetName()
+//RouteName adds a name to a particular routeInfo
+func (ri RouteInfo) RouteName(name string) {
+	ri.Name = fmt.Sprintf("%s_path", name)
 }
 
 // RouteList contains a mapping of the routes defined

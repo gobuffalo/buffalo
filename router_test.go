@@ -261,7 +261,7 @@ func Test_Router_RouteName(t *testing.T) {
 
 	for input, result := range cases {
 		routeInfo := a.GET(input, empty)
-		r.Equal(routeInfo.MuxRoute.GetName(), result)
+		r.Equal(routeInfo.Name, result)
 	}
 
 }
