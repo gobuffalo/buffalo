@@ -36,7 +36,7 @@ func (f Flash) Add(key, value string) {
 }
 
 //Persist the flash inside the session.
-func (f Flash) Persist(session *Session) {
+func (f Flash) persist(session *Session) {
 	b, _ := json.Marshal(f.data)
 	session.Set(flashKey, b)
 	session.Save()

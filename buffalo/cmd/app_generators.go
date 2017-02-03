@@ -49,62 +49,45 @@ func appGoGet() *exec.Cmd {
 	return exec.Command("go", appArgs...)
 }
 
-const nREADME = `# {{name}}
+const nREADME = `
+# Welcome to Buffalo!
 
-## Documentation
+Thank you for chosing Buffalo for your web development needs.
 
-To view generated docs for {{name}}, run the below command and point your browser to http://127.0.0.1:6060/pkg/
+{{#if withPop}}
+## Database Setup
 
-    godoc -http=:6060 2>/dev/null &
+It looks like you chose to set up your application using a {{dbType}} database! Fantastic!
 
-### Buffalo
+The first thing you need to do is open up the "database.yml" file and edit it to use the correct usernames, passwords, hosts, etc... that are appropriate for your environment.
 
-http://gobuffalo.io/docs/getting-started
+You will also need to make sure that **you** start/install the database of your choice. Buffalo **won't** install and start {{dbType}} for you.
 
-### Pop/Soda
+### Create Your Databases
 
-http://gobuffalo.io/docs/db
+Ok, so you've edited the "database.yml" file and started {{dbType}}, now Buffalo can create the databases in that file for you:
 
-## Database Configuration
+	$ buffalo db create -a
+{{/if}}
 
- 	development:
- 		dialect: postgres
- 		database: {{name}}_development
- 		user: <username>
- 		password: <password>
- 		host: 127.0.0.1
- 		pool: 5
+## Starting the Application
 
- 	test:
- 		dialect: postgres
- 		database: {{name}}_test
- 		user: <username>
- 		password: <password>
- 		host: 127.0.0.1
+Buffalo ships with a command that will watch your application and automatically rebuild the Go binary and any assets for you. To do that run the "buffalo dev" command:
 
- 	production:
- 		dialect: postgres
- 		database: {{name}}_production
- 		user: <username>
- 		password: <password>
- 		host: 127.0.0.1
- 		pool: 25
+	$ buffalo dev
 
- ### Running Migrations
+If you point your browser to [http://127.0.0.1:3000](http://127.0.0.1:3000) you should see a "Welcome to Buffalo!" page.
 
-    buffalo soda migrate
+**Congratulations!** You now have your Buffalo application up and running.
 
- ## Run Tests
+## What Next?
 
-    buffalo test
+We recommend you heading over to [http://gobuffalo.io](http://gobuffalo.io) and reviewing all of the great documentation there.
 
- ## Run in dev
+Good luck!
 
-    buffalo dev
+[Powered by Buffalo](http://gobuffalo.io)`
 
-[Powered by Buffalo](http://gobuffalo.io)
-
-`
 const nMain = `package main
 
 import (

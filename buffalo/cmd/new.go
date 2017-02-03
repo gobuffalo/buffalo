@@ -55,7 +55,17 @@ var newCmd = &cobra.Command{
 			}
 		}
 
-		return genNewFiles(name, rootPath)
+		err = genNewFiles(name, rootPath)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("Congratulations! Your application, %s, has been successfully built!\n\n", name)
+		fmt.Println("You can find your new application at:")
+		fmt.Println(rootPath)
+		fmt.Println("\nPlease read the README.md file in your new application for next steps on running your application.")
+
+		return nil
 	},
 }
 

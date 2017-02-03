@@ -25,7 +25,19 @@ var GothCmd = &cobra.Command{
 // NewGothGenerator a actions/goth.go file configured to the specified providers.
 func NewGothGenerator() *gentronics.Generator {
 	g := gentronics.New()
-	g.Add(gentronics.NewFile(filepath.Join("actions", "goth.go"), gGoth))
+	g.Add(gentronics.NewFile(filepath.Join("actions", "auth.go"), gGoth))
+	g.Add(&gentronics.Func{
+		Should: func(data gentronics.Data) bool { return true },
+		Runner: func(root string, data gentronics.Data) error {
+			err := addInsideAppBlock("auth := app.Group(\"/auth\")",
+				"auth.GET(\"/{provider}\", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))",
+				"auth.GET(\"/{provider}/callback\", AuthCallback)")
+			if err != nil {
+				return err
+			}
+			return addImport(filepath.Join("actions", "app.go"), "github.com/markbates/goth/gothic")
+		},
+	})
 	g.Add(gentronics.NewCommand(GoGet("github.com/markbates/goth/...")))
 	g.Add(Fmt)
 	return g
@@ -53,10 +65,6 @@ func init() {
 		{{downcase .}}.New(os.Getenv("{{upcase .}}_KEY"), os.Getenv("{{upcase .}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{downcase .}}/callback")),
 		{{/each}}
 	)
-
-	app := App().Group("/auth")
-	app.GET("/{provider}", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))
-	app.GET("/{provider}/callback", AuthCallback)
 }
 
 func AuthCallback(c buffalo.Context) error {
