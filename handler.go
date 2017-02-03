@@ -58,7 +58,7 @@ func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
 	hf := func(res http.ResponseWriter, req *http.Request) {
 		c := a.newContext(info, res, req)
 
-		defer c.Flash().Persist(c.Session())
+		defer c.Flash().persist(c.Session())
 
 		err := a.Middleware.handler(h)(c)
 
