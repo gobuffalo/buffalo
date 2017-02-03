@@ -141,7 +141,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 
 		if d.Session() != nil {
 			d.Flash().Clear()
-			d.Flash().Persist(d.Session())
+			d.Flash().persist(d.Session())
 		}
 
 		d.Response().Header().Set("Content-Type", rr.ContentType())
@@ -206,7 +206,7 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 
 // Redirect a request with the given status to the given URL.
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
-	d.Flash().Persist(d.Session())
+	d.Flash().persist(d.Session())
 
 	http.Redirect(d.Response(), d.Request(), fmt.Sprintf(url, args...), status)
 	return nil
