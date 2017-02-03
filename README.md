@@ -88,19 +88,20 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 
 * Mark Bates
 * Antonio Pagano
+* Stanislas Michalak
 * lumost
+* Philip I. Thomas
 * Brian Downs
 * Cody Oss
-* amedeiros
 * Brian Scott
 * arif emre
-* Stanislas Michalak
-* Amós Oviedo
+* amedeiros
 * Mark Lussier
-* Daniel Heckrath
-* Michael Henderson
+* Amós Oviedo
 * Dan Kleiman
+* Michael Henderson
+* Steven Klassen
 * Ivan Menshykov
 * Kenny Grant
-* Steven Klassen
+* Daniel Heckrath
 * Stuart Ellis
