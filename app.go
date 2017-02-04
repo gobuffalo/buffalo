@@ -81,9 +81,6 @@ func New(opts Options) *App {
 // https://www.youtube.com/watch?v=BKbOplYmjZM
 func Automatic(opts Options) *App {
 	opts = optionsWithDefaults(opts)
-	if opts.MethodOverride == nil {
-		opts.MethodOverride = MethodOverrideFunc
-	}
 	if opts.Logger == nil {
 		lvl, _ := logrus.ParseLevel(opts.LogLevel)
 
