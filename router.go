@@ -131,7 +131,6 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	hs := funcKey(h)
 
 	route := a.router.NewRoute()
-	route.Name(buildRouteName(url))
 	route.Path(url).Methods(method)
 
 	r := RouteInfo{
@@ -160,7 +159,7 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 func buildRouteName(path string) string {
 
 	if path == "/" {
-		return "root_path"
+		return "root"
 	}
 
 	resultPars := []string{}
@@ -184,6 +183,5 @@ func buildRouteName(path string) string {
 		resultPars = append([]string{part}, resultPars...)
 	}
 
-	resultPars = append(resultPars, "path")
 	return strings.Join(resultPars, "_")
 }

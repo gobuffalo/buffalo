@@ -26,8 +26,9 @@ type RouteInfo struct {
 }
 
 //RouteName adds a name to a particular routeInfo
-func (ri RouteInfo) RouteName(name string) {
-	ri.MuxRoute.Name(fmt.Sprintf("%s_path", name))
+func (ri RouteInfo) RouteName(name string) RouteInfo {
+	ri.MuxRoute = ri.MuxRoute.Name(fmt.Sprintf("%s_path", name))
+	return ri
 }
 
 //Name returns the name of the route.

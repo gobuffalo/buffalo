@@ -38,9 +38,12 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	var h http.Handler
 	h = a.router
+	a.addDefaultRouteNames()
+
 	if a.Env == "development" {
 		h = web.ErrorChecker(h)
 	}
+
 	h.ServeHTTP(ws, r)
 }
 
@@ -118,4 +121,12 @@ func Automatic(opts Options) *App {
 	a.Use(RequestLogger)
 
 	return a
+}
+
+func (a *App) addDefaultRouteNames() {
+	for _, route := range a.Routes() {
+		if route.Name() == "" {
+			route.RouteName(buildRouteName(route.Path))
+		}
+	}
 }
