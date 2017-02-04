@@ -30,6 +30,7 @@ func (ri RouteInfo) RouteName(name string) {
 	ri.MuxRoute.Name(fmt.Sprintf("%s_path", name))
 }
 
+//Name returns the name of the route.
 func (ri RouteInfo) Name() string {
 	return ri.MuxRoute.GetName()
 }
