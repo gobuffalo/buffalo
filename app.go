@@ -1,13 +1,9 @@
 package buffalo
 
 import (
-	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
@@ -61,9 +57,6 @@ func New(opts Options) *App {
 		moot:   &sync.Mutex{},
 		routes: RouteList{},
 	}
-	if a.Logger == nil {
-		a.Logger = NewLogger(opts.LogLevel)
-	}
 	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		c := a.newContext(RouteInfo{}, res, req)
 		err := errors.Errorf("path not found: %s", req.URL.Path)
@@ -81,30 +74,6 @@ func New(opts Options) *App {
 // https://www.youtube.com/watch?v=BKbOplYmjZM
 func Automatic(opts Options) *App {
 	opts = optionsWithDefaults(opts)
-	if opts.Logger == nil {
-		lvl, _ := logrus.ParseLevel(opts.LogLevel)
-
-		hl := logrus.New()
-		hl.Level = lvl
-		hl.Formatter = &logrus.TextFormatter{}
-
-		err := os.MkdirAll(opts.LogDir, 0755)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		f, err := os.Create(filepath.Join(opts.LogDir, opts.Env+".log"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		fl := logrus.New()
-		fl.Level = lvl
-		fl.Formatter = &logrus.JSONFormatter{}
-		fl.Out = f
-
-		ml := &multiLogger{Loggers: []logrus.FieldLogger{hl, fl}}
-		opts.Logger = ml
-	}
 
 	a := New(opts)
 
