@@ -129,15 +129,20 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 
 	url = path.Join(a.prefix, url)
 	hs := funcKey(h)
+
+	route := a.router.NewRoute()
+	route.Name(buildRouteName(url))
+	route.Path(url).Methods(method)
+
 	r := RouteInfo{
 		Method:      method,
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
-		Name:        buildRouteName(url),
+		MuxRoute:    route,
 	}
 
-	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+	r.MuxRoute.Handler(a.handlerToHandler(r, h))
 
 	routes := a.Routes()
 	routes = append(routes, r)
@@ -153,6 +158,11 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 
 //buildRouteName builds a route based on the path passed.
 func buildRouteName(path string) string {
+
+	if path == "/" {
+		return "root_path"
+	}
+
 	resultPars := []string{}
 	parts := strings.Split(path, "/")
 	for index, part := range parts {

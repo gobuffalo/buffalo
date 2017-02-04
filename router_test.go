@@ -226,6 +226,7 @@ func (u *userResource) Destroy(c Context) error {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
+		"/":                                          "root_path",
 		"/users":                                     "users_path",
 		"/users/new":                                 "new_users_path",
 		"/users/{user_id}":                           "user_path",
@@ -250,6 +251,7 @@ func Test_Router_RouteName(t *testing.T) {
 	a := testApp()
 
 	cases := map[string]string{
+		"/":                                          "root_path",
 		"/users":                                     "users_path",
 		"/users/new":                                 "new_users_path",
 		"/users/{user_id}":                           "user_path",
@@ -261,7 +263,7 @@ func Test_Router_RouteName(t *testing.T) {
 
 	for input, result := range cases {
 		routeInfo := a.GET(input, empty)
-		r.Equal(routeInfo.Name, result)
+		r.Equal(routeInfo.Name(), result)
 	}
 
 }
