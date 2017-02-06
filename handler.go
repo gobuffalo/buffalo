@@ -39,14 +39,13 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	session := a.getSession(req, ws)
 
 	return &DefaultContext{
-		Context:      req.Context(),
-		response:     ws,
-		request:      req,
-		params:       params,
-		logger:       a.Logger,
-		session:      session,
-		flash:        newFlash(session),
-		currentRoute: info,
+		Context:  req.Context(),
+		response: ws,
+		request:  req,
+		params:   params,
+		logger:   a.Logger,
+		session:  session,
+		flash:    newFlash(session),
 		data: map[string]interface{}{
 			"env":           a.Env,
 			"routes":        a.Routes(),
