@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/markbates/going/validate"
-	"github.com/markbates/going/validate/validators"
 	"github.com/markbates/pop"
+	"github.com/markbates/validate"
+	"github.com/markbates/validate/validators"
 )
 
 // User model stores information about a user account

@@ -3,8 +3,6 @@ package buffalo
 import (
 	"bytes"
 	"context"
-	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,7 +13,6 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gorilla/schema"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 )
@@ -164,21 +161,11 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "http://www.gorillatoolkit.org/pkg/schema".
 func (d *DefaultContext) Bind(value interface{}) error {
-	switch strings.ToLower(d.Request().Header.Get("Content-Type")) {
-	case "application/json", "text/json", "json":
-		return json.NewDecoder(d.Request().Body).Decode(value)
-	case "application/xml", "text/xml", "xml":
-		return xml.NewDecoder(d.Request().Body).Decode(value)
-	default:
-		err := d.Request().ParseForm()
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		dec := schema.NewDecoder()
-		dec.IgnoreUnknownKeys(true)
-		dec.ZeroEmpty(true)
-		return dec.Decode(value, d.Request().PostForm)
+	ct := strings.ToLower(d.Request().Header.Get("Content-Type"))
+	if b, ok := binders[ct]; ok {
+		return b(d.Request(), value)
 	}
+	return errors.Errorf("could not find a binder for %s", ct)
 }
 
 // LogField adds the key/value pair onto the Logger to be printed out

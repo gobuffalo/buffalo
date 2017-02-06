@@ -21,6 +21,20 @@ type Logger interface {
 	Panic(...interface{})
 }
 
+var _ Logger = logrusWrapper{}
+
+type logrusWrapper struct {
+	logrus.FieldLogger
+}
+
+func (l logrusWrapper) WithField(s string, i interface{}) Logger {
+	return logrusWrapper{l.FieldLogger.WithField(s, i)}
+}
+
+func (l logrusWrapper) WithFields(m map[string]interface{}) Logger {
+	return logrusWrapper{l.FieldLogger.WithFields(m)}
+}
+
 // NewLogger based on the specified log level.
 // This logger will log to the STDOUT in a human readable,
 // but parseable form.
@@ -30,5 +44,6 @@ type Logger interface {
 func NewLogger(level string) Logger {
 	l := logrus.New()
 	l.Level, _ = logrus.ParseLevel(level)
-	return &multiLogger{Loggers: []logrus.FieldLogger{l}}
+	l.Formatter = &logrus.TextFormatter{}
+	return logrusWrapper{l}
 }
