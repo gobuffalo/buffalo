@@ -18,7 +18,7 @@ func testApp() *App {
 	rt := a.Group("/router/tests")
 
 	h := func(c Context) error {
-		return c.Render(200, render.String(c.Request().Method))
+		return c.Render(200, render.String(c.Request().Method+"|"+c.Value("current_path").(string)))
 	}
 
 	rt.GET("/", h)
@@ -51,7 +51,7 @@ func Test_Router(t *testing.T) {
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(v, string(b))
+		r.Equal(fmt.Sprintf("%s|/router/tests", v), string(b))
 	}
 }
 

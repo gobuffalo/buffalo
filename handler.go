@@ -50,6 +50,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 			"env":           a.Env,
 			"routes":        a.Routes(),
 			"current_route": info,
+			"current_path":  req.URL.Path,
 		},
 	}
 }
