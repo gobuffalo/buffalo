@@ -33,7 +33,6 @@ type Context interface {
 	Redirect(int, string, ...interface{}) error
 	Data() map[string]interface{}
 	Flash() *Flash
-	CurrentRoute() RouteInfo
 }
 
 // ParamValues will most commonly be url.Values,

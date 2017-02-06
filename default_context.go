@@ -25,15 +25,14 @@ var _ context.Context = &DefaultContext{}
 // implementation of the Context interface.
 type DefaultContext struct {
 	context.Context
-	response     http.ResponseWriter
-	request      *http.Request
-	params       url.Values
-	logger       Logger
-	session      *Session
-	contentType  string
-	data         map[string]interface{}
-	flash        *Flash
-	currentRoute RouteInfo
+	response    http.ResponseWriter
+	request     *http.Request
+	params      url.Values
+	logger      Logger
+	session     *Session
+	contentType string
+	data        map[string]interface{}
+	flash       *Flash
 }
 
 // Response returns the original Response for the request.
@@ -209,9 +208,4 @@ var defaultUpgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin:     func(r *http.Request) bool { return true },
-}
-
-// CurrentRoute returns the current route information.
-func (d *DefaultContext) CurrentRoute() RouteInfo {
-	return d.currentRoute
 }
