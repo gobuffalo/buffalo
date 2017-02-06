@@ -37,8 +37,8 @@ func (s *Session) Delete(name interface{}) {
 
 // Clear the current session
 func (s *Session) Clear() {
-	for k, _ := range s.Session.Values {
-		delete(s.Session.Values, k)
+	for k := range s.Session.Values {
+		s.Delete(k)
 	}
 }
 
