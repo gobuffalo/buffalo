@@ -21,10 +21,6 @@ var consoleCmd = &cobra.Command{
 		if err != nil {
 			return errors.New("we could not find \"gore\" in your path. You must first install \"gore\" in order to use the Buffalo console:\n\n$ go get -u github.com/motemen/gore")
 		}
-		rootPath, err := rootPath("")
-		if err != nil {
-			return err
-		}
 		packagePath := packagePath(rootPath)
 		packages := []string{}
 		for _, p := range []string{"models", "actions"} {

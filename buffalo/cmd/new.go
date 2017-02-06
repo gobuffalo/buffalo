@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var rootPath string
 var force bool
 var verbose bool
 var skipPop bool
@@ -36,12 +37,13 @@ var newCmd = &cobra.Command{
 
 		name := args[0]
 
-		err := validateInGoPath(name)
-		if err != nil {
-			return err
+		if name == "." {
+			name = filepath.Base(rootPath)
+		} else {
+			rootPath = filepath.Join(rootPath, name)
 		}
 
-		rootPath, err := rootPath(name)
+		err := validateInGoPath(name)
 		if err != nil {
 			return err
 		}
@@ -80,11 +82,6 @@ func validateInGoPath(name string) error {
 		os.Exit(-1)
 	}
 
-	root, err := rootPath(name)
-	if err != nil {
-		return err
-	}
-
 	var gpMultiple []string
 
 	if runtime.GOOS == "windows" {
@@ -96,7 +93,7 @@ func validateInGoPath(name string) error {
 	foundInPath := false
 
 	for i := 0; i < gpMultipleLen; i++ {
-		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+		if strings.HasPrefix(rootPath, filepath.Join(gpMultiple[i], "src")) {
 			foundInPath = true
 			break
 		}
@@ -110,7 +107,7 @@ func validateInGoPath(name string) error {
 		t, err := velvet.Render(notInGoWorkspace, velvet.NewContextWith(map[string]interface{}{
 			"name":     name,
 			"gopath":   gp,
-			"current":  root,
+			"current":  rootPath,
 			"username": u.Username,
 		}))
 		if err != nil {
@@ -143,15 +140,6 @@ func goPath(root string) string {
 	return path
 }
 
-func rootPath(name string) (string, error) {
-	pwd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	rootPath := filepath.Join(pwd, name)
-	return rootPath, nil
-}
-
 func packagePath(rootPath string) string {
 	gosrcpath := strings.Replace(filepath.Join(goPath(rootPath), "src"), "\\", "/", -1)
 	rootPath = strings.Replace(rootPath, "\\", "/", -1)
@@ -179,6 +167,9 @@ func genNewFiles(name, rootPath string) error {
 }
 
 func init() {
+	pwd, _ := os.Getwd()
+	rootPath = pwd
+
 	RootCmd.AddCommand(newCmd)
 	newCmd.Flags().BoolVarP(&force, "force", "f", false, "delete and remake if the app already exists")
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")

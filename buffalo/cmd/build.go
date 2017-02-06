@@ -286,15 +286,11 @@ func (b *builder) buildMain() error {
 		return err
 	}
 
-	root, err := rootPath("")
-	if err != nil {
-		return err
-	}
 	ctx := velvet.NewContext()
-	ctx.Set("root", root)
-	ctx.Set("modelsPack", packagePath(root)+"/models")
-	ctx.Set("aPack", packagePath(root)+"/a")
-	ctx.Set("name", filepath.Base(root))
+	ctx.Set("root", rootPath)
+	ctx.Set("modelsPack", packagePath(rootPath)+"/models")
+	ctx.Set("aPack", packagePath(rootPath)+"/a")
+	ctx.Set("name", filepath.Base(rootPath))
 	s, err := velvet.Render(buildMainTmpl, ctx)
 	if err != nil {
 		return err
