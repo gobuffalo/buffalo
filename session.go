@@ -35,6 +35,13 @@ func (s *Session) Delete(name interface{}) {
 	delete(s.Session.Values, name)
 }
 
+// Clear the current session
+func (s *Session) Clear() {
+	for k := range s.Session.Values {
+		s.Delete(k)
+	}
+}
+
 // Get a session using a request and response.
 func (a *App) getSession(r *http.Request, w http.ResponseWriter) *Session {
 	session, _ := a.SessionStore.Get(r, a.SessionName)
