@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
@@ -117,6 +118,34 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 	r.Equal(201, res.Code)
 
 	r.Equal("Mark", user.FirstName)
+}
+
+func Test_DefaultContext_Bind_No_ContentType(t *testing.T) {
+	r := require.New(t)
+
+	user := struct {
+		FirstName string `schema:"first_name"`
+	}{
+		FirstName: "Mark",
+	}
+
+	a := New(Options{})
+	a.POST("/", func(c Context) error {
+		err := c.Bind(&user)
+		if err != nil {
+			return c.Error(422, err)
+		}
+		return c.Render(201, nil)
+	})
+
+	bb := &bytes.Buffer{}
+	req, err := http.NewRequest("POST", "/", bb)
+	r.NoError(err)
+	req.Header.Del("Content-Type")
+	res := httptest.NewRecorder()
+	a.ServeHTTP(res, req)
+	r.Equal(422, res.Code)
+	r.Contains(res.Body.String(), "blank content type")
 }
 
 func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
