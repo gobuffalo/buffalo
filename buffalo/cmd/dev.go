@@ -3,12 +3,12 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"html/template"
 	"log"
 	"os"
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/velvet"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -75,13 +75,14 @@ func startDevServer(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		t, err := template.New("").Parse(nRefresh)
+		defer f.Close()
+		t, err := velvet.Render(nRefresh, velvet.NewContextWith(map[string]interface{}{
+			"name": "buffalo",
+		}))
 		if err != nil {
 			return err
 		}
-		err = t.Execute(f, map[string]interface{}{
-			"name": "buffalo",
-		})
+		_, err = f.WriteString(t)
 		if err != nil {
 			return err
 		}
@@ -91,7 +92,7 @@ func startDevServer(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	r := refresh.New(c)
+	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
 }
 
