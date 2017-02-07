@@ -148,6 +148,35 @@ func Test_DefaultContext_Bind_No_ContentType(t *testing.T) {
 	r.Contains(res.Body.String(), "blank content type")
 }
 
+func Test_DefaultContext_Bind_Empty_ContentType(t *testing.T) {
+	r := require.New(t)
+
+	user := struct {
+		FirstName string `schema:"first_name"`
+	}{
+		FirstName: "Mark",
+	}
+
+	a := New(Options{})
+	a.POST("/", func(c Context) error {
+		err := c.Bind(&user)
+		if err != nil {
+			return c.Error(422, err)
+		}
+		return c.Render(201, nil)
+	})
+
+	bb := &bytes.Buffer{}
+	req, err := http.NewRequest("POST", "/", bb)
+	r.NoError(err)
+	// Want to make sure that an empty string value does not cause an error on `split`
+	req.Header.Set("Content-Type", "")
+	res := httptest.NewRecorder()
+	a.ServeHTTP(res, req)
+	r.Equal(422, res.Code)
+	r.Contains(res.Body.String(), "blank content type")
+}
+
 func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 	r := require.New(t)
 
