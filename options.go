@@ -18,8 +18,8 @@ type Options struct {
 	LogLevel string
 	// Logger to be used with the application. A default one is provided.
 	Logger Logger
-	// LogDir is the path to the directory for storing the JSON log files from the
-	// default Logger
+	// MethodOverride allows for changing of the request method type. See the default
+	// implementation at buffalo.MethodOverride
 	MethodOverride http.HandlerFunc
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
