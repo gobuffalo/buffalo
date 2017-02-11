@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/markbates/gentronics"
 	"github.com/markbates/pop/soda/cmd/generate"
-	"github.com/pkg/errors"
 )
 
 func newSodaGenerator() *gentronics.Generator {
@@ -23,17 +22,7 @@ func newSodaGenerator() *gentronics.Generator {
 	g.Add(&gentronics.Func{
 		Should: should,
 		Runner: func(rootPath string, data gentronics.Data) error {
-			var driver string
-			if data["dbType"] == "sqlite3" {
-				driver = "sqlite_driver"
-			} else if data["dbType"] == "postgres" {
-				driver = "postgresql_driver"
-			} else if data["dbType"] == "mysql" {
-				driver = "mysql_driver"
-			} else {
-				return errors.Errorf("Invalid database type %s!", data["dbType"])
-			}
-			gentronics.NewCommand(goGet("github.com/markbates/pop/...", "-tags", "'"+driver+"'"))
+			gentronics.NewCommand(goGet("github.com/markbates/pop/...", "-tags", "'"+data["dbType"].(string)+"'"))
 			return nil
 		},
 	})
