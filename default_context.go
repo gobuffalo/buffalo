@@ -161,10 +161,15 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 // binder is "http://www.gorillatoolkit.org/pkg/schema".
 func (d *DefaultContext) Bind(value interface{}) error {
 	ct := strings.ToLower(d.Request().Header.Get("Content-Type"))
-	if b, ok := binders[ct]; ok {
-		return b(d.Request(), value)
+	if ct != "" {
+		cts := strings.Split(ct, ";")
+		c := cts[0]
+		if b, ok := binders[strings.TrimSpace(c)]; ok {
+			return b(d.Request(), value)
+		}
+		return errors.Errorf("could not find a binder for %s", c)
 	}
-	return errors.Errorf("could not find a binder for %s", ct)
+	return errors.New("blank content type")
 }
 
 // LogField adds the key/value pair onto the Logger to be printed out
