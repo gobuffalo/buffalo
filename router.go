@@ -45,6 +45,13 @@ func (a *App) PATCH(p string, h Handler) RouteInfo {
 	return a.addRoute("PATCH", p, h)
 }
 
+// Redirect from one URL to another URL. Only works for "GET" requests.
+func (a *App) Redirect(status int, from, to string) RouteInfo {
+	return a.GET(from, func(c Context) error {
+		return c.Redirect(status, to)
+	})
+}
+
 // ServeFiles maps an path to a directory on disk to serve static files.
 // Useful for JavaScript, images, CSS, etc...
 /*

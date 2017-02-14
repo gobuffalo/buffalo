@@ -15,6 +15,11 @@ import (
 
 func testApp() *App {
 	a := New(Options{})
+	a.Redirect(301, "/foo", "/bar")
+	a.GET("/bar", func(c Context) error {
+		return c.Render(200, render.String("bar"))
+	})
+
 	rt := a.Group("/router/tests")
 
 	h := func(c Context) error {
@@ -101,6 +106,14 @@ func Test_Router_Group_Middleware(t *testing.T) {
 	g.Use(func(h Handler) Handler { return h })
 	r.Len(a.Middleware.stack, 1)
 	r.Len(g.Middleware.stack, 2)
+}
+
+func Test_Router_Redirect(t *testing.T) {
+	r := require.New(t)
+	w := willie.New(testApp())
+	res := w.Request("/foo").Get()
+	r.Equal(301, res.Code)
+	r.Equal("/bar", res.Location())
 }
 
 func Test_Router_ServeFiles(t *testing.T) {
