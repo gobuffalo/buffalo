@@ -169,6 +169,7 @@ func init() {
 				Box: rice.MustFindBox("../templates"),
 			}
 		},
+		Helpers: map[string]interface{}{},
 	})
 }
 
