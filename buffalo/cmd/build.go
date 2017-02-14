@@ -289,6 +289,10 @@ func (b *builder) buildMain() error {
 	ctx := velvet.NewContext()
 	ctx.Set("root", rootPath)
 	ctx.Set("modelsPack", packagePath(rootPath)+"/models")
+	_, err = os.Stat(filepath.Join(rootPath, "grifts"))
+	if err == nil {
+		ctx.Set("griftsPack", packagePath(rootPath)+"/grifts")
+	}
 	ctx.Set("aPack", packagePath(rootPath)+"/a")
 	ctx.Set("name", filepath.Base(rootPath))
 	s, err := velvet.Render(buildMainTmpl, ctx)
@@ -461,9 +465,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/markbates/grift/grift"
 	rice "github.com/GeertJohan/go.rice"
 	_ "{{aPack}}"
 	"{{modelsPack}}"
+	{{#if griftsPack}}
+	_ "{{griftsPack}}"
+	{{/if}}
 )
 
 var version = "unknown"
@@ -484,6 +492,11 @@ func main() {
 		originalMain()
 	case "version":
 		printVersion()
+	case "task", "t", "tasks":
+		err := grift.Run(args[2], grift.NewContext(args[2]))
+		if err != nil {
+			log.Fatal(err)
+		}
 	default:
 		log.Fatalf("Could not find a command named: %s", c)
 	}
