@@ -74,7 +74,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	modules := []string{"webpack@^1.14.0", "sass-loader", "css-loader", "style-loader", "node-sass",
 		"babel-loader", "extract-text-webpack-plugin", "babel", "babel-core", "url-loader", "file-loader",
 		"jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
-		"copy-webpack-plugin",
+		"copy-webpack-plugin", "expose-loader",
 	}
 	args := []string{"install", "--save"}
 	args = append(args, modules...)
@@ -146,7 +146,8 @@ module.exports = {
 };
 `
 
-const wApplicationJS = `require("bootstrap/dist/js/bootstrap.js");
+const wApplicationJS = `require('expose?$!expose?jQuery!jquery');
+require("bootstrap/dist/js/bootstrap.js");
 
 $(() => {
 
