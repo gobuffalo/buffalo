@@ -94,7 +94,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"{{actionsPath}}"
 	"github.com/gobuffalo/envy"
@@ -110,8 +109,6 @@ func main() {
 const nApp = `package actions
 
 import (
-	"os"
-
 	"github.com/gobuffalo/buffalo"
 	{{#if withPop }}
 	"github.com/gobuffalo/buffalo/middleware"
