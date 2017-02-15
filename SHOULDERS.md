@@ -58,6 +58,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
+* [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
+
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
