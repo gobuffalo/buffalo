@@ -1,4 +1,4 @@
 package cmd
 
 // Version is the current version of the buffalo binary
-const Version = "0.7.2"
+const Version = "0.7.3"
