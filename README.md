@@ -18,7 +18,7 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 $ go get -u github.com/gobuffalo/buffalo/buffalo
 ```
 
-_NOTE_: For Buffulo to work `Go >= 1.7` has to be installed.
+_NOTE_: Buffalo has a minimum Go dependency of `1.7.x`.
 
 ## Generating a new Project
 
