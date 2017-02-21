@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/markbates/inflect"
 )
@@ -136,14 +137,19 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 
 	url = path.Join(a.prefix, url)
 	hs := funcKey(h)
+
+	route := a.router.NewRoute()
+	route.Path(url).Methods(method)
+
 	r := RouteInfo{
 		Method:      method,
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
+		MuxRoute:    route,
 	}
 
-	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+	r.MuxRoute.Handler(a.handlerToHandler(r, h))
 
 	routes := a.Routes()
 	routes = append(routes, r)
@@ -155,4 +161,35 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	}
 
 	return r
+}
+
+//buildRouteName builds a route based on the path passed.
+func buildRouteName(path string) string {
+
+	if path == "/" {
+		return "root"
+	}
+
+	resultPars := []string{}
+	parts := strings.Split(path, "/")
+	for index, part := range parts {
+
+		if strings.Contains(part, "{") || part == "" {
+			continue
+		}
+
+		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
+		if shouldSingularize {
+			part = inflect.Singularize(part)
+		}
+
+		if index > 0 && strings.Contains(parts[index-1], "}") {
+			resultPars = append(resultPars, part)
+			continue
+		}
+
+		resultPars = append([]string{part}, resultPars...)
+	}
+
+	return strings.Join(resultPars, "_")
 }

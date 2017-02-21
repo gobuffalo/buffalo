@@ -1,6 +1,10 @@
 package buffalo
 
-import "github.com/gorilla/mux"
+import (
+	"fmt"
+
+	"github.com/gorilla/mux"
+)
 
 // Routes returns a list of all of the routes defined
 // in this application.
@@ -19,6 +23,17 @@ type RouteInfo struct {
 	HandlerName string     `json:"handler"`
 	MuxRoute    *mux.Route `json:"-"`
 	Handler     Handler    `json:"-"`
+}
+
+//RouteName adds a name to a particular routeInfo
+func (ri RouteInfo) RouteName(name string) RouteInfo {
+	ri.MuxRoute = ri.MuxRoute.Name(fmt.Sprintf("%s_path", name))
+	return ri
+}
+
+//Name returns the name of the route.
+func (ri RouteInfo) Name() string {
+	return ri.MuxRoute.GetName()
 }
 
 // RouteList contains a mapping of the routes defined

@@ -73,6 +73,7 @@ var htmlNotFound = `
 		<tr>
 			<th>METHOD</th>
 			<th>PATH</th>
+			<th>NAME</th>
 			<th>HANDLER</th>
 		</tr>
 	</thead>
@@ -81,6 +82,7 @@ var htmlNotFound = `
 			<tr>
 				<td>{{route.Method}}</td>
 				<td>{{route.Path}}</td>
+				<td>{{route.Name}}</td>
 				<td><code>{{route.HandlerName}}</code></td>
 			</tr>
 		{{/each}}
