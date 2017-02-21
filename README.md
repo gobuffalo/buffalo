@@ -18,6 +18,8 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 $ go get -u github.com/gobuffalo/buffalo/buffalo
 ```
 
+_NOTE_: Buffalo has a minimum Go dependency of `1.7.x`.
+
 ## Generating a new Project
 
 Buffalo aims to make building new web applications in Go as simple as possible, and what could be more simple than a new application generator?
