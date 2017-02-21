@@ -3,9 +3,9 @@ package buffalo
 import (
 	"fmt"
 	"net/http"
-	"path/filepath"
+	"path"
 	"sort"
-	"strings"
+	//"strings"
 
 	"github.com/markbates/inflect"
 )
@@ -81,18 +81,18 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
-	base := filepath.Base(p)
+	base := path.Base(p)
 	single := inflect.Singularize(base)
 	g := a.Group(p)
 	p = "/"
-	spath := filepath.Join(p, fmt.Sprintf("{%s_id}", single))
+	spath := path.Join(p, fmt.Sprintf("{%s_id}", single))
 	g.GET(p, r.List)
-	g.GET(filepath.Join(p, "new"), r.New)
-	g.GET(filepath.Join(spath), r.Show)
-	g.GET(filepath.Join(spath, "edit"), r.Edit)
+	g.GET(path.Join(p, "new"), r.New)
+	g.GET(path.Join(spath), r.Show)
+	g.GET(path.Join(spath, "edit"), r.Edit)
 	g.POST(p, r.Create)
-	g.PUT(filepath.Join(spath), r.Update)
-	g.DELETE(filepath.Join(spath), r.Destroy)
+	g.PUT(path.Join(spath), r.Update)
+	g.DELETE(path.Join(spath), r.Destroy)
 	return g
 }
 
@@ -117,20 +117,10 @@ func (a *App) ANY(p string, h Handler) {
 	g.GET("/users, APIUsersHandler)
 	g.GET("/users/:user_id, APIUserShowHandler)
 */
-func (a *App) Group(path string) *App {
+func (a *App) Group(groupPath string) *App {
 	g := New(a.Options)
 
-	if a.prefix != "" {
-		g.prefix = strings.Join(
-			[]string{
-				strings.TrimRight(a.prefix, "/"),
-				strings.TrimLeft(path, "/"),
-			},
-			"/",
-		)
-	} else {
-		g.prefix = path
-	}
+	g.prefix = path.Join(a.prefix, groupPath)
 
 	g.router = a.router
 	g.Middleware = a.Middleware.clone()
@@ -146,14 +136,7 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
-	if a.prefix != "" {
-		url = strings.Join(
-			[]string{
-				strings.TrimRight(a.prefix, "/"),
-				strings.TrimLeft(url, "/")},
-			"/",
-		)
-	}
+	url = path.Join(a.prefix, url)
 
 	hs := funcKey(h)
 	r := RouteInfo{
