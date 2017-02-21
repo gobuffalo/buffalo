@@ -3,9 +3,9 @@ package buffalo
 import (
 	"fmt"
 	"net/http"
-	"path"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/markbates/inflect"
 )
@@ -119,7 +119,13 @@ func (a *App) ANY(p string, h Handler) {
 */
 func (a *App) Group(path string) *App {
 	g := New(a.Options)
-	g.prefix = filepath.Join(a.prefix, path)
+
+	if a.prefix != "" {
+		g.prefix = strings.Join([]string{a.prefix, path}, "/")
+	} else {
+		g.prefix = path
+	}
+
 	g.router = a.router
 	g.Middleware = a.Middleware.clone()
 	g.ErrorHandlers = a.ErrorHandlers
@@ -134,7 +140,10 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
-	url = path.Join(a.prefix, url)
+	if a.prefix != "" {
+		url = strings.Join([]string{a.prefix, strings.TrimLeft(url, "/")}, "/")
+	}
+
 	hs := funcKey(h)
 	r := RouteInfo{
 		Method:      method,
