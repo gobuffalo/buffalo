@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -22,13 +23,16 @@ var assetsLogo = &gentronics.RemoteFile{
 	RemotePath: "https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg",
 }
 
+var withYarn bool
+
 // WebpackCmd generates a new actions/resource file and a stub test.
 var WebpackCmd = &cobra.Command{
-	Use:   "webpack",
+	Use:   "webpack [flags]",
 	Short: "Generates a webpack asset pipeline.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		data := gentronics.Data{
 			"withWebpack": true,
+			"withYarn":    withYarn,
 		}
 		return NewWebpackGenerator(data).Run(".", data)
 	},
@@ -61,6 +65,38 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 		return g
 	}
 
+	command := "npm"
+	args := []string{"install", "--save"}
+	// If yarn.lock exists then yarn is used by default (generate webpack)
+	_, ferr := os.Stat("yarn.lock")
+	if ferr == nil {
+		data["withYarn"] = true
+	}
+
+	useYarn := func(data gentronics.Data) bool {
+		if b, ok := data["withYarn"]; ok {
+			return b.(bool)
+		}
+		return false
+	}
+	if useYarn(data) {
+		// if there's no yarn, install it!
+		_, err := exec.LookPath("yarn")
+		// A new gentronics is necessary to have yarn available in path
+		if err != nil {
+			yg := gentronics.New()
+			yargs := []string{"install", "-g", "yarn"}
+			yg.Should = useYarn
+			yg.Add(gentronics.NewCommand(exec.Command(command, yargs...)))
+			err = yg.Run(".", data)
+			if err != nil {
+				return g
+			}
+		}
+		command = "yarn"
+		args = []string{"add"}
+	}
+
 	g.Should = should
 	g.Add(assetsLogo)
 	g.Add(gentronics.NewFile("webpack.config.js", nWebpack))
@@ -68,7 +104,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	g.Add(gentronics.NewFile("assets/js/application.js", wApplicationJS))
 	g.Add(gentronics.NewFile("assets/css/application.scss", wApplicationCSS))
 
-	c := gentronics.NewCommand(exec.Command("npm", "init", "-y"))
+	c := gentronics.NewCommand(exec.Command(command, "init", "-y"))
 	g.Add(c)
 
 	modules := []string{"webpack@^1.14.0", "sass-loader", "css-loader", "style-loader", "node-sass",
@@ -76,10 +112,14 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 		"jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
 		"copy-webpack-plugin", "expose-loader",
 	}
-	args := []string{"install", "--save"}
+
 	args = append(args, modules...)
-	g.Add(gentronics.NewCommand(exec.Command("npm", args...)))
+	g.Add(gentronics.NewCommand(exec.Command(command, args...)))
 	return g
+}
+
+func init() {
+	WebpackCmd.Flags().BoolVar(&withYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 }
 
 var nWebpack = `var webpack = require("webpack");
