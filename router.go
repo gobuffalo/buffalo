@@ -121,7 +121,13 @@ func (a *App) Group(path string) *App {
 	g := New(a.Options)
 
 	if a.prefix != "" {
-		g.prefix = strings.Join([]string{a.prefix, path}, "/")
+		g.prefix = strings.Join(
+			[]string{
+				strings.TrimRight(a.prefix, "/"),
+				strings.TrimLeft(path, "/"),
+			},
+			"/",
+		)
 	} else {
 		g.prefix = path
 	}
@@ -140,7 +146,12 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 	defer a.moot.Unlock()
 
 	if a.prefix != "" {
-		url = strings.Join([]string{a.prefix, strings.TrimLeft(url, "/")}, "/")
+		url = strings.Join(
+			[]string{
+				strings.TrimRight(a.prefix, "/"),
+				strings.TrimLeft(url, "/")},
+			"/",
+		)
 	}
 
 	hs := funcKey(h)
