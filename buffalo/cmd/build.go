@@ -22,6 +22,7 @@ import (
 var outputBinName string
 var zipBin bool
 var extractAssets bool
+var hasDB bool
 
 type builder struct {
 	cleanup      []string
@@ -90,8 +91,7 @@ func (b *builder) buildDatabase() error {
 	if err != nil {
 		return err
 	}
-	_, err = os.Stat("database.yml")
-	if err == nil {
+	if hasDB {
 		// copy the database.yml file to the migrations folder so it's available through rice
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
@@ -288,7 +288,10 @@ func (b *builder) buildMain() error {
 
 	ctx := velvet.NewContext()
 	ctx.Set("root", rootPath)
-	ctx.Set("modelsPack", packagePath(rootPath)+"/models")
+	ctx.Set("hasDB", hasDB)
+	if hasDB {
+		ctx.Set("modelsPack", packagePath(rootPath)+"/models")
+	}
 	_, err = os.Stat(filepath.Join(rootPath, "grifts"))
 	if err == nil {
 		ctx.Set("griftsPack", packagePath(rootPath)+"/grifts")
@@ -340,7 +343,12 @@ func (b *builder) cleanupTarget() {
 }
 
 func (b *builder) run() error {
-	err := b.buildMain()
+	_, err := os.Stat("database.yml")
+	if err == nil {
+		hasDB = true
+	}
+
+	err = b.buildMain()
 	if err != nil {
 		return err
 	}
@@ -460,15 +468,17 @@ var buildMainTmpl = `package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/markbates/grift/grift"
 	rice "github.com/GeertJohan/go.rice"
 	_ "{{aPack}}"
+	{{#if modelsPack}}
+	"io/ioutil"
+	"path/filepath"
 	"{{modelsPack}}"
+	{{/if}}
 	{{#if griftsPack}}
 	_ "{{griftsPack}}"
 	{{/if}}
@@ -485,8 +495,10 @@ func main() {
 	}
 	c := args[1]
 	switch c {
+	{{#if modelsPack}}
 	case "migrate":
 		migrate()
+	{{/if}}
 	case "start", "run", "serve":
 		printVersion()
 		originalMain()
@@ -506,6 +518,7 @@ func printVersion() {
 	fmt.Printf("{{name}} version %s (%s)\n\n", version, buildTime)
 }
 
+{{#if modelsPack}}
 func migrate() {
 	var err error
 	migrationBox, err = rice.FindBox("./migrations")
@@ -541,7 +554,9 @@ func unpackMigrations() (string, error) {
 	})
 
 	return dir, nil
-}`
+}
+{{/if}}
+`
 
 var aGo = `package a
 
