@@ -107,7 +107,7 @@ func NewWebpackGenerator(data gentronics.Data) *gentronics.Generator {
 	c := gentronics.NewCommand(exec.Command(command, "init", "-y"))
 	g.Add(c)
 
-	modules := []string{"webpack@^1.14.0", "sass-loader", "css-loader", "style-loader", "node-sass",
+	modules := []string{"webpack@^2.2.1", "sass-loader", "css-loader", "style-loader", "node-sass",
 		"babel-loader", "extract-text-webpack-plugin", "babel", "babel-core", "url-loader", "file-loader",
 		"jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
 		"copy-webpack-plugin", "expose-loader",
@@ -153,40 +153,48 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
-      loader: "babel",
+      loader: "babel-loader",
       exclude: /node_modules/
     }, {
       test: /\.scss$/,
-      loader: ExtractTextPlugin.extract(
-        "style",
-        "css?sourceMap!sass?sourceMap"
-      )
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use:
+        [{
+          loader: "css-loader",
+          options: { sourceMap: true }
+      	},
+        {
+          loader: "sass-loader",
+          options: { sourceMap: true }
+        }]
+      })
     }, {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url?limit=10000&mimetype=application/font-woff"
+      use: "url-loader?limit=10000&mimetype=application/font-woff"
     }, {
       test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url?limit=10000&mimetype=application/font-woff"
+      use: "url-loader?limit=10000&mimetype=application/font-woff"
     }, {
       test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url?limit=10000&mimetype=application/octet-stream"
+      use: "url-loader?limit=10000&mimetype=application/octet-stream"
     }, {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "file"
+      use: "file-loader"
     }, {
       test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url?limit=10000&mimetype=image/svg+xml"
+      use: "url-loader?limit=10000&mimetype=image/svg+xml"
     }, {
       test: require.resolve('jquery'),
-      loader: 'expose?jQuery!expose?$'
+      use: 'expose-loader?jQuery!expose-loader?$'
     }]
   }
 };
 `
 
-const wApplicationJS = `require('expose?$!expose?jQuery!jquery');
+const wApplicationJS = `require('expose-loader?$!expose-loader?jQuery!jquery');
 require("bootstrap/dist/js/bootstrap.js");
 
 $(() => {
