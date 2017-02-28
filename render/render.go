@@ -1,10 +1,11 @@
 package render
 
 import (
+	"bytes"
+	"html/template"
 	"sync"
 
 	"github.com/gobuffalo/buffalo/render/resolvers"
-	"github.com/gobuffalo/velvet"
 )
 
 // Engine used to power all defined renderers.
@@ -13,8 +14,7 @@ import (
 // the defaults.
 type Engine struct {
 	Options
-	templateCache map[string]*velvet.Template
-	moot          *sync.Mutex
+	moot *sync.Mutex
 }
 
 // New render.Engine ready to go with your Options
@@ -31,11 +31,31 @@ func New(opts Options) *Engine {
 			return &resolvers.SimpleResolver{}
 		}
 	}
+	if opts.TemplateEngine == nil {
+		opts.TemplateEngine = GoTemplateEngine
+	}
 
 	e := &Engine{
-		Options:       opts,
-		templateCache: map[string]*velvet.Template{},
-		moot:          &sync.Mutex{},
+		Options: opts,
+		moot:    &sync.Mutex{},
 	}
 	return e
+}
+
+type TemplateOptions struct {
+	Data    map[string]interface{}
+	Helpers map[string]interface{}
+}
+
+type TemplateEngine func(string, TemplateOptions) (string, error)
+
+func GoTemplateEngine(input string, opts TemplateOptions) (string, error) {
+	t, err := template.New(input).Parse(input)
+	if err != nil {
+		return "", err
+	}
+	t = t.Funcs(opts.Helpers)
+	bb := &bytes.Buffer{}
+	err = t.Execute(bb, opts.Data)
+	return bb.String(), err
 }
