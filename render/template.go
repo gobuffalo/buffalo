@@ -33,6 +33,11 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 	w.Write([]byte(body))
 	return nil
 }
+func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
+	d, f := filepath.Split(name)
+	name = filepath.Join(d, "_"+f)
+	return s.exec(name, dd)
+}
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	var body string
@@ -42,12 +47,9 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	helpers := map[string]interface{}{
-		"partial": func(name string) (template.HTML, error) {
-			d, f := filepath.Split(name)
-			name = filepath.Join(d, "_"+f)
-			return s.exec(name, data)
-		},
+		"partial": s.partial,
 	}
+
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
