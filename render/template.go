@@ -41,18 +41,18 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		return "", err
 	}
 
-	opts := TemplateOptions{
-		Data:    data,
-		Helpers: s.Helpers,
+	helpers := map[string]interface{}{
+		"partial": func(name string) (template.HTML, error) {
+			d, f := filepath.Split(name)
+			name = filepath.Join(d, "_"+f)
+			return s.exec(name, data)
+		},
+	}
+	for k, v := range s.Helpers {
+		helpers[k] = v
 	}
 
-	opts.Helpers["partial"] = func(name string) (template.HTML, error) {
-		d, f := filepath.Split(name)
-		name = filepath.Join(d, "_"+f)
-		return s.exec(name, data)
-	}
-
-	body, err = s.TemplateEngine(string(source), opts)
+	body, err = s.TemplateEngine(string(source), data, helpers)
 	if err != nil {
 		return "", err
 	}
