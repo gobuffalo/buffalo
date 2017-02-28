@@ -1,15 +1,11 @@
 package render
 
 import (
-	"bytes"
-	"fmt"
 	"html/template"
 	"io"
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/velvet"
-	"github.com/pkg/errors"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
@@ -24,85 +20,48 @@ func (s templateRenderer) ContentType() string {
 }
 
 func (s templateRenderer) Render(w io.Writer, data Data) error {
-	var yield template.HTML
+	var body template.HTML
 	var err error
 	for _, name := range s.names {
-		yield, err = s.execute(name, data.ToVelvet())
+
+		body, err = s.exec(name, data)
 		if err != nil {
-			err = errors.Errorf("error rendering %s:\n%+v", name, err)
 			return err
 		}
-		data["yield"] = yield
+		data["yield"] = body
 	}
-	_, err = w.Write([]byte(yield))
-	if err != nil {
-		return errors.WithStack(err)
-	}
+	w.Write([]byte(body))
 	return nil
 }
 
-func (s templateRenderer) execute(name string, data *velvet.Context) (template.HTML, error) {
-	source, err := s.source(name)
+func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
+	var body string
+	source, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
 	if err != nil {
 		return "", err
 	}
 
-	err = source.Helpers.Add("partial", func(name string, help velvet.HelperContext) (template.HTML, error) {
-		p, err := s.partial(name, help.Context)
-		if err != nil {
-			return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
-		}
-		return p, nil
-	})
-	if err != nil {
-		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+	opts := TemplateOptions{
+		Data:    data,
+		Helpers: s.Helpers,
 	}
 
-	yield, err := source.Exec(data)
-	if err != nil {
-		return template.HTML(fmt.Sprintf("<pre>%s: %s</pre>", name, err.Error())), err
+	opts.Helpers["partial"] = func(name string) (template.HTML, error) {
+		d, f := filepath.Split(name)
+		name = filepath.Join(d, "_"+f)
+		return s.exec(name, data)
 	}
-	return template.HTML(yield), nil
-}
 
-func (s templateRenderer) source(name string) (*velvet.Template, error) {
-	var t *velvet.Template
-	var ok bool
-	var err error
-	if s.CacheTemplates {
-		if t, ok = s.templateCache[name]; ok {
-			return t.Clone(), nil
-		}
-	}
-	b, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
+	body, err = s.TemplateEngine(string(source), opts)
 	if err != nil {
-		return nil, errors.WithStack(fmt.Errorf("could not find template: %s", name))
+		return "", err
 	}
+
 	if strings.ToLower(filepath.Ext(name)) == ".md" {
-		b = github_flavored_markdown.Markdown(b)
-		// unescape quotes so raymond can parse the file correctly.
-		b = bytes.Replace(b, []byte("&#34;"), []byte("\""), -1)
+		b := github_flavored_markdown.Markdown([]byte(body))
+		body = string(b)
 	}
-	source := string(b)
-	t, err = velvet.Parse(source)
-	if err != nil {
-		return t, errors.Errorf("Error parsing %s: %+v", name, errors.WithStack(err))
-	}
-
-	err = t.Helpers.AddMany(s.Helpers)
-	if err != nil {
-		return nil, err
-	}
-	if s.CacheTemplates {
-		s.templateCache[name] = t
-	}
-	return t.Clone(), err
-}
-
-func (s templateRenderer) partial(name string, data *velvet.Context) (template.HTML, error) {
-	d, f := filepath.Split(name)
-	name = filepath.Join(d, "_"+f)
-	return s.execute(name, data)
+	return template.HTML(body), nil
 }
 
 // Template renders the named files using the specified

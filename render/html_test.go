@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/velvet"
 	"github.com/stretchr/testify/require"
 )
 
@@ -25,19 +26,16 @@ func Test_HTML(t *testing.T) {
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		table := []ji{
-			render.HTML,
-			render.New(render.Options{}).HTML,
-		}
+		j := render.New(render.Options{
+			TemplateEngine: velvet.BuffaloRenderer,
+		}).HTML
 
-		for _, j := range table {
-			re := j(tmpFile.Name())
-			r.Equal("text/html", re.ContentType())
-			bb := &bytes.Buffer{}
-			err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("Mark", strings.TrimSpace(bb.String()))
-		}
+		re := j(tmpFile.Name())
+		r.Equal("text/html", re.ContentType())
+		bb := &bytes.Buffer{}
+		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
+		r.NoError(err)
+		r.Equal("Mark", strings.TrimSpace(bb.String()))
 	})
 
 	t.Run("with a layout", func(st *testing.T) {
@@ -50,7 +48,10 @@ func Test_HTML(t *testing.T) {
 		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
 		r.NoError(err)
 
-		re := render.New(render.Options{HTMLLayout: layout.Name()})
+		re := render.New(render.Options{
+			HTMLLayout:     layout.Name(),
+			TemplateEngine: velvet.BuffaloRenderer,
+		})
 
 		st.Run("using just the HTMLLayout", func(sst *testing.T) {
 			r := require.New(sst)

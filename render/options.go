@@ -13,9 +13,9 @@ type Options struct {
 	fileResolver     resolvers.FileResolver
 	// Helpers to be rendered with the templates
 	Helpers map[string]interface{}
-	// CacheTemplates reduced overheads, but won't reload changed templates.
-	// This should only be set to true in production environments.
-	CacheTemplates bool
+
+	// TemplateEngine to be used for rendering HTML templates
+	TemplateEngine TemplateEngine
 }
 
 // Resolver calls the FileResolverFunc and returns the resolver. The resolver
