@@ -2,7 +2,9 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
+	"sync"
 
 	"github.com/gobuffalo/buffalo/render/resolvers"
 	"github.com/gobuffalo/velvet"
@@ -29,6 +31,13 @@ func New(opts Options) *Engine {
 	}
 	if opts.TemplateEngine == nil {
 		opts.TemplateEngine = velvet.BuffaloRenderer
+	}
+
+	if opts.CacheTemplates {
+		once := &sync.Once{}
+		once.Do(func() {
+			fmt.Println("[DEPRACTED] The 'CacheTemplates' option is deprecated in 0.8.0. To remove this warning please remove the option in your configuration.")
+		})
 	}
 
 	e := &Engine{
