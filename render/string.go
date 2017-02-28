@@ -12,9 +12,7 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	t, err := s.TemplateEngine(s.body, TemplateOptions{
-		Data: data,
-	})
+	t, err := s.TemplateEngine(s.body, data, s.Helpers)
 	if err != nil {
 		return err
 	}
