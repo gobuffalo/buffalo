@@ -1,10 +1,6 @@
 package render
 
-import (
-	"io"
-
-	"github.com/gobuffalo/velvet"
-)
+import "io"
 
 type stringRenderer struct {
 	*Engine
@@ -16,15 +12,11 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	t, err := velvet.Parse(s.body)
+	t, err := s.TemplateEngine(s.body, data, s.Helpers)
 	if err != nil {
 		return err
 	}
-	b, err := t.Exec(data.ToVelvet())
-	if err != nil {
-		return err
-	}
-	_, err = w.Write([]byte(b))
+	_, err = w.Write([]byte(t))
 	return err
 }
 
@@ -32,15 +24,16 @@ func (s stringRenderer) Render(w io.Writer, data Data) error {
 // the github.com/aymerick/raymond package and return
 // "text/plain" as the content type.
 func String(s string) Renderer {
-	return stringRenderer{
-		Engine: New(Options{}),
-		body:   s,
-	}
+	e := New(Options{})
+	return e.String(s)
 }
 
 // String renderer that will run the string through
 // the github.com/aymerick/raymond package and return
 // "text/plain" as the content type.
 func (e *Engine) String(s string) Renderer {
-	return String(s)
+	return stringRenderer{
+		Engine: e,
+		body:   s,
+	}
 }

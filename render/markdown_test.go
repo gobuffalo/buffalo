@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/velvet"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,8 +32,9 @@ func Test_Markdown(t *testing.T) {
 		r := require.New(st)
 
 		table := []ji{
-			render.HTML,
-			render.New(render.Options{}).HTML,
+			render.New(render.Options{
+				TemplateEngine: velvet.BuffaloRenderer,
+			}).HTML,
 		}
 
 		for _, j := range table {
@@ -55,7 +57,10 @@ func Test_Markdown(t *testing.T) {
 		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
 		r.NoError(err)
 
-		re := render.New(render.Options{HTMLLayout: layout.Name()}).HTML(tmpFile.Name())
+		re := render.New(render.Options{
+			HTMLLayout:     layout.Name(),
+			TemplateEngine: velvet.BuffaloRenderer,
+		}).HTML(tmpFile.Name())
 
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}

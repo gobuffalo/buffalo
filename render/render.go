@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/gobuffalo/buffalo/render/resolvers"
@@ -13,15 +14,10 @@ import (
 // the defaults.
 type Engine struct {
 	Options
-	templateCache map[string]*velvet.Template
-	moot          *sync.Mutex
 }
 
 // New render.Engine ready to go with your Options
-// and some defaults we think you might like. Engines
-// have the following helpers added to them:
-// https://github.com/gobuffalo/buffalo/blob/master/render/helpers/helpers.go#L1
-// https://github.com/markbates/inflect/blob/master/helpers.go#L3
+// and some defaults we think you might like.
 func New(opts Options) *Engine {
 	if opts.Helpers == nil {
 		opts.Helpers = map[string]interface{}{}
@@ -31,11 +27,19 @@ func New(opts Options) *Engine {
 			return &resolvers.SimpleResolver{}
 		}
 	}
+	if opts.TemplateEngine == nil {
+		opts.TemplateEngine = velvet.BuffaloRenderer
+	}
+
+	if opts.CacheTemplates {
+		once := &sync.Once{}
+		once.Do(func() {
+			fmt.Println("[DEPRACTED] The 'CacheTemplates' option is deprecated in 0.8.0. To remove this warning please remove the option in your configuration.")
+		})
+	}
 
 	e := &Engine{
-		Options:       opts,
-		templateCache: map[string]*velvet.Template{},
-		moot:          &sync.Mutex{},
+		Options: opts,
 	}
 	return e
 }
