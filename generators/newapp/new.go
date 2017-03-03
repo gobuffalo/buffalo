@@ -7,7 +7,6 @@ import (
 	"github.com/gobuffalo/buffalo/generators/common"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/gentronics"
-	sg "github.com/markbates/pop/soda/cmd/generate"
 )
 
 // App is the representation of a new Buffalo application
@@ -34,15 +33,16 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	for _, f := range files {
 		g.Add(gentronics.NewFile(f.WritePath, f.Body))
 	}
-
-	g.Add(refresh.New())
-	g.Add(gentronics.NewFile(".codeclimate.yml", nCodeClimate))
+	rr, err := refresh.New()
+	if err != nil {
+		return nil, err
+	}
+	g.Add(rr)
 
 	if data["ciProvider"] == "travis" {
 		g.Add(gentronics.NewFile(".travis.yml", nTravis))
 	}
 
-	g.Add(gentronics.NewFile(".gitignore", nGitignore))
 	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/refresh/...")))
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/refresh")))
 	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/grift/...")))
@@ -66,42 +66,6 @@ func (a App) goGet() *exec.Cmd {
 	return exec.Command("go", appArgs...)
 }
 
-const nGitignore = `vendor/
-**/*.log
-**/*.sqlite
-.idea/
-bin/
-tmp/
-node_modules/
-.sass-cache/
-rice-box.go
-public/assets/
-{{ name }}
-`
-
-const nCodeClimate = `engines:
-  fixme:
-    enabled: true
-  gofmt:
-    enabled: true
-  golint:
-    enabled: true
-  govet:
-    enabled: true
-exclude_paths:
-  - grifts/**/*
-  - "**/*_test.go"
-  - "*_test.go"
-  - "**_test.go"
-  - logs/*
-  - public/*
-  - templates/*
-ratings:
-  paths:
-    - "**.go"
-
-`
-
 const nTravis = `language: go
 env:
 - GO_ENV=test
@@ -116,62 +80,4 @@ go:
   - master
 
 go_import_path: {{ packagePath }}
-`
-
-func newSodaGenerator() *gentronics.Generator {
-	g := gentronics.New()
-
-	should := func(data gentronics.Data) bool {
-		if _, ok := data["withPop"]; ok {
-			return ok
-		}
-		return false
-	}
-
-	f := gentronics.NewFile("models/models.go", nModels)
-	f.Should = should
-	g.Add(f)
-
-	c := gentronics.NewCommand(generate.GoGet("github.com/markbates/pop/..."))
-	c.Should = should
-	g.Add(c)
-
-	c = gentronics.NewCommand(generate.GoInstall("github.com/markbates/pop/soda"))
-	c.Should = should
-	g.Add(c)
-
-	g.Add(&gentronics.Func{
-		Should: should,
-		Runner: func(rootPath string, data gentronics.Data) error {
-			data["dialect"] = data["dbType"]
-			return sg.GenerateConfig("./database.yml", data)
-		},
-	})
-
-	return g
-}
-
-const nModels = `package models
-
-import (
-	"log"
-	"os"
-
-	"github.com/markbates/going/defaults"
-	"github.com/markbates/pop"
-)
-
-// DB is a connection to your database to be used
-// throughout your application.
-var DB *pop.Connection
-
-func init() {
-	var err error
-	env := defaults.String(os.Getenv("GO_ENV"), "development")
-	DB, err = pop.Connect(env)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pop.Debug = env == "development"
-}
 `
