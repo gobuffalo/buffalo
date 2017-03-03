@@ -10,17 +10,17 @@
     <th></th>
   </thead>
   <tbody>
-    {{#each users as |user|}}
+    <%= for (user) in users { %>
     <tr>
-      <td>{{ user.FirstName }}</td>
-      <td>{{ user.LastName }}</td>
-      <td>{{ user.Email }}</td>
+      <td><%= user.FirstName %></td>
+      <td><%= user.LastName %></td>
+      <td><%= user.Email %></td>
       <td>
-        <a href="/users/{{ user.ID }}">View</a>
-        <a href="/users/{{ user.ID }}/edit">Edit</a>
-        <a href="/users/{{ user.ID }}" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
+        <a href="/users/<%= user.ID %>">View</a>
+        <a href="/users/<%= user.ID %>/edit">Edit</a>
+        <a href="/users/<%= user.ID %>" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
       </td>
     </tr>
-    {{/each}}
+    <% } %>
   </tbody>
 </table>
