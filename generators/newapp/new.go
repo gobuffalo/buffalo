@@ -10,6 +10,7 @@ import (
 	sg "github.com/markbates/pop/soda/cmd/generate"
 )
 
+// App is the representation of a new Buffalo application
 type App struct {
 	RootPath    string
 	Name        string
@@ -22,6 +23,7 @@ type App struct {
 	CIProvider  string
 }
 
+// Generator returns a generator to create a new application
 func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	g := gentronics.New()
 	files, err := common.Find("newapp")
@@ -49,13 +51,13 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
 	g.Add(generate.NewWebpackGenerator(data))
 	g.Add(newSodaGenerator())
-	g.Add(gentronics.NewCommand(a.GoGet()))
+	g.Add(gentronics.NewCommand(a.goGet()))
 	g.Add(generate.Fmt)
 
 	return g, nil
 }
 
-func (a App) GoGet() *exec.Cmd {
+func (a App) goGet() *exec.Cmd {
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")

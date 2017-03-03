@@ -2,6 +2,7 @@ package refresh
 
 import "github.com/markbates/gentronics"
 
+// New generator for a .buffalo.dev.yml file
 func New() *gentronics.Generator {
 	g := gentronics.New()
 
