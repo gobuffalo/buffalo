@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
@@ -105,7 +105,7 @@ func validateInGoPath(name string) error {
 		if err != nil {
 			return err
 		}
-		t, err := velvet.Render(notInGoWorkspace, velvet.NewContextWith(map[string]interface{}{
+		t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 			"name":     name,
 			"gopath":   gp,
 			"current":  rootPath,
@@ -184,13 +184,13 @@ func init() {
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
 
-Your $GOPATH is set to "{{gopath}}".
+Your $GOPATH is set to "<%= gopath %>".
 
-You are currently in "{{current}}".
+You are currently in "<%= current %>".
 
-The standard location for putting Go projects is something along the lines of "$GOPATH/src/github.com/{{username}}/{{name}}" (adjust accordingly).
+The standard location for putting Go projects is something along the lines of "$GOPATH/src/github.com/<%= username %>/<%= name %>" (adjust accordingly).
 
-We recommend you go to "$GOPATH/src/github.com/{{username}}/" and try "buffalo new {{name}}" again.`
+We recommend you go to "$GOPATH/src/github.com/<%= username %>/" and try "buffalo new <%= name %>" again.`
 
 const noGoPath = `You do not have a $GOPATH set. In order to work with Go, you must set up your $GOPATH and your Go Workspace.
 

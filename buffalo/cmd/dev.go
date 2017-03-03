@@ -8,7 +8,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -76,7 +76,7 @@ func startDevServer(ctx context.Context) error {
 			return err
 		}
 		defer f.Close()
-		t, err := velvet.Render(nRefresh, velvet.NewContextWith(map[string]interface{}{
+		t, err := plush.Render(nRefresh, plush.NewContextWith(map[string]interface{}{
 			"name": "buffalo",
 		}))
 		if err != nil {
