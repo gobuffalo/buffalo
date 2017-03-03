@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
 )
 
@@ -31,8 +31,8 @@ func NotFoundHandler(status int, err error, c Context) error {
 		res.WriteHeader(404)
 		return json.NewEncoder(res).Encode(data)
 	}
-	ctx := velvet.NewContextWith(data)
-	t, err := velvet.Render(htmlNotFound, ctx)
+	ctx := plush.NewContextWith(data)
+	t, err := plush.Render(htmlNotFound, ctx)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -66,7 +66,7 @@ var htmlNotFound = `
 </head>
 <body>
 <h1>404 Page Not Found!</h1>
-<h3>Could not find path <code>[{{method}}] {{path}}</code></h3>
+<h3>Could not find path <code>[<%= method %>] <%= path %></code></h3>
 <hr>
 <table id="buffalo-routes-table">
 	<thead>
@@ -77,20 +77,20 @@ var htmlNotFound = `
 		</tr>
 	</thead>
 	<tbody>
-		{{#each routes as |route|}}
+		<%= for (route) in routes { %>
 			<tr>
-				<td>{{route.Method}}</td>
-				<td>{{route.Path}}</td>
-				<td><code>{{route.HandlerName}}</code></td>
+				<td><%= route.Method %></td>
+				<td><%= route.Path %></td>
+				<td><code><%= route.HandlerName %></code></td>
 			</tr>
-		{{/each}}
+		<% } %>
 	</tbody>
 </table>
-{{#if error}}
+<%= if (error) { %>
 <hr>
 <h2>Error</h2>
-<pre>{{error}}</pre>
-{{/if}}
+<pre><%= error %></pre>
+<% } %>
 </body>
 </html>
 `
