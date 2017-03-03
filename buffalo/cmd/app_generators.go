@@ -153,7 +153,7 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/render/resolvers"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
@@ -161,7 +161,7 @@ var r *render.Engine
 func init() {
 	r = render.New(render.Options{
 		HTMLLayout:     "application.html",
-		TemplateEngine: velvet.BuffaloRenderer,
+		TemplateEngine: plush.BuffaloRenderer,
 		FileResolverFunc: func() resolvers.FileResolver {
 			return &resolvers.RiceBox{
 				Box: rice.MustFindBox("../templates"),
@@ -233,13 +233,13 @@ const nIndexHTML = `<div class="row">
         </tr>
       </thead>
       <tbody>
-        \{{#each routes as |r|}}
+				<%= for (r) in routes { %>
         <tr>
-          <td>\{{r.Method}}</td>
-          <td>\{{r.Path}}</td>
-          <td><code>\{{r.HandlerName}}</code></td>
+          <td><%= r.Method %></td>
+          <td><%= r.Path %></td>
+          <td><code><%= r.HandlerName %></code></td>
         </tr>
-        \{{/each}}
+				<% } %>
       </tbody>
     </table>
   </div>
@@ -256,7 +256,7 @@ const nApplicationHTML = `<html>
 <body>
 
   <div class="container">
-    \{{ yield }}
+		<%= yield %>
   </div>
 
   <script src="/assets/application.js" type="text/javascript" charset="utf-8"></script>
