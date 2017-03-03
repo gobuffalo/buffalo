@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +19,7 @@ func Test_HTML(t *testing.T) {
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
-	_, err = tmpFile.Write([]byte("{{name}}"))
+	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
 
 	type ji func(...string) render.Renderer
@@ -27,7 +27,7 @@ func Test_HTML(t *testing.T) {
 		r := require.New(st)
 
 		j := render.New(render.Options{
-			TemplateEngine: velvet.BuffaloRenderer,
+			TemplateEngine: plush.BuffaloRenderer,
 		}).HTML
 
 		re := j(tmpFile.Name())
@@ -45,12 +45,12 @@ func Test_HTML(t *testing.T) {
 		r.NoError(err)
 		defer os.Remove(layout.Name())
 
-		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
+		_, err = layout.Write([]byte("<body><%= yield %></body>"))
 		r.NoError(err)
 
 		re := render.New(render.Options{
 			HTMLLayout:     layout.Name(),
-			TemplateEngine: velvet.BuffaloRenderer,
+			TemplateEngine: plush.BuffaloRenderer,
 		})
 
 		st.Run("using just the HTMLLayout", func(sst *testing.T) {
@@ -70,7 +70,7 @@ func Test_HTML(t *testing.T) {
 			r.NoError(err)
 			defer os.Remove(nlayout.Name())
 
-			_, err = nlayout.Write([]byte("<html>{{yield}}</html>"))
+			_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
 			r.NoError(err)
 			h := re.HTML(tmpFile.Name(), nlayout.Name())
 
