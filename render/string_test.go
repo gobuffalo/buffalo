@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -13,10 +13,10 @@ func Test_String(t *testing.T) {
 	r := require.New(t)
 
 	j := render.New(render.Options{
-		TemplateEngine: velvet.BuffaloRenderer,
+		TemplateEngine: plush.BuffaloRenderer,
 	}).String
 
-	re := j("{{name}}")
+	re := j("<%= name %>")
 	r.Equal("text/plain", re.ContentType())
 	bb := &bytes.Buffer{}
 	err := re.Render(bb, map[string]interface{}{"name": "Mark"})
