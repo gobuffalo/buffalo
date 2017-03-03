@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/spf13/cobra"
 )
 
@@ -286,7 +286,7 @@ func (b *builder) buildMain() error {
 		return err
 	}
 
-	ctx := velvet.NewContext()
+	ctx := plush.NewContext()
 	ctx.Set("root", rootPath)
 	ctx.Set("hasDB", hasDB)
 	if hasDB {
@@ -298,7 +298,7 @@ func (b *builder) buildMain() error {
 	}
 	ctx.Set("aPack", packagePath(rootPath)+"/a")
 	ctx.Set("name", filepath.Base(rootPath))
-	s, err := velvet.Render(buildMainTmpl, ctx)
+	s, err := plush.Render(buildMainTmpl, ctx)
 	if err != nil {
 		return err
 	}
@@ -473,15 +473,15 @@ import (
 
 	"github.com/markbates/grift/grift"
 	rice "github.com/GeertJohan/go.rice"
-	_ "{{aPack}}"
-	{{#if modelsPack}}
+	_ "<%= aPack %>"
+	<%= if (modelsPack) { %>
 	"io/ioutil"
 	"path/filepath"
-	"{{modelsPack}}"
-	{{/if}}
-	{{#if griftsPack}}
-	_ "{{griftsPack}}"
-	{{/if}}
+	"<%= modelsPack %>"
+	<% } %>
+	<%= if (griftsPack) { %>
+	_ "<%= griftsPack %>"
+	<% } %>
 )
 
 var version = "unknown"
@@ -495,10 +495,10 @@ func main() {
 	}
 	c := args[1]
 	switch c {
-	{{#if modelsPack}}
+	<%= if (modelsPack) { %>
 	case "migrate":
 		migrate()
-	{{/if}}
+	<% } %>
 	case "start", "run", "serve":
 		printVersion()
 		originalMain()
@@ -515,10 +515,10 @@ func main() {
 }
 
 func printVersion() {
-	fmt.Printf("{{name}} version %s (%s)\n\n", version, buildTime)
+	fmt.Printf("<%= name %> version %s (%s)\n\n", version, buildTime)
 }
 
-{{#if modelsPack}}
+<%= if (modelsPack) { %>
 func migrate() {
 	var err error
 	migrationBox, err = rice.FindBox("./migrations")
@@ -537,7 +537,7 @@ func migrate() {
 }
 
 func unpackMigrations() (string, error) {
-	dir, err := ioutil.TempDir("", "{{name}}-migrations")
+	dir, err := ioutil.TempDir("", "<%= name %>-migrations")
 	if err != nil {
 		log.Fatalf("Unable to create temp directory: %s", err)
 	}
@@ -555,7 +555,7 @@ func unpackMigrations() (string, error) {
 
 	return dir, nil
 }
-{{/if}}
+<% } %>
 `
 
 var aGo = `package a
@@ -571,7 +571,6 @@ func init() {
 
 func dropDatabaseYml() {
 	if DB_CONFIG != "" {
-
 		_, err := os.Stat("database.yml")
 		if err == nil {
 			// yaml already exists, don't do anything
