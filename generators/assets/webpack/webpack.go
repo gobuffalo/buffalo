@@ -11,15 +11,17 @@ import (
 	"github.com/markbates/gentronics"
 )
 
+var logo = &gentronics.RemoteFile{
+	File:       gentronics.NewFile("assets/images/logo.svg", ""),
+	RemotePath: assets.LogoURL,
+}
+
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
+// New webpack generator
 func New(data gentronics.Data) (*gentronics.Generator, error) {
 	g := gentronics.New()
-
-	should := func(data gentronics.Data) bool {
-		return true
-	}
 
 	// if there's no npm, return!
 	_, err := exec.LookPath("npm")
@@ -36,32 +38,16 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 		data["withYarn"] = true
 	}
 
-	useYarn := func(data gentronics.Data) bool {
-		if b, ok := data["withYarn"]; ok {
-			return b.(bool)
-		}
-		return false
-	}
-	if useYarn(data) {
-		// if there's no yarn, install it!
-		_, err := exec.LookPath("yarn")
-		// A new gentronics is necessary to have yarn available in path
-		if err != nil {
-			yg := gentronics.New()
-			yargs := []string{"install", "-g", "yarn"}
-			yg.Should = useYarn
-			yg.Add(gentronics.NewCommand(exec.Command(command, yargs...)))
-			err = yg.Run(".", data)
-			if err != nil {
-				return g, err
-			}
-		}
+	if _, ok := data["withYarn"]; ok {
 		command = "yarn"
 		args = []string{"add"}
+		err := generateYarn(data)
+		if err != nil {
+			return g, err
+		}
 	}
 
-	g.Should = should
-	g.Add(assets.AssetsLogo)
+	g.Add(logo)
 
 	files, err := common.Find(filepath.Join("assets", "webpack"))
 	if err != nil {
@@ -84,4 +70,20 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 	args = append(args, modules...)
 	g.Add(gentronics.NewCommand(exec.Command(command, args...)))
 	return g, nil
+}
+
+func generateYarn(data gentronics.Data) error {
+	// if there's no yarn, install it!
+	_, err := exec.LookPath("yarn")
+	// A new gentronics is necessary to have yarn available in path
+	if err != nil {
+		yg := gentronics.New()
+		yargs := []string{"install", "-g", "yarn"}
+		yg.Add(gentronics.NewCommand(exec.Command("npm", yargs...)))
+		err = yg.Run(".", data)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

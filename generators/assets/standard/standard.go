@@ -8,6 +8,12 @@ import (
 	"github.com/markbates/gentronics"
 )
 
+var logo = &gentronics.RemoteFile{
+	File:       gentronics.NewFile("public/assets/images/logo.svg", ""),
+	RemotePath: assets.LogoURL,
+}
+
+// New standard assets generator for those wishing to not use webpack
 func New(data gentronics.Data) (*gentronics.Generator, error) {
 	files, err := common.Find(filepath.Join("assets", "standard"))
 	if err != nil {
@@ -17,6 +23,6 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 	for _, f := range files {
 		g.Add(gentronics.NewFile(f.WritePath, f.Body))
 	}
-	g.Add(assets.PublicLogo)
+	g.Add(logo)
 	return g, nil
 }

@@ -24,3 +24,7 @@ var WebpackCmd = &cobra.Command{
 		return wg.Run(".", data)
 	},
 }
+
+func init() {
+	WebpackCmd.Flags().BoolVar(&withYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
+}
