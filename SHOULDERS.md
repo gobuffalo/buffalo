@@ -24,6 +24,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://github.com/fatih/color)
 
+* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://github.com/fatih/color/vendor/github.com/mattn/go-colorable)
+
+* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://github.com/fatih/color/vendor/github.com/mattn/go-isatty)
+
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
 * [github.com/gobuffalo/buffalo/render](https://github.com/gobuffalo/buffalo/render)
@@ -65,10 +69,6 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
 
 * [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
-
-* [github.com/mattn/go-colorable](https://github.com/mattn/go-colorable)
-
-* [github.com/mattn/go-isatty](https://github.com/mattn/go-isatty)
 
 * [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
 
