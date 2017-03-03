@@ -6,7 +6,7 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/render/resolvers"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
@@ -14,7 +14,7 @@ var r *render.Engine
 func init() {
 	r = render.New(render.Options{
 		HTMLLayout:     "application.html",
-		TemplateEngine: velvet.BuffaloRenderer,
+		TemplateEngine: plush.BuffaloRenderer,
 		FileResolverFunc: func() resolvers.FileResolver {
 			return &resolvers.RiceBox{
 				Box: rice.MustFindBox("../templates"),
