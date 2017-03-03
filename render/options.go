@@ -19,9 +19,6 @@ type Options struct {
 
 	// TemplateEngine to be used for rendering HTML templates
 	TemplateEngine TemplateEngine
-
-	// CacheTemplates option will be removed in 0.8.0.
-	CacheTemplates bool
 }
 
 // Resolver calls the FileResolverFunc and returns the resolver. The resolver

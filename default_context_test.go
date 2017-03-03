@@ -89,7 +89,7 @@ func Test_DefaultContext_Render(t *testing.T) {
 	c.params = url.Values{"name": []string{"Mark"}}
 	c.Set("greet", "Hello")
 
-	err := c.Render(123, render.String("{{greet}} {{params.name}}!"))
+	err := c.Render(123, render.String(`<%= greet %> <%= params["name"] %>!`))
 	r.NoError(err)
 
 	r.Equal(123, res.Code)
