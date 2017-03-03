@@ -4,6 +4,8 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/buffalo/generators/assets/standard"
+	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/common"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/gentronics"
@@ -49,7 +51,19 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/grift")))
 	g.Add(gentronics.NewCommand(generate.GoGet("github.com/motemen/gore")))
 	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
-	g.Add(generate.NewWebpackGenerator(data))
+	if a.SkipWebpack {
+		wg, err := standard.New(data)
+		if err != nil {
+			return g, err
+		}
+		g.Add(wg)
+	} else {
+		wg, err := webpack.New(data)
+		if err != nil {
+			return g, err
+		}
+		g.Add(wg)
+	}
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(a.goGet()))
 	g.Add(generate.Fmt)
