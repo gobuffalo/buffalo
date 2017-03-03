@@ -7,14 +7,17 @@ import (
 	"strings"
 )
 
+// File represents the file to be templated
 type File struct {
 	ReadPath  string
 	WritePath string
 	Body      string
 }
 
+// Files is a slice of File
 type Files []File
 
+// Find all the .tmpl files inside the buffalo GOPATH
 func Find(path string) (Files, error) {
 	root := filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "generators", path)
 	files := Files{}
