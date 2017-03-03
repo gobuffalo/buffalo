@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,14 +20,14 @@ func Test_Template(t *testing.T) {
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
-	_, err = tmpFile.Write([]byte("{{name}}"))
+	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
 
 	type ji func(string, ...string) render.Renderer
 
 	table := []ji{
 		render.New(render.Options{
-			TemplateEngine: velvet.BuffaloRenderer,
+			TemplateEngine: plush.BuffaloRenderer,
 		}).Template,
 	}
 
@@ -51,13 +51,13 @@ func Test_Template_Partial(t *testing.T) {
 	partFile, err := os.Create(filepath.Join(tPath, "_foo.html"))
 	r.NoError(err)
 
-	_, err = partFile.Write([]byte("Foo -> {{name}}"))
+	_, err = partFile.Write([]byte("Foo -> <%= name %>"))
 	r.NoError(err)
 
 	tmpFile, err := os.Create(filepath.Join(tPath, "index.html"))
 	r.NoError(err)
 
-	_, err = tmpFile.Write([]byte(`{{partial "foo.html"}}`))
+	_, err = tmpFile.Write([]byte(`<%= partial("foo.html") %>`))
 	r.NoError(err)
 
 	type ji func(string, ...string) render.Renderer
@@ -65,7 +65,7 @@ func Test_Template_Partial(t *testing.T) {
 	table := []ji{
 		render.New(render.Options{
 			TemplatesPath:  tPath,
-			TemplateEngine: velvet.BuffaloRenderer,
+			TemplateEngine: plush.BuffaloRenderer,
 		}).Template,
 	}
 
