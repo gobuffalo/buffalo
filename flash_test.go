@@ -59,10 +59,12 @@ func Test_FlashRenderEmpty(t *testing.T) {
 	r.NotContains(res.Body.String(), "Flash:")
 }
 
-const errorsTPL = `{{#each flash.errors as |k value|}}
+const errorsTPL = `
+<%= for (k, v) in flash["errors"] { %>
 	Flash:
-    {{k}}:{{value}}
-{{/each}}`
+		<%= k %>:<%= v %>
+<% } %>
+`
 
 func Test_FlashRenderEntireFlash(t *testing.T) {
 	r := require.New(t)
@@ -79,10 +81,11 @@ func Test_FlashRenderEntireFlash(t *testing.T) {
 	r.Contains(res.Body.String(), "something to say!")
 }
 
-const keyTPL = `{{#each flash as |k value|}}
+const keyTPL = `<%= for (k, v) in flash { %>
 	Flash:
-    {{k}}:{{value}}
-{{/each}}`
+		<%= k %>:<%= v %>
+<% } %>
+`
 
 func Test_FlashRenderCustomKey(t *testing.T) {
 	r := require.New(t)

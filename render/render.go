@@ -1,11 +1,8 @@
 package render
 
 import (
-	"fmt"
-	"sync"
-
 	"github.com/gobuffalo/buffalo/render/resolvers"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 )
 
 // Engine used to power all defined renderers.
@@ -28,14 +25,7 @@ func New(opts Options) *Engine {
 		}
 	}
 	if opts.TemplateEngine == nil {
-		opts.TemplateEngine = velvet.BuffaloRenderer
-	}
-
-	if opts.CacheTemplates {
-		once := &sync.Once{}
-		once.Do(func() {
-			fmt.Println("[DEPRACTED] The 'CacheTemplates' option is deprecated in 0.8.0. To remove this warning please remove the option in your configuration.")
-		})
+		opts.TemplateEngine = plush.BuffaloRenderer
 	}
 
 	e := &Engine{
