@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +24,7 @@ func Test_Markdown(t *testing.T) {
 	tmpFile, err := os.Create(filepath.Join(tmpDir, "t.md"))
 	r.NoError(err)
 
-	_, err = tmpFile.Write([]byte("{{name}}"))
+	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
 
 	type ji func(...string) render.Renderer
@@ -33,7 +33,7 @@ func Test_Markdown(t *testing.T) {
 
 		table := []ji{
 			render.New(render.Options{
-				TemplateEngine: velvet.BuffaloRenderer,
+				TemplateEngine: plush.BuffaloRenderer,
 			}).HTML,
 		}
 
@@ -54,12 +54,12 @@ func Test_Markdown(t *testing.T) {
 		r.NoError(err)
 		defer os.Remove(layout.Name())
 
-		_, err = layout.Write([]byte("<body>{{yield}}</body>"))
+		_, err = layout.Write([]byte("<body><%= yield %></body>"))
 		r.NoError(err)
 
 		re := render.New(render.Options{
 			HTMLLayout:     layout.Name(),
-			TemplateEngine: velvet.BuffaloRenderer,
+			TemplateEngine: plush.BuffaloRenderer,
 		}).HTML(tmpFile.Name())
 
 		r.Equal("text/html", re.ContentType())
