@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-2">
+    <img src="/assets/images/logo.svg" alt="" />
+  </div>
+  <div class="col-md-10">
+    <h1>Welcome to Buffalo! [v{{version}}]</h1>
+    <h2>
+      <a href="https://github.com/gobuffalo/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
+    </h2>
+    <h2>
+      <a href="http://gobuffalo.io"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
+    </h2>
+
+    <hr>
+    <h2>Defined Routes</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr text-align="left">
+          <th>METHOD</th>
+          <th>PATH</th>
+          <th>HANDLER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for (r) in routes { %>
+        <tr>
+          <td><%= r.Method %></td>
+          <td><%= r.Path %></td>
+          <td><code><%= r.HandlerName %></code></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
