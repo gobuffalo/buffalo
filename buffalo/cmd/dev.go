@@ -8,7 +8,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/plush"
+	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -71,21 +71,10 @@ func startDevServer(ctx context.Context) error {
 	cfgFile := "./.buffalo.dev.yml"
 	_, err := os.Stat(cfgFile)
 	if err != nil {
-		f, err := os.Create(cfgFile)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-		t, err := plush.Render(nRefresh, plush.NewContextWith(map[string]interface{}{
+		g := rg.New()
+		err = g.Run("./", map[string]interface{}{
 			"name": "buffalo",
-		}))
-		if err != nil {
-			return err
-		}
-		_, err = f.WriteString(t)
-		if err != nil {
-			return err
-		}
+		})
 	}
 	c := &refresh.Configuration{}
 	err = c.Load(cfgFile)
