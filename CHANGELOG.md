@@ -1,5 +1,37 @@
 # Change Log
 
+## [v0.7.4](https://github.com/gobuffalo/buffalo/tree/v0.7.4) (2017-03-03)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.3...v0.7.4)
+
+**Implemented enhancements:**
+
+- Add yarn as alternative --with-yarn [\#256](https://github.com/gobuffalo/buffalo/pull/256) ([fooflare](https://github.com/fooflare))
+
+**Fixed bugs:**
+
+- Buffalo needs to be updated to support Webpack 2.2.x [\#195](https://github.com/gobuffalo/buffalo/issues/195)
+
+**Closed issues:**
+
+- buffalo command throwing errors [\#266](https://github.com/gobuffalo/buffalo/issues/266)
+- v0.7.3 webpack2.0 release breaks default configuration [\#262](https://github.com/gobuffalo/buffalo/issues/262)
+- models starting with a b produce errors [\#261](https://github.com/gobuffalo/buffalo/issues/261)
+- App.Group incorrectly builds paths on Windows machines [\#258](https://github.com/gobuffalo/buffalo/issues/258)
+- Can't register custom error handler [\#255](https://github.com/gobuffalo/buffalo/issues/255)
+- install fails when sqllite fails to build. [\#253](https://github.com/gobuffalo/buffalo/issues/253)
+- Add Support for MongoDB via mgo package [\#252](https://github.com/gobuffalo/buffalo/issues/252)
+- Documentation Needs to State Requirement for Go \>= 1.7 [\#251](https://github.com/gobuffalo/buffalo/issues/251)
+
+**Merged pull requests:**
+
+- Inching towards being able to use different template engines in Buffalo [\#265](https://github.com/gobuffalo/buffalo/pull/265) ([markbates](https://github.com/markbates))
+- support binding of html multipart post requests [\#264](https://github.com/gobuffalo/buffalo/pull/264) ([tsauter](https://github.com/tsauter))
+- Webpack v2.2.1 upgrade [\#263](https://github.com/gobuffalo/buffalo/pull/263) ([fooflare](https://github.com/fooflare))
+- fixed build so it also builds non-db apps [\#260](https://github.com/gobuffalo/buffalo/pull/260) ([markbates](https://github.com/markbates))
+- updated router Group function to acount for Windows path cruft [\#259](https://github.com/gobuffalo/buffalo/pull/259) ([schigh](https://github.com/schigh))
+- Copy ErrorHandlers to Group. [\#257](https://github.com/gobuffalo/buffalo/pull/257) ([drlogout](https://github.com/drlogout))
+- Add Go version requirement to README.md [\#254](https://github.com/gobuffalo/buffalo/pull/254) ([gillchristian](https://github.com/gillchristian))
+
 ## [v0.7.3](https://github.com/gobuffalo/buffalo/tree/v0.7.3) (2017-02-15)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.2...v0.7.3)
 
