@@ -33,8 +33,17 @@ RUN go vet -x ./...
 RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
+
 RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
+
+RUN buffalo g resource users name:text email:text
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_model_migration.json
+
+RUN rm -rf models/user.go
+RUN rm -rf models/user_test.go
+RUN rm -rf actions/users_test.go
+
 RUN buffalo test -race
 RUN buffalo build
 

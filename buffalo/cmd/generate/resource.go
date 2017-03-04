@@ -3,6 +3,7 @@ package generate
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/markbates/gentronics"
@@ -19,6 +20,7 @@ var ResourceCmd = &cobra.Command{
 		if len(args) == 0 {
 			return errors.New("you must specify a resource name")
 		}
+
 		name := args[0]
 		data := gentronics.Data{
 			"name":         name,
@@ -28,7 +30,9 @@ var ResourceCmd = &cobra.Command{
 			"under":        inflect.Underscore(name),
 			"downFirstCap": inflect.CamelizeDownFirst(name),
 			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":         args,
 		}
+
 		return NewResourceGenerator(data).Run(".", data)
 	},
 }
@@ -47,6 +51,13 @@ func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 			)
 		},
 	})
+
+	modelName := inflect.Underscore(data["singular"].(string))
+	args := data["args"].([]string)
+	args = append(args[:0], args[0+1:]...)
+	args = append([]string{"db", "g", "model", modelName}, args...)
+	g.Add(gentronics.NewCommand(exec.Command("buffalo", args...)))
+
 	g.Add(Fmt)
 	return g
 }
