@@ -12,13 +12,13 @@ import (
 
 const (
 	// CSRF token length in bytes.
-	CSRF_TOKEN_LENGTH int    = 32
-	CSRF_TOKEN_KEY    string = "authenticity_token"
+	csrfTokenLength int    = 32
+	csrfTokenKey    string = "authenticity_token"
 )
 
 var (
 	// The name value used in form fields.
-	fieldName = CSRF_TOKEN_KEY
+	fieldName = csrfTokenKey
 
 	// The HTTP request header to inspect
 	headerName = "X-CSRF-Token"
@@ -41,23 +41,23 @@ var (
 	ErrBadToken = errors.New("CSRF token invalid")
 )
 
-// Enable CSRF protection on routes using this middleware.
+// EnableCSRF enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf
 func EnableCSRF() buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
 			var realToken []byte
-			rawRealToken := c.Session().Get(CSRF_TOKEN_KEY)
+			rawRealToken := c.Session().Get(csrfTokenKey)
 
-			if rawRealToken == nil || len(rawRealToken.([]byte)) != CSRF_TOKEN_LENGTH {
+			if rawRealToken == nil || len(rawRealToken.([]byte)) != csrfTokenLength {
 				// If the token is missing, or the length if the token is wrong,
 				// generate a new token.
-				realToken, err := generateRandomBytes(CSRF_TOKEN_LENGTH)
+				realToken, err := generateRandomBytes(csrfTokenLength)
 				if err != nil {
 					return err
 				}
 				// Save the new real token in session
-				c.Session().Set(CSRF_TOKEN_KEY, realToken)
+				c.Session().Set(csrfTokenKey, realToken)
 			} else {
 				realToken = rawRealToken.([]byte)
 			}
@@ -174,7 +174,7 @@ func xorToken(a, b []byte) []byte {
 // randomises the token on a per-request basis without breaking multiple browser
 // tabs/windows.
 func mask(realToken []byte, r *http.Request) string {
-	otp, err := generateRandomBytes(CSRF_TOKEN_LENGTH)
+	otp, err := generateRandomBytes(csrfTokenLength)
 	if err != nil {
 		return ""
 	}
@@ -189,13 +189,13 @@ func mask(realToken []byte, r *http.Request) string {
 // unmasked request token for comparison.
 func unmask(issued []byte) []byte {
 	// Issued tokens are always masked and combined with the pad.
-	if len(issued) != CSRF_TOKEN_LENGTH*2 {
+	if len(issued) != csrfTokenLength*2 {
 		return nil
 	}
 
 	// We now know the length of the byte slice.
-	otp := issued[CSRF_TOKEN_LENGTH:]
-	masked := issued[:CSRF_TOKEN_LENGTH]
+	otp := issued[csrfTokenLength:]
+	masked := issued[:csrfTokenLength]
 
 	// Unmask the token by XOR'ing it against the OTP used to mask it.
 	return xorToken(otp, masked)
