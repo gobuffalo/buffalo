@@ -36,6 +36,22 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
 
+* [github.com/gobuffalo/plush](https://github.com/gobuffalo/plush)
+
+* [github.com/gobuffalo/plush/ast](https://github.com/gobuffalo/plush/ast)
+
+* [github.com/gobuffalo/plush/lexer](https://github.com/gobuffalo/plush/lexer)
+
+* [github.com/gobuffalo/plush/parser](https://github.com/gobuffalo/plush/parser)
+
+* [github.com/gobuffalo/plush/token](https://github.com/gobuffalo/plush/token)
+
+* [github.com/gobuffalo/tags](https://github.com/gobuffalo/tags)
+
+* [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/form)
+
+* [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/form/bootstrap)
+
 * [github.com/gobuffalo/velvet](https://github.com/gobuffalo/velvet)
 
 * [github.com/gorilla/context](https://github.com/gorilla/context)
