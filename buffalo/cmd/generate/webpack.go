@@ -2,7 +2,7 @@ package generate
 
 import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +13,7 @@ var WebpackCmd = &cobra.Command{
 	Use:   "webpack [flags]",
 	Short: "Generates a webpack asset pipeline.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		data := gentronics.Data{
+		data := makr.Data{
 			"withWebpack": true,
 			"withYarn":    withYarn,
 		}

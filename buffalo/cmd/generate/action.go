@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/generators/action"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
@@ -26,7 +26,7 @@ var ActionCmd = &cobra.Command{
 
 		name := args[0]
 
-		data := gentronics.Data{
+		data := makr.Data{
 			"filename":  inflect.Underscore(name),
 			"namespace": inflect.Camelize(name),
 		}

@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +19,7 @@ var ResourceCmd = &cobra.Command{
 			return errors.New("you must specify a resource name")
 		}
 		name := args[0]
-		data := gentronics.Data{
+		data := makr.Data{
 			"name":         name,
 			"singular":     inflect.Singularize(name),
 			"plural":       inflect.Pluralize(name),

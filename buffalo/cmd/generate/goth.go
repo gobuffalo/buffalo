@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/gobuffalo/buffalo/generators/goth"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var GothCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return g.Run(".", gentronics.Data{
+		return g.Run(".", makr.Data{
 			"providers": args,
 		})
 	},
