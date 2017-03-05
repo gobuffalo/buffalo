@@ -16,11 +16,12 @@ type csrfForm struct {
 
 func ctCSRFApp() *buffalo.App {
 	h := func(c buffalo.Context) error {
-		return c.Render(200, render.String(c.(*buffalo.DefaultContext).Data()["authenticity_token"].(string)))
+		return c.Render(200, render.String(c.Value("authenticity_token").(string)))
 	}
 	a := buffalo.Automatic(buffalo.Options{})
-	a.GET("/csrf", middleware.EnableCSRF()(h))
-	a.POST("/csrf", middleware.EnableCSRF()(h))
+	a.Use(middleware.CSRF)
+	a.GET("/csrf", h)
+	a.POST("/csrf", h)
 	return a
 }
 
