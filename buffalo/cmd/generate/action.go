@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/markbates/gentronics"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -63,7 +64,7 @@ var ActionCmd = &cobra.Command{
 		addTemplateFiles(actionsToAdd, data)
 
 		if !runningTests {
-			g.Add(Fmt)
+			g.Add(gentronics.NewCommand(generators.GoFmt()))
 		}
 
 		return g.Run(".", data)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/markbates/gentronics"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -47,7 +48,7 @@ func NewResourceGenerator(data gentronics.Data) *gentronics.Generator {
 			)
 		},
 	})
-	g.Add(Fmt)
+	g.Add(gentronics.NewCommand(generators.GoFmt()))
 	return g
 }
 
