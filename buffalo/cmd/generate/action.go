@@ -58,7 +58,7 @@ var ActionCmd = &cobra.Command{
 				for _, a := range actions {
 					routes = append(routes, fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, a, data["namespace"].(string)+inflect.Camelize(a)))
 				}
-				return addInsideAppBlock(routes...)
+				return generators.AddInsideAppBlock(routes...)
 			},
 		})
 		addTemplateFiles(actionsToAdd, data)
