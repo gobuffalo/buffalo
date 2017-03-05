@@ -2,8 +2,8 @@ package generate
 
 import (
 	"errors"
-	"path/filepath"
 
+	"github.com/gobuffalo/buffalo/generators/goth"
 	"github.com/markbates/gentronics"
 	"github.com/spf13/cobra"
 )
@@ -16,63 +16,12 @@ var GothCmd = &cobra.Command{
 		if len(args) == 0 {
 			return errors.New("you must specify at least one provider")
 		}
-		return NewGothGenerator().Run(".", gentronics.Data{
+		g, err := goth.New()
+		if err != nil {
+			return err
+		}
+		return g.Run(".", gentronics.Data{
 			"providers": args,
 		})
 	},
 }
-
-// NewGothGenerator a actions/goth.go file configured to the specified providers.
-func NewGothGenerator() *gentronics.Generator {
-	g := gentronics.New()
-	g.Add(gentronics.NewFile(filepath.Join("actions", "auth.go"), gGoth))
-	g.Add(&gentronics.Func{
-		Should: func(data gentronics.Data) bool { return true },
-		Runner: func(root string, data gentronics.Data) error {
-			err := addInsideAppBlock("auth := app.Group(\"/auth\")",
-				"auth.GET(\"/{provider}\", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))",
-				"auth.GET(\"/{provider}/callback\", AuthCallback)")
-			if err != nil {
-				return err
-			}
-			return addImport(filepath.Join("actions", "app.go"), "github.com/markbates/goth/gothic")
-		},
-	})
-	g.Add(gentronics.NewCommand(GoGet("github.com/markbates/goth/...")))
-	g.Add(Fmt)
-	return g
-}
-
-var gGoth = `package actions
-
-import (
-	"fmt"
-	"os"
-
-	"github.com/gobuffalo/buffalo"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/gothic"
-	{{#each providers}}
-	"github.com/markbates/goth/providers/{{ downcase . }}"
-	{{/each}}
-)
-
-func init() {
-	gothic.Store = App().SessionStore
-
-	goth.UseProviders(
-		{{#each providers}}
-		{{downcase .}}.New(os.Getenv("{{upcase .}}_KEY"), os.Getenv("{{upcase .}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{downcase .}}/callback")),
-		{{/each}}
-	)
-}
-
-func AuthCallback(c buffalo.Context) error {
-	user, err := gothic.CompleteUserAuth(c.Response(), c.Request())
-	if err != nil {
-		return c.Error(401, err)
-	}
-	// Do something with the user, maybe register them/sign them in
-	return c.Render(200, r.JSON(user))
-}
-`

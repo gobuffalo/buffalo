@@ -1,7 +1,7 @@
 package newapp
 
 import (
-	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/markbates/gentronics"
 	sg "github.com/markbates/pop/soda/cmd/generate"
 )
@@ -20,11 +20,11 @@ func newSodaGenerator() *gentronics.Generator {
 	f.Should = should
 	g.Add(f)
 
-	c := gentronics.NewCommand(generate.GoGet("github.com/markbates/pop/..."))
+	c := gentronics.NewCommand(generators.GoGet("github.com/markbates/pop/..."))
 	c.Should = should
 	g.Add(c)
 
-	c = gentronics.NewCommand(generate.GoInstall("github.com/markbates/pop/soda"))
+	c = gentronics.NewCommand(generators.GoInstall("github.com/markbates/pop/soda"))
 	c.Should = should
 	g.Add(c)
 

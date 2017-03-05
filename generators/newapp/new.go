@@ -4,9 +4,9 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	"github.com/gobuffalo/buffalo/generators/common"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/gentronics"
 )
@@ -27,7 +27,7 @@ type App struct {
 // Generator returns a generator to create a new application
 func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	g := gentronics.New()
-	files, err := common.Find("newapp")
+	files, err := generators.Find("newapp")
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +45,12 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 		g.Add(gentronics.NewFile(".travis.yml", nTravis))
 	}
 
-	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/refresh/...")))
-	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/refresh")))
-	g.Add(gentronics.NewCommand(generate.GoGet("github.com/markbates/grift/...")))
-	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/markbates/grift")))
-	g.Add(gentronics.NewCommand(generate.GoGet("github.com/motemen/gore")))
-	g.Add(gentronics.NewCommand(generate.GoInstall("github.com/motemen/gore")))
+	g.Add(gentronics.NewCommand(generators.GoGet("github.com/markbates/refresh/...")))
+	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/markbates/refresh")))
+	g.Add(gentronics.NewCommand(generators.GoGet("github.com/markbates/grift/...")))
+	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/markbates/grift")))
+	g.Add(gentronics.NewCommand(generators.GoGet("github.com/motemen/gore")))
+	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
 		wg, err := standard.New(data)
 		if err != nil {

@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
-	"github.com/gobuffalo/buffalo/generators/common"
 	"github.com/markbates/gentronics"
 )
 
@@ -49,7 +49,7 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 
 	g.Add(logo)
 
-	files, err := common.Find(filepath.Join("assets", "webpack"))
+	files, err := generators.Find(filepath.Join("assets", "webpack"))
 	if err != nil {
 		return g, err
 	}
