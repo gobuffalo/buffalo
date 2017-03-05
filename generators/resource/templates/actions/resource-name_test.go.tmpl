@@ -1,0 +1,13 @@
+package actions_test
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+{{#each actions}}
+func Test_{{camel}}Resource_{{camelize .}}(t *testing.T) {
+	r := require.New(t)
+	r.Fail("Not Implemented!")
+}
+{{/each}}
