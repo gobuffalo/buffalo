@@ -3,7 +3,6 @@ package newapp
 import (
 	"os/exec"
 
-	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
@@ -66,7 +65,7 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	}
 	g.Add(newSodaGenerator())
 	g.Add(gentronics.NewCommand(a.goGet()))
-	g.Add(generate.Fmt)
+	g.Add(gentronics.NewCommand(generators.GoFmt()))
 
 	return g, nil
 }
