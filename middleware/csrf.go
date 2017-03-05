@@ -34,72 +34,70 @@ var (
 	// ErrBadReferer is returned when the scheme & host in the URL do not match
 	// the supplied Referer header.
 	ErrBadReferer = errors.New("referer invalid")
-	// ErrNoToken is returned if no CSRF token is supplied in the request.
-	ErrNoToken = errors.New("CSRF token not found in request")
-	// ErrBadToken is returned if the CSRF token in the request does not match
+	// ErrNoCSRFToken is returned if no CSRF token is supplied in the request.
+	ErrNoCSRFToken = errors.New("CSRF token not found in request")
+	// ErrBadCSRFToken is returned if the CSRF token in the request does not match
 	// the token in the session, or is otherwise malformed.
-	ErrBadToken = errors.New("CSRF token invalid")
+	ErrBadCSRFToken = errors.New("CSRF token invalid")
 )
 
-// EnableCSRF enable CSRF protection on routes using this middleware.
+// CSRF enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf
-func EnableCSRF() buffalo.MiddlewareFunc {
-	return func(next buffalo.Handler) buffalo.Handler {
-		return func(c buffalo.Context) error {
-			var realToken []byte
-			rawRealToken := c.Session().Get(csrfTokenKey)
+func CSRF(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		var realToken []byte
+		rawRealToken := c.Session().Get(csrfTokenKey)
 
-			if rawRealToken == nil || len(rawRealToken.([]byte)) != csrfTokenLength {
-				// If the token is missing, or the length if the token is wrong,
-				// generate a new token.
-				realToken, err := generateRandomBytes(csrfTokenLength)
-				if err != nil {
-					return err
-				}
-				// Save the new real token in session
-				c.Session().Set(csrfTokenKey, realToken)
-			} else {
-				realToken = rawRealToken.([]byte)
+		if rawRealToken == nil || len(rawRealToken.([]byte)) != csrfTokenLength {
+			// If the token is missing, or the length if the token is wrong,
+			// generate a new token.
+			realToken, err := generateRandomBytes(csrfTokenLength)
+			if err != nil {
+				return err
 			}
-
-			// Set masked token in context data, to be available in template
-			c.Set(fieldName, mask(realToken, c.Request()))
-
-			// HTTP methods not defined as idempotent ("safe") under RFC7231 require
-			// inspection.
-			if !contains(safeMethods, c.Request().Method) {
-				// Enforce an origin check for HTTPS connections. As per the Django CSRF
-				// implementation (https://goo.gl/vKA7GE) the Referer header is almost
-				// always present for same-domain HTTP requests.
-				if c.Request().URL.Scheme == "https" {
-					// Fetch the Referer value. Call the error handler if it's empty or
-					// otherwise fails to parse.
-					referer, err := url.Parse(c.Request().Referer())
-					if err != nil || referer.String() == "" {
-						return ErrNoReferer
-					}
-
-					if sameOrigin(c.Request().URL, referer) == false {
-						return ErrBadReferer
-					}
-				}
-
-				// Retrieve the combined token (pad + masked) token and unmask it.
-				requestToken := unmask(requestCSRFToken(c.Request()))
-
-				// Missing token
-				if requestToken == nil {
-					return ErrNoToken
-				}
-
-				// Compare tokens
-				if !compareTokens(requestToken, realToken) {
-					return ErrBadToken
-				}
-			}
-
-			return next(c)
+			// Save the new real token in session
+			c.Session().Set(csrfTokenKey, realToken)
+		} else {
+			realToken = rawRealToken.([]byte)
 		}
+
+		// Set masked token in context data, to be available in template
+		c.Set(fieldName, mask(realToken, c.Request()))
+
+		// HTTP methods not defined as idempotent ("safe") under RFC7231 require
+		// inspection.
+		if !contains(safeMethods, c.Request().Method) {
+			// Enforce an origin check for HTTPS connections. As per the Django CSRF
+			// implementation (https://goo.gl/vKA7GE) the Referer header is almost
+			// always present for same-domain HTTP requests.
+			if c.Request().URL.Scheme == "https" {
+				// Fetch the Referer value. Call the error handler if it's empty or
+				// otherwise fails to parse.
+				referer, err := url.Parse(c.Request().Referer())
+				if err != nil || referer.String() == "" {
+					return ErrNoReferer
+				}
+
+				if sameOrigin(c.Request().URL, referer) == false {
+					return ErrBadReferer
+				}
+			}
+
+			// Retrieve the combined token (pad + masked) token and unmask it.
+			requestToken := unmask(requestCSRFToken(c.Request()))
+
+			// Missing token
+			if requestToken == nil {
+				return ErrNoCSRFToken
+			}
+
+			// Compare tokens
+			if !compareTokens(requestToken, realToken) {
+				return ErrBadCSRFToken
+			}
+		}
+
+		return next(c)
 	}
 }
 
