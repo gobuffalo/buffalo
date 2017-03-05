@@ -26,5 +26,9 @@ func GoFmt() *exec.Cmd {
 	if err == nil {
 		c = "goimports"
 	}
+	_, err = exec.LookPath("gofmt")
+	if err != nil {
+		return exec.Command("echo", "could not find gofmt or goimports")
+	}
 	return exec.Command(c, "-w", ".")
 }

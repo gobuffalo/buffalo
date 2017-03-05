@@ -10,10 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func init() {
-	runningTests = true
-}
-
 func TestGenerateActionArgsComplete(t *testing.T) {
 	dir := os.TempDir()
 	packagePath := filepath.Join(dir, "src", "sample")
