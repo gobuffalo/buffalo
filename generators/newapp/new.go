@@ -84,13 +84,13 @@ env:
 - GO_ENV=test
 
 before_script:
-  - psql -c 'create database {{name}}_test;' -U postgres
-	- mysql -e 'CREATE DATABASE {{name}}_test;'
+  - psql -c 'create database {{.name}}_test;' -U postgres
+	- mysql -e 'CREATE DATABASE {{.name}}_test;'
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go:
   - 1.7.x
   - master
 
-go_import_path: {{ packagePath }}
+go_import_path: {{ .packagePath }}
 `
