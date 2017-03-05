@@ -1,6 +1,8 @@
-package generate
+package generators
 
-import "os/exec"
+import (
+	"os/exec"
+)
 
 // GoInstall compiles and installs packages and dependencies
 func GoInstall(pkg string) *exec.Cmd {
@@ -14,4 +16,15 @@ func GoGet(pkg string) *exec.Cmd {
 	args := []string{"get"}
 	args = append(args, pkg)
 	return exec.Command("go", args...)
+}
+
+// GoFmt is command that will use `goimports` if available,
+// or fail back to `gofmt` otherwise.
+func GoFmt() *exec.Cmd {
+	c := "gofmt"
+	_, err := exec.LookPath("goimports")
+	if err == nil {
+		c = "goimports"
+	}
+	return exec.Command(c, "-w", ".")
 }

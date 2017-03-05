@@ -1,7 +1,7 @@
 package refresh
 
 import (
-	"github.com/gobuffalo/buffalo/generators/common"
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/markbates/gentronics"
 )
 
@@ -9,7 +9,7 @@ import (
 func New() (*gentronics.Generator, error) {
 	g := gentronics.New()
 
-	files, err := common.Find("refresh")
+	files, err := generators.Find("refresh")
 	if err != nil {
 		return nil, err
 	}

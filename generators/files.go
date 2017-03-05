@@ -1,4 +1,4 @@
-package common
+package generators
 
 import (
 	"io/ioutil"

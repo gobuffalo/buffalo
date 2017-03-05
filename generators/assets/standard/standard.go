@@ -3,8 +3,8 @@ package standard
 import (
 	"path/filepath"
 
+	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
-	"github.com/gobuffalo/buffalo/generators/common"
 	"github.com/markbates/gentronics"
 )
 
@@ -15,7 +15,7 @@ var logo = &gentronics.RemoteFile{
 
 // New standard assets generator for those wishing to not use webpack
 func New(data gentronics.Data) (*gentronics.Generator, error) {
-	files, err := common.Find(filepath.Join("assets", "standard"))
+	files, err := generators.Find(filepath.Join("assets", "standard"))
 	if err != nil {
 		return nil, err
 	}
