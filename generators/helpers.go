@@ -10,11 +10,13 @@ import (
 	"strings"
 )
 
+// AddRoute adds a new route inside the `action/app.go` file.
 func AddRoute(method, path, handlerName string) error {
 	routeDefinition := fmt.Sprintf(`app.%v("%v", %v)`, method, path, handlerName)
 	return AddInsideAppBlock(routeDefinition)
 }
 
+// AddInsideAppBlock will add anything inside of the app declaration block inside of `actions/app.go`
 func AddInsideAppBlock(expressions ...string) error {
 	src, err := ioutil.ReadFile("actions/app.go")
 	if err != nil {
@@ -65,6 +67,7 @@ func findClosingRouteBlockEnd(f *ast.File, fset *token.FileSet, fileLines []stri
 	return end
 }
 
+// AddImport adds n number of import statements into the path provided
 func AddImport(path string, imports ...string) error {
 	src, err := ioutil.ReadFile(path)
 	if err != nil {
