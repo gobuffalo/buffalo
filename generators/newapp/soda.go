@@ -2,35 +2,35 @@ package newapp
 
 import (
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	sg "github.com/markbates/pop/soda/cmd/generate"
 )
 
-func newSodaGenerator() *gentronics.Generator {
-	g := gentronics.New()
+func newSodaGenerator() *makr.Generator {
+	g := makr.New()
 
-	should := func(data gentronics.Data) bool {
+	should := func(data makr.Data) bool {
 		if _, ok := data["withPop"]; ok {
 			return ok
 		}
 		return false
 	}
 
-	f := gentronics.NewFile("models/models.go", nModels)
+	f := makr.NewFile("models/models.go", nModels)
 	f.Should = should
 	g.Add(f)
 
-	c := gentronics.NewCommand(generators.GoGet("github.com/markbates/pop/..."))
+	c := makr.NewCommand(generators.GoGet("github.com/markbates/pop/..."))
 	c.Should = should
 	g.Add(c)
 
-	c = gentronics.NewCommand(generators.GoInstall("github.com/markbates/pop/soda"))
+	c = makr.NewCommand(generators.GoInstall("github.com/markbates/pop/soda"))
 	c.Should = should
 	g.Add(c)
 
-	g.Add(&gentronics.Func{
+	g.Add(&makr.Func{
 		Should: should,
-		Runner: func(rootPath string, data gentronics.Data) error {
+		Runner: func(rootPath string, data makr.Data) error {
 			data["dialect"] = data["dbType"]
 			return sg.GenerateConfig("./database.yml", data)
 		},

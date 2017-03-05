@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/refresh"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 )
 
 // App is the representation of a new Buffalo application
@@ -24,15 +24,15 @@ type App struct {
 }
 
 // Generator returns a generator to create a new application
-func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
-	g := gentronics.New()
+func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
+	g := makr.New()
 	files, err := generators.Find("newapp")
 	if err != nil {
 		return nil, err
 	}
 
 	for _, f := range files {
-		g.Add(gentronics.NewFile(f.WritePath, f.Body))
+		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
 	rr, err := refresh.New()
 	if err != nil {
@@ -41,15 +41,15 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 	g.Add(rr)
 
 	if data["ciProvider"] == "travis" {
-		g.Add(gentronics.NewFile(".travis.yml", nTravis))
+		g.Add(makr.NewFile(".travis.yml", nTravis))
 	}
 
-	g.Add(gentronics.NewCommand(generators.GoGet("github.com/markbates/refresh/...")))
-	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/markbates/refresh")))
-	g.Add(gentronics.NewCommand(generators.GoGet("github.com/markbates/grift/...")))
-	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/markbates/grift")))
-	g.Add(gentronics.NewCommand(generators.GoGet("github.com/motemen/gore")))
-	g.Add(gentronics.NewCommand(generators.GoInstall("github.com/motemen/gore")))
+	g.Add(makr.NewCommand(generators.GoGet("github.com/markbates/refresh/...")))
+	g.Add(makr.NewCommand(generators.GoInstall("github.com/markbates/refresh")))
+	g.Add(makr.NewCommand(generators.GoGet("github.com/markbates/grift/...")))
+	g.Add(makr.NewCommand(generators.GoInstall("github.com/markbates/grift")))
+	g.Add(makr.NewCommand(generators.GoGet("github.com/motemen/gore")))
+	g.Add(makr.NewCommand(generators.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
 		wg, err := standard.New(data)
 		if err != nil {
@@ -64,8 +64,8 @@ func (a *App) Generator(data gentronics.Data) (*gentronics.Generator, error) {
 		g.Add(wg)
 	}
 	g.Add(newSodaGenerator())
-	g.Add(gentronics.NewCommand(a.goGet()))
-	g.Add(gentronics.NewCommand(generators.GoFmt()))
+	g.Add(makr.NewCommand(a.goGet()))
+	g.Add(makr.NewCommand(generators.GoFmt()))
 
 	return g, nil
 }

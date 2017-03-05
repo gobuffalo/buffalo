@@ -162,10 +162,12 @@ func genNewFiles() error {
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !app.SkipPop,
 		"withWebpack": !app.SkipWebpack,
-		"withYarn":    app.WithYarn,
 		"dbType":      app.DBType,
 		"version":     Version,
 		"ciProvider":  app.CIProvider,
+	}
+	if app.WithYarn {
+		data["withYarn"] = true
 	}
 
 	g, err := app.Generator(data)

@@ -8,11 +8,11 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 )
 
-var logo = &gentronics.RemoteFile{
-	File:       gentronics.NewFile("assets/images/logo.svg", ""),
+var logo = &makr.RemoteFile{
+	File:       makr.NewFile("assets/images/logo.svg", ""),
 	RemotePath: assets.LogoURL,
 }
 
@@ -20,8 +20,8 @@ var logo = &gentronics.RemoteFile{
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
 // New webpack generator
-func New(data gentronics.Data) (*gentronics.Generator, error) {
-	g := gentronics.New()
+func New(data makr.Data) (*makr.Generator, error) {
+	g := makr.New()
 
 	// if there's no npm, return!
 	_, err := exec.LookPath("npm")
@@ -55,10 +55,10 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 	}
 
 	for _, f := range files {
-		g.Add(gentronics.NewFile(f.WritePath, f.Body))
+		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
 
-	c := gentronics.NewCommand(exec.Command(command, "init", "-y"))
+	c := makr.NewCommand(exec.Command(command, "init", "-y"))
 	g.Add(c)
 
 	modules := []string{"webpack@^2.2.1", "sass-loader", "css-loader", "style-loader", "node-sass",
@@ -68,18 +68,18 @@ func New(data gentronics.Data) (*gentronics.Generator, error) {
 	}
 
 	args = append(args, modules...)
-	g.Add(gentronics.NewCommand(exec.Command(command, args...)))
+	g.Add(makr.NewCommand(exec.Command(command, args...)))
 	return g, nil
 }
 
-func generateYarn(data gentronics.Data) error {
+func generateYarn(data makr.Data) error {
 	// if there's no yarn, install it!
 	_, err := exec.LookPath("yarn")
-	// A new gentronics is necessary to have yarn available in path
+	// A new makr is necessary to have yarn available in path
 	if err != nil {
-		yg := gentronics.New()
+		yg := makr.New()
 		yargs := []string{"install", "-g", "yarn"}
-		yg.Add(gentronics.NewCommand(exec.Command("npm", yargs...)))
+		yg.Add(makr.NewCommand(exec.Command("npm", yargs...)))
 		err = yg.Run(".", data)
 		if err != nil {
 			return err

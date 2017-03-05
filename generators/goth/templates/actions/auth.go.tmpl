@@ -7,18 +7,18 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
-	{{#each providers}}
+	{{range .providers -}}
 	"github.com/markbates/goth/providers/{{ downcase . }}"
-	{{/each}}
+  {{end -}}
 )
 
 func init() {
 	gothic.Store = App().SessionStore
 
 	goth.UseProviders(
-		{{#each providers}}
+    {{range .providers -}}
 		{{downcase .}}.New(os.Getenv("{{upcase .}}_KEY"), os.Getenv("{{upcase .}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{downcase .}}/callback")),
-		{{/each}}
+    {{end -}}
 	)
 }
 

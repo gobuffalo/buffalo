@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
@@ -31,9 +31,9 @@ var consoleCmd = &cobra.Command{
 		}
 
 		fname := inflect.Parameterize(packagePath) + "_loader.go"
-		g := gentronics.New()
-		g.Add(gentronics.NewFile(fname, cMain))
-		err = g.Run(os.TempDir(), gentronics.Data{
+		g := makr.New()
+		g.Add(makr.NewFile(fname, cMain))
+		err = g.Run(os.TempDir(), makr.Data{
 			"packages": packages,
 		})
 		os.Chdir(rootPath)
@@ -57,7 +57,7 @@ func init() {
 var cMain = `
 package main
 
-{{#each packages}}
+{{range .packages}}
 import _ "{{.}}"
-{{/each}}
+{{end}}
 `

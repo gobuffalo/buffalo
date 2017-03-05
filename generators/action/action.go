@@ -8,14 +8,14 @@ import (
 
 	"github.com/bep/inflect"
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/markbates/gentronics"
+	"github.com/gobuffalo/makr"
 )
 
 var runningTests bool
 
 // New action generator
-func New(name string, actions []string, data gentronics.Data) (*gentronics.Generator, error) {
-	g := gentronics.New()
+func New(name string, actions []string, data makr.Data) (*makr.Generator, error) {
+	g := makr.New()
 
 	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", data["filename"]))
 	actionsTemplate := buildActionsTemplate(filePath)
@@ -27,11 +27,12 @@ func New(name string, actions []string, data gentronics.Data) (*gentronics.Gener
 	data["actions"] = actionsToAdd
 	data["tests"] = testsToAdd
 
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
-	g.Add(gentronics.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
-	g.Add(&gentronics.Func{
-		Should: func(data gentronics.Data) bool { return true },
-		Runner: func(root string, data gentronics.Data) error {
+	fmt.Printf("### actionsTemplate -> %+v\n", actionsTemplate)
+	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
+	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
+	g.Add(&makr.Func{
+		Should: func(data makr.Data) bool { return true },
+		Runner: func(root string, data makr.Data) error {
 			routes := []string{}
 			for _, a := range actions {
 				routes = append(routes, fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, a, data["namespace"].(string)+inflect.Camelize(a)))
@@ -42,7 +43,7 @@ func New(name string, actions []string, data gentronics.Data) (*gentronics.Gener
 	addTemplateFiles(actionsToAdd, data)
 
 	if !runningTests {
-		g.Add(gentronics.NewCommand(generators.GoFmt()))
+		g.Add(makr.NewCommand(generators.GoFmt()))
 	}
 	return g, nil
 }
@@ -55,12 +56,12 @@ func buildActionsTemplate(filePath string) string {
 	}
 
 	actionsTemplate = actionsTemplate + `
-{{#each actions as |action|}}
-// {{namespace}}{{camelize action}} default implementation.
-func {{namespace}}{{camelize action}}(c buffalo.Context) error {
-	return c.Render(200, r.HTML("{{filename}}/{{underscore action}}.html"))
+{{ range $action := .actions }}
+// {{$.namespace}}{{camelize $action}} default implementation.
+func {{$.namespace}}{{camelize $action}}(c buffalo.Context) error {
+	return c.Render(200, r.HTML("{{$.filename}}/{{underscore $action}}.html"))
 }
-{{/each}}`
+{{end}}`
 	return actionsTemplate
 }
 
@@ -79,22 +80,22 @@ import (
 	}
 
 	testsTemplate = testsTemplate + `
-{{#each tests as |action|}}
-func Test_{{namespace}}_{{camelize action}}(t *testing.T) {
+{{ range $action := .tests}}
+func Test_{{$.namespace}}_{{camelize $action}}(t *testing.T) {
 	r := require.New(t)
 	r.Fail("Not Implemented!")
 }
 
-{{/each}}`
+{{end}}`
 	return testsTemplate
 }
 
-func addTemplateFiles(actionsToAdd []string, data gentronics.Data) {
+func addTemplateFiles(actionsToAdd []string, data makr.Data) {
 	for _, action := range actionsToAdd {
-		vg := gentronics.New()
+		vg := makr.New()
 		viewPath := filepath.Join("templates", fmt.Sprintf("%s", data["filename"]), fmt.Sprintf("%s.html", inflect.Underscore(action)))
-		vg.Add(gentronics.NewFile(viewPath, rViewT))
-		vg.Run(".", gentronics.Data{
+		vg.Add(makr.NewFile(viewPath, rViewT))
+		vg.Run(".", makr.Data{
 			"namespace": data["namespace"],
 			"action":    inflect.Camelize(action),
 		})
