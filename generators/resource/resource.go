@@ -8,7 +8,7 @@ import (
 	"github.com/markbates/gentronics"
 )
 
-// Newgenerates a new actions/resource file and a stub test.
+// New generates a new actions/resource file and a stub test.
 func New(data gentronics.Data) (*gentronics.Generator, error) {
 	g := gentronics.New()
 	files, err := generators.Find("resource")

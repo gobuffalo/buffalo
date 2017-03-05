@@ -13,6 +13,7 @@ import (
 
 var runningTests bool
 
+// New action generator
 func New(name string, actions []string, data gentronics.Data) (*gentronics.Generator, error) {
 	g := gentronics.New()
 
