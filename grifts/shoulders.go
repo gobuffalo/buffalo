@@ -1,6 +1,7 @@
 package grifts
 
 import (
+	"fmt"
 	"html/template"
 	"os"
 	"os/exec"
@@ -10,8 +11,8 @@ import (
 	"github.com/markbates/grift/grift"
 )
 
-var _ = grift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
-var _ = grift.Add("shoulders", func(c *grift.Context) error {
+var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages used by buffalo.")
+var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 	giants := map[string]string{
 		"github.com/markbates/refresh": "github.com/markbates/refresh",
 		"github.com/markbates/grift":   "github.com/markbates/grift",
@@ -30,12 +31,22 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 		list := strings.Split(string(b), "\n")
 
 		for _, g := range list {
-			if strings.Contains(g, "github.com") {
+			if strings.Contains(g, "github.com") || strings.Contains(g, "bitbucket.org") {
+				fmt.Println(g)
 				giants[g] = g
 			}
 		}
 	}
+	c.Set("giants", giants)
+	return nil
+})
 
+var _ = grift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
+var _ = grift.Add("shoulders", func(c *grift.Context) error {
+	err := grift.Run("shoulders:list", c)
+	if err != nil {
+		return err
+	}
 	f, err := os.Create(path.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
 	if err != nil {
 		return err
@@ -44,7 +55,7 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
-	err = t.Execute(f, giants)
+	err = t.Execute(f, c.Get("giants"))
 	if err != nil {
 		return err
 	}

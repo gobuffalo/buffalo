@@ -7,8 +7,8 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/refresh/refresh"
 	"github.com/spf13/cobra"
 )
@@ -60,7 +60,7 @@ func startWebpack(ctx context.Context) error {
 		// there's no webpack, so don't do anything
 		return nil
 	}
-	cmd := exec.Command(generate.WebpackPath, "--watch")
+	cmd := exec.Command(webpack.BinPath, "--watch")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
@@ -71,21 +71,13 @@ func startDevServer(ctx context.Context) error {
 	cfgFile := "./.buffalo.dev.yml"
 	_, err := os.Stat(cfgFile)
 	if err != nil {
-		f, err := os.Create(cfgFile)
+		g, err := rg.New()
 		if err != nil {
 			return err
 		}
-		defer f.Close()
-		t, err := plush.Render(nRefresh, plush.NewContextWith(map[string]interface{}{
+		err = g.Run("./", map[string]interface{}{
 			"name": "buffalo",
-		}))
-		if err != nil {
-			return err
-		}
-		_, err = f.WriteString(t)
-		if err != nil {
-			return err
-		}
+		})
 	}
 	c := &refresh.Configuration{}
 	err = c.Load(cfgFile)

@@ -1,0 +1,32 @@
+package actions
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/gobuffalo/buffalo"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/gothic"
+	{{range .providers -}}
+	"github.com/markbates/goth/providers/{{ downcase . }}"
+  {{end -}}
+)
+
+func init() {
+	gothic.Store = App().SessionStore
+
+	goth.UseProviders(
+    {{range .providers -}}
+		{{downcase .}}.New(os.Getenv("{{upcase .}}_KEY"), os.Getenv("{{upcase .}}_SECRET"), fmt.Sprintf("%s%s", App().Host, "/auth/{{downcase .}}/callback")),
+    {{end -}}
+	)
+}
+
+func AuthCallback(c buffalo.Context) error {
+	user, err := gothic.CompleteUserAuth(c.Response(), c.Request())
+	if err != nil {
+		return c.Error(401, err)
+	}
+	// Do something with the user, maybe register them/sign them in
+	return c.Render(200, r.JSON(user))
+}

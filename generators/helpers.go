@@ -1,4 +1,4 @@
-package generate
+package generators
 
 import (
 	"errors"
@@ -10,12 +10,14 @@ import (
 	"strings"
 )
 
-func addRoute(method, path, handlerName string) error {
+// AddRoute adds a new route inside the `action/app.go` file.
+func AddRoute(method, path, handlerName string) error {
 	routeDefinition := fmt.Sprintf(`app.%v("%v", %v)`, method, path, handlerName)
-	return addInsideAppBlock(routeDefinition)
+	return AddInsideAppBlock(routeDefinition)
 }
 
-func addInsideAppBlock(expressions ...string) error {
+// AddInsideAppBlock will add anything inside of the app declaration block inside of `actions/app.go`
+func AddInsideAppBlock(expressions ...string) error {
 	src, err := ioutil.ReadFile("actions/app.go")
 	if err != nil {
 		return err
@@ -65,7 +67,8 @@ func findClosingRouteBlockEnd(f *ast.File, fset *token.FileSet, fileLines []stri
 	return end
 }
 
-func addImport(path string, imports ...string) error {
+// AddImport adds n number of import statements into the path provided
+func AddImport(path string, imports ...string) error {
 	src, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err

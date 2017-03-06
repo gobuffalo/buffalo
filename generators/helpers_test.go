@@ -1,4 +1,4 @@
-package generate
+package generators
 
 import (
 	"io/ioutil"
@@ -48,7 +48,7 @@ func App() *buffalo.App {
 
 	ioutil.WriteFile(filepath.Join(packagePath, "actions", "app.go"), []byte(shortAppFileExample), 0755)
 
-	addRoute("GET", "/new/route", "UserCoolHandler")
+	AddRoute("GET", "/new/route", "UserCoolHandler")
 
 	contentAfter, _ := ioutil.ReadFile(filepath.Join(packagePath, "actions", "app.go"))
 	r.Equal(`package actions

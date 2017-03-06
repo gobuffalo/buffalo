@@ -1,0 +1,15 @@
+package actions
+
+import "github.com/gobuffalo/buffalo"
+
+type {{.camel}}Resource struct{
+	buffalo.Resource
+}
+
+{{ range $a := .actions }}
+// {{$a}} default implementation.
+func (v {{$.camel}}Resource) {{$a}}(c buffalo.Context) error {
+	return c.Render(200, r.String("{{$.camel}}#{{$a}}"))
+}
+
+{{end}}
