@@ -30,8 +30,12 @@ func New(data makr.Data) (*makr.Generator, error) {
 		},
 	})
 
-	g.Add(modelCommand(data))
+	if skipModel := data["skipModel"].(bool); skipModel == false {
+		g.Add(modelCommand(data))
+	}
+
 	g.Add(makr.NewCommand(generators.GoFmt()))
+
 	return g, nil
 }
 
@@ -41,6 +45,10 @@ func modelCommand(data makr.Data) makr.Command {
 	args := data["args"].([]string)
 	args = append(args[:0], args[0+1:]...)
 	args = append([]string{"db", "g", "model", modelName}, args...)
+
+	if skipMigration := data["skipMigration"].(bool); skipMigration == false {
+		args = append(args, "--skip-migration")
+	}
 
 	return makr.NewCommand(exec.Command("buffalo", args...))
 }

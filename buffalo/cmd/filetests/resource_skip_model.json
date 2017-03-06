@@ -1,0 +1,7 @@
+[{
+    "path": "models",
+    "!contains": [
+        "user.go",
+        "user_test.go"
+    ]
+}]

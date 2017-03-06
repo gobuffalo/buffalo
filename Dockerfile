@@ -44,6 +44,13 @@ RUN rm -rf models/user.go
 RUN rm -rf models/user_test.go
 RUN rm -rf actions/users_test.go
 
+RUN buffalo g resource users --skip-model
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_skip_model.json
+
+RUN rm -rf models/user.go
+RUN rm -rf models/user_test.go
+RUN rm -rf actions/users_test.go
+
 RUN buffalo test -race
 RUN buffalo build
 
