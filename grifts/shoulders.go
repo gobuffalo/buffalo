@@ -1,10 +1,13 @@
 package grifts
 
 import (
+	"fmt"
 	"html/template"
 	"os"
 	"os/exec"
 	"path"
+	"sort"
+	"strings"
 
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
@@ -12,10 +15,7 @@ import (
 
 var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages used by buffalo.")
 var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
-	giants, err := deplist.List()
-	if err != nil {
-		return err
-	}
+	giants, _ := deplist.List("examples")
 	for _, k := range []string{
 		"github.com/markbates/refresh",
 		"github.com/markbates/grift",
@@ -26,7 +26,15 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 		giants[k] = k
 	}
 
-	c.Set("giants", giants)
+	deps := make([]string, len(giants), len(giants))
+	for k := range giants {
+		if !strings.Contains(k, "github.com/gobuffalo/buffalo") {
+			deps = append(deps, k)
+		}
+	}
+	sort.Strings(deps)
+	fmt.Println(strings.Join(deps, "\n"))
+	c.Set("giants", deps)
 	return nil
 })
 
@@ -76,7 +84,7 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 
 Thank you to the following **GIANTS**:
 
-{{ range $k, $v := .}}
-* [{{$k}}](https://{{$v}})
+{{ range $v := .}}
+* [{{$v}}](https://{{$v}})
 {{ end }}
 `
