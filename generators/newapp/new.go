@@ -44,12 +44,12 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
 	}
 
-	g.Add(makr.NewCommand(generators.GoGet("github.com/markbates/refresh/...")))
-	g.Add(makr.NewCommand(generators.GoInstall("github.com/markbates/refresh")))
-	g.Add(makr.NewCommand(generators.GoGet("github.com/markbates/grift/...")))
-	g.Add(makr.NewCommand(generators.GoInstall("github.com/markbates/grift")))
-	g.Add(makr.NewCommand(generators.GoGet("github.com/motemen/gore")))
-	g.Add(makr.NewCommand(generators.GoInstall("github.com/motemen/gore")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/refresh/...")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/markbates/refresh")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/grift/...")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/markbates/grift")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
 		wg, err := standard.New(data)
 		if err != nil {
@@ -65,7 +65,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	}
 	g.Add(newSodaGenerator())
 	g.Add(makr.NewCommand(a.goGet()))
-	g.Add(makr.NewCommand(generators.GoFmt()))
+	g.Add(makr.NewCommand(makr.GoFmt()))
 
 	return g, nil
 }

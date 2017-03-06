@@ -29,7 +29,7 @@ func New() (*makr.Generator, error) {
 			return generators.AddImport(filepath.Join("actions", "app.go"), "github.com/markbates/goth/gothic")
 		},
 	})
-	g.Add(makr.NewCommand(generators.GoGet("github.com/markbates/goth/...")))
-	g.Add(makr.NewCommand(generators.GoFmt()))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/goth/...")))
+	g.Add(makr.NewCommand(makr.GoFmt()))
 	return g, nil
 }
