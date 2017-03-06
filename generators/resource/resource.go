@@ -27,6 +27,6 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	g.Add(makr.NewCommand(generators.GoFmt()))
+	g.Add(makr.NewCommand(makr.GoFmt()))
 	return g, nil
 }

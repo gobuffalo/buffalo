@@ -1,7 +1,6 @@
 package newapp
 
 import (
-	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
 	sg "github.com/markbates/pop/soda/cmd/generate"
 )
@@ -20,11 +19,11 @@ func newSodaGenerator() *makr.Generator {
 	f.Should = should
 	g.Add(f)
 
-	c := makr.NewCommand(generators.GoGet("github.com/markbates/pop/..."))
+	c := makr.NewCommand(makr.GoGet("github.com/markbates/pop/..."))
 	c.Should = should
 	g.Add(c)
 
-	c = makr.NewCommand(generators.GoInstall("github.com/markbates/pop/soda"))
+	c = makr.NewCommand(makr.GoInstall("github.com/markbates/pop/soda"))
 	c.Should = should
 	g.Add(c)
 

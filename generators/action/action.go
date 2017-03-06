@@ -43,7 +43,7 @@ func New(name string, actions []string, data makr.Data) (*makr.Generator, error)
 	addTemplateFiles(actionsToAdd, data)
 
 	if !runningTests {
-		g.Add(makr.NewCommand(generators.GoFmt()))
+		g.Add(makr.NewCommand(makr.GoFmt()))
 	}
 	return g, nil
 }
