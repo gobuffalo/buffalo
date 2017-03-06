@@ -1,42 +1,31 @@
 package grifts
 
 import (
-	"fmt"
 	"html/template"
 	"os"
 	"os/exec"
 	"path"
-	"strings"
 
+	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
 )
 
 var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages used by buffalo.")
 var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
-	giants := map[string]string{
-		"github.com/markbates/refresh": "github.com/markbates/refresh",
-		"github.com/markbates/grift":   "github.com/markbates/grift",
-		"github.com/markbates/pop":     "github.com/markbates/pop",
-		"github.com/spf13/cobra":       "github.com/spf13/cobra",
-		"github.com/motemen/gore":      "github.com/motemen/gore",
+	giants, err := deplist.List()
+	if err != nil {
+		return err
+	}
+	for _, k := range []string{
+		"github.com/markbates/refresh",
+		"github.com/markbates/grift",
+		"github.com/markbates/pop",
+		"github.com/spf13/cobra",
+		"github.com/motemen/gore",
+	} {
+		giants[k] = k
 	}
 
-	for _, p := range []string{".", "./render"} {
-		cmd := exec.Command("go", "list", "-f", `'* {{ join .Deps  "\n"}}'`, p)
-		b, err := cmd.Output()
-		if err != nil {
-			return err
-		}
-
-		list := strings.Split(string(b), "\n")
-
-		for _, g := range list {
-			if strings.Contains(g, "github.com") || strings.Contains(g, "bitbucket.org") {
-				fmt.Println(g)
-				giants[g] = g
-			}
-		}
-	}
 	c.Set("giants", giants)
 	return nil
 })
