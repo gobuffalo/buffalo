@@ -9,9 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const resourceExamples = `
-
-$ buffalo g resource users
+const resourceExamples = `$ buffalo g resource users
 Generates:
 
 - actions/users.go
@@ -33,9 +31,7 @@ $ buffalo g resource users --skip-model
 Generates:
 
 - actions/users.go
-- actions/users_test.go
-
-`
+- actions/users_test.go`
 
 //SkipResourceMigration allows to generate a resource without the migration.
 var SkipResourceMigration = false
