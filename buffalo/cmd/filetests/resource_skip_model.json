@@ -1,6 +1,0 @@
-[{
-    "!contains": [
-        "models/user.go",
-        "models/user_test.go"
-    ]
-}]
