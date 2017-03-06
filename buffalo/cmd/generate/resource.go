@@ -16,8 +16,8 @@ Generates:
 - actions/users_test.go
 - models/user.go
 - models/user_test.go
-- migrations/XXXXX_create_table_users.fizz
-- migrations/XXXXX_drop_table_users.fizz
+- migrations/2016020216301234_create_users.up.fizz
+- migrations/2016020216301234_create_users.down.fizz
 
 $ buffalo g resource users --skip-migration
 Generates:

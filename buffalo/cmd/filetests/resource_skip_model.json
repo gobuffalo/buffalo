@@ -1,7 +1,6 @@
 [{
-    "path": "models",
     "!contains": [
-        "user.go",
-        "user_test.go"
+        "models/user.go",
+        "models/user_test.go"
     ]
 }]
