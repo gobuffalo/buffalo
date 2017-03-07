@@ -1,9 +1,11 @@
 package generators
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -19,9 +21,13 @@ type Files []File
 
 // Find all the .tmpl files inside the buffalo GOPATH
 func Find(path string) (Files, error) {
-	root := filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "generators", path, "templates")
+	gp, err := goPath()
+	if err != nil {
+		return nil, err
+	}
+	root := filepath.Join(gp, "src", "github.com", "gobuffalo", "buffalo", "generators", path, "templates")
 	files := Files{}
-	err := filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
+	err = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			if filepath.Ext(p) == ".tmpl" {
 				f := File{ReadPath: p}
@@ -49,4 +55,32 @@ func Find(path string) (Files, error) {
 		return nil
 	})
 	return files, err
+}
+
+func goPath() (string, error) {
+	gp := os.Getenv("GOPATH")
+
+	var gpMultiple []string
+
+	if runtime.GOOS == "windows" {
+		gpMultiple = strings.Split(gp, ";")
+	} else {
+		gpMultiple = strings.Split(gp, ":")
+	}
+
+	for _, path := range gpMultiple {
+		pp := filepath.Join(path, "src", "github.com", "gobuffalo", "buffalo")
+		if exists(pp) {
+			return path, nil
+		}
+	}
+	return "", errors.New("buffalo was not found")
+}
+
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return true
 }
