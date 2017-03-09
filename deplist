@@ -13,11 +13,6 @@ github.com/fatih/color/vendor/github.com/mattn/go-colorable
 github.com/fatih/color/vendor/github.com/mattn/go-isatty
 github.com/fsnotify/fsnotify
 github.com/go-sql-driver/mysql
-github.com/gobuffalo/buffalo
-github.com/gobuffalo/buffalo/buffalo/cmd
-github.com/gobuffalo/buffalo/buffalo/cmd/generate
-github.com/gobuffalo/buffalo/render
-github.com/gobuffalo/buffalo/render/resolvers
 github.com/gobuffalo/envy
 github.com/gobuffalo/makr
 github.com/gobuffalo/velvet
@@ -32,6 +27,7 @@ github.com/jmoiron/sqlx/reflectx
 github.com/kardianos/osext
 github.com/lib/pq
 github.com/lib/pq/oid
+github.com/markbates/deplist
 github.com/markbates/gentronics
 github.com/markbates/going/clam
 github.com/markbates/going/defaults
