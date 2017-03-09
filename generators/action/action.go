@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bep/inflect"
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/markbates/inflect"
 )
 
 var runningTests bool

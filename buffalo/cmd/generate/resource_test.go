@@ -29,6 +29,9 @@ func TestGenerateResourceCode(t *testing.T) {
 	os.Mkdir("actions", 0755)
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
+	SkipResourceMigration = false
+	SkipResourceModel = false
+
 	e = ResourceCmd.RunE(&cmd, []string{"users"})
 	r.Nil(e)
 

@@ -2,10 +2,12 @@ package resource
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/markbates/inflect"
 )
 
 // New generates a new actions/resource file and a stub test.
@@ -27,6 +29,26 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
+
+	if skipModel := data["skipModel"].(bool); skipModel == false {
+		g.Add(modelCommand(data))
+	}
+
 	g.Add(makr.NewCommand(makr.GoFmt()))
+
 	return g, nil
+}
+
+func modelCommand(data makr.Data) makr.Command {
+	modelName := inflect.Underscore(data["singular"].(string))
+
+	args := data["args"].([]string)
+	args = append(args[:0], args[0+1:]...)
+	args = append([]string{"db", "g", "model", modelName}, args...)
+
+	if skipMigration := data["skipMigration"].(bool); skipMigration == true {
+		args = append(args, "--skip-migration")
+	}
+
+	return makr.NewCommand(exec.Command("buffalo", args...))
 }
