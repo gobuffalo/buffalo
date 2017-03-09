@@ -1,36 +1,43 @@
 package grifts
 
 import (
-	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
+	"sort"
+	"strings"
 
+	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
 )
 
-var depListCmd = exec.Command("deplist", "|", "grep", "-v", "gobuffalo/buffalo")
-var _ = grift.Add("deplist", func(c *grift.Context) error {
-	out, err := depListCmd.Output()
-	if err != nil {
-		return err
+func depList() []string {
+	list, _ := deplist.List("examples")
+	clean := []string{}
+	for v := range list {
+		if !strings.Contains(v, "gobuffalo/buffalo") {
+			clean = append(clean, v)
+		}
 	}
+	sort.Strings(clean)
+	return clean
+}
+
+var _ = grift.Add("deplist", func(c *grift.Context) error {
 	w, err := os.Create("deplist")
 	if err != nil {
 		return err
 	}
 	defer w.Close()
-	w.Write(bytes.TrimSpace(out))
+	w.WriteString(strings.Join(depList(), "\n"))
 	return nil
 })
 
 var _ = grift.Add("deplist:count", func(c *grift.Context) error {
-	out, err := depListCmd.Output()
-	if err != nil {
-		return err
-	}
-	out = bytes.TrimSpace(out)
-	l := len(bytes.Split(out, []byte("\n")))
-	fmt.Printf("%d Dependencies\n", l)
+	fmt.Printf("%d Dependencies\n", len(depList()))
+	return nil
+})
+
+var _ = grift.Add("deplist:print", func(c *grift.Context) error {
+	fmt.Println(strings.Join(depList(), "\n"))
 	return nil
 })
