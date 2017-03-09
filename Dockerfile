@@ -45,8 +45,7 @@ RUN rm models/user.go
 RUN rm actions/users_test.go
 
 RUN buffalo g resource admins --skip-model
-RUN if [ -e "models/admin.go" ]; then exit -1; fi
-RUN if [ -e "models/admin_test.go" ]; then exit -1; fi
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_skip_model.json
 RUN rm actions/admins_test.go
 
 RUN buffalo test -race
