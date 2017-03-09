@@ -17,7 +17,14 @@ import (
 
 var _ = grift.Desc("release", "Generates a CHANGELOG and creates a new GitHub release based on what is in the version.go file.")
 var _ = grift.Add("release", func(c *grift.Context) error {
-	grift.Run("shoulders", c)
+	err := grift.Run("shoulders", c)
+	if err != nil {
+		return err
+	}
+	err = grift.Run("deplist", c)
+	if err != nil {
+		return err
+	}
 	v, err := findVersion()
 	if err != nil {
 		return err
