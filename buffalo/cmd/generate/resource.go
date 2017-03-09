@@ -52,14 +52,16 @@ var ResourceCmd = &cobra.Command{
 
 		name := args[0]
 		data := makr.Data{
-			"name":          name,
-			"singular":      inflect.Singularize(name),
-			"plural":        inflect.Pluralize(name),
-			"camel":         inflect.Camelize(name),
-			"under":         inflect.Underscore(name),
-			"downFirstCap":  inflect.CamelizeDownFirst(name),
-			"actions":       []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
-			"args":          args,
+			"name":         name,
+			"singular":     inflect.Singularize(name),
+			"plural":       inflect.Pluralize(name),
+			"camel":        inflect.Camelize(name),
+			"under":        inflect.Underscore(name),
+			"downFirstCap": inflect.CamelizeDownFirst(name),
+			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":         args,
+
+			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 		}

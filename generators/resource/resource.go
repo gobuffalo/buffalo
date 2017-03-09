@@ -46,7 +46,7 @@ func modelCommand(data makr.Data) makr.Command {
 	args = append(args[:0], args[0+1:]...)
 	args = append([]string{"db", "g", "model", modelName}, args...)
 
-	if skipMigration := data["skipMigration"].(bool); skipMigration == false {
+	if skipMigration := data["skipMigration"].(bool); skipMigration == true {
 		args = append(args, "--skip-migration")
 	}
 
