@@ -4,12 +4,14 @@ const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const paths = require('./config/paths');
 const publicPath = ('/');
+const cleanPaths = [paths.appBuild.concat("/assets/js"), paths.appBuild.concat("/assets/css")]
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+const cssFilename = 'assets/css/[name].[contenthash:8].css';
 
 if (process.env.NODE_ENV == 'development') {
 	const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
@@ -43,7 +45,7 @@ if (process.env.NODE_ENV == 'development') {
 			pathinfo: true,
 			// Generated JS file names (with nested folders).
 		  // There will be one main bundle.
-			filename: 'static/js/bundle.js',
+			filename: 'assets/js/bundle.js',
 			// This is the URL that app is served from. We use "/" in development.
 			publicPath: publicPath,
 	  },
@@ -103,7 +105,7 @@ if (process.env.NODE_ENV == 'development') {
 				  ],
 				  loader: 'file-loader',
 				  options: {
-				    name: 'static/media/[name].[hash:8].[ext]',
+				    name: 'assets/images/[name].[hash:8].[ext]',
 				  },
 				},
 				// "url" loader works like "file" loader except that it embeds assets
@@ -114,7 +116,7 @@ if (process.env.NODE_ENV == 'development') {
 				  loader: 'url-loader',
 				  options: {
 				    limit: 10000,
-				    name: 'static/media/[name].[hash:8].[ext]',
+				    name: 'assets/images/[name].[hash:8].[ext]',
 				  },
 				},
 				// Process JS with Babel.
@@ -181,6 +183,11 @@ if (process.env.NODE_ENV == 'development') {
 			// makes the discovery automatic so you don't have to restart.
 			// See https://github.com/facebookincubator/create-react-app/issues/186
 			new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+			new CleanWebpackPlugin(cleanPaths, {
+			  root: paths.appPath,
+			  verbose: false, 
+			  dry: false
+			}),
 			new CopyWebpackPlugin([
 				{ from: paths.appPublic, to: '' },
 			], {
@@ -221,7 +228,7 @@ if (process.env.NODE_ENV == 'development') {
 		  path: paths.appBuild,
 		  // Generated JS file names (with nested folders).
 		  // There will be one main bundle.
-		  filename: 'static/js/[name].[hash:8].js',
+		  filename: 'assets/js/[name].[hash:8].js',
 		  // We inferred the "public path" (such as / or /my-project) from homepage.
 		  publicPath: publicPath,
 		},
@@ -280,7 +287,7 @@ if (process.env.NODE_ENV == 'development') {
 		      ],
 		      loader: 'file-loader',
 		      options: {
-		        name: 'static/media/[name].[hash:8].[ext]',
+		        name: 'assets/images/[name].[hash:8].[ext]',
 		      },
 		    },
 		    // "url" loader works just like "file" loader but it also embeds
@@ -290,7 +297,7 @@ if (process.env.NODE_ENV == 'development') {
 		      loader: 'url-loader',
 		      options: {
 		        limit: 10000,
-		        name: 'static/media/[name].[hash:8].[ext]',
+		        name: 'assets/images/[name].[hash:8].[ext]',
 		      },
 		    },
 		    // Process JS with Babel.
@@ -322,6 +329,7 @@ if (process.env.NODE_ENV == 'development') {
 									  loader: 'css-loader',
 									  options: {
 									    importLoaders: 1,
+											minimize: true,
 									  },
 									},
 									{
@@ -392,6 +400,11 @@ if (process.env.NODE_ENV == 'development') {
 			// having to parse `index.html`.
 			new ManifestPlugin({
 				fileName: 'asset-manifest.json',
+			}),
+			new CleanWebpackPlugin(cleanPaths, {
+			  root: paths.appPath,
+			  verbose: false, 
+			  dry: false
 			}),
 			new CopyWebpackPlugin([
 				{ from: paths.appPublic, to: '' },

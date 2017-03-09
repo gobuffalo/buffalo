@@ -12,7 +12,7 @@ import (
 )
 
 var logo = &makr.RemoteFile{
-	File:       makr.NewFile("src/logo.svg", ""),
+	File:       makr.NewFile("assets/logo.svg", ""),
 	RemotePath: assets.LogoURL,
 }
 

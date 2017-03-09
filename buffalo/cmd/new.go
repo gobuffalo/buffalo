@@ -193,29 +193,11 @@ func genNewFiles() error {
 func postProcessReact() error {
 	changes := map[string]string{
 		"application.html": "",
-		"/public/assets":   "/build/static",
-		"/templates":       "/build",
+		"/templates":       "/public",
 	}
 	// Modify render.go to not use html template
+	// and serve index.html from public
 	err := modifyAppFile("actions/render.go", changes)
-	if err != nil {
-		return err
-	}
-
-	changes = map[string]string{
-		"/assets": "/static",
-	}
-	// Modify app.go to modify assets path
-	err = modifyAppFile("actions/app.go", changes)
-	if err != nil {
-		return err
-	}
-
-	changes = map[string]string{
-		"{{ .titleName }}": "inflect.Titleize(app.Name)",
-	}
-	// Modify index.html with full html content
-	err = modifyAppFile("public/index.html", changes)
 	if err != nil {
 		return err
 	}
@@ -229,8 +211,8 @@ func postProcessReact() error {
 		return err
 	}
 
-	// Remove templates folder
-	err = os.RemoveAll(filepath.Join(app.RootPath, "templates"))
+	// Remove application.html from templates
+	err = os.Remove(filepath.Join(app.RootPath, "templates", "application.html"))
 	if err != nil {
 		return err
 	}
