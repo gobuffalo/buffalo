@@ -32,6 +32,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 			fmt.Printf(msg, cause)
 		}()
 		os.Setenv("GO_ENV", "development")
+		os.Setenv("NODE_ENV", "development")
 		ctx := context.Background()
 		ctx, cancelFunc := context.WithCancel(ctx)
 		go func() {

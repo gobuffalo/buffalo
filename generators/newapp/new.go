@@ -4,6 +4,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/generators"
+	"github.com/gobuffalo/buffalo/generators/assets/react"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/refresh"
@@ -18,6 +19,7 @@ type App struct {
 	Verbose     bool
 	SkipPop     bool
 	SkipWebpack bool
+	WithReact   bool
 	WithYarn    bool
 	DBType      string
 	CIProvider  string
@@ -52,6 +54,13 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
 		wg, err := standard.New(data)
+		if err != nil {
+			return g, err
+		}
+		g.Add(wg)
+
+	} else if a.WithReact {
+		wg, err := react.New(data)
 		if err != nil {
 			return g, err
 		}

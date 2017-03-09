@@ -3,9 +3,11 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -22,6 +24,7 @@ var rootPath string
 // var verbose bool
 // var skipPop bool
 // var skipWebpack bool
+// var withReact bool
 // var withYarn bool
 // var dbType = "postgres"
 // var ciProvider = "none"
@@ -65,6 +68,14 @@ var newCmd = &cobra.Command{
 		err = genNewFiles()
 		if err != nil {
 			return err
+		}
+
+		// Postprocess to remove the template in render.go and to generate the index.html
+		if app.WithReact {
+			err = postProcessReact()
+			if err != nil {
+				return err
+			}
 		}
 
 		fmt.Printf("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
@@ -162,6 +173,7 @@ func genNewFiles() error {
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !app.SkipPop,
 		"withWebpack": !app.SkipWebpack,
+		"withReact":   app.WithReact,
 		"dbType":      app.DBType,
 		"version":     Version,
 		"ciProvider":  app.CIProvider,
@@ -177,6 +189,73 @@ func genNewFiles() error {
 	return g.Run(app.RootPath, data)
 }
 
+// React postprocess to adapt its app template
+func postProcessReact() error {
+	changes := map[string]string{
+		"application.html": "",
+		"/public/assets":   "/build/static",
+		"/templates":       "/build",
+	}
+	// Modify render.go to not use html template
+	err := modifyAppFile("actions/render.go", changes)
+	if err != nil {
+		return err
+	}
+
+	changes = map[string]string{
+		"/assets": "/static",
+	}
+	// Modify app.go to modify assets path
+	err = modifyAppFile("actions/app.go", changes)
+	if err != nil {
+		return err
+	}
+
+	changes = map[string]string{
+		"{{ .titleName }}": "inflect.Titleize(app.Name)",
+	}
+	// Modify index.html with full html content
+	err = modifyAppFile("public/index.html", changes)
+	if err != nil {
+		return err
+	}
+
+	changes = map[string]string{
+		"Welcome to Buffalo!": `<div id=\"root\"></div>`,
+	}
+	// Modify home_test.go to test index.html body
+	err = modifyAppFile("actions/home_test.go", changes)
+	if err != nil {
+		return err
+	}
+
+	// Remove templates folder
+	err = os.RemoveAll(filepath.Join(app.RootPath, "templates"))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Modify the file content with regular expressions
+func modifyAppFile(path string, changes map[string]string) error {
+	rf := filepath.Join(app.RootPath, path)
+	file, err := ioutil.ReadFile(rf)
+	if err != nil {
+		return err
+	}
+	for src, target := range changes {
+		re := regexp.MustCompile(src)
+		file = []byte(re.ReplaceAllString(string(file), target))
+	}
+	err = ioutil.WriteFile(rf, file, 644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func init() {
 	pwd, _ := os.Getwd()
 
@@ -188,6 +267,7 @@ func init() {
 	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&app.SkipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
+	newCmd.Flags().BoolVar(&app.WithReact, "with-react", false, "adds React to your app")
 	newCmd.Flags().BoolVar(&app.WithYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis]")
