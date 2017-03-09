@@ -2,16 +2,16 @@ package grifts
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 
 	"github.com/markbates/grift/grift"
 )
 
+var depListCmd = exec.Command("deplist", "|", "grep", "-v", "gobuffalo/buffalo")
 var _ = grift.Add("deplist", func(c *grift.Context) error {
-	//deplist | grep -v "buffalo" | wc -l
-	cmd := exec.Command("deplist", "|", "grep", "-v", "gobuffalo/buffalo")
-	out, err := cmd.Output()
+	out, err := depListCmd.Output()
 	if err != nil {
 		return err
 	}
@@ -21,5 +21,16 @@ var _ = grift.Add("deplist", func(c *grift.Context) error {
 	}
 	defer w.Close()
 	w.Write(bytes.TrimSpace(out))
+	return nil
+})
+
+var _ = grift.Add("deplist:count", func(c *grift.Context) error {
+	out, err := depListCmd.Output()
+	if err != nil {
+		return err
+	}
+	out = bytes.TrimSpace(out)
+	l := len(bytes.Split(out, []byte("\n")))
+	fmt.Printf("%d Dependencies\n", l)
 	return nil
 })
