@@ -117,7 +117,7 @@ func (b *builder) buildRiceZip() error {
 		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" || base == "bin" {
+				if base == "node_modules" || base == ".git" || base == "bin" || base == "vendor" {
 					return filepath.SkipDir
 				}
 			} else {
