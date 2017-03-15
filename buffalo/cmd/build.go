@@ -109,54 +109,8 @@ func (b *builder) buildDatabase() error {
 	return nil
 }
 
-// func (b *builder) buildRiceZip() error {
-// 	defer os.Chdir(b.workDir)
-// 	_, err := exec.LookPath("rice")
-// 	if err == nil {
-// 		paths := map[string]bool{}
-// 		// if rice exists, try and build some cleanup:
-// 		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-// 			if info.IsDir() {
-// 				base := filepath.Base(path)
-// 				if base == "node_modules" || base == ".git" || base == "bin" || base == "vendor" {
-// 					return filepath.SkipDir
-// 				}
-// 			} else {
-// 				err = os.Chdir(filepath.Dir(path))
-// 				if err != nil {
-// 					return err
-// 				}
-//
-// 				s, err := ioutil.ReadFile(path)
-// 				if err != nil {
-// 					return err
-// 				}
-// 				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
-// 				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
-// 					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
-// 					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
-// 					paths[pkg] = true
-// 				}
-// 			}
-// 			return nil
-// 		})
-// 		if err != nil {
-// 			return err
-// 		}
-// 		if len(paths) != 0 {
-// 			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
-// 			for k := range paths {
-// 				args = append(args, "-i", k)
-// 			}
-// 			return b.exec("rice", args...)
-// 		}
-// 		// rice append --exec example
-// 	}
-// 	return nil
-// }
 func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
-	defer pack.Clean(b.workDir)
 	p := pack.New(context.Background(), b.workDir)
 	return p.Run()
 }
@@ -290,6 +244,9 @@ func (b *builder) cleanupBuild() {
 		fmt.Printf("----> cleaning up %s\n", b)
 		os.RemoveAll(b)
 	}
+
+	pack.Clean(b.workDir)
+
 	maingo, _ := os.Create("main.go")
 	maingo.Write(b.originalMain)
 
