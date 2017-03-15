@@ -3,18 +3,19 @@ package cmd
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 	"time"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
 	"github.com/spf13/cobra"
 )
@@ -108,84 +109,56 @@ func (b *builder) buildDatabase() error {
 	return nil
 }
 
-func (b *builder) buildRiceZip() error {
+// func (b *builder) buildRiceZip() error {
+// 	defer os.Chdir(b.workDir)
+// 	_, err := exec.LookPath("rice")
+// 	if err == nil {
+// 		paths := map[string]bool{}
+// 		// if rice exists, try and build some cleanup:
+// 		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
+// 			if info.IsDir() {
+// 				base := filepath.Base(path)
+// 				if base == "node_modules" || base == ".git" || base == "bin" || base == "vendor" {
+// 					return filepath.SkipDir
+// 				}
+// 			} else {
+// 				err = os.Chdir(filepath.Dir(path))
+// 				if err != nil {
+// 					return err
+// 				}
+//
+// 				s, err := ioutil.ReadFile(path)
+// 				if err != nil {
+// 					return err
+// 				}
+// 				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
+// 				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
+// 					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
+// 					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
+// 					paths[pkg] = true
+// 				}
+// 			}
+// 			return nil
+// 		})
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if len(paths) != 0 {
+// 			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
+// 			for k := range paths {
+// 				args = append(args, "-i", k)
+// 			}
+// 			return b.exec("rice", args...)
+// 		}
+// 		// rice append --exec example
+// 	}
+// 	return nil
+// }
+func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		paths := map[string]bool{}
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" || base == "bin" || base == "vendor" {
-					return filepath.SkipDir
-				}
-			} else {
-				err = os.Chdir(filepath.Dir(path))
-				if err != nil {
-					return err
-				}
-
-				s, err := ioutil.ReadFile(path)
-				if err != nil {
-					return err
-				}
-				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
-				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
-					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
-					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
-					paths[pkg] = true
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		if len(paths) != 0 {
-			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
-			for k := range paths {
-				args = append(args, "-i", k)
-			}
-			return b.exec("rice", args...)
-		}
-		// rice append --exec example
-	}
-	return nil
-}
-func (b *builder) buildRiceEmbedded() error {
-	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" {
-					return filepath.SkipDir
-				}
-				err = os.Chdir(path)
-				if err != nil {
-					return err
-				}
-				err = b.execQuiet("rice", "embed-go")
-				if err == nil {
-					bp := filepath.Join(path, "rice-box.go")
-					_, err := os.Stat(bp)
-					if err == nil {
-						fmt.Printf("--> built rice box %s\n", bp)
-						b.clean(bp)
-					}
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		// rice append --exec example
-	}
-	return nil
+	defer pack.Clean(b.workDir)
+	p := pack.New(context.Background(), b.workDir)
+	return p.Run()
 }
 
 func (b *builder) disableAssetsHandling() error {
@@ -380,15 +353,15 @@ func (b *builder) run() error {
 		return b.buildBin()
 	}
 
-	if zipBin {
-		err = b.buildBin()
-		if err != nil {
-			return err
-		}
-		return b.buildRiceZip()
-	}
+	// if zipBin {
+	// 	err = b.buildBin()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	return b.buildRiceZip()
+	// }
 
-	err = b.buildRiceEmbedded()
+	err = b.buildPackrEmbedded()
 	if err != nil {
 		return err
 	}
