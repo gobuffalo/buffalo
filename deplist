@@ -28,7 +28,6 @@ github.com/jmoiron/sqlx/reflectx
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/markbates/deplist
-github.com/markbates/going/clam
 github.com/markbates/going/defaults
 github.com/markbates/going/randx
 github.com/markbates/going/wait
