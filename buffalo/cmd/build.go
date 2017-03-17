@@ -93,7 +93,7 @@ func (b *builder) buildDatabase() error {
 		return err
 	}
 	if hasDB {
-		// copy the database.yml file to the migrations folder so it's available through rice
+		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
@@ -315,7 +315,7 @@ func (b *builder) run() error {
 	// 	if err != nil {
 	// 		return err
 	// 	}
-	// 	return b.buildRiceZip()
+	// 	return b.buildpackrZip()
 	// }
 
 	err = b.buildPackrEmbedded()
@@ -348,7 +348,7 @@ func (b *builder) buildBin() error {
 var buildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b", "bill"},
-	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
+	Short:   "Builds a Buffalo binary, including bundling of assets (packr & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
 		originalMain := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
@@ -400,9 +400,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"io"
 
 	"github.com/markbates/grift/grift"
-	rice "github.com/GeertJohan/go.rice"
+	"github.com/gobuffalo/packr"
 	_ "<%= aPack %>"
 	<%= if (modelsPack) { %>
 	"io/ioutil"
@@ -416,7 +417,7 @@ import (
 
 var version = "unknown"
 var buildTime = "unknown"
-var migrationBox *rice.Box
+var migrationBox packr.Box
 
 func main() {
 	args := os.Args
@@ -451,11 +452,7 @@ func printVersion() {
 <%= if (modelsPack) { %>
 func migrate() {
 	var err error
-	migrationBox, err = rice.FindBox("./migrations")
-	if err != nil {
-		fmt.Println("--> No migrations found.")
-		return
-	}
+	migrationBox = packr.NewBox("./migrations")
 	fmt.Println("--> Running migrations")
 	path, err := unpackMigrations()
 	if err != nil {
@@ -472,15 +469,16 @@ func unpackMigrations() (string, error) {
 		log.Fatalf("Unable to create temp directory: %s", err)
 	}
 
-	migrationBox.Walk("", func(path string, fi os.FileInfo, e error) error {
-		if !fi.IsDir() {
-			content := migrationBox.MustBytes(path)
-			file := filepath.Join(dir, path)
-			if err := ioutil.WriteFile(file, content, 0666); err != nil {
-				log.Fatalf("Failed to write migration to disk: %s", err)
-			}
+	migrationBox.Walk(func(path string, f packr.File) error {
+		file, err := os.Create(filepath.Join(dir, path))
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
 		}
-		return e
+		_, err = io.Copy(file, f)
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
+		}
+		return nil
 	})
 
 	return dir, nil

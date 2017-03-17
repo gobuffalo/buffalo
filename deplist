@@ -1,7 +1,4 @@
-github.com/GeertJohan/go.rice
-github.com/GeertJohan/go.rice/embedded
 github.com/Sirupsen/logrus
-github.com/daaku/go.zipexe
 github.com/dustin/go-humanize
 github.com/fatih/color
 github.com/fatih/color/vendor/github.com/mattn/go-colorable
@@ -10,6 +7,8 @@ github.com/fsnotify/fsnotify
 github.com/go-sql-driver/mysql
 github.com/gobuffalo/envy
 github.com/gobuffalo/makr
+github.com/gobuffalo/packr
+github.com/gobuffalo/packr/builder
 github.com/gobuffalo/plush
 github.com/gobuffalo/plush/ast
 github.com/gobuffalo/plush/lexer
@@ -26,7 +25,6 @@ github.com/gorilla/sessions
 github.com/gorilla/websocket
 github.com/jmoiron/sqlx
 github.com/jmoiron/sqlx/reflectx
-github.com/kardianos/osext
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/markbates/deplist
@@ -43,6 +41,7 @@ github.com/markbates/pop/fizz/translators
 github.com/markbates/pop/nulls
 github.com/markbates/pop/soda/cmd
 github.com/markbates/pop/soda/cmd/generate
+github.com/markbates/pop/soda/cmd/schema
 github.com/markbates/refresh/refresh
 github.com/markbates/refresh/refresh/web
 github.com/markbates/validate
