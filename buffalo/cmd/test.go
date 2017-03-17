@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -30,22 +29,33 @@ var testCmd = &cobra.Command{
 		os.Setenv("GO_ENV", "test")
 		if _, err := os.Stat("database.yml"); err == nil {
 			// there's a database
-			c, err := pop.Connect("test")
+			test, err := pop.Connect("test")
 			if err != nil {
 				return err
 			}
+
 			// drop the test db:
-			c.Dialect.DropDB()
+			test.Dialect.DropDB()
+
 			// create the test db:
-			err = c.Dialect.CreateDB()
+			err = test.Dialect.CreateDB()
 			if err != nil {
 				return err
 			}
-			pwd, _ := os.Getwd()
-			migs := filepath.Join(pwd, "migrations")
-			if _, err = os.Stat(migs); err == nil {
-				// there are migrations, so run them against the test db:
-				c.MigrateUp(migs)
+
+			dev, err := pop.Connect("development")
+			if err != nil {
+				return err
+			}
+			schema := &bytes.Buffer{}
+			err = dev.Dialect.DumpSchema(schema)
+			if err != nil {
+				return err
+			}
+
+			err = test.Dialect.LoadSchema(schema)
+			if err != nil {
+				return err
 			}
 		}
 		return testRunner(args)
