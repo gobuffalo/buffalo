@@ -3,18 +3,19 @@ package cmd
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 	"time"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
 	"github.com/spf13/cobra"
 )
@@ -92,7 +93,7 @@ func (b *builder) buildDatabase() error {
 		return err
 	}
 	if hasDB {
-		// copy the database.yml file to the migrations folder so it's available through rice
+		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
@@ -108,84 +109,10 @@ func (b *builder) buildDatabase() error {
 	return nil
 }
 
-func (b *builder) buildRiceZip() error {
+func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		paths := map[string]bool{}
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" || base == "bin" || base == "vendor" {
-					return filepath.SkipDir
-				}
-			} else {
-				err = os.Chdir(filepath.Dir(path))
-				if err != nil {
-					return err
-				}
-
-				s, err := ioutil.ReadFile(path)
-				if err != nil {
-					return err
-				}
-				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
-				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
-					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
-					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
-					paths[pkg] = true
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		if len(paths) != 0 {
-			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
-			for k := range paths {
-				args = append(args, "-i", k)
-			}
-			return b.exec("rice", args...)
-		}
-		// rice append --exec example
-	}
-	return nil
-}
-func (b *builder) buildRiceEmbedded() error {
-	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" {
-					return filepath.SkipDir
-				}
-				err = os.Chdir(path)
-				if err != nil {
-					return err
-				}
-				err = b.execQuiet("rice", "embed-go")
-				if err == nil {
-					bp := filepath.Join(path, "rice-box.go")
-					_, err := os.Stat(bp)
-					if err == nil {
-						fmt.Printf("--> built rice box %s\n", bp)
-						b.clean(bp)
-					}
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		// rice append --exec example
-	}
-	return nil
+	p := pack.New(context.Background(), b.workDir)
+	return p.Run()
 }
 
 func (b *builder) disableAssetsHandling() error {
@@ -317,6 +244,9 @@ func (b *builder) cleanupBuild() {
 		fmt.Printf("----> cleaning up %s\n", b)
 		os.RemoveAll(b)
 	}
+
+	pack.Clean(b.workDir)
+
 	maingo, _ := os.Create("main.go")
 	maingo.Write(b.originalMain)
 
@@ -380,15 +310,15 @@ func (b *builder) run() error {
 		return b.buildBin()
 	}
 
-	if zipBin {
-		err = b.buildBin()
-		if err != nil {
-			return err
-		}
-		return b.buildRiceZip()
-	}
+	// if zipBin {
+	// 	err = b.buildBin()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	return b.buildpackrZip()
+	// }
 
-	err = b.buildRiceEmbedded()
+	err = b.buildPackrEmbedded()
 	if err != nil {
 		return err
 	}
@@ -418,7 +348,7 @@ func (b *builder) buildBin() error {
 var buildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b", "bill"},
-	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
+	Short:   "Builds a Buffalo binary, including bundling of assets (packr & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
 		originalMain := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
@@ -470,9 +400,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"io"
 
 	"github.com/markbates/grift/grift"
-	rice "github.com/GeertJohan/go.rice"
+	"github.com/gobuffalo/packr"
 	_ "<%= aPack %>"
 	<%= if (modelsPack) { %>
 	"io/ioutil"
@@ -486,7 +417,7 @@ import (
 
 var version = "unknown"
 var buildTime = "unknown"
-var migrationBox *rice.Box
+var migrationBox packr.Box
 
 func main() {
 	args := os.Args
@@ -521,11 +452,7 @@ func printVersion() {
 <%= if (modelsPack) { %>
 func migrate() {
 	var err error
-	migrationBox, err = rice.FindBox("./migrations")
-	if err != nil {
-		fmt.Println("--> No migrations found.")
-		return
-	}
+	migrationBox = packr.NewBox("./migrations")
 	fmt.Println("--> Running migrations")
 	path, err := unpackMigrations()
 	if err != nil {
@@ -542,15 +469,16 @@ func unpackMigrations() (string, error) {
 		log.Fatalf("Unable to create temp directory: %s", err)
 	}
 
-	migrationBox.Walk("", func(path string, fi os.FileInfo, e error) error {
-		if !fi.IsDir() {
-			content := migrationBox.MustBytes(path)
-			file := filepath.Join(dir, path)
-			if err := ioutil.WriteFile(file, content, 0666); err != nil {
-				log.Fatalf("Failed to write migration to disk: %s", err)
-			}
+	migrationBox.Walk(func(path string, f packr.File) error {
+		file, err := os.Create(filepath.Join(dir, path))
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
 		}
-		return e
+		_, err = io.Copy(file, f)
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
+		}
+		return nil
 	})
 
 	return dir, nil
