@@ -37,3 +37,8 @@ RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 RUN buffalo test -race
 RUN buffalo build
+
+WORKDIR $GOPATH/src
+RUN buffalo new --skip-pop simple_world
+WORKDIR ./simple_world
+RUN buffalo build

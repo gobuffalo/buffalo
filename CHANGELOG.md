@@ -1,5 +1,72 @@
 # Change Log
 
+## [v0.7.4](https://github.com/gobuffalo/buffalo/tree/v0.7.4) (2017-03-03)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.3...v0.7.4)
+
+**Implemented enhancements:**
+
+- Add yarn as alternative --with-yarn [\#256](https://github.com/gobuffalo/buffalo/pull/256) ([fooflare](https://github.com/fooflare))
+
+**Fixed bugs:**
+
+- Buffalo needs to be updated to support Webpack 2.2.x [\#195](https://github.com/gobuffalo/buffalo/issues/195)
+
+**Closed issues:**
+
+- buffalo command throwing errors [\#266](https://github.com/gobuffalo/buffalo/issues/266)
+- v0.7.3 webpack2.0 release breaks default configuration [\#262](https://github.com/gobuffalo/buffalo/issues/262)
+- models starting with a b produce errors [\#261](https://github.com/gobuffalo/buffalo/issues/261)
+- App.Group incorrectly builds paths on Windows machines [\#258](https://github.com/gobuffalo/buffalo/issues/258)
+- Can't register custom error handler [\#255](https://github.com/gobuffalo/buffalo/issues/255)
+- install fails when sqllite fails to build. [\#253](https://github.com/gobuffalo/buffalo/issues/253)
+- Add Support for MongoDB via mgo package [\#252](https://github.com/gobuffalo/buffalo/issues/252)
+- Documentation Needs to State Requirement for Go \>= 1.7 [\#251](https://github.com/gobuffalo/buffalo/issues/251)
+
+**Merged pull requests:**
+
+- Inching towards being able to use different template engines in Buffalo [\#265](https://github.com/gobuffalo/buffalo/pull/265) ([markbates](https://github.com/markbates))
+- support binding of html multipart post requests [\#264](https://github.com/gobuffalo/buffalo/pull/264) ([tsauter](https://github.com/tsauter))
+- Webpack v2.2.1 upgrade [\#263](https://github.com/gobuffalo/buffalo/pull/263) ([fooflare](https://github.com/fooflare))
+- fixed build so it also builds non-db apps [\#260](https://github.com/gobuffalo/buffalo/pull/260) ([markbates](https://github.com/markbates))
+- updated router Group function to acount for Windows path cruft [\#259](https://github.com/gobuffalo/buffalo/pull/259) ([schigh](https://github.com/schigh))
+- Copy ErrorHandlers to Group. [\#257](https://github.com/gobuffalo/buffalo/pull/257) ([drlogout](https://github.com/drlogout))
+- Add Go version requirement to README.md [\#254](https://github.com/gobuffalo/buffalo/pull/254) ([gillchristian](https://github.com/gillchristian))
+
+## [v0.7.3](https://github.com/gobuffalo/buffalo/tree/v0.7.3) (2017-02-15)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.2...v0.7.3)
+
+**Implemented enhancements:**
+
+- Add a Redirect function to the Router [\#245](https://github.com/gobuffalo/buffalo/issues/245)
+- Add a `Clear` function to Session [\#230](https://github.com/gobuffalo/buffalo/issues/230)
+- Run tasks from the built binary [\#224](https://github.com/gobuffalo/buffalo/issues/224)
+-  create a new buffalo app in the current directory [\#206](https://github.com/gobuffalo/buffalo/issues/206)
+
+**Closed issues:**
+
+- Best way to wrap or dispatch to http.Handler [\#241](https://github.com/gobuffalo/buffalo/issues/241)
+- Allow for new binders to be registered with Buffalo [\#222](https://github.com/gobuffalo/buffalo/issues/222)
+- nulls package types can't be decoded with gorilla [\#221](https://github.com/gobuffalo/buffalo/issues/221)
+
+**Merged pull requests:**
+
+- Run tasks from the built binary closes \#224 [\#248](https://github.com/gobuffalo/buffalo/pull/248) ([markbates](https://github.com/markbates))
+- Use envy instead of defaults for new apps [\#247](https://github.com/gobuffalo/buffalo/pull/247) ([markbates](https://github.com/markbates))
+- Add a Redirect function to the Router closes \#245 [\#246](https://github.com/gobuffalo/buffalo/pull/246) ([markbates](https://github.com/markbates))
+- Add an empty Helpers map to actions/render.go [\#244](https://github.com/gobuffalo/buffalo/pull/244) ([markbates](https://github.com/markbates))
+- Content type ranging - extra test [\#238](https://github.com/gobuffalo/buffalo/pull/238) ([philipithomas](https://github.com/philipithomas))
+- fixed the generation of the refresh file if it didn't exist [\#237](https://github.com/gobuffalo/buffalo/pull/237) ([markbates](https://github.com/markbates))
+- buffalo db should now print out `buffalo db` and not `buffalo soda`. [\#236](https://github.com/gobuffalo/buffalo/pull/236) ([markbates](https://github.com/markbates))
+- removed the no longer existing docs for LogDir and added some for [\#235](https://github.com/gobuffalo/buffalo/pull/235) ([markbates](https://github.com/markbates))
+- content types need to be ranged over in case of ones with a ';' in them [\#234](https://github.com/gobuffalo/buffalo/pull/234) ([markbates](https://github.com/markbates))
+- create a new buffalo app in the current directory closes \#206 [\#233](https://github.com/gobuffalo/buffalo/pull/233) ([markbates](https://github.com/markbates))
+- put the current\_path in the context closes \#207 [\#232](https://github.com/gobuffalo/buffalo/pull/232) ([markbates](https://github.com/markbates))
+- Add a `Clear` function to Session closes \#230 [\#231](https://github.com/gobuffalo/buffalo/pull/231) ([markbates](https://github.com/markbates))
+- Update usage of validate in html-crud example [\#228](https://github.com/gobuffalo/buffalo/pull/228) ([srt32](https://github.com/srt32))
+- removed the multilogger since it wasn't providing any real benefit [\#227](https://github.com/gobuffalo/buffalo/pull/227) ([markbates](https://github.com/markbates))
+- removed the used MethodOverride var and a duplicate check for setting the MethodOverride [\#226](https://github.com/gobuffalo/buffalo/pull/226) ([markbates](https://github.com/markbates))
+- Custom binders [\#223](https://github.com/gobuffalo/buffalo/pull/223) ([markbates](https://github.com/markbates))
+
 ## [v0.7.2](https://github.com/gobuffalo/buffalo/tree/v0.7.2) (2017-02-03)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.1...v0.7.2)
 
@@ -271,18 +338,18 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.2)
 
 ## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.1)
 
-## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
+## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.0.pre)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
 
-## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
+## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)

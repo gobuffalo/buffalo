@@ -94,14 +94,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"{{actionsPath}}"
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/envy"
 )
 
 func main() {
-	port := defaults.String(os.Getenv("PORT"), "3000")
+	port := envy.Get("PORT", "3000")
 	log.Printf("Starting {{name}} on port %s\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), actions.App()))
 }
@@ -110,19 +109,17 @@ func main() {
 const nApp = `package actions
 
 import (
-	"os"
-
 	"github.com/gobuffalo/buffalo"
 	{{#if withPop }}
 	"github.com/gobuffalo/buffalo/middleware"
 	"{{modelsPath}}"
 	{{/if}}
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/envy"
 )
 
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
-var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
+var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
 
 // App is where all routes and middleware for buffalo
@@ -156,6 +153,7 @@ import (
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/render/resolvers"
+	"github.com/gobuffalo/velvet"
 )
 
 var r *render.Engine
@@ -163,12 +161,13 @@ var r *render.Engine
 func init() {
 	r = render.New(render.Options{
 		HTMLLayout:     "application.html",
-		CacheTemplates: ENV == "production",
+		TemplateEngine: velvet.BuffaloRenderer,
 		FileResolverFunc: func() resolvers.FileResolver {
 			return &resolvers.RiceBox{
 				Box: rice.MustFindBox("../templates"),
 			}
 		},
+		Helpers: map[string]interface{}{},
 	})
 }
 

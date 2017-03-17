@@ -20,6 +20,7 @@ var force bool
 var verbose bool
 var skipPop bool
 var skipWebpack bool
+var withYarn bool
 var dbType = "postgres"
 var ciProvider = "none"
 
@@ -157,6 +158,7 @@ func genNewFiles(name, rootPath string) error {
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !skipPop,
 		"withWebpack": !skipWebpack,
+		"withYarn":    withYarn,
 		"dbType":      dbType,
 		"version":     Version,
 		"ciProvider":  ciProvider,
@@ -175,6 +177,7 @@ func init() {
 	newCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&skipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&skipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
+	newCmd.Flags().BoolVar(&withYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 	newCmd.Flags().StringVar(&dbType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 	newCmd.Flags().StringVar(&ciProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis]")
 }

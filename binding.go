@@ -48,6 +48,7 @@ func init() {
 	binders["application/html"] = sb
 	binders["text/html"] = sb
 	binders["application/x-www-form-urlencoded"] = sb
+	binders["multipart/form-data"] = sb
 }
 
 func init() {

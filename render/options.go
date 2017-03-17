@@ -6,15 +6,21 @@ import "github.com/gobuffalo/buffalo/render/resolvers"
 type Options struct {
 	// HTMLLayout is the default layout to be used with all HTML renders.
 	HTMLLayout string
+
 	// TemplatesPath is the location of the templates directory on disk.
 	TemplatesPath string
+
 	// FileResolverFunc will attempt to file a file and return it's bytes, if possible
 	FileResolverFunc func() resolvers.FileResolver
 	fileResolver     resolvers.FileResolver
+
 	// Helpers to be rendered with the templates
 	Helpers map[string]interface{}
-	// CacheTemplates reduced overheads, but won't reload changed templates.
-	// This should only be set to true in production environments.
+
+	// TemplateEngine to be used for rendering HTML templates
+	TemplateEngine TemplateEngine
+
+	// CacheTemplates option will be removed in 0.8.0.
 	CacheTemplates bool
 }
 
