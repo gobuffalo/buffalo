@@ -172,43 +172,7 @@ Thank you to the following **GIANTS**:
 
 * [](https://)
 
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [](https://)
-
-* [github.com/GeertJohan/go.rice](https://github.com/GeertJohan/go.rice)
-
-* [github.com/GeertJohan/go.rice/embedded](https://github.com/GeertJohan/go.rice/embedded)
-
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
-
-* [github.com/bep/inflect](https://github.com/bep/inflect)
-
-* [github.com/boltdb/bolt](https://github.com/boltdb/bolt)
-
-* [github.com/daaku/go.zipexe](https://github.com/daaku/go.zipexe)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
@@ -225,6 +189,10 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
 
 * [github.com/gobuffalo/makr](https://github.com/gobuffalo/makr)
+
+* [github.com/gobuffalo/packr](https://github.com/gobuffalo/packr)
+
+* [github.com/gobuffalo/packr/builder](https://github.com/gobuffalo/packr/builder)
 
 * [github.com/gobuffalo/plush](https://github.com/gobuffalo/plush)
 
@@ -257,8 +225,6 @@ Thank you to the following **GIANTS**:
 * [github.com/jmoiron/sqlx](https://github.com/jmoiron/sqlx)
 
 * [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/reflectx)
-
-* [github.com/kardianos/osext](https://github.com/kardianos/osext)
 
 * [github.com/lib/pq](https://github.com/lib/pq)
 
@@ -294,15 +260,13 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/pop/soda/cmd/generate](https://github.com/markbates/pop/soda/cmd/generate)
 
+* [github.com/markbates/pop/soda/cmd/schema](https://github.com/markbates/pop/soda/cmd/schema)
+
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
 
 * [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
-
-* [github.com/markbates/tt/cmd](https://github.com/markbates/tt/cmd)
-
-* [github.com/markbates/tt/cmd/models](https://github.com/markbates/tt/cmd/models)
 
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 
@@ -316,27 +280,11 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
 
-* [github.com/mattn/go-zglob](https://github.com/mattn/go-zglob)
-
-* [github.com/mattn/go-zglob/fastwalk](https://github.com/mattn/go-zglob/fastwalk)
-
 * [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/motemen/gore](https://github.com/motemen/gore)
-
-* [github.com/newrelic/go-agent](https://github.com/newrelic/go-agent)
-
-* [github.com/newrelic/go-agent/internal](https://github.com/newrelic/go-agent/internal)
-
-* [github.com/newrelic/go-agent/internal/jsonx](https://github.com/newrelic/go-agent/internal/jsonx)
-
-* [github.com/newrelic/go-agent/internal/logger](https://github.com/newrelic/go-agent/internal/logger)
-
-* [github.com/newrelic/go-agent/internal/sysinfo](https://github.com/newrelic/go-agent/internal/sysinfo)
-
-* [github.com/newrelic/go-agent/internal/utilization](https://github.com/newrelic/go-agent/internal/utilization)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
