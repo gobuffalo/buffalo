@@ -10,7 +10,7 @@ import "errors"
 // properly recognize and match it.
 /*
 	// Works:
-	var ur Resource
+	var cr Resource
 	cr = &carsResource{&buffaloBaseResource{}}
 	g = a.Resource("/cars", cr)
 	g.Use(SomeMiddleware)
