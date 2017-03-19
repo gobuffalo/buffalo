@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/newapp"
@@ -17,15 +16,6 @@ import (
 )
 
 var rootPath string
-
-// var force bool
-// var verbose bool
-// var skipPop bool
-// var skipWebpack bool
-// var withYarn bool
-// var dbType = "postgres"
-// var ciProvider = "none"
-
 var app = &newapp.App{}
 
 var newCmd = &cobra.Command{
@@ -81,37 +71,24 @@ func validDbType() bool {
 }
 
 func validateInGoPath() error {
-	gp, err := envy.MustGet("GOPATH")
-	if err != nil {
-		fmt.Println(noGoPath)
-		os.Exit(-1)
-	}
+	gpMultiple := envy.GoPaths()
 
-	var gpMultiple []string
-
-	if runtime.GOOS == "windows" {
-		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
-	} else {
-		gpMultiple = strings.Split(gp, ":")
-	}
-	gpMultipleLen := len(gpMultiple)
-	foundInPath := false
-
-	for i := 0; i < gpMultipleLen; i++ {
+	var gp string
+	for i := 0; i < len(gpMultiple); i++ {
 		if strings.HasPrefix(app.RootPath, filepath.Join(gpMultiple[i], "src")) {
-			foundInPath = true
+			gp = gpMultiple[i]
 			break
 		}
 	}
 
-	if !foundInPath {
+	if gp == "" {
 		u, err := user.Current()
 		if err != nil {
 			return err
 		}
 		t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 			"name":     app.Name,
-			"gopath":   gp,
+			"gopath":   envy.GoPath(),
 			"current":  app.RootPath,
 			"username": u.Username,
 		}))
@@ -125,18 +102,10 @@ func validateInGoPath() error {
 }
 
 func goPath(root string) string {
-	var gpMultiple []string
-	gp := os.Getenv("GOPATH")
-
-	if runtime.GOOS == "windows" {
-		gpMultiple = strings.Split(gp, ";") // Windows uses a different separator
-	} else {
-		gpMultiple = strings.Split(gp, ":")
-	}
-	gpMultipleLen := len(gpMultiple)
+	gpMultiple := envy.GoPaths()
 	path := ""
 
-	for i := 0; i < gpMultipleLen; i++ {
+	for i := 0; i < len(gpMultiple); i++ {
 		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
 			path = gpMultiple[i]
 			break

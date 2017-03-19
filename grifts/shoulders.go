@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
 )
@@ -44,7 +45,7 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(path.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
+	f, err := os.Create(path.Join(envy.GoPath(), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
 	if err != nil {
 		return err
 	}

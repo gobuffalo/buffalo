@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
+
+	"github.com/gobuffalo/envy"
 )
 
 // File represents the file to be templated
@@ -58,17 +59,7 @@ func Find(path string) (Files, error) {
 }
 
 func goPath() (string, error) {
-	gp := os.Getenv("GOPATH")
-
-	var gpMultiple []string
-
-	if runtime.GOOS == "windows" {
-		gpMultiple = strings.Split(gp, ";")
-	} else {
-		gpMultiple = strings.Split(gp, ":")
-	}
-
-	for _, path := range gpMultiple {
+	for _, path := range envy.GoPaths() {
 		pp := filepath.Join(path, "src", "github.com", "gobuffalo", "buffalo")
 		if exists(pp) {
 			return path, nil
