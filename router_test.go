@@ -148,7 +148,7 @@ func Test_Resource(t *testing.T) {
 	tests := []trs{
 		{
 			Method: "GET",
-			Path:   "/",
+			Path:   "",
 			Result: "list",
 		},
 		{
@@ -168,7 +168,7 @@ func Test_Resource(t *testing.T) {
 		},
 		{
 			Method: "POST",
-			Path:   "/",
+			Path:   "",
 			Result: "create",
 		},
 		{
@@ -193,7 +193,7 @@ func Test_Resource(t *testing.T) {
 	c := http.Client{}
 	for _, path := range []string{"/users", "/api/v1/users"} {
 		for _, test := range tests {
-			u := ts.URL + filepath.Join(path, test.Path)
+			u := ts.URL + path + test.Path
 			req, err := http.NewRequest(test.Method, u, nil)
 			r.NoError(err)
 			res, err := c.Do(req)
