@@ -33,6 +33,7 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 	w.Write([]byte(body))
 	return nil
 }
+
 func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
@@ -41,7 +42,7 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	var body string
-	source, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
+	source, err := s.TemplatesBox.MustString(name)
 	if err != nil {
 		return "", err
 	}
@@ -54,7 +55,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
-	body, err = s.TemplateEngine(string(source), data, helpers)
+	body, err = s.TemplateEngine(source, data, helpers)
 	if err != nil {
 		return "", err
 	}
@@ -67,7 +68,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 }
 
 // Template renders the named files using the specified
-// content type and the github.com/aymerick/raymond
+// content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
 // the second file will be considered a "layout" file
 // and the first file will be the "content" file which will
@@ -78,7 +79,7 @@ func Template(c string, names ...string) Renderer {
 }
 
 // Template renders the named files using the specified
-// content type and the github.com/aymerick/raymond
+// content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
 // the second file will be considered a "layout" file
 // and the first file will be the "content" file which will

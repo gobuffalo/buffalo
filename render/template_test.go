@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
@@ -64,8 +65,7 @@ func Test_Template_Partial(t *testing.T) {
 
 	table := []ji{
 		render.New(render.Options{
-			TemplatesPath:  tPath,
-			TemplateEngine: plush.BuffaloRenderer,
+			TemplatesBox: packr.NewBox(tPath),
 		}).Template,
 	}
 
