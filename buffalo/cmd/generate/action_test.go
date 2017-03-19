@@ -136,14 +136,9 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 
 	data, _ = ioutil.ReadFile("actions/users_test.go")
 	r.Contains(string(data), "package actions_test")
-	r.Contains(string(data), `import (
-	"testing"
-
-	"github.com/stretchr/testify/require"
-)`)
-	r.Contains(string(data), "func Test_Users_Show(t *testing.T) {")
-	r.Contains(string(data), "func Test_Users_Edit(t *testing.T) {")
-	r.Contains(string(data), "func Test_Users_List(t *testing.T) {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Users_Show() {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Users_Edit() {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Users_List() {")
 }
 
 var appGo = []byte(`

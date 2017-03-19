@@ -19,6 +19,10 @@ func newSodaGenerator() *makr.Generator {
 	f.Should = should
 	g.Add(f)
 
+	f = makr.NewFile("models/models_test.go", nModelsTest)
+	f.Should = should
+	g.Add(f)
+
 	c := makr.NewCommand(makr.GoGet("github.com/markbates/pop/..."))
 	c.Should = should
 	g.Add(c)
@@ -62,3 +66,20 @@ func init() {
 	pop.Debug = env == "development"
 }
 `
+
+const nModelsTest = `package models_test
+
+import (
+	"testing"
+
+	"github.com/gobuffalo/suite"
+)
+
+type ModelSuite struct {
+	*suite.Model
+}
+
+func Test_ModelSuite(t *testing.T) {
+	as := &ModelSuite{suite.NewModel()}
+	suite.Run(t, as)
+}`
