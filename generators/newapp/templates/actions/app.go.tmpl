@@ -7,6 +7,7 @@ import (
 	"{{.modelsPath}}"
   {{ end }}
 	"github.com/gobuffalo/envy"
+  "github.com/gobuffalo/packr"
 )
 
 // ENV is used to help switch settings based on where the
@@ -30,7 +31,7 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		app.ServeFiles("/assets", assetsPath())
+		app.ServeFiles("/assets", packr.NewBox("../public/assets"))
 	}
 
 	return app

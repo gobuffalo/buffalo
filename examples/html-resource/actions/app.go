@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/examples/html-resource/models"
 	"github.com/gobuffalo/buffalo/middleware"
+	"github.com/gobuffalo/packr"
 	"github.com/markbates/going/defaults"
 )
 
@@ -24,7 +25,7 @@ func App() *buffalo.App {
 			Env: ENV,
 		})
 
-		app.ServeFiles("/assets", assetsPath())
+		app.ServeFiles("/assets", packr.NewBox("../assets"))
 		app.Use(middleware.PopTransaction(models.DB))
 		app.GET("/", func(c buffalo.Context) error {
 			return c.Redirect(http.StatusPermanentRedirect, "/users")
