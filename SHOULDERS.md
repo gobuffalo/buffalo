@@ -168,10 +168,6 @@ Thank you to the following **GIANTS**:
 
 * [](https://)
 
-* [](https://)
-
-* [](https://)
-
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
@@ -231,8 +227,6 @@ Thank you to the following **GIANTS**:
 * [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
 
 * [github.com/markbates/deplist](https://github.com/markbates/deplist)
-
-* [github.com/markbates/going/clam](https://github.com/markbates/going/clam)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 
