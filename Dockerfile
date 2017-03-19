@@ -5,6 +5,7 @@ RUN go version
 RUN apt-get update
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
 RUN apt-get install -y build-essential nodejs
+RUN apt-get install -y sqlite3 libsqlite3-dev
 
 RUN go get -u github.com/golang/lint/golint
 RUN go get -u github.com/markbates/filetest
