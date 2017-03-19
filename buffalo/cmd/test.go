@@ -63,7 +63,7 @@ var testCmd = &cobra.Command{
 }
 
 func testRunner(args []string) error {
-	cmd := exec.Command("go", "test")
+	cmd := exec.Command("go", "test", "-p", "1")
 	cmd.Args = append(cmd.Args, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
