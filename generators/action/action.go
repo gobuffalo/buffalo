@@ -27,7 +27,6 @@ func New(name string, actions []string, data makr.Data) (*makr.Generator, error)
 	data["actions"] = actionsToAdd
 	data["tests"] = testsToAdd
 
-	fmt.Printf("### actionsTemplate -> %+v\n", actionsTemplate)
 	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
 	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
 	g.Add(&makr.Func{
@@ -81,9 +80,8 @@ import (
 
 	testsTemplate = testsTemplate + `
 {{ range $action := .tests}}
-func Test_{{$.namespace}}_{{camelize $action}}(t *testing.T) {
-	r := require.New(t)
-	r.Fail("Not Implemented!")
+func (as *ActionSuite) Test_{{$.namespace}}_{{camelize $action}}() {
+	as.Fail("Not Implemented!")
 }
 
 {{end}}`
