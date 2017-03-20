@@ -43,7 +43,18 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	if data["ciProvider"] == "travis" {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
 	} else if data["ciProvider"] == "gitlab-ci" {
-		g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
+		if _, ok := data["withPop"]; ok {
+			if data["dbType"] == "postgres" {
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + data["name"].(string) + "_test"
+			} else if data["dbType"] == "mysql" {
+				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + data["name"].(string) + "_test"
+			} else {
+				data["testDbUrl"] = ""
+			}
+			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
+		} else {
+			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCiNoPop))
+		}
 	}
 
 	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/refresh/...")))
@@ -114,6 +125,7 @@ stages:
     POSTGRES_DB: "{{.name}}_test"
     MYSQL_DATABASE: "{{.name}}_test"
     MYSQL_ROOT_PASSWORD: "root"
+    TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
 .use-golang-latest: &use-golang-latest
@@ -139,6 +151,43 @@ test:1.7:
   services:
     - mysql:latest
     - postgres:latest
+  script:
+    - buffalo test
+`
+
+const nGitlabCiNoPop = `before_script:
+  - ln -s /builds /go/src/$(echo "{{.packagePath}}" | cut -d "/" -f1)
+  - cd /go/src/{{.packagePath}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
+  - go get -t -v ./...
+  - export PATH="$PATH:$GOPATH/bin"
+
+stages:
+  - test
+
+.test-vars: &test-vars
+  variables:
+    GO_ENV: "test"
+
+# Golang version choice helper
+.use-golang-latest: &use-golang-latest
+  image: golang:latest
+
+.use-golang-latest: &use-golang-1-7
+  image: golang:1.7
+
+test:latest:
+  <<: *use-golang-latest
+  <<: *test-vars
+  stage: test
+  script:
+    - buffalo test
+
+test:1.7:
+  <<: *use-golang-1-7
+  <<: *test-vars
+  stage: test
   script:
     - buffalo test
 `
