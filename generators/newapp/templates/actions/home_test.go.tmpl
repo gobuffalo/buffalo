@@ -1,13 +1,5 @@
 package actions_test
 
-import (
-	"testing"
-
-	"{{ .actionsPath }}"
-	"github.com/markbates/willie"
-	"github.com/stretchr/testify/require"
-)
-
 func (as *ActionSuite) Test_HomeHandler() {
 	res := as.HTML("/").Get()
 
