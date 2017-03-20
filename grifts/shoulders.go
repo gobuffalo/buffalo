@@ -27,7 +27,7 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 		giants[k] = k
 	}
 
-	deps := make([]string, len(giants), len(giants))
+	deps := make([]string, 0, len(giants))
 	for k := range giants {
 		if !strings.Contains(k, "github.com/gobuffalo/buffalo") {
 			deps = append(deps, k)
