@@ -159,7 +159,7 @@ func init() {
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().BoolVar(&app.WithYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
-	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis]")
+	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.

@@ -42,6 +42,8 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 
 	if data["ciProvider"] == "travis" {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
+	} else if data["ciProvider"] == "gitlab-ci" {
+		g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
 	}
 
 	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/refresh/...")))
@@ -93,4 +95,50 @@ go:
   - master
 
 go_import_path: {{ .packagePath }}
+`
+
+const nGitlabCi = `before_script:
+  - ln -s /builds /go/src/$(echo "{{.packagePath}}" | cut -d "/" -f1)
+  - cd /go/src/{{.packagePath}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
+  - go get -t -v ./...
+  - export PATH="$PATH:$GOPATH/bin"
+
+stages:
+  - test
+
+.test-vars: &test-vars
+  variables:
+    GO_ENV: "test"
+    POSTGRES_DB: "{{.name}}_test"
+    MYSQL_DATABASE: "{{.name}}_test"
+    MYSQL_ROOT_PASSWORD: "root"
+
+# Golang version choice helper
+.use-golang-latest: &use-golang-latest
+  image: golang:latest
+
+.use-golang-latest: &use-golang-1-7
+  image: golang:1.7
+
+test:latest:
+  <<: *use-golang-latest
+  <<: *test-vars
+  stage: test
+  services:
+    - mysql:latest
+    - postgres:latest
+  script:
+    - buffalo test
+
+test:1.7:
+  <<: *use-golang-1-7
+  <<: *test-vars
+  stage: test
+  services:
+    - mysql:latest
+    - postgres:latest
+  script:
+    - buffalo test
 `
