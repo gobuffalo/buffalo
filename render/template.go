@@ -1,6 +1,7 @@
 package render
 
 import (
+	"html"
 	"html/template"
 	"io"
 	"path/filepath"
@@ -41,8 +42,7 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
-	var body string
-	source, err := s.TemplatesBox.MustString(name)
+	source, err := s.TemplatesBox.MustBytes(name)
 	if err != nil {
 		return "", err
 	}
@@ -55,15 +55,16 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
-	body, err = s.TemplateEngine(source, data, helpers)
+	if strings.ToLower(filepath.Ext(name)) == ".md" {
+		source = github_flavored_markdown.Markdown(source)
+		source = []byte(html.UnescapeString(string(source)))
+	}
+
+	body, err := s.TemplateEngine(string(source), data, helpers)
 	if err != nil {
 		return "", err
 	}
 
-	if strings.ToLower(filepath.Ext(name)) == ".md" {
-		b := github_flavored_markdown.Markdown([]byte(body))
-		body = string(b)
-	}
 	return template.HTML(body), nil
 }
 
