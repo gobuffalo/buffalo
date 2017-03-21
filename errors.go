@@ -47,12 +47,12 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 
 func defaultErrorHandler(status int, err error, c Context) error {
 	env := c.Value("env")
+	c.Logger().Error(err)
 	if env != nil && env.(string) == "production" {
 		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(prodErrorTmpl))
 		return nil
 	}
-	c.Logger().Error(err)
 	c.Response().WriteHeader(status)
 
 	msg := fmt.Sprintf("%+v", err)
