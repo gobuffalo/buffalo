@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
 )
@@ -26,7 +27,7 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 		giants[k] = k
 	}
 
-	deps := make([]string, len(giants), len(giants))
+	deps := make([]string, 0, len(giants))
 	for k := range giants {
 		if !strings.Contains(k, "github.com/gobuffalo/buffalo") {
 			deps = append(deps, k)
@@ -44,7 +45,7 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(path.Join(os.Getenv("GOPATH"), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
+	f, err := os.Create(path.Join(envy.GoPath(), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ import (
 // task command is a forward to grift tasks
 var taskCommand = &cobra.Command{
 	Use:     "task",
-	Aliases: []string{"t"},
+	Aliases: []string{"t", "tasks"},
 	Short:   "Runs your grift tasks",
 	RunE: func(c *cobra.Command, args []string) error {
 		_, err := exec.LookPath("grift")

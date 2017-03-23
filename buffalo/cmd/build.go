@@ -400,12 +400,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"io"
 
 	"github.com/markbates/grift/grift"
 	"github.com/gobuffalo/packr"
 	_ "<%= aPack %>"
 	<%= if (modelsPack) { %>
+	"io"
 	"io/ioutil"
 	"path/filepath"
 	"<%= modelsPack %>"

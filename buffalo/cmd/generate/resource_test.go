@@ -46,8 +46,8 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Contains(string(fileData), "func (v UsersResource) Destroy(c buffalo.Context) error {")
 
 	fileData, _ = ioutil.ReadFile("actions/users_test.go")
-	r.Contains(string(fileData), "func Test_UsersResource_List")
-	r.Contains(string(fileData), "func Test_UsersResource_Show")
-	r.Contains(string(fileData), "func Test_UsersResource_Create")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_List")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Show")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Create")
 
 }

@@ -19,6 +19,10 @@ func newSodaGenerator() *makr.Generator {
 	f.Should = should
 	g.Add(f)
 
+	f = makr.NewFile("models/models_test.go", nModelsTest)
+	f.Should = should
+	g.Add(f)
+
 	c := makr.NewCommand(makr.GoGet("github.com/markbates/pop/..."))
 	c.Should = should
 	g.Add(c)
@@ -42,9 +46,8 @@ const nModels = `package models
 
 import (
 	"log"
-	"os"
 
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/pop"
 )
 
@@ -54,7 +57,7 @@ var DB *pop.Connection
 
 func init() {
 	var err error
-	env := defaults.String(os.Getenv("GO_ENV"), "development")
+	env := envy.Get("GO_ENV", "development")
 	DB, err = pop.Connect(env)
 	if err != nil {
 		log.Fatal(err)
@@ -62,3 +65,20 @@ func init() {
 	pop.Debug = env == "development"
 }
 `
+
+const nModelsTest = `package models_test
+
+import (
+	"testing"
+
+	"github.com/gobuffalo/suite"
+)
+
+type ModelSuite struct {
+	*suite.Model
+}
+
+func Test_ModelSuite(t *testing.T) {
+	as := &ModelSuite{suite.NewModel()}
+	suite.Run(t, as)
+}`

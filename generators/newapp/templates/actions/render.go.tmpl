@@ -1,30 +1,21 @@
 package actions
 
 import (
-	"net/http"
-
 	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/buffalo/render/resolvers"
-	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
 
 func init() {
 	r = render.New(render.Options{
+    // HTML layout to be used for all HTML requests:
 		HTMLLayout:     "application.html",
-		TemplateEngine: plush.BuffaloRenderer,
-		FileResolverFunc: func() resolvers.FileResolver {
-			return &resolvers.PackrBox{
-				Box: packr.NewBox("../templates"),
-			}
-		},
-		Helpers: map[string]interface{}{},
-	})
-}
 
-func assetsPath() http.FileSystem {
-	box := packr.NewBox("../public/assets")
-	return box.HTTPBox()
+    // Box containing all of the templates:
+    TemplatesBox: packr.NewBox("../templates"),
+
+    // Add template helpers here:
+    Helpers: render.Helpers{},
+	})
 }

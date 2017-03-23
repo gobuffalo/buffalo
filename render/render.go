@@ -1,7 +1,6 @@
 package render
 
 import (
-	"github.com/gobuffalo/buffalo/render/resolvers"
 	"github.com/gobuffalo/plush"
 )
 
@@ -18,11 +17,6 @@ type Engine struct {
 func New(opts Options) *Engine {
 	if opts.Helpers == nil {
 		opts.Helpers = map[string]interface{}{}
-	}
-	if opts.FileResolverFunc == nil {
-		opts.FileResolverFunc = func() resolvers.FileResolver {
-			return &resolvers.SimpleResolver{}
-		}
 	}
 	if opts.TemplateEngine == nil {
 		opts.TemplateEngine = plush.BuffaloRenderer

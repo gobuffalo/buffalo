@@ -10,7 +10,7 @@ module.exports = {
   ],
   output: {
     filename: "application.js",
-    path: "./public/assets"
+    path: __dirname + "/public/assets"
   },
   plugins: [
     new webpack.ProvidePlugin({
