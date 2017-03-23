@@ -36,7 +36,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 }
 
 // Show gets the data for one {{.singular}}. This function is mapped to
-// the path GET /{{.under}}/[{{.singular}}_id]
+// the path GET /{{.under}}/{{"{"}}{{.singular}}_id}
 func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -93,7 +93,7 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 }
 
 // Edit renders a edit formular for a {{.singular}}. This function is 
-// mapped to the path GET /{{.under}}/[{{.singular}}_id]/edit
+// mapped to the path GET /{{.under}}/{{"{"}}{{.singular}}}/edit
 func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -109,7 +109,7 @@ func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 }
 
 // Update changes a {{.singular}} in the DB. This function is mapped to 
-// the path PUT /{{.under}}/[{{.singular}}_id]
+// the path PUT /{{.under}}/{{"{"}}{{.singular}}}
 func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -144,7 +144,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
-// to the path DELETE /{{.under}}/[{{.singular}}_id]
+// to the path DELETE /{{.under}}/{{"{"}}{{.singular}}}
 func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
