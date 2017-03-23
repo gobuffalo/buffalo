@@ -52,7 +52,7 @@ func appGoGet() *exec.Cmd {
 const nREADME = `
 # Welcome to Buffalo!
 
-Thank you for chosing Buffalo for your web development needs.
+Thank you for choosing Buffalo for your web development needs.
 
 {{#if withPop}}
 ## Database Setup
