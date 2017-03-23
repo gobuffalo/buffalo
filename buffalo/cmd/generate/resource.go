@@ -58,6 +58,7 @@ var ResourceCmd = &cobra.Command{
 			"camel":        inflect.Camelize(name),
 			"under":        inflect.Underscore(name),
 			"downFirstCap": inflect.CamelizeDownFirst(name),
+			"model":        inflect.Singularize(inflect.Camelize(name)),
 			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":         args,
 
