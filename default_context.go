@@ -47,8 +47,6 @@ func (d *DefaultContext) Request() *http.Request {
 
 // Params returns all of the parameters for the request,
 // including both named params and query string parameters.
-// These parameters are automatically available in templates
-// as "{{.params}}".
 func (d *DefaultContext) Params() ParamValues {
 	return d.params
 }
