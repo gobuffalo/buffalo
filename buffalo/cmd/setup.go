@@ -176,10 +176,10 @@ func yarnCheck() error {
 
 func nodeCheck() error {
 	if _, err := exec.LookPath("node"); err != nil {
-		return errors.New("This application requires node, and we could not find it installed on your system. Please install node and try again.")
+		return errors.New("this application requires node, and we could not find it installed on your system please install node and try again")
 	}
 	if _, err := exec.LookPath("npm"); err != nil {
-		return errors.New("This application requires npm, and we could not find it installed on your system. Please install npm and try again.")
+		return errors.New("this application requires npm, and we could not find it installed on your system please install npm and try again")
 	}
 	return nil
 }
