@@ -34,8 +34,8 @@ func goInstall(pkg string) *exec.Cmd {
 	return generate.GoInstall(pkg)
 }
 
-func goGet(pkg string) *exec.Cmd {
-	return generate.GoGet(pkg)
+func goGet(pkg string, buildFlags ...string) *exec.Cmd {
+	return generate.GoGet(pkg, buildFlags...)
 }
 
 // func init() {

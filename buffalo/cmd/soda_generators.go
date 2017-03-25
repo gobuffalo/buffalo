@@ -19,11 +19,15 @@ func newSodaGenerator() *gentronics.Generator {
 	f.Should = should
 	g.Add(f)
 
-	c := gentronics.NewCommand(goGet("github.com/markbates/pop/..."))
-	c.Should = should
-	g.Add(c)
+	g.Add(&gentronics.Func{
+		Should: should,
+		Runner: func(rootPath string, data gentronics.Data) error {
+			gentronics.NewCommand(goGet("github.com/markbates/pop/...", "-tags", "'"+data["dbType"].(string)+"'"))
+			return nil
+		},
+	})
 
-	c = gentronics.NewCommand(goInstall("github.com/markbates/pop/soda"))
+	c := gentronics.NewCommand(goInstall("github.com/markbates/pop/soda"))
 	c.Should = should
 	g.Add(c)
 
