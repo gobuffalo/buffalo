@@ -78,3 +78,9 @@ func Test_Template_Partial(t *testing.T) {
 		r.Equal("Foo -> Mark", strings.TrimSpace(bb.String()))
 	}
 }
+
+func Test_FilepathJoin(t *testing.T) {
+	r := require.New(t)
+
+	r.Equal("dir/with/files", render.FilepathJoin("dir\\with", "files"))
+}

@@ -33,15 +33,25 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 	w.Write([]byte(body))
 	return nil
 }
+
+// FilepathJoin works just like filepath.join but will always use slashes.
+// Note: on Windows filepath.join returns a path separated by backslashes.
+// While this works find with files it crashes with the use of rice which
+// expects slashes
+func FilepathJoin(dirname string, filename string) string {
+	joined := filepath.Join(dirname, filename)
+	return strings.Replace(joined, "\\", "/", -1)
+}
+
 func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	d, f := filepath.Split(name)
-	name = filepath.Join(d, "_"+f)
+	name = FilepathJoin(d, "_"+f)
 	return s.exec(name, dd)
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	var body string
-	source, err := s.Resolver().Read(filepath.Join(s.TemplatesPath, name))
+	source, err := s.Resolver().Read(FilepathJoin(s.TemplatesPath, name))
 	if err != nil {
 		return "", err
 	}
