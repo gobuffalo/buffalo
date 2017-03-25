@@ -57,10 +57,6 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 	}
 
-	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/refresh/...")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/markbates/refresh")))
-	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/grift/...")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/markbates/grift")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore")))
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
