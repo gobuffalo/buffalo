@@ -133,7 +133,7 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 	data, _ = ioutil.ReadFile("templates/posts/list.html")
 	r.Contains(string(data), "<h1>Posts#List</h1>")
 
-	data, _ = ioutil.ReadFile("actions/Posts_test.go")
+	data, _ = ioutil.ReadFile("actions/posts_test.go")
 	r.Contains(string(data), "package actions_test")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Show() {")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Edit() {")
