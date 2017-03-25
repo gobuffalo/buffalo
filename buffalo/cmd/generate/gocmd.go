@@ -11,7 +11,7 @@ func GoInstall(pkg string) *exec.Cmd {
 
 // GoGet downloads and installs packages and dependencies
 func GoGet(pkg string) *exec.Cmd {
-	args := []string{"get"}
+	args := []string{"get", "-u"}
 	args = append(args, pkg)
 	return exec.Command("go", args...)
 }
