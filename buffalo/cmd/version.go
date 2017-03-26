@@ -18,6 +18,9 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version number of buffalo",
 	Long:  `All software has versions.  This is buffalo's.`,
 	Run: func(c *cobra.Command, args []string) {
-		fmt.Println("Buffalo version %s", Version)
+		fmt.Printf("Buffalo version is: %s\n", Version)
+	},
+	// needed to override the root level pre-run func
+	PersistentPreRun: func(c *cobra.Command, args []string) {
 	},
 }
