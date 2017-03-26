@@ -2,6 +2,8 @@ package generate
 
 import (
 	"errors"
+	"os"
+	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
 	"github.com/gobuffalo/makr"
@@ -49,7 +51,10 @@ var ResourceCmd = &cobra.Command{
 		if len(args) == 0 {
 			return errors.New("you must specify a resource name")
 		}
-
+		importPath, err := getImportPath()
+		if err != nil {
+			return err
+		}
 		name := args[0]
 		data := makr.Data{
 			"name":         name,
@@ -65,6 +70,9 @@ var ResourceCmd = &cobra.Command{
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
+
+			// System
+			"importPath": importPath,
 		}
 
 		g, err := resource.New(data)
@@ -73,4 +81,18 @@ var ResourceCmd = &cobra.Command{
 		}
 		return g.Run(".", data)
 	},
+}
+
+// getImportPath returns the import path of the app created by Buffalo
+func getImportPath() (string, error) {
+	fp, err := filepath.Abs(os.Args[0])
+	if err != nil {
+		return "", err
+	}
+	base := filepath.Join(os.Getenv("GOPATH"), "src")
+	rel, err := filepath.Rel(base, fp)
+	if err != nil {
+		return rel, err
+	}
+	return filepath.Dir(rel), nil
 }
