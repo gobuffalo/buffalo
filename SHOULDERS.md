@@ -74,6 +74,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/grift](https://github.com/markbates/grift)
 
+* [github.com/markbates/grift/cmd](https://github.com/markbates/grift/cmd)
+
 * [github.com/markbates/grift/grift](https://github.com/markbates/grift/grift)
 
 * [github.com/markbates/inflect](https://github.com/markbates/inflect)
@@ -102,6 +104,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 
+* [github.com/markbates/validate/validators](https://github.com/markbates/validate/validators)
+
 * [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
 
 * [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
@@ -123,6 +127,8 @@ Thank you to the following **GIANTS**:
 * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
 
 * [github.com/satori/go.uuid](https://github.com/satori/go.uuid)
+
+* [github.com/serenize/snaker](https://github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
 
