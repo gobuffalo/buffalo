@@ -1,12 +1,12 @@
 package actions
 
 import (
-	"github.com/gobuffalo/buffalo"
-	{{ if .withPop }}
-	"github.com/gobuffalo/buffalo/middleware"
-	"{{.modelsPath}}"
+  "github.com/gobuffalo/buffalo"
+  "github.com/gobuffalo/buffalo/middleware"
+  {{ if .withPop }}
+  "{{.modelsPath}}"
   {{ end }}
-	"github.com/gobuffalo/envy"
+  "github.com/gobuffalo/envy"
   "github.com/gobuffalo/packr"
 )
 
@@ -19,20 +19,23 @@ var app *buffalo.App
 // should be defined. This is the nerve center of your
 // application.
 func App() *buffalo.App {
-	if app == nil {
-		app = buffalo.Automatic(buffalo.Options{
-			Env: ENV,
-			SessionName: "_{{.name}}_session",
-		})
+  if app == nil {
+    app = buffalo.Automatic(buffalo.Options{
+      Env: ENV,
+      SessionName: "_{{.name}}_session",
+    })
+    if ENV == "development" {
+      app.Use(middleware.ParameterLogger)
+    }
 
-		{{ if .withPop }}
-		app.Use(middleware.PopTransaction(models.DB))
+    {{ if .withPop }}
+    app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
 
-		app.GET("/", HomeHandler)
+    app.GET("/", HomeHandler)
 
-		app.ServeFiles("/assets", packr.NewBox("../public/assets"))
-	}
+    app.ServeFiles("/assets", packr.NewBox("../public/assets"))
+  }
 
-	return app
+  return app
 }
