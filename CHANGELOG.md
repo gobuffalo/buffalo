@@ -1,5 +1,88 @@
 # Change Log
 
+## [v0.8.0.dev](https://github.com/gobuffalo/buffalo/tree/v0.8.0.dev) (2017-03-27)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4.1...v0.8.0.dev)
+
+**Implemented enhancements:**
+
+- Potential enhancement -- version cmd [\#322](https://github.com/gobuffalo/buffalo/issues/322)
+- Generate a default .gitlab-ci.yml file for new projects [\#181](https://github.com/gobuffalo/buffalo/issues/181)
+- React+Babel+webpack generator [\#125](https://github.com/gobuffalo/buffalo/issues/125)
+
+**Closed issues:**
+
+- Test fails in v0.8.0 buffalo/cmd/generate on Windows [\#325](https://github.com/gobuffalo/buffalo/issues/325)
+- Asset paths returning 404 [\#324](https://github.com/gobuffalo/buffalo/issues/324)
+- Having trouble installing -- prob easy fix [\#317](https://github.com/gobuffalo/buffalo/issues/317)
+- Update docs to reflect current state of template context. [\#312](https://github.com/gobuffalo/buffalo/issues/312)
+
+**Merged pull requests:**
+
+- Adds a version command to the CLI [\#330](https://github.com/gobuffalo/buffalo/pull/330) ([SpencerCDixon](https://github.com/SpencerCDixon))
+- Issue \#325 fixed failing windows tests [\#327](https://github.com/gobuffalo/buffalo/pull/327) ([as27](https://github.com/as27))
+- fix output path [\#323](https://github.com/gobuffalo/buffalo/pull/323) ([mario-seidel](https://github.com/mario-seidel))
+- Params doc fix [\#321](https://github.com/gobuffalo/buffalo/pull/321) ([markbates](https://github.com/markbates))
+- rewrote the default "routes" task so it doesn't need to import the tablewriter package any more [\#320](https://github.com/gobuffalo/buffalo/pull/320) ([markbates](https://github.com/markbates))
+- no longer need to shell out to the grifts binary [\#319](https://github.com/gobuffalo/buffalo/pull/319) ([markbates](https://github.com/markbates))
+- Gen seed script [\#318](https://github.com/gobuffalo/buffalo/pull/318) ([markbates](https://github.com/markbates))
+- Added a "buffalo setup" command to make sure applications are setup and [\#316](https://github.com/gobuffalo/buffalo/pull/316) ([markbates](https://github.com/markbates))
+- spelling fix - chosing -\> choosing [\#314](https://github.com/gobuffalo/buffalo/pull/314) ([corylanou](https://github.com/corylanou))
+- V0.8.0 [\#269](https://github.com/gobuffalo/buffalo/pull/269) ([markbates](https://github.com/markbates))
+
+## [v0.7.4.1](https://github.com/gobuffalo/buffalo/tree/v0.7.4.1) (2017-03-22)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4...v0.7.4.1)
+
+**Implemented enhancements:**
+
+- Drop go.rice support [\#290](https://github.com/gobuffalo/buffalo/issues/290)
+- Provide a CSRF middleware [\#243](https://github.com/gobuffalo/buffalo/issues/243)
+- Proposal: ActionSuite [\#242](https://github.com/gobuffalo/buffalo/issues/242)
+- Clean up the generate package [\#165](https://github.com/gobuffalo/buffalo/issues/165)
+- Improve resource generator to also generate the model and migration [\#42](https://github.com/gobuffalo/buffalo/issues/42)
+- Added CSRF middleware \(fix issue \#243\) [\#271](https://github.com/gobuffalo/buffalo/pull/271) ([stanislas-m](https://github.com/stanislas-m))
+
+**Fixed bugs:**
+
+- The migrate command on a built binary doesn't work [\#289](https://github.com/gobuffalo/buffalo/issues/289)
+
+**Closed issues:**
+
+- New project - webpack error [\#310](https://github.com/gobuffalo/buffalo/issues/310)
+- Lower case package dependency [\#308](https://github.com/gobuffalo/buffalo/issues/308)
+- Context Session [\#306](https://github.com/gobuffalo/buffalo/issues/306)
+- Best practices of model error handling  [\#304](https://github.com/gobuffalo/buffalo/issues/304)
+- fatal error: concurrent map writes [\#303](https://github.com/gobuffalo/buffalo/issues/303)
+- Test fails on Windows in router\_test.go [\#295](https://github.com/gobuffalo/buffalo/issues/295)
+- sql: Scan error [\#288](https://github.com/gobuffalo/buffalo/issues/288)
+- context.HasParam\(name\) ? [\#285](https://github.com/gobuffalo/buffalo/issues/285)
+- Documented video link is broken [\#284](https://github.com/gobuffalo/buffalo/issues/284)
+- Set up test db before running `buffalo test` [\#281](https://github.com/gobuffalo/buffalo/issues/281)
+- Removed the dependency on TT \(and BoltDB\) [\#280](https://github.com/gobuffalo/buffalo/issues/280)
+- Skip vendor directory during build when looking for rice files [\#278](https://github.com/gobuffalo/buffalo/issues/278)
+- Remove the new relic middleware from the 'middleware' package [\#225](https://github.com/gobuffalo/buffalo/issues/225)
+
+**Merged pull requests:**
+
+- run templates through the markdown engine first before going through plush [\#307](https://github.com/gobuffalo/buffalo/pull/307) ([markbates](https://github.com/markbates))
+- Fix \#181: generate default gitlab ci config [\#305](https://github.com/gobuffalo/buffalo/pull/305) ([stanislas-m](https://github.com/stanislas-m))
+- Action and Model Suites [\#302](https://github.com/gobuffalo/buffalo/pull/302) ([markbates](https://github.com/markbates))
+- Removed Resolvers and Cleaned up actions/render.go [\#301](https://github.com/gobuffalo/buffalo/pull/301) ([markbates](https://github.com/markbates))
+- cleaned up a bunch of code that did stuff with multiple go paths [\#300](https://github.com/gobuffalo/buffalo/pull/300) ([markbates](https://github.com/markbates))
+- use schema's to set up the test database [\#299](https://github.com/gobuffalo/buffalo/pull/299) ([markbates](https://github.com/markbates))
+- Correcting router\_test.go fixes \#295 [\#296](https://github.com/gobuffalo/buffalo/pull/296) ([as27](https://github.com/as27))
+- Typo in Resource documentation fixed [\#294](https://github.com/gobuffalo/buffalo/pull/294) ([as27](https://github.com/as27))
+- Drop go.rice support in favor of Packr [\#293](https://github.com/gobuffalo/buffalo/pull/293) ([markbates](https://github.com/markbates))
+- Remove new relic [\#283](https://github.com/gobuffalo/buffalo/pull/283) ([markbates](https://github.com/markbates))
+- Removed the dependency on TT \(and BoltDB\) closes \#280 and closes \#281 [\#282](https://github.com/gobuffalo/buffalo/pull/282) ([markbates](https://github.com/markbates))
+- Skip vendor directory during build when looking for rice files [\#279](https://github.com/gobuffalo/buffalo/pull/279) ([markbates](https://github.com/markbates))
+- Get valid gopath if multiple [\#275](https://github.com/gobuffalo/buffalo/pull/275) ([fooflare](https://github.com/fooflare))
+- Deplist [\#274](https://github.com/gobuffalo/buffalo/pull/274) ([markbates](https://github.com/markbates))
+- Switched to using github.com/gobuffalo/makr for generators [\#273](https://github.com/gobuffalo/buffalo/pull/273) ([markbates](https://github.com/markbates))
+- Clean up the generate package [\#272](https://github.com/gobuffalo/buffalo/pull/272) ([markbates](https://github.com/markbates))
+- \[feature\] implementing model generation for resources [\#270](https://github.com/gobuffalo/buffalo/pull/270) ([apaganobeleno](https://github.com/apaganobeleno))
+- now that 1.8 is released we should be testing against the latest Go as well [\#268](https://github.com/gobuffalo/buffalo/pull/268) ([markbates](https://github.com/markbates))
+- Convert Buffalo to use Plush by default [\#267](https://github.com/gobuffalo/buffalo/pull/267) ([markbates](https://github.com/markbates))
+
 ## [v0.7.4](https://github.com/gobuffalo/buffalo/tree/v0.7.4) (2017-03-03)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.3...v0.7.4)
 
@@ -341,15 +424,15 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.1)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...0.4.0)
+
+## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
-
-## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)
