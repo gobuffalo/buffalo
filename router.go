@@ -6,48 +6,48 @@ import (
 	"path"
 	"reflect"
 	"sort"
-	//"strings"
+	"strings"
 
 	"github.com/markbates/inflect"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
-func (a *App) GET(p string, h Handler) RouteInfo {
+func (a *App) GET(p string, h Handler) *RouteInfo {
 	return a.addRoute("GET", p, h)
 }
 
 // POST maps an HTTP "POST" request to the path and the specified handler.
-func (a *App) POST(p string, h Handler) RouteInfo {
+func (a *App) POST(p string, h Handler) *RouteInfo {
 	return a.addRoute("POST", p, h)
 }
 
 // PUT maps an HTTP "PUT" request to the path and the specified handler.
-func (a *App) PUT(p string, h Handler) RouteInfo {
+func (a *App) PUT(p string, h Handler) *RouteInfo {
 	return a.addRoute("PUT", p, h)
 }
 
 // DELETE maps an HTTP "DELETE" request to the path and the specified handler.
-func (a *App) DELETE(p string, h Handler) RouteInfo {
+func (a *App) DELETE(p string, h Handler) *RouteInfo {
 	return a.addRoute("DELETE", p, h)
 }
 
 // HEAD maps an HTTP "HEAD" request to the path and the specified handler.
-func (a *App) HEAD(p string, h Handler) RouteInfo {
+func (a *App) HEAD(p string, h Handler) *RouteInfo {
 	return a.addRoute("HEAD", p, h)
 }
 
 // OPTIONS maps an HTTP "OPTIONS" request to the path and the specified handler.
-func (a *App) OPTIONS(p string, h Handler) RouteInfo {
+func (a *App) OPTIONS(p string, h Handler) *RouteInfo {
 	return a.addRoute("OPTIONS", p, h)
 }
 
 // PATCH maps an HTTP "PATCH" request to the path and the specified handler.
-func (a *App) PATCH(p string, h Handler) RouteInfo {
+func (a *App) PATCH(p string, h Handler) *RouteInfo {
 	return a.addRoute("PATCH", p, h)
 }
 
 // Redirect from one URL to another URL. Only works for "GET" requests.
-func (a *App) Redirect(status int, from, to string) RouteInfo {
+func (a *App) Redirect(status int, from, to string) *RouteInfo {
 	return a.GET(from, func(c Context) error {
 		return c.Redirect(status, to)
 	})
@@ -145,7 +145,7 @@ func (a *App) Group(groupPath string) *App {
 	return g
 }
 
-func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
+func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
@@ -157,18 +157,53 @@ func (a *App) addRoute(method string, url string, h Handler) RouteInfo {
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
+		App:         a,
 	}
 
 	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+	r.Name(buildRouteName(url))
 
 	routes := a.Routes()
 	routes = append(routes, r)
 	sort.Sort(routes)
+
 	if a.root != nil {
 		a.root.routes = routes
 	} else {
 		a.routes = routes
 	}
 
-	return r
+	return &r
+}
+
+//buildRouteName builds a route based on the path passed.
+func buildRouteName(path string) string {
+
+	if path == "/" {
+		return "root"
+	}
+
+	resultPars := []string{}
+	parts := strings.Split(path, "/")
+
+	for index, part := range parts {
+
+		if strings.Contains(part, "{") || part == "" {
+			continue
+		}
+		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
+		if shouldSingularize {
+			part = inflect.Singularize(part)
+		}
+
+		if index > 0 && strings.Contains(parts[index-1], "}") {
+			resultPars = append(resultPars, part)
+			continue
+		}
+
+		resultPars = append([]string{part}, resultPars...)
+	}
+
+	underscore := strings.Join(resultPars, "_")
+	return inflect.CamelizeDownFirst(underscore)
 }
