@@ -33,6 +33,12 @@ $ buffalo g resource users --skip-model
 Generates:
 
 - actions/users.go
+- actions/users_test.go
+
+$ buffalo g resource users --use-model
+Generates:
+
+- actions/users.go
 - actions/users_test.go`
 
 // SkipResourceMigration allows to generate a resource without the migration.

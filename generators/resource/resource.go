@@ -36,7 +36,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	if skipModel := data["skipModel"].(bool); skipModel == false || useModel == true {
+	if skipModel := data["skipModel"].(bool); skipModel == false && useModel == false {
 		g.Add(modelCommand(data))
 	}
 
