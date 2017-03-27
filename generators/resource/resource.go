@@ -18,9 +18,9 @@ func New(data makr.Data) (*makr.Generator, error) {
 		return nil, err
 	}
 	tmplName := "resource-name"
-	skipModel := data["skipModel"].(bool)
-	if skipModel == true {
-		tmplName = "resource-skip_model"
+	useModel := data["useModel"].(bool)
+	if useModel == true {
+		tmplName = "resource-use_model"
 	}
 	for _, f := range files {
 		if strings.Contains(f.WritePath, tmplName) {
@@ -36,7 +36,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	if skipModel == false {
+	if skipModel := data["skipModel"].(bool); skipModel == false || useModel == true {
 		g.Add(modelCommand(data))
 	}
 

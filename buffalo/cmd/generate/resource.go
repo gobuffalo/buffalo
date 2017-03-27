@@ -35,11 +35,14 @@ Generates:
 - actions/users.go
 - actions/users_test.go`
 
-//SkipResourceMigration allows to generate a resource without the migration.
+// SkipResourceMigration allows to generate a resource without the migration.
 var SkipResourceMigration = false
 
-//SkipResourceModel allows to generate a resource without the model and Migration.
+// SkipResourceModel allows to generate a resource without the model and Migration.
 var SkipResourceModel = false
+
+// UseResourceModel allows to generate a resource with a working model.
+var UseResourceModel = false
 
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
@@ -70,6 +73,7 @@ var ResourceCmd = &cobra.Command{
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
+			"useModel":      UseResourceModel,
 
 			// System
 			"importPath": importPath,
