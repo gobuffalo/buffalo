@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/packr"
 	"github.com/markbates/going/defaults"
 )
 
@@ -21,7 +22,7 @@ func App() *buffalo.App {
 			Env: ENV,
 		})
 
-		app.ServeFiles("/assets", assetsPath())
+		app.ServeFiles("/assets", packr.NewBox("../assets"))
 		app.GET("/", HomeHandler)
 		app.GET("/socket", SocketHandler)
 	}

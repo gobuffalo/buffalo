@@ -1,0 +1,6 @@
+[{
+    "path": "models/user.go",
+    "contains": [
+        "type User struct {"
+    ]
+}]

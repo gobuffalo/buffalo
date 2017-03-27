@@ -29,6 +29,9 @@ func TestGenerateResourceCode(t *testing.T) {
 	os.Mkdir("actions", 0755)
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
+	SkipResourceMigration = false
+	SkipResourceModel = false
+
 	e = ResourceCmd.RunE(&cmd, []string{"users"})
 	r.Nil(e)
 
@@ -43,8 +46,8 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Contains(string(fileData), "func (v UsersResource) Destroy(c buffalo.Context) error {")
 
 	fileData, _ = ioutil.ReadFile("actions/users_test.go")
-	r.Contains(string(fileData), "func Test_UsersResource_List")
-	r.Contains(string(fileData), "func Test_UsersResource_Show")
-	r.Contains(string(fileData), "func Test_UsersResource_Create")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_List")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Show")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Create")
 
 }

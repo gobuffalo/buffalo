@@ -3,9 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
-	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
 	"github.com/spf13/cobra"
 )
 
@@ -28,14 +26,6 @@ func Execute() {
 		fmt.Printf("Error: %s\n\n", err)
 		os.Exit(-1)
 	}
-}
-
-func goInstall(pkg string) *exec.Cmd {
-	return generate.GoInstall(pkg)
-}
-
-func goGet(pkg string) *exec.Cmd {
-	return generate.GoGet(pkg)
 }
 
 // func init() {
