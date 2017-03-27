@@ -1,7 +1,7 @@
 # Change Log
 
-## [v0.8.0.dev](https://github.com/gobuffalo/buffalo/tree/v0.8.0.dev) (2017-03-27)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4.1...v0.8.0.dev)
+## [v0.8.0](https://github.com/gobuffalo/buffalo/tree/v0.8.0) (2017-03-27)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4.1...v0.8.0)
 
 **Implemented enhancements:**
 
