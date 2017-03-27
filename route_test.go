@@ -40,3 +40,23 @@ func Test_App_Routes_with_Root(t *testing.T) {
 
 	r.Equal(a.Routes(), g.Routes())
 }
+
+func Test_App_RouteName(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+
+	cases := map[string]string{
+		"cool":                "coolPath",
+		"coolPath":            "coolPath",
+		"coco_path":           "cocoPath",
+		"ouch_something_cool": "ouchSomethingCoolPath",
+	}
+
+	ri := a.GET("/something", voidHandler)
+	for k, v := range cases {
+		ri.Name(k)
+		r.Equal(ri.PathName, v)
+	}
+
+}
