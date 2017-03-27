@@ -2,8 +2,8 @@ package actions
 
 import (
   "github.com/gobuffalo/buffalo"
-  {{ if .withPop }}
   "github.com/gobuffalo/buffalo/middleware"
+  {{ if .withPop }}
   "{{.modelsPath}}"
   {{ end }}
   "github.com/gobuffalo/envy"
