@@ -2,8 +2,6 @@ package generate
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
 	"github.com/gobuffalo/makr"
@@ -73,6 +71,8 @@ var ResourceCmd = &cobra.Command{
 			"under":        inflect.Underscore(name),
 			"downFirstCap": inflect.CamelizeDownFirst(name),
 			"model":        inflect.Singularize(inflect.Camelize(name)),
+			"modelPlural":  inflect.Pluralize(inflect.Camelize(name)),
+			"modelUnder":   inflect.Singularize(inflect.Underscore(name)),
 			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":         args,
 
@@ -80,9 +80,6 @@ var ResourceCmd = &cobra.Command{
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
-
-			// System
-			"importPath": importPath,
 		}
 
 		g, err := resource.New(data)
@@ -91,18 +88,4 @@ var ResourceCmd = &cobra.Command{
 		}
 		return g.Run(".", data)
 	},
-}
-
-// getImportPath returns the import path of the app created by Buffalo
-func getImportPath() (string, error) {
-	fp, err := filepath.Abs(os.Args[0])
-	if err != nil {
-		return "", err
-	}
-	base := filepath.Join(os.Getenv("GOPATH"), "src")
-	rel, err := filepath.Rel(base, fp)
-	if err != nil {
-		return rel, err
-	}
-	return filepath.Dir(rel), nil
 }

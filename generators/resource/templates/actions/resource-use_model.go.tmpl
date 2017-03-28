@@ -12,19 +12,19 @@ import (
 // complex or you need more than the basic implementation you need to
 //  edit this file.
 
-// {{.camel}}Resource is the resource for the {{.singular}} model
-type {{.camel}}Resource struct{
+// {{.modelPlural}}Resource is the resource for the {{.singular}} model
+type {{.modelPlural}}Resource struct{
 	buffalo.Resource
 }
 
-// List gets all {{.camel}}. This function is mapped to the the path 
+// List gets all {{.modelPlural}}. This function is mapped to the the path 
 // GET /{{.under}} 
-func (v {{.camel}}Resource) List(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
-	{{.downFirstCap}} := &models.{{.camel}}{}
+	{{.plural}} := &models.{{.modelPlural}}{}
 	// You can order your list here. Just change 
-	err := tx.All({{.downFirstCap}})
+	err := tx.All({{.plural}})
 	// to:
 	// err := tx.Order("(case when completed then 1 else 2 end) desc, lower([sort_parameter]) asc").All({{.downFirstCap}})
 	// Don't forget to change [sort_parameter] to the parameter of
@@ -33,13 +33,13 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 		return err
 	}
 	// Make {{.plural}} available inside the html template
-	c.Set("{{.plural}}", {{.downFirstCap}})
+	c.Set("{{.plural}}", {{.plural}})
 	return c.Render(200, r.HTML("{{.under}}/index.html"))
 }
 
 // Show gets the data for one {{.singular}}. This function is mapped to
 // the path GET /{{.under}}/{{"{"}}{{.singular}}_id}
-func (v {{.camel}}Resource) Show(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
@@ -56,7 +56,7 @@ func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 
 // New renders the formular for creating a new {{.singular}}. 
 // This function is mapped to the path GET /{{.under}}/new
-func (v {{.camel}}Resource) New(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) New(c buffalo.Context) error {
 	// Make {{.singular}} available inside the html template
 	c.Set("{{.singular}}", &models.{{.model}}{})
 	return c.Render(200, r.HTML("{{.under}}/new.html"))
@@ -64,7 +64,7 @@ func (v {{.camel}}Resource) New(c buffalo.Context) error {
 
 // Create adds a {{.singular}} to the DB. This function is mapped to the 
 // path POST /{{.under}}
-func (v {{.camel}}Resource) Create(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) Create(c buffalo.Context) error {
 	// Allocate an empty {{.model}}
 	{{.singular}} := &models.{{.model}}{}
 	// Bind {{.singular}} to the html form elements
@@ -96,7 +96,7 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 
 // Edit renders a edit formular for a {{.singular}}. This function is 
 // mapped to the path GET /{{.under}}/{{"{"}}{{.singular}}}/edit
-func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) Edit(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
@@ -112,7 +112,7 @@ func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 
 // Update changes a {{.singular}} in the DB. This function is mapped to 
 // the path PUT /{{.under}}/{{"{"}}{{.singular}}}
-func (v {{.camel}}Resource) Update(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
@@ -147,7 +147,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
 // to the path DELETE /{{.under}}/{{"{"}}{{.singular}}}
-func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
+func (v {{.modelPlural}}Resource) Destroy(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}

@@ -3,6 +3,7 @@ package resource
 import (
 	"fmt"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators"
@@ -17,14 +18,26 @@ func New(data makr.Data) (*makr.Generator, error) {
 	if err != nil {
 		return nil, err
 	}
-	tmplName := "resource-name"
+	// Get the flags
 	useModel := data["useModel"].(bool)
-	if useModel == true {
-		tmplName = "resource-use_model"
+	skipModel := data["skipModel"].(bool)
+
+	tmplName := "resource-use_model"
+
+	if skipModel == true {
+		tmplName = "resource-name"
 	}
 	for _, f := range files {
 		if strings.Contains(f.WritePath, tmplName) {
 			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["under"].(string), -1), f.Body))
+		}
+		if strings.Contains(f.WritePath, "model-view-") {
+			targetPath := filepath.Join(
+				filepath.Dir(f.WritePath),
+				data["modelUnder"].(string),
+				strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
+			)
+			g.Add(makr.NewFile(targetPath, f.Body))
 		}
 	}
 	g.Add(&makr.Func{
@@ -36,7 +49,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	if skipModel := data["skipModel"].(bool); skipModel == false && useModel == false {
+	if skipModel == false && useModel == false {
 		g.Add(modelCommand(data))
 	}
 
