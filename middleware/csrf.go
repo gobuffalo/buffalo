@@ -5,9 +5,10 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"errors"
-	"github.com/gobuffalo/buffalo"
 	"net/http"
 	"net/url"
+
+	"github.com/gobuffalo/buffalo"
 )
 
 const (
