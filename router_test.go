@@ -150,11 +150,13 @@ func Test_App_NamedRoutes(t *testing.T) {
 	})
 
 	sampleHandler := func(c Context) error {
+		c.Set("opts", map[string]interface{}{})
 		return c.Render(200, rr.String(`
 			1. <%= rootPath() %>
 			2. <%= usersPath() %>
 			3. <%= userPath({user_id: 1}) %>
 			4. <%= myPeepsPath() %>
+			5. <%= userPath(opts) %>
 		`))
 	}
 
@@ -171,6 +173,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "2. /users")
 	r.Contains(res.Body.String(), "3. /users/1")
 	r.Contains(res.Body.String(), "4. /peeps")
+	r.Contains(res.Body.String(), "5. /users/{user_id}")
 }
 
 func Test_Resource(t *testing.T) {
