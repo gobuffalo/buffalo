@@ -23,13 +23,13 @@ func TestGenerateActionArgsComplete(t *testing.T) {
 	e := ActionCmd.RunE(&cmd, []string{})
 	r.NotNil(e)
 
-	e = ActionCmd.RunE(&cmd, []string{"users"})
+	e = ActionCmd.RunE(&cmd, []string{"nodes"})
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
-	e = ActionCmd.RunE(&cmd, []string{"users", "show"})
+	e = ActionCmd.RunE(&cmd, []string{"nodes", "show"})
 	r.Nil(e)
 }
 
@@ -45,25 +45,25 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 	r := require.New(t)
 	cmd := cobra.Command{}
 
-	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
+	e := ActionCmd.RunE(&cmd, []string{"comments", "show", "edit"})
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
-	e = ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
+	e = ActionCmd.RunE(&cmd, []string{"comments", "show", "edit"})
 	r.Nil(e)
 
-	data, _ := ioutil.ReadFile("actions/users.go")
+	data, _ := ioutil.ReadFile("actions/comments.go")
 	r.Contains(string(data), "package actions")
 	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
-	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
-	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
-	r.Contains(string(data), `r.HTML("users/edit.html")`)
-	r.Contains(string(data), `c.Render(200, r.HTML("users/show.html"))`)
+	r.Contains(string(data), "func CommentsShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func CommentsEdit(c buffalo.Context) error {")
+	r.Contains(string(data), `r.HTML("comments/edit.html")`)
+	r.Contains(string(data), `c.Render(200, r.HTML("comments/show.html"))`)
 
-	data, _ = ioutil.ReadFile("templates/users/show.html")
-	r.Contains(string(data), "<h1>Users#Show</h1>")
+	data, _ = ioutil.ReadFile("templates/comments/show.html")
+	r.Contains(string(data), "<h1>Comments#Show</h1>")
 }
 
 func TestGenerateActionActionsFileExists(t *testing.T) {
@@ -108,37 +108,36 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 	r := require.New(t)
 	cmd := cobra.Command{}
-	e := ActionCmd.RunE(&cmd, []string{"users", "show", "edit"})
+	e := ActionCmd.RunE(&cmd, []string{"posts", "show", "edit"})
 	r.Nil(e)
 
-	data, _ := ioutil.ReadFile("actions/users.go")
+	data, _ := ioutil.ReadFile("actions/posts.go")
 	r.Contains(string(data), "package actions")
-	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
-	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
-	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
-	r.Contains(string(data), `r.HTML("users/edit.html")`)
-	r.Contains(string(data), `c.Render(200, r.HTML("users/show.html"))`)
+	r.Contains(string(data), "github.com/gobuffalo/buffalo")
+	r.Contains(string(data), "func PostsShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func PostsEdit(c buffalo.Context) error {")
+	r.Contains(string(data), `r.HTML("posts/edit.html")`)
+	r.Contains(string(data), `c.Render(200, r.HTML("posts/show.html"))`)
 
-	e = ActionCmd.RunE(&cmd, []string{"users", "list"})
+	e = ActionCmd.RunE(&cmd, []string{"posts", "list"})
 	r.Nil(e)
 
-	data, _ = ioutil.ReadFile("actions/users.go")
+	data, _ = ioutil.ReadFile("actions/posts.go")
 	r.Contains(string(data), "package actions")
-	r.Contains(string(data), `import "github.com/gobuffalo/buffalo"`)
-	r.Contains(string(data), "func UsersShow(c buffalo.Context) error {")
-	r.Contains(string(data), "func UsersEdit(c buffalo.Context) error {")
-	r.Contains(string(data), "func UsersList(c buffalo.Context) error {")
-	r.Contains(string(data), `r.HTML("users/list.html")`)
-	r.Contains(string(data), `c.Render(200, r.HTML("users/list.html"))`)
+	r.Contains(string(data), "github.com/gobuffalo/buffalo")
+	r.Contains(string(data), "func PostsShow(c buffalo.Context) error {")
+	r.Contains(string(data), "func PostsEdit(c buffalo.Context) error {")
+	r.Contains(string(data), "func PostsList(c buffalo.Context) error {")
+	r.Contains(string(data), `c.Render(200, r.HTML("posts/list.html"))`)
 
-	data, _ = ioutil.ReadFile("templates/users/list.html")
-	r.Contains(string(data), "<h1>Users#List</h1>")
+	data, _ = ioutil.ReadFile("templates/posts/list.html")
+	r.Contains(string(data), "<h1>Posts#List</h1>")
 
-	data, _ = ioutil.ReadFile("actions/users_test.go")
+	data, _ = ioutil.ReadFile("actions/posts_test.go")
 	r.Contains(string(data), "package actions_test")
-	r.Contains(string(data), "func (as *ActionSuite) Test_Users_Show() {")
-	r.Contains(string(data), "func (as *ActionSuite) Test_Users_Edit() {")
-	r.Contains(string(data), "func (as *ActionSuite) Test_Users_List() {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Show() {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Edit() {")
+	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_List() {")
 }
 
 var appGo = []byte(`

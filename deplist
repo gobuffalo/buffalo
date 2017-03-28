@@ -31,6 +31,7 @@ github.com/markbates/deplist
 github.com/markbates/going/defaults
 github.com/markbates/going/randx
 github.com/markbates/going/wait
+github.com/markbates/grift/cmd
 github.com/markbates/grift/grift
 github.com/markbates/inflect
 github.com/markbates/pop
@@ -44,6 +45,7 @@ github.com/markbates/pop/soda/cmd/schema
 github.com/markbates/refresh/refresh
 github.com/markbates/refresh/refresh/web
 github.com/markbates/validate
+github.com/markbates/validate/validators
 github.com/mattn/anko/ast
 github.com/mattn/anko/builtins
 github.com/mattn/anko/parser
@@ -54,6 +56,7 @@ github.com/mitchellh/go-homedir
 github.com/pkg/errors
 github.com/russross/blackfriday
 github.com/satori/go.uuid
+github.com/serenize/snaker
 github.com/sergi/go-diff/diffmatchpatch
 github.com/shurcooL/github_flavored_markdown
 github.com/shurcooL/highlight_diff
