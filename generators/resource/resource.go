@@ -28,13 +28,15 @@ func New(data makr.Data) (*makr.Generator, error) {
 		tmplName = "resource-name"
 	}
 	for _, f := range files {
+		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
 			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["under"].(string), -1), f.Body))
 		}
+		// Adding the html templates to the generator
 		if strings.Contains(f.WritePath, "model-view-") {
 			targetPath := filepath.Join(
 				filepath.Dir(f.WritePath),
-				data["modelUnder"].(string),
+				data["modelPluralUnder"].(string),
 				strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
 			)
 			g.Add(makr.NewFile(targetPath, f.Body))

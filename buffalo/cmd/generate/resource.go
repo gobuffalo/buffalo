@@ -58,23 +58,25 @@ var ResourceCmd = &cobra.Command{
 		if len(args) == 0 {
 			return errors.New("you must specify a resource name")
 		}
-		importPath, err := getImportPath()
-		if err != nil {
-			return err
-		}
+
 		name := args[0]
 		data := makr.Data{
-			"name":         name,
-			"singular":     inflect.Singularize(name),
-			"plural":       inflect.Pluralize(name),
-			"camel":        inflect.Camelize(name),
-			"under":        inflect.Underscore(name),
-			"downFirstCap": inflect.CamelizeDownFirst(name),
-			"model":        inflect.Singularize(inflect.Camelize(name)),
-			"modelPlural":  inflect.Pluralize(inflect.Camelize(name)),
-			"modelUnder":   inflect.Singularize(inflect.Underscore(name)),
-			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
-			"args":         args,
+			"name":             name,
+			"singular":         inflect.Singularize(name),
+			"plural":           inflect.Pluralize(name),
+			"camel":            inflect.Camelize(name),
+			"under":            inflect.Underscore(name),
+			"underSingular":    inflect.Singularize(inflect.Underscore(name)),
+			"underPlural":      inflect.Pluralize(inflect.Underscore(name)),
+			"downFirstCap":     inflect.CamelizeDownFirst(name),
+			"model":            inflect.Singularize(inflect.Camelize(name)),
+			"modelPlural":      inflect.Pluralize(inflect.Camelize(name)),
+			"modelUnder":       inflect.Singularize(inflect.Underscore(name)),
+			"modelPluralUnder": inflect.Pluralize(inflect.Underscore(name)),
+			"varPlural":        inflect.Pluralize(inflect.CamelizeDownFirst(name)),
+			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(name)),
+			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":             args,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
