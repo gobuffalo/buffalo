@@ -1,2 +1,6 @@
-<h1>{{.camel}}#New</h1>
+<h1>New {{.model}}</h1>
 
+<%= partial("{{.modelUnder}}/errors.html") %>
+<form action="/{{.plural}}" method="POST" accept-charset="utf-8">
+  <%= partial("{{.modelUnder}}/form.html") %>
+</form>

@@ -1,1 +1,26 @@
-<h1>{{.camel}}#Index</h1>
+<% let args = ["Title"] %>
+<h1>{{.modelPlural}}</h1>
+
+<a href="/{{.plural}}/new">Create New {{.model}}</a>
+
+<table>
+  <thead>
+  <%= for (val) in args { %>
+    <th><%= val %></th>
+  <% } %>
+  </thead>
+  <tbody>
+    <%= for ({{.model}}) in {{.plural}} { %>
+    <tr>
+	  <%= for (val) in args { %>
+		<td><%= {{.model}}.val %></td>
+	  <% } %>
+      <td>
+        <a href="/{{.plural}}/<%= {{.model}}.ID %>">View</a>
+        <a href="/{{.plural}}/<%= {{.model}}.ID %>/edit">Edit</a>
+        <a href="/{{.plural}}/<%= {{.model}}.ID %>" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
+      </td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
