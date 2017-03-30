@@ -3,7 +3,6 @@ package grifts
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,21 +10,25 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/markbates/grift/grift"
+	"github.com/pkg/errors"
 )
 
 var _ = grift.Desc("release", "Generates a CHANGELOG and creates a new GitHub release based on what is in the version.go file.")
 var _ = grift.Add("release", func(c *grift.Context) error {
-	err := grift.Run("shoulders", c)
-	if err != nil {
-		return err
-	}
-	err = grift.Run("deplist", c)
-	if err != nil {
-		return err
-	}
 	v, err := findVersion()
+	if err != nil {
+		return err
+	}
+
+	err = grift.Run("shoulders", c)
+	if err != nil {
+		return err
+	}
+
+	err = grift.Run("deplist", c)
 	if err != nil {
 		return err
 	}
@@ -153,5 +156,8 @@ func findVersion() (string, error) {
 		return "", errors.New("failed to find the version")
 	}
 	v := matches[1]
+	if strings.Contains(v, "dev") {
+		return "", errors.Errorf("version can not be a dev version %s", v)
+	}
 	return v, nil
 }
