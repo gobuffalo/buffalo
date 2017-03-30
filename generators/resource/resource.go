@@ -19,7 +19,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		return nil, err
 	}
 	// Get the flags
-	useModel := data["useModel"].(bool)
+	useModel := data["useModel"].(string)
 	skipModel := data["skipModel"].(bool)
 
 	tmplName := "resource-use_model"
@@ -28,13 +28,15 @@ func New(data makr.Data) (*makr.Generator, error) {
 		tmplName = "resource-name"
 	}
 	for _, f := range files {
+		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
 			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["under"].(string), -1), f.Body))
 		}
+		// Adding the html templates to the generator
 		if strings.Contains(f.WritePath, "model-view-") {
 			targetPath := filepath.Join(
 				filepath.Dir(f.WritePath),
-				data["modelUnder"].(string),
+				data["modelPluralUnder"].(string),
 				strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
 			)
 			g.Add(makr.NewFile(targetPath, f.Body))
@@ -49,7 +51,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	if skipModel == false && useModel == false {
+	if skipModel == false && useModel == "" {
 		g.Add(modelCommand(data))
 	}
 
