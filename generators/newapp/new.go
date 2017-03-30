@@ -72,7 +72,9 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 		g.Add(wg)
 	}
-	g.Add(newSodaGenerator())
+	if !a.SkipPop {
+		g.Add(newSodaGenerator())
+	}
 	g.Add(makr.NewCommand(a.goGet()))
 	g.Add(makr.NewCommand(makr.GoFmt()))
 
