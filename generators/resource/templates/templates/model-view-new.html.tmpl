@@ -1,6 +1,6 @@
 <h1>New {{.model}}</h1>
 
-<%= partial("{{.modelUnder}}/errors.html") %>
-<form action="/{{.plural}}" method="POST" accept-charset="utf-8">
-  <%= partial("{{.modelUnder}}/form.html") %>
+<%= partial("{{.modelPluralUnder}}/errors.html") %>
+<form action="/{{.under}}" method="POST" accept-charset="utf-8">
+  <%= partial("{{.modelPluralUnder}}/form.html") %>
 </form>

@@ -2,7 +2,7 @@
  <%= for (val) in args { %>
  <div>
   <label for="<%= val %>"><%= val %>:</label>
-  <input type="text" name="<%= val %>" id="<%= val %>" value="<%= {{.modelPlural}}+"."+val %>" />
+  <input type="text" name="<%= val %>" id="<%= val %>" value="<%= {{.modelPlural}}.val %>" />
 </div>
   <% } %>
 

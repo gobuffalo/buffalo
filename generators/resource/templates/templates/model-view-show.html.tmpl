@@ -1,1 +1,12 @@
 <h1>{{.camel}}#Show</h1>
+<% let args = ["Title","Body"] %>
+ <%= for (val) in args { %>
+ <div>
+  <%= val %>: <%= {{.modelPlural}}.val %>
+  
+</div>
+  <% } %>
+
+<div>
+  <input type="submit" value="Save" />
+</div>
