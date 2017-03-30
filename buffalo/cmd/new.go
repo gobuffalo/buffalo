@@ -74,8 +74,10 @@ func validateInGoPath() error {
 	gpMultiple := envy.GoPaths()
 
 	var gp string
+	larp := strings.ToLower(app.RootPath)
 	for i := 0; i < len(gpMultiple); i++ {
-		if strings.HasPrefix(app.RootPath, filepath.Join(gpMultiple[i], "src")) {
+		lgpm := strings.ToLower(filepath.Join(gpMultiple[i], "src"))
+		if strings.HasPrefix(larp, lgpm) {
 			gp = gpMultiple[i]
 			break
 		}
