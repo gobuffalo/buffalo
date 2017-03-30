@@ -46,7 +46,7 @@ var SkipResourceMigration = false
 var SkipResourceModel = false
 
 // UseResourceModel allows to generate a resource with a working model.
-var UseResourceModel = false
+var UseResourceModel = ""
 
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
@@ -55,26 +55,43 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return errors.New("you must specify a resource name")
+		var name, modelName string
+
+		// Allow overwriting modelName with the --use-model flag
+		// buffalo generate resource users --use-model people
+		if UseResourceModel != "" {
+			modelName = inflect.Pluralize(UseResourceModel)
 		}
 
-		name := args[0]
+		if len(args) == 0 {
+			if UseResourceModel == "" {
+				return errors.New("you must specify a resource name")
+			}
+			// When there is no resource name given and --use-model flag is set
+			name = UseResourceModel
+		} else {
+			// When resource name is specified
+			name = inflect.Pluralize(args[0])
+			// If there is no --use-model flag set use the resource to create the model
+			if modelName == "" {
+				modelName = name
+			}
+		}
+
 		data := makr.Data{
 			"name":             name,
 			"singular":         inflect.Singularize(name),
-			"plural":           inflect.Pluralize(name),
+			"plural":           name,
 			"camel":            inflect.Camelize(name),
 			"under":            inflect.Underscore(name),
 			"underSingular":    inflect.Singularize(inflect.Underscore(name)),
-			"underPlural":      inflect.Pluralize(inflect.Underscore(name)),
 			"downFirstCap":     inflect.CamelizeDownFirst(name),
-			"model":            inflect.Singularize(inflect.Camelize(name)),
-			"modelPlural":      inflect.Pluralize(inflect.Camelize(name)),
-			"modelUnder":       inflect.Singularize(inflect.Underscore(name)),
-			"modelPluralUnder": inflect.Pluralize(inflect.Underscore(name)),
-			"varPlural":        inflect.Pluralize(inflect.CamelizeDownFirst(name)),
-			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(name)),
+			"model":            inflect.Singularize(inflect.Camelize(modelName)),
+			"modelPlural":      inflect.Camelize(modelName),
+			"modelUnder":       inflect.Singularize(inflect.Underscore(modelName)),
+			"modelPluralUnder": inflect.Underscore(modelName),
+			"varPlural":        inflect.CamelizeDownFirst(modelName),
+			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
 

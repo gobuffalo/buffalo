@@ -19,7 +19,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		return nil, err
 	}
 	// Get the flags
-	useModel := data["useModel"].(bool)
+	useModel := data["useModel"].(string)
 	skipModel := data["skipModel"].(bool)
 
 	tmplName := "resource-use_model"
@@ -51,7 +51,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			)
 		},
 	})
-	if skipModel == false && useModel == false {
+	if skipModel == false && useModel == "" {
 		g.Add(modelCommand(data))
 	}
 

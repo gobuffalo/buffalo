@@ -19,7 +19,7 @@ func init() {
 
 	generate.ResourceCmd.Flags().BoolVarP(&generate.SkipResourceMigration, "skip-migration", "s", false, "sets resource generator not-to add model migration")
 	generate.ResourceCmd.Flags().BoolVarP(&generate.SkipResourceModel, "skip-model", "", false, "makes resource generator not to generate model nor migrations")
-	generate.ResourceCmd.Flags().BoolVarP(&generate.UseResourceModel, "use-model", "u", false, "generates crud options for a model")
+	generate.ResourceCmd.Flags().StringVarP(&generate.UseResourceModel, "use-model", "u", "", "generates crud options for a model")
 
 	RootCmd.AddCommand(generateCmd)
 }
