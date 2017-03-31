@@ -1,26 +1,28 @@
-<% let args = ["ID"] %>
+
 <h1>{{.modelPlural}}</h1>
 
+<p>
 <a href="/{{.plural}}/new">Create New {{.model}}</a>
+</p>
 
 <table>
   <thead>
-  <%= for (val) in args { %>
-    <th><%= val %></th>
-  <% } %>
+  {{ range $p := .modelProps }}
+    <th>{{ $p }}</th>
+  {{ end }}
   </thead>
   <tbody>
-    <%= for ({{.model}}) in {{.plural}} { %>
-    <tr>
-	  <%= for (val) in args { %>
-		<td><%= {{.model}}.val %></td>
-	  <% } %>
-      <td>
-        <a href="/{{.plural}}/<%= {{.model}}.ID %>">View</a>
-        <a href="/{{.plural}}/<%= {{.model}}.ID %>/edit">Edit</a>
-        <a href="/{{.plural}}/<%= {{.model}}.ID %>" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
-      </td>
-    </tr>
+    <%= for ({{.varSingular}}) in {{.varPlural}} { %>
+      <tr>
+      {{ range $mp := .modelProps }}  
+      <td><%= {{.varSingular}}.{{$mp}} %></td>
+      {{ end }}
+        <td>
+          <a href="/{{.plural}}/<%= {{.model}}.ID %>">View</a>
+          <a href="/{{.plural}}/<%= {{.model}}.ID %>/edit">Edit</a>
+          <a href="/{{.plural}}/<%= {{.model}}.ID %>" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
+        </td>
+      </tr>
     <% } %>
   </tbody>
 </table>

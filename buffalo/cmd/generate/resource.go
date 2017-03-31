@@ -94,6 +94,7 @@ var ResourceCmd = &cobra.Command{
 			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
+			"modelProps":       args,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
