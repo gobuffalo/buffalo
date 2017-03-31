@@ -2,6 +2,7 @@ package generate
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
 	"github.com/gobuffalo/makr"
@@ -77,6 +78,8 @@ var ResourceCmd = &cobra.Command{
 				modelName = name
 			}
 		}
+		fmt.Printf("%#v\n\n", args)
+		modelProps := getModelPropertiesFromArgs(args)
 
 		data := makr.Data{
 			"name":             name,
@@ -94,18 +97,27 @@ var ResourceCmd = &cobra.Command{
 			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
-			"modelProps":       args,
+			"modelProps":       modelProps,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
 		}
-
+		fmt.Printf("%#v\n\n", args)
 		g, err := resource.New(data)
 		if err != nil {
 			return err
 		}
+		fmt.Printf("%#v", args)
 		return g.Run(".", data)
 	},
+}
+
+func getModelPropertiesFromArgs(args []string) []string {
+	var mProps []string
+	for _, a := range args[1:] {
+		mProps = append(mProps, inflect.Camelize(a))
+	}
+	return mProps
 }

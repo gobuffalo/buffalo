@@ -1,10 +1,9 @@
-<% let args = ["Title","Body"] %>
- <%= for (val) in args { %>
+{{ range $p := .modelProps }}
  <div>
-  <label for="<%= val %>"><%= val %>:</label>
-  <input type="text" name="<%= val %>" id="<%= val %>" value="<%= {{.modelPlural}}.val %>" />
+  <label for="{{$p}}">{{$p}}:</label>
+  <input type="text" name="{{$p}}" id="{{$p}}" value="<%= {{$.varSingular}}.{{$p}} %>" />
 </div>
-  <% } %>
+{{ end }}
 
 <div>
   <input type="submit" value="Save" />
