@@ -89,7 +89,7 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 		// Make {{.varSingular}} available inside the html template
 		c.Set("{{.varSingular}}", {{.varSingular}})
 		// Make the errors available inside the html template
-		c.Set("errors", verrs.Errors)
+		c.Set("verrs", verrs.Errors)
 		// Render again the new.html template that the user can
 		// correct the input.
 		return c.Render(422, r.HTML("{{.modelPluralUnder}}/new.html"))
@@ -140,7 +140,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 		// Make {{.varSingular}} available inside the html template
 		c.Set("{{.varSingular}}", {{.varSingular}})
 		// Make the errors available inside the html template
-		c.Set("errors", verrs.Errors)
+		c.Set("verrs", verrs.Errors)
 		// Render again the edit.html template that the user can
 		// correct the input.
 		return c.Render(422, r.HTML("{{.modelPluralUnder}}/edit.html"))
