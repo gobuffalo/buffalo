@@ -2,7 +2,7 @@
 
 <%= partial("{{.modelPluralUnder}}/errors.html") %>
 
-<form action="/{{.under}}/<%= {{.varSingular}}.ID" method="POST" accept-charset="utf-8">
+<form action="/{{.under}}/<%= {{.varSingular}}.ID %>" method="POST" accept-charset="utf-8">
   <input type="hidden" name="_method" id="_method" value="PUT" />
   <%= partial("{{.modelPluralUnder}}/form.html") %>
 </form>
