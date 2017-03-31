@@ -1,1 +1,10 @@
-<h2>{{.camel}}#Form</h2>
+{{ range $p := .modelProps }}
+ <div>
+  <label for="{{$p}}">{{$p}}:</label>
+  <input type="text" name="{{$p}}" id="{{$p}}" value="<%= {{$.varSingular}}.{{$p}} %>" />
+</div>
+{{ end }}
+
+<div>
+  <input type="submit" value="Save" />
+</div>

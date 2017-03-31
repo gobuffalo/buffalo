@@ -77,6 +77,7 @@ var ResourceCmd = &cobra.Command{
 				modelName = name
 			}
 		}
+		modelProps := getModelPropertiesFromArgs(args)
 
 		data := makr.Data{
 			"name":             name,
@@ -94,17 +95,25 @@ var ResourceCmd = &cobra.Command{
 			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
+			"modelProps":       modelProps,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
 		}
-
 		g, err := resource.New(data)
 		if err != nil {
 			return err
 		}
 		return g.Run(".", data)
 	},
+}
+
+func getModelPropertiesFromArgs(args []string) []string {
+	var mProps []string
+	for _, a := range args[1:] {
+		mProps = append(mProps, inflect.Camelize(a))
+	}
+	return mProps
 }

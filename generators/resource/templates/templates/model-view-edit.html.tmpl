@@ -1,1 +1,8 @@
-<h1>{{.camel}}#Edit</h1>
+<h1>Edit {{.model}}</h1>
+
+<%= partial("{{.modelPluralUnder}}/errors.html") %>
+
+<form action="/{{.under}}/<%= {{.varSingular}}.ID" method="POST" accept-charset="utf-8">
+  <input type="hidden" name="_method" id="_method" value="PUT" />
+  <%= partial("{{.modelPluralUnder}}/form.html") %>
+</form>
