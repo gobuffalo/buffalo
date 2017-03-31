@@ -2,7 +2,6 @@ package generate
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
 	"github.com/gobuffalo/makr"
@@ -78,7 +77,6 @@ var ResourceCmd = &cobra.Command{
 				modelName = name
 			}
 		}
-		fmt.Printf("%#v\n\n", args)
 		modelProps := getModelPropertiesFromArgs(args)
 
 		data := makr.Data{
@@ -104,12 +102,10 @@ var ResourceCmd = &cobra.Command{
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
 		}
-		fmt.Printf("%#v\n\n", args)
 		g, err := resource.New(data)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("%#v", args)
 		return g.Run(".", data)
 	},
 }
