@@ -111,14 +111,30 @@ var ResourceCmd = &cobra.Command{
 	},
 }
 
-func getModelPropertiesFromArgs(args []string) []string {
-	var mProps []string
+type modelProp struct {
+	Name string
+	Type string
+}
+
+func (m modelProp) String() string {
+	return m.Name
+}
+
+func getModelPropertiesFromArgs(args []string) []modelProp {
+	var mProps []modelProp
 	if len(args) == 0 {
 		return mProps
 	}
 	for _, a := range args[1:] {
 		ax := strings.Split(a, ":")
-		mProps = append(mProps, inflect.Camelize(ax[0]))
+		p := modelProp{
+			Name: inflect.Camelize(ax[0]),
+			Type: "string",
+		}
+		if len(ax) > 1 {
+			p.Type = strings.ToLower(strings.TrimPrefix(ax[1], "nulls."))
+		}
+		mProps = append(mProps, p)
 	}
 	return mProps
 }

@@ -8,7 +8,7 @@
 
 {{ range $p := .modelProps -}}
 <p>
-  <strong>{{ $p }}</strong>: <%= {{$.varSingular}}.{{$p}} %>
+  <strong>{{ $p.Name }}</strong>: <%= {{$.varSingular}}.{{$p.Name}} %>
 </p>
 {{ end -}}
 

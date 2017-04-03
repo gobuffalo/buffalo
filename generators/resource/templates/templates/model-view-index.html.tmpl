@@ -8,7 +8,9 @@
 <table class="table table-striped">
   <thead>
   {{ range $p := .modelProps -}}
-    <th>{{ $p }}</th>
+    {{ if ne $p.Type "text"}}
+    <th>{{ $p.Name }}</th>
+    {{ end -}}
   {{ end -}}
   <th>&nbsp;</th>
   </thead>
@@ -16,7 +18,9 @@
     <%= for ({{.varSingular}}) in {{.varPlural}} { %>
       <tr>
       {{ range $mp := .modelProps -}}
-        <td><%= {{$.varSingular}}.{{$mp}} %></td>
+        {{ if ne $mp.Type "text"}}
+        <td><%= {{$.varSingular}}.{{$mp.Name}} %></td>
+        {{ end -}}
       {{ end -}}
         <td>
           <div class="pull-right">
