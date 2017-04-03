@@ -31,13 +31,22 @@ $ buffalo g resource users --skip-model
 Generates:
 
 - actions/users.go
+- actions/users_test.go
+
+$ buffalo g resource users --use-model
+Generates:
+
+- actions/users.go
 - actions/users_test.go`
 
-//SkipResourceMigration allows to generate a resource without the migration.
+// SkipResourceMigration allows to generate a resource without the migration.
 var SkipResourceMigration = false
 
-//SkipResourceModel allows to generate a resource without the model and Migration.
+// SkipResourceModel allows to generate a resource without the model and Migration.
 var SkipResourceModel = false
+
+// UseResourceModel allows to generate a resource with a working model.
+var UseResourceModel = ""
 
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
@@ -46,30 +55,65 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return errors.New("you must specify a resource name")
+		var name, modelName string
+
+		// Allow overwriting modelName with the --use-model flag
+		// buffalo generate resource users --use-model people
+		if UseResourceModel != "" {
+			modelName = inflect.Pluralize(UseResourceModel)
 		}
 
-		name := args[0]
+		if len(args) == 0 {
+			if UseResourceModel == "" {
+				return errors.New("you must specify a resource name")
+			}
+			// When there is no resource name given and --use-model flag is set
+			name = UseResourceModel
+		} else {
+			// When resource name is specified
+			name = inflect.Pluralize(args[0])
+			// If there is no --use-model flag set use the resource to create the model
+			if modelName == "" {
+				modelName = name
+			}
+		}
+		modelProps := getModelPropertiesFromArgs(args)
+
 		data := makr.Data{
-			"name":         name,
-			"singular":     inflect.Singularize(name),
-			"plural":       inflect.Pluralize(name),
-			"camel":        inflect.Camelize(name),
-			"under":        inflect.Underscore(name),
-			"downFirstCap": inflect.CamelizeDownFirst(name),
-			"actions":      []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
-			"args":         args,
+			"name":             name,
+			"singular":         inflect.Singularize(name),
+			"plural":           name,
+			"camel":            inflect.Camelize(name),
+			"under":            inflect.Underscore(name),
+			"underSingular":    inflect.Singularize(inflect.Underscore(name)),
+			"downFirstCap":     inflect.CamelizeDownFirst(name),
+			"model":            inflect.Singularize(inflect.Camelize(modelName)),
+			"modelPlural":      inflect.Camelize(modelName),
+			"modelUnder":       inflect.Singularize(inflect.Underscore(modelName)),
+			"modelPluralUnder": inflect.Underscore(modelName),
+			"varPlural":        inflect.CamelizeDownFirst(modelName),
+			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
+			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":             args,
+			"modelProps":       modelProps,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
+			"useModel":      UseResourceModel,
 		}
-
 		g, err := resource.New(data)
 		if err != nil {
 			return err
 		}
 		return g.Run(".", data)
 	},
+}
+
+func getModelPropertiesFromArgs(args []string) []string {
+	var mProps []string
+	for _, a := range args[1:] {
+		mProps = append(mProps, inflect.Camelize(a))
+	}
+	return mProps
 }
