@@ -2,25 +2,28 @@
 <h1>{{.modelPlural}}</h1>
 
 <p>
-<a href="/{{.plural}}/new">Create New {{.model}}</a>
+  <a href="/{{.plural}}/new" class="btn btn-primary">Create New {{.model}}</a>
 </p>
 
-<table>
+<table class="table table-striped">
   <thead>
-  {{ range $p := .modelProps }}
+  {{ range $p := .modelProps -}}
     <th>{{ $p }}</th>
-  {{ end }}
+  {{ end -}}
+  <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for ({{.varSingular}}) in {{.varPlural}} { %>
       <tr>
-      {{ range $mp := .modelProps }}  
-      <td><%= {{$.varSingular}}.{{$mp}} %></td>
-      {{ end }}
+      {{ range $mp := .modelProps -}}
+        <td><%= {{$.varSingular}}.{{$mp}} %></td>
+      {{ end -}}
         <td>
-          <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>">View</a>
-          <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>/edit">Edit</a>
-          <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" data-method="DELETE" data-confirm="Are you sure?">Destroy</a>
+          <div class="pull-right">
+            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" class="btn btn-info">View</a>
+            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>/edit" class="btn btn-warning">Edit</a>
+            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+          </div>
         </td>
       </tr>
     <% } %>

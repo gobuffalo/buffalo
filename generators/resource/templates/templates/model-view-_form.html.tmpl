@@ -1,10 +1,5 @@
-{{ range $p := .modelProps }}
- <div>
-  <label for="{{$p}}">{{$p}}:</label>
-  <input type="text" name="{{$p}}" id="{{$p}}" value="<%= {{$.varSingular}}.{{$p}} %>" />
-</div>
-{{ end }}
+{{ range $p := .modelProps -}}
+<%= f.InputTag("{{$p}}") %>
+{{ end -}}
 
-<div>
-  <input type="submit" value="Save" />
-</div>
+<button class="btn btn-success" role="submit">Save</button>

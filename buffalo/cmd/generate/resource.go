@@ -2,6 +2,7 @@ package generate
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
 	"github.com/gobuffalo/makr"
@@ -112,8 +113,12 @@ var ResourceCmd = &cobra.Command{
 
 func getModelPropertiesFromArgs(args []string) []string {
 	var mProps []string
+	if len(args) == 0 {
+		return mProps
+	}
 	for _, a := range args[1:] {
-		mProps = append(mProps, inflect.Camelize(a))
+		ax := strings.Split(a, ":")
+		mProps = append(mProps, inflect.Camelize(ax[0]))
 	}
 	return mProps
 }

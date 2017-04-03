@@ -1,6 +1,6 @@
 <h1>New {{.model}}</h1>
 
-<%= partial("{{.modelPluralUnder}}/errors.html") %>
-<form action="/{{.under}}" method="POST" accept-charset="utf-8">
+<%= form_for({{.varSingular}}, {action: "/{{.under}}", method: "POST", errors: errors}) { %>
   <%= partial("{{.modelPluralUnder}}/form.html") %>
-</form>
+  <a href="/{{.under}}" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>
