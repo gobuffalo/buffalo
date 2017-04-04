@@ -36,7 +36,7 @@ type RouteInfo struct {
 func (ri *RouteInfo) Name(name string) *RouteInfo {
 	routeIndex := -1
 	for index, route := range ri.App.Routes() {
-		if route.Path == ri.Path {
+		if route.Path == ri.Path && route.Method == ri.Method {
 			routeIndex = index
 			break
 		}
