@@ -99,13 +99,13 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
 	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
-	g.GET(path.Join(spath, "edit"), r.Edit)
+	g.GET(path.Join(spath, "edit"), r.Edit).Name(fmt.Sprintf("%sEdit", single))
 	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
-	g.POST(p, r.Create)
+	g.POST(p, r.Create).Name(fmt.Sprintf("%sCreate", single))
 	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
-	g.PUT(path.Join(spath), r.Update)
+	g.PUT(path.Join(spath), r.Update).Name(fmt.Sprintf("%sUpdate", single))
 	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
-	g.DELETE(path.Join(spath), r.Destroy)
+	g.DELETE(path.Join(spath), r.Destroy).Name(fmt.Sprintf("%sDelete", single))
 	return g
 }
 
