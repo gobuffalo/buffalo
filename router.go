@@ -89,10 +89,10 @@ func (a *App) Resource(p string, r Resource) *App {
 	g.GET(p, r.List)
 	g.GET(path.Join(p, "new"), r.New)
 	g.GET(path.Join(spath), r.Show)
-	g.GET(path.Join(spath, "edit"), r.Edit)
-	g.POST(p, r.Create)
-	g.PUT(path.Join(spath), r.Update)
-	g.DELETE(path.Join(spath), r.Destroy)
+	g.GET(path.Join(spath, "edit"), r.Edit).Name(fmt.Sprintf("%sEdit", single))
+	g.POST(p, r.Create).Name(fmt.Sprintf("%sCreate", single))
+	g.PUT(path.Join(spath), r.Update).Name(fmt.Sprintf("%sUpdate", single))
+	g.DELETE(path.Join(spath), r.Destroy).Name(fmt.Sprintf("%sDelete", single))
 	return g
 }
 
