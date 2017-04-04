@@ -1,8 +1,10 @@
 package actions
 
 import (
+  "log"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
+  "github.com/gobuffalo/buffalo/middleware/i18n"
   {{ if .withPop }}
   "{{.modelsPath}}"
   {{ end }}
@@ -34,6 +36,13 @@ func App() *buffalo.App {
     {{ if .withPop }}
     app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
+
+		// Setup and use translations:
+		t, err := i18n.New(packr.NewBox("../locales"), "en-US")
+		if err != nil {
+			log.Fatal(err)
+		}
+		app.Use(t.Middleware())
 
     app.GET("/", HomeHandler)
 
