@@ -139,8 +139,16 @@ func Test_Router_ServeFiles(t *testing.T) {
 }
 
 func Test_App_NamedRoutes(t *testing.T) {
+
+	type CarsResource struct {
+		*BaseResource
+	}
+
 	r := require.New(t)
 	a := Automatic(Options{})
+
+	var carsResource Resource
+	carsResource = CarsResource{&BaseResource{}}
 
 	rr := render.New(render.Options{
 		HTMLLayout:     "application.html",
@@ -157,6 +165,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 			3. <%= userPath({user_id: 1}) %>
 			4. <%= myPeepsPath() %>
 			5. <%= userPath(opts) %>
+			6. <%= carPath({car_id: 1}) %>
+			7. <%= newCarPath() %>
 		`))
 	}
 
@@ -164,6 +174,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.GET("/users", sampleHandler)
 	a.GET("/users/{user_id}", sampleHandler)
 	a.GET("/peeps", sampleHandler).Name("myPeeps")
+	a.Resource("/car", carsResource)
 
 	w := willie.New(a)
 	res := w.Request("/").Get()
@@ -174,6 +185,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "3. /users/1")
 	r.Contains(res.Body.String(), "4. /peeps")
 	r.Contains(res.Body.String(), "5. /users/{user_id}")
+	r.Contains(res.Body.String(), "6. /car/1")
+	r.Contains(res.Body.String(), "7. /car/new")
 }
 
 func Test_Resource(t *testing.T) {
