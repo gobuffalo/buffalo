@@ -62,11 +62,11 @@ func Test_DefaultContext_ParamInt(t *testing.T) {
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()
-	r.Nil(c.Get("name"))
+	r.Nil(c.Value("name"))
 
 	c.Set("name", "Mark")
-	r.NotNil(c.Get("name"))
-	r.Equal("Mark", c.Get("name").(string))
+	r.NotNil(c.Value("name"))
+	r.Equal("Mark", c.Value("name").(string))
 }
 
 func Test_DefaultContext_Value(t *testing.T) {
@@ -77,7 +77,7 @@ func Test_DefaultContext_Value(t *testing.T) {
 	c.Set("name", "Mark")
 	r.NotNil(c.Value("name"))
 	r.Equal("Mark", c.Value("name").(string))
-	r.Equal("Mark", c.Get("name").(string))
+	r.Equal("Mark", c.Value("name").(string))
 }
 
 func Test_DefaultContext_Render(t *testing.T) {
