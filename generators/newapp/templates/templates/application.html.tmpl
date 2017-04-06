@@ -3,6 +3,8 @@
     <meta charset="utf-8">
     <title>Buffalo - {{ .titleName }}</title>
     <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all" />
+    <meta name="csrf-param" content="authenticity_token" />
+    <meta name="csrf-token" content="<%= authenticity_token %>" />
   </head>
   <body>
 
