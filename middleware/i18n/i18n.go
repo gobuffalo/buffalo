@@ -5,7 +5,6 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/packr"
-	"github.com/gobuffalo/plush"
 	"github.com/nicksnyder/go-i18n/i18n"
 	"github.com/nicksnyder/go-i18n/i18n/language"
 	"github.com/nicksnyder/go-i18n/i18n/translation"
@@ -85,21 +84,26 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 				}
 			}
 
-			langs := t.LanguageFinder(t, c)
-
-			c.Set("languages", langs)
-
 			// set up the helper function for the views:
-			c.Set(t.HelperName, func(s string, help plush.HelperContext) (string, error) {
-				T, err := i18n.Tfunc(langs[0], langs[1:]...)
-				if err != nil {
-					return "", err
-				}
-				return T(s), nil
+			c.Set(t.HelperName, func(s string) (string, error) {
+				return t.Translate(c, s)
 			})
 			return next(c)
 		}
 	}
+}
+
+// Translate a string given a Context
+func (t *Translator) Translate(c buffalo.Context, s string) (string, error) {
+	if langs := c.Value("languages"); langs == nil {
+		c.Set("languages", t.LanguageFinder(t, c))
+	}
+	langs := c.Value("languages").([]string)
+	T, err := i18n.Tfunc(langs[0], langs[1:]...)
+	if err != nil {
+		return "", err
+	}
+	return T(s, c.Data()), nil
 }
 
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {

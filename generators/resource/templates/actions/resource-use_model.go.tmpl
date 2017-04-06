@@ -146,7 +146,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 		return c.Render(422, r.HTML("{{.modelPluralUnder}}/edit.html"))
 	}
 	// If there are no errors set a success message
-	c.Flash().Add("success", "{{.model}} was edited successfully")
+	c.Flash().Add("success", "{{.model}} was updated successfully")
 	// and redirect to the {{.under}} index page
 	return c.Redirect(302, "/{{.under}}/%s",{{.varSingular}}.ID)
 }
@@ -168,7 +168,7 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 		return err
 	}
 	// If there are no errors set a flash message
-	c.Flash().Add("success", "{{.model}} was deleted successfully")
+	c.Flash().Add("success", "{{.model}} was destroyed successfully")
 	// Redirect to the {{.under}} index page
 	return c.Redirect(302, "/{{.under}}")
 }
