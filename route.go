@@ -29,7 +29,7 @@ type RouteList []RouteInfo
 func (a RouteList) Len() int      { return len(a) }
 func (a RouteList) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a RouteList) Less(i, j int) bool {
-	x := a[i].Method + a[i].Path
-	y := a[j].Method + a[j].Path
+	x := a[i].Path // + a[i].Method
+	y := a[j].Path // + a[j].Method
 	return x < y
 }
