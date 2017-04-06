@@ -33,7 +33,7 @@ Asset Pipeline (if used):
 Database (if used):
 * Runs "buffalo db create -a" to create databases.
 * Runs "buffalo db migrate" to run database migrations.
-* Runs "buffalo task db:seeed" to seed the database (if the task exists).
+* Runs "buffalo task db:seed" to seed the database (if the task exists).
 
 Tests:
 * Runs "buffalo test" to confirm the application's tests are running properly.
