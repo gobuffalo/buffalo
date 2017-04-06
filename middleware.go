@@ -144,18 +144,22 @@ func funcKey(funcs ...interface{}) string {
 	for _, f := range funcs {
 		rv := reflect.ValueOf(f)
 		ptr := rv.Pointer()
-		if n, ok := keyMap[rv.Pointer()]; ok {
+		if n, ok := keyMap[ptr]; ok {
 			names = append(names, n)
-			// fmt.Printf("### found %+v -> %+v\n", ptr, n)
 			continue
 		}
 		fnc := runtime.FuncForPC(ptr)
 		n := fnc.Name()
-		// fmt.Printf("### not found %+v -> %+v\n", ptr, n)
 		keyMap[ptr] = n
 		names = append(names, n)
 	}
 	return strings.Join(names, "/")
+}
+
+func setFuncKey(f interface{}, name string) {
+	rv := reflect.ValueOf(f)
+	ptr := rv.Pointer()
+	keyMap[ptr] = name
 }
 
 var keyMap = map[uintptr]string{}

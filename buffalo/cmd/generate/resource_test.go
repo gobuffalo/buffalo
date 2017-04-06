@@ -37,9 +37,7 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Nil(e)
 
 	fileData, _ := ioutil.ReadFile("actions/app.go")
-	r.Contains(string(fileData), "var usersResource buffalo.Resource")
-	r.Contains(string(fileData), "usersResource = UsersResource{&buffalo.BaseResource{}}")
-	r.Contains(string(fileData), "app.Resource(\"/users\", usersResource)")
+	r.Contains(string(fileData), "app.Resource(\"/users\", UsersResource{&buffalo.BaseResource{}})")
 
 	fileData, _ = ioutil.ReadFile("actions/users.go")
 	r.Contains(string(fileData), "type UsersResource struct {")
@@ -56,9 +54,7 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Nil(e)
 
 	fileData, _ = ioutil.ReadFile("actions/app.go")
-	r.Contains(string(fileData), "var commentsResource buffalo.Resource")
-	r.Contains(string(fileData), "commentsResource = CommentsResource{&buffalo.BaseResource{}}")
-	r.Contains(string(fileData), "app.Resource(\"/comments\", commentsResource)")
+	r.Contains(string(fileData), "app.Resource(\"/comments\", CommentsResource{&buffalo.BaseResource{}})")
 
 	fileData, _ = ioutil.ReadFile("actions/comments.go")
 	r.Contains(string(fileData), "type CommentsResource struct {")
