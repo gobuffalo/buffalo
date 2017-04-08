@@ -24,9 +24,9 @@
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="<%= {{.varSingular}}Path({{.underSingular}}_id: {{.varSingular}}.ID) %>" class="btn btn-info">View</a>
-            <a href="<%= {{.varSingular}}EditPath({{.underSingular}}_id: {{.varSingular}}.ID) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= {{.varSingular}}Path({{.underSingular}}_id: {{.varSingular}}.ID) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= {{.varSingular}}EditPath({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>
