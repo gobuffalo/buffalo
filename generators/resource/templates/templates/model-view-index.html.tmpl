@@ -24,9 +24,9 @@
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" class="btn btn-info">View</a>
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>/edit" class="btn btn-warning">Edit</a>
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= {{.model}}Path({{.under}}_id: {{.varSingular}}.ID) %>" class="btn btn-info">View</a>
+            <a href="<%= {{.model}}EditPath({{.under}}_id: {{.varSingular}}.ID) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= {{.model}}Path({{.under}}_id: {{.varSingular}}.ID) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>
