@@ -7,7 +7,7 @@ import (
 )
 
 // Version is the current version of the buffalo binary
-const Version = "0.8.1"
+const Version = "0.8.2.dev"
 
 func init() {
 	RootCmd.AddCommand(versionCmd)
