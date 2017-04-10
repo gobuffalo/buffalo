@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"path"
+	"reflect"
 	"sort"
 	//"strings"
 
@@ -85,13 +86,25 @@ func (a *App) Resource(p string, r Resource) *App {
 	single := inflect.Singularize(base)
 	g := a.Group(p)
 	p = "/"
+
+	rv := reflect.ValueOf(r)
+	rt := rv.Type()
+	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
+
 	spath := path.Join(p, fmt.Sprintf("{%s_id}", single))
+	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
 	g.GET(p, r.List)
+	setFuncKey(r.New, fmt.Sprintf(rname, "New"))
 	g.GET(path.Join(p, "new"), r.New)
+	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
+	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
 	g.GET(path.Join(spath, "edit"), r.Edit)
+	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
 	g.POST(p, r.Create)
+	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
 	g.PUT(path.Join(spath), r.Update)
+	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
 	return g
 }

@@ -1,0 +1,9 @@
+{{ range $p := .modelProps -}}
+{{ if eq $p.Type "text" -}}
+<%= f.TextArea("{{$p.Name}}", {rows: 10}) %>
+{{ else -}}
+<%= f.InputTag("{{$p.Name}}") %>
+{{ end -}}
+{{ end -}}
+
+<button class="btn btn-success" role="submit">Save</button>
