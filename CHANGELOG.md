@@ -1,7 +1,59 @@
 # Change Log
 
+## [v0.8.1](https://github.com/gobuffalo/buffalo/tree/v0.8.1) (2017-04-10)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.0...v0.8.1)
+
+**Fixed bugs:**
+
+- --skip-pop doesn't work [\#343](https://github.com/gobuffalo/buffalo/issues/343)
+- Install in Arch Linux fails [\#311](https://github.com/gobuffalo/buffalo/issues/311)
+
+**Closed issues:**
+
+- sqlite cant store image blobs [\#372](https://github.com/gobuffalo/buffalo/issues/372)
+- go get on macOS Sierra exits with Killed: 9 [\#371](https://github.com/gobuffalo/buffalo/issues/371)
+- node deprecation warning for loader-utils [\#369](https://github.com/gobuffalo/buffalo/issues/369)
+- Using Laravel Mix as a webpack wrapper for easier usage and sensible defaults [\#368](https://github.com/gobuffalo/buffalo/issues/368)
+- Resource names don't show up correctly in routes tables [\#362](https://github.com/gobuffalo/buffalo/issues/362)
+- Create project issue [\#359](https://github.com/gobuffalo/buffalo/issues/359)
+- New Generator - System Init [\#357](https://github.com/gobuffalo/buffalo/issues/357)
+- stdout on windows console. [\#348](https://github.com/gobuffalo/buffalo/issues/348)
+- actions-packr.go: path error in windows [\#347](https://github.com/gobuffalo/buffalo/issues/347)
+- Upgrading to V0.8X [\#346](https://github.com/gobuffalo/buffalo/issues/346)
+- context.Logger\(\).InfoF or Errorf does not have color [\#344](https://github.com/gobuffalo/buffalo/issues/344)
+- Generate the `middleware.CSRF` middleware in new applications [\#342](https://github.com/gobuffalo/buffalo/issues/342)
+- Patch for a new project, "buffalo new" cmd on windows 10 [\#340](https://github.com/gobuffalo/buffalo/issues/340)
+- Upgrade of gobuffalo and running go setup -u wants to reference a resolvers package that doesn't exist anymore [\#339](https://github.com/gobuffalo/buffalo/issues/339)
+- Getting "Killed: 9" response from buffalo binary [\#338](https://github.com/gobuffalo/buffalo/issues/338)
+- reflect.Set: value of type uuid.UUID is not assignable to type uuid.UUID [\#337](https://github.com/gobuffalo/buffalo/issues/337)
+- Windows 10 new buffalo site sqlite3 "\<no value\>" in database.yml [\#336](https://github.com/gobuffalo/buffalo/issues/336)
+- Integration test to resources fails, when basic implementation contains a model. [\#328](https://github.com/gobuffalo/buffalo/issues/328)
+- Add basic functions into the default implementation of resource functions [\#297](https://github.com/gobuffalo/buffalo/issues/297)
+- I18n \(internationalisation\) support [\#249](https://github.com/gobuffalo/buffalo/issues/249)
+
+**Merged pull requests:**
+
+- Merge Development branch for v0.8.1 [\#373](https://github.com/gobuffalo/buffalo/pull/373) ([markbates](https://github.com/markbates))
+- generate app.go to have translations available in actions [\#370](https://github.com/gobuffalo/buffalo/pull/370) ([markbates](https://github.com/markbates))
+- Typo in setup command long description [\#367](https://github.com/gobuffalo/buffalo/pull/367) ([jmhobbs](https://github.com/jmhobbs))
+- Resource names don't show up correctly in routes tables fixes \#362 [\#363](https://github.com/gobuffalo/buffalo/pull/363) ([markbates](https://github.com/markbates))
+- Translate in actions [\#361](https://github.com/gobuffalo/buffalo/pull/361) ([markbates](https://github.com/markbates))
+- I18n \(internationalisation\) support closes \#249 [\#354](https://github.com/gobuffalo/buffalo/pull/354) ([markbates](https://github.com/markbates))
+- Generate the `middleware.CSRF` middleware in new applications closes \#342 [\#353](https://github.com/gobuffalo/buffalo/pull/353) ([markbates](https://github.com/markbates))
+- Resource generator fixes \#328 [\#352](https://github.com/gobuffalo/buffalo/pull/352) ([markbates](https://github.com/markbates))
+- Build webpack assets for production in `buffalo build` [\#351](https://github.com/gobuffalo/buffalo/pull/351) ([mattdoran](https://github.com/mattdoran))
+- Setup webpack to enable full ES6 transpile [\#350](https://github.com/gobuffalo/buffalo/pull/350) ([mattdoran](https://github.com/mattdoran))
+- turn off colored output on windows in dev mode. fixes \#348 [\#349](https://github.com/gobuffalo/buffalo/pull/349) ([markbates](https://github.com/markbates))
+- --skip-pop doesn't work fixes \#343 [\#345](https://github.com/gobuffalo/buffalo/pull/345) ([markbates](https://github.com/markbates))
+- ignore case when checking if the user is in the GOPATH. fixes \#340 [\#341](https://github.com/gobuffalo/buffalo/pull/341) ([markbates](https://github.com/markbates))
+- added a ParameterLogger middleware [\#334](https://github.com/gobuffalo/buffalo/pull/334) ([markbates](https://github.com/markbates))
+- Resource generator --use-model \#297 fixes \#328 [\#333](https://github.com/gobuffalo/buffalo/pull/333) ([as27](https://github.com/as27))
+
 ## [v0.8.0](https://github.com/gobuffalo/buffalo/tree/v0.8.0) (2017-03-27)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4.1...v0.8.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.0.dev...v0.8.0)
+
+## [v0.8.0.dev](https://github.com/gobuffalo/buffalo/tree/v0.8.0.dev) (2017-03-27)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.7.4.1...v0.8.0.dev)
 
 **Implemented enhancements:**
 
@@ -424,15 +476,15 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.1)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...0.4.0)
-
-## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
+
+## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)

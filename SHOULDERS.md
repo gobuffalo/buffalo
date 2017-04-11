@@ -114,13 +114,25 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mattn/anko/vm](https://github.com/mattn/anko/vm)
 
-* [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
-
 * [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/motemen/gore](https://github.com/motemen/gore)
+
+* [github.com/mutecomm/go-sqlcipher](https://github.com/mutecomm/go-sqlcipher)
+
+* [github.com/nicksnyder/go-i18n/i18n](https://github.com/nicksnyder/go-i18n/i18n)
+
+* [github.com/nicksnyder/go-i18n/i18n/bundle](https://github.com/nicksnyder/go-i18n/i18n/bundle)
+
+* [github.com/nicksnyder/go-i18n/i18n/language](https://github.com/nicksnyder/go-i18n/i18n/language)
+
+* [github.com/nicksnyder/go-i18n/i18n/translation](https://github.com/nicksnyder/go-i18n/i18n/translation)
+
+* [github.com/pelletier/go-buffruneio](https://github.com/pelletier/go-buffruneio)
+
+* [github.com/pelletier/go-toml](https://github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
