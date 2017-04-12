@@ -44,7 +44,7 @@ var (
 
 // CSRF enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf
-func CSRF(next buffalo.Handler) buffalo.Handler {
+var CSRF = func(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		var realToken []byte
 		rawRealToken := c.Session().Get(csrfTokenKey)
