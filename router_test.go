@@ -167,7 +167,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 			5. <%= userPath(opts) %>
 			6. <%= carPath({car_id: 1}) %>
 			7. <%= newCarPath() %>
-			8. <%= carEditPath({car_id: 1}) %>
+			8. <%= editCarPath({car_id: 1}) %>
 		`))
 	}
 

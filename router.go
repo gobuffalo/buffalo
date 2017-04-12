@@ -99,7 +99,10 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
 	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
-	g.GET(path.Join(spath, "edit"), r.Edit)
+
+	editPathName := inflect.Camelize(fmt.Sprintf("edit_" + single))
+	g.GET(path.Join(spath, "edit"), r.Edit).Name(editPathName)
+
 	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
 	g.POST(p, r.Create)
 	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
