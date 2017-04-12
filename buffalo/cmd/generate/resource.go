@@ -56,7 +56,7 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var name, modelName string
+		var name, modelName, filesPath string
 
 		// Allow overwriting modelName with the --use-model flag
 		// buffalo generate resource users --use-model people
@@ -70,17 +70,23 @@ var ResourceCmd = &cobra.Command{
 			}
 			// When there is no resource name given and --use-model flag is set
 			name = UseResourceModel
+			filesPath = name
 		} else {
 			// When resource name is specified
-			name = inflect.Pluralize(args[0])
+			parts := strings.Split(args[0], "/")
+			name = inflect.Pluralize(parts[len(parts)-1])
+			parts = append(parts[:len(parts)-1], name)
+			filesPath = strings.Join(parts, "/")
+
 			// If there is no --use-model flag set use the resource to create the model
 			if modelName == "" {
 				modelName = name
 			}
 		}
-		modelProps := getModelPropertiesFromArgs(args)
 
+		modelProps := getModelPropertiesFromArgs(args)
 		data := makr.Data{
+			"path":             inflect.Underscore(filesPath),
 			"name":             name,
 			"singular":         inflect.Singularize(name),
 			"plural":           name,
