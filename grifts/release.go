@@ -23,16 +23,6 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 		return err
 	}
 
-	err = grift.Run("shoulders", c)
-	if err != nil {
-		return err
-	}
-
-	err = grift.Run("deplist", c)
-	if err != nil {
-		return err
-	}
-
 	err = installBin()
 	if err != nil {
 		return err
@@ -47,6 +37,9 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
+
+	grift.Run("shoulders", c)
+	grift.Run("deplist", c)
 
 	err = tagRelease(v)
 	if err != nil {
