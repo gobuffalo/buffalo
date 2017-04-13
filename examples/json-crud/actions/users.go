@@ -13,7 +13,7 @@ func findUserMW(h buffalo.Handler) buffalo.Handler {
 		id, err := c.ParamInt("user_id")
 		if err == nil {
 			u := &models.User{}
-			tx := c.Get("tx").(*pop.Connection)
+			tx := c.Value("tx").(*pop.Connection)
 			err = tx.Find(u, id)
 			if err != nil {
 				return c.Error(404, errors.WithStack(err))
@@ -27,7 +27,7 @@ func findUserMW(h buffalo.Handler) buffalo.Handler {
 // UsersList returns all user data in JSON
 func UsersList(c buffalo.Context) error {
 	users := &models.Users{}
-	tx := c.Get("tx").(*pop.Connection)
+	tx := c.Value("tx").(*pop.Connection)
 	err := tx.All(users)
 	if err != nil {
 		return c.Error(404, errors.WithStack(err))
@@ -38,7 +38,7 @@ func UsersList(c buffalo.Context) error {
 
 // UsersShow renders one user's JSON data
 func UsersShow(c buffalo.Context) error {
-	return c.Render(200, render.JSON(c.Get("user")))
+	return c.Render(200, render.JSON(c.Value("user")))
 }
 
 // UsersCreate creates a user
@@ -49,7 +49,7 @@ func UsersCreate(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	tx := c.Get("tx").(*pop.Connection)
+	tx := c.Value("tx").(*pop.Connection)
 	verrs, err := u.ValidateNew(tx)
 	if err != nil {
 		return errors.WithStack(err)
@@ -68,8 +68,8 @@ func UsersCreate(c buffalo.Context) error {
 
 // UsersUpdate updates a target user account data
 func UsersUpdate(c buffalo.Context) error {
-	tx := c.Get("tx").(*pop.Connection)
-	u := c.Get("user").(*models.User)
+	tx := c.Value("tx").(*pop.Connection)
+	u := c.Value("user").(*models.User)
 
 	err := c.Bind(u)
 	if err != nil {
@@ -98,8 +98,8 @@ func UsersUpdate(c buffalo.Context) error {
 
 // UsersDelete deletes a target user account
 func UsersDelete(c buffalo.Context) error {
-	tx := c.Get("tx").(*pop.Connection)
-	u := c.Get("user").(*models.User)
+	tx := c.Value("tx").(*pop.Connection)
+	u := c.Value("user").(*models.User)
 
 	err := tx.Destroy(u)
 	if err != nil {

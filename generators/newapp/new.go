@@ -26,6 +26,8 @@ type App struct {
 // Generator returns a generator to create a new application
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
+	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
+
 	files, err := generators.Find("newapp")
 	if err != nil {
 		return nil, err
