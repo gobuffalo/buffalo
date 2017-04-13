@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.8.1.2](https://github.com/gobuffalo/buffalo/tree/v0.8.1.2) (2017-04-13)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.1...v0.8.1.2)
+
+**Closed issues:**
+
+- Default routes listing link to the route [\#381](https://github.com/gobuffalo/buffalo/issues/381)
+- Add CSRF middleware handler to TestSuite [\#380](https://github.com/gobuffalo/buffalo/issues/380)
+- migration with model [\#379](https://github.com/gobuffalo/buffalo/issues/379)
+- Running outside of GOPATH fails [\#375](https://github.com/gobuffalo/buffalo/issues/375)
+- Warning when `go get`-ing buffalo [\#374](https://github.com/gobuffalo/buffalo/issues/374)
+
+**Merged pull requests:**
+
+- updated the examples apps to use c.Value instead of the old c.Get function [\#377](https://github.com/gobuffalo/buffalo/pull/377) ([markbates](https://github.com/markbates))
+
 ## [v0.8.1](https://github.com/gobuffalo/buffalo/tree/v0.8.1) (2017-04-10)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.0...v0.8.1)
 
@@ -470,21 +485,21 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/gobuffalo/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/gobuffalo/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.2)
-
-## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.1)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.2)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...0.4.0)
+
+## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
+
+## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
-
-## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)

@@ -23,6 +23,7 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 		"github.com/markbates/pop",
 		"github.com/spf13/cobra",
 		"github.com/motemen/gore",
+		"golang.org/x/tools/cmd/goimports",
 	} {
 		giants[k] = k
 	}

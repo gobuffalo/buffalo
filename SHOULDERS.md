@@ -208,3 +208,5 @@ Thank you to the following **GIANTS**:
 
 * [github.com/spf13/pflag](https://github.com/spf13/pflag)
 
+* [golang.org/x/tools/cmd/goimports](https://golang.org/x/tools/cmd/goimports)
+
