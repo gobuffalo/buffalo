@@ -1,4 +1,3 @@
-
 <h1>{{.modelPlural}}</h1>
 
 <p>
@@ -8,17 +7,17 @@
 <table class="table table-striped">
   <thead>
   {{ range $p := .modelProps -}}
-    {{ if ne $p.Type "text"}}
+    {{ if ne $p.Type "text" -}}
     <th>{{ $p.Name }}</th>
     {{ end -}}
   {{ end -}}
-  <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for ({{.varSingular}}) in {{.varPlural}} { %>
       <tr>
       {{ range $mp := .modelProps -}}
-        {{ if ne $mp.Type "text"}}
+        {{ if ne $mp.Type "text" -}}
         <td><%= {{$.varSingular}}.{{$mp.Name}} %></td>
         {{ end -}}
       {{ end -}}
