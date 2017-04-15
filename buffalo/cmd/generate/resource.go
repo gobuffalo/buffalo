@@ -52,6 +52,9 @@ var SkipResourceModel = false
 // UseResourceModel allows to generate a resource with a working model.
 var UseResourceModel = ""
 
+// ResourceMimeType allows to generate a typed resource (HTML by default, JSON...).
+var ResourceMimeType = "html"
+
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
@@ -81,6 +84,11 @@ var ResourceCmd = &cobra.Command{
 				modelName = name
 			}
 		}
+
+		if ResourceMimeType != "html" && ResourceMimeType != "json" {
+			return errors.New("invalid resource type, you need to choose between \"html\" and \"json\"")
+		}
+
 		modelProps := getModelPropertiesFromArgs(args)
 
 		data := makr.Data{
@@ -106,6 +114,7 @@ var ResourceCmd = &cobra.Command{
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
+			"mimeType":      ResourceMimeType,
 		}
 		g, err := resource.New(data)
 		if err != nil {
