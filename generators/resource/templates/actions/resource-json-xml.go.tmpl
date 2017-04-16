@@ -39,7 +39,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.Render(200, r.JSON({{.varPlural}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varPlural}}))
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
@@ -54,7 +54,7 @@ func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.Render(200, r.JSON({{.varSingular}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
 }
 
 // New default implementation. Returns a 404
@@ -80,8 +80,8 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 		return err
 	}
 	if verrs.HasAny() {
-		// Render errors as JSON
-		return c.Render(400, r.JSON(verrs))
+		// Render errors as {{.renderFunction}}
+		return c.Render(400, r.{{.renderFunction}}(verrs))
 	}
 	// Success!
 	return c.Render(201, nil)
@@ -113,8 +113,8 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 		return err
 	}
 	if verrs.HasAny() {
-		// Render errors as JSON
-		return c.Render(400, r.JSON(verrs))
+		// Render errors as {{.renderFunction}}
+		return c.Render(400, r.{{.renderFunction}}(verrs))
 	}
 	// Success!
 	return c.Render(200, nil)

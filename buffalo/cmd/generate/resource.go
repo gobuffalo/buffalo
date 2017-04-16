@@ -85,8 +85,8 @@ var ResourceCmd = &cobra.Command{
 			}
 		}
 
-		if ResourceMimeType != "html" && ResourceMimeType != "json" {
-			return errors.New("invalid resource type, you need to choose between \"html\" and \"json\"")
+		if ResourceMimeType != "html" && ResourceMimeType != "json" && ResourceMimeType != "xml" {
+			return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
 		}
 
 		modelProps := getModelPropertiesFromArgs(args)
@@ -105,6 +105,7 @@ var ResourceCmd = &cobra.Command{
 			"modelPluralUnder": inflect.Underscore(modelName),
 			"varPlural":        inflect.CamelizeDownFirst(modelName),
 			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
+			"renderFunction":   strings.ToUpper(ResourceMimeType),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
 			"modelProps":       modelProps,
