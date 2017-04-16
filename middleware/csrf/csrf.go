@@ -37,14 +37,14 @@ var (
 	// ErrBadReferer is returned when the scheme & host in the URL do not match
 	// the supplied Referer header.
 	ErrBadReferer = errors.New("referer invalid")
-	// ErrNoCSRFToken is returned if no CSRF token is supplied in the request.
+	// ErrNoToken is returned if no CSRF token is supplied in the request.
 	ErrNoToken = errors.New("CSRF token not found in request")
-	// ErrBadCSRFToken is returned if the CSRF token in the request does not match
+	// ErrBadToken is returned if the CSRF token in the request does not match
 	// the token in the session, or is otherwise malformed.
 	ErrBadToken = errors.New("CSRF token invalid")
 )
 
-// CSRF enable CSRF protection on routes using this middleware.
+// Middleware enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf
 var Middleware = func(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
