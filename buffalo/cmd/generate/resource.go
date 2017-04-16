@@ -2,9 +2,12 @@ package generate
 
 import (
 	"errors"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -49,6 +52,9 @@ var SkipResourceModel = false
 // UseResourceModel allows to generate a resource with a working model.
 var UseResourceModel = ""
 
+// ResourceMimeType allows to generate a typed resource (HTML by default, JSON...).
+var ResourceMimeType = "html"
+
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
@@ -90,7 +96,12 @@ var ResourceCmd = &cobra.Command{
 			}
 		}
 
+		if ResourceMimeType != "html" && ResourceMimeType != "json" {
+			return errors.New("invalid resource type, you need to choose between \"html\" and \"json\"")
+		}
+
 		modelProps := getModelPropertiesFromArgs(args)
+    
 		data := makr.Data{
 			"package":          pkgName,
 			"path":             inflect.Underscore(filesPath),
@@ -110,11 +121,13 @@ var ResourceCmd = &cobra.Command{
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
 			"modelProps":       modelProps,
+			"modelsPath":       packagePath() + "/models",
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
+			"mimeType":      ResourceMimeType,
 		}
 		g, err := resource.New(data)
 		if err != nil {
@@ -150,4 +163,24 @@ func getModelPropertiesFromArgs(args []string) []modelProp {
 		mProps = append(mProps, p)
 	}
 	return mProps
+}
+
+func goPath(root string) string {
+	gpMultiple := envy.GoPaths()
+	path := ""
+
+	for i := 0; i < len(gpMultiple); i++ {
+		if strings.HasPrefix(root, filepath.Join(gpMultiple[i], "src")) {
+			path = gpMultiple[i]
+			break
+		}
+	}
+	return path
+}
+
+func packagePath() string {
+	rootPath, _ := os.Getwd()
+	gosrcpath := strings.Replace(filepath.Join(goPath(rootPath), "src"), "\\", "/", -1)
+	rootPath = strings.Replace(rootPath, "\\", "/", -1)
+	return strings.Replace(rootPath, gosrcpath+"/", "", 2)
 }

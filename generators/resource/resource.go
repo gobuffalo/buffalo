@@ -21,10 +21,13 @@ func New(data makr.Data) (*makr.Generator, error) {
 	// Get the flags
 	useModel := data["useModel"].(string)
 	skipModel := data["skipModel"].(bool)
+	mimeType := data["mimeType"].(string)
 
 	tmplName := "resource-use_model"
 
-	if skipModel == true {
+	if mimeType == "json" {
+		tmplName = "resource-json"
+	} else if skipModel == true {
 		tmplName = "resource-name"
 	}
 	for _, f := range files {
@@ -34,7 +37,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		}
 
 		// Adding the html templates to the generator
-		if strings.Contains(f.WritePath, "model-view-") {
+		if mimeType == "html" && strings.Contains(f.WritePath, "model-view-") {
 			targetPath := filepath.Join(
 				filepath.Dir(f.WritePath),
 				data["under"].(string),
