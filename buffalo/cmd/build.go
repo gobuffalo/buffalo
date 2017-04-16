@@ -17,6 +17,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -334,6 +335,8 @@ func (b *builder) buildBin() error {
 		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
 		out := &bytes.Buffer{}
 		cmd.Stdout = out
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 		err = cmd.Run()
 		if err == nil && out.String() != "" {
 			version = strings.TrimSpace(out.String())
@@ -354,7 +357,7 @@ var buildCmd = &cobra.Command{
 		maingo, err := os.Open("main.go")
 		_, err = originalMain.ReadFrom(maingo)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		maingo.Close()
 
@@ -362,7 +365,7 @@ var buildCmd = &cobra.Command{
 		appgo, err := os.Open("actions/app.go")
 		_, err = originalApp.ReadFrom(appgo)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		appgo.Close()
 
