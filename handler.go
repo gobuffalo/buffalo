@@ -38,6 +38,18 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 	session := a.getSession(req, ws)
 
+	contextData := map[string]interface{}{
+		"env":           a.Env,
+		"routes":        a.Routes(),
+		"current_route": info,
+		"current_path":  req.URL.Path,
+	}
+
+	for _, route := range a.Routes() {
+		cRoute := route
+		contextData[cRoute.PathName] = cRoute.BuildPathHelper()
+	}
+
 	return &DefaultContext{
 		Context:  req.Context(),
 		response: ws,
@@ -46,12 +58,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		logger:   a.Logger,
 		session:  session,
 		flash:    newFlash(session),
-		data: map[string]interface{}{
-			"env":           a.Env,
-			"routes":        a.Routes(),
-			"current_route": info,
-			"current_path":  req.URL.Path,
-		},
+		data:     contextData,
 	}
 }
 

@@ -135,6 +135,7 @@ var devErrorTmpl = `
 		<tr>
 			<th>METHOD</th>
 			<th>PATH</th>
+			<th>NAME</th>
 			<th>HANDLER</th>
 		</tr>
 	</thead>
@@ -143,6 +144,7 @@ var devErrorTmpl = `
 			<tr>
 				<td><%= route.Method %></td>
 				<td><%= route.Path %></td>
+				<td><%= route.PathName %></td>
 				<td><code><%= route.HandlerName %></code></td>
 			</tr>
 		<% } %>
