@@ -1,7 +1,7 @@
 <h1>{{.modelPlural}}</h1>
 
 <p>
-  <a href="<%= new{{.modelSingular}}Path() %>" class="btn btn-primary">Create New {{.model}}</a>
+  <a href="<%= new{{.model}}Path() %>" class="btn btn-primary">Create New {{.model}}</a>
 </p>
 
 <table class="table table-striped">
@@ -24,7 +24,7 @@
         <td>
           <div class="pull-right">
             <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= edit{{.modelSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= edit{{.model}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
             <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>

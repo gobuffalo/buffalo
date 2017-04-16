@@ -2,7 +2,7 @@
 
 <ul class="list-unstyled list-inline">
   <li><a href="<%= {{.varPlural}}Path() %>" class="btn btn-info">Back to all {{.modelPlural}}</a></li>
-  <li><a href="<%= edit{{.modelSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID })%>" class="btn btn-warning">Edit</a></li>
+  <li><a href="<%= edit{{.model}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID })%>" class="btn btn-warning">Edit</a></li>
   <li><a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
 </ul>
 
