@@ -84,7 +84,7 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 		return c.Render(400, r.{{.renderFunction}}(verrs))
 	}
 	// Success!
-	return c.Render(201, nil)
+	return c.Render(201, r.{{.renderFunction}}({{.varSingular}}))
 }
 
 // Edit default implementation. Returns a 404
@@ -117,7 +117,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 		return c.Render(400, r.{{.renderFunction}}(verrs))
 	}
 	// Success!
-	return c.Render(200, nil)
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
@@ -137,5 +137,5 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 		return err
 	}
 	// Success!
-	return c.Render(200, nil)
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
 }
