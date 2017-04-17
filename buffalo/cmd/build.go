@@ -25,12 +25,14 @@ var outputBinName string
 var zipBin bool
 var extractAssets bool
 var hasDB bool
+var buildTags string
 
 type builder struct {
 	cleanup      []string
 	originalMain []byte
 	originalApp  []byte
 	workDir      string
+	buildTags    []string
 }
 
 func (b *builder) clean(name ...string) string {
@@ -103,6 +105,9 @@ func (b *builder) buildDatabase() error {
 		_, err = io.Copy(bb, d)
 		if err != nil {
 			return err
+		}
+		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
+			b.buildTags = append(b.buildTags, "nosqlite")
 		}
 	}
 	dgo.WriteString("package a\n")
@@ -311,14 +316,6 @@ func (b *builder) run() error {
 		return b.buildBin()
 	}
 
-	// if zipBin {
-	// 	err = b.buildBin()
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	return b.buildpackrZip()
-	// }
-
 	err = b.buildPackrEmbedded()
 	if err != nil {
 		return err
@@ -327,7 +324,11 @@ func (b *builder) run() error {
 }
 
 func (b *builder) buildBin() error {
-	buildArgs := []string{"build", "-v", "-o", outputBinName}
+	buildArgs := []string{"build", "-v"}
+	if len(b.buildTags) > 0 {
+		buildArgs = append(buildArgs, "-tags", strings.Join(b.buildTags, " "))
+	}
+	buildArgs = append(buildArgs, "-o", outputBinName)
 	_, err := exec.LookPath("git")
 	buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
 	version := buildTime
@@ -375,6 +376,10 @@ var buildCmd = &cobra.Command{
 			originalMain: originalMain.Bytes(),
 			originalApp:  originalApp.Bytes(),
 			workDir:      pwd,
+			buildTags:    []string{},
+		}
+		if buildTags != "" {
+			b.buildTags = append(b.buildTags, buildTags)
 		}
 		defer b.cleanupBuild()
 
@@ -393,6 +398,7 @@ func init() {
 	}
 
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
+	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
 	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 }
