@@ -138,6 +138,7 @@ func genNewFiles() error {
 		"titleName":   inflect.Titleize(app.Name),
 		"packagePath": packagePath,
 		"actionsPath": packagePath + "/actions",
+		"configPath":  packagePath + "/config",
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !app.SkipPop,
 		"withWebpack": !app.SkipWebpack,

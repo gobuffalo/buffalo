@@ -1,11 +1,11 @@
-package actions
+package config
 
 import (
   "github.com/gobuffalo/packr"
   "github.com/gobuffalo/buffalo/render"
 )
 
-var r *render.Engine
+var R *render.Engine
 
 func init() {
   r = render.New(render.Options{
