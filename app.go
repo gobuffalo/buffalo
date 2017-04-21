@@ -80,7 +80,7 @@ func Automatic(opts Options) *App {
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}
-
+	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
 
 	return a
