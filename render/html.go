@@ -30,7 +30,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 	hr := templateRenderer{
 		Engine:      e,
 		contentType: "text/html",
-		names:       names,
+		names:       names[:2],
 	}
 	return hr
 }
