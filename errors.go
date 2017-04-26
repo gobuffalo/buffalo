@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
 )
 
@@ -47,12 +47,12 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 
 func defaultErrorHandler(status int, err error, c Context) error {
 	env := c.Value("env")
+	c.Logger().Error(err)
 	if env != nil && env.(string) == "production" {
 		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(prodErrorTmpl))
 		return nil
 	}
-	c.Logger().Error(err)
 	c.Response().WriteHeader(status)
 
 	msg := fmt.Sprintf("%+v", err)
@@ -71,8 +71,8 @@ func defaultErrorHandler(status int, err error, c Context) error {
 			"status": status,
 			"data":   c.Data(),
 		}
-		ctx := velvet.NewContextWith(data)
-		t, err := velvet.Render(devErrorTmpl, ctx)
+		ctx := plush.NewContextWith(data)
+		t, err := plush.Render(devErrorTmpl, ctx)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -87,7 +87,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 var devErrorTmpl = `
 <html>
 <head>
-	<title>{{status}} - ERROR!</title>
+	<title><%= status %> - ERROR!</title>
 	<style>
 		body {
 			font-family: helvetica;
@@ -121,13 +121,13 @@ var devErrorTmpl = `
 	</style>
 </head>
 <body>
-<h1>{{status}} - ERROR!</h1>
-<pre>{{error}}</pre>
+<h1><%= status %> - ERROR!</h1>
+<pre><%= error %></pre>
 <hr>
 <h3>Context</h3>
-<pre>{{#each data as |k v|}}
-{{inspect k}}: {{inspect v}}
-{{/each}}</pre>
+<pre><%= for (k, v) in data { %>
+<%= inspect(k) %>: <%= inspect(v) %>
+<% } %></pre>
 <hr>
 <h3>Routes</h3>
 <table id="buffalo-routes-table">
@@ -139,13 +139,13 @@ var devErrorTmpl = `
 		</tr>
 	</thead>
 	<tbody>
-		{{#each routes as |route|}}
+		<%= for (route) in routes { %>
 			<tr>
-				<td>{{route.Method}}</td>
-				<td>{{route.Path}}</td>
-				<td><code>{{route.HandlerName}}</code></td>
+				<td><%= route.Method %></td>
+				<td><%= route.Path %></td>
+				<td><code><%= route.HandlerName %></code></td>
 			</tr>
-		{{/each}}
+		<% } %>
 	</tbody>
 </table>
 </body>

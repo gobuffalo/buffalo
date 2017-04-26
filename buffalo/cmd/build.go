@@ -3,19 +3,20 @@ package cmd
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 	"time"
 
-	"github.com/gobuffalo/buffalo/buffalo/cmd/generate"
-	"github.com/gobuffalo/velvet"
+	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	pack "github.com/gobuffalo/packr/builder"
+	"github.com/gobuffalo/plush"
 	"github.com/spf13/cobra"
 )
 
@@ -55,7 +56,7 @@ func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		return b.exec(generate.WebpackPath)
+		return b.exec(webpack.BinPath, "-p")
 	}
 	return nil
 }
@@ -92,7 +93,7 @@ func (b *builder) buildDatabase() error {
 		return err
 	}
 	if hasDB {
-		// copy the database.yml file to the migrations folder so it's available through rice
+		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
@@ -108,84 +109,10 @@ func (b *builder) buildDatabase() error {
 	return nil
 }
 
-func (b *builder) buildRiceZip() error {
+func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		paths := map[string]bool{}
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" || base == "bin" {
-					return filepath.SkipDir
-				}
-			} else {
-				err = os.Chdir(filepath.Dir(path))
-				if err != nil {
-					return err
-				}
-
-				s, err := ioutil.ReadFile(path)
-				if err != nil {
-					return err
-				}
-				rx := regexp.MustCompile("(rice.FindBox|rice.MustFindBox)")
-				if rx.Match(s) && filepath.Ext(info.Name()) == ".go" {
-					gopath := strings.Replace(filepath.Join(os.Getenv("GOPATH"), "src"), "\\", "/", -1)
-					pkg := strings.Replace(filepath.Dir(strings.Replace(path, gopath+"/", "", -1)), "\\", "/", -1)
-					paths[pkg] = true
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		if len(paths) != 0 {
-			args := []string{"append", "--exec", filepath.Join(b.workDir, outputBinName)}
-			for k := range paths {
-				args = append(args, "-i", k)
-			}
-			return b.exec("rice", args...)
-		}
-		// rice append --exec example
-	}
-	return nil
-}
-func (b *builder) buildRiceEmbedded() error {
-	defer os.Chdir(b.workDir)
-	_, err := exec.LookPath("rice")
-	if err == nil {
-		// if rice exists, try and build some cleanup:
-		err = filepath.Walk(b.workDir, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				base := filepath.Base(path)
-				if base == "node_modules" || base == ".git" {
-					return filepath.SkipDir
-				}
-				err = os.Chdir(path)
-				if err != nil {
-					return err
-				}
-				err = b.execQuiet("rice", "embed-go")
-				if err == nil {
-					bp := filepath.Join(path, "rice-box.go")
-					_, err := os.Stat(bp)
-					if err == nil {
-						fmt.Printf("--> built rice box %s\n", bp)
-						b.clean(bp)
-					}
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-		// rice append --exec example
-	}
-	return nil
+	p := pack.New(context.Background(), b.workDir)
+	return p.Run()
 }
 
 func (b *builder) disableAssetsHandling() error {
@@ -286,7 +213,7 @@ func (b *builder) buildMain() error {
 		return err
 	}
 
-	ctx := velvet.NewContext()
+	ctx := plush.NewContext()
 	ctx.Set("root", rootPath)
 	ctx.Set("hasDB", hasDB)
 	if hasDB {
@@ -298,7 +225,7 @@ func (b *builder) buildMain() error {
 	}
 	ctx.Set("aPack", packagePath(rootPath)+"/a")
 	ctx.Set("name", filepath.Base(rootPath))
-	s, err := velvet.Render(buildMainTmpl, ctx)
+	s, err := plush.Render(buildMainTmpl, ctx)
 	if err != nil {
 		return err
 	}
@@ -317,6 +244,9 @@ func (b *builder) cleanupBuild() {
 		fmt.Printf("----> cleaning up %s\n", b)
 		os.RemoveAll(b)
 	}
+
+	pack.Clean(b.workDir)
+
 	maingo, _ := os.Create("main.go")
 	maingo.Write(b.originalMain)
 
@@ -380,15 +310,15 @@ func (b *builder) run() error {
 		return b.buildBin()
 	}
 
-	if zipBin {
-		err = b.buildBin()
-		if err != nil {
-			return err
-		}
-		return b.buildRiceZip()
-	}
+	// if zipBin {
+	// 	err = b.buildBin()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	return b.buildpackrZip()
+	// }
 
-	err = b.buildRiceEmbedded()
+	err = b.buildPackrEmbedded()
 	if err != nil {
 		return err
 	}
@@ -418,7 +348,7 @@ func (b *builder) buildBin() error {
 var buildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b", "bill"},
-	Short:   "Builds a Buffalo binary, including bundling of assets (go.rice & webpack)",
+	Short:   "Builds a Buffalo binary, including bundling of assets (packr & webpack)",
 	RunE: func(cc *cobra.Command, args []string) error {
 		originalMain := &bytes.Buffer{}
 		maingo, err := os.Open("main.go")
@@ -472,21 +402,22 @@ import (
 	"os"
 
 	"github.com/markbates/grift/grift"
-	rice "github.com/GeertJohan/go.rice"
-	_ "{{aPack}}"
-	{{#if modelsPack}}
+	"github.com/gobuffalo/packr"
+	_ "<%= aPack %>"
+	<%= if (modelsPack) { %>
+	"io"
 	"io/ioutil"
 	"path/filepath"
-	"{{modelsPack}}"
-	{{/if}}
-	{{#if griftsPack}}
-	_ "{{griftsPack}}"
-	{{/if}}
+	"<%= modelsPack %>"
+	<% } %>
+	<%= if (griftsPack) { %>
+	_ "<%= griftsPack %>"
+	<% } %>
 )
 
 var version = "unknown"
 var buildTime = "unknown"
-var migrationBox *rice.Box
+var migrationBox packr.Box
 
 func main() {
 	args := os.Args
@@ -495,10 +426,10 @@ func main() {
 	}
 	c := args[1]
 	switch c {
-	{{#if modelsPack}}
+	<%= if (modelsPack) { %>
 	case "migrate":
 		migrate()
-	{{/if}}
+	<% } %>
 	case "start", "run", "serve":
 		printVersion()
 		originalMain()
@@ -515,17 +446,13 @@ func main() {
 }
 
 func printVersion() {
-	fmt.Printf("{{name}} version %s (%s)\n\n", version, buildTime)
+	fmt.Printf("<%= name %> version %s (%s)\n\n", version, buildTime)
 }
 
-{{#if modelsPack}}
+<%= if (modelsPack) { %>
 func migrate() {
 	var err error
-	migrationBox, err = rice.FindBox("./migrations")
-	if err != nil {
-		fmt.Println("--> No migrations found.")
-		return
-	}
+	migrationBox = packr.NewBox("./migrations")
 	fmt.Println("--> Running migrations")
 	path, err := unpackMigrations()
 	if err != nil {
@@ -537,25 +464,26 @@ func migrate() {
 }
 
 func unpackMigrations() (string, error) {
-	dir, err := ioutil.TempDir("", "{{name}}-migrations")
+	dir, err := ioutil.TempDir("", "<%= name %>-migrations")
 	if err != nil {
 		log.Fatalf("Unable to create temp directory: %s", err)
 	}
 
-	migrationBox.Walk("", func(path string, fi os.FileInfo, e error) error {
-		if !fi.IsDir() {
-			content := migrationBox.MustBytes(path)
-			file := filepath.Join(dir, path)
-			if err := ioutil.WriteFile(file, content, 0666); err != nil {
-				log.Fatalf("Failed to write migration to disk: %s", err)
-			}
+	migrationBox.Walk(func(path string, f packr.File) error {
+		file, err := os.Create(filepath.Join(dir, path))
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
 		}
-		return e
+		_, err = io.Copy(file, f)
+		if err != nil {
+			log.Fatalf("Failed to write migration to disk: %s", err)
+		}
+		return nil
 	})
 
 	return dir, nil
 }
-{{/if}}
+<% } %>
 `
 
 var aGo = `package a
@@ -571,7 +499,6 @@ func init() {
 
 func dropDatabaseYml() {
 	if DB_CONFIG != "" {
-
 		_, err := os.Stat("database.yml")
 		if err == nil {
 			// yaml already exists, don't do anything

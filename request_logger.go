@@ -31,6 +31,10 @@ func RequestLoggerFunc(h Handler) Handler {
 			"method":     c.Request().Method,
 			"path":       c.Request().URL.String(),
 		})
+		ct := c.Request().Header.Get("Content-Type")
+		if ct != "" {
+			c.LogField("content_type", ct)
+		}
 		defer func() {
 			ws := c.Response().(*buffaloResponse)
 			c.LogFields(logrus.Fields{

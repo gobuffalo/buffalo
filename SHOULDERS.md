@@ -6,19 +6,9 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
-* [github.com/GeertJohan/go.rice](https://github.com/GeertJohan/go.rice)
-
-* [github.com/GeertJohan/go.rice/embedded](https://github.com/GeertJohan/go.rice/embedded)
-
 * [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
 
-* [github.com/aymerick/raymond/ast](https://github.com/aymerick/raymond/ast)
-
-* [github.com/aymerick/raymond/lexer](https://github.com/aymerick/raymond/lexer)
-
-* [github.com/aymerick/raymond/parser](https://github.com/aymerick/raymond/parser)
-
-* [github.com/daaku/go.zipexe](https://github.com/daaku/go.zipexe)
+* [github.com/daviddengcn/go-colortext](https://github.com/daviddengcn/go-colortext)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
@@ -30,13 +20,31 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
-* [github.com/gobuffalo/buffalo/render](https://github.com/gobuffalo/buffalo/render)
-
-* [github.com/gobuffalo/buffalo/render/resolvers](https://github.com/gobuffalo/buffalo/render/resolvers)
+* [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
 
 * [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
 
-* [github.com/gobuffalo/velvet](https://github.com/gobuffalo/velvet)
+* [github.com/gobuffalo/makr](https://github.com/gobuffalo/makr)
+
+* [github.com/gobuffalo/packr](https://github.com/gobuffalo/packr)
+
+* [github.com/gobuffalo/packr/builder](https://github.com/gobuffalo/packr/builder)
+
+* [github.com/gobuffalo/plush](https://github.com/gobuffalo/plush)
+
+* [github.com/gobuffalo/plush/ast](https://github.com/gobuffalo/plush/ast)
+
+* [github.com/gobuffalo/plush/lexer](https://github.com/gobuffalo/plush/lexer)
+
+* [github.com/gobuffalo/plush/parser](https://github.com/gobuffalo/plush/parser)
+
+* [github.com/gobuffalo/plush/token](https://github.com/gobuffalo/plush/token)
+
+* [github.com/gobuffalo/tags](https://github.com/gobuffalo/tags)
+
+* [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/form)
+
+* [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/form/bootstrap)
 
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
@@ -50,19 +58,45 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
 
-* [github.com/kardianos/osext](https://github.com/kardianos/osext)
+* [github.com/jmoiron/sqlx](https://github.com/jmoiron/sqlx)
+
+* [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/reflectx)
+
+* [github.com/lib/pq](https://github.com/lib/pq)
+
+* [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
+
+* [github.com/markbates/deplist](https://github.com/markbates/deplist)
 
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 
 * [github.com/markbates/going/randx](https://github.com/markbates/going/randx)
 
+* [github.com/markbates/going/wait](https://github.com/markbates/going/wait)
+
 * [github.com/markbates/grift](https://github.com/markbates/grift)
+
+* [github.com/markbates/grift/cmd](https://github.com/markbates/grift/cmd)
+
+* [github.com/markbates/grift/grift](https://github.com/markbates/grift/grift)
 
 * [github.com/markbates/inflect](https://github.com/markbates/inflect)
 
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
+* [github.com/markbates/pop/columns](https://github.com/markbates/pop/columns)
+
+* [github.com/markbates/pop/fizz](https://github.com/markbates/pop/fizz)
+
+* [github.com/markbates/pop/fizz/translators](https://github.com/markbates/pop/fizz/translators)
+
 * [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
+
+* [github.com/markbates/pop/soda/cmd](https://github.com/markbates/pop/soda/cmd)
+
+* [github.com/markbates/pop/soda/cmd/generate](https://github.com/markbates/pop/soda/cmd/generate)
+
+* [github.com/markbates/pop/soda/cmd/schema](https://github.com/markbates/pop/soda/cmd/schema)
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
@@ -70,15 +104,91 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
 
+* [github.com/markbates/validate](https://github.com/markbates/validate)
+
+* [github.com/markbates/validate/validators](https://github.com/markbates/validate/validators)
+
+* [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
+
+* [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
+
+* [github.com/mattn/anko/builtins/encoding/json](https://github.com/mattn/anko/builtins/encoding/json)
+
+* [github.com/mattn/anko/builtins/errors](https://github.com/mattn/anko/builtins/errors)
+
+* [github.com/mattn/anko/builtins/flag](https://github.com/mattn/anko/builtins/flag)
+
+* [github.com/mattn/anko/builtins/fmt](https://github.com/mattn/anko/builtins/fmt)
+
+* [github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext](https://github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext)
+
+* [github.com/mattn/anko/builtins/io](https://github.com/mattn/anko/builtins/io)
+
+* [github.com/mattn/anko/builtins/io/ioutil](https://github.com/mattn/anko/builtins/io/ioutil)
+
+* [github.com/mattn/anko/builtins/math](https://github.com/mattn/anko/builtins/math)
+
+* [github.com/mattn/anko/builtins/math/big](https://github.com/mattn/anko/builtins/math/big)
+
+* [github.com/mattn/anko/builtins/math/rand](https://github.com/mattn/anko/builtins/math/rand)
+
+* [github.com/mattn/anko/builtins/net](https://github.com/mattn/anko/builtins/net)
+
+* [github.com/mattn/anko/builtins/net/http](https://github.com/mattn/anko/builtins/net/http)
+
+* [github.com/mattn/anko/builtins/net/url](https://github.com/mattn/anko/builtins/net/url)
+
+* [github.com/mattn/anko/builtins/os](https://github.com/mattn/anko/builtins/os)
+
+* [github.com/mattn/anko/builtins/os/exec](https://github.com/mattn/anko/builtins/os/exec)
+
+* [github.com/mattn/anko/builtins/os/signal](https://github.com/mattn/anko/builtins/os/signal)
+
+* [github.com/mattn/anko/builtins/path](https://github.com/mattn/anko/builtins/path)
+
+* [github.com/mattn/anko/builtins/path/filepath](https://github.com/mattn/anko/builtins/path/filepath)
+
+* [github.com/mattn/anko/builtins/regexp](https://github.com/mattn/anko/builtins/regexp)
+
+* [github.com/mattn/anko/builtins/runtime](https://github.com/mattn/anko/builtins/runtime)
+
+* [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/builtins/sort)
+
+* [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/builtins/strings)
+
+* [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/builtins/time)
+
+* [github.com/mattn/anko/parser](https://github.com/mattn/anko/parser)
+
+* [github.com/mattn/anko/vm](https://github.com/mattn/anko/vm)
+
 * [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/motemen/gore](https://github.com/motemen/gore)
 
+* [github.com/mutecomm/go-sqlcipher](https://github.com/mutecomm/go-sqlcipher)
+
+* [github.com/nicksnyder/go-i18n/i18n](https://github.com/nicksnyder/go-i18n/i18n)
+
+* [github.com/nicksnyder/go-i18n/i18n/bundle](https://github.com/nicksnyder/go-i18n/i18n/bundle)
+
+* [github.com/nicksnyder/go-i18n/i18n/language](https://github.com/nicksnyder/go-i18n/i18n/language)
+
+* [github.com/nicksnyder/go-i18n/i18n/translation](https://github.com/nicksnyder/go-i18n/i18n/translation)
+
+* [github.com/pelletier/go-buffruneio](https://github.com/pelletier/go-buffruneio)
+
+* [github.com/pelletier/go-toml](https://github.com/pelletier/go-toml)
+
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
 * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
+
+* [github.com/satori/go.uuid](https://github.com/satori/go.uuid)
+
+* [github.com/serenize/snaker](https://github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
 
@@ -95,4 +205,8 @@ Thank you to the following **GIANTS**:
 * [github.com/sourcegraph/syntaxhighlight](https://github.com/sourcegraph/syntaxhighlight)
 
 * [github.com/spf13/cobra](https://github.com/spf13/cobra)
+
+* [github.com/spf13/pflag](https://github.com/spf13/pflag)
+
+* [golang.org/x/tools/cmd/goimports](https://golang.org/x/tools/cmd/goimports)
 

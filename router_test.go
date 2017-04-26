@@ -213,7 +213,7 @@ func (u *userResource) List(c Context) error {
 }
 
 func (u *userResource) Show(c Context) error {
-	return c.Render(200, render.String("show {{params.user_id}}"))
+	return c.Render(200, render.String(`show <%=params["user_id"] %>`))
 }
 
 func (u *userResource) New(c Context) error {
@@ -225,13 +225,13 @@ func (u *userResource) Create(c Context) error {
 }
 
 func (u *userResource) Edit(c Context) error {
-	return c.Render(200, render.String("edit {{params.user_id}}"))
+	return c.Render(200, render.String(`edit <%=params["user_id"] %>`))
 }
 
 func (u *userResource) Update(c Context) error {
-	return c.Render(200, render.String("update {{params.user_id}}"))
+	return c.Render(200, render.String(`update <%=params["user_id"] %>`))
 }
 
 func (u *userResource) Destroy(c Context) error {
-	return c.Render(200, render.String("destroy {{params.user_id}}"))
+	return c.Render(200, render.String(`destroy <%=params["user_id"] %>`))
 }

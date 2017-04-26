@@ -29,13 +29,15 @@ func TestGenerateResourceCode(t *testing.T) {
 	os.Mkdir("actions", 0755)
 	ioutil.WriteFile("actions/app.go", appGo, 0755)
 
-	e = ResourceCmd.RunE(&cmd, []string{"users"})
+	SkipResourceMigration = false
+	SkipResourceModel = false
+
+	// Testing generator with singular definition
+	e = ResourceCmd.RunE(&cmd, []string{"user"})
 	r.Nil(e)
 
 	fileData, _ := ioutil.ReadFile("actions/app.go")
-	r.Contains(string(fileData), "var usersResource buffalo.Resource")
-	r.Contains(string(fileData), "usersResource = UsersResource{&buffalo.BaseResource{}}")
-	r.Contains(string(fileData), "app.Resource(\"/users\", usersResource)")
+	r.Contains(string(fileData), "app.Resource(\"/users\", UsersResource{&buffalo.BaseResource{}})")
 
 	fileData, _ = ioutil.ReadFile("actions/users.go")
 	r.Contains(string(fileData), "type UsersResource struct {")
@@ -43,8 +45,25 @@ func TestGenerateResourceCode(t *testing.T) {
 	r.Contains(string(fileData), "func (v UsersResource) Destroy(c buffalo.Context) error {")
 
 	fileData, _ = ioutil.ReadFile("actions/users_test.go")
-	r.Contains(string(fileData), "func Test_UsersResource_List")
-	r.Contains(string(fileData), "func Test_UsersResource_Show")
-	r.Contains(string(fileData), "func Test_UsersResource_Create")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_List")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Show")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_UsersResource_Create")
+
+	// Testing generator with plural definition
+	e = ResourceCmd.RunE(&cmd, []string{"comments"})
+	r.Nil(e)
+
+	fileData, _ = ioutil.ReadFile("actions/app.go")
+	r.Contains(string(fileData), "app.Resource(\"/comments\", CommentsResource{&buffalo.BaseResource{}})")
+
+	fileData, _ = ioutil.ReadFile("actions/comments.go")
+	r.Contains(string(fileData), "type CommentsResource struct {")
+	r.Contains(string(fileData), "func (v CommentsResource) List(c buffalo.Context) error {")
+	r.Contains(string(fileData), "func (v CommentsResource) Destroy(c buffalo.Context) error {")
+
+	fileData, _ = ioutil.ReadFile("actions/comments_test.go")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_CommentsResource_List")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_CommentsResource_Show")
+	r.Contains(string(fileData), "func (as *ActionSuite) Test_CommentsResource_Create")
 
 }
