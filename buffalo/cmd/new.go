@@ -139,6 +139,7 @@ func genNewFiles() error {
 		"packagePath": packagePath,
 		"actionsPath": packagePath + "/actions",
 		"configPath":  packagePath + "/config",
+		"routesPath":  packagePath + "/routes",
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !app.SkipPop,
 		"withWebpack": !app.SkipWebpack,

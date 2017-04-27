@@ -6,11 +6,11 @@ import (
 	"text/tabwriter"
 
 	. "github.com/markbates/grift/grift"
-	"{{ .configPath }}"
+	"{{ .routesPath }}"
 )
 
 var _ = Add("routes", func(c *Context) error {
-	a := config.App()
+	a := routes.App()
 	routes := a.Routes()
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 	fmt.Fprintln(w, "METHOD\t PATH\t NAME\t HANDLER")

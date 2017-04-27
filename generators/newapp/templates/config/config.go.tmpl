@@ -1,0 +1,21 @@
+package config
+
+import (
+  "log"
+  "github.com/gobuffalo/buffalo/middleware/i18n"
+  "github.com/gobuffalo/envy"
+  "github.com/gobuffalo/packr"
+)
+
+// ENV is used to help switch settings based on where the
+// application is being run. Default is "development".
+var ENV = envy.Get("GO_ENV", "development")
+var T *i18n.Translator
+
+func init() {
+  var err error
+  T, err = i18n.New(packr.NewBox("../locales"), "en-US")
+  if err != nil {
+    log.Fatal(err)
+  }
+}
