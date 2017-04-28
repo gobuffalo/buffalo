@@ -6,6 +6,11 @@ RUN apt-get update
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
 RUN apt-get install -y build-essential nodejs
 RUN apt-get install -y sqlite3 libsqlite3-dev
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add -
+RUN apt-get update
+RUN apt-get install -y postgresql postgresql-contrib libpq-dev
+RUN apt-get install -y -q mysql-client
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
