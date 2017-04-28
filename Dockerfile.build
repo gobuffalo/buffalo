@@ -1,0 +1,5 @@
+FROM golang:latest
+
+RUN go version
+
+RUN export
