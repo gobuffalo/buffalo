@@ -1,0 +1,20 @@
+[{
+    "path": "templates/users/_form.html",
+    "absent": true
+},
+{
+    "path": "templates/users/edit.html",
+    "absent": true
+},
+{
+    "path": "templates/users/index.html",
+    "absent": true
+},
+{
+    "path": "templates/users/new.html",
+    "absent": true
+},
+{
+    "path": "templates/users/show.html",
+    "absent": true
+}]

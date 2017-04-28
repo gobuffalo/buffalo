@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/plush"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
@@ -136,6 +138,59 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.Equal(af, res.Body.Bytes())
 }
 
+func Test_App_NamedRoutes(t *testing.T) {
+
+	type CarsResource struct {
+		*BaseResource
+	}
+
+	r := require.New(t)
+	a := Automatic(Options{})
+
+	var carsResource Resource
+	carsResource = CarsResource{&BaseResource{}}
+
+	rr := render.New(render.Options{
+		HTMLLayout:     "application.html",
+		TemplateEngine: plush.BuffaloRenderer,
+		TemplatesBox:   packr.NewBox("../templates"),
+		Helpers:        map[string]interface{}{},
+	})
+
+	sampleHandler := func(c Context) error {
+		c.Set("opts", map[string]interface{}{})
+		return c.Render(200, rr.String(`
+			1. <%= rootPath() %>
+			2. <%= usersPath() %>
+			3. <%= userPath({user_id: 1}) %>
+			4. <%= myPeepsPath() %>
+			5. <%= userPath(opts) %>
+			6. <%= carPath({car_id: 1}) %>
+			7. <%= newCarPath() %>
+			8. <%= editCarPath({car_id: 1}) %>
+		`))
+	}
+
+	a.GET("/", sampleHandler)
+	a.GET("/users", sampleHandler)
+	a.GET("/users/{user_id}", sampleHandler)
+	a.GET("/peeps", sampleHandler).Name("myPeeps")
+	a.Resource("/car", carsResource)
+
+	w := willie.New(a)
+	res := w.Request("/").Get()
+
+	r.Equal(200, res.Code)
+	r.Contains(res.Body.String(), "1. /")
+	r.Contains(res.Body.String(), "2. /users")
+	r.Contains(res.Body.String(), "3. /users/1")
+	r.Contains(res.Body.String(), "4. /peeps")
+	r.Contains(res.Body.String(), "5. /users/{user_id}")
+	r.Contains(res.Body.String(), "6. /car/1")
+	r.Contains(res.Body.String(), "7. /car/new")
+	r.Contains(res.Body.String(), "8. /car/1/edit")
+}
+
 func Test_Resource(t *testing.T) {
 	r := require.New(t)
 
@@ -234,4 +289,23 @@ func (u *userResource) Update(c Context) error {
 
 func (u *userResource) Destroy(c Context) error {
 	return c.Render(200, render.String(`destroy <%=params["user_id"] %>`))
+}
+
+func Test_buildRouteName(t *testing.T) {
+	r := require.New(t)
+	cases := map[string]string{
+		"/":                                          "root",
+		"/users":                                     "users",
+		"/users/new":                                 "newUsers",
+		"/users/{user_id}":                           "user",
+		"/users/{user_id}/children":                  "userChildren",
+		"/users/{user_id}/children/{child_id}":       "userChild",
+		"/users/{user_id}/children/new":              "newUserChildren",
+		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
+	}
+
+	for input, result := range cases {
+		fResult := buildRouteName(input)
+		r.Equal(result, fResult, input)
+	}
 }

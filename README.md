@@ -20,6 +20,10 @@ $ go get -u github.com/gobuffalo/buffalo/buffalo
 
 _NOTE_: Buffalo has a minimum Go dependency of `1.7.x`.
 
+Buffalo also depends on:
+ - gcc for [go-sqlite3](https://github.com/mattn/go-sqlite3) wich is a cgo package.
+ - node and npm for the asset pipeline.
+
 ## Generating a new Project
 
 Buffalo aims to make building new web applications in Go as simple as possible, and what could be more simple than a new application generator?

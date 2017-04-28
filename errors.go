@@ -45,6 +45,30 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 	return defaultErrorHandler
 }
 
+// PanicHandler recovers from panics gracefully and calls
+// the error handling code for a 500 error.
+func (a *App) PanicHandler(next Handler) Handler {
+	return func(c Context) error {
+		defer func() { //catch or finally
+			r := recover()
+			var err error
+			if r != nil { //catch
+				switch t := r.(type) {
+				case error:
+					err = t
+				case string:
+					err = errors.New(t)
+				default:
+					err = errors.New(fmt.Sprint(t))
+				}
+				eh := a.ErrorHandlers.Get(500)
+				eh(500, err, c)
+			}
+		}()
+		return next(c)
+	}
+}
+
 func defaultErrorHandler(status int, err error, c Context) error {
 	env := c.Value("env")
 	c.Logger().Error(err)
@@ -135,6 +159,7 @@ var devErrorTmpl = `
 		<tr>
 			<th>METHOD</th>
 			<th>PATH</th>
+			<th>NAME</th>
 			<th>HANDLER</th>
 		</tr>
 	</thead>
@@ -143,6 +168,7 @@ var devErrorTmpl = `
 			<tr>
 				<td><%= route.Method %></td>
 				<td><%= route.Path %></td>
+				<td><%= route.PathName %></td>
 				<td><code><%= route.HandlerName %></code></td>
 			</tr>
 		<% } %>

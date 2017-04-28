@@ -14,7 +14,9 @@ func (s xmlRenderer) ContentType() string {
 }
 
 func (s xmlRenderer) Render(w io.Writer, data Data) error {
-	return xml.NewEncoder(w).Encode(s.value)
+	enc := xml.NewEncoder(w)
+	enc.Indent("", "  ")
+	return enc.Encode(s.value)
 }
 
 // XML renders the value using the "application/xml"

@@ -19,6 +19,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -27,12 +28,14 @@ var zipBin bool
 var extractAssets bool
 var hasDB bool
 var ldflags string
+var buildTags string
 
 type builder struct {
 	cleanup      []string
 	originalMain []byte
 	originalApp  []byte
 	workDir      string
+	buildTags    []string
 }
 
 func (b *builder) clean(name ...string) string {
@@ -105,6 +108,9 @@ func (b *builder) buildDatabase() error {
 		_, err = io.Copy(bb, d)
 		if err != nil {
 			return err
+		}
+		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
+			b.buildTags = append(b.buildTags, "nosqlite")
 		}
 	}
 	dgo.WriteString("package a\n")
@@ -313,14 +319,6 @@ func (b *builder) run() error {
 		return b.buildBin()
 	}
 
-	// if zipBin {
-	// 	err = b.buildBin()
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	return b.buildpackrZip()
-	// }
-
 	err = b.buildPackrEmbedded()
 	if err != nil {
 		return err
@@ -329,7 +327,11 @@ func (b *builder) run() error {
 }
 
 func (b *builder) buildBin() error {
-	buildArgs := []string{"build", "-v", "-o", outputBinName}
+	buildArgs := []string{"build", "-v"}
+	if len(b.buildTags) > 0 {
+		buildArgs = append(buildArgs, "-tags", strings.Join(b.buildTags, " "))
+	}
+	buildArgs = append(buildArgs, "-o", outputBinName)
 	_, err := exec.LookPath("git")
 	buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
 	version := buildTime
@@ -337,6 +339,8 @@ func (b *builder) buildBin() error {
 		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
 		out := &bytes.Buffer{}
 		cmd.Stdout = out
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 		err = cmd.Run()
 		if err == nil && out.String() != "" {
 			version = strings.TrimSpace(out.String())
@@ -374,7 +378,7 @@ var buildCmd = &cobra.Command{
 		maingo, err := os.Open("main.go")
 		_, err = originalMain.ReadFrom(maingo)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		maingo.Close()
 
@@ -382,7 +386,7 @@ var buildCmd = &cobra.Command{
 		appgo, err := os.Open("actions/app.go")
 		_, err = originalApp.ReadFrom(appgo)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		appgo.Close()
 
@@ -392,6 +396,10 @@ var buildCmd = &cobra.Command{
 			originalMain: originalMain.Bytes(),
 			originalApp:  originalApp.Bytes(),
 			workDir:      pwd,
+			buildTags:    []string{},
+		}
+		if buildTags != "" {
+			b.buildTags = append(b.buildTags, buildTags)
 		}
 		defer b.cleanupBuild()
 
@@ -410,6 +418,7 @@ func init() {
 	}
 
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
+	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
 	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	buildCmd.Flags().StringVarP(&ldflags, "ldflags", "", "", "set any ldflags to be passed to the go build")

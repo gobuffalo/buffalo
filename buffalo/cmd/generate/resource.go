@@ -52,6 +52,9 @@ var SkipResourceModel = false
 // UseResourceModel allows to generate a resource with a working model.
 var UseResourceModel = ""
 
+// ResourceMimeType allows to generate a typed resource (HTML by default, JSON...).
+var ResourceMimeType = "html"
+
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
@@ -81,6 +84,11 @@ var ResourceCmd = &cobra.Command{
 				modelName = name
 			}
 		}
+
+		if ResourceMimeType != "html" && ResourceMimeType != "json" && ResourceMimeType != "xml" {
+			return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
+		}
+
 		modelProps := getModelPropertiesFromArgs(args)
 
 		data := makr.Data{
@@ -97,6 +105,7 @@ var ResourceCmd = &cobra.Command{
 			"modelPluralUnder": inflect.Underscore(modelName),
 			"varPlural":        inflect.CamelizeDownFirst(modelName),
 			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
+			"renderFunction":   strings.ToUpper(ResourceMimeType),
 			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":             args,
 			"modelProps":       modelProps,
@@ -106,6 +115,7 @@ var ResourceCmd = &cobra.Command{
 			"skipMigration": SkipResourceMigration,
 			"skipModel":     SkipResourceModel,
 			"useModel":      UseResourceModel,
+			"mimeType":      ResourceMimeType,
 		}
 		g, err := resource.New(data)
 		if err != nil {
