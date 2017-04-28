@@ -4,12 +4,14 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
@@ -25,6 +27,7 @@ var outputBinName string
 var zipBin bool
 var extractAssets bool
 var hasDB bool
+var ldflags string
 var buildTags string
 
 type builder struct {
@@ -343,7 +346,24 @@ func (b *builder) buildBin() error {
 			version = strings.TrimSpace(out.String())
 		}
 	}
-	buildArgs = append(buildArgs, "-ldflags", fmt.Sprintf("-X main.version=%s -X main.buildTime=%s", version, buildTime))
+
+	flags := []string{
+		fmt.Sprintf("-X main.version=%s", version),
+		fmt.Sprintf("-X main.buildTime=%s", buildTime),
+	}
+
+	// Add any additional ldflags passed in to the build args
+	if len(ldflags) > 0 {
+		if foundVersion, _ := regexp.MatchString("-X\\s+main.version=", ldflags); foundVersion {
+			return errors.New("The ldflag option '-X main.version=' is reserved for gobuffalo use")
+		}
+		if foundBuildTime, _ := regexp.MatchString("-X\\s+main.buildTime=", ldflags); foundBuildTime {
+			return errors.New("The ldflag option '-X main.buildTime=' is reserved for gobuffalo use")
+		}
+		flags = append(flags, ldflags)
+	}
+
+	buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
 
 	return b.exec("go", buildArgs...)
 }
@@ -401,6 +421,7 @@ func init() {
 	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
 	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
+	buildCmd.Flags().StringVarP(&ldflags, "ldflags", "", "", "set any ldflags to be passed to the go build")
 }
 
 var buildMainTmpl = `package main
