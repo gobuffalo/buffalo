@@ -65,6 +65,15 @@ func (d *DefaultContext) Param(key string) string {
 // ParamInt tries to convert the requested parameter to
 // an int. It will return an error if there is a problem.
 func (d *DefaultContext) ParamInt(key string) (int, error) {
+	warningMsg := "Context#ParamInt is deprecated, and will be removed in v0.9.0."
+
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
+
+	d.Logger().Warn(warningMsg)
+
 	k := d.Params().Get(key)
 	i, err := strconv.Atoi(k)
 	return i, errors.WithMessage(err, fmt.Sprintf("could not convert %s to an int", k))
@@ -78,11 +87,11 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 
 // Get is deprecated. Please use Value instead.
 func (d *DefaultContext) Get(key string) interface{} {
-	warningMsg := "Context#Get is deprecated. Please use Context#Value instead."
+	warningMsg := "Context#Get is deprecated, and will be removed in v0.9.0. Please use Context#Value instead."
 
 	_, file, no, ok := runtime.Caller(1)
 	if ok {
-		warningMsg = fmt.Sprintf("Context#Get is deprecated. Please use Context#Value instead. Called from %s:%d", file, no)
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
 	}
 
 	d.Logger().Warn(warningMsg)
