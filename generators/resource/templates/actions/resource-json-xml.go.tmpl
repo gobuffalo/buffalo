@@ -39,7 +39,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.Render(200, r.{{.renderFunction}}({{.varPlural}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varPlural}}{{.renderOptionalArgument}}))
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
@@ -54,7 +54,7 @@ func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}{{.renderOptionalArgument}}))
 }
 
 // New default implementation. Returns a 404
@@ -81,10 +81,10 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 	}
 	if verrs.HasAny() {
 		// Render errors as {{.renderFunction}}
-		return c.Render(400, r.{{.renderFunction}}(verrs))
+		return c.Render(400, r.{{.renderFunction}}(verrs{{.renderOptionalArgument}}))
 	}
 	// Success!
-	return c.Render(201, r.{{.renderFunction}}({{.varSingular}}))
+	return c.Render(201, r.{{.renderFunction}}({{.varSingular}}{{.renderOptionalArgument}}))
 }
 
 // Edit default implementation. Returns a 404
@@ -114,10 +114,10 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	}
 	if verrs.HasAny() {
 		// Render errors as {{.renderFunction}}
-		return c.Render(400, r.{{.renderFunction}}(verrs))
+		return c.Render(400, r.{{.renderFunction}}(verrs{{.renderOptionalArgument}}))
 	}
 	// Success!
-	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}{{.renderOptionalArgument}}))
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
@@ -137,5 +137,5 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 		return err
 	}
 	// Success!
-	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
+	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}{{.renderOptionalArgument}}))
 }
