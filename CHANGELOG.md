@@ -1,5 +1,41 @@
 # Change Log
 
+## [v0.8.2](https://github.com/gobuffalo/buffalo/tree/v0.8.2) (2017-05-01)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.1.2...v0.8.2)
+
+**Implemented enhancements:**
+
+- Resource generator should be able to generate XML [\#388](https://github.com/gobuffalo/buffalo/issues/388)
+- Resource generator should be able to generate JSON [\#365](https://github.com/gobuffalo/buffalo/issues/365)
+- Add support for "named routes" [\#210](https://github.com/gobuffalo/buffalo/issues/210)
+
+**Closed issues:**
+
+- Command failing on MacOS Sierra 10.12 [\#404](https://github.com/gobuffalo/buffalo/issues/404)
+- Gracefully handle panics [\#401](https://github.com/gobuffalo/buffalo/issues/401)
+- i18n should search for the language in the session as well [\#397](https://github.com/gobuffalo/buffalo/issues/397)
+- babel deprecation warning during creation [\#395](https://github.com/gobuffalo/buffalo/issues/395)
+- DB reverse tools  [\#393](https://github.com/gobuffalo/buffalo/issues/393)
+- Generator New - can't get package [\#385](https://github.com/gobuffalo/buffalo/issues/385)
+- field name got cut off if it ends with s when generate resource [\#384](https://github.com/gobuffalo/buffalo/issues/384)
+- I've got "undefined: models in models.User" [\#383](https://github.com/gobuffalo/buffalo/issues/383)
+
+**Merged pull requests:**
+
+- Added a ldflags option to the build command [\#409](https://github.com/gobuffalo/buffalo/pull/409) ([tbasnett](https://github.com/tbasnett))
+- specified a version for certain deprecations [\#408](https://github.com/gobuffalo/buffalo/pull/408) ([markbates](https://github.com/markbates))
+- 0.8.2 [\#405](https://github.com/gobuffalo/buffalo/pull/405) ([markbates](https://github.com/markbates))
+- gcc, node and npm dependecies [\#403](https://github.com/gobuffalo/buffalo/pull/403) ([danielsousaio](https://github.com/danielsousaio))
+- Gracefully handle panics fixes \#401 [\#402](https://github.com/gobuffalo/buffalo/pull/402) ([markbates](https://github.com/markbates))
+- add forbidden app names validation check [\#400](https://github.com/gobuffalo/buffalo/pull/400) ([marythought](https://github.com/marythought))
+- i18n should search for the language in the session as well fixes \#397 [\#398](https://github.com/gobuffalo/buffalo/pull/398) ([markbates](https://github.com/markbates))
+- babel deprecation warning during creation fixes \#395 [\#396](https://github.com/gobuffalo/buffalo/pull/396) ([markbates](https://github.com/markbates))
+- build tags can now be passed in. oh, and sqlite will not be compiled [\#392](https://github.com/gobuffalo/buffalo/pull/392) ([markbates](https://github.com/markbates))
+- Added XML resource generator, fixes \#388 [\#390](https://github.com/gobuffalo/buffalo/pull/390) ([stanislas-m](https://github.com/stanislas-m))
+- Csrf cleanup [\#387](https://github.com/gobuffalo/buffalo/pull/387) ([markbates](https://github.com/markbates))
+- Implements JSON resource generator [\#386](https://github.com/gobuffalo/buffalo/pull/386) ([stanislas-m](https://github.com/stanislas-m))
+- Named Routes implementation. [\#332](https://github.com/gobuffalo/buffalo/pull/332) ([apaganobeleno](https://github.com/apaganobeleno))
+
 ## [v0.8.1.2](https://github.com/gobuffalo/buffalo/tree/v0.8.1.2) (2017-04-13)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.1...v0.8.1.2)
 
