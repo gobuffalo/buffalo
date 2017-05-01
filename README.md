@@ -89,25 +89,3 @@ Buffalo would not be possible if not for all of the great projects it depends on
 ## Benchmarks
 
 Oh, yeah, everyone wants benchmarks! What would a web framework be without its benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.
-
-## Contributors
-
-* Mark Bates
-* Antonio Pagano
-* Stanislas Michalak
-* lumost
-* Philip I. Thomas
-* Brian Downs
-* Cody Oss
-* Brian Scott
-* arif emre
-* amedeiros
-* Mark Lussier
-* Amós Oviedo
-* Dan Kleiman
-* Michael Henderson
-* Steven Klassen
-* Ivan Menshykov
-* Kenny Grant
-* Daniel Heckrath
-* Stuart Ellis
