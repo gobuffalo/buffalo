@@ -1,4 +1,4 @@
-package middleware_test
+package csrf_test
 
 import (
 	"testing"
@@ -16,7 +16,10 @@ type csrfForm struct {
 
 func ctCSRFApp() *buffalo.App {
 	h := func(c buffalo.Context) error {
-		return c.Render(200, render.String(c.Value("authenticity_token").(string)))
+		if at := c.Value("authenticity_token"); at != nil {
+			return c.Render(200, render.String(at.(string)))
+		}
+		return c.Render(420, nil)
 	}
 	a := buffalo.Automatic(buffalo.Options{})
 	a.Use(middleware.CSRF)
@@ -31,6 +34,20 @@ func Test_CSRFOnIdempotentAction(t *testing.T) {
 	w := willie.New(ctCSRFApp())
 	res := w.Request("/csrf").Get()
 	r.Equal(200, res.Code)
+}
+
+func Test_CSRFOnJSONRequest(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(ctCSRFApp())
+
+	// Test missing token case
+	res := w.Request("/csrf").Post("")
+	r.Equal(500, res.Code)
+	r.Contains(res.Body.String(), "CSRF token not found in request")
+
+	rs := w.JSON("/csrf").Post("")
+	r.Equal(420, rs.Code)
 }
 
 func Test_CSRFOnEditingAction(t *testing.T) {

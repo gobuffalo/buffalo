@@ -18,7 +18,7 @@ func findUserMW(n string) buffalo.MiddlewareFunc {
 			id, err := c.ParamInt(n)
 			if err == nil {
 				u := &models.User{}
-				tx := c.Get("tx").(*pop.Connection)
+				tx := c.Value("tx").(*pop.Connection)
 				err = tx.Find(u, id)
 				if err != nil {
 					return c.Error(404, errors.WithStack(err))
@@ -33,7 +33,7 @@ func findUserMW(n string) buffalo.MiddlewareFunc {
 // List shows all users in an HTML page
 func (ur *UsersResource) List(c buffalo.Context) error {
 	users := &models.Users{}
-	tx := c.Get("tx").(*pop.Connection)
+	tx := c.Value("tx").(*pop.Connection)
 	err := tx.All(users)
 	if err != nil {
 		return c.Error(404, errors.WithStack(err))
@@ -62,7 +62,7 @@ func (ur *UsersResource) Create(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	tx := c.Get("tx").(*pop.Connection)
+	tx := c.Value("tx").(*pop.Connection)
 	verrs, err := u.ValidateNew(tx)
 	if err != nil {
 		return errors.WithStack(err)
@@ -87,8 +87,8 @@ func (ur *UsersResource) Edit(c buffalo.Context) error {
 
 // Update is a JSON API endpoint that updates a user
 func (ur *UsersResource) Update(c buffalo.Context) error {
-	tx := c.Get("tx").(*pop.Connection)
-	u := c.Get("user").(*models.User)
+	tx := c.Value("tx").(*pop.Connection)
+	u := c.Value("user").(*models.User)
 
 	err := c.Bind(u)
 	if err != nil {
@@ -118,8 +118,8 @@ func (ur *UsersResource) Update(c buffalo.Context) error {
 
 // Destroy is an API endpoint that deletes a user
 func (ur *UsersResource) Destroy(c buffalo.Context) error {
-	tx := c.Get("tx").(*pop.Connection)
-	u := c.Get("user").(*models.User)
+	tx := c.Value("tx").(*pop.Connection)
+	u := c.Value("user").(*models.User)
 
 	err := tx.Destroy(u)
 	if err != nil {

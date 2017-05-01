@@ -1,32 +1,31 @@
-
 <h1>{{.modelPlural}}</h1>
 
 <p>
-  <a href="/{{.plural}}/new" class="btn btn-primary">Create New {{.model}}</a>
+  <a href="<%= new{{.model}}Path() %>" class="btn btn-primary">Create New {{.model}}</a>
 </p>
 
 <table class="table table-striped">
   <thead>
   {{ range $p := .modelProps -}}
-    {{ if ne $p.Type "text"}}
+    {{ if ne $p.Type "text" -}}
     <th>{{ $p.Name }}</th>
     {{ end -}}
   {{ end -}}
-  <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for ({{.varSingular}}) in {{.varPlural}} { %>
       <tr>
       {{ range $mp := .modelProps -}}
-        {{ if ne $mp.Type "text"}}
+        {{ if ne $mp.Type "text" -}}
         <td><%= {{$.varSingular}}.{{$mp.Name}} %></td>
         {{ end -}}
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" class="btn btn-info">View</a>
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>/edit" class="btn btn-warning">Edit</a>
-            <a href="/{{$.plural}}/<%= {{$.varSingular}}.ID %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= edit{{.model}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= {{.varSingular}}Path({ {{.underSingular}}_id: {{.varSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>

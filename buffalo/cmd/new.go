@@ -32,6 +32,10 @@ var newCmd = &cobra.Command{
 
 		app.Name = args[0]
 
+		if forbiddenName() {
+			return fmt.Errorf("Name %s is not allowed, try a different application name", app.Name)
+		}
+
 		if app.Name == "." {
 			app.Name = filepath.Base(app.RootPath)
 		} else {
@@ -68,6 +72,10 @@ var newCmd = &cobra.Command{
 
 func validDbType() bool {
 	return app.DBType == "postgres" || app.DBType == "mysql" || app.DBType == "sqlite3"
+}
+
+func forbiddenName() bool {
+	return contains(forbiddenAppNames, strings.ToLower(app.Name))
 }
 
 func validateInGoPath() error {
@@ -163,6 +171,17 @@ func init() {
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 }
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+var forbiddenAppNames = []string{"buffalo"}
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
 
