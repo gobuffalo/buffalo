@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/spf13/cobra"
@@ -138,6 +139,15 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Show() {")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Edit() {")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_List() {")
+
+	e = ActionCmd.RunE(&cmd, []string{"posts", "list"})
+	r.Nil(e)
+
+	data, _ = ioutil.ReadFile("actions/posts_test.go")
+	r.Equal(strings.Count(string(data), "func (as *ActionSuite) Test_Posts_List() {"), 1)
+
+	data, _ = ioutil.ReadFile("actions/app.go")
+	r.Equal(strings.Count(string(data), "app.GET(\"/posts/list\", PostsList)"), 1)
 }
 
 var appGo = []byte(`
