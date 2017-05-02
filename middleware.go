@@ -150,6 +150,10 @@ func funcKey(funcs ...interface{}) string {
 		}
 		fnc := runtime.FuncForPC(ptr)
 		n := fnc.Name()
+
+		n = strings.Replace(n, "-fm", "", 1)
+		n = strings.Replace(n, "(", "", 1)
+		n = strings.Replace(n, ")", "", 1)
 		keyMap[ptr] = n
 		names = append(names, n)
 	}
