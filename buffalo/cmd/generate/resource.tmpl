@@ -1,0 +1,29 @@
+package actions
+
+import "github.com/gobuffalo/buffalo"
+
+type {{camel}}Resource struct{
+	buffalo.Resource
+}
+
+func (v {{camel}}Resource) List(c buffalo.Context) error {
+	tx := c.Value("tx").(*pop.Connection)
+	todos := &models.{{plural}}{}
+	err := tx.Order("(case when completed then 1 else 2 end) desc, lower(id) asc").All({{plural}})
+	if err != nil {
+		return err
+	}
+	c.Set("{{plural}}", {{plural}})
+	return c.Render(200, r.HTML("t{{plural}}/index.html"))
+}
+
+func
+
+
+{{#each actions}}
+// {{.}} default implementation.
+func (v {{camel}}Resource) {{.}}(c buffalo.Context) error {
+	return c.Render(200, r.String("{{camel}}#{{.}}"))
+}
+
+{{/each}}
