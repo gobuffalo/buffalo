@@ -7,6 +7,7 @@ RUN go get -u github.com/markbates/filetest
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
+RUN rm -rfv $BP
 RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
