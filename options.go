@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/going/defaults"
@@ -31,7 +32,7 @@ type Options struct {
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
 	Host string
 	// Worker implements the Worker interface and can process tasks in the background
-	Worker Worker
+	Worker worker.Worker
 	prefix string
 }
 
@@ -57,7 +58,7 @@ func optionsWithDefaults(opts Options) Options {
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
 	if opts.Worker == nil {
-		opts.Worker = defaultWorker{}
+		opts.Worker = worker.Simple{}
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
