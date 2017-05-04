@@ -29,7 +29,9 @@ type Options struct {
 	// to "_buffalo_session".
 	SessionName string
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
-	Host   string
+	Host string
+	// Worker implements the Worker interface and can process tasks in the background
+	Worker Worker
 	prefix string
 }
 
@@ -53,6 +55,9 @@ func optionsWithDefaults(opts Options) Options {
 			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
+	}
+	if opts.Worker == nil {
+		opts.Worker = defaultWorker{}
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
