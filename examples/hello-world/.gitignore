@@ -1,6 +1,0 @@
-vendor/
-**/*.log
-**/*.sqlite
-bin/
-node_modules/
-hello-world
