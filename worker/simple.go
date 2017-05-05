@@ -1,37 +1,88 @@
 package worker
 
 import (
+	"context"
+	"sync"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
-var _ Worker = Simple{}
+var _ Worker = &simple{}
 
-// Simple is a basic implementation of the Worker interface
+// NewSimple creates a basic implementation of the Worker interface
 // that is backed using just the standard library and goroutines.
-type Simple struct{}
+func NewSimple() Worker {
+	return NewSimpleWithContext(context.Background())
+}
 
-// Perform a job as soon as possibly using a goroutine.
-func (w Simple) Perform(job Job) error {
-	if err := job.Valid(); err != nil {
-		return err
+// NewSimpleWithContext creates a basic implementation of the Worker interface
+// that is backed using just the standard library and goroutines.
+func NewSimpleWithContext(ctx context.Context) Worker {
+	ctx, cancel := context.WithCancel(ctx)
+	return &simple{
+		ctx:      ctx,
+		cancel:   cancel,
+		handlers: map[string]Handler{},
+		moot:     &sync.Mutex{},
 	}
-	go job.Handler(job.Args...)
+}
+
+// simple is a basic implementation of the Worker interface
+// that is backed using just the standard library and goroutines.
+type simple struct {
+	ctx      context.Context
+	cancel   context.CancelFunc
+	handlers map[string]Handler
+	moot     *sync.Mutex
+}
+
+func (w *simple) Register(name string, h Handler) error {
+	w.moot.Lock()
+	defer w.moot.Unlock()
+	if _, ok := w.handlers[name]; ok {
+		return errors.Errorf("handler already mapped for name %s", name)
+	}
+	w.handlers[name] = h
 	return nil
 }
 
+func (w *simple) Start(ctx context.Context) error {
+	w.ctx, w.cancel = context.WithCancel(ctx)
+	return nil
+}
+
+func (w simple) Stop() error {
+	w.cancel()
+	return nil
+}
+
+// Perform a job as soon as possibly using a goroutine.
+func (w simple) Perform(job Job) error {
+	w.moot.Lock()
+	defer w.moot.Unlock()
+	if h, ok := w.handlers[job.Handler]; ok {
+		go h(job.Args)
+		return nil
+	}
+	return errors.Errorf("no handler mapped for name %s", job.Handler)
+}
+
 // PerformAt performs a job at a particular time using a goroutine.
-func (w Simple) PerformAt(job Job, t time.Time) error {
+func (w simple) PerformAt(job Job, t time.Time) error {
 	return w.PerformIn(job, t.Sub(time.Now()))
 }
 
 // PerformIn performs a job after waiting for a specified amount
 // using a goroutine.
-func (w Simple) PerformIn(job Job, d time.Duration) error {
-	if err := job.Valid(); err != nil {
-		return err
-	}
-	time.AfterFunc(d, func() {
-		w.Perform(job)
-	})
+func (w simple) PerformIn(job Job, d time.Duration) error {
+	go func() {
+		select {
+		case <-time.After(d):
+			w.Perform(job)
+		case <-w.ctx.Done():
+			w.cancel()
+		}
+	}()
 	return nil
 }

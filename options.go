@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,9 +32,15 @@ type Options struct {
 	SessionName string
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
 	Host string
-	// Worker implements the Worker interface and can process tasks in the background
+	// Worker implements the Worker interface and can process tasks in the background.
+	// Default is "github.com/gobuffalo/worker.Simple.
 	Worker worker.Worker
-	prefix string
+	// WorkerOff tells App.Start() whether to start the Worker process or not. Default is "false".
+	WorkerOff bool
+
+	Context context.Context
+	cancel  context.CancelFunc
+	prefix  string
 }
 
 // NewOptions returns a new Options instance with sensible defaults
@@ -44,6 +51,11 @@ func NewOptions() Options {
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
+
+	if opts.Context == nil {
+		opts.Context = context.Background()
+	}
+	opts.Context, opts.cancel = context.WithCancel(opts.Context)
 
 	if opts.Logger == nil {
 		opts.Logger = NewLogger(opts.LogLevel)
@@ -58,7 +70,7 @@ func optionsWithDefaults(opts Options) Options {
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
 	if opts.Worker == nil {
-		opts.Worker = worker.Simple{}
+		opts.Worker = worker.NewSimpleWithContext(opts.Context)
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
