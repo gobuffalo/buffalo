@@ -25,9 +25,12 @@ func RequestLoggerFunc(h Handler) Handler {
 			c.Session().Set("requestor_id", irid)
 			c.Session().Save()
 		}
+		rid := irid.(string) + "-" + randx.String(10)
+		c.Set("request_id", rid)
+
 		now := time.Now()
 		c.LogFields(logrus.Fields{
-			"request_id": irid.(string) + "-" + randx.String(10),
+			"request_id": rid,
 			"method":     c.Request().Method,
 			"path":       c.Request().URL.String(),
 		})
