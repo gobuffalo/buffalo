@@ -28,7 +28,7 @@ type Options struct {
 	// SessionName is the name of the session cookie that is set. This defaults
 	// to "_buffalo_session".
 	SessionName string
-	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
+	// Host that this application will be available at. Default is "http://localhost:[$PORT|3000]".
 	Host   string
 	prefix string
 }
@@ -55,6 +55,6 @@ func optionsWithDefaults(opts Options) Options {
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
+	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://localhost:%s", envy.Get("PORT", "3000"))))
 	return opts
 }
