@@ -13,20 +13,20 @@ import (
 // for the capture of the response status and size to be used for things
 // like logging requests.
 type Response struct {
-	status int
-	size   int
+	Status int
+	Size   int
 	http.ResponseWriter
 }
 
 // WriteHeader sets the status code for a response
 func (w *Response) WriteHeader(i int) {
-	w.status = i
+	w.Status = i
 	w.ResponseWriter.WriteHeader(i)
 }
 
 // Write the body of the response
 func (w *Response) Write(b []byte) (int, error) {
-	w.size = binary.Size(b)
+	w.Size = binary.Size(b)
 	return w.ResponseWriter.Write(b)
 }
 
