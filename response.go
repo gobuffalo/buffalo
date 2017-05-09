@@ -9,32 +9,46 @@ import (
 	"github.com/pkg/errors"
 )
 
-type buffaloResponse struct {
+// Response implements the http.ResponseWriter interface and allows
+// for the capture of the response status and size to be used for things
+// like logging requests.
+type Response struct {
 	status int
 	size   int
 	http.ResponseWriter
 }
 
-func (w *buffaloResponse) WriteHeader(i int) {
+// WriteHeader sets the status code for a response
+func (w *Response) WriteHeader(i int) {
 	w.status = i
 	w.ResponseWriter.WriteHeader(i)
 }
 
-func (w *buffaloResponse) Write(b []byte) (int, error) {
+// Write the body of the response
+func (w *Response) Write(b []byte) (int, error) {
 	w.size = binary.Size(b)
 	return w.ResponseWriter.Write(b)
 }
-func (w *buffaloResponse) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+
+// Hijack implements the http.Hijacker interface to allow for things like websockets.
+func (w *Response) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	if hj, ok := w.ResponseWriter.(http.Hijacker); ok {
 		return hj.Hijack()
 	}
 	return nil, nil, errors.WithStack(errors.New("does not implement http.Hijack"))
 }
 
-func (w *buffaloResponse) Flush() {
-	w.ResponseWriter.(http.Flusher).Flush()
+// Flush the response
+func (w *Response) Flush() {
+	if f, ok := w.ResponseWriter.(http.Flusher); ok {
+		f.Flush()
+	}
 }
 
-func (w *buffaloResponse) CloseNotify() <-chan bool {
-	return w.ResponseWriter.(http.CloseNotifier).CloseNotify()
+// CloseNotify implements the http.CloseNotifier interface
+func (w *Response) CloseNotify() <-chan bool {
+	if cn, ok := w.ResponseWriter.(http.CloseNotifier); ok {
+		return cn.CloseNotify()
+	}
+	return nil
 }
