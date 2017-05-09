@@ -89,7 +89,7 @@ func (a *App) Stop() error {
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer gcontext.Clear(r)
-	ws := &buffaloResponse{
+	ws := &Response{
 		ResponseWriter: w,
 	}
 	if a.MethodOverride != nil {

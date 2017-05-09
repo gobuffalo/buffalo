@@ -39,12 +39,12 @@ func RequestLoggerFunc(h Handler) Handler {
 			c.LogField("content_type", ct)
 		}
 		defer func() {
-			ws := c.Response().(*buffaloResponse)
+			ws := c.Response().(*Response)
 			c.LogFields(logrus.Fields{
 				"duration":   time.Now().Sub(now),
-				"size":       ws.size,
-				"human_size": humanize.Bytes(uint64(ws.size)),
-				"status":     ws.status,
+				"size":       ws.Size,
+				"human_size": humanize.Bytes(uint64(ws.Size)),
+				"status":     ws.Status,
 			})
 			c.Logger().Info()
 		}()
