@@ -16,15 +16,15 @@ func AddRoute(method, path, handlerName string) error {
 	return AddInsideAppBlock(routeDefinition)
 }
 
-// AddInsideAppBlock will add anything inside of the app declaration block inside of `actions/app.go`
+// AddInsideAppBlock will add anything inside of the app declaration block inside of `routes/routes.go`
 func AddInsideAppBlock(expressions ...string) error {
-	src, err := ioutil.ReadFile("actions/app.go")
+	src, err := ioutil.ReadFile("routes/routes.go")
 	if err != nil {
 		return err
 	}
 
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "actions/app.go", string(src), 0)
+	f, err := parser.ParseFile(fset, "routes/routes.go", string(src), 0)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func AddInsideAppBlock(expressions ...string) error {
 	fileLines = append(fileLines[:end], append(expressions, fileLines[end:]...)...)
 
 	fileContent := strings.Join(fileLines, "\n")
-	err = ioutil.WriteFile("actions/app.go", []byte(fileContent), 0755)
+	err = ioutil.WriteFile("routes/routes.go", []byte(fileContent), 0755)
 	return err
 }
 

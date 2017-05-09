@@ -46,11 +46,18 @@ func App() *buffalo.App {
 	return app
 }`
 
-	ioutil.WriteFile(filepath.Join(packagePath, "actions", "app.go"), []byte(shortAppFileExample), 0755)
+	os.MkdirAll(filepath.Join(packagePath, "routes"), 0755)
+	err := ioutil.WriteFile(filepath.Join(packagePath, "routes", "routes.go"), []byte(shortAppFileExample), 0755)
 
-	AddRoute("GET", "/new/route", "UserCoolHandler")
+	r.NoError(err)
 
-	contentAfter, _ := ioutil.ReadFile(filepath.Join(packagePath, "actions", "app.go"))
+	err = AddRoute("GET", "/new/route", "UserCoolHandler")
+	r.NoError(err)
+
+	contentAfter, err := ioutil.ReadFile(filepath.Join(packagePath, "routes", "routes.go"))
+	r.NoError(err)
+	r.NotZero(contentAfter)
+
 	r.Equal(`package actions
 
 import (

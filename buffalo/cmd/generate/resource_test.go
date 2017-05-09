@@ -26,8 +26,9 @@ func TestGenerateResourceCode(t *testing.T) {
 	e = ActionCmd.RunE(&cmd, []string{"users"})
 	r.NotNil(e)
 
-	os.Mkdir("actions", 0755)
-	ioutil.WriteFile("actions/app.go", appGo, 0755)
+	os.Mkdir("routes", 0755)
+	err := ioutil.WriteFile("routes/routes.go", appGo, 0755)
+	r.NoError(err)
 
 	SkipResourceMigration = false
 	SkipResourceModel = false
@@ -36,7 +37,7 @@ func TestGenerateResourceCode(t *testing.T) {
 	e = ResourceCmd.RunE(&cmd, []string{"user"})
 	r.Nil(e)
 
-	fileData, _ := ioutil.ReadFile("actions/app.go")
+	fileData, _ := ioutil.ReadFile("routes/routes.go")
 	r.Contains(string(fileData), "app.Resource(\"/users\", UsersResource{&buffalo.BaseResource{}})")
 
 	fileData, _ = ioutil.ReadFile("actions/users.go")
@@ -53,7 +54,7 @@ func TestGenerateResourceCode(t *testing.T) {
 	e = ResourceCmd.RunE(&cmd, []string{"comments"})
 	r.Nil(e)
 
-	fileData, _ = ioutil.ReadFile("actions/app.go")
+	fileData, _ = ioutil.ReadFile("routes/routes.go")
 	r.Contains(string(fileData), "app.Resource(\"/comments\", CommentsResource{&buffalo.BaseResource{}})")
 
 	fileData, _ = ioutil.ReadFile("actions/comments.go")

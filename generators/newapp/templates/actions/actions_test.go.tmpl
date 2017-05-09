@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/suite"
 	"{{ .actionsPath }}"
-	"{{ .configPath }}"
+	"{{ .routesPath }}"
 )
 
 type ActionSuite struct {
@@ -13,6 +13,6 @@ type ActionSuite struct {
 }
 
 func Test_ActionSuite(t *testing.T) {
-	as := &ActionSuite{suite.NewAction(config.App())}
+	as := &ActionSuite{suite.NewAction(routes.App())}
 	suite.Run(t, as)
 }
