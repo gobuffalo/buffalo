@@ -1,0 +1,8 @@
+[{
+  "path": "actions/ouch.go",
+  "absent": true
+},
+{
+  "path": "actions/ouch_test.go",
+  "absent": true
+}]

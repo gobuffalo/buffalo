@@ -69,7 +69,15 @@ RUN rm actions/users_test.go
 
 RUN buffalo g resource ouch
 RUN buffalo d resource -y ouch
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_all.json
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_resource_all.json
+
+RUN buffalo db g model ouch
+RUN buffalo d model -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_model_all.json
+
+RUN buffalo db g actions ouch build edit
+RUN buffalo d action -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_action_all.json
 
 WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world
