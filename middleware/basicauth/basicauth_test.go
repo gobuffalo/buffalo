@@ -32,24 +32,34 @@ func TestBasicAuth(t *testing.T) {
 
 	// missing authorization
 	res := w.Request("/").Get()
-	r.Equal(500, res.Code)
-	r.Contains(res.Body.String(), authfail)
+	r.Equal(401, res.Code)
+	r.Contains(res.Header().Get("WWW-Authenticate"), `Basic realm="Basic Authentication"`)
+	r.Contains(res.Body.String(), "Unauthorized")
 
-	// bad cred tokens
+	// bad header value, not Basic
 	req := w.Request("/")
 	req.Headers["Authorization"] = "badcreds"
 	res = req.Get()
-	r.Equal(500, res.Code)
-	r.Contains(res.Body.String(), authfail)
+	r.Equal(401, res.Code)
+	r.Contains(res.Body.String(), "Unauthorized")
 
 	// bad cred values
 	req = w.Request("/")
-	req.Headers["Authorization"] = "badcreds:badpass"
+	req.Headers["Authorization"] = "bad creds"
 	res = req.Get()
 	r.Equal(500, res.Code)
 	r.Contains(res.Body.String(), authfail)
 
-	creds := base64.StdEncoding.EncodeToString([]byte("tester:pass123"))
+	creds := base64.StdEncoding.EncodeToString([]byte("badcredvalue"))
+
+	// invalid cred values in authorization
+	req = w.Request("/")
+	req.Headers["Authorization"] = fmt.Sprintf("Basic %s", creds)
+	res = req.Get()
+	r.Equal(500, res.Code)
+	r.Contains(res.Body.String(), authfail)
+
+	creds = base64.StdEncoding.EncodeToString([]byte("tester:pass123"))
 
 	// valid cred values
 	req = w.Request("/")

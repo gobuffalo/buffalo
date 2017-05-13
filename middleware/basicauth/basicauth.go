@@ -3,6 +3,7 @@ package basicauth
 import (
 	"encoding/base64"
 	"errors"
+	"net/http"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
@@ -22,7 +23,8 @@ func BasicAuth(auth func(c buffalo.Context, u, p string) bool) buffalo.Middlewar
 		return func(c buffalo.Context) error {
 			token := strings.SplitN(c.Request().Header.Get("Authorization"), " ", 2)
 			if len(token) != 2 {
-				return ErrAuthFail
+				c.Response().Header().Set("WWW-Authenticate", `Basic realm="Basic Authentication"`)
+				return c.Error(http.StatusUnauthorized, errors.New("Unauthorized"))
 			}
 			b, err := base64.StdEncoding.DecodeString(token[1])
 			if err != nil {
