@@ -63,6 +63,13 @@ RUN rm models/user_test.go
 RUN rm models/user.go
 RUN rm actions/users_test.go
 
+RUN buffalo g resource --type=auto users name:text email:text
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_json-xml.json
+
+RUN rm models/user_test.go
+RUN rm models/user.go
+RUN rm actions/users_test.go
+
 WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world
 WORKDIR ./simple_world
