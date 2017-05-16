@@ -85,6 +85,9 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 RUN buffalo g resource user
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_singular.json
 
+RUN buffalo g resource cars
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_plural.json
+
 
 WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world

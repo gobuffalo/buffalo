@@ -1,22 +1,22 @@
 [{
-  "path": "actions/comments.go",
+  "path": "actions/cars.go",
   "contains": [
-    "func (v CommentsResource) List(c buffalo.Context) error {",
-	"func (v CommentsResource) Destroy(c buffalo.Context) error {",
-    "type CommentsResource struct {"
+    "func (v CarsResource) List(c buffalo.Context) error {",
+	"func (v CarsResource) Destroy(c buffalo.Context) error {",
+    "type CarsResource struct {"
   ]
 },
 {
   "path": "actions/app.go",
   "contains": [
-    "app.Resource(\"/comments\", CommentsResource{&buffalo.BaseResource{}})"
+    "app.Resource(\"/cars\", CarsResource{&buffalo.BaseResource{}})"
   ]
 },
 {
-  "path": "actions/comments_test.go",
+  "path": "actions/cars_test.go",
   "contains": [
-    "func (as *ActionSuite) Test_CommentsResource_List",
-	"func (as *ActionSuite) Test_CommentsResource_Show",
-	"func (as *ActionSuite) Test_CommentsResource_Create"
+    "func (as *ActionSuite) Test_CarsResource_List",
+	  "func (as *ActionSuite) Test_CarsResource_Show",
+	  "func (as *ActionSuite) Test_CarsResource_Create"
   ]
 }]
