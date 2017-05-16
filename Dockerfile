@@ -71,9 +71,15 @@ RUN buffalo db g model ouch
 RUN buffalo d model -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_model_all.json
 
-RUN buffalo db g actions ouch build edit
+RUN buffalo g actions ouch build edit
 RUN buffalo d action -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_action_all.json
+
+RUN buffalo g actions users create --skip-template
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_skip_template.json
+
+RUN buffalo g actions users update --skip-template --method POST
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_with_method.json
 
 WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world

@@ -35,12 +35,15 @@ func New(name string, actions []string, data makr.Data) (*makr.Generator, error)
 		Runner: func(root string, data makr.Data) error {
 			routes := []string{}
 			for _, a := range handlersToAdd {
-				routes = append(routes, fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, a, data["namespace"].(string)+inflect.Camelize(a)))
+				routes = append(routes, fmt.Sprintf("app.%s(\"/%s/%s\", %s)", data["method"], name, a, data["namespace"].(string)+inflect.Camelize(a)))
 			}
 			return generators.AddInsideAppBlock(routes...)
 		},
 	})
-	addTemplateFiles(actionsToAdd, data)
+
+	if skipTemplates := data["skipTemplate"].(bool); !skipTemplates {
+		addTemplateFiles(actionsToAdd, data)
+	}
 
 	if !runningTests {
 		g.Add(makr.NewCommand(makr.GoFmt()))
