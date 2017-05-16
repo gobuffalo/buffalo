@@ -63,7 +63,7 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 
 // Skip a specified piece of middleware the specified Handlers.
 // This is useful for things like wrapping your application in an
-// authorization middleare, but skipping it for things the home
+// authorization middleware, but skipping it for things the home
 // page, the login page, etc...
 /*
 	a.Middleware.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
@@ -73,7 +73,7 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 // properly recognize and match it.
 /*
 	// Works:
-	var ur Resource
+	var cr Resource
 	cr = &carsResource{&buffaloBaseResource{}}
 	g = a.Resource("/cars", cr)
 	g.Use(SomeMiddleware)

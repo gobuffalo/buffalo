@@ -26,6 +26,9 @@ type Translator struct {
 	// CookieName - name of the cookie to find the desired language.
 	// default is "lang"
 	CookieName string
+	// SessionName - name of the session to find the desired language.
+	// default is "lang"
+	SessionName string
 	// HelperName - name of the view helper. default is "t"
 	HelperName     string
 	LanguageFinder LanguageFinder
@@ -57,6 +60,7 @@ func New(box packr.Box, language string) (*Translator, error) {
 		Box:             box,
 		DefaultLanguage: language,
 		CookieName:      "lang",
+		SessionName:     "lang",
 		HelperName:      "t",
 		LanguageFinder:  defaultLanguageFinder,
 	}
@@ -116,6 +120,11 @@ func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {
 		if cookie.Value != "" {
 			langs = append(langs, cookie.Value)
 		}
+	}
+
+	// try to get the language from the session
+	if s := c.Session().Get(t.SessionName); s != nil {
+		langs = append(langs, s.(string))
 	}
 
 	// try to get the language from a header:

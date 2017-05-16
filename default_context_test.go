@@ -41,11 +41,10 @@ func Test_DefaultContext_Param(t *testing.T) {
 
 func Test_DefaultContext_ParamInt(t *testing.T) {
 	r := require.New(t)
-	c := DefaultContext{
-		params: url.Values{
-			"name": []string{"Mark"},
-			"id":   []string{"1"},
-		},
+	c := basicContext()
+	c.params = url.Values{
+		"name": []string{"Mark"},
+		"id":   []string{"1"},
 	}
 
 	id, err := c.ParamInt("id")
