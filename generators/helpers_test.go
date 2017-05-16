@@ -14,7 +14,7 @@ func TestAppendRoute(t *testing.T) {
 
 	tmpDir := os.TempDir()
 	packagePath := filepath.Join(tmpDir, "src", "sample")
-	os.MkdirAll(packagePath, 0755)
+	os.MkdirAll(packagePath, 0644)
 	os.Chdir(packagePath)
 
 	const shortAppFileExample = `package actions
