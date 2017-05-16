@@ -1,0 +1,22 @@
+[{
+  "path": "actions/comments.go",
+  "contains": [
+    "func (v CommentsResource) List(c buffalo.Context) error {",
+	"func (v CommentsResource) Destroy(c buffalo.Context) error {",
+    "type CommentsResource struct {"
+  ]
+},
+{
+  "path": "actions/app.go",
+  "contains": [
+    "app.Resource(\"/comments\", CommentsResource{&buffalo.BaseResource{}})"
+  ]
+},
+{
+  "path": "actions/comments_test.go",
+  "contains": [
+    "func (as *ActionSuite) Test_CommentsResource_List",
+	"func (as *ActionSuite) Test_CommentsResource_Show",
+	"func (as *ActionSuite) Test_CommentsResource_Create"
+  ]
+}]
