@@ -36,9 +36,7 @@ type MiddlewareStack struct {
 
 func (ms *MiddlewareStack) clone() *MiddlewareStack {
 	n := newMiddlewareStack()
-	for _, s := range ms.stack {
-		n.stack = append(n.stack, s)
-	}
+	n.stack = append(n.stack, ms.stack...)
 	for k, v := range ms.skips {
 		n.skips[k] = v
 	}
