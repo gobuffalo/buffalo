@@ -28,7 +28,7 @@ func RequestLoggerFunc(h Handler) Handler {
 		rid := irid.(string) + "-" + randx.String(10)
 		c.Set("request_id", rid)
 
-		now := time.Now()
+		start := time.Now()
 		c.LogFields(logrus.Fields{
 			"request_id": rid,
 			"method":     c.Request().Method,
@@ -41,7 +41,7 @@ func RequestLoggerFunc(h Handler) Handler {
 		defer func() {
 			ws := c.Response().(*Response)
 			c.LogFields(logrus.Fields{
-				"duration":   time.Now().Sub(now),
+				"duration":   time.Since(start),
 				"size":       ws.Size,
 				"human_size": humanize.Bytes(uint64(ws.Size)),
 				"status":     ws.Status,

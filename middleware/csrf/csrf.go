@@ -89,7 +89,7 @@ var Middleware = func(next buffalo.Handler) buffalo.Handler {
 					return ErrNoReferer
 				}
 
-				if sameOrigin(req.URL, referer) == false {
+				if !sameOrigin(req.URL, referer) {
 					return ErrBadReferer
 				}
 			}
