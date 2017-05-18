@@ -1,17 +1,13 @@
-FROM golang:latest
+FROM gobuffalo/buffalo:development
 
-RUN go version
-
-RUN apt-get update
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
-RUN apt-get install -y build-essential nodejs
-RUN apt-get install -y sqlite3 libsqlite3-dev
+RUN buffalo version
 
 RUN go get -u github.com/golang/lint/golint
 RUN go get -u github.com/markbates/filetest
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
+RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
@@ -66,6 +62,18 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/r
 RUN rm models/user_test.go
 RUN rm models/user.go
 RUN rm actions/users_test.go
+
+RUN buffalo g resource ouch
+RUN buffalo d resource -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_resource_all.json
+
+RUN buffalo db g model ouch
+RUN buffalo d model -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_model_all.json
+
+RUN buffalo db g actions ouch build edit
+RUN buffalo d action -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_action_all.json
 
 WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world

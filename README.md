@@ -18,7 +18,7 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 $ go get -u github.com/gobuffalo/buffalo/buffalo
 ```
 
-_NOTE_: Buffalo has a minimum Go dependency of `1.7.x`.
+_NOTE_: Buffalo has a minimum Go dependency of `1.8.1`.
 
 Buffalo also depends on:
  - gcc for [go-sqlite3](https://github.com/mattn/go-sqlite3) wich is a cgo package.

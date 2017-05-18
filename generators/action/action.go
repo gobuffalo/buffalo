@@ -23,6 +23,7 @@ func New(name string, actions []string, data makr.Data) (*makr.Generator, error)
 	testsTemplate := buildTestsTemplate(testFilePath)
 	actionsToAdd := findActionsToAdd(name, filePath, actions)
 	testsToAdd := findTestsToAdd(name, testFilePath, actions)
+	handlersToAdd := findHandlersToAdd(name, filepath.Join("actions", "app.go"), actions)
 
 	data["actions"] = actionsToAdd
 	data["tests"] = testsToAdd
@@ -33,7 +34,7 @@ func New(name string, actions []string, data makr.Data) (*makr.Generator, error)
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
 			routes := []string{}
-			for _, a := range actions {
+			for _, a := range handlersToAdd {
 				routes = append(routes, fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, a, data["namespace"].(string)+inflect.Camelize(a)))
 			}
 			return generators.AddInsideAppBlock(routes...)
@@ -121,6 +122,27 @@ func findActionsToAdd(name, path string, actions []string) []string {
 	return actionsToAdd
 }
 
+func findHandlersToAdd(name, path string, actions []string) []string {
+	fileContents, err := ioutil.ReadFile(path)
+	if err != nil {
+		fileContents = []byte("")
+	}
+
+	handlersToAdd := []string{}
+
+	for _, action := range actions {
+		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, action, inflect.Camelize(inflect.Pluralize(name)+"_"+action))
+		if strings.Contains(string(fileContents), funcSignature) {
+			fmt.Printf("--> [warning] skipping %s from app.go since it already exists\n", funcSignature)
+			continue
+		}
+
+		handlersToAdd = append(handlersToAdd, action)
+	}
+
+	return handlersToAdd
+}
+
 func findTestsToAdd(name, path string, actions []string) []string {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -130,7 +152,7 @@ func findTestsToAdd(name, path string, actions []string) []string {
 	actionsToAdd := []string{}
 
 	for _, action := range actions {
-		funcSignature := fmt.Sprintf("func Test_%v_%v(c buffalo.Context) error", inflect.Camelize(name), inflect.Camelize(action))
+		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", inflect.Camelize(name), inflect.Camelize(action))
 		if strings.Contains(string(fileContents), funcSignature) {
 			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", inflect.Camelize(name), inflect.Camelize(action))
 			continue

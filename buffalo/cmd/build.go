@@ -111,6 +111,9 @@ func (b *builder) buildDatabase() error {
 		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
 			b.buildTags = append(b.buildTags, "nosqlite")
 		}
+	} else {
+		// add the nosqlite build tag if there is no database being used
+		b.buildTags = append(b.buildTags, "nosqlite")
 	}
 	dgo.WriteString("package a\n")
 	dgo.WriteString(fmt.Sprintf("var DB_CONFIG = `%s`", bb.String()))
