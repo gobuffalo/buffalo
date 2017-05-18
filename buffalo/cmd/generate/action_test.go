@@ -28,7 +28,7 @@ func TestGenerateActionArgsComplete(t *testing.T) {
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
-	ioutil.WriteFile("actions/app.go", appGo, 0755)
+	ioutil.WriteFile("routes/routes.go", appGo, 0755)
 
 	e = ActionCmd.RunE(&cmd, []string{"nodes", "show"})
 	r.Nil(e)
@@ -50,7 +50,7 @@ func TestGenerateActionActionsFolderExists(t *testing.T) {
 	r.NotNil(e)
 
 	os.Mkdir("actions", 0755)
-	ioutil.WriteFile("actions/app.go", appGo, 0755)
+	ioutil.WriteFile("routes/routes.go", appGo, 0755)
 
 	e = ActionCmd.RunE(&cmd, []string{"comments", "show", "edit"})
 	r.Nil(e)
@@ -74,7 +74,7 @@ func TestGenerateActionActionsFileExists(t *testing.T) {
 	os.Chdir(packagePath)
 
 	os.Mkdir("actions", 0755)
-	ioutil.WriteFile("actions/app.go", appGo, 0755)
+	ioutil.WriteFile("routes/routes.go", appGo, 0755)
 	r := require.New(t)
 	cmd := cobra.Command{}
 	usersContent := `package actions
@@ -97,22 +97,34 @@ func UsersShow(c buffalo.Context) error {
 }
 
 func TestGenerateNewActionWithExistingActions(t *testing.T) {
+	r := require.New(t)
 	dir := os.TempDir()
 	packagePath := filepath.Join(dir, "src", "sample")
-	os.MkdirAll(packagePath, 0755)
-	os.Chdir(packagePath)
+	err := os.MkdirAll(packagePath, 0755)
+	r.NoError(err)
 
-	os.RemoveAll("actions")
-	os.RemoveAll("templates")
+	err = os.Chdir(packagePath)
+	r.NoError(err)
 
-	os.Mkdir("actions", 0755)
-	ioutil.WriteFile("actions/app.go", appGo, 0755)
-	r := require.New(t)
+	err = os.RemoveAll("routes")
+	r.NoError(err)
+	err = os.RemoveAll("templates")
+	r.NoError(err)
+
+	err = os.Mkdir("routes", 0755)
+	r.NoError(err)
+	err = os.Mkdir("templates", 0755)
+	r.NoError(err)
+
+	err = ioutil.WriteFile(filepath.Join("routes", "routes.go"), appGo, 0755)
+	r.NoError(err)
+
 	cmd := cobra.Command{}
 	e := ActionCmd.RunE(&cmd, []string{"posts", "show", "edit"})
-	r.Nil(e)
+	r.NoError(e)
 
-	data, _ := ioutil.ReadFile("actions/posts.go")
+	data, err := ioutil.ReadFile("actions/posts.go")
+	r.NoError(err)
 	r.Contains(string(data), "package actions")
 	r.Contains(string(data), "github.com/gobuffalo/buffalo")
 	r.Contains(string(data), "func PostsShow(c buffalo.Context) error {")
@@ -121,9 +133,10 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 	r.Contains(string(data), `c.Render(200, r.HTML("posts/show.html"))`)
 
 	e = ActionCmd.RunE(&cmd, []string{"posts", "list"})
-	r.Nil(e)
+	r.NoError(e)
 
-	data, _ = ioutil.ReadFile("actions/posts.go")
+	data, err = ioutil.ReadFile("actions/posts.go")
+	r.NoError(err)
 	r.Contains(string(data), "package actions")
 	r.Contains(string(data), "github.com/gobuffalo/buffalo")
 	r.Contains(string(data), "func PostsShow(c buffalo.Context) error {")
@@ -131,22 +144,26 @@ func TestGenerateNewActionWithExistingActions(t *testing.T) {
 	r.Contains(string(data), "func PostsList(c buffalo.Context) error {")
 	r.Contains(string(data), `c.Render(200, r.HTML("posts/list.html"))`)
 
-	data, _ = ioutil.ReadFile("templates/posts/list.html")
+	data, err = ioutil.ReadFile("templates/posts/list.html")
+	r.NoError(err)
 	r.Contains(string(data), "<h1>Posts#List</h1>")
 
-	data, _ = ioutil.ReadFile("actions/posts_test.go")
+	data, err = ioutil.ReadFile("actions/posts_test.go")
+	r.NoError(err)
 	r.Contains(string(data), "package actions_test")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Show() {")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_Edit() {")
 	r.Contains(string(data), "func (as *ActionSuite) Test_Posts_List() {")
 
 	e = ActionCmd.RunE(&cmd, []string{"posts", "list"})
-	r.Nil(e)
+	r.NoError(e)
 
-	data, _ = ioutil.ReadFile("actions/posts_test.go")
+	data, err = ioutil.ReadFile("actions/posts_test.go")
+	r.NoError(err)
 	r.Equal(strings.Count(string(data), "func (as *ActionSuite) Test_Posts_List() {"), 1)
 
-	data, _ = ioutil.ReadFile("actions/app.go")
+	data, err = ioutil.ReadFile("routes/routes.go")
+	r.NoError(err)
 	r.Equal(strings.Count(string(data), "app.GET(\"/posts/list\", PostsList)"), 1)
 }
 

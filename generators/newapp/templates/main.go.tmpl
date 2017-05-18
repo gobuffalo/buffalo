@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-  "{{ .actionsPath }}"
-  "github.com/gobuffalo/envy"
+	"{{ .routesPath }}"
+	"github.com/gobuffalo/envy"
 )
 
 func main() {
 	port := envy.Get("PORT", "3000")
-	app := actions.App()
+	app := routes.App()
 	log.Fatal(app.Start(port))
 }

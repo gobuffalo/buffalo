@@ -132,7 +132,7 @@ func (b *builder) disableAssetsHandling() error {
 
 	newApp := strings.Replace(string(b.originalApp), "app.ServeFiles(\"/assets\", assetsPath())", "//app.ServeFiles(\"/assets\", assetsPath())", 1)
 
-	appgo, err := os.Create("actions/app.go")
+	appgo, err := os.Create("routes/routes.go")
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -261,7 +261,7 @@ func (b *builder) cleanupBuild() {
 	maingo, _ := os.Create("main.go")
 	maingo.Write(b.originalMain)
 
-	appgo, _ := os.Create("actions/app.go")
+	appgo, _ := os.Create("routes/routes.go")
 	appgo.Write(b.originalApp)
 }
 
@@ -385,7 +385,7 @@ var buildCmd = &cobra.Command{
 		maingo.Close()
 
 		originalApp := &bytes.Buffer{}
-		appgo, err := os.Open("actions/app.go")
+		appgo, err := os.Open("routes/routes.go")
 		_, err = originalApp.ReadFrom(appgo)
 		if err != nil {
 			return errors.WithStack(err)

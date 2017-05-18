@@ -20,7 +20,7 @@
     "buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)"
   ]
 }, {
-  "path": "actions/app.go",
+  "path": "routes/routes.go",
   "contains": [
     "auth := app.Group(\"/auth\")",
     "auth.GET(\"/{provider}\", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))",
