@@ -70,7 +70,7 @@ func (w simple) Perform(job Job) error {
 
 // PerformAt performs a job at a particular time using a goroutine.
 func (w simple) PerformAt(job Job, t time.Time) error {
-	return w.PerformIn(job, t.Sub(time.Now()))
+	return w.PerformIn(job, time.Until(t))
 }
 
 // PerformIn performs a job after waiting for a specified amount
