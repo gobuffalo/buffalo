@@ -29,7 +29,7 @@ import (
 type Handler func(Context) error
 
 func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Request) Context {
-	ws := res.(*buffaloResponse)
+	ws := res.(*Response)
 	params := req.URL.Query()
 	vars := mux.Vars(req)
 	for k, v := range vars {

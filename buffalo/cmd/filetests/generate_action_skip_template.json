@@ -1,0 +1,12 @@
+[
+    {
+        "path": "actions/users.go",
+        "contains": [
+            "func UsersCreate(c buffalo.Context) error {"
+        ]
+    },
+    {
+        "path": "templates/users/create.html",
+        "absent": true
+    }
+]

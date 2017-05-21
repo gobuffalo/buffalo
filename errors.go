@@ -55,9 +55,9 @@ func (a *App) PanicHandler(next Handler) Handler {
 			if r != nil { //catch
 				switch t := r.(type) {
 				case error:
-					err = t
+					err = errors.WithStack(t)
 				case string:
-					err = errors.New(t)
+					err = errors.WithStack(errors.New(t))
 				default:
 					err = errors.New(fmt.Sprint(t))
 				}

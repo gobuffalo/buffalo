@@ -36,9 +36,7 @@ type MiddlewareStack struct {
 
 func (ms *MiddlewareStack) clone() *MiddlewareStack {
 	n := newMiddlewareStack()
-	for _, s := range ms.stack {
-		n.stack = append(n.stack, s)
-	}
+	n.stack = append(n.stack, ms.stack...)
 	for k, v := range ms.skips {
 		n.skips[k] = v
 	}
@@ -150,6 +148,10 @@ func funcKey(funcs ...interface{}) string {
 		}
 		fnc := runtime.FuncForPC(ptr)
 		n := fnc.Name()
+
+		n = strings.Replace(n, "-fm", "", 1)
+		n = strings.Replace(n, "(", "", 1)
+		n = strings.Replace(n, ")", "", 1)
 		keyMap[ptr] = n
 		names = append(names, n)
 	}

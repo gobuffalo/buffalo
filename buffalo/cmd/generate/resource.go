@@ -142,7 +142,7 @@ func getModelPropertiesFromArgs(args []string) []modelProp {
 	for _, a := range args[1:] {
 		ax := strings.Split(a, ":")
 		p := modelProp{
-			Name: inflect.Camelize(ax[0]),
+			Name: inflect.ForeignKeyToAttribute(ax[0]),
 			Type: "string",
 		}
 		if len(ax) > 1 {

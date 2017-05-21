@@ -39,25 +39,6 @@ func Test_DefaultContext_Param(t *testing.T) {
 	r.Equal("Mark", c.Param("name"))
 }
 
-func Test_DefaultContext_ParamInt(t *testing.T) {
-	r := require.New(t)
-	c := basicContext()
-	c.params = url.Values{
-		"name": []string{"Mark"},
-		"id":   []string{"1"},
-	}
-
-	id, err := c.ParamInt("id")
-	r.NoError(err)
-	r.Equal(1, id)
-
-	_, err = c.ParamInt("badkey")
-	r.Error(err)
-
-	_, err = c.ParamInt("name")
-	r.Error(err)
-}
-
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()

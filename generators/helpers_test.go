@@ -14,7 +14,9 @@ func TestAppendRoute(t *testing.T) {
 
 	tmpDir := os.TempDir()
 	packagePath := filepath.Join(tmpDir, "src", "sample")
-	os.MkdirAll(packagePath, 0755)
+	err := os.MkdirAll(packagePath, 0644)
+	println(err)
+
 	os.Chdir(packagePath)
 
 	const shortAppFileExample = `package actions
@@ -46,7 +48,8 @@ func App() *buffalo.App {
 	return app
 }`
 
-	ioutil.WriteFile(filepath.Join(packagePath, "actions", "app.go"), []byte(shortAppFileExample), 0755)
+	os.MkdirAll("actions", 0644)
+	ioutil.WriteFile(filepath.Join(packagePath, "actions", "app.go"), []byte(shortAppFileExample), 0644)
 
 	AddRoute("GET", "/new/route", "UserCoolHandler")
 
