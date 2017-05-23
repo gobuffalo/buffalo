@@ -1,3 +1,4 @@
+{{ $ := . -}}
 package actions_test
 
 import (
@@ -5,8 +6,101 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
-{{ range $a := .actions }}
-func (as *ActionSuite) Test_{{$.camel}}Resource_{{ camelize $a }}() {
-	as.Fail("Not Implemented!")
+
+// Following naming logic is implemented in Buffalo:
+// Model: Singular ({{.model}})
+// DB Table: Plural ({{.modelPlural}})
+// Resource: Plural ({{.modelPlural}})
+// Path: Plural (/{{.under}})
+// View Template Folder: Plural (/templates/{{.varPlural}}/)
+// While generation following props where added:
+{{ range $p := .modelProps -}}
+// {{ $p.Name }}
+{{ end -}}
+
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
+	{{.varPlural}} := models.{{.modelPlural}}{
+		{{"{"}}
+	{{ range $p := .modelProps -}}
+			{{ $p.Name }}: "A string for {{ $p.Name }}",
+	{{ end -}}
+		},
+		{{"{"}}
+	{{ range $p := .modelProps -}}
+			{{ $p.Name }}: "Another string for {{ $p.Name }}",
+	{{ end -}}
+		},
+	}
+	for _, t := range {{.varPlural}} {
+		err := as.DB.Create(&t)
+		as.NoError(err)
+	}
+	res := as.HTML("/{{.under}}").Get()
+	body := res.Body.String()
+	for _, t := range {{.varPlural}} {
+		as.Contains(body, fmt.Sprintf("%s", t.Name))
+	}
 }
-{{ end }}
+
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_New() {
+	res := as.HTML("/{{.under}}/new").Get()
+	as.Contains(res.Body.String(), "<h1>New {{.Singular}}</h1>")
+}
+
+
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
+    {{.varSingular}} := &models.{{.model}}{
+		{{ range $p := .modelProps -}}
+		{{$p.Name}}: "A value for {{$p.Name}}",
+		{{ end -}}
+	}
+	res := as.HTML("/{{.under}}").Post({{.varSingular}})
+	as.Equal(301, res.Code)
+	as.Equal("/{{.under}}", res.Location())
+
+	err := as.DB.First({{.varSingular}})
+	as.NoError(err)
+	as.NotZero({{.varSingular}}.ID)
+	as.NotZero({{.varSingular}}.CreatedAt)
+	{{ range $p := .modelProps -}}
+	as.Equal("A value for {{$p.Name}}", {{$.varSingular}}.{{$p.Name}})
+	{{ end -}}
+}
+
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
+    {{.varSingular}} := &models.{{.model}}{}
+	res := as.HTML("/{{.under}}").Post({{.varSingular}})
+	as.Equal(422, res.Code)
+	{{ range $p := .modelProps -}}
+	as.Contains(res.Body.String(), "{{$p.Name}} can not be blank.")
+	{{ end -}}
+
+	c, err := as.DB.Count({{.varSingular}})
+	as.NoError(err)
+	as.Equal(0, c)
+}
+
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
+    {{.varSingular}} := &models.{{.model}}{
+		{{ range $p := .modelProps -}}
+		{{$p.Name}}: "A value for {{$p.Name}}",
+		{{ end -}}
+	}
+	verrs, err := as.DB.ValidateAndCreate({{.varSingular}})
+	as.NoError(err)
+	as.False(verrs.HasAny())
+	res := as.HTML("/{{.under}}/%s", {{.varSingular}}.ID).Put(&models.{{.model}}{
+		ID: {{.varSingular}}.ID,
+		{{ range $p := .modelProps -}}
+		{{$p.Name}}: "A value for {{$p.Name}}",
+		{{ end -}}
+		})
+	as.Equal(200, res.Code)
+
+	err = as.DB.Reload({{.varSingular}})
+	as.NoError(err)
+	{{ range $p := .modelProps -}}
+	as.Equal("A value for {{$p.Name}}", {{$.varSingular}}.{{$p.Name}})
+	{{ end -}}
+}
+
