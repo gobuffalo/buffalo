@@ -1,10 +1,12 @@
 package buffalo
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/going/defaults"
@@ -29,8 +31,16 @@ type Options struct {
 	// to "_buffalo_session".
 	SessionName string
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
-	Host   string
-	prefix string
+	Host string
+	// Worker implements the Worker interface and can process tasks in the background.
+	// Default is "github.com/gobuffalo/worker.Simple.
+	Worker worker.Worker
+	// WorkerOff tells App.Start() whether to start the Worker process or not. Default is "false".
+	WorkerOff bool
+
+	Context context.Context
+	cancel  context.CancelFunc
+	prefix  string
 }
 
 // NewOptions returns a new Options instance with sensible defaults
@@ -41,6 +51,11 @@ func NewOptions() Options {
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
+
+	if opts.Context == nil {
+		opts.Context = context.Background()
+	}
+	opts.Context, opts.cancel = context.WithCancel(opts.Context)
 
 	if opts.Logger == nil {
 		opts.Logger = NewLogger(opts.LogLevel)
@@ -53,6 +68,9 @@ func optionsWithDefaults(opts Options) Options {
 			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
+	}
+	if opts.Worker == nil {
+		opts.Worker = worker.NewSimpleWithContext(opts.Context)
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))

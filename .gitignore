@@ -28,3 +28,4 @@ bin/*
 gin-bin
 *.sqlite*
 .idea/
+.vscode
