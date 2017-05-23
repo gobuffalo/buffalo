@@ -44,7 +44,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 
 	name = inflect.CamelizeDownFirst(name)
 
-	if strings.HasSuffix(name, "Path") == false {
+	if !strings.HasSuffix(name, "Path") {
 		name = name + "Path"
 	}
 

@@ -69,15 +69,15 @@ func (b *builder) buildWebpack() error {
 func (b *builder) buildAPack() error {
 	err := os.MkdirAll(b.clean("a"), 0766)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = b.buildAInit()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = b.buildDatabase()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return nil
 }
@@ -85,7 +85,7 @@ func (b *builder) buildAPack() error {
 func (b *builder) buildAInit() error {
 	a, err := os.Create(b.clean("a", "a.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	a.WriteString(aGo)
 	return nil
@@ -95,18 +95,18 @@ func (b *builder) buildDatabase() error {
 	bb := &bytes.Buffer{}
 	dgo, err := os.Create(b.clean("a", "database.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if hasDB {
 		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		_, err = io.Copy(bb, d)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
 			b.buildTags = append(b.buildTags, "nosqlite")
@@ -134,11 +134,11 @@ func (b *builder) disableAssetsHandling() error {
 
 	appgo, err := os.Create("actions/app.go")
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	_, err = appgo.WriteString(newApp)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	return nil
@@ -155,7 +155,7 @@ func (b *builder) buildAssetsArchive() error {
 
 	zipfile, err := os.Create(target)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	defer zipfile.Close()
 
@@ -164,7 +164,7 @@ func (b *builder) buildAssetsArchive() error {
 
 	info, err := os.Stat(source)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	var baseDir string
@@ -174,12 +174,12 @@ func (b *builder) buildAssetsArchive() error {
 
 	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		if baseDir != "" {
@@ -194,7 +194,7 @@ func (b *builder) buildAssetsArchive() error {
 
 		writer, err := archive.CreateHeader(header)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		if info.IsDir() {
@@ -203,25 +203,25 @@ func (b *builder) buildAssetsArchive() error {
 
 		file, err := os.Open(path)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		defer file.Close()
 		_, err = io.Copy(writer, file)
-		return err
+		return errors.WithStack(err)
 	})
 
-	return err
+	return errors.WithStack(err)
 }
 
 func (b *builder) buildMain() error {
 	newMain := strings.Replace(string(b.originalMain), "func main()", "func originalMain()", 1)
 	maingo, err := os.Create("main.go")
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	_, err = maingo.WriteString(newMain)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	ctx := plush.NewContext()
@@ -238,11 +238,11 @@ func (b *builder) buildMain() error {
 	ctx.Set("name", filepath.Base(rootPath))
 	s, err := plush.Render(buildMainTmpl, ctx)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	f, err := os.Create(b.clean("buffalo_build_main.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	f.WriteString(s)
 
@@ -291,39 +291,39 @@ func (b *builder) run() error {
 
 	err = b.buildMain()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildWebpack()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildAPack()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildMain()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	if extractAssets {
 		err = b.buildAssetsArchive()
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		err = b.disableAssetsHandling()
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		return b.buildBin()
 	}
 
 	err = b.buildPackrEmbedded()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return b.buildBin()
 }

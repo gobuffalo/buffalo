@@ -92,9 +92,9 @@ func (d *DefaultContext) Flash() *Flash {
 // be made available to the render.Renderer. To render "no content" pass
 // in a nil render.Renderer.
 func (d *DefaultContext) Render(status int, rr render.Renderer) error {
-	now := time.Now()
+	start := time.Now()
 	defer func() {
-		d.LogField("render", time.Now().Sub(now))
+		d.LogField("render", time.Since(start))
 	}()
 	if rr != nil {
 		data := d.data

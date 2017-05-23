@@ -101,7 +101,6 @@ func defaultErrorHandler(status int, err error, c Context) error {
 			return errors.WithStack(err)
 		}
 		res := c.Response()
-		res.WriteHeader(404)
 		_, err = res.Write([]byte(t))
 		return err
 	}
