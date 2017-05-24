@@ -111,69 +111,142 @@ var devErrorTmpl = `
 <html>
 <head>
 	<title><%= status %> - ERROR!</title>
+	<link rel="stylesheet" href="/assets/application.css" type="text/css" media="all">
 	<style>
+		.container {
+      		min-width: 320px;
+    	}
+		
 		body {
 			font-family: helvetica;
 		}
-		table {
-			width: 100%;
-		}
-		th {
-			text-align: left;
-		}
-		tr:nth-child(even) {
-		  background-color: #dddddd;
-		}
-		td {
-			margin: 0px;
-			padding: 10px;
-		}
+		
+		table {font-size: 14px;}
+    	table.table tbody tr td {
+      		border-top: 0;
+      		padding: 10px;
+    	}
+
 		pre {
-			display: block;
-			padding: 9.5px;
-			margin: 0 0 10px;
-			font-size: 13px;
-			line-height: 1.42857143;
-			color: #333;
-			word-break: break-all;
-			word-wrap: break-word;
-			background-color: #f5f5f5;
-			border: 1px solid #ccc;
-			border-radius: 4px;
+			white-space: pre-line;
+			margin-bottom: 10px;
+			max-height: 275px;
+			overflow: scroll;
+		}
+
+		header {
+			background-color: #ed605e;
+			padding: 10px 20px;
+			box-sizing: border-box;
+		}
+
+		.logo img { width: 80px;}
+		.titles h1{
+			font-size: 30px;
+			font-weight: 300;
+			color: white;
+			margin: 24px 0;
+		}
+		.content h3 {
+			color: gray;
+			margin: 25px 0;
+		}
+		.centered{
+      		text-align: center;
+    	}
+		.foot{
+			padding: 5px 0 20px;
+			text-align: right;
+			text-align: right;
+			color: #c5c5c5;
+			font-weight: 300;
+    	}
+
+		.foot a {
+			color: #8b8b8b;
+			text-decoration: underline;
+		}
+
+		.centered{
+			text-align: center;
+		}
+
+		@media all and (max-width: 500px) {
+			.titles h1{
+				font-size: 25px;
+				margin: 26px 0;
+			}
+		}
+
+		@media all and (max-width: 530px) {
+			.titles h1{
+				font-size: 20px;
+				margin: 24px 0;
+			}
+
+			.logo { padding: 0}
+			.logo img {
+				width: 100%;
+				max-width: 80px;
+			}
 		}
 	</style>
 </head>
 <body>
-<h1><%= status %> - ERROR!</h1>
-<pre><%= error %></pre>
-<hr>
-<h3>Context</h3>
-<pre><%= for (k, v) in data { %>
-<%= inspect(k) %>: <%= inspect(v) %>
-<% } %></pre>
-<hr>
-<h3>Routes</h3>
-<table id="buffalo-routes-table">
-	<thead>
-		<tr>
-			<th>METHOD</th>
-			<th>PATH</th>
-			<th>NAME</th>
-			<th>HANDLER</th>
-		</tr>
-	</thead>
-	<tbody>
-		<%= for (route) in routes { %>
-			<tr>
-				<td><%= route.Method %></td>
-				<td><%= route.Path %></td>
-				<td><%= route.PathName %></td>
-				<td><code><%= route.HandlerName %></code></td>
-			</tr>
-		<% } %>
-	</tbody>
-</table>
-</body>
+	<header>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1 col-sm-2 col-xs-3 logo">
+            <img src="/assets/images/logo.svg" alt="buffalo logo">
+          </div>
+          <div class="col-md-10 col-sm-6 col-xs-7 titles">
+            <h1><%= status %> - ERROR!</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+	
+	<div class="container content">
+      <div class="row">
+        <div  class="col-md-12">
+			<h3>Error Trace</h3>
+			<pre><%= error %></pre>
+			
+			<h3>Context</h3>
+			<pre>
+				<%= for (k, v) in data { %>
+					<%= inspect(k) %>: <%= inspect(v) %>
+				<% } %>
+			</pre>
+
+			<h3>Routes</h3>
+			<table class="table table-striped">
+				<thead>
+					<tr text-align="left">
+						<th class="centered">METHOD</th>
+						<th>PATH</th>
+						<th>NAME</th>
+						<th>HANDLER</th>
+					</tr>
+				</thead>
+            	<tbody>
+
+				<%= for (r) in routes { %>
+					<tr>
+					<td class="centered"><%= r.Method %></td>
+					<td><%= r.Path %></td>
+					<td><%= r.PathName %></td>
+					<td><code><%= r.HandlerName %></code></td>
+					</tr>
+				<% } %>
+
+	            </tbody>
+    	    </table>
+		</div>
+	  </div>
+	  <div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span></div>
+	</div>
+  </body>
 </html>
 `
 var prodErrorTmpl = `
