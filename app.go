@@ -113,7 +113,7 @@ func New(opts Options) *App {
 		Options:    opts,
 		Middleware: newMiddlewareStack(),
 		ErrorHandlers: ErrorHandlers{
-			404: NotFoundHandler,
+			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
 		router: mux.NewRouter(),

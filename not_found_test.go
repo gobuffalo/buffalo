@@ -19,7 +19,7 @@ func Test_App_Dev_NotFound(t *testing.T) {
 	res := w.Request("/bad").Get()
 
 	body := res.Body.String()
-	r.Contains(body, "404 PAGE NOT FOUND")
+	r.Contains(body, "404 - ERROR!")
 	r.Contains(body, "/foo")
 	r.Equal(404, res.Code)
 }
@@ -38,24 +38,7 @@ func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	jb := map[string]interface{}{}
 	err := json.NewDecoder(res.Body).Decode(&jb)
 	r.NoError(err)
-	r.Equal("GET", jb["method"])
-	r.Equal("/bad", jb["path"])
-	r.NotEmpty(jb["routes"])
-}
-
-func Test_App_Prod_NotFound(t *testing.T) {
-	r := require.New(t)
-
-	a := New(Options{Env: "production"})
-	a.GET("/foo", func(c Context) error { return nil })
-
-	w := willie.New(a)
-	res := w.Request("/bad").Get()
-	r.Equal(404, res.Code)
-
-	body := res.Body.String()
-	r.Equal(body, "404 page not found\n")
-	r.NotContains(body, "/foo")
+	r.Equal(float64(404), jb["code"])
 }
 
 func Test_App_Override_NotFound(t *testing.T) {
