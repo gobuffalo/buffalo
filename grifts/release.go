@@ -85,7 +85,7 @@ func tagRelease(v string) error {
 	}
 
 	body := map[string]interface{}{
-		"tag_name":   fmt.Sprintf("v%s", v),
+		"tag_name":   v,
 		"prerelease": false,
 	}
 
@@ -116,7 +116,7 @@ func runChangelogGenerator(v string) error {
 }
 
 func commitAndPush(v string) error {
-	cmd := exec.Command("git", "commit", "CHANGELOG.md", "-m", fmt.Sprintf("Updated changelog for release v%s", v))
+	cmd := exec.Command("git", "commit", "CHANGELOG.md", "-m", fmt.Sprintf("Updated changelog for release %s", v))
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
@@ -142,7 +142,7 @@ func findVersion() (string, error) {
 		return "", err
 	}
 
-	//var Version = "0.4.0"
+	//var Version = "v0.4.0"
 	re := regexp.MustCompile(`const Version = "(.+)"`)
 	matches := re.FindStringSubmatch(string(vfile))
 	if len(matches) < 2 {
@@ -151,6 +151,9 @@ func findVersion() (string, error) {
 	v := matches[1]
 	if strings.Contains(v, "dev") {
 		return "", errors.Errorf("version can not be a dev version %s", v)
+	}
+	if !strings.HasPrefix(v, "v") {
+		return "", errors.Errorf("version must match format `v0.0.0`: %s", v)
 	}
 	return v, nil
 }
