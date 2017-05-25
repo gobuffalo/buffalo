@@ -90,10 +90,11 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 	default:
 		data := map[string]interface{}{
-			"routes": c.Value("routes"),
-			"error":  msg,
-			"status": status,
-			"data":   c.Data(),
+			"routes":  c.Value("routes"),
+			"error":   msg,
+			"status":  status,
+			"data":    c.Data(),
+			"context": c,
 		}
 		ctx := plush.NewContextWith(data)
 		t, err := plush.Render(devErrorTmpl, ctx)
@@ -110,143 +111,158 @@ func defaultErrorHandler(status int, err error, c Context) error {
 var devErrorTmpl = `
 <html>
 <head>
-	<title><%= status %> - ERROR!</title>
-	<link rel="stylesheet" href="/assets/application.css" type="text/css" media="all">
-	<style>
-		.container {
-      		min-width: 320px;
-    	}
-		
-		body {
-			font-family: helvetica;
-		}
-		
-		table {font-size: 14px;}
-    	table.table tbody tr td {
-      		border-top: 0;
-      		padding: 10px;
-    	}
+  <title><%= status %> - ERROR!</title>
+  <link rel="stylesheet" href="/assets/application.css" type="text/css" media="all">
+  <style>
+    .container {
+      min-width: 320px;
+    }
 
-		pre {
-			white-space: pre-line;
-			margin-bottom: 10px;
-			max-height: 275px;
-			overflow: scroll;
-		}
+    body {
+      font-family: helvetica;
+    }
 
-		header {
-			background-color: #ed605e;
-			padding: 10px 20px;
-			box-sizing: border-box;
-		}
+    table {
+      font-size: 14px;
+    }
 
-		.logo img { width: 80px;}
-		.titles h1{
-			font-size: 30px;
-			font-weight: 300;
-			color: white;
-			margin: 24px 0;
-		}
-		.content h3 {
-			color: gray;
-			margin: 25px 0;
-		}
-		.centered{
-      		text-align: center;
-    	}
-		.foot{
-			padding: 5px 0 20px;
-			text-align: right;
-			text-align: right;
-			color: #c5c5c5;
-			font-weight: 300;
-    	}
+    table.table tbody tr td {
+      border-top: 0;
+      padding: 10px;
+    }
 
-		.foot a {
-			color: #8b8b8b;
-			text-decoration: underline;
-		}
+    pre {
+      white-space: pre-line;
+      margin-bottom: 10px;
+      max-height: 275px;
+      overflow: scroll;
+    }
 
-		.centered{
-			text-align: center;
-		}
+    header {
+      background-color: #ed605e;
+      padding: 10px 20px;
+      box-sizing: border-box;
+    }
 
-		@media all and (max-width: 500px) {
-			.titles h1{
-				font-size: 25px;
-				margin: 26px 0;
-			}
-		}
+    .logo img {
+      width: 80px;
+    }
 
-		@media all and (max-width: 530px) {
-			.titles h1{
-				font-size: 20px;
-				margin: 24px 0;
-			}
+    .titles h1 {
+      font-size: 30px;
+      font-weight: 300;
+      color: white;
+      margin: 24px 0;
+    }
 
-			.logo { padding: 0}
-			.logo img {
-				width: 100%;
-				max-width: 80px;
-			}
-		}
-	</style>
+    .content h3 {
+      color: gray;
+      margin: 25px 0;
+    }
+
+    .centered {
+      text-align: center;
+    }
+
+    .foot {
+      padding: 5px 0 20px;
+      text-align: right;
+      text-align: right;
+      color: #c5c5c5;
+      font-weight: 300;
+    }
+
+    .foot a {
+      color: #8b8b8b;
+      text-decoration: underline;
+    }
+
+    .centered {
+      text-align: center;
+    }
+
+    @media all and (max-width: 500px) {
+      .titles h1 {
+        font-size: 25px;
+        margin: 26px 0;
+      }
+    }
+
+    @media all and (max-width: 530px) {
+      .titles h1 {
+        font-size: 20px;
+        margin: 24px 0;
+      }
+      .logo {
+        padding: 0
+      }
+      .logo img {
+        width: 100%;
+        max-width: 80px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-	<header>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-1 col-sm-2 col-xs-3 logo">
-            <img src="/assets/images/logo.svg" alt="buffalo logo">
-          </div>
-          <div class="col-md-10 col-sm-6 col-xs-7 titles">
-            <h1><%= status %> - ERROR!</h1>
-          </div>
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-1 col-sm-2 col-xs-3 logo">
+          <a href="/"><img src="/assets/images/logo.svg" alt=""></a>
+        </div>
+        <div class="col-md-10 col-sm-6 col-xs-7 titles">
+          <h1>
+            <%= status %> - ERROR!
+          </h1>
         </div>
       </div>
-    </header>
-	
-	<div class="container content">
-      <div class="row">
-        <div  class="col-md-12">
-			<h3>Error Trace</h3>
-			<pre><%= error %></pre>
-			
-			<h3>Context</h3>
-			<pre>
-				<%= for (k, v) in data { %>
-					<%= inspect(k) %>: <%= inspect(v) %>
-				<% } %>
-			</pre>
+    </div>
+  </header>
 
-			<h3>Routes</h3>
-			<table class="table table-striped">
-				<thead>
-					<tr text-align="left">
-						<th class="centered">METHOD</th>
-						<th>PATH</th>
-						<th>NAME</th>
-						<th>HANDLER</th>
-					</tr>
-				</thead>
-            	<tbody>
+  <div class="container content">
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Error Trace</h3>
+        <pre><%= error %></pre>
 
-				<%= for (r) in routes { %>
-					<tr>
-					<td class="centered"><%= r.Method %></td>
-					<td><%= r.Path %></td>
-					<td><%= r.PathName %></td>
-					<td><code><%= r.HandlerName %></code></td>
-					</tr>
-				<% } %>
+        <h3>Context</h3>
+        <pre><%= inspect(context) %></pre>
 
-	            </tbody>
-    	    </table>
-		</div>
-	  </div>
-	  <div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span></div>
-	</div>
-  </body>
+        <h3>Routes</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr text-align="left">
+              <th class="centered">METHOD</th>
+              <th>PATH</th>
+              <th>NAME</th>
+              <th>HANDLER</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <%= for (r) in routes { %>
+              <tr>
+                <td class="centered">
+                  <%= r.Method %>
+                </td>
+                <td>
+                  <%= r.Path %>
+                </td>
+                <td>
+                  <%= r.PathName %>
+                </td>
+                <td><code><%= r.HandlerName %></code></td>
+              </tr>
+            <% } %>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span></div>
+  </div>
+</body>
 </html>
 `
 var prodErrorTmpl = `

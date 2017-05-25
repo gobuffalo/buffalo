@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -30,6 +31,11 @@ type RouteInfo struct {
 
 	PathName string `json:"pathName"`
 	App      *App   `json:"-"`
+}
+
+func (ri RouteInfo) String() string {
+	b, _ := json.MarshalIndent(ri, "", "  ")
+	return string(b)
 }
 
 // Name allows users to set custom names for the routes.
