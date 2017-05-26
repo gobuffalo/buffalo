@@ -38,7 +38,9 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
 	res := as.HTML("/{{.under}}").Get()
 	body := res.Body.String()
 	for _, t := range {{.varPlural}} {
-		as.Contains(body, fmt.Sprintf("%s", t.Name))
+		{{ range $p := .modelProps -}}
+			as.Contains(body, fmt.Sprintf("%s", t.{{ $p.Name }}))
+		{{ end -}}
 	}
 }
 
