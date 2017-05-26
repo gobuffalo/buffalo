@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 	"time"
 
@@ -182,6 +183,18 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 // Data contains all the values set through Get/Set.
 func (d *DefaultContext) Data() map[string]interface{} {
 	return d.data
+}
+
+func (d *DefaultContext) String() string {
+	bb := make([]string, 0, len(d.data))
+
+	for k, v := range d.data {
+		if _, ok := v.(RouteHelperFunc); !ok {
+			bb = append(bb, fmt.Sprintf("%s: %s", k, v))
+		}
+	}
+	sort.Strings(bb)
+	return strings.Join(bb, "\n\n")
 }
 
 var defaultUpgrader = websocket.Upgrader{

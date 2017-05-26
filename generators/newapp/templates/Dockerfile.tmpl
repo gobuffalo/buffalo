@@ -1,0 +1,11 @@
+FROM gobuffalo/buffalo:{{.version}}
+
+RUN mkdir -p $GOPATH/src/{{.packagePath}}
+WORKDIR $GOPATH/src/{{.packagePath}}
+
+ADD . .
+
+RUN npm install
+RUN buffalo build -o bin/app
+
+CMD ./bin/app
