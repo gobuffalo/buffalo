@@ -46,7 +46,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
 
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_New() {
 	res := as.HTML("/{{.under}}/new").Get()
-	as.Contains(res.Body.String(), "<h1>New {{.Singular}}</h1>")
+	as.Contains(res.Body.String(), "<h1>New {{.model}}</h1>")
 }
 
 
@@ -57,8 +57,8 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
 		{{ end -}}
 	}
 	res := as.HTML("/{{.under}}").Post({{.varSingular}})
-	as.Equal(301, res.Code)
-	as.Equal("/{{.under}}", res.Location())
+	as.Equal(302, res.Code)
+	as.Contains(res.Loaction(),"/{{.under}}")
 
 	err := as.DB.First({{.varSingular}})
 	as.NoError(err)
@@ -97,7 +97,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
 		{{$p.Name}}: "A value for {{$p.Name}}",
 		{{ end -}}
 		})
-	as.Equal(200, res.Code)
+	as.Equal(302, res.Code)
 
 	err = as.DB.Reload({{.varSingular}})
 	as.NoError(err)
