@@ -79,7 +79,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
 	// Check the return code of the model
 	as.Equal(302, res.Code)
 	// Check the redirected URL
-	as.Contains(res.Loaction(),"/{{.under}}")
+	as.Contains(res.Location(),"/{{.under}}")
 
 	// Load the created values
 	err := as.DB.First({{.varSingular}})
@@ -112,6 +112,30 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
 	as.NoError(err)
 	// Check if there is nothing created
 	as.Equal(0, c)
+}
+
+// This test checks {{.camel}}Resource.Show()
+func (as *ActionSuite) Test_{{.modelPlural}}Resource_Show() {
+	// {{.varSingular}} defines just some basic values
+	// You should change that basic values that they represent 
+	// your model.
+    {{.varSingular}} := &models.{{.model}}{
+		{{ range $p := .modelProps -}}
+		{{$p.Name}}: "A value for {{$p.Name}}",
+		{{ end -}}
+	}
+	// Create an entry 
+	verrs, err := as.DB.ValidateAndCreate({{.varSingular}})
+	as.NoError(err)
+	as.False(verrs.HasAny())
+
+	// Get the user over the Buffalo app
+	res := as.HTML("/{{.under}}/%s", {{.varSingular}}.ID).Get()
+	body := res.Body.String()
+	// Check if the properties are inside the page
+	{{ range $p := .modelProps -}}
+	as.Contains(body, "A value for {{$p.Name}}")
+	{{ end -}}
 }
 
 // This test checks {{.camel}}Resource.Update()
