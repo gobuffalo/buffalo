@@ -66,23 +66,6 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 /*
 	a.Middleware.Skip(Authorization, HomeHandler, LoginHandler, RegistrationHandler)
 */
-// NOTE: When skipping Resource handlers, you need to first declare your
-// resource handler as a type of buffalo.Resource for the Skip function to
-// properly recognize and match it.
-/*
-	// Works:
-	var cr Resource
-	cr = &carsResource{&buffaloBaseResource{}}
-	g = a.Resource("/cars", cr)
-	g.Use(SomeMiddleware)
-	g.Middleware.Skip(SomeMiddleware, cr.Show)
-
-	// Doesn't Work:
-	cr := &carsResource{&buffaloBaseResource{}}
-	g = a.Resource("/cars", cr)
-	g.Use(SomeMiddleware)
-	g.Middleware.Skip(SomeMiddleware, cr.Show)
-*/
 func (ms *MiddlewareStack) Skip(mw MiddlewareFunc, handlers ...Handler) {
 	for _, h := range handlers {
 		key := funcKey(mw, h)
