@@ -13,32 +13,20 @@ import (
 
 // This file is not complete it just offers basic tests for the
 // basic generated {{.model}} resource.
+// That the tests are working correct you have to add test cases
+// which are representing your model.
+// All the parts which you need to edit are marked with
+// as.FailNow("TODO: ...")
 
-// While generation following props where added to the tests:
-{{ range $p := .modelProps -}}
-// ---> {{ $p.Name }}
-{{ end -}}
 // ------------------------------------------------------------------
 
 
 // This test checks {{.camel}}Resource.List() which lists all 
 // {{.modelPlural}}
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
-	// {{.varPlural}} defines a list of {{.model}}. The generator
-	// created just two basic values. After generation you should
-	// edit this test cases that is represents your model
-	{{.varPlural}} := models.{{.modelPlural}}{
-		{{"{"}}
-	{{ range $p := .modelProps -}}
-			{{ $p.Name }}: "A string for {{ $p.Name }}",
-	{{ end -}}
-		},
-		{{"{"}}
-	{{ range $p := .modelProps -}}
-			{{ $p.Name }}: "Another string for {{ $p.Name }}",
-	{{ end -}}
-		},
-	}
+	as.FailNow("TODO: fill-in 'models{{.modelPlural}}{}' with appropriate test data")
+	{{.varPlural}} := models.{{.modelPlural}}{}
+	
 	// Create a entry for each list value
 	for _, t := range {{.varPlural}} {
 		err := as.DB.Create(&t)
@@ -51,6 +39,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
 	// page.
 	for _, t := range {{.varPlural}} {
 		{{ range $p := .modelProps -}}
+			as.FailNow("TODO: check if you set test data for '{{$p.Name}}'")
 			as.Contains(body, fmt.Sprintf("%s", t.{{ $p.Name }}))
 		{{ end -}}
 	}
@@ -67,14 +56,9 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_New() {
 // This test checks {{.camel}}Resource.Create(), which adds a
 // {{.singular}} to the DB.
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
-	// {{.varSingular}} defines just some basic values
-	// You should change that basic values that they represent 
-	// your model.
-    {{.varSingular}} := &models.{{.model}}{
-		{{ range $p := .modelProps -}}
-		{{$p.Name}}: "A value for {{$p.Name}}",
-		{{ end -}}
-	}
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+    {{.varSingular}} := &models.{{.model}}{}
+	t := *{{.varSingular}}
 	res := as.HTML("/{{.under}}").Post({{.varSingular}})
 	// Check the return code of the model
 	as.Equal(302, res.Code)
@@ -87,8 +71,9 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
 	// Check the loaded {{.varSingular}}
 	as.NotZero({{.varSingular}}.ID)
 	as.NotZero({{.varSingular}}.CreatedAt)
+	as.FailNow("TODO: Check if these tests represents your test data")
 	{{ range $p := .modelProps -}}
-	as.Equal("A value for {{$p.Name}}", {{$.varSingular}}.{{$p.Name}})
+	as.Equal(t.{{$p.Name}}, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
 }
 
@@ -101,9 +86,8 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
 	res := as.HTML("/{{.under}}").Post({{.varSingular}})
 	// Check the return code 
 	as.Equal(422, res.Code)
-	// Check the error message. You need to edit this tests if your
-	// validation changes or if some properties are allowed to left
-	// blank.
+
+	as.FailNow("TODO: Delete or change the expected errors")
 	{{ range $p := .modelProps -}}
 	as.Contains(res.Body.String(), "{{$p.Name}} can not be blank.")
 	{{ end -}}
@@ -116,14 +100,8 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
 
 // This test checks {{.camel}}Resource.Show()
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Show() {
-	// {{.varSingular}} defines just some basic values
-	// You should change that basic values that they represent 
-	// your model.
-    {{.varSingular}} := &models.{{.model}}{
-		{{ range $p := .modelProps -}}
-		{{$p.Name}}: "A value for {{$p.Name}}",
-		{{ end -}}
-	}
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+    {{.varSingular}} := &models.{{.model}}{}
 	// Create an entry 
 	verrs, err := as.DB.ValidateAndCreate({{.varSingular}})
 	as.NoError(err)
@@ -134,31 +112,27 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Show() {
 	body := res.Body.String()
 	// Check if the properties are inside the page
 	{{ range $p := .modelProps -}}
-	as.Contains(body, "A value for {{$p.Name}}")
+	as.FailNow("TODO: check if you set test data for '{{$p.Name}}'")
+	as.Contains(body, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
 }
 
 // This test checks {{.camel}}Resource.Update()
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
-	// {{.varSingular}} defines first an initial value
-	// for each property.
-	// Please change that values that they represent your model.
-    {{.varSingular}} := &models.{{.model}}{
-		{{ range $p := .modelProps -}}
-		{{$p.Name}}: "Initial value for {{$p.Name}}",
-		{{ end -}}
-	}
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+    {{.varSingular}} := &models.{{.model}}{}
+
 	// Create the initial entry
 	verrs, err := as.DB.ValidateAndCreate({{.varSingular}})
 	as.NoError(err)
 	as.False(verrs.HasAny())
 	// Now change the value of each property to another value
-	res := as.HTML("/{{.under}}/%s", {{.varSingular}}.ID).Put(&models.{{.model}}{
+	as.FailNow("TODO: change the test data to update the database entry")
+	changed{{.varSingular}} := &models.{{.model}}{
 		ID: {{.varSingular}}.ID,
-		{{ range $p := .modelProps -}}
-		{{$p.Name}}: "Changed value for {{$p.Name}}",
-		{{ end -}}
-	})
+	}
+	res := as.HTML("/{{.under}}/%s", {{.varSingular}}.ID).Put(changed{{.varSingular}})
+
 	// Check the return code
 	as.Equal(302, res.Code)
 
@@ -166,8 +140,9 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
 	err = as.DB.Reload({{.varSingular}})
 	as.NoError(err)
 	// Check if the changed values are updated correctly
+	as.FailNow("TODO: Check if these tests represents your test data")
 	{{ range $p := .modelProps -}}
-	as.Equal("Changed value for {{$p.Name}}", {{$.varSingular}}.{{$p.Name}})
+	as.Equal(changed{{$.varSingular}}.{{$p.Name}}, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
 }
 
