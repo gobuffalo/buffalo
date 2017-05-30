@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"sync"
+	"syscall"
 
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
@@ -65,7 +66,7 @@ func (a *App) Start(addr string) error {
 
 	go func() {
 		signalChan := make(chan os.Signal, 1)
-		signal.Notify(signalChan, os.Interrupt, os.Kill)
+		signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 		<-signalChan
 		a.cancel()
 	}()
