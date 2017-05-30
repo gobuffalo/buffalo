@@ -88,6 +88,9 @@ func (a *App) Resource(p string, r Resource) *App {
 	p = "/"
 
 	rv := reflect.ValueOf(r)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 

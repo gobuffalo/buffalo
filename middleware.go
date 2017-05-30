@@ -160,6 +160,9 @@ func funcKey(funcs ...interface{}) string {
 
 func setFuncKey(f interface{}, name string) {
 	rv := reflect.ValueOf(f)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
 	ptr := rv.Pointer()
 	keyMap[ptr] = name
 }
