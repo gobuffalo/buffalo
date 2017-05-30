@@ -24,7 +24,7 @@ import (
 // This test checks {{.camel}}Resource.List() which lists all 
 // {{.modelPlural}}
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
-	as.FailNow("TODO: fill-in 'models{{.modelPlural}}{}' with appropriate test data")
+	as.FailNow("TODO: fill-in 'models{{.modelPlural}}{}' with appropriate test data.")
 	{{.varPlural}} := models.{{.modelPlural}}{}
 	
 	// Create a entry for each list value
@@ -39,7 +39,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_List() {
 	// page.
 	for _, t := range {{.varPlural}} {
 		{{ range $p := .modelProps -}}
-			as.FailNow("TODO: check if you set test data for '{{$p.Name}}'")
+			as.FailNow("TODO: check if you set test data for '{{$p.Name}}'.")
 			as.Contains(body, fmt.Sprintf("%s", t.{{ $p.Name }}))
 		{{ end -}}
 	}
@@ -56,7 +56,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_New() {
 // This test checks {{.camel}}Resource.Create(), which adds a
 // {{.singular}} to the DB.
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
-	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data.")
     {{.varSingular}} := &models.{{.model}}{}
 	t := *{{.varSingular}}
 	res := as.HTML("/{{.under}}").Post({{.varSingular}})
@@ -71,7 +71,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create() {
 	// Check the loaded {{.varSingular}}
 	as.NotZero({{.varSingular}}.ID)
 	as.NotZero({{.varSingular}}.CreatedAt)
-	as.FailNow("TODO: Check if these tests represents your test data")
+	as.FailNow("TODO: Check if these tests represents your test data.")
 	{{ range $p := .modelProps -}}
 	as.Equal(t.{{$p.Name}}, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
@@ -87,7 +87,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
 	// Check the return code 
 	as.Equal(422, res.Code)
 
-	as.FailNow("TODO: Delete or change the expected errors")
+	as.FailNow("TODO: Delete or change the expected errors.")
 	{{ range $p := .modelProps -}}
 	as.Contains(res.Body.String(), "{{$p.Name}} can not be blank.")
 	{{ end -}}
@@ -100,7 +100,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Create_Errors() {
 
 // This test checks {{.camel}}Resource.Show()
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Show() {
-	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data.")
     {{.varSingular}} := &models.{{.model}}{}
 	// Create an entry 
 	verrs, err := as.DB.ValidateAndCreate({{.varSingular}})
@@ -112,14 +112,14 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Show() {
 	body := res.Body.String()
 	// Check if the properties are inside the page
 	{{ range $p := .modelProps -}}
-	as.FailNow("TODO: check if you set test data for '{{$p.Name}}'")
+	as.FailNow("TODO: check if you set test data for '{{$p.Name}}'.")
 	as.Contains(body, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
 }
 
 // This test checks {{.camel}}Resource.Update()
 func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
-	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data")
+	as.FailNow("TODO: fill-in 'models{{.model}}{}' with appropriate test data.")
     {{.varSingular}} := &models.{{.model}}{}
 
 	// Create the initial entry
@@ -127,7 +127,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
 	as.NoError(err)
 	as.False(verrs.HasAny())
 	// Now change the value of each property to another value
-	as.FailNow("TODO: change the test data to update the database entry")
+	as.FailNow("TODO: change the test data to update the database entry.")
 	changed{{.varSingular}} := &models.{{.model}}{
 		ID: {{.varSingular}}.ID,
 	}
@@ -140,7 +140,7 @@ func (as *ActionSuite) Test_{{.modelPlural}}Resource_Update() {
 	err = as.DB.Reload({{.varSingular}})
 	as.NoError(err)
 	// Check if the changed values are updated correctly
-	as.FailNow("TODO: Check if these tests represents your test data")
+	as.FailNow("TODO: Check if these tests represents your test data.")
 	{{ range $p := .modelProps -}}
 	as.Equal(changed{{$.varSingular}}.{{$p.Name}}, {{$.varSingular}}.{{$p.Name}})
 	{{ end -}}
