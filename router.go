@@ -163,7 +163,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 		App:         a,
 	}
 
-	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+	r.MuxRoute = a.router.Handle(url, r).Methods(method)
 	r.Name(buildRouteName(url))
 
 	routes := a.Routes()

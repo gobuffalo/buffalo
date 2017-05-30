@@ -105,7 +105,8 @@ func (ms *MiddlewareStack) Replace(mw1 MiddlewareFunc, mw2 MiddlewareFunc) {
 	ms.stack = stack
 }
 
-func (ms *MiddlewareStack) handler(h Handler) Handler {
+func (ms *MiddlewareStack) handler(info RouteInfo) Handler {
+	h := info.Handler
 	if len(ms.stack) > 0 {
 		mh := func(_ Handler) Handler {
 			return h
@@ -116,7 +117,7 @@ func (ms *MiddlewareStack) handler(h Handler) Handler {
 		sl := len(ms.stack) - 1
 		for i := sl; i >= 0; i-- {
 			mw := ms.stack[i]
-			key := funcKey(mw, h)
+			key := funcKey(mw, info)
 			if !ms.skips[key] {
 				tstack = append(tstack, mw)
 			}
@@ -140,22 +141,31 @@ func newMiddlewareStack(mws ...MiddlewareFunc) *MiddlewareStack {
 func funcKey(funcs ...interface{}) string {
 	names := []string{}
 	for _, f := range funcs {
+		if n, ok := f.(RouteInfo); ok {
+			names = append(names, n.HandlerName)
+			continue
+		}
 		rv := reflect.ValueOf(f)
 		ptr := rv.Pointer()
 		if n, ok := keyMap[ptr]; ok {
 			names = append(names, n)
 			continue
 		}
-		fnc := runtime.FuncForPC(ptr)
-		n := fnc.Name()
-
-		n = strings.Replace(n, "-fm", "", 1)
-		n = strings.Replace(n, "(", "", 1)
-		n = strings.Replace(n, ")", "", 1)
+		n := ptrName(ptr)
 		keyMap[ptr] = n
 		names = append(names, n)
 	}
 	return strings.Join(names, "/")
+}
+
+func ptrName(ptr uintptr) string {
+	fnc := runtime.FuncForPC(ptr)
+	n := fnc.Name()
+
+	n = strings.Replace(n, "-fm", "", 1)
+	n = strings.Replace(n, "(", "", 1)
+	n = strings.Replace(n, ")", "", 1)
+	return n
 }
 
 func setFuncKey(f interface{}, name string) {
