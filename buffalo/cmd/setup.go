@@ -27,6 +27,9 @@ var setupCmd = &cobra.Command{
 	Short: "Setups a newly created, or recently checked out application.",
 	Long: `Setup runs through checklist to make sure dependencies are setup correcly.
 
+Dependencies (if used):
+* Runs "dep ensure" to install required Go dependencies.
+
 Asset Pipeline (if used):
 * Runs "npm install" or "yarn install" to install asset dependencies.
 
@@ -50,25 +53,42 @@ Tests:
 }
 
 func updateGoDepsCheck() error {
-	if setupOptions.updateGoDeps {
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-		wg, ctx := errgroup.WithContext(ctx)
-		deps, err := deplist.List()
+	if _, err := os.Stat("Gopkg.toml"); err == nil {
+		// use github.com/golang/dep
+		args := []string{"ensure", "-v"}
+		if setupOptions.updateGoDeps {
+			args = append(args, "--update")
+		}
+		err := run(exec.Command("dep", args...))
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		for dep := range deps {
-			c := exec.Command("go", "get", "-v", "-u", dep)
-			f := func() error {
-				return run(c)
-			}
-			wg.Go(f)
+		return nil
+	}
+
+	// go old school with the installation
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	wg, ctx := errgroup.WithContext(ctx)
+	deps, err := deplist.List()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	for dep := range deps {
+		args := []string{"get", "-v"}
+		if setupOptions.updateGoDeps {
+			args = append(args, "-v")
 		}
-		err = wg.Wait()
-		if err != nil {
-			return errors.Errorf("We encountered the following error trying to install and update the dependencies for this application:\n%s", err)
+		args = append(args, dep)
+		c := exec.Command("go", args...)
+		f := func() error {
+			return run(c)
 		}
+		wg.Go(f)
+	}
+	err = wg.Wait()
+	if err != nil {
+		return errors.Errorf("We encountered the following error trying to install and update the dependencies for this application:\n%s", err)
 	}
 	return nil
 }

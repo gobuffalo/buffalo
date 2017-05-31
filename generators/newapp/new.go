@@ -59,6 +59,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 	}
 
+	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore")))
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
@@ -84,12 +85,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 }
 
 func (a App) goGet() *exec.Cmd {
-	appArgs := []string{"get", "-t"}
-	if a.Verbose {
-		appArgs = append(appArgs, "-v")
-	}
-	appArgs = append(appArgs, "./...")
-	return exec.Command("go", appArgs...)
+	return exec.Command("dep", "init")
 }
 
 const nTravis = `language: go
