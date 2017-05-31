@@ -27,7 +27,11 @@ func RegisterBinder(contentType string, fn BinderFunc) {
 }
 
 func init() {
-	decoder = formam.NewDecoder(&formam.DecoderOptions{TagName: "schema"})
+	decoder = formam.NewDecoder(&formam.DecoderOptions{
+		TagName:           "schema",
+		IgnoreUnknownKeys: true,
+	})
+
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
 		if err != nil {
