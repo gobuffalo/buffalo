@@ -2,11 +2,15 @@ FROM gobuffalo/buffalo:development
 
 RUN buffalo version
 
-RUN go get -u github.com/golang/lint/golint
-RUN go get -u github.com/markbates/filetest
+RUN go get -v -u github.com/golang/dep
+RUN go install -v github.com/golang/dep
+RUN go get -v -u github.com/golang/lint/golint
+RUN go get -v -u github.com/markbates/filetest
+RUN go get -v -u github.com/gobuffalo/makr
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
+RUN rm $(which buffalo)
 RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
@@ -14,11 +18,12 @@ ADD . .
 
 RUN go get -v -t ./...
 
+RUN go install -v ./buffalo
+
 RUN go test -race ./...
 
 RUN golint -set_exit_status ./...
 
-RUN go install ./buffalo
 
 WORKDIR $GOPATH/src/
 RUN buffalo new --db-type=sqlite3 hello_world --ci-provider=travis
