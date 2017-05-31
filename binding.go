@@ -4,17 +4,15 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"net/http"
-	"reflect"
 	"sync"
 
-	"github.com/gorilla/schema"
-	"github.com/markbates/pop/nulls"
+	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
 )
 
 var binderLock = &sync.Mutex{}
 var binders = map[string]BinderFunc{}
-var schemaDecoder *schema.Decoder
+var decoder *formam.Decoder
 
 // BinderFunc takes a request and binds it to an interface.
 // If there is a problem it should return an error.
@@ -29,22 +27,19 @@ func RegisterBinder(contentType string, fn BinderFunc) {
 }
 
 func init() {
-	schemaDecoder = schema.NewDecoder()
-	schemaDecoder.IgnoreUnknownKeys(true)
-	schemaDecoder.ZeroEmpty(true)
-
-	// register the types in the nulls package with the decoder
-	nulls.RegisterWithSchema(func(i interface{}, fn func(s string) reflect.Value) {
-		schemaDecoder.RegisterConverter(i, fn)
-	})
-
-	sb := func(req *http.Request, value interface{}) error {
+	decoder = formam.NewDecoder(&formam.DecoderOptions{TagName: "schema"})
+	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return schemaDecoder.Decode(value, req.PostForm)
+
+		if err := decoder.Decode(req.Form, i); err != nil {
+			return errors.WithStack(err)
+		}
+		return nil
 	}
+
 	binders["application/html"] = sb
 	binders["text/html"] = sb
 	binders["application/x-www-form-urlencoded"] = sb
