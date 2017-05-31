@@ -53,7 +53,7 @@ Tests:
 }
 
 func updateGoDepsCheck() error {
-	if _, err := os.Stat("Gopkg.toml"); err == nil {
+	if _, err := exec.LookPath("Gopkg.toml"); err == nil {
 		// use github.com/golang/dep
 		args := []string{"ensure", "-v"}
 		if setupOptions.updateGoDeps {
