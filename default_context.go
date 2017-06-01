@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
@@ -140,7 +141,7 @@ func (d *DefaultContext) Bind(value interface{}) error {
 	if ct != "" {
 		cts := strings.Split(ct, ";")
 		c := cts[0]
-		if b, ok := binders[strings.TrimSpace(c)]; ok {
+		if b, ok := binding.Binders[strings.TrimSpace(c)]; ok {
 			return b(d.Request(), value)
 		}
 		return errors.Errorf("could not find a binder for %s", c)
