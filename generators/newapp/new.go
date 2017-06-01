@@ -26,7 +26,12 @@ type App struct {
 // Generator returns a generator to create a new application
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
-	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
+	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-v", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports", "-v")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-v", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep", "-v")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-v", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore", "-v")))
 
 	files, err := generators.Find("newapp")
 	if err != nil {
@@ -59,8 +64,6 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 	}
 
-	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 	if a.SkipWebpack {
 		wg, err := standard.New(data)
 		if err != nil {
@@ -84,6 +87,9 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 }
 
 func (a App) goGet() *exec.Cmd {
+	if _, err := exec.LookPath("dep"); err == nil {
+		return exec.Command("dep", "init")
+	}
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")
