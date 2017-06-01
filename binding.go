@@ -37,7 +37,7 @@ func RegisterTimeLayout(layout string) {
 	timeLayouts = append(timeLayouts, layout)
 }
 
-// RegisterCustomTypeDecoder
+// RegisterBinderTypeDecoder allows to define custom type decoders.
 func RegisterBinderTypeDecoder(fn formam.DecodeCustomTypeFunc, types []interface{}, fields []interface{}) {
 	decoder.RegisterCustomType(fn, types, fields)
 }
