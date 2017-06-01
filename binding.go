@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
@@ -13,6 +14,10 @@ import (
 var binderLock = &sync.Mutex{}
 var binders = map[string]BinderFunc{}
 var decoder *formam.Decoder
+
+var timeLayouts = []string{
+	"2006-01-02T15:04:05Z07:00",
+}
 
 // BinderFunc takes a request and binds it to an interface.
 // If there is a problem it should return an error.
@@ -26,11 +31,38 @@ func RegisterBinder(contentType string, fn BinderFunc) {
 	binders[contentType] = fn
 }
 
+// RegisterTimeLayout allows to add custom time layouts that
+// the binder will be able to use for decoding.
+func RegisterTimeLayout(layout string) {
+	timeLayouts = append(timeLayouts, layout)
+}
+
+// RegisterCustomTypeDecoder
+func RegisterBinderTypeDecoder(fn formam.DecodeCustomTypeFunc, types []interface{}, fields []interface{}) {
+	decoder.RegisterCustomType(fn, types, fields)
+}
+
 func init() {
 	decoder = formam.NewDecoder(&formam.DecoderOptions{
 		TagName:           "schema",
 		IgnoreUnknownKeys: true,
 	})
+
+	decoder.RegisterCustomType(func(vals []string) (interface{}, error) {
+		var t time.Time
+		var err error
+
+		for _, layout := range timeLayouts {
+			t, er := time.Parse(layout, vals[0])
+			if er == nil {
+				return t, er
+			}
+
+			err = er
+		}
+
+		return t, err
+	}, []interface{}{time.Time{}}, nil)
 
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
