@@ -4,6 +4,7 @@ import (
   "log"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
+	"github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   {{ if .withPop }}
   "{{.modelsPath}}"
@@ -30,9 +31,11 @@ func App() *buffalo.App {
     if ENV == "development" {
       app.Use(middleware.ParameterLogger)
     }
-    // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
-    // Remove to disable this.
-    app.Use(middleware.CSRF)
+    if ENV != "test" {
+      // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+      // Remove to disable this.
+      app.Use(csrf.Middleware)
+    }
 
     {{ if .withPop }}
     app.Use(middleware.PopTransaction(models.DB))
