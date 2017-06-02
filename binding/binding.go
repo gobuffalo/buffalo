@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/markbates/pop/nulls"
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
 )
@@ -69,6 +70,23 @@ func init() {
 
 		return t, err
 	}, []interface{}{time.Time{}}, nil)
+
+	decoder.RegisterCustomType(func(vals []string) (interface{}, error) {
+		var ti nulls.Time
+		var err error
+
+		for _, layout := range timeFormats {
+			t, er := time.Parse(layout, vals[0])
+			if er == nil {
+				ti.Time = t
+				return ti, er
+			}
+
+			err = er
+		}
+
+		return ti, err
+	}, []interface{}{nulls.Time{}}, nil)
 
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
