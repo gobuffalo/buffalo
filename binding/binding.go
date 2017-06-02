@@ -41,7 +41,7 @@ func RegisterCustomDecorder(fn CustomTypeDecoder, types []interface{}, fields []
 	decoder.RegisterCustomType(rawFunc, types, fields)
 }
 
-// RegisterBinder maps a request Content-Type (application/json)
+// Registermaps a request Content-Type (application/json)
 // to a Binder.
 func Register(contentType string, fn Binder) {
 	lock.Lock()
@@ -50,7 +50,7 @@ func Register(contentType string, fn Binder) {
 	binders[strings.ToLower(contentType)] = fn
 }
 
-// Bind the interface to the request.Body. The type of binding
+// Exec will bind the interface to the request.Body. The type of binding
 // is dependent on the "Content-Type" for the request. If the type
 // is "application/json" it will use "json.NewDecoder". If the type
 // is "application/xml" it will use "xml.NewDecoder". The default
