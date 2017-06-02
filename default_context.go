@@ -134,19 +134,10 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 // Bind the interface to the request.Body. The type of binding
 // is dependent on the "Content-Type" for the request. If the type
 // is "application/json" it will use "json.NewDecoder". If the type
-// is "application/xml" it will use "xml.NewDecoder". The default
-// binder is "http://www.gorillatoolkit.org/pkg/schema".
+// is "application/xml" it will use "xml.NewDecoder". See the
+// github.com/gobuffalo/buffalo/binding package for more details.
 func (d *DefaultContext) Bind(value interface{}) error {
-	ct := strings.ToLower(d.Request().Header.Get("Content-Type"))
-	if ct != "" {
-		cts := strings.Split(ct, ";")
-		c := cts[0]
-		if b, ok := binding.Binders[strings.TrimSpace(c)]; ok {
-			return b(d.Request(), value)
-		}
-		return errors.Errorf("could not find a binder for %s", c)
-	}
-	return errors.New("blank content type")
+	return binding.Exec(d.Request(), value)
 }
 
 // LogField adds the key/value pair onto the Logger to be printed out

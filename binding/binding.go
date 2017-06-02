@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -12,15 +13,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-// BinderFunc takes a request and binds it to an interface.
+// Binder takes a request and binds it to an interface.
 // If there is a problem it should return an error.
-type BinderFunc func(*http.Request, interface{}) error
+type Binder func(*http.Request, interface{}) error
 
-// CustomTypeDecoderFunc converts a custom type from the request insto its exact type.
-type CustomTypeDecoderFunc func([]string) (interface{}, error)
+// CustomTypeDecoder converts a custom type from the request insto its exact type.
+type CustomTypeDecoder func([]string) (interface{}, error)
 
-// Binders is a map of the defined content-type related binders.
-var Binders = map[string]BinderFunc{}
+// binders is a map of the defined content-type related binders.
+var binders = map[string]Binder{}
 
 var decoder *formam.Decoder
 var lock = &sync.Mutex{}
@@ -34,19 +35,37 @@ func RegisterTimeFormats(layouts ...string) {
 	timeFormats = append(timeFormats, layouts...)
 }
 
-// RegisterBinderTypeDecoder allows to define custom type decoders.
-func RegisterBinderTypeDecoder(fn CustomTypeDecoderFunc, types []interface{}, fields []interface{}) {
+// RegisterCustomDecorder allows to define custom type decoders.
+func RegisterCustomDecorder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
 	rawFunc := (func([]string) (interface{}, error))(fn)
 	decoder.RegisterCustomType(rawFunc, types, fields)
 }
 
 // RegisterBinder maps a request Content-Type (application/json)
-// to a BinderFunc.
-func RegisterBinder(contentType string, fn BinderFunc) {
+// to a Binder.
+func Register(contentType string, fn Binder) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	Binders[contentType] = fn
+	binders[strings.ToLower(contentType)] = fn
+}
+
+// Bind the interface to the request.Body. The type of binding
+// is dependent on the "Content-Type" for the request. If the type
+// is "application/json" it will use "json.NewDecoder". If the type
+// is "application/xml" it will use "xml.NewDecoder". The default
+// binder is "https://github.com/monoculum/formam".
+func Exec(req *http.Request, value interface{}) error {
+	ct := strings.ToLower(req.Header.Get("Content-Type"))
+	if ct != "" {
+		cts := strings.Split(ct, ";")
+		c := cts[0]
+		if b, ok := binders[strings.TrimSpace(c)]; ok {
+			return b(req, value)
+		}
+		return errors.Errorf("could not find a binder for %s", c)
+	}
+	return errors.New("blank content type")
 }
 
 func init() {
@@ -100,10 +119,11 @@ func init() {
 		return nil
 	}
 
-	Binders["application/html"] = sb
-	Binders["text/html"] = sb
-	Binders["application/x-www-form-urlencoded"] = sb
-	Binders["multipart/form-data"] = sb
+	binders["application/html"] = sb
+	binders["text/html"] = sb
+	binders["application/x-www-form-urlencoded"] = sb
+	binders["multipart/form-data"] = sb
+	binders["html"] = sb
 }
 
 func init() {
@@ -111,9 +131,9 @@ func init() {
 		return json.NewDecoder(req.Body).Decode(value)
 	}
 
-	Binders["application/json"] = jb
-	Binders["text/json"] = jb
-	Binders["json"] = jb
+	binders["application/json"] = jb
+	binders["text/json"] = jb
+	binders["json"] = jb
 }
 
 func init() {
@@ -121,7 +141,7 @@ func init() {
 		return xml.NewDecoder(req.Body).Decode(value)
 	}
 
-	Binders["application/xml"] = xb
-	Binders["text/xml"] = xb
-	Binders["xml"] = xb
+	binders["application/xml"] = xb
+	binders["text/xml"] = xb
+	binders["xml"] = xb
 }
