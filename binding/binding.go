@@ -41,7 +41,7 @@ func RegisterCustomDecorder(fn CustomTypeDecoder, types []interface{}, fields []
 	decoder.RegisterCustomType(rawFunc, types, fields)
 }
 
-// Registermaps a request Content-Type (application/json)
+// Register maps a request Content-Type (application/json)
 // to a Binder.
 func Register(contentType string, fn Binder) {
 	lock.Lock()
