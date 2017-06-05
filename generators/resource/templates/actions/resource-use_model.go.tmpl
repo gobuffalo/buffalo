@@ -24,7 +24,7 @@ type {{.camel}}Resource struct{
 	buffalo.Resource
 }
 
-// List gets all {{.modelPlural}}. This function is mapped to the the path
+// List gets all {{.modelPlural}}. This function is mapped to the path
 // GET /{{.under}}
 func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
@@ -33,9 +33,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// You can order your list here. Just change
 	err := tx.All({{.varPlural}})
 	// to:
-	// err := tx.Order("(case when completed then 1 else 2 end) desc, lower([sort_parameter]) asc").All({{.downFirstCap}})
-	// Don't forget to change [sort_parameter] to the parameter of
-	// your model, which should be used for sorting.
+	// err := tx.Order("create_at desc").All({{.varPlural}})
 	if err != nil {
 		return err
 	}
