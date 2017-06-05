@@ -2,6 +2,7 @@ package actions
 
 import (
 
+  "github.com/pkg/errors"
 	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/pop"
   "{{.modelsPath}}"
@@ -35,7 +36,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// to:
 	// err := tx.Order("create_at desc").All({{.varPlural}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Make {{.plural}} available inside the html template
 	c.Set("{{.varPlural}}", {{.varPlural}})
@@ -52,7 +53,7 @@ func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Make {{.varSingular}} available inside the html template
 	c.Set("{{.varSingular}}", {{.varSingular}})
@@ -75,14 +76,14 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 	// Bind {{.varSingular}} to the html form elements
 	err := c.Bind({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if verrs.HasAny() {
 		// Make {{.varSingular}} available inside the html template
@@ -108,7 +109,7 @@ func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 	{{.varSingular}} := &models.{{.model}}{}
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Make {{.varSingular}} available inside the html template
 	c.Set("{{.varSingular}}", {{.varSingular}})
@@ -124,16 +125,16 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	{{.varSingular}} := &models.{{.model}}{}
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Bind {{.singular}} to the html form elements
 	err = c.Bind({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	verrs, err := tx.ValidateAndUpdate({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if verrs.HasAny() {
 		// Make {{.varSingular}} available inside the html template
@@ -160,11 +161,11 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = tx.Destroy({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// If there are no errors set a flash message
 	c.Flash().Add("success", "{{.model}} was destroyed successfully")

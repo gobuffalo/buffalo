@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/pop"
@@ -24,7 +24,7 @@ type {{.camel}}Resource struct{
 	buffalo.Resource
 }
 
-// List gets all {{.modelPlural}}. This function is mapped to the the path
+// List gets all {{.modelPlural}}. This function is mapped to the path
 // GET /{{.under}}
 func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
@@ -33,11 +33,9 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// You can order your list here. Just change
 	err := tx.All({{.varPlural}})
 	// to:
-	// err := tx.Order("(case when completed then 1 else 2 end) desc, lower([sort_parameter]) asc").All({{.downFirstCap}})
-	// Don't forget to change [sort_parameter] to the parameter of
-	// your model, which should be used for sorting.
+	// err := tx.Order("created_at desc").All({{.varPlural}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return c.Render(200, r.{{.renderFunction}}({{.varPlural}}))
 }
@@ -52,7 +50,7 @@ func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
 }
@@ -70,14 +68,14 @@ func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 	// Bind {{.varSingular}} to the html form elements
 	err := c.Bind({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if verrs.HasAny() {
 		// Render errors as {{.renderFunction}}
@@ -101,16 +99,16 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	{{.varSingular}} := &models.{{.model}}{}
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Bind {{.singular}} to the html form elements
 	err = c.Bind({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	verrs, err := tx.ValidateAndUpdate({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if verrs.HasAny() {
 		// Render errors as {{.renderFunction}}
@@ -130,11 +128,11 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
 	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = tx.Destroy({{.varSingular}})
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	// Success!
 	return c.Render(200, r.{{.renderFunction}}({{.varSingular}}))
