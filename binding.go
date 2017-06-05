@@ -10,7 +10,7 @@ import (
 
 // RegisterBinder is deprecated. Please use binding.Register instead.
 func RegisterBinder(contentType string, fn binding.Binder) {
-	warningMsg := "RegisterBinder is deprecated, and will be removed in v0.10.0. Use binding.Register instead"
+	warningMsg := "RegisterBinder is deprecated, and will be removed in v0.10.0. Use binding.Register instead."
 	_, file, no, ok := runtime.Caller(1)
 	if ok {
 		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
