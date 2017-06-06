@@ -1,7 +1,6 @@
 package actions
 
 import (
-  "log"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
 	"github.com/gobuffalo/buffalo/middleware/csrf"
@@ -38,14 +37,16 @@ func App() *buffalo.App {
     }
 
     {{ if .withPop }}
+    // Wraps each request in a transaction.
+    //  c.Value("tx").(*pop.PopTransaction)
+    // Remove to disable this.
     app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
 
     // Setup and use translations:
     var err error
-    T, err = i18n.New(packr.NewBox("../locales"), "en-US")
-    if err != nil {
-      log.Fatal(err)
+    if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
+      app.Stop(err)
     }
     app.Use(T.Middleware())
 
