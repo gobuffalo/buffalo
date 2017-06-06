@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -83,8 +84,11 @@ func (a *App) Start(addr string) error {
 }
 
 // Stop the application and attempt to gracefully shutdown
-func (a *App) Stop() error {
+func (a *App) Stop(err error) error {
 	a.cancel()
+	if err != nil {
+		log.Printf("%+v", err)
+	}
 	return nil
 }
 
