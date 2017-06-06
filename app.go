@@ -2,7 +2,6 @@ package buffalo
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -40,14 +39,15 @@ func (a *App) Start(addr string) error {
 	}
 
 	go func() {
+		// gracefully shut down the application when the context is cancelled
 		<-a.Context.Done()
 		fmt.Println("Shutting down application")
-		a.cancel()
 		err := server.Shutdown(a.Context)
 		if err != nil {
 			a.Logger.Error(errors.WithStack(err))
 		}
 		if !a.WorkerOff {
+			// stop the workers
 			err = a.Worker.Stop()
 			if err != nil {
 				a.Logger.Error(errors.WithStack(err))
@@ -55,30 +55,28 @@ func (a *App) Start(addr string) error {
 		}
 	}()
 
+	// if configured to do so, start the workers
 	if !a.WorkerOff {
 		go func() {
 			err := a.Worker.Start(a.Context)
 			if err != nil {
-				a.Logger.Error(errors.WithStack(err))
-				a.cancel()
+				a.Stop(errors.WithStack(err))
 			}
 		}()
 	}
 
+	// listen for system signals, like CTRL-C
 	go func() {
 		signalChan := make(chan os.Signal, 1)
 		signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 		<-signalChan
-		a.cancel()
+		a.Stop(nil)
 	}()
 
+	// start the web server
 	err := server.ListenAndServe()
 	if err != nil {
-		a.cancel()
-
-		err = errors.WithStack(err)
-		a.Logger.Error(err)
-		return errors.WithStack(err)
+		return a.Stop(errors.WithStack(err))
 	}
 	return nil
 }
@@ -87,7 +85,8 @@ func (a *App) Start(addr string) error {
 func (a *App) Stop(err error) error {
 	a.cancel()
 	if err != nil {
-		log.Printf("%+v", err)
+		a.Logger.Error(err)
+		return err
 	}
 	return nil
 }
