@@ -16,6 +16,7 @@ import (
 )
 
 var setupOptions = struct {
+	verbose       bool
 	updateGoDeps  bool
 	dropDatabases bool
 }{}
@@ -53,9 +54,13 @@ Tests:
 }
 
 func updateGoDepsCheck() error {
-	if _, err := exec.LookPath("Gopkg.toml"); err == nil {
+	deps, _ := deplist.List()
+	if _, err := os.Stat("Gopkg.toml"); err == nil {
 		// use github.com/golang/dep
-		args := []string{"ensure", "-v"}
+		args := []string{"ensure"}
+		if setupOptions.verbose {
+			args = append(args, "-v")
+		}
 		if setupOptions.updateGoDeps {
 			args = append(args, "--update")
 		}
@@ -75,9 +80,12 @@ func updateGoDepsCheck() error {
 		return errors.WithStack(err)
 	}
 	for dep := range deps {
-		args := []string{"get", "-v"}
-		if setupOptions.updateGoDeps {
+		args := []string{"get"}
+		if setupOptions.verbose {
 			args = append(args, "-v")
+		}
+		if setupOptions.updateGoDeps {
+			args = append(args, "-u")
 		}
 		args = append(args, dep)
 		c := exec.Command("go", args...)
@@ -213,7 +221,8 @@ func run(cmd *exec.Cmd) error {
 }
 
 func init() {
-	setupCmd.Flags().BoolVarP(&setupOptions.updateGoDeps, "update", "u", false, "run go get -u -v against the application's Go dependencies")
+	setupCmd.Flags().BoolVarP(&setupOptions.verbose, "verbose", "v", false, "run with verbose output")
+	setupCmd.Flags().BoolVarP(&setupOptions.updateGoDeps, "update", "u", false, "run go get -u against the application's Go dependencies")
 	setupCmd.Flags().BoolVarP(&setupOptions.dropDatabases, "drop", "d", false, "drop existing databases")
 	RootCmd.AddCommand(setupCmd)
 }

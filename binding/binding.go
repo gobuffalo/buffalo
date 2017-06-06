@@ -75,36 +75,20 @@ func init() {
 	})
 
 	decoder.RegisterCustomType(func(vals []string) (interface{}, error) {
-		var t time.Time
-		var err error
-
-		for _, layout := range timeFormats {
-			t, er := time.Parse(layout, vals[0])
-			if er == nil {
-				return t, er
-			}
-
-			err = er
-		}
-
-		return t, err
+		return parseTime(vals)
 	}, []interface{}{time.Time{}}, nil)
 
 	decoder.RegisterCustomType(func(vals []string) (interface{}, error) {
 		var ti nulls.Time
-		var err error
 
-		for _, layout := range timeFormats {
-			t, er := time.Parse(layout, vals[0])
-			if er == nil {
-				ti.Time = t
-				return ti, er
-			}
-
-			err = er
+		t, err := parseTime(vals)
+		if err != nil {
+			return ti, errors.WithStack(err)
 		}
+		ti.Time = t
+		ti.Valid = true
 
-		return ti, err
+		return ti, nil
 	}, []interface{}{nulls.Time{}}, nil)
 
 	sb := func(req *http.Request, i interface{}) error {
@@ -144,4 +128,27 @@ func init() {
 	binders["application/xml"] = xb
 	binders["text/xml"] = xb
 	binders["xml"] = xb
+}
+
+func parseTime(vals []string) (time.Time, error) {
+	var t time.Time
+	var err error
+
+	// don't try to parse empty time values, it will raise an error
+	if len(vals) == 0 || vals[0] == "" {
+		return t, nil
+	}
+
+	for _, layout := range timeFormats {
+		t, err := time.Parse(layout, vals[0])
+		if err == nil {
+			return t, nil
+		}
+	}
+
+	if err != nil {
+		return t, errors.WithStack(err)
+	}
+
+	return t, nil
 }
