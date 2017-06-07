@@ -11,7 +11,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 
@@ -414,7 +413,7 @@ func init() {
 	pwd, _ := os.Getwd()
 	output := filepath.Join("bin", filepath.Base(pwd))
 
-	if runtime.GOOS == "windows" || os.Getenv("GOOS") == "windows" {
+	if os.Getenv("GOOS") == "windows" {
 		output += ".exe"
 	}
 
