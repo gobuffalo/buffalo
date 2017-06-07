@@ -27,6 +27,23 @@ var decoder *formam.Decoder
 var lock = &sync.Mutex{}
 var timeFormats = []string{
 	"2006-01-02T15:04:05Z07:00",
+	"01/02/2006",
+	"2006-01-02",
+	time.ANSIC,
+	time.UnixDate,
+	time.RubyDate,
+	time.RFC822,
+	time.RFC822Z,
+	time.RFC850,
+	time.RFC1123,
+	time.RFC1123Z,
+	time.RFC3339,
+	time.RFC3339Nano,
+	time.Kitchen,
+	time.Stamp,
+	time.StampMilli,
+	time.StampMicro,
+	time.StampNano,
 }
 
 // RegisterTimeFormats allows to add custom time layouts that
