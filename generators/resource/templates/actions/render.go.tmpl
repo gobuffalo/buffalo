@@ -1,0 +1,12 @@
+package {{.package}}
+
+import (
+	"github.com/gobuffalo/buffalo/render"
+)
+
+var r *render.Engine
+
+// SetRenderEngine sets the r variable from outside (p.e. actions root) package.
+func SetRenderEngine(engine *render.Engine) {
+	r = engine
+}

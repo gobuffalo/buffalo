@@ -33,24 +33,43 @@ func New(data makr.Data) (*makr.Generator, error) {
 	for _, f := range files {
 		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
-			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["under"].(string), -1), f.Body))
+			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["path"].(string), -1), f.Body))
 		}
-		if mimeType == "html" {
-			// Adding the html templates to the generator
-			if strings.Contains(f.WritePath, "model-view-") {
-				targetPath := filepath.Join(
-					filepath.Dir(f.WritePath),
-					data["modelPluralUnder"].(string),
-					strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
-				)
-				g.Add(makr.NewFile(targetPath, f.Body))
-			}
+
+		// Adding the html templates to the generator
+		if mimeType == "html" && strings.Contains(f.WritePath, "model-view-") {
+			targetPath := filepath.Join(
+				filepath.Dir(f.WritePath),
+				data["under"].(string),
+				strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
+			)
+			g.Add(makr.NewFile(targetPath, f.Body))
+		}
+
+		// Adding package render if needed
+		if strings.Contains(f.WritePath, "render.go") && data["package"] != "actions" {
+			targetPath := filepath.Join(filepath.Dir(f.WritePath), filepath.Dir(data["path"].(string)), "render.go")
+			g.Add(makr.NewFile(targetPath, f.Body))
+		}
+
+		// Adding package action_tests if needed
+		if strings.Contains(f.WritePath, "actions_test.go") && data["package"] != "actions" {
+			targetPath := filepath.Join(filepath.Dir(f.WritePath), filepath.Dir(data["path"].(string)), "actions_test.go")
+			g.Add(makr.NewFile(targetPath, f.Body))
 		}
 	}
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["under"], data["camel"]))
+			if data["package"].(string) == "actions" {
+				return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["under"], data["camel"]))
+			}
+
+			//Adds package prefix if the action is nested
+			code := fmt.Sprintf("\n%s.SetRenderEngine(r)", data["package"])
+			code = code + fmt.Sprintf("\napp.Resource(\"/%s\", %s.%sResource{&buffalo.BaseResource{}})", data["under"], data["package"], data["camel"])
+
+			return generators.AddInsideAppBlock(code)
 		},
 	})
 	if !skipModel && useModel == "" {
