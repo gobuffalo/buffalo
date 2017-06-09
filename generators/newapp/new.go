@@ -26,12 +26,12 @@ type App struct {
 // Generator returns a generator to create a new application
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
-	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-v", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports", "-v")))
-	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-v", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep", "-v")))
-	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-v", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore", "-v")))
+	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep")))
+	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 
 	files, err := generators.Find("newapp")
 	if err != nil {
@@ -81,7 +81,6 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		g.Add(newSodaGenerator())
 	}
 	g.Add(makr.NewCommand(a.goGet()))
-	g.Add(makr.NewCommand(makr.GoFmt()))
 
 	return g, nil
 }
