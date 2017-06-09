@@ -144,6 +144,8 @@ func genNewFiles() error {
 		"dbType":      app.DBType,
 		"version":     Version,
 		"ciProvider":  app.CIProvider,
+		"asAPI":       app.API,
+		"asWeb":       !app.API,
 	}
 	if app.WithYarn {
 		data["withYarn"] = true
@@ -163,6 +165,7 @@ func init() {
 	app.RootPath = pwd
 
 	RootCmd.AddCommand(newCmd)
+	newCmd.Flags().BoolVar(&app.API, "api", false, "skip all front-end code and configure for an API server")
 	newCmd.Flags().BoolVarP(&app.Force, "force", "f", false, "delete and remake if the app already exists")
 	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&app.SkipPop, "skip-pop", false, "skips adding pop/soda to your app")

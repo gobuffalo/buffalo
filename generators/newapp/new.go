@@ -1,7 +1,9 @@
 package newapp
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
@@ -21,6 +23,7 @@ type App struct {
 	WithYarn    bool
 	DBType      string
 	CIProvider  string
+	API         bool
 }
 
 // Generator returns a generator to create a new application
@@ -64,21 +67,30 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 	}
 
-	if a.SkipWebpack {
-		wg, err := standard.New(data)
-		if err != nil {
-			return g, err
+	if !a.API {
+		if a.SkipWebpack {
+			wg, err := standard.New(data)
+			if err != nil {
+				return g, err
+			}
+			g.Add(wg)
+		} else {
+			wg, err := webpack.New(data)
+			if err != nil {
+				return g, err
+			}
+			g.Add(wg)
 		}
-		g.Add(wg)
-	} else {
-		wg, err := webpack.New(data)
-		if err != nil {
-			return g, err
-		}
-		g.Add(wg)
 	}
 	if !a.SkipPop {
 		g.Add(newSodaGenerator())
+	}
+	if a.API {
+		g.Add(makr.Func{
+			Runner: func(path string, data makr.Data) error {
+				return os.RemoveAll(filepath.Join(path, "templates"))
+			},
+		})
 	}
 	g.Add(makr.NewCommand(a.goGet()))
 
