@@ -3,7 +3,7 @@ package actions
 import (
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
-	"github.com/gobuffalo/buffalo/middleware/csrf"
+  "github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   {{ if .withPop }}
   "{{.modelsPath}}"
@@ -27,6 +27,11 @@ func App() *buffalo.App {
       Env: ENV,
       SessionName: "_{{.name}}_session",
     })
+    {{ if .asAPI -}}
+    // Set the request content type to JSON
+    app.Use(middleware.SetContentType("application/json"))
+    {{ end }}
+
     if ENV == "development" {
       app.Use(middleware.ParameterLogger)
     }
@@ -52,7 +57,9 @@ func App() *buffalo.App {
 
     app.GET("/", HomeHandler)
 
+    {{ if .asWeb -}}
     app.ServeFiles("/assets", packr.NewBox("../public/assets"))
+    {{ end -}}
   }
 
   return app

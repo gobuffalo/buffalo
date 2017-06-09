@@ -102,3 +102,9 @@ WORKDIR $GOPATH/src
 RUN buffalo new --skip-pop simple_world
 WORKDIR ./simple_world
 RUN buffalo build
+
+WORKDIR $GOPATH/src
+RUN buffalo new --api apiapp
+WORKDIR ./apiapp
+RUN buffalo build
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json

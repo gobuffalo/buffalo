@@ -9,6 +9,7 @@ var r *render.Engine
 
 func init() {
   r = render.New(render.Options{
+    {{ if .asWeb -}}
     // HTML layout to be used for all HTML requests:
     HTMLLayout:     "application.html",
 
@@ -17,5 +18,6 @@ func init() {
 
     // Add template helpers here:
     Helpers: render.Helpers{},
+  {{ end -}}
   })
 }
