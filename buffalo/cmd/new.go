@@ -169,6 +169,7 @@ func init() {
 	newCmd.Flags().BoolVarP(&app.Force, "force", "f", false, "delete and remake if the app already exists")
 	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
 	newCmd.Flags().BoolVar(&app.SkipPop, "skip-pop", false, "skips adding pop/soda to your app")
+	newCmd.Flags().BoolVar(&app.SkipDep, "skip-dep", false, "skips adding github.com/golang/dep to your app")
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().BoolVar(&app.WithYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")

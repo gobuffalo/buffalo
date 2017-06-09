@@ -24,6 +24,7 @@ type App struct {
 	DBType      string
 	CIProvider  string
 	API         bool
+	SkipDep     bool
 }
 
 // Generator returns a generator to create a new application
@@ -31,8 +32,10 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
-	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep")))
+	if !a.SkipDep {
+		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-u")))
+		g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep")))
+	}
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 
@@ -98,8 +101,10 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 }
 
 func (a App) goGet() *exec.Cmd {
-	if _, err := exec.LookPath("dep"); err == nil {
-		return exec.Command("dep", "init")
+	if !a.SkipDep {
+		if _, err := exec.LookPath("dep"); err == nil {
+			return exec.Command("dep", "init")
+		}
 	}
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
