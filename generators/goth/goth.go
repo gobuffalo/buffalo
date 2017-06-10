@@ -30,6 +30,5 @@ func New() (*makr.Generator, error) {
 		},
 	})
 	g.Add(makr.NewCommand(makr.GoGet("github.com/markbates/goth/...")))
-	g.Add(makr.NewCommand(makr.GoFmt()))
 	return g, nil
 }

@@ -163,7 +163,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 		App:         a,
 	}
 
-	r.MuxRoute = a.router.Handle(url, a.handlerToHandler(r, h)).Methods(method)
+	r.MuxRoute = a.router.Handle(url, r).Methods(method)
 	r.Name(buildRouteName(url))
 
 	routes := a.Routes()
@@ -207,6 +207,9 @@ func buildRouteName(path string) string {
 		resultPars = append([]string{part}, resultPars...)
 	}
 
-	underscore := strings.Join(resultPars, "_")
+	underscore := strings.TrimSpace(strings.Join(resultPars, "_"))
+	if underscore == "" {
+		return "root"
+	}
 	return inflect.CamelizeDownFirst(underscore)
 }

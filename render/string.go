@@ -1,6 +1,9 @@
 package render
 
-import "io"
+import (
+	"fmt"
+	"io"
+)
 
 type stringRenderer struct {
 	*Engine
@@ -21,17 +24,20 @@ func (s stringRenderer) Render(w io.Writer, data Data) error {
 }
 
 // String renderer that will run the string through
-// the github.com/aymerick/raymond package and return
+// the github.com/gobuffalo/plush package and return
 // "text/plain" as the content type.
-func String(s string) Renderer {
+func String(s string, args ...interface{}) Renderer {
 	e := New(Options{})
-	return e.String(s)
+	return e.String(s, args...)
 }
 
 // String renderer that will run the string through
-// the github.com/aymerick/raymond package and return
+// the github.com/gobuffalo/plush package and return
 // "text/plain" as the content type.
-func (e *Engine) String(s string) Renderer {
+func (e *Engine) String(s string, args ...interface{}) Renderer {
+	if len(args) > 0 {
+		s = fmt.Sprintf(s, args...)
+	}
 	return stringRenderer{
 		Engine: e,
 		body:   s,

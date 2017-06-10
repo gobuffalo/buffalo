@@ -2,11 +2,11 @@ package basicauth
 
 import (
 	"encoding/base64"
-	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/pkg/errors"
 )
 
 var (
@@ -17,8 +17,12 @@ var (
 	ErrAuthFail = errors.New("invalid basic auth username or password")
 )
 
-// BasicAuth middleware enables basic authentication
-func BasicAuth(auth func(c buffalo.Context, u, p string) bool) buffalo.MiddlewareFunc {
+// Authorizer is used to authenticate the basic auth username/password.
+// Should return true/false and/or an error.
+type Authorizer func(buffalo.Context, string, string) (bool, error)
+
+// Middleware enables basic authentication
+func Middleware(auth Authorizer) buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
 			token := strings.SplitN(c.Request().Header.Get("Authorization"), " ", 2)
@@ -34,7 +38,11 @@ func BasicAuth(auth func(c buffalo.Context, u, p string) bool) buffalo.Middlewar
 			if len(pair) != 2 {
 				return ErrAuthFail
 			}
-			if !auth(c, pair[0], pair[1]) {
+			success, err := auth(c, pair[0], pair[1])
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			if !success {
 				return ErrAuthFail
 			}
 			return next(c)

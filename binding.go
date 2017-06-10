@@ -1,70 +1,22 @@
 package buffalo
 
 import (
-	"encoding/json"
-	"encoding/xml"
-	"net/http"
-	"reflect"
-	"sync"
+	"fmt"
+	"log"
+	"runtime"
 
-	"github.com/gorilla/schema"
-	"github.com/markbates/pop/nulls"
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/buffalo/binding"
 )
 
-var binderLock = &sync.Mutex{}
-var binders = map[string]BinderFunc{}
-var schemaDecoder *schema.Decoder
-
-// BinderFunc takes a request and binds it to an interface.
-// If there is a problem it should return an error.
-type BinderFunc func(*http.Request, interface{}) error
-
-// RegisterBinder maps a request Content-Type (application/json)
-// to a BinderFunc.
-func RegisterBinder(contentType string, fn BinderFunc) {
-	binderLock.Lock()
-	defer binderLock.Unlock()
-	binders[contentType] = fn
-}
-
-func init() {
-	schemaDecoder = schema.NewDecoder()
-	schemaDecoder.IgnoreUnknownKeys(true)
-	schemaDecoder.ZeroEmpty(true)
-
-	// register the types in the nulls package with the decoder
-	nulls.RegisterWithSchema(func(i interface{}, fn func(s string) reflect.Value) {
-		schemaDecoder.RegisterConverter(i, fn)
-	})
-
-	sb := func(req *http.Request, value interface{}) error {
-		err := req.ParseForm()
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		return schemaDecoder.Decode(value, req.PostForm)
+// RegisterBinder is deprecated. Please use binding.Register instead.
+func RegisterBinder(contentType string, fn binding.Binder) {
+	warningMsg := "RegisterBinder is deprecated, and will be removed in v0.10.0. Use binding.Register instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
 	}
-	binders["application/html"] = sb
-	binders["text/html"] = sb
-	binders["application/x-www-form-urlencoded"] = sb
-	binders["multipart/form-data"] = sb
-}
 
-func init() {
-	jb := func(req *http.Request, value interface{}) error {
-		return json.NewDecoder(req.Body).Decode(value)
-	}
-	binders["application/json"] = jb
-	binders["text/json"] = jb
-	binders["json"] = jb
-}
+	log.Println(warningMsg)
 
-func init() {
-	xb := func(req *http.Request, value interface{}) error {
-		return xml.NewDecoder(req.Body).Decode(value)
-	}
-	binders["application/xml"] = xb
-	binders["text/xml"] = xb
-	binders["xml"] = xb
+	binding.Register(contentType, fn)
 }

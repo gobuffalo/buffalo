@@ -1,8 +1,13 @@
 package actions_test
 
 func (as *ActionSuite) Test_HomeHandler() {
+  {{ if .asWeb -}}
 	res := as.HTML("/").Get()
+  {{ end -}}
+  {{ if .asAPI -}}
+	res := as.JSON("/").Get()
+  {{ end -}}
 
 	as.Equal(200, res.Code)
-	as.Contains(res.Body.String(), "Welcome to Buffalo (EN)")
+	as.Contains(res.Body.String(), "Welcome to Buffalo")
 }

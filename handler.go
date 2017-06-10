@@ -62,33 +62,29 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	}
 }
 
-func (a *App) handlerToHandler(info RouteInfo, h Handler) http.Handler {
-	hf := func(res http.ResponseWriter, req *http.Request) {
-		c := a.newContext(info, res, req)
+func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	a := info.App
+	c := a.newContext(info, res, req)
 
-		defer c.Flash().persist(c.Session())
+	defer c.Flash().persist(c.Session())
 
-		err := a.Middleware.handler(h)(c)
+	err := a.Middleware.handler(info)(c)
 
+	if err != nil {
+		status := 500
+		// unpack root cause and check for HTTPError
+		cause := errors.Cause(err)
+		httpError, ok := cause.(HTTPError)
+		if ok {
+			status = httpError.Status
+		}
+		eh := a.ErrorHandlers.Get(status)
+		err = eh(status, err, c)
 		if err != nil {
-			status := 500
-			// unpack root cause and check for HTTPError
-			cause := errors.Cause(err)
-			httpError, ok := cause.(HTTPError)
-			if ok {
-				status = httpError.Status
-			}
-			eh := a.ErrorHandlers.Get(status)
-			err = eh(status, err, c)
-			if err != nil {
-				// things have really hit the fan if we're here!!
-				a.Logger.Error(err)
-				c.Response().WriteHeader(500)
-				c.Response().Write([]byte(err.Error()))
-			}
-			// err := c.Error(500, err)
-			// a.Logger.Error(err)
+			// things have really hit the fan if we're here!!
+			a.Logger.Error(err)
+			c.Response().WriteHeader(500)
+			c.Response().Write([]byte(err.Error()))
 		}
 	}
-	return http.HandlerFunc(hf)
 }

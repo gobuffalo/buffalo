@@ -11,7 +11,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 
@@ -23,7 +22,6 @@ import (
 )
 
 var outputBinName string
-var zipBin bool
 var extractAssets bool
 var hasDB bool
 var ldflags string
@@ -415,13 +413,12 @@ func init() {
 	pwd, _ := os.Getwd()
 	output := filepath.Join("bin", filepath.Base(pwd))
 
-	if runtime.GOOS == "windows" {
+	if os.Getenv("GOOS") == "windows" {
 		output += ".exe"
 	}
 
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
 	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
-	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	buildCmd.Flags().StringVar(&ldflags, "ldflags", "", "set any ldflags to be passed to the go build")
 }

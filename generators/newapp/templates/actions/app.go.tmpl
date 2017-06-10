@@ -1,9 +1,9 @@
 package actions
 
 import (
-  "log"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
+  "github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   {{ if .withPop }}
   "{{.modelsPath}}"
@@ -27,28 +27,39 @@ func App() *buffalo.App {
       Env: ENV,
       SessionName: "_{{.name}}_session",
     })
+    {{ if .asAPI -}}
+    // Set the request content type to JSON
+    app.Use(middleware.SetContentType("application/json"))
+    {{ end }}
+
     if ENV == "development" {
       app.Use(middleware.ParameterLogger)
     }
-    // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
-    // Remove to disable this.
-    app.Use(middleware.CSRF)
+    if ENV != "test" {
+      // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+      // Remove to disable this.
+      app.Use(csrf.Middleware)
+    }
 
     {{ if .withPop }}
+    // Wraps each request in a transaction.
+    //  c.Value("tx").(*pop.PopTransaction)
+    // Remove to disable this.
     app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
 
     // Setup and use translations:
     var err error
-    T, err = i18n.New(packr.NewBox("../locales"), "en-US")
-    if err != nil {
-      log.Fatal(err)
+    if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
+      app.Stop(err)
     }
     app.Use(T.Middleware())
 
     app.GET("/", HomeHandler)
 
+    {{ if .asWeb -}}
     app.ServeFiles("/assets", packr.NewBox("../public/assets"))
+    {{ end -}}
   }
 
   return app
