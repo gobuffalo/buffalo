@@ -204,6 +204,9 @@ func buildRouteName(path string) string {
 		resultPars = append([]string{part}, resultPars...)
 	}
 
-	underscore := strings.Join(resultPars, "_")
+	underscore := strings.TrimSpace(strings.Join(resultPars, "_"))
+	if underscore == "" {
+		return "root"
+	}
 	return inflect.CamelizeDownFirst(underscore)
 }
