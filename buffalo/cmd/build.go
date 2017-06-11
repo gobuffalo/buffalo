@@ -519,7 +519,8 @@ var aGo = `package a
 
 import (
 	"log"
-	"os"
+	"strings"
+	"github.com/markbates/pop"
 )
 
 func init() {
@@ -528,16 +529,8 @@ func init() {
 
 func dropDatabaseYml() {
 	if DB_CONFIG != "" {
-		_, err := os.Stat("database.yml")
-		if err == nil {
-			// yaml already exists, don't do anything
-			return
-		}
-		f, err := os.Create("database.yml")
-		if err != nil {
-			log.Fatal(err)
-		}
-		_, err = f.WriteString(DB_CONFIG)
+		r := strings.NewReader(DB_CONFIG)
+		err := pop.LoadFrom(r)
 		if err != nil {
 			log.Fatal(err)
 		}
