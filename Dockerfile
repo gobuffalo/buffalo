@@ -44,7 +44,7 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/r
 RUN rm actions/admins_test.go
 
 RUN buffalo test -race
-RUN buffalo build
+RUN buffalo build -static
 
 RUN buffalo g resource users name:text email:text
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_model_migration.json
