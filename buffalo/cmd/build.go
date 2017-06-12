@@ -26,6 +26,7 @@ var extractAssets bool
 var hasDB bool
 var ldflags string
 var buildTags string
+var static bool
 
 type builder struct {
 	cleanup      []string
@@ -108,7 +109,10 @@ func (b *builder) buildDatabase() error {
 		}
 		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
 			b.buildTags = append(b.buildTags, "nosqlite")
+		} else if !static {
+			fmt.Println("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
 		}
+
 	} else {
 		// add the nosqlite build tag if there is no database being used
 		b.buildTags = append(b.buildTags, "nosqlite")
@@ -347,9 +351,13 @@ func (b *builder) buildBin() error {
 		}
 	}
 
+	// RUN GOOS=linux buffalo build --ldflags '-linkmode external -extldflags "-static"' -o /bin/app
 	flags := []string{
 		fmt.Sprintf("-X main.version=%s", version),
 		fmt.Sprintf("-X main.buildTime=%s", buildTime),
+	}
+	if static {
+		flags = append(flags, "-linkmode external", "-extldflags \"-static\"")
 	}
 
 	// Add any additional ldflags passed in to the build args
@@ -420,6 +428,7 @@ func init() {
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
 	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
+	buildCmd.Flags().BoolVarP(&static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"' (USE FOR CGO)")
 	buildCmd.Flags().StringVar(&ldflags, "ldflags", "", "set any ldflags to be passed to the go build")
 }
 
