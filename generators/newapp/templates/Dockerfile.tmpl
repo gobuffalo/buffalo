@@ -1,11 +1,27 @@
-FROM gobuffalo/buffalo:{{.version}}
+FROM gobuffalo/buffalo:{{.version}} as builder
 
 RUN mkdir -p $GOPATH/src/{{.packagePath}}
 WORKDIR $GOPATH/src/{{.packagePath}}
 
 ADD . .
 
+{{if .asWeb -}}
 RUN npm install
-RUN buffalo build -o bin/app
+{{end -}}
+RUN buffalo build --static -o /bin/app
 
-CMD ./bin/app
+FROM alpine
+RUN apk add --no-cache bash
+
+# Comment out to run the binary in "production" mode:
+# ENV GO_ENV=production
+
+WORKDIR /bin/
+
+COPY --from=builder /bin/app .
+
+EXPOSE 3000
+
+# Comment out to run the migrations before running the binary:
+# CMD /bin/app migrate; /bin/app
+CMD /bin/app

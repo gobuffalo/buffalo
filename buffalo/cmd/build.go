@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -278,11 +277,6 @@ func (b *builder) cleanupTarget() {
 		fmt.Printf("----> creating target dir %s\n", outputDir)
 	}
 
-	files, _ := ioutil.ReadDir(outputDir)
-	for _, f := range files {
-		fmt.Printf("----> cleaning up %s\n", f.Name())
-		os.RemoveAll(outputDir + f.Name())
-	}
 }
 
 func (b *builder) run() error {
