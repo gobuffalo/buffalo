@@ -141,11 +141,6 @@ var ResourceCmd = &cobra.Command{
 			"mimeType":      ResourceMimeType,
 		}
 
-		// encoded, err := json.Marshal(data)
-		// log.Println(string(encoded))
-
-		// return nil
-
 		g, err := resource.New(data)
 		if err != nil {
 			return err
