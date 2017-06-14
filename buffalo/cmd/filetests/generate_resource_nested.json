@@ -1,0 +1,24 @@
+[
+    {
+        "path": "actions/admin_planes.go",
+        "contains": []
+    },
+    {
+        "path": "actions/admin_planes_test.go",
+        "contains": [
+            "package actions_test"
+        ]
+    },
+    {
+        "path": "locales/admin/planes.en-us.yaml",
+        "contains": [
+            "translation: \"Plane was successfully created.\""
+        ]
+    },
+    {
+        "path": "templates/admin/planes/_form.html",
+        "contains": [
+            "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
+        ]
+    }
+]

@@ -62,7 +62,7 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var name, modelName string
+		var name, modelName, folderPath string
 
 		if len(args) == 0 && UseResourceModel == "" {
 			return errors.New("you must specify a resource name")
@@ -85,27 +85,36 @@ var ResourceCmd = &cobra.Command{
 			return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
 		}
 
-		modelProps := getModelPropertiesFromArgs(args)
+		folderPath = name
+
+		if strings.Contains(name, "/") {
+			parts := strings.Split(name, "/")
+			name = parts[len(parts)-1]
+			modelName = strings.Join(parts, "_")
+		}
+
+		modelProps := modelPropertiesFromArgs(args)
 
 		data := makr.Data{
-			"name":             name,
-			"singular":         inflect.Singularize(name),
-			"plural":           name,
-			"camel":            inflect.Camelize(name),
-			"under":            inflect.Underscore(name),
-			"underSingular":    inflect.Singularize(inflect.Underscore(name)),
-			"downFirstCap":     inflect.CamelizeDownFirst(name),
-			"model":            inflect.Singularize(inflect.Camelize(modelName)),
-			"modelPlural":      inflect.Camelize(modelName),
-			"modelUnder":       inflect.Singularize(inflect.Underscore(modelName)),
+			"name":          name,
+			"singular":      inflect.Singularize(name),
+			"camel":         inflect.Camelize(name),
+			"under":         inflect.Underscore(name),
+			"underSingular": inflect.Singularize(inflect.Underscore(name)),
+			"model":         inflect.Singularize(inflect.Camelize(modelName)),
+			"modelPlural":   inflect.Camelize(modelName),
+
+			"varPlural":   inflect.CamelizeDownFirst(modelName),
+			"varSingular": inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
+
+			"renderFunction": strings.ToUpper(ResourceMimeType),
+			"actions":        []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":           args,
+			"modelProps":     modelProps,
+			"modelsPath":     packagePath() + "/models",
+
 			"modelPluralUnder": inflect.Underscore(modelName),
-			"varPlural":        inflect.CamelizeDownFirst(modelName),
-			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
-			"renderFunction":   strings.ToUpper(ResourceMimeType),
-			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
-			"args":             args,
-			"modelProps":       modelProps,
-			"modelsPath":       packagePath() + "/models",
+			"folderPath":       folderPath,
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
@@ -130,7 +139,7 @@ func (m modelProp) String() string {
 	return m.Name
 }
 
-func getModelPropertiesFromArgs(args []string) []modelProp {
+func modelPropertiesFromArgs(args []string) []modelProp {
 	var mProps []modelProp
 	if len(args) == 0 {
 		return mProps

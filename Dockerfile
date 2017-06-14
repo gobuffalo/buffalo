@@ -109,3 +109,6 @@ RUN buffalo new --api apiapp
 WORKDIR ./apiapp
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json
+
+RUN buffalo g resource admin/planes
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested.json
