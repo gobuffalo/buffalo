@@ -41,14 +41,14 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
-// the path GET /{{.under}}/{{"{"}}{{.underSingular}}_id}
+// the path GET /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
-	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
-	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
+	// To find the {{.model}} the parameter {{.modelSingularUnder}}_id is used.
+	err := tx.Find({{.varSingular}}, c.Param("{{.modelSingularUnder}}_id"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -61,7 +61,7 @@ func (v {{.camel}}Resource) New(c buffalo.Context) error {
 }
 
 // Create adds a {{.singular}} to the DB. This function is mapped to the
-// path POST /{{.under}}
+// path POST /{{.resourcesURL}}
 func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
@@ -91,13 +91,13 @@ func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 }
 
 // Update changes a {{.singular}} in the DB. This function is mapped to
-// the path PUT /{{.under}}/{{"{"}}{{.underSingular}}_id}
+// the path PUT /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
-	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
+	err := tx.Find({{.varSingular}}, c.Param("{{.modelSingularUnder}}_id"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -119,14 +119,14 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
-// to the path DELETE /{{.under}}/{{"{"}}{{.underSingular}}_id}
+// to the path DELETE /{{.under}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
-	// To find the {{.model}} the parameter {{.underSingular}}_id is used.
-	err := tx.Find({{.varSingular}}, c.Param("{{.underSingular}}_id"))
+	// To find the {{.model}} the parameter {{.modelSingularUnder}}_id is used.
+	err := tx.Find({{.varSingular}}, c.Param("{{.modelSingularUnder}}_id"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

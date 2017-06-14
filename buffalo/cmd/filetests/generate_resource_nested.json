@@ -1,12 +1,16 @@
 [
     {
         "path": "actions/admin_planes.go",
-        "contains": []
+        "contains": [
+            "type AdminPlanesResource struct",
+            "func (v AdminPlanesResource)"
+        ]
     },
     {
         "path": "actions/admin_planes_test.go",
         "contains": [
-            "package actions_test"
+            "package actions_test",
+            "Test_AdminPlanesResource_List"
         ]
     },
     {
