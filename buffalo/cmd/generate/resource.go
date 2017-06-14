@@ -64,25 +64,21 @@ var ResourceCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var name, modelName string
 
+		if len(args) == 0 && UseResourceModel == "" {
+			return errors.New("you must specify a resource name")
+		}
+
+		name = inflect.Pluralize(args[0])
+
 		// Allow overwriting modelName with the --use-model flag
 		// buffalo generate resource users --use-model people
 		if UseResourceModel != "" {
 			modelName = inflect.Pluralize(UseResourceModel)
+			name = UseResourceModel
 		}
 
-		if len(args) == 0 {
-			if UseResourceModel == "" {
-				return errors.New("you must specify a resource name")
-			}
-			// When there is no resource name given and --use-model flag is set
-			name = UseResourceModel
-		} else {
-			// When resource name is specified
-			name = inflect.Pluralize(args[0])
-			// If there is no --use-model flag set use the resource to create the model
-			if modelName == "" {
-				modelName = name
-			}
+		if modelName == "" {
+			modelName = name
 		}
 
 		if ResourceMimeType != "html" && ResourceMimeType != "json" && ResourceMimeType != "xml" {
