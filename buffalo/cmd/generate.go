@@ -23,6 +23,7 @@ func init() {
 
 	generate.ActionCmd.Flags().StringVarP(&generate.ActionMethod, "method", "m", "GET", "allows to set a different method for the action being generated.")
 	generate.ResourceCmd.Flags().StringVarP(&generate.UseResourceModel, "use-model", "u", "", "generates crud options for a model")
+	generate.ResourceCmd.Flags().StringVarP(&generate.ModelName, "model-name", "n", "", "allows to define a different model name for the resource being generated.")
 	generate.ResourceCmd.Flags().StringVarP(&generate.ResourceMimeType, "type", "", "html", "sets the resource type (html or json)")
 
 	RootCmd.AddCommand(generateCmd)

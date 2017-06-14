@@ -59,6 +59,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["resourceURL"], data["resourceName"]))
 		},
 	})
+
 	if !skipModel && useModel == "" {
 		g.Add(modelCommand(data))
 	}
@@ -67,7 +68,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 }
 
 func modelCommand(data makr.Data) makr.Command {
-	modelName := inflect.Underscore(data["singular"].(string))
+	modelName := inflect.Underscore(data["modelSingularUnder"].(string))
 
 	args := data["args"].([]string)
 	args = append(args[:0], args[0+1:]...)

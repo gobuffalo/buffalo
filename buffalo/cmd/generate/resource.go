@@ -55,6 +55,9 @@ var UseResourceModel = ""
 // ResourceMimeType allows to generate a typed resource (HTML by default, JSON...).
 var ResourceMimeType = "html"
 
+// ModelName allows to specify a different model name for the resource.
+var ModelName = ""
+
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
@@ -95,6 +98,11 @@ var ResourceCmd = &cobra.Command{
 			name = UseResourceModel
 		}
 
+		if ModelName != "" {
+			modelName = inflect.Pluralize(ModelName)
+			name = ModelName
+		}
+
 		modelProps := modelPropertiesFromArgs(args)
 
 		data := makr.Data{
@@ -106,18 +114,18 @@ var ResourceCmd = &cobra.Command{
 			"renderFunction": strings.ToUpper(ResourceMimeType),
 			"actions":        []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
 			"args":           args,
-			"modelProps":     modelProps,
-			"modelsPath":     packagePath() + "/models",
 
-			"modelPluralUnder": inflect.Underscore(modelName),
-			"filesPath":        filesPath,
-			"actionsPath":      actionsPath,
+			"filesPath":   filesPath,
+			"actionsPath": actionsPath,
 
 			"model":              inflect.Singularize(inflect.Camelize(name)),
 			"modelPlural":        inflect.Pluralize(inflect.Camelize(name)),
+			"modelPluralUnder":   inflect.Underscore(modelName),
 			"modelFilename":      inflect.Underscore(inflect.Camelize(name)),
 			"modelTable":         inflect.Underscore(inflect.Pluralize(name)),
 			"modelSingularUnder": inflect.Underscore(inflect.Singularize(name)),
+			"modelProps":         modelProps,
+			"modelsPath":         packagePath() + "/models",
 
 			"resourceName":   inflect.Camelize(resourceName),
 			"resourcePlural": inflect.Pluralize(inflect.Camelize(resourceName)),
