@@ -113,5 +113,5 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/a
 RUN buffalo g resource admin/planes
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested.json
 
-RUN buffalo g resource admin/users --model-name=AdminPlane
+RUN buffalo g resource admin/users --model-name=AdminUser
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name.json
