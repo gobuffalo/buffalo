@@ -29,7 +29,7 @@ func Find(path string) (Files, error) {
 	root := filepath.Join(gp, "src", "github.com", "gobuffalo", "buffalo", "generators", path, "templates")
 	files := Files{}
 	err = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
+		if info != nil && !info.IsDir() {
 			if filepath.Ext(p) == ".tmpl" {
 				f := File{ReadPath: p}
 				rel := strings.TrimPrefix(p, root)
