@@ -8,8 +8,10 @@ import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
 // App is the representation of a new Buffalo application
@@ -25,6 +27,7 @@ type App struct {
 	CIProvider  string
 	API         bool
 	SkipDep     bool
+	Docker      string
 }
 
 // Generator returns a generator to create a new application
@@ -41,7 +44,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 
 	files, err := generators.Find("newapp")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	for _, f := range files {
@@ -74,13 +77,13 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		if a.SkipWebpack {
 			wg, err := standard.New(data)
 			if err != nil {
-				return g, err
+				return g, errors.WithStack(err)
 			}
 			g.Add(wg)
 		} else {
 			wg, err := webpack.New(data)
 			if err != nil {
-				return g, err
+				return g, errors.WithStack(err)
 			}
 			g.Add(wg)
 		}
@@ -94,6 +97,13 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 				return os.RemoveAll(filepath.Join(path, "templates"))
 			},
 		})
+	}
+	if a.Docker != "none" {
+		dg, err := docker.New()
+		if err != nil {
+			return g, errors.WithStack(err)
+		}
+		g.Add(dg)
 	}
 	g.Add(makr.NewCommand(a.goGet()))
 
