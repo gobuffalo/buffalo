@@ -140,12 +140,13 @@ func genNewFiles() error {
 		"actionsPath": packagePath + "/actions",
 		"modelsPath":  packagePath + "/models",
 		"withPop":     !app.SkipPop,
-		"withWebpack": !app.SkipWebpack,
+		"withWebpack": !app.SkipWebpack && !app.API,
 		"dbType":      app.DBType,
 		"version":     Version,
 		"ciProvider":  app.CIProvider,
 		"asAPI":       app.API,
 		"asWeb":       !app.API,
+		"docker":      app.Docker,
 	}
 	if app.WithYarn {
 		data["withYarn"] = true
@@ -173,6 +174,7 @@ func init() {
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().BoolVar(&app.WithYarn, "with-yarn", false, "allows the use of yarn instead of npm as dependency manager")
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
+	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 }
 
