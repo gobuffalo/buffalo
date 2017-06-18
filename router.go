@@ -82,11 +82,6 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
-	paramName := inflect.Singularize(strings.Replace(p, "/", "_", -1))
-	if strings.HasPrefix(paramName, "_") {
-		paramName = paramName[1:len(paramName)]
-	}
-
 	g := a.Group(p)
 	p = "/"
 
@@ -94,8 +89,12 @@ func (a *App) Resource(p string, r Resource) *App {
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
+
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
+
+	name := strings.Replace(rt.Name(), "Resource", "", 1)
+	paramName := inflect.Singularize(inflect.Underscore(name))
 
 	spath := path.Join(p, fmt.Sprintf("{%s_id}", paramName))
 	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
