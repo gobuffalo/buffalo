@@ -98,11 +98,13 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
 	g.GET(p, r.List)
 	setFuncKey(r.New, fmt.Sprintf(rname, "New"))
-	g.GET(path.Join(p, "new"), r.New).Name(inflect.Camelize(fmt.Sprintf("new_" + single)))
+	g.GET(path.Join(p, "new"), r.New)
+	//.Name(inflect.Camelize(fmt.Sprintf("new_" + single)))
 	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
 	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
-	g.GET(path.Join(spath, "edit"), r.Edit).Name(inflect.Camelize(fmt.Sprintf("edit_" + single)))
+	g.GET(path.Join(spath, "edit"), r.Edit)
+	//.Name(inflect.Camelize(fmt.Sprintf("edit_" + single)))
 	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
 	g.POST(p, r.Create)
 	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
@@ -181,12 +183,11 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 
 //buildRouteName builds a route based on the path passed.
 func buildRouteName(path string) string {
-
-	if path == "/" {
+	if path == "/" || path == "" {
 		return "root"
 	}
 
-	resultPars := []string{}
+	resultParts := []string{}
 	parts := strings.Split(path, "/")
 
 	for index, part := range parts {
@@ -194,22 +195,25 @@ func buildRouteName(path string) string {
 		if strings.Contains(part, "{") || part == "" {
 			continue
 		}
+
 		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
 		if shouldSingularize {
 			part = inflect.Singularize(part)
 		}
 
-		if index > 0 && strings.Contains(parts[index-1], "}") {
-			resultPars = append(resultPars, part)
+		if parts[index] == "new" || parts[index] == "edit" {
+			resultParts = append([]string{part}, resultParts...)
 			continue
 		}
 
-		resultPars = append([]string{part}, resultPars...)
+		if index > 0 && strings.Contains(parts[index-1], "}") {
+			resultParts = append(resultParts, part)
+			continue
+		}
+
+		resultParts = append(resultParts, part)
 	}
 
-	underscore := strings.TrimSpace(strings.Join(resultPars, "_"))
-	if underscore == "" {
-		return "root"
-	}
+	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
 	return inflect.CamelizeDownFirst(underscore)
 }

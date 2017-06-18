@@ -1,0 +1,20 @@
+app_root: .
+ignored_folders:
+- vendor
+- log
+- logs
+- assets
+- public
+- grifts
+- tmp
+- bin
+- node_modules
+- .sass-cache
+included_extensions:
+- .go
+build_path: tmp
+build_delay: 200ns
+binary_name: buffalo-build
+command_flags: []
+enable_colors: true
+log_name: buffalo
