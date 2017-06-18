@@ -41,7 +41,7 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
-// the path GET /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
+// the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.camel}}Resource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -61,7 +61,7 @@ func (v {{.camel}}Resource) New(c buffalo.Context) error {
 }
 
 // Create adds a {{.singular}} to the DB. This function is mapped to the
-// path POST /{{.resourcesURL}}
+// path POST /{{.resourceURL}}
 func (v {{.camel}}Resource) Create(c buffalo.Context) error {
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
@@ -91,7 +91,7 @@ func (v {{.camel}}Resource) Edit(c buffalo.Context) error {
 }
 
 // Update changes a {{.singular}} in the DB. This function is mapped to
-// the path PUT /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
+// the path PUT /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.camel}}Resource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)

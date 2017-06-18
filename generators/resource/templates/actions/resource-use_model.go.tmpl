@@ -44,7 +44,7 @@ func (v {{.resourceName}}Resource) List(c buffalo.Context) error {
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
-// the path GET /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
+// the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.resourceName}}Resource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -61,7 +61,7 @@ func (v {{.resourceName}}Resource) Show(c buffalo.Context) error {
 }
 
 // New renders the formular for creating a new {{.model}}.
-// This function is mapped to the path GET /{{.resourcesURL}}/new
+// This function is mapped to the path GET /{{.resourceURL}}/new
 func (v {{.resourceName}}Resource) New(c buffalo.Context) error {
 	// Make {{.varSingular}} available inside the html template
 	c.Set("{{.varSingular}}", &models.{{.model}}{})
@@ -69,7 +69,7 @@ func (v {{.resourceName}}Resource) New(c buffalo.Context) error {
 }
 
 // Create adds a {{.model}} to the DB. This function is mapped to the
-// path POST /{{.resourcesURL}}
+// path POST /{{.resourceURL}}
 func (v {{.resourceName}}Resource) Create(c buffalo.Context) error {
 	// Allocate an empty {{.model}}
 	{{.varSingular}} := &models.{{.model}}{}
@@ -97,11 +97,11 @@ func (v {{.resourceName}}Resource) Create(c buffalo.Context) error {
 	// If there are no errors set a success message
 	c.Flash().Add("success", "{{.model}} was created successfully")
 	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourcesURL}}/%s",{{.varSingular}}.ID)
+	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
 }
 
 // Edit renders a edit formular for a {{.singular}}. This function is
-// mapped to the path GET /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}/edit
+// mapped to the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}/edit
 func (v {{.resourceName}}Resource) Edit(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -148,11 +148,11 @@ func (v {{.resourceName}}Resource) Update(c buffalo.Context) error {
 	// If there are no errors set a success message
 	c.Flash().Add("success", "{{.model}} was updated successfully")
 	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourcesURL}}/%s",{{.varSingular}}.ID)
+	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
-// to the path DELETE /{{.resourcesURL}}/{{"{"}}{{.modelSingularUnder}}_id}
+// to the path DELETE /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.resourceName}}Resource) Destroy(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
@@ -170,5 +170,5 @@ func (v {{.resourceName}}Resource) Destroy(c buffalo.Context) error {
 	// If there are no errors set a flash message
 	c.Flash().Add("success", "{{.model}} was destroyed successfully")
 	// Redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourcesURL}}")
+	return c.Redirect(302, "/{{.resourceURL}}")
 }
