@@ -27,7 +27,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 
 	if mimeType == "json" || mimeType == "xml" {
 		tmplName = "resource-json-xml"
-	} else if skipModel == true {
+	} else if skipModel {
 		tmplName = "resource-name"
 	}
 	for _, f := range files {
@@ -53,11 +53,9 @@ func New(data makr.Data) (*makr.Generator, error) {
 			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["under"], data["camel"]))
 		},
 	})
-	if skipModel == false && useModel == "" {
+	if !skipModel && useModel == "" {
 		g.Add(modelCommand(data))
 	}
-
-	g.Add(makr.NewCommand(makr.GoFmt()))
 
 	return g, nil
 }
@@ -69,7 +67,7 @@ func modelCommand(data makr.Data) makr.Command {
 	args = append(args[:0], args[0+1:]...)
 	args = append([]string{"db", "g", "model", modelName}, args...)
 
-	if skipMigration := data["skipMigration"].(bool); skipMigration == true {
+	if skipMigration := data["skipMigration"].(bool); skipMigration {
 		args = append(args, "--skip-migration")
 	}
 

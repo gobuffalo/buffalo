@@ -6,12 +6,10 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 	"time"
 
@@ -23,11 +21,11 @@ import (
 )
 
 var outputBinName string
-var zipBin bool
 var extractAssets bool
 var hasDB bool
 var ldflags string
 var buildTags string
+var static bool
 
 type builder struct {
 	cleanup      []string
@@ -69,15 +67,15 @@ func (b *builder) buildWebpack() error {
 func (b *builder) buildAPack() error {
 	err := os.MkdirAll(b.clean("a"), 0766)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = b.buildAInit()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	err = b.buildDatabase()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return nil
 }
@@ -85,7 +83,7 @@ func (b *builder) buildAPack() error {
 func (b *builder) buildAInit() error {
 	a, err := os.Create(b.clean("a", "a.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	a.WriteString(aGo)
 	return nil
@@ -95,22 +93,28 @@ func (b *builder) buildDatabase() error {
 	bb := &bytes.Buffer{}
 	dgo, err := os.Create(b.clean("a", "database.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if hasDB {
 		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll("./migrations", 0755)
 		d, err := os.Open("database.yml")
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		_, err = io.Copy(bb, d)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
 			b.buildTags = append(b.buildTags, "nosqlite")
+		} else if !static {
+			fmt.Println("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
 		}
+
+	} else {
+		// add the nosqlite build tag if there is no database being used
+		b.buildTags = append(b.buildTags, "nosqlite")
 	}
 	dgo.WriteString("package a\n")
 	dgo.WriteString(fmt.Sprintf("var DB_CONFIG = `%s`", bb.String()))
@@ -131,11 +135,11 @@ func (b *builder) disableAssetsHandling() error {
 
 	appgo, err := os.Create("actions/app.go")
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	_, err = appgo.WriteString(newApp)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	return nil
@@ -152,7 +156,7 @@ func (b *builder) buildAssetsArchive() error {
 
 	zipfile, err := os.Create(target)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	defer zipfile.Close()
 
@@ -161,7 +165,7 @@ func (b *builder) buildAssetsArchive() error {
 
 	info, err := os.Stat(source)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	var baseDir string
@@ -171,12 +175,12 @@ func (b *builder) buildAssetsArchive() error {
 
 	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		if baseDir != "" {
@@ -191,7 +195,7 @@ func (b *builder) buildAssetsArchive() error {
 
 		writer, err := archive.CreateHeader(header)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 
 		if info.IsDir() {
@@ -200,25 +204,25 @@ func (b *builder) buildAssetsArchive() error {
 
 		file, err := os.Open(path)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		defer file.Close()
 		_, err = io.Copy(writer, file)
-		return err
+		return errors.WithStack(err)
 	})
 
-	return err
+	return errors.WithStack(err)
 }
 
 func (b *builder) buildMain() error {
 	newMain := strings.Replace(string(b.originalMain), "func main()", "func originalMain()", 1)
 	maingo, err := os.Create("main.go")
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	_, err = maingo.WriteString(newMain)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	ctx := plush.NewContext()
@@ -235,11 +239,11 @@ func (b *builder) buildMain() error {
 	ctx.Set("name", filepath.Base(rootPath))
 	s, err := plush.Render(buildMainTmpl, ctx)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	f, err := os.Create(b.clean("buffalo_build_main.go"))
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	f.WriteString(s)
 
@@ -273,11 +277,6 @@ func (b *builder) cleanupTarget() {
 		fmt.Printf("----> creating target dir %s\n", outputDir)
 	}
 
-	files, _ := ioutil.ReadDir(outputDir)
-	for _, f := range files {
-		fmt.Printf("----> cleaning up %s\n", f.Name())
-		os.RemoveAll(outputDir + f.Name())
-	}
 }
 
 func (b *builder) run() error {
@@ -288,39 +287,39 @@ func (b *builder) run() error {
 
 	err = b.buildMain()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildWebpack()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildAPack()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	err = b.buildMain()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	if extractAssets {
 		err = b.buildAssetsArchive()
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		err = b.disableAssetsHandling()
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 		return b.buildBin()
 	}
 
 	err = b.buildPackrEmbedded()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return b.buildBin()
 }
@@ -346,9 +345,13 @@ func (b *builder) buildBin() error {
 		}
 	}
 
+	// RUN GOOS=linux buffalo build --ldflags '-linkmode external -extldflags "-static"' -o /bin/app
 	flags := []string{
 		fmt.Sprintf("-X main.version=%s", version),
 		fmt.Sprintf("-X main.buildTime=%s", buildTime),
+	}
+	if static {
+		flags = append(flags, "-linkmode external", "-extldflags \"-static\"")
 	}
 
 	// Add any additional ldflags passed in to the build args
@@ -412,14 +415,14 @@ func init() {
 	pwd, _ := os.Getwd()
 	output := filepath.Join("bin", filepath.Base(pwd))
 
-	if runtime.GOOS == "windows" {
+	if os.Getenv("GOOS") == "windows" {
 		output += ".exe"
 	}
 
 	buildCmd.Flags().StringVarP(&outputBinName, "output", "o", output, "set the name of the binary")
 	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
-	buildCmd.Flags().BoolVarP(&zipBin, "zip", "z", false, "zips the assets to the binary, this requires zip installed")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
+	buildCmd.Flags().BoolVarP(&static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"' (USE FOR CGO)")
 	buildCmd.Flags().StringVar(&ldflags, "ldflags", "", "set any ldflags to be passed to the go build")
 }
 
@@ -519,7 +522,8 @@ var aGo = `package a
 
 import (
 	"log"
-	"os"
+	"strings"
+	"github.com/markbates/pop"
 )
 
 func init() {
@@ -528,16 +532,8 @@ func init() {
 
 func dropDatabaseYml() {
 	if DB_CONFIG != "" {
-		_, err := os.Stat("database.yml")
-		if err == nil {
-			// yaml already exists, don't do anything
-			return
-		}
-		f, err := os.Create("database.yml")
-		if err != nil {
-			log.Fatal(err)
-		}
-		_, err = f.WriteString(DB_CONFIG)
+		r := strings.NewReader(DB_CONFIG)
+		err := pop.LoadFrom(r)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -3,10 +3,14 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/markbates/pop"
 	"github.com/spf13/cobra"
@@ -31,7 +35,7 @@ var testCmd = &cobra.Command{
 			// there's a database
 			test, err := pop.Connect("test")
 			if err != nil {
-				return err
+				return errors.WithStack(err)
 			}
 
 			// drop the test db:
@@ -40,26 +44,39 @@ var testCmd = &cobra.Command{
 			// create the test db:
 			err = test.Dialect.CreateDB()
 			if err != nil {
-				return err
+				return errors.WithStack(err)
 			}
 
-			dev, err := pop.Connect("development")
-			if err != nil {
-				return err
-			}
-			schema := &bytes.Buffer{}
-			err = dev.Dialect.DumpSchema(schema)
-			if err != nil {
-				return err
-			}
-
-			err = test.Dialect.LoadSchema(schema)
-			if err != nil {
-				return err
+			if schema := findSchema(); schema != nil {
+				err = test.Dialect.LoadSchema(schema)
+				if err != nil {
+					return errors.WithStack(err)
+				}
 			}
 		}
 		return testRunner(args)
 	},
+}
+
+func findSchema() io.Reader {
+	if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
+		return f
+	}
+	if dev, err := pop.Connect("development"); err == nil {
+		schema := &bytes.Buffer{}
+		if err = dev.Dialect.DumpSchema(schema); err == nil {
+			return schema
+		}
+	}
+
+	if test, err := pop.Connect("test"); err == nil {
+		if err := test.MigrateUp("./migrations"); err == nil {
+			if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
+				return f
+			}
+		}
+	}
+	return nil
 }
 
 func testRunner(args []string) error {

@@ -1,0 +1,33 @@
+[{
+  "path": "actions/app.go",
+  "contains": [
+    "app.Use(middleware.SetContentType(\"application/json\"))"
+  ],
+  "!contains": [
+    "app.ServeFiles"
+  ]
+}, {
+  "path": "actions/home.go",
+  "contains": [
+    "r.JSON"
+  ],
+  "!contains": [
+    "r.HTML"
+  ]
+}, {
+  "path": "actions/render.go",
+  "!contains": [
+    "HTMLLayout",
+    "TemplatesBox",
+    "Helpers"
+  ]
+}, {
+  "path": "templates",
+  "absent": true
+}, {
+  "path": "assets",
+  "absent": true
+}, {
+  "path": "public",
+  "absent": true
+}]

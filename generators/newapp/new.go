@@ -1,13 +1,17 @@
 package newapp
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
 // App is the representation of a new Buffalo application
@@ -21,16 +25,26 @@ type App struct {
 	WithYarn    bool
 	DBType      string
 	CIProvider  string
+	API         bool
+	SkipDep     bool
+	Docker      string
 }
 
 // Generator returns a generator to create a new application
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
-	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
+	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
+	if !a.SkipDep {
+		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-u")))
+		g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep")))
+	}
+	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
+	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 
 	files, err := generators.Find("newapp")
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	for _, f := range files {
@@ -59,31 +73,49 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		}
 	}
 
-	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
-	if a.SkipWebpack {
-		wg, err := standard.New(data)
-		if err != nil {
-			return g, err
+	if !a.API {
+		if a.SkipWebpack {
+			wg, err := standard.New(data)
+			if err != nil {
+				return g, errors.WithStack(err)
+			}
+			g.Add(wg)
+		} else {
+			wg, err := webpack.New(data)
+			if err != nil {
+				return g, errors.WithStack(err)
+			}
+			g.Add(wg)
 		}
-		g.Add(wg)
-	} else {
-		wg, err := webpack.New(data)
-		if err != nil {
-			return g, err
-		}
-		g.Add(wg)
 	}
 	if !a.SkipPop {
 		g.Add(newSodaGenerator())
 	}
+	if a.API {
+		g.Add(makr.Func{
+			Runner: func(path string, data makr.Data) error {
+				return os.RemoveAll(filepath.Join(path, "templates"))
+			},
+		})
+	}
+	if a.Docker != "none" {
+		dg, err := docker.New()
+		if err != nil {
+			return g, errors.WithStack(err)
+		}
+		g.Add(dg)
+	}
 	g.Add(makr.NewCommand(a.goGet()))
-	g.Add(makr.NewCommand(makr.GoFmt()))
 
 	return g, nil
 }
 
 func (a App) goGet() *exec.Cmd {
+	if !a.SkipDep {
+		if _, err := exec.LookPath("dep"); err == nil {
+			return exec.Command("dep", "init")
+		}
+	}
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")

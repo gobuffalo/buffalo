@@ -39,25 +39,6 @@ func Test_DefaultContext_Param(t *testing.T) {
 	r.Equal("Mark", c.Param("name"))
 }
 
-func Test_DefaultContext_ParamInt(t *testing.T) {
-	r := require.New(t)
-	c := basicContext()
-	c.params = url.Values{
-		"name": []string{"Mark"},
-		"id":   []string{"1"},
-	}
-
-	id, err := c.ParamInt("id")
-	r.NoError(err)
-	r.Equal(1, id)
-
-	_, err = c.ParamInt("badkey")
-	r.Error(err)
-
-	_, err = c.ParamInt("name")
-	r.Error(err)
-}
-
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()
@@ -99,7 +80,7 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 	r := require.New(t)
 
 	user := struct {
-		FirstName string `schema:"first_name"`
+		FirstName string `form:"first_name"`
 	}{}
 
 	a := New(Options{})
@@ -123,7 +104,7 @@ func Test_DefaultContext_Bind_No_ContentType(t *testing.T) {
 	r := require.New(t)
 
 	user := struct {
-		FirstName string `schema:"first_name"`
+		FirstName string `form:"first_name"`
 	}{
 		FirstName: "Mark",
 	}
@@ -151,7 +132,7 @@ func Test_DefaultContext_Bind_Empty_ContentType(t *testing.T) {
 	r := require.New(t)
 
 	user := struct {
-		FirstName string `schema:"first_name"`
+		FirstName string `form:"first_name"`
 	}{
 		FirstName: "Mark",
 	}
@@ -180,7 +161,7 @@ func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 	r := require.New(t)
 
 	user := struct {
-		FirstName string `schema:"first_name"`
+		FirstName string `form:"first_name"`
 	}{
 		FirstName: "Mark",
 	}

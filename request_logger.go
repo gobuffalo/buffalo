@@ -25,9 +25,12 @@ func RequestLoggerFunc(h Handler) Handler {
 			c.Session().Set("requestor_id", irid)
 			c.Session().Save()
 		}
-		now := time.Now()
+		rid := irid.(string) + "-" + randx.String(10)
+		c.Set("request_id", rid)
+
+		start := time.Now()
 		c.LogFields(logrus.Fields{
-			"request_id": irid.(string) + "-" + randx.String(10),
+			"request_id": rid,
 			"method":     c.Request().Method,
 			"path":       c.Request().URL.String(),
 		})
@@ -36,12 +39,12 @@ func RequestLoggerFunc(h Handler) Handler {
 			c.LogField("content_type", ct)
 		}
 		defer func() {
-			ws := c.Response().(*buffaloResponse)
+			ws := c.Response().(*Response)
 			c.LogFields(logrus.Fields{
-				"duration":   time.Now().Sub(now),
-				"size":       ws.size,
-				"human_size": humanize.Bytes(uint64(ws.size)),
-				"status":     ws.status,
+				"duration":   time.Since(start),
+				"size":       ws.Size,
+				"human_size": humanize.Bytes(uint64(ws.Size)),
+				"status":     ws.Status,
 			})
 			c.Logger().Info()
 		}()

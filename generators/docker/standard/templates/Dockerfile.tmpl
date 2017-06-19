@@ -1,0 +1,21 @@
+FROM gobuffalo/buffalo:{{.version}}
+
+RUN mkdir -p $GOPATH/src/{{.packagePath}}
+WORKDIR $GOPATH/src/{{.packagePath}}
+
+{{if .asWeb -}}
+{{if .withWebpack -}}
+# this will cache the npm install step, unless package.json changes
+ADD package.json .
+RUN npm install
+{{end -}}
+{{end -}}
+
+ADD . .
+RUN buffalo build --static -o /bin/app
+
+EXPOSE 3000
+
+# Comment out to run the migrations before running the binary:
+# CMD /bin/app migrate; /bin/app
+CMD /bin/app

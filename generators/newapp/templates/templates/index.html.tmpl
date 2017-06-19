@@ -1,37 +1,188 @@
-<div class="row">
-  <div class="col-md-2">
-    <img src="/assets/images/logo.svg" alt="" />
-  </div>
-  <div class="col-md-10">
-    <h1><%= t("welcome_greeting") %> [v{{.version}}]</h1>
-    <h2>
-      <a href="https://github.com/gobuffalo/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
-    </h2>
-    <h2>
-      <a href="http://gobuffalo.io"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
-    </h2>
+<style media="screen">
+  * {
+    -webkit-transition: all .38s;
+    /* Safari */
+    transition: all .38s;
+  }
 
-    <hr>
-    <h2>Defined Routes</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr text-align="left">
-          <th>METHOD</th>
-          <th>PATH</th>
-          <th>NAME</th>
-          <th>HANDLER</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for (r) in routes { %>
-        <tr>
-          <td><%= r.Method %></td>
-          <td><%= r.Path %></td>
-          <td><%= r.PathName %></td>
-          <td><code><%= r.HandlerName %></code></td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+  .container {
+    min-width: 320px;
+  }
+
+  header {
+    background-color: #62a5ee;
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
+
+  .logo img {
+    width: 80px;
+  }
+
+  .titles h1 {
+    font-size: 30px;
+    font-weight: 300;
+    color: white;
+    margin-bottom: 13px;
+    margin-top: 5px;
+  }
+
+  .titles h2 {
+    font-weight: 300;
+    font-size: 18px;
+    display: inline-block;
+    margin: 0;
+  }
+
+  .titles a {
+    color: white;
+    text-decoration: underline;
+  }
+
+  .titles i {
+    margin-right: 5px;
+    text-decoration: none;
+  }
+
+  .titles .documentation {
+    margin-left: 28px;
+  }
+
+  .subtitle {
+    color: white;
+    margin: 0;
+    padding: 13px 0;
+    background-color: #2a3543;
+    margin-bottom: 20px;
+  }
+
+  .subtitle h3 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  table.table tbody tr td {
+    border-top: 0;
+    padding: 10px;
+  }
+
+  .foot {
+    text-align: right;
+    text-align: right;
+    color: #c5c5c5;
+    font-weight: 300;
+  }
+
+  .foot a {
+    color: #8b8b8b;
+    text-decoration: underline;
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  @media all and (max-width: 770px) {
+    .titles h1 {
+      font-size: 25px;
+      margin: 15px 0 5px 0;
+    }
+  }
+
+  @media all and (max-width: 640px) {
+    .titles h1 {
+      font-size: 23px;
+      margin: 15px 0 5px 0;
+    }
+    .titles h2 {
+      font-size: 15px;
+    }
+    .titles .documentation {
+      margin-left: 10px;
+    }
+  }
+
+  @media all and (max-width: 530px) {
+    .titles h1 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+    .logo {
+      padding: 0
+    }
+    .logo img {
+      width: 100%
+    }
+    .titles .documentation {
+      margin-left: 0px;
+      margin-top: 5px;
+      display: block;
+    }
+  }
+</style>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1 col-sm-2 col-xs-2 logo">
+        <a href="<%= rootPath() %>"><img src="/assets/images/logo.svg" alt=""></a>
+      </div>
+      <div class="col-md-9 col-sm-9 col-xs-10 titles">
+        <h1>Welcome to Buffalo (EN) [{{.version}}]</h1>
+        <h2>
+          <a href="https://github.com/gobuffalo/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
+        </h2>
+        <h2 class="documentation">
+          <a href="http://gobuffalo.io/"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
+        </h2>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="subtitle">
+      <div class="container">
+        <h3>Defined Routes</h3>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr text-align="left">
+            <th class="centered">METHOD</th>
+            <th>PATH</th>
+            <th>NAME</th>
+            <th>HANDLER</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <%= for (r) in routes { %>
+            <tr>
+              <td class="centered">
+                <%= r.Method %>
+              </td>
+              <td>
+                <%= r.Path %>
+              </td>
+              <td>
+                <%= r.PathName %>
+              </td>
+              <td><code><%= r.HandlerName %></code></td>
+            </tr>
+          <% } %>
+
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+<div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span> </div>
