@@ -54,7 +54,7 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
-	err = t.Execute(f, c.Get("giants"))
+	err = t.Execute(f, c.Value("giants"))
 	if err != nil {
 		return err
 	}
