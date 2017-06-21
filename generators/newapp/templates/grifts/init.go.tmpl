@@ -1,0 +1,10 @@
+package grifts
+
+import (
+  "github.com/gobuffalo/buffalo"
+	"{{ .actionsPath }}"
+)
+
+func init() {
+  buffalo.Grifts(actions.App())
+}

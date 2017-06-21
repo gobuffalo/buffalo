@@ -23,7 +23,7 @@ func newSodaGenerator() *makr.Generator {
 	f.Should = should
 	g.Add(f)
 
-	f = makr.NewFile("grifts/seed.go", nSeedGrift)
+	f = makr.NewFile("grifts/db.go", nSeedGrift)
 	f.Should = should
 	g.Add(f)
 
@@ -93,7 +93,12 @@ import (
 	"github.com/markbates/grift/grift"
 )
 
-var _ = grift.Add("db:seed", func(c *grift.Context) error {
-	// Add DB seeding stuff here
-	return nil
+var _ = grift.Namespace("db", func() {
+
+	grift.Desc("seed", "Seeds a database")
+	grift.Add("seed", func(c *grift.Context) error {
+		// Add DB seeding stuff here
+		return nil
+	})
+
 })`
