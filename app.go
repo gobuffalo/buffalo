@@ -149,6 +149,5 @@ func Automatic(opts Options) *App {
 	}
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
-
 	return a
 }
