@@ -89,12 +89,15 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		})
 	case "application/xml", "text/xml", "xml":
 	default:
+		err := c.Request().ParseForm()
 		data := map[string]interface{}{
-			"routes":  c.Value("routes"),
-			"error":   msg,
-			"status":  status,
-			"data":    c.Data(),
-			"context": c,
+			"routes":      c.Value("routes"),
+			"error":       msg,
+			"status":      status,
+			"data":        c.Data(),
+			"params":      c.Params(),
+			"posted_form": c.Request().Form,
+			"context":     c,
 		}
 		ctx := plush.NewContextWith(data)
 		t, err := plush.Render(devErrorTmpl, ctx)
@@ -228,6 +231,12 @@ var devErrorTmpl = `
 
         <h3>Context</h3>
         <pre><%= inspect(context) %></pre>
+
+        <h3>Parameters</h3>
+        <pre><%= inspect(params) %></pre>
+
+        <h3>Form</h3>
+        <pre><%= inspect(posted_form) %></pre>
 
         <h3>Routes</h3>
         <table class="table table-striped">
