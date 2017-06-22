@@ -14,6 +14,7 @@ import (
 
 // Options are used to configure and define how your application should run.
 type Options struct {
+	Name string
 	// Env is the "environment" in which the App is running. Default is "development".
 	Env string
 	// LogLevel defaults to "debug".
@@ -51,6 +52,7 @@ func NewOptions() Options {
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
+	opts.Name = defaults.String(opts.Name, "/")
 
 	if opts.Context == nil {
 		opts.Context = context.Background()
