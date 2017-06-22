@@ -16,7 +16,7 @@ ratings:
     - "**.go"
 exclude_paths:
   - "generators/*/templates/**/*"
-  - "buffalo/cmd/filetest/*"
+  - "buffalo/cmd/filetests/*"
   - "examples/**/*"
   - "grifts/**/*"
   - "**/*_test.go"
