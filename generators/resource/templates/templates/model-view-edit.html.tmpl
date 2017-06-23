@@ -1,6 +1,6 @@
 <h1>Edit {{.model}}</h1>
 
-<%= form_for({{.varSingular}}, {action: {{.varSingular}}Path({ {{.modelSingularUnder}}_id: {{.varSingular}}.ID }), method: "PUT"}) { %>
+<%= form_for({{.varSingular}}, {action: {{.routeFirstDownSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID }), method: "PUT"}) { %>
   <%= partial("{{.filesPath}}/form.html") %>
-  <a href="<%= {{.varSingular}}Path({ {{.modelSingularUnder}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+  <a href="<%= {{.routeFirstDown}}Path({ {{.modelSingularUnder}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

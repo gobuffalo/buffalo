@@ -127,9 +127,15 @@ var ResourceCmd = &cobra.Command{
 			"modelProps":         modelProps,
 			"modelsPath":         packagePath() + "/models",
 
-			"resourceName":   inflect.Camelize(resourceName),
-			"resourcePlural": inflect.Pluralize(inflect.Camelize(resourceName)),
-			"resourceURL":    inflect.Pluralize(inflect.Underscore(filesPath)),
+			"resourceName":          inflect.Camelize(resourceName),
+			"resourcePlural":        inflect.Pluralize(inflect.Camelize(resourceName)),
+			"resourceURL":           inflect.Pluralize(inflect.Underscore(filesPath)),
+			"resourceSingularUnder": inflect.Underscore(inflect.Singularize(resourceName)),
+
+			"routeName":              inflect.Camelize(resourceName),
+			"routeNameSingular":      inflect.Camelize(inflect.Singularize(resourceName)),
+			"routeFirstDown":         inflect.CamelizeDownFirst(resourceName),
+			"routeFirstDownSingular": inflect.CamelizeDownFirst(inflect.Singularize(resourceName)),
 
 			"varPlural":   inflect.CamelizeDownFirst(modelName),
 			"varSingular": inflect.Singularize(inflect.CamelizeDownFirst(modelName)),

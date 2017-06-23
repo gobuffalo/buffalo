@@ -24,5 +24,11 @@
         "contains": [
             "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
         ]
+    },
+    {
+        "path": "templates/admin/planes/index.html",
+        "contains": [
+            "newAdminPlanesPath()"
+        ]
     }
 ]
