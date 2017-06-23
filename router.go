@@ -137,8 +137,8 @@ func (a *App) ANY(p string, h Handler) {
 */
 func (a *App) Group(groupPath string) *App {
 	g := New(a.Options)
-
 	g.prefix = path.Join(a.prefix, groupPath)
+	g.Name = g.prefix
 
 	g.router = a.router
 	g.Middleware = a.Middleware.clone()
@@ -147,6 +147,7 @@ func (a *App) Group(groupPath string) *App {
 	if a.root != nil {
 		g.root = a.root
 	}
+	a.children = append(a.children, g)
 	return g
 }
 

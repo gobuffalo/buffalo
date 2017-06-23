@@ -1,5 +1,84 @@
 # Change Log
 
+## [v0.9.0](https://github.com/gobuffalo/buffalo/tree/v0.9.0) (2017-06-19)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.2...v0.9.0)
+
+**Implemented enhancements:**
+
+- Add an HTTP basic auth middleware [\#432](https://github.com/gobuffalo/buffalo/issues/432)
+- Proposal: Add a `config` package [\#394](https://github.com/gobuffalo/buffalo/issues/394)
+- Remove or rebuild the apps in the examples folder [\#376](https://github.com/gobuffalo/buffalo/issues/376)
+- Destroy CLI [\#277](https://github.com/gobuffalo/buffalo/issues/277)
+- Create a Docker container to run Buffalo [\#250](https://github.com/gobuffalo/buffalo/issues/250)
+- Buffalo - Heroku Buildpack [\#159](https://github.com/gobuffalo/buffalo/issues/159)
+- Go package dependencies are untracked [\#133](https://github.com/gobuffalo/buffalo/issues/133)
+- Add support for background jobs [\#95](https://github.com/gobuffalo/buffalo/issues/95)
+- 0.9.0 Release [\#468](https://github.com/gobuffalo/buffalo/pull/468) ([markbates](https://github.com/markbates))
+
+**Fixed bugs:**
+
+- Worker package is not compatible with go1.7 [\#448](https://github.com/gobuffalo/buffalo/issues/448)
+- Actions generator inserts test & route for already existing actions [\#412](https://github.com/gobuffalo/buffalo/issues/412)
+- Fix 428: use proper case for ID in generated templates [\#431](https://github.com/gobuffalo/buffalo/pull/431) ([stanislas-m](https://github.com/stanislas-m))
+
+**Closed issues:**
+
+- Add an `--api` flag to `buffalo new` [\#462](https://github.com/gobuffalo/buffalo/issues/462)
+- Need to set path of database.yml when production mode. [\#460](https://github.com/gobuffalo/buffalo/issues/460)
+- When running go imports on generates it's slow with vendor directories [\#459](https://github.com/gobuffalo/buffalo/issues/459)
+- `buffalo dev` stuck when running dev server for 1st time [\#454](https://github.com/gobuffalo/buffalo/issues/454)
+- Test ticket from Code Climate [\#453](https://github.com/gobuffalo/buffalo/issues/453)
+- problem on middleware skipping [\#445](https://github.com/gobuffalo/buffalo/issues/445)
+- Allow action generator to specify the method to use on app.go [\#438](https://github.com/gobuffalo/buffalo/issues/438)
+- Allow action generator to skip views. [\#437](https://github.com/gobuffalo/buffalo/issues/437)
+- Wrong sqlite3 path: buffalo db create puts the database file into wrong directory [\#436](https://github.com/gobuffalo/buffalo/issues/436)
+- Can I store an Object into Session? [\#433](https://github.com/gobuffalo/buffalo/issues/433)
+- Documentation for the Recent Background Job [\#429](https://github.com/gobuffalo/buffalo/issues/429)
+- treatment of field name '\_id' is different between model and template. [\#428](https://github.com/gobuffalo/buffalo/issues/428)
+- If no database is being used the `nosqlite` build tag should be used [\#425](https://github.com/gobuffalo/buffalo/issues/425)
+- Export `buffalo.Response` so it can be used outside of Buffalo [\#423](https://github.com/gobuffalo/buffalo/issues/423)
+- Remove deprecated functions slated for 0.9.0 [\#418](https://github.com/gobuffalo/buffalo/issues/418)
+- Applicaton.scss does not update built application.css [\#414](https://github.com/gobuffalo/buffalo/issues/414)
+- Slow tests for `cmd/generate` [\#407](https://github.com/gobuffalo/buffalo/issues/407)
+- Replace schema package [\#335](https://github.com/gobuffalo/buffalo/issues/335)
+
+**Merged pull requests:**
+
+- add fall throughs for finding the schema to set up the test db [\#471](https://github.com/gobuffalo/buffalo/pull/471) ([markbates](https://github.com/markbates))
+- Added a flag to generate different Dockerfile types, as well as a sub-command to generate docker [\#470](https://github.com/gobuffalo/buffalo/pull/470) ([markbates](https://github.com/markbates))
+- generate a multi-stage Dockerfile [\#467](https://github.com/gobuffalo/buffalo/pull/467) ([markbates](https://github.com/markbates))
+- Added a --static flag to buffalo build [\#466](https://github.com/gobuffalo/buffalo/pull/466) ([markbates](https://github.com/markbates))
+- read the database.yml from inside the binary fixes \#460 [\#465](https://github.com/gobuffalo/buffalo/pull/465) ([markbates](https://github.com/markbates))
+- added a --skip-dep flag to not use dep [\#464](https://github.com/gobuffalo/buffalo/pull/464) ([markbates](https://github.com/markbates))
+- Add an `--api` flag to `buffalo new` closes \#462 [\#463](https://github.com/gobuffalo/buffalo/pull/463) ([markbates](https://github.com/markbates))
+- When running go imports on generates it's slow with vendor directories closes \#459 [\#461](https://github.com/gobuffalo/buffalo/pull/461) ([markbates](https://github.com/markbates))
+- fixed an issue with binding if the time was an empty string it would raise an error [\#458](https://github.com/gobuffalo/buffalo/pull/458) ([markbates](https://github.com/markbates))
+- App.Stop should take an error. [\#457](https://github.com/gobuffalo/buffalo/pull/457) ([markbates](https://github.com/markbates))
+- cleaned up the basicauth package to prevent "stuttering" as well as make it nicer to use. [\#456](https://github.com/gobuffalo/buffalo/pull/456) ([markbates](https://github.com/markbates))
+- Adds Formam as a replacement for Schema [\#455](https://github.com/gobuffalo/buffalo/pull/455) ([apaganobeleno](https://github.com/apaganobeleno))
+- Set up github.com/golang/dep for new applications fixes \#133 [\#452](https://github.com/gobuffalo/buffalo/pull/452) ([markbates](https://github.com/markbates))
+- hopefully this fixes skipping of middleware for resources. closes \#445 [\#451](https://github.com/gobuffalo/buffalo/pull/451) ([markbates](https://github.com/markbates))
+- ignore csrf in test mode [\#450](https://github.com/gobuffalo/buffalo/pull/450) ([markbates](https://github.com/markbates))
+- cleaned up the errors page output to show less "pointer garbage" [\#447](https://github.com/gobuffalo/buffalo/pull/447) ([markbates](https://github.com/markbates))
+- generate a Dockerfile and .dockerignore file for new apps [\#446](https://github.com/gobuffalo/buffalo/pull/446) ([markbates](https://github.com/markbates))
+- \[feature\] implementing some UI for the error and welcome pages [\#444](https://github.com/gobuffalo/buffalo/pull/444) ([apaganobeleno](https://github.com/apaganobeleno))
+- fixed `http: multiple response.WriteHeader calls` [\#443](https://github.com/gobuffalo/buffalo/pull/443) ([jnoortheen](https://github.com/jnoortheen))
+- cleaned up some non-idiomatic code [\#442](https://github.com/gobuffalo/buffalo/pull/442) ([markbates](https://github.com/markbates))
+- implementing skip templates and method [\#440](https://github.com/gobuffalo/buffalo/pull/440) ([apaganobeleno](https://github.com/apaganobeleno))
+- Moving action generator tests to use filetest [\#439](https://github.com/gobuffalo/buffalo/pull/439) ([apaganobeleno](https://github.com/apaganobeleno))
+- Fix HTTP Basic browser authentication prompt [\#435](https://github.com/gobuffalo/buffalo/pull/435) ([peteretelej](https://github.com/peteretelej))
+- Add HTTP Basic authentication Middleware [\#434](https://github.com/gobuffalo/buffalo/pull/434) ([peteretelej](https://github.com/peteretelej))
+- Destroy resource CLI [\#430](https://github.com/gobuffalo/buffalo/pull/430) ([apaganobeleno](https://github.com/apaganobeleno))
+- If no database is being used the `nosqlite` build tag should be used \#425 [\#426](https://github.com/gobuffalo/buffalo/pull/426) ([markbates](https://github.com/markbates))
+- Export `buffalo.Response` so it can be used outside of Buffalo \#423 [\#424](https://github.com/gobuffalo/buffalo/pull/424) ([markbates](https://github.com/markbates))
+- RequestLogger sets request\_id in context [\#421](https://github.com/gobuffalo/buffalo/pull/421) ([nzoschke](https://github.com/nzoschke))
+- Add support for background jobs \#95 [\#420](https://github.com/gobuffalo/buffalo/pull/420) ([markbates](https://github.com/markbates))
+- Remove deprecations [\#419](https://github.com/gobuffalo/buffalo/pull/419) ([markbates](https://github.com/markbates))
+- Remove or rebuild the apps in the examples folder \#376 [\#417](https://github.com/gobuffalo/buffalo/pull/417) ([markbates](https://github.com/markbates))
+- Fixes \#412  action generation [\#416](https://github.com/gobuffalo/buffalo/pull/416) ([apaganobeleno](https://github.com/apaganobeleno))
+- Fix function name [\#415](https://github.com/gobuffalo/buffalo/pull/415) ([markbates](https://github.com/markbates))
+- Fix typos in GoDoc [\#413](https://github.com/gobuffalo/buffalo/pull/413) ([nubunto](https://github.com/nubunto))
+
 ## [v0.8.2](https://github.com/gobuffalo/buffalo/tree/v0.8.2) (2017-05-01)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.1.2...v0.8.2)
 
@@ -524,18 +603,18 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.2)
 
 ## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...0.4.0)
 
-## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
+## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
 
 ## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.0)
 
-## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
+## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)
