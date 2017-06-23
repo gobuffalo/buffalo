@@ -73,7 +73,7 @@ RUN buffalo d resource -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_resource_all.json
 
 RUN buffalo db g model ouch
-RUN buffalo d model -y ouch
+RUN buffalo db d model -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_model_all.json
 
 RUN buffalo g actions ouch build edit
