@@ -55,6 +55,9 @@ var UseResourceModel = ""
 // ResourceMimeType allows to generate a typed resource (HTML by default, JSON...).
 var ResourceMimeType = "html"
 
+// ModelName allows to specify a different model name for the resource.
+var ModelName = ""
+
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
@@ -62,54 +65,80 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var name, modelName string
+		var name, modelName, resourceName, filesPath, actionsPath string
+
+		//Check for a valid mime type
+		if ResourceMimeType != "html" && ResourceMimeType != "json" && ResourceMimeType != "xml" {
+			return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
+		}
+
+		if len(args) == 0 && UseResourceModel == "" {
+			return errors.New("you must specify a resource name")
+		}
+
+		name = inflect.Pluralize(args[0])
+		modelName = name
+		filesPath = name
+		actionsPath = name
+		resourceName = name
+
+		if strings.Contains(name, "/") {
+			parts := strings.Split(name, "/")
+			name = parts[len(parts)-1]
+			modelName = name
+
+			resourceName = strings.Join(parts, "_")
+			actionsPath = resourceName
+		}
 
 		// Allow overwriting modelName with the --use-model flag
 		// buffalo generate resource users --use-model people
 		if UseResourceModel != "" {
 			modelName = inflect.Pluralize(UseResourceModel)
-		}
-
-		if len(args) == 0 {
-			if UseResourceModel == "" {
-				return errors.New("you must specify a resource name")
-			}
-			// When there is no resource name given and --use-model flag is set
 			name = UseResourceModel
-		} else {
-			// When resource name is specified
-			name = inflect.Pluralize(args[0])
-			// If there is no --use-model flag set use the resource to create the model
-			if modelName == "" {
-				modelName = name
-			}
 		}
 
-		if ResourceMimeType != "html" && ResourceMimeType != "json" && ResourceMimeType != "xml" {
-			return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
+		if ModelName != "" {
+			modelName = inflect.Pluralize(ModelName)
+			name = ModelName
 		}
 
-		modelProps := getModelPropertiesFromArgs(args)
+		modelProps := modelPropertiesFromArgs(args)
 
 		data := makr.Data{
-			"name":             name,
-			"singular":         inflect.Singularize(name),
-			"plural":           name,
-			"camel":            inflect.Camelize(name),
-			"under":            inflect.Underscore(name),
-			"underSingular":    inflect.Singularize(inflect.Underscore(name)),
-			"downFirstCap":     inflect.CamelizeDownFirst(name),
-			"model":            inflect.Singularize(inflect.Camelize(modelName)),
-			"modelPlural":      inflect.Camelize(modelName),
-			"modelUnder":       inflect.Singularize(inflect.Underscore(modelName)),
-			"modelPluralUnder": inflect.Underscore(modelName),
-			"varPlural":        inflect.CamelizeDownFirst(modelName),
-			"varSingular":      inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
-			"renderFunction":   strings.ToUpper(ResourceMimeType),
-			"actions":          []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
-			"args":             args,
-			"modelProps":       modelProps,
-			"modelsPath":       packagePath() + "/models",
+			"name":     name,
+			"singular": inflect.Singularize(name),
+			"camel":    inflect.Camelize(name),
+			"under":    inflect.Underscore(name),
+
+			"renderFunction": strings.ToUpper(ResourceMimeType),
+			"actions":        []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"},
+			"args":           args,
+
+			"filesPath":   filesPath,
+			"actionsPath": actionsPath,
+
+			"model":              inflect.Singularize(inflect.Camelize(name)),
+			"modelPlural":        inflect.Pluralize(inflect.Camelize(name)),
+			"modelPluralUnder":   inflect.Underscore(modelName),
+			"modelFilename":      inflect.Underscore(inflect.Camelize(name)),
+			"modelTable":         inflect.Underscore(inflect.Pluralize(name)),
+			"modelSingularUnder": inflect.Underscore(inflect.Singularize(name)),
+			"modelProps":         modelProps,
+			"modelsPath":         packagePath() + "/models",
+
+			"resourceName":          inflect.Camelize(resourceName),
+			"resourcePlural":        inflect.Pluralize(inflect.Camelize(resourceName)),
+			"resourceURL":           inflect.Pluralize(inflect.Underscore(filesPath)),
+			"resourceSingularUnder": inflect.Underscore(inflect.Singularize(resourceName)),
+
+			"routeName":              inflect.Camelize(resourceName),
+			"routeNameSingular":      inflect.Camelize(inflect.Singularize(resourceName)),
+			"routeFirstDown":         inflect.CamelizeDownFirst(resourceName),
+			"routeFirstDownSingular": inflect.CamelizeDownFirst(inflect.Singularize(resourceName)),
+
+			"varPlural":   inflect.CamelizeDownFirst(modelName),
+			"varSingular": inflect.Singularize(inflect.CamelizeDownFirst(modelName)),
 
 			// Flags
 			"skipMigration": SkipResourceMigration,
@@ -117,6 +146,7 @@ var ResourceCmd = &cobra.Command{
 			"useModel":      UseResourceModel,
 			"mimeType":      ResourceMimeType,
 		}
+
 		g, err := resource.New(data)
 		if err != nil {
 			return err
@@ -134,7 +164,7 @@ func (m modelProp) String() string {
 	return m.Name
 }
 
-func getModelPropertiesFromArgs(args []string) []modelProp {
+func modelPropertiesFromArgs(args []string) []modelProp {
 	var mProps []modelProp
 	if len(args) == 0 {
 		return mProps
