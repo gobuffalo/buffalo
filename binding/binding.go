@@ -157,7 +157,7 @@ func parseTime(vals []string) (time.Time, error) {
 	}
 
 	for _, layout := range timeFormats {
-		t, err := time.Parse(layout, vals[0])
+		t, err = time.Parse(layout, vals[0])
 		if err == nil {
 			return t, nil
 		}
