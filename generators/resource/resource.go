@@ -30,17 +30,23 @@ func New(data makr.Data) (*makr.Generator, error) {
 	} else if skipModel {
 		tmplName = "resource-name"
 	}
+
 	for _, f := range files {
 		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
-			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, data["under"].(string), -1), f.Body))
+			folder := data["filesPath"].(string)
+			if strings.Contains(f.WritePath, "actions") {
+				folder = data["actionsPath"].(string)
+			}
+
+			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, folder, -1), f.Body))
 		}
 		if mimeType == "html" {
 			// Adding the html templates to the generator
 			if strings.Contains(f.WritePath, "model-view-") {
 				targetPath := filepath.Join(
 					filepath.Dir(f.WritePath),
-					data["modelPluralUnder"].(string),
+					data["filesPath"].(string),
 					strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
 				)
 				g.Add(makr.NewFile(targetPath, f.Body))
@@ -50,9 +56,10 @@ func New(data makr.Data) (*makr.Generator, error) {
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["under"], data["camel"]))
+			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["resourceURL"], data["resourceName"]))
 		},
 	})
+
 	if !skipModel && useModel == "" {
 		g.Add(modelCommand(data))
 	}
@@ -61,7 +68,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 }
 
 func modelCommand(data makr.Data) makr.Command {
-	modelName := inflect.Underscore(data["singular"].(string))
+	modelName := inflect.Underscore(data["modelSingularUnder"].(string))
 
 	args := data["args"].([]string)
 	args = append(args[:0], args[0+1:]...)

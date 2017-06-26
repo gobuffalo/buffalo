@@ -26,6 +26,7 @@ type App struct {
 	moot          *sync.Mutex
 	routes        RouteList
 	root          *App
+	children      []*App
 }
 
 // Start the application at the specified address/port and listen for OS
@@ -120,9 +121,10 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router: mux.NewRouter(),
-		moot:   &sync.Mutex{},
-		routes: RouteList{},
+		router:   mux.NewRouter(),
+		moot:     &sync.Mutex{},
+		routes:   RouteList{},
+		children: []*App{},
 	}
 	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		c := a.newContext(RouteInfo{}, res, req)
@@ -149,6 +151,5 @@ func Automatic(opts Options) *App {
 	}
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
-
 	return a
 }

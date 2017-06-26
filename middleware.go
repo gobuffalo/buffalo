@@ -34,6 +34,15 @@ type MiddlewareStack struct {
 	skips map[string]bool
 }
 
+func (ms MiddlewareStack) String() string {
+	s := []string{}
+	for _, m := range ms.stack {
+		s = append(s, funcKey(m))
+	}
+
+	return strings.Join(s, "\n")
+}
+
 func (ms *MiddlewareStack) clone() *MiddlewareStack {
 	n := newMiddlewareStack()
 	n.stack = append(n.stack, ms.stack...)
