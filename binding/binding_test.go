@@ -3,22 +3,20 @@ package binding
 import (
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseTimeErrorParsing(t *testing.T) {
+	r := require.New(t)
 	_, err := parseTime([]string{"this is sparta"})
-	if err == nil {
-		t.Fatal("expected an error, got nothing")
-	}
+	r.Error(err)
 }
 
 func TestParseTime(t *testing.T) {
+	r := require.New(t)
 	tt, err := parseTime([]string{"2017-01-01"})
-	if err != nil {
-		t.Fatal(err)
-	}
+	r.NoError(err)
 	expected := time.Date(2017, time.January, 1, 0, 0, 0, 0, time.UTC)
-	if tt != expected {
-		t.Fatal("expected %v, got %v", expected, tt)
-	}
+	r.Equal(expected, tt)
 }
