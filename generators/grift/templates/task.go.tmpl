@@ -1,0 +1,34 @@
+package grifts
+
+import (
+	. "github.com/markbates/grift/grift"
+)
+
+{{ if .plainTask -}}
+    var _ = Desc("{{.taskName}}", "TODO")
+    var _ = Add("{{.taskName}}", func(c *Context) error {
+        return nil
+    })
+{{ else }}  
+    {{ $last := .last }}
+    {{ range $index, $element := .parts }}
+        {{ $isLast := eq $index $last }}
+        {{ if not $isLast }}
+            {{if eq $index 0}}
+                var _ = Namespace("{{$element}}", func(){
+            {{ else }}
+                Namespace("{{$element}}", func(){
+            {{end}}
+        {{ else }}
+            Desc("{{$element}}", "TODO")
+            Add("{{$element}}", func(c *Context) error{
+                return nil
+            })
+        {{ end }}
+    {{ end }}
+
+    {{ range $index, $element := .parts }}
+        {{ if $index }} }) {{ end }}
+    {{ end }}
+               
+{{ end }}

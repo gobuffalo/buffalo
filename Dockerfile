@@ -111,6 +111,12 @@ WORKDIR ./apiapp
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json
 
+RUN buffalo g task plainTask
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_plain_task.json
+
+RUN buffalo g task nested:task:now
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_nested_task.json
+
 RUN buffalo g resource admin/planes
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested.json
 

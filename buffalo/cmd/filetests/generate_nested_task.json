@@ -1,0 +1,10 @@
+[{
+  "path": "grifts/now.go",
+  "contains": [
+    "var _ = Namespace(\"nested\", func() {",
+    "Namespace(\"task\", func() {",
+    "Desc(\"now\", \"TODO\")",
+    "Add(\"now\", func(c *Context) error {",
+    "return nil"
+  ]
+}]
