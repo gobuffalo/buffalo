@@ -14,7 +14,7 @@ import (
 //TaskCmd is the command called with the generate grift cli.
 var TaskCmd = &cobra.Command{
 	Use:     "task [name]",
-	Aliases: []string{"task", "g"},
+	Aliases: []string{"t", "grift"},
 	Short:   "Generates a grift task",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
