@@ -1,9 +1,7 @@
 [{
-  "path": "grifts/nested.go",
+  "path": "grifts/now.go",
   "contains": [
-    "var _ = Desc(\"nested\", \"TODO\")",
     "var _ = Namespace(\"nested\", func() {",
-    "Desc(\"task\", \"TODO\")",
     "Namespace(\"task\", func() {",
     "Desc(\"now\", \"TODO\")",
     "Add(\"now\", func(c *Context) error {",

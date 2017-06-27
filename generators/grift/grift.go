@@ -47,10 +47,8 @@ var existsTmpl = `
         {{ $isLast := eq $index $last }}
         {{ if not $isLast }}
             {{if eq $index 0}}
-                var _ = Desc("{{$element}}", "TODO")
                 var _ = Namespace("{{$element}}", func(){
             {{ else }}
-                Desc("{{$element}}", "TODO")
                 Namespace("{{$element}}", func(){
             {{end}}
         {{ else }}

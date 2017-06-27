@@ -18,7 +18,7 @@ func init() {
 	generateCmd.AddCommand(generate.WebpackCmd)
 	generateCmd.AddCommand(generate.ActionCmd)
 	generateCmd.AddCommand(generate.DockerCmd)
-	generateCmd.AddCommand(generate.GriftCmd)
+	generateCmd.AddCommand(generate.TaskCmd)
 
 	generate.ResourceCmd.Flags().BoolVarP(&generate.SkipResourceMigration, "skip-migration", "s", false, "sets resource generator not-to add model migration")
 	generate.ResourceCmd.Flags().BoolVarP(&generate.SkipResourceModel, "skip-model", "", false, "makes resource generator not to generate model nor migrations")

@@ -7,6 +7,7 @@ RUN go install -v github.com/golang/dep
 RUN go get -v -u github.com/golang/lint/golint
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/gobuffalo/makr
+RUN go get -v -u github.com/markbates/grift
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -110,8 +111,8 @@ WORKDIR ./apiapp
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json
 
-RUN buffalo g grift plainTask
+RUN buffalo g task plainTask
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_plain_task.json
 
-RUN buffalo g grift nested:task:now
+RUN buffalo g task nested:task:now
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_nested_task.json

@@ -11,10 +11,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//GriftCmd is the command called with the generate grift cli.
-var GriftCmd = &cobra.Command{
-	Use:     "grift [name]",
-	Aliases: []string{"grift", "g"},
+//TaskCmd is the command called with the generate grift cli.
+var TaskCmd = &cobra.Command{
+	Use:     "task [name]",
+	Aliases: []string{"task", "g"},
 	Short:   "Generates a grift task",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -28,7 +28,7 @@ var GriftCmd = &cobra.Command{
 
 		if !plain {
 			parts = strings.Split(args[0], ":")
-			filename = fmt.Sprintf("%v.go", inflect.Underscore(parts[0]))
+			filename = fmt.Sprintf("%v.go", inflect.Underscore(parts[len(parts)-1]))
 		}
 
 		data := makr.Data{
