@@ -3,6 +3,7 @@ package buffalo
 import (
 	"net/http"
 
+	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -43,6 +44,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		"routes":        a.Routes(),
 		"current_route": info,
 		"current_path":  req.URL.Path,
+		"env_vars":      envy.Map(),
 	}
 
 	for _, route := range a.Routes() {
