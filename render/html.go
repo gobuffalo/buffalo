@@ -21,11 +21,8 @@ func HTML(names ...string) Renderer {
 // in the options, then that layout file will be used
 // automatically.
 func (e *Engine) HTML(names ...string) Renderer {
-	if e.HTMLLayout != "" {
+	if e.HTMLLayout != "" && len(names) == 1 {
 		names = append(names, e.HTMLLayout)
-	}
-	if len(names) > 2 {
-		names = names[:2]
 	}
 	hr := templateRenderer{
 		Engine:      e,
