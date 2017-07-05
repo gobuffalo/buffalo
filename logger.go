@@ -1,6 +1,6 @@
 package buffalo
 
-import "github.com/Sirupsen/logrus"
+import "github.com/sirupsen/logrus"
 
 // Logger interface is used throughout Buffalo
 // apps to log a whole manner of things.

@@ -6,7 +6,7 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
-* [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus)
+* [github.com/sirupsen/logrus](https://github.com/sirupsen/logrus)
 
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 

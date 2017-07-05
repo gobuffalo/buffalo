@@ -1,7 +1,9 @@
-github.com/Sirupsen/logrus
 github.com/dustin/go-humanize
 github.com/fatih/color
 github.com/fsnotify/fsnotify
+github.com/gobuffalo/buffalo/binding
+github.com/gobuffalo/buffalo/render
+github.com/gobuffalo/buffalo/worker
 github.com/gobuffalo/envy
 github.com/gobuffalo/packr
 github.com/gobuffalo/plush
@@ -36,6 +38,8 @@ github.com/sergi/go-diff/diffmatchpatch
 github.com/shurcooL/github_flavored_markdown
 github.com/shurcooL/highlight_diff
 github.com/shurcooL/highlight_go
+github.com/shurcooL/octiconssvg
 github.com/shurcooL/sanitized_anchor_name
+github.com/sirupsen/logrus
 github.com/sourcegraph/annotate
 github.com/sourcegraph/syntaxhighlight
