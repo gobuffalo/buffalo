@@ -224,5 +224,7 @@ func init() {
 	setupCmd.Flags().BoolVarP(&setupOptions.verbose, "verbose", "v", false, "run with verbose output")
 	setupCmd.Flags().BoolVarP(&setupOptions.updateGoDeps, "update", "u", false, "run go get -u against the application's Go dependencies")
 	setupCmd.Flags().BoolVarP(&setupOptions.dropDatabases, "drop", "d", false, "drop existing databases")
+
+	decorate("setup", setupCmd)
 	RootCmd.AddCommand(setupCmd)
 }

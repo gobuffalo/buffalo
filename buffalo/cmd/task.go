@@ -26,5 +26,6 @@ var taskCommand = &cobra.Command{
 }
 
 func init() {
+	decorate("task", taskCommand)
 	RootCmd.AddCommand(taskCommand)
 }

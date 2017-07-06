@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
+// var cfgFile string
 
 // RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
@@ -26,6 +26,10 @@ func Execute() {
 		fmt.Printf("Error: %s\n\n", err)
 		os.Exit(-1)
 	}
+}
+
+func init() {
+	decorate("root", RootCmd)
 }
 
 // func init() {

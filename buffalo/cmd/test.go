@@ -18,11 +18,11 @@ import (
 
 const vendorPattern = "/vendor/"
 
-var vendorRegex *regexp.Regexp
+var vendorRegex = regexp.MustCompile(vendorPattern)
 
 func init() {
+	decorate("test", testCmd)
 	RootCmd.AddCommand(testCmd)
-	vendorRegex = regexp.MustCompile(vendorPattern)
 }
 
 var testCmd = &cobra.Command{

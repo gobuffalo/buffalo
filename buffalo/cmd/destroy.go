@@ -19,5 +19,6 @@ func init() {
 	destroy.ModelCmd.Flags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
 	destroy.ActionCmd.Flags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
 
+	decorate("destroy", destroyCmd)
 	RootCmd.AddCommand(destroyCmd)
 }

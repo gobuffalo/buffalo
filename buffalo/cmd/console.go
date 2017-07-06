@@ -51,7 +51,9 @@ var consoleCmd = &cobra.Command{
 }
 
 func init() {
+	decorate("console", consoleCmd)
 	RootCmd.AddCommand(consoleCmd)
+
 }
 
 var cMain = `

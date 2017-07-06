@@ -16,8 +16,12 @@ func init() {
 
 	c := cmd.RootCmd
 	destroyCmd.AddCommand(destroy.ModelCmd)
+
+	decorate("destroy", destroyCmd)
+
 	c.AddCommand(destroyCmd)
 
 	c.Use = "db"
+	decorate("db", c)
 	RootCmd.AddCommand(c)
 }
