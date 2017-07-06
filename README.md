@@ -21,7 +21,7 @@ $ go get -u github.com/gobuffalo/buffalo/buffalo
 _NOTE_: Buffalo has a minimum Go dependency of `1.8.1`.
 
 Buffalo also depends on:
- - gcc for [go-sqlite3](https://github.com/mattn/go-sqlite3) wich is a cgo package.
+ - gcc for [go-sqlite3](https://github.com/mattn/go-sqlite3) which is a cgo package.
  - node and npm for the asset pipeline.
 
 ## Generating a new Project

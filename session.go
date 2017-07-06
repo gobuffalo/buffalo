@@ -24,6 +24,15 @@ func (s *Session) Get(name interface{}) interface{} {
 	return s.Session.Values[name]
 }
 
+// GetOnce gets a value from the current session and then deletes it.
+func (s *Session) GetOnce(name interface{}) interface{} {
+	if x, ok := s.Session.Values[name]; ok {
+		s.Delete(name)
+		return x
+	}
+	return nil
+}
+
 // Set a value onto the current session. If a value with that name
 // already exists it will be overridden with the new value.
 func (s *Session) Set(name, value interface{}) {

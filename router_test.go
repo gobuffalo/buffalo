@@ -302,6 +302,9 @@ func Test_buildRouteName(t *testing.T) {
 		"/users/{user_id}/children/{child_id}":       "userChild",
 		"/users/{user_id}/children/new":              "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
+		"/admin/planes":                              "adminPlanes",
+		"/admin/planes/{plane_id}":                   "adminPlane",
+		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
 	for input, result := range cases {

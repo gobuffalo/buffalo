@@ -3,20 +3,25 @@ package actions
 import (
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
-  "github.com/gobuffalo/buffalo/middleware/csrf"
-  "github.com/gobuffalo/buffalo/middleware/i18n"
   {{ if .withPop }}
   "{{.modelsPath}}"
   {{ end }}
   "github.com/gobuffalo/envy"
+
+  {{ if .asWeb -}}
+  "github.com/gobuffalo/buffalo/middleware/csrf"
+  "github.com/gobuffalo/buffalo/middleware/i18n"
   "github.com/gobuffalo/packr"
+  {{ end }}
 )
 
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
 var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
+{{ if .asWeb -}}
 var T *i18n.Translator
+{{ end }}
 
 // App is where all routes and middleware for buffalo
 // should be defined. This is the nerve center of your
@@ -27,6 +32,10 @@ func App() *buffalo.App {
       Env: ENV,
       SessionName: "_{{.name}}_session",
     })
+    // Automatically save the session if the underlying
+    // Handler does not return an error.
+    app.Use(middleware.SessionSaver)
+
     {{ if .asAPI -}}
     // Set the request content type to JSON
     app.Use(middleware.SetContentType("application/json"))
@@ -35,11 +44,14 @@ func App() *buffalo.App {
     if ENV == "development" {
       app.Use(middleware.ParameterLogger)
     }
+
+    {{ if .asWeb -}}
     if ENV != "test" {
       // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
       // Remove to disable this.
       app.Use(csrf.Middleware)
     }
+    {{ end }}
 
     {{ if .withPop }}
     // Wraps each request in a transaction.
@@ -48,12 +60,14 @@ func App() *buffalo.App {
     app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
 
+    {{ if .asWeb -}}
     // Setup and use translations:
     var err error
     if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
       app.Stop(err)
     }
     app.Use(T.Middleware())
+    {{ end }}
 
     app.GET("/", HomeHandler)
 

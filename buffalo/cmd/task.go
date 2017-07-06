@@ -20,7 +20,8 @@ var taskCommand = &cobra.Command{
 		}
 
 		return grifts.Run("buffalo task", args)
-
+	},
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 	},
 }
 

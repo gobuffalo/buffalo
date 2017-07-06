@@ -97,6 +97,11 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 				return os.RemoveAll(filepath.Join(path, "templates"))
 			},
 		})
+		g.Add(makr.Func{
+			Runner: func(path string, data makr.Data) error {
+				return os.RemoveAll(filepath.Join(path, "locales"))
+			},
+		})
 	}
 	if a.Docker != "none" {
 		dg, err := docker.New()
