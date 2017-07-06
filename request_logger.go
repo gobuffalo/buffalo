@@ -3,9 +3,9 @@ package buffalo
 import (
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	humanize "github.com/dustin/go-humanize"
 	"github.com/markbates/going/randx"
+	"github.com/sirupsen/logrus"
 )
 
 // RequestLogger can be be overridden to a user specified
