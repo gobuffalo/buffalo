@@ -165,6 +165,7 @@ func init() {
 	rootPath = pwd
 	app.RootPath = pwd
 
+	decorate("new", newCmd)
 	RootCmd.AddCommand(newCmd)
 	newCmd.Flags().BoolVar(&app.API, "api", false, "skip all front-end code and configure for an API server")
 	newCmd.Flags().BoolVarP(&app.Force, "force", "f", false, "delete and remake if the app already exists")

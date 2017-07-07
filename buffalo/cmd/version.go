@@ -10,6 +10,7 @@ import (
 const Version = "development"
 
 func init() {
+	decorate("version", versionCmd)
 	RootCmd.AddCommand(versionCmd)
 }
 

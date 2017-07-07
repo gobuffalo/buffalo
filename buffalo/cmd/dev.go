@@ -94,5 +94,6 @@ func startDevServer(ctx context.Context) error {
 }
 
 func init() {
+	decorate("dev", devCmd)
 	RootCmd.AddCommand(devCmd)
 }

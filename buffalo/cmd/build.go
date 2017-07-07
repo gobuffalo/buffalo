@@ -411,6 +411,8 @@ var buildCmd = &cobra.Command{
 }
 
 func init() {
+	decorate("build", buildCmd)
+
 	RootCmd.AddCommand(buildCmd)
 	pwd, _ := os.Getwd()
 	output := filepath.Join("bin", filepath.Base(pwd))
