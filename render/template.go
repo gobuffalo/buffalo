@@ -54,7 +54,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
-	if strings.ToLower(filepath.Ext(name)) == ".md" {
+	if strings.ToLower(filepath.Ext(name)) == ".md" && strings.ToLower(s.contentType) != "text/plain" {
 		source = github_flavored_markdown.Markdown(source)
 		source = []byte(html.UnescapeString(string(source)))
 	}
