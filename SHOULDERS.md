@@ -6,8 +6,6 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
-* [github.com/sirupsen/logrus](https://github.com/sirupsen/logrus)
-
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://github.com/fatih/color)
@@ -52,6 +50,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/grift](https://github.com/markbates/grift)
 
+* [github.com/markbates/grift/grift](https://github.com/markbates/grift/grift)
+
 * [github.com/markbates/inflect](https://github.com/markbates/inflect)
 
 * [github.com/markbates/pop](https://github.com/markbates/pop)
@@ -80,6 +80,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
 
+* [github.com/satori/go.uuid](https://github.com/satori/go.uuid)
+
 * [github.com/serenize/snaker](https://github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
@@ -91,6 +93,8 @@ Thank you to the following **GIANTS**:
 * [github.com/shurcooL/highlight_go](https://github.com/shurcooL/highlight_go)
 
 * [github.com/shurcooL/sanitized_anchor_name](https://github.com/shurcooL/sanitized_anchor_name)
+
+* [github.com/sirupsen/logrus](https://github.com/sirupsen/logrus)
 
 * [github.com/sourcegraph/annotate](https://github.com/sourcegraph/annotate)
 
