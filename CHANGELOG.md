@@ -1,5 +1,45 @@
 # Change Log
 
+## [v0.9.1](https://github.com/gobuffalo/buffalo/tree/v0.9.1) (2017-07-10)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.0...v0.9.1)
+
+**Implemented enhancements:**
+
+- Add support for plugins for the buffalo binary [\#495](https://github.com/gobuffalo/buffalo/issues/495)
+- Resource generator doesn't support "nested" values [\#364](https://github.com/gobuffalo/buffalo/issues/364)
+- WIP 0.9.1 [\#499](https://github.com/gobuffalo/buffalo/pull/499) ([markbates](https://github.com/markbates))
+
+**Closed issues:**
+
+- error with flag --api [\#492](https://github.com/gobuffalo/buffalo/issues/492)
+- No Benchmark ? Seriously ! [\#490](https://github.com/gobuffalo/buffalo/issues/490)
+- New project tests fail \(on buffalo 0.9.0\) [\#489](https://github.com/gobuffalo/buffalo/issues/489)
+- v2 of github.com/monoculum/formam always get installed [\#488](https://github.com/gobuffalo/buffalo/issues/488)
+- template helper accessing context value [\#486](https://github.com/gobuffalo/buffalo/issues/486)
+- cockroachdb compatibility [\#478](https://github.com/gobuffalo/buffalo/issues/478)
+- Grifts generator [\#477](https://github.com/gobuffalo/buffalo/issues/477)
+- Destroy Model is inconsistent with the generator for the model [\#475](https://github.com/gobuffalo/buffalo/issues/475)
+- running deployed binary task argument missing [\#473](https://github.com/gobuffalo/buffalo/issues/473)
+- dep wrong version of github.com/monoculum/formam [\#472](https://github.com/gobuffalo/buffalo/issues/472)
+- adding mailer [\#292](https://github.com/gobuffalo/buffalo/issues/292)
+- Provide alternative webpack starters [\#214](https://github.com/gobuffalo/buffalo/issues/214)
+
+**Merged pull requests:**
+
+- added a render.Plain Renderer [\#498](https://github.com/gobuffalo/buffalo/pull/498) ([markbates](https://github.com/markbates))
+- Add support for plugins for the buffalo binary closes \#495 [\#496](https://github.com/gobuffalo/buffalo/pull/496) ([markbates](https://github.com/markbates))
+- fix case-insensitive import collision [\#494](https://github.com/gobuffalo/buffalo/pull/494) ([s7v7nislands](https://github.com/s7v7nislands))
+- error with flag --api fixes \#492 [\#493](https://github.com/gobuffalo/buffalo/pull/493) ([markbates](https://github.com/markbates))
+- Update README.md Spelling Mistake [\#491](https://github.com/gobuffalo/buffalo/pull/491) ([asqrd](https://github.com/asqrd))
+- allows n number of yields in templates [\#485](https://github.com/gobuffalo/buffalo/pull/485) ([markbates](https://github.com/markbates))
+- Vdemeester fix binding parse time [\#484](https://github.com/gobuffalo/buffalo/pull/484) ([markbates](https://github.com/markbates))
+- Making some fronted optimisation [\#481](https://github.com/gobuffalo/buffalo/pull/481) ([egorikas](https://github.com/egorikas))
+- Moves destroy model command [\#480](https://github.com/gobuffalo/buffalo/pull/480) ([apaganobeleno](https://github.com/apaganobeleno))
+- Feature grift generator [\#479](https://github.com/gobuffalo/buffalo/pull/479) ([apaganobeleno](https://github.com/apaganobeleno))
+- improved the connection with grifts, including the ability automatically add grifts to a buffalo.App [\#476](https://github.com/gobuffalo/buffalo/pull/476) ([markbates](https://github.com/markbates))
+- Session once [\#474](https://github.com/gobuffalo/buffalo/pull/474) ([markbates](https://github.com/markbates))
+- Nested resources with actions namespacing [\#469](https://github.com/gobuffalo/buffalo/pull/469) ([apaganobeleno](https://github.com/apaganobeleno))
+
 ## [v0.9.0](https://github.com/gobuffalo/buffalo/tree/v0.9.0) (2017-06-19)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.8.2...v0.9.0)
 
