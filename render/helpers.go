@@ -2,6 +2,7 @@ package render
 
 import (
 	"html/template"
+	"net/http"
 
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/tags"
@@ -10,7 +11,10 @@ import (
 )
 
 func init() {
-	plush.Helpers.Add("paginator", func(pagination *pop.Paginator, opts map[string]interface{}) (template.HTML, error) {
+	plush.Helpers.Add("paginator", func(pagination *pop.Paginator, opts map[string]interface{}, help plush.HelperContext) (template.HTML, error) {
+		if opts["path"] == nil {
+			opts["path"] = help.Value("request").(*http.Request).URL.String()
+		}
 		t, err := tags.Pagination(pagination, opts)
 		if err != nil {
 			return "", errors.WithStack(err)
