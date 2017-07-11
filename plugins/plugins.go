@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -58,20 +59,21 @@ func Available() (List, error) {
 			})
 		}(p)
 	}
+
 	go func() {
-		err := wg.Wait()
-		close(ch)
-		if err != nil {
-			log.Fatal(err)
+		for c := range ch {
+			bc := c.BuffaloCommand
+			if _, ok := list[bc]; !ok {
+				list[bc] = Commands{}
+			}
+			list[bc] = append(list[bc], c)
 		}
 	}()
 
-	for c := range ch {
-		bc := c.BuffaloCommand
-		if _, ok := list[bc]; !ok {
-			list[bc] = Commands{}
-		}
-		list[bc] = append(list[bc], c)
+	err := wg.Wait()
+	close(ch)
+	if err != nil {
+		return list, errors.WithStack(err)
 	}
 	return list, nil
 }
