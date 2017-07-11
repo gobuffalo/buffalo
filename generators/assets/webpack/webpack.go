@@ -62,7 +62,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 	g.Add(c)
 
 	modules := []string{"webpack@~2.3.0", "sass-loader", "css-loader", "style-loader", "node-sass",
-		"extract-text-webpack-plugin", "babel-cli", "babel-core", "babel-preset-env", "babel-loader", "url-loader",
+		"extract-text-webpack-plugin@2.1.2", "babel-cli", "babel-core", "babel-preset-env", "babel-loader", "url-loader",
 		"file-loader", "jquery", "bootstrap", "path", "font-awesome", "npm-install-webpack-plugin", "jquery-ujs",
 		"copy-webpack-plugin", "expose-loader", "uglifyjs-webpack-plugin@~0.4.6",
 	}
