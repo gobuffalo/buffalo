@@ -32,14 +32,16 @@ func (v {{.resourceName}}Resource) List(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 	{{.varPlural}} := &models.{{.modelPlural}}{}
 	// You can order your list here. Just change
-	err := tx.All({{.varPlural}})
+	q := tx.PaginateFromParams(c.Params())
+	err := q.All({{.varPlural}})
 	// to:
-	// err := tx.Order("create_at desc").All({{.varPlural}})
+	// err := q.Order("create_at desc").All({{.varPlural}})
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	// Make {{.modelPlural}} available inside the html template
 	c.Set("{{.varPlural}}", {{.varPlural}})
+	c.Set("pagination", q.Paginator)
 	return c.Render(200, r.HTML("{{.filesPath}}/index.html"))
 }
 
