@@ -6,11 +6,15 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
+* [github.com/daviddengcn/go-colortext](https://github.com/daviddengcn/go-colortext)
+
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://github.com/fatih/color)
 
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
+
+* [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
 
 * [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
 
@@ -42,6 +46,14 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
 
+* [github.com/jmoiron/sqlx](https://github.com/jmoiron/sqlx)
+
+* [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/reflectx)
+
+* [github.com/lib/pq](https://github.com/lib/pq)
+
+* [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
+
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 
 * [github.com/markbates/going/randx](https://github.com/markbates/going/randx)
@@ -56,6 +68,12 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
+* [github.com/markbates/pop/columns](https://github.com/markbates/pop/columns)
+
+* [github.com/markbates/pop/fizz](https://github.com/markbates/pop/fizz)
+
+* [github.com/markbates/pop/fizz/translators](https://github.com/markbates/pop/fizz/translators)
+
 * [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
@@ -67,6 +85,62 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 
 * [github.com/markbates/validate/validators](https://github.com/markbates/validate/validators)
+
+* [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
+
+* [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
+
+* [github.com/mattn/anko/builtins/encoding/json](https://github.com/mattn/anko/builtins/encoding/json)
+
+* [github.com/mattn/anko/builtins/errors](https://github.com/mattn/anko/builtins/errors)
+
+* [github.com/mattn/anko/builtins/flag](https://github.com/mattn/anko/builtins/flag)
+
+* [github.com/mattn/anko/builtins/fmt](https://github.com/mattn/anko/builtins/fmt)
+
+* [github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext](https://github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext)
+
+* [github.com/mattn/anko/builtins/io](https://github.com/mattn/anko/builtins/io)
+
+* [github.com/mattn/anko/builtins/io/ioutil](https://github.com/mattn/anko/builtins/io/ioutil)
+
+* [github.com/mattn/anko/builtins/math](https://github.com/mattn/anko/builtins/math)
+
+* [github.com/mattn/anko/builtins/math/big](https://github.com/mattn/anko/builtins/math/big)
+
+* [github.com/mattn/anko/builtins/math/rand](https://github.com/mattn/anko/builtins/math/rand)
+
+* [github.com/mattn/anko/builtins/net](https://github.com/mattn/anko/builtins/net)
+
+* [github.com/mattn/anko/builtins/net/http](https://github.com/mattn/anko/builtins/net/http)
+
+* [github.com/mattn/anko/builtins/net/url](https://github.com/mattn/anko/builtins/net/url)
+
+* [github.com/mattn/anko/builtins/os](https://github.com/mattn/anko/builtins/os)
+
+* [github.com/mattn/anko/builtins/os/exec](https://github.com/mattn/anko/builtins/os/exec)
+
+* [github.com/mattn/anko/builtins/os/signal](https://github.com/mattn/anko/builtins/os/signal)
+
+* [github.com/mattn/anko/builtins/path](https://github.com/mattn/anko/builtins/path)
+
+* [github.com/mattn/anko/builtins/path/filepath](https://github.com/mattn/anko/builtins/path/filepath)
+
+* [github.com/mattn/anko/builtins/regexp](https://github.com/mattn/anko/builtins/regexp)
+
+* [github.com/mattn/anko/builtins/runtime](https://github.com/mattn/anko/builtins/runtime)
+
+* [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/builtins/sort)
+
+* [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/builtins/strings)
+
+* [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/builtins/time)
+
+* [github.com/mattn/anko/parser](https://github.com/mattn/anko/parser)
+
+* [github.com/mattn/anko/vm](https://github.com/mattn/anko/vm)
+
+* [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
 
 * [github.com/microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday)
 
