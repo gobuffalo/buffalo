@@ -13,7 +13,9 @@ import (
 func init() {
 	plush.Helpers.Add("paginator", func(pagination *pop.Paginator, opts map[string]interface{}, help plush.HelperContext) (template.HTML, error) {
 		if opts["path"] == nil {
-			opts["path"] = help.Value("request").(*http.Request).URL.String()
+			if req, ok := help.Value("request").(*http.Request); ok {
+				opts["path"] = req.URL.String()
+			}
 		}
 		t, err := tags.Pagination(pagination, opts)
 		if err != nil {
