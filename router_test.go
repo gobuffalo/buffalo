@@ -168,6 +168,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 			6. <%= carPath({car_id: 1}) %>
 			7. <%= newCarPath() %>
 			8. <%= editCarPath({car_id: 1}) %>
+			9. <%= editCarPath({car_id: 1, other: 12}) %>
+			10. <%= rootPath({"some":"variable","other": 12}) %>
 		`))
 	}
 
@@ -189,6 +191,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "6. /car/1")
 	r.Contains(res.Body.String(), "7. /car/new")
 	r.Contains(res.Body.String(), "8. /car/1/edit")
+	r.Contains(res.Body.String(), "9. /car/1/edit?other=12")
+	r.Contains(res.Body.String(), "10. /?other=12&some=variable")
 }
 
 func Test_Resource(t *testing.T) {

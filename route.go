@@ -3,6 +3,8 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"sort"
 	"strings"
 
 	"reflect"
@@ -65,7 +67,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 //BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
 func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	cRoute := ri
-	return func(opts map[string]interface{}) string {
+	return func(opts map[string]interface{}) template.HTML {
 		pairs := []string{}
 		for k, v := range opts {
 			pairs = append(pairs, k)
@@ -74,15 +76,54 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return cRoute.Path
+			return template.HTML(cRoute.Path)
 		}
 
-		return url.Path
+		result := url.Path
+		result = addExtraParamsTo(result, opts)
+
+		return template.HTML(result)
 	}
 }
 
+func addExtraParamsTo(path string, opts map[string]interface{}) string {
+	pendingParams := map[string]string{}
+	keys := []string{}
+	for k, v := range opts {
+		if strings.Contains(path, fmt.Sprintf("%v", v)) {
+			continue
+		}
+
+		keys = append(keys, k)
+		pendingParams[k] = fmt.Sprintf("%v", v)
+	}
+
+	if strings.Contains(path, "?") == false {
+		path = path + "?"
+	} else {
+		if strings.HasSuffix(path, "?") == false {
+			path = path + "&"
+		}
+	}
+
+	sort.Strings(keys)
+
+	for index, k := range keys {
+		format := "%v=%v"
+
+		if index > 0 {
+			format = "&%v=%v"
+		}
+
+		path = path + fmt.Sprintf(format, k, pendingParams[k])
+		index = index + 1
+	}
+
+	return path
+}
+
 //RouteHelperFunc represents the function that takes the route and the opts and build the path
-type RouteHelperFunc func(opts map[string]interface{}) string
+type RouteHelperFunc func(opts map[string]interface{}) template.HTML
 
 // RouteList contains a mapping of the routes defined
 // in the application. This listing contains, Method, Path,
