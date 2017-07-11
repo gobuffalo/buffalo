@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.9.1.1](https://github.com/gobuffalo/buffalo/tree/v0.9.1.1) (2017-07-11)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1...v0.9.1.1)
+
 ## [v0.9.1](https://github.com/gobuffalo/buffalo/tree/v0.9.1) (2017-07-10)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.0...v0.9.1)
 
@@ -640,21 +643,21 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/gobuffalo/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/gobuffalo/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.2)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.2)
 
-## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...0.4.0)
-
-## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.0.pre)
+## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
 
 ## [v0.4.1.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.1.pre) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0...v0.4.1.pre)
 
 ## [v0.4.0](https://github.com/gobuffalo/buffalo/tree/v0.4.0) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.0)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
-## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
+## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.0.pre)
+
+## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)
