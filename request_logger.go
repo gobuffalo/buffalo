@@ -27,6 +27,7 @@ func RequestLoggerFunc(h Handler) Handler {
 		}
 		rid := irid.(string) + "-" + randx.String(10)
 		c.Set("request_id", rid)
+		c.LogField("request_id", rid)
 
 		start := time.Now()
 		defer func() {
@@ -36,7 +37,6 @@ func RequestLoggerFunc(h Handler) Handler {
 				c.LogField("content_type", ct)
 			}
 			c.LogFields(logrus.Fields{
-				"request_id": rid,
 				"method":     c.Request().Method,
 				"path":       c.Request().URL.String(),
 				"duration":   time.Since(start),
