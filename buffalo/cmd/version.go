@@ -22,6 +22,7 @@ var versionCmd = &cobra.Command{
 		fmt.Printf("Buffalo version is: %s\n", Version)
 	},
 	// needed to override the root level pre-run func
-	PersistentPreRun: func(c *cobra.Command, args []string) {
+	PersistentPreRunE: func(c *cobra.Command, args []string) error {
+		return nil
 	},
 }
