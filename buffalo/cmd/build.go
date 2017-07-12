@@ -436,9 +436,9 @@ import (
 	"os"
 
 	"github.com/markbates/grift/grift"
-	"github.com/gobuffalo/packr"
 	_ "<%= aPack %>"
 	<%= if (modelsPack) { %>
+	"github.com/gobuffalo/packr"
 	"github.com/markbates/pop"
 	"<%= modelsPack %>"
 	<% } %>
