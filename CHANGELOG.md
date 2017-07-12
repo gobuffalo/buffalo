@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.9.1.2](https://github.com/gobuffalo/buffalo/tree/v0.9.1.2) (2017-07-12)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.1...v0.9.1.2)
+
+**Closed issues:**
+
+- Pagination and auto-generated route functions [\#501](https://github.com/gobuffalo/buffalo/issues/501)
+
+**Merged pull requests:**
+
+- Binary migrations [\#507](https://github.com/gobuffalo/buffalo/pull/507) ([markbates](https://github.com/markbates))
+- use goroutines to more quickly look through paths for plugins [\#506](https://github.com/gobuffalo/buffalo/pull/506) ([markbates](https://github.com/markbates))
+- Generate pagination [\#505](https://github.com/gobuffalo/buffalo/pull/505) ([markbates](https://github.com/markbates))
+- cleaned up per request logging [\#504](https://github.com/gobuffalo/buffalo/pull/504) ([markbates](https://github.com/markbates))
+- Allowing to pass extra arguments to named routes [\#502](https://github.com/gobuffalo/buffalo/pull/502) ([apaganobeleno](https://github.com/apaganobeleno))
+
 ## [v0.9.1.1](https://github.com/gobuffalo/buffalo/tree/v0.9.1.1) (2017-07-11)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1...v0.9.1.1)
 
