@@ -439,9 +439,7 @@ import (
 	"github.com/gobuffalo/packr"
 	_ "<%= aPack %>"
 	<%= if (modelsPack) { %>
-	"io"
-	"io/ioutil"
-	"path/filepath"
+	"github.com/markbates/pop"
 	"<%= modelsPack %>"
 	<% } %>
 	<%= if (griftsPack) { %>
@@ -451,7 +449,6 @@ import (
 
 var version = "unknown"
 var buildTime = "unknown"
-var migrationBox packr.Box
 
 func main() {
 	args := os.Args
@@ -485,37 +482,14 @@ func printVersion() {
 
 <%= if (modelsPack) { %>
 func migrate() {
-	var err error
-	migrationBox = packr.NewBox("./migrations")
-	fmt.Println("--> Running migrations")
-	path, err := unpackMigrations()
+	box, err := pop.NewMigrationBox(packr.NewBox("./migrations"), models.DB)
 	if err != nil {
 		log.Fatalf("Failed to unpack migrations: %s", err)
 	}
-	defer os.RemoveAll(path)
-
-	models.DB.MigrateUp(path)
-}
-
-func unpackMigrations() (string, error) {
-	dir, err := ioutil.TempDir("", "<%= name %>-migrations")
+	err = box.Up()
 	if err != nil {
-		log.Fatalf("Unable to create temp directory: %s", err)
+		log.Fatalf("Failed to run migrations: %s", err)
 	}
-
-	migrationBox.Walk(func(path string, f packr.File) error {
-		file, err := os.Create(filepath.Join(dir, path))
-		if err != nil {
-			log.Fatalf("Failed to write migration to disk: %s", err)
-		}
-		_, err = io.Copy(file, f)
-		if err != nil {
-			log.Fatalf("Failed to write migration to disk: %s", err)
-		}
-		return nil
-	})
-
-	return dir, nil
 }
 <% } %>
 `
