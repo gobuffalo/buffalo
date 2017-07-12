@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -29,9 +28,13 @@ func Test_Plain(t *testing.T) {
 	}).Plain
 
 	re := j(tmpFile.Name())
-	r.Equal("text/plain", re.ContentType())
-	bb := &bytes.Buffer{}
-	err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-	r.NoError(err)
-	r.Equal("Mark", strings.TrimSpace(bb.String()))
+	r.Equal("text/plain; charset=utf-8", re.ContentType())
+	var examples = []string{"Mark", "Jém"}
+	for _, example := range examples {
+		example := example
+		bb := &bytes.Buffer{}
+		err := re.Render(bb, map[string]interface{}{"name": example})
+		r.NoError(err)
+		r.Equal(example, bb.String())
+	}
 }
