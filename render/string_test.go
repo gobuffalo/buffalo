@@ -17,9 +17,15 @@ func Test_String(t *testing.T) {
 	}).String
 
 	re := j("<%= name %>")
-	r.Equal("text/plain", re.ContentType())
-	bb := &bytes.Buffer{}
-	err := re.Render(bb, map[string]interface{}{"name": "Mark"})
-	r.NoError(err)
-	r.Equal("Mark", bb.String())
+	r.Equal("text/plain; charset=utf-8", re.ContentType())
+
+	var examples = []string{"Mark", "Jém"}
+	for _, example := range examples {
+		example := example
+		bb := &bytes.Buffer{}
+		err := re.Render(bb, map[string]interface{}{"name": example})
+		r.NoError(err)
+		r.Equal(example, bb.String())
+	}
+
 }

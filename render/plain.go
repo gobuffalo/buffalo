@@ -20,7 +20,7 @@ func Plain(names ...string) Renderer {
 func (e *Engine) Plain(names ...string) Renderer {
 	hr := templateRenderer{
 		Engine:      e,
-		contentType: "text/plain",
+		contentType: "text/plain; charset=utf-8",
 		names:       names,
 	}
 	return hr
