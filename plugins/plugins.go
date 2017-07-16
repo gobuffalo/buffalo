@@ -2,6 +2,7 @@ package plugins
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 
@@ -80,7 +82,9 @@ func Available() (List, error) {
 
 func askBin(path string, ch chan Command) error {
 	commands := Commands{}
-	cmd := exec.Command(path, "available")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, path, "available")
 	bb := &bytes.Buffer{}
 	cmd.Stdout = bb
 	cmd.Stderr = bb
