@@ -177,7 +177,7 @@ func npmCheck() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	err = run(exec.Command("npm", "install"))
+	err = run(exec.Command("npm", "install", "--no-progress"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using npm:\n%s", err)
 	}

@@ -31,7 +31,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 	}
 
 	command := "npm"
-	args := []string{"install", "--save"}
+	args := []string{"install", "--no-progress", "--save"}
 	// If yarn.lock exists then yarn is used by default (generate webpack)
 	_, ferr := os.Stat("yarn.lock")
 	if ferr == nil {
