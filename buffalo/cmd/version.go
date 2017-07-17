@@ -7,7 +7,7 @@ import (
 )
 
 // Version is the current version of the buffalo binary
-const Version = "v0.9.1.2"
+const Version = "development"
 
 func init() {
 	decorate("version", versionCmd)
@@ -22,6 +22,7 @@ var versionCmd = &cobra.Command{
 		fmt.Printf("Buffalo version is: %s\n", Version)
 	},
 	// needed to override the root level pre-run func
-	PersistentPreRun: func(c *cobra.Command, args []string) {
+	PersistentPreRunE: func(c *cobra.Command, args []string) error {
+		return nil
 	},
 }

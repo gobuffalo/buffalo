@@ -2,6 +2,7 @@ package plugins
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -9,8 +10,11 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
+
+	"golang.org/x/sync/errgroup"
 )
 
 // List maps a Buffalo command to a slice of Command
@@ -32,45 +36,71 @@ func Available() (List, error) {
 	} else {
 		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
 	}
+
+	ch := make(chan Command)
+	wg := &errgroup.Group{}
 	for _, p := range paths {
-		if _, err := os.Stat(p); err != nil {
-			continue
-		}
-		err := filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				return nil
-			}
-			base := filepath.Base(path)
-			if strings.HasPrefix(base, "buffalo-") {
-				commands := Commands{}
-				cmd := exec.Command(path, "available")
-				bb := &bytes.Buffer{}
-				cmd.Stdout = bb
-				cmd.Stderr = bb
-				err = cmd.Run()
-				if err != nil {
-					fmt.Printf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
+		func(p string) {
+			wg.Go(func() error {
+				if _, err := os.Stat(p); err != nil {
 					return nil
 				}
-				err = json.NewDecoder(bb).Decode(&commands)
-				if err != nil {
-					fmt.Printf("[PLUGIN] error loading plugin %s: %s\n", path, err)
-					return nil
-				}
-				for _, c := range commands {
-					bc := c.BuffaloCommand
-					if _, ok := list[bc]; !ok {
-						list[bc] = Commands{}
+				err := filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
+					if info.IsDir() {
+						return nil
 					}
-					c.Binary = path
-					list[bc] = append(list[bc], c)
-				}
+					base := filepath.Base(path)
+					if strings.HasPrefix(base, "buffalo-") {
+						wg.Go(func() error {
+							return askBin(path, ch)
+						})
+					}
+					return nil
+				})
+				return err
+			})
+		}(p)
+	}
+
+	go func() {
+		for c := range ch {
+			bc := c.BuffaloCommand
+			if _, ok := list[bc]; !ok {
+				list[bc] = Commands{}
 			}
-			return nil
-		})
-		if err != nil {
-			return nil, errors.WithStack(err)
+			list[bc] = append(list[bc], c)
 		}
+	}()
+
+	err := wg.Wait()
+	close(ch)
+	if err != nil {
+		return list, errors.WithStack(err)
 	}
 	return list, nil
+}
+
+func askBin(path string, ch chan Command) error {
+	commands := Commands{}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, path, "available")
+	bb := &bytes.Buffer{}
+	cmd.Stdout = bb
+	cmd.Stderr = bb
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
+		return nil
+	}
+	err = json.NewDecoder(bb).Decode(&commands)
+	if err != nil {
+		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n", path, err)
+		return nil
+	}
+	for _, c := range commands {
+		c.Binary = path
+		ch <- c
+	}
+	return nil
 }

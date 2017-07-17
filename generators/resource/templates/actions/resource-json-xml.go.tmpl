@@ -30,13 +30,17 @@ func (v {{.camel}}Resource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	{{.varPlural}} := &models.{{.modelPlural}}{}
+	// Paginate results. Params "page" and "per_page" control pagination.
+	// Default values are "page=1" and "per_page=2".
+	q := tx.PaginateFromParams(c.Params())
 	// You can order your list here. Just change
-	err := tx.All({{.varPlural}})
+	err := q.All({{.varPlural}})
 	// to:
-	// err := tx.Order("created_at desc").All({{.varPlural}})
+	// err := q.Order("create_at desc").All({{.varPlural}})
 	if err != nil {
 		return errors.WithStack(err)
 	}
+	c.Response().Header().Set("X-Pagination", q.Paginator.String())
 	return c.Render(200, r.{{.renderFunction}}({{.varPlural}}))
 }
 

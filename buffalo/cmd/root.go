@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -14,8 +15,26 @@ var RootCmd = &cobra.Command{
 	SilenceErrors: true,
 	Use:           "buffalo",
 	Short:         "Helps you build your Buffalo applications that much easier!",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Printf("Buffalo version %s\n\n", Version)
+
+		anywhereCommands := []string{"new", "version"}
+		isFreeCommand := false
+		for _, freeCmd := range anywhereCommands {
+			if freeCmd == cmd.Name() {
+				isFreeCommand = true
+			}
+		}
+
+		if isFreeCommand {
+			return nil
+		}
+
+		if insideBuffaloProject() == false {
+			return errors.New("you need to be inside your buffalo project path to run this command")
+		}
+
+		return nil
 	},
 }
 
@@ -30,6 +49,14 @@ func Execute() {
 
 func init() {
 	decorate("root", RootCmd)
+}
+
+func insideBuffaloProject() bool {
+	if _, err := os.Stat(".buffalo.dev.yml"); err != nil {
+		return false
+	}
+
+	return true
 }
 
 // func init() {

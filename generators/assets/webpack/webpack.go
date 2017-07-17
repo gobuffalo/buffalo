@@ -8,7 +8,9 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
+	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
 var logo = &makr.RemoteFile{
@@ -27,11 +29,16 @@ func New(data makr.Data) (*makr.Generator, error) {
 	_, err := exec.LookPath("npm")
 	if err != nil {
 		fmt.Println("Could not find npm/node. Skipping webpack generation.")
-		return g, nil
+
+		wg, err := standard.New(data)
+		if err != nil {
+			return g, errors.WithStack(err)
+		}
+		return wg, nil
 	}
 
 	command := "npm"
-	args := []string{"install", "--save"}
+	args := []string{"install", "--no-progress", "--save"}
 	// If yarn.lock exists then yarn is used by default (generate webpack)
 	_, ferr := os.Stat("yarn.lock")
 	if ferr == nil {

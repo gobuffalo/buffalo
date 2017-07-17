@@ -31,15 +31,20 @@ func (v {{.resourceName}}Resource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx := c.Value("tx").(*pop.Connection)
 	{{.varPlural}} := &models.{{.modelPlural}}{}
+	// Paginate results. Params "page" and "per_page" control pagination.
+	// Default values are "page=1" and "per_page=2".
+	q := tx.PaginateFromParams(c.Params())
 	// You can order your list here. Just change
-	err := tx.All({{.varPlural}})
+	err := q.All({{.varPlural}})
 	// to:
-	// err := tx.Order("create_at desc").All({{.varPlural}})
+	// err := q.Order("create_at desc").All({{.varPlural}})
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	// Make {{.modelPlural}} available inside the html template
 	c.Set("{{.varPlural}}", {{.varPlural}})
+  // Add the paginator to the context so it can be used in the template.
+	c.Set("pagination", q.Paginator)
 	return c.Render(200, r.HTML("{{.filesPath}}/index.html"))
 }
 
