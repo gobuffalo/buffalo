@@ -45,6 +45,7 @@ type Simple struct {
 	moot     *sync.Mutex
 }
 
+// Register Handler with the worker
 func (w *Simple) Register(name string, h Handler) error {
 	w.moot.Lock()
 	defer w.moot.Unlock()
@@ -55,12 +56,14 @@ func (w *Simple) Register(name string, h Handler) error {
 	return nil
 }
 
+// Start the worker
 func (w *Simple) Start(ctx context.Context) error {
 	w.Logger.Info("Starting Simple Background Worker")
 	w.ctx, w.cancel = context.WithCancel(ctx)
 	return nil
 }
 
+// Stop the worker
 func (w Simple) Stop() error {
 	w.Logger.Info("Stopping Simple Background Worker")
 	w.cancel()
