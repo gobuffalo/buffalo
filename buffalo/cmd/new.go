@@ -36,6 +36,10 @@ var newCmd = &cobra.Command{
 			return fmt.Errorf("Name %s is not allowed, try a different application name", app.Name)
 		}
 
+		if nameHasIllegalCharacter() {
+			return fmt.Errorf("Name %s is not allowed, application name should not have slashes or dots", app.Name)
+		}
+
 		if app.Name == "." {
 			app.Name = filepath.Base(app.RootPath)
 		} else {
@@ -76,6 +80,20 @@ func validDbType() bool {
 
 func forbiddenName() bool {
 	return contains(forbiddenAppNames, strings.ToLower(app.Name))
+}
+
+func nameHasIllegalCharacter() bool {
+	illegal := []string{
+		"/", "\\", ".",
+	}
+
+	for _, ch := range illegal {
+		if strings.Contains(app.Name, ch) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func validateInGoPath() error {
