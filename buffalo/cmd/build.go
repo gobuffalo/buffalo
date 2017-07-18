@@ -59,7 +59,7 @@ func (b *builder) buildWebpack() error {
 	_, err := os.Stat("webpack.config.js")
 	if err == nil {
 		// build webpack
-		return b.exec(webpack.BinPath, "-p")
+		return b.exec(webpack.BinPath)
 	}
 	return nil
 }
