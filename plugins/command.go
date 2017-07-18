@@ -7,8 +7,9 @@ type Command struct {
 	// BuffaloCommand "generate"
 	BuffaloCommand string `json:"buffalo_command"`
 	// Description "generates a foo"
-	Description string `json:"description"`
-	Binary      string `json:"-"`
+	Description string   `json:"description"`
+	Aliases     []string `json:"aliases"`
+	Binary      string   `json:"-"`
 }
 
 // Commands is a slice of Command
