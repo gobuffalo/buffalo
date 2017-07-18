@@ -84,7 +84,7 @@ func forbiddenName() bool {
 
 func nameHasIllegalCharacter() bool {
 	illegal := []string{
-		"/", "\\", ".",
+		"/", `\`, ".",
 	}
 
 	for _, ch := range illegal {
