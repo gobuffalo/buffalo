@@ -89,7 +89,7 @@ var infoCmd = &cobra.Command{
 			c.Stderr = bb
 			c.Run()
 		} else {
-			bb.WriteString("MySQL Not Found\n")
+			bb.WriteString("SQLite Not Found\n")
 		}
 
 		return nil
