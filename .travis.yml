@@ -5,16 +5,10 @@ services:
 install: false
 
 go:
-  - 1.7
-
-env:
-  matrix:
-    - GO_DOCKER_TAG=1.7
-    - GO_DOCKER_TAG=1.8
-    - GO_DOCKER_TAG=latest
+  - 1.8
 
 script:
-  - perl -pi -w -e "s/FROM golang:latest/FROM golang:$GO_DOCKER_TAG/g" Dockerfile && docker build .
+  - docker build .
 
 addons:
   code_climate:
