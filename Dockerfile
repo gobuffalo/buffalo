@@ -27,7 +27,7 @@ RUN golint -set_exit_status ./...
 
 
 WORKDIR $GOPATH/src/
-RUN buffalo new --db-type=sqlite3 hello_world --ci-provider=travis
+RUN buffalo new --skip-dep --db-type=sqlite3 hello_world --ci-provider=travis
 WORKDIR ./hello_world
 
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
@@ -100,13 +100,13 @@ RUN buffalo g actions users update --skip-template --method POST
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_with_method.json
 
 WORKDIR $GOPATH/src
-RUN buffalo new --skip-pop --skip-dep simple_world
+RUN buffalo new --skip-dep --skip-pop --skip-dep simple_world
 WORKDIR ./simple_world
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/skip_dep.json
 
 WORKDIR $GOPATH/src
-RUN buffalo new --api apiapp
+RUN buffalo new --skip-dep --api apiapp
 WORKDIR ./apiapp
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json

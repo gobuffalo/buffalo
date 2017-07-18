@@ -6,21 +6,28 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
-var _ Worker = &simple{}
+var _ Worker = &Simple{}
 
 // NewSimple creates a basic implementation of the Worker interface
 // that is backed using just the standard library and goroutines.
-func NewSimple() Worker {
+func NewSimple() *Simple {
 	return NewSimpleWithContext(context.Background())
 }
 
 // NewSimpleWithContext creates a basic implementation of the Worker interface
 // that is backed using just the standard library and goroutines.
-func NewSimpleWithContext(ctx context.Context) Worker {
+func NewSimpleWithContext(ctx context.Context) *Simple {
 	ctx, cancel := context.WithCancel(ctx)
-	return &simple{
+
+	l := logrus.New()
+	l.Level = logrus.InfoLevel
+	l.Formatter = &logrus.TextFormatter{}
+
+	return &Simple{
+		Logger:   l,
 		ctx:      ctx,
 		cancel:   cancel,
 		handlers: map[string]Handler{},
@@ -28,16 +35,18 @@ func NewSimpleWithContext(ctx context.Context) Worker {
 	}
 }
 
-// simple is a basic implementation of the Worker interface
+// Simple is a basic implementation of the Worker interface
 // that is backed using just the standard library and goroutines.
-type simple struct {
+type Simple struct {
+	Logger   SimpleLogger
 	ctx      context.Context
 	cancel   context.CancelFunc
 	handlers map[string]Handler
 	moot     *sync.Mutex
 }
 
-func (w *simple) Register(name string, h Handler) error {
+// Register Handler with the worker
+func (w *Simple) Register(name string, h Handler) error {
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if _, ok := w.handlers[name]; ok {
@@ -47,35 +56,53 @@ func (w *simple) Register(name string, h Handler) error {
 	return nil
 }
 
-func (w *simple) Start(ctx context.Context) error {
+// Start the worker
+func (w *Simple) Start(ctx context.Context) error {
+	w.Logger.Info("Starting Simple Background Worker")
 	w.ctx, w.cancel = context.WithCancel(ctx)
 	return nil
 }
 
-func (w simple) Stop() error {
+// Stop the worker
+func (w Simple) Stop() error {
+	w.Logger.Info("Stopping Simple Background Worker")
 	w.cancel()
 	return nil
 }
 
 // Perform a job as soon as possibly using a goroutine.
-func (w simple) Perform(job Job) error {
+func (w Simple) Perform(job Job) error {
+	w.Logger.Infof("Performing job %s\n", job)
+	if job.Handler == "" {
+		err := errors.Errorf("no handler name given for %s", job)
+		w.Logger.Error(err)
+		return err
+	}
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
-		go h(job.Args)
+		go func() {
+			err := h(job.Args)
+			if err != nil {
+				w.Logger.Error(err)
+			}
+			w.Logger.Infof("Completed job %s\n", job)
+		}()
 		return nil
 	}
-	return errors.Errorf("no handler mapped for name %s", job.Handler)
+	err := errors.Errorf("no handler mapped for name %s", job.Handler)
+	w.Logger.Error(err)
+	return err
 }
 
 // PerformAt performs a job at a particular time using a goroutine.
-func (w simple) PerformAt(job Job, t time.Time) error {
+func (w Simple) PerformAt(job Job, t time.Time) error {
 	return w.PerformIn(job, time.Until(t))
 }
 
 // PerformIn performs a job after waiting for a specified amount
 // using a goroutine.
-func (w simple) PerformIn(job Job, d time.Duration) error {
+func (w Simple) PerformIn(job Job, d time.Duration) error {
 	go func() {
 		select {
 		case <-time.After(d):
@@ -85,4 +112,14 @@ func (w simple) PerformIn(job Job, d time.Duration) error {
 		}
 	}()
 	return nil
+}
+
+// SimpleLogger is used by the Simple worker to write logs
+type SimpleLogger interface {
+	Debugf(string, ...interface{})
+	Infof(string, ...interface{})
+	Errorf(string, ...interface{})
+	Debug(...interface{})
+	Info(...interface{})
+	Error(...interface{})
 }
