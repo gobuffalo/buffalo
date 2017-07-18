@@ -1,4 +1,4 @@
-FROM golang:1.8.1
+FROM golang:1.8.3
 
 RUN go version
 
@@ -11,8 +11,7 @@ RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key ad
 RUN apt-get update
 RUN apt-get install -y postgresql postgresql-contrib libpq-dev
 RUN apt-get install -y -q mysql-client
-RUN go get -v -u github.com/golang/dep
-RUN go install -v github.com/golang/dep
+RUN go get -u github.com/golang/dep/cmd/dep
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
