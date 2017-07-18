@@ -2,8 +2,6 @@ FROM gobuffalo/buffalo:development
 
 RUN buffalo version
 
-RUN go get -v -u github.com/golang/dep
-RUN go install -v github.com/golang/dep
 RUN go get -v -u github.com/golang/lint/golint
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/gobuffalo/makr
