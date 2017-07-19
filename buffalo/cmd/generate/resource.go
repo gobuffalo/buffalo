@@ -37,7 +37,7 @@ Generates:
 - actions/users.go
 - actions/users_test.go
 
-$ buffalo g resource users --use-model
+$ buffalo g resource users --use-model users
 Generates:
 
 - actions/users.go
