@@ -34,11 +34,11 @@ var newCmd = &cobra.Command{
 		app.Name = args[0]
 
 		if forbiddenName() {
-			return fmt.Errorf("Name %s is not allowed, try a different application name", app.Name)
+			return fmt.Errorf("name %s is not allowed, try a different application name", app.Name)
 		}
 
 		if nameHasIllegalCharacter(app.Name) {
-			return fmt.Errorf("Name %s is not allowed, application name should not have slashes or dots", app.Name)
+			return fmt.Errorf("name %s is not allowed, application name can only be contain [a-Z0-9-_]", app.Name)
 		}
 
 		if app.Name == "." {
