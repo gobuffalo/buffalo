@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/newapp"
@@ -33,7 +34,11 @@ var newCmd = &cobra.Command{
 		app.Name = args[0]
 
 		if forbiddenName() {
-			return fmt.Errorf("Name %s is not allowed, try a different application name", app.Name)
+			return fmt.Errorf("name %s is not allowed, try a different application name", app.Name)
+		}
+
+		if nameHasIllegalCharacter(app.Name) {
+			return fmt.Errorf("name %s is not allowed, application name can only be contain [a-Z0-9-_]", app.Name)
 		}
 
 		if app.Name == "." {
@@ -76,6 +81,12 @@ func validDbType() bool {
 
 func forbiddenName() bool {
 	return contains(forbiddenAppNames, strings.ToLower(app.Name))
+}
+
+var nameRX = regexp.MustCompile("^[\\w-]+$")
+
+func nameHasIllegalCharacter(name string) bool {
+	return !nameRX.MatchString(name)
 }
 
 func validateInGoPath() error {

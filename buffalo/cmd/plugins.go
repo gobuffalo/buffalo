@@ -32,8 +32,9 @@ func decorate(name string, cmd *cobra.Command) {
 	for _, c := range plugs()[name] {
 		func(c plugins.Command) {
 			cc := &cobra.Command{
-				Use:   c.Name,
-				Short: fmt.Sprintf("[PLUGIN] %s", c.Description),
+				Use:     c.Name,
+				Short:   fmt.Sprintf("[PLUGIN] %s", c.Description),
+				Aliases: c.Aliases,
 				RunE: func(cmd *cobra.Command, args []string) error {
 					ax := []string{c.Name}
 					ax = append(ax, args...)

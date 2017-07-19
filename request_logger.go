@@ -27,20 +27,18 @@ func RequestLoggerFunc(h Handler) Handler {
 		}
 		rid := irid.(string) + "-" + randx.String(10)
 		c.Set("request_id", rid)
+		c.LogField("request_id", rid)
 
 		start := time.Now()
-		c.LogFields(logrus.Fields{
-			"request_id": rid,
-			"method":     c.Request().Method,
-			"path":       c.Request().URL.String(),
-		})
-		ct := c.Request().Header.Get("Content-Type")
-		if ct != "" {
-			c.LogField("content_type", ct)
-		}
 		defer func() {
 			ws := c.Response().(*Response)
+			ct := c.Request().Header.Get("Content-Type")
+			if ct != "" {
+				c.LogField("content_type", ct)
+			}
 			c.LogFields(logrus.Fields{
+				"method":     c.Request().Method,
+				"path":       c.Request().URL.String(),
 				"duration":   time.Since(start),
 				"size":       ws.Size,
 				"human_size": humanize.Bytes(uint64(ws.Size)),

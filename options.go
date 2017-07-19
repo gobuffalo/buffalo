@@ -72,7 +72,9 @@ func optionsWithDefaults(opts Options) Options {
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
 	if opts.Worker == nil {
-		opts.Worker = worker.NewSimpleWithContext(opts.Context)
+		w := worker.NewSimpleWithContext(opts.Context)
+		w.Logger = opts.Logger
+		opts.Worker = w
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))

@@ -11,7 +11,7 @@ type stringRenderer struct {
 }
 
 func (s stringRenderer) ContentType() string {
-	return "text/plain"
+	return "text/plain; charset=utf-8"
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
