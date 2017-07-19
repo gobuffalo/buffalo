@@ -15,6 +15,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var devOptions = struct {
+	Debug bool
+}{}
+
 // devCmd represents the dev command
 var devCmd = &cobra.Command{
 	Use:   "dev",
@@ -89,11 +93,13 @@ func startDevServer(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	c.Debug = devOptions.Debug
 	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
 }
 
 func init() {
+	devCmd.Flags().BoolVarP(&devOptions.Debug, "debug", "d", false, "use delve to debug the app")
 	decorate("dev", devCmd)
 	RootCmd.AddCommand(devCmd)
 }
