@@ -1,6 +1,7 @@
 package newapp
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -36,8 +37,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
 	if !a.SkipDep {
-		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep", "-u")))
-		g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep")))
+		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 	}
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
@@ -111,6 +111,13 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		g.Add(dg)
 	}
 	g.Add(makr.NewCommand(a.goGet()))
+	if !a.SkipDep {
+		if v, ok := data["version"].(string); ok {
+			if v != "development" {
+				g.Add(makr.NewCommand(exec.Command("dep", "ensure", fmt.Sprintf("github.com/gobuffalo/buffalo@%s", v))))
+			}
+		}
+	}
 
 	return g, nil
 }
