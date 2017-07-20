@@ -29,3 +29,4 @@ gin-bin
 *.sqlite*
 .idea/
 .vscode
+vendor/
