@@ -37,6 +37,10 @@ func Available() (List, error) {
 			continue
 		}
 		err := filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				// May indicate a permissions problem with the path, skip it
+				return nil	
+			}
 			if info.IsDir() {
 				return nil
 			}
