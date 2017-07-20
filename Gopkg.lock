@@ -161,7 +161,7 @@
   name = "github.com/markbates/refresh"
   packages = ["refresh","refresh/web"]
   revision = "ea691f3d039a952f2a7f1456bcbf6a6e49cea7a6"
-  version = "1.3"
+  version = "v1.3.2"
 
 [[projects]]
   branch = "master"
