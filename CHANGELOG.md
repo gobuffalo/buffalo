@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/gobuffalo/buffalo/tree/HEAD)
+## [v0.9.2](https://github.com/gobuffalo/buffalo/tree/v0.9.2) (2017-07-12)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.2...v0.9.2)
 
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.2...HEAD)
 
 **Implemented enhancements:**
 
@@ -50,9 +50,6 @@
 - added --no-progress to npm install [\#523](https://github.com/gobuffalo/buffalo/pull/523) ([markbates](https://github.com/markbates))
 - Prevents buffalo from executing commands outside the buffalo project [\#514](https://github.com/gobuffalo/buffalo/pull/514) ([apaganobeleno](https://github.com/apaganobeleno))
 - Update string and plain renderer with the charset [\#511](https://github.com/gobuffalo/buffalo/pull/511) ([ryanfaerman](https://github.com/ryanfaerman))
-
-## [v0.9.2](https://github.com/gobuffalo/buffalo/tree/v0.9.2) (2017-07-12)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.2...v0.9.2)
 
 ## [v0.9.1.2](https://github.com/gobuffalo/buffalo/tree/v0.9.1.2) (2017-07-12)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.1...v0.9.1.2)
