@@ -1,5 +1,59 @@
 # Change Log
 
+## [Unreleased](https://github.com/gobuffalo/buffalo/tree/HEAD)
+
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.2...HEAD)
+
+**Implemented enhancements:**
+
+- Buffalo can't bind on fixed IP [\#518](https://github.com/gobuffalo/buffalo/issues/518)
+
+**Closed issues:**
+
+- New Command generates invalid app settings [\#540](https://github.com/gobuffalo/buffalo/issues/540)
+- webpack error in Buffalo 0.9.1.2 [\#532](https://github.com/gobuffalo/buffalo/issues/532)
+- \[Question\] db.Transaction and controller unittest [\#528](https://github.com/gobuffalo/buffalo/issues/528)
+- Mac issue [\#524](https://github.com/gobuffalo/buffalo/issues/524)
+- Buffalo dev runtime error upon trying to access local host page [\#521](https://github.com/gobuffalo/buffalo/issues/521)
+- Demo/Example Buffalo Application [\#520](https://github.com/gobuffalo/buffalo/issues/520)
+- \[Question\] showing sql queries when testing or log to test.log [\#519](https://github.com/gobuffalo/buffalo/issues/519)
+- Assets missing on new v0.9.1.2 app without npm [\#517](https://github.com/gobuffalo/buffalo/issues/517)
+- Environment variables in .buffalo.dev.yml? [\#516](https://github.com/gobuffalo/buffalo/issues/516)
+- How to start app at 0.0.0.0:3000? [\#515](https://github.com/gobuffalo/buffalo/issues/515)
+- Weird bug regarding $GOPATH bin directory [\#513](https://github.com/gobuffalo/buffalo/issues/513)
+- Provide an error if -\(dash\) in a helper name. [\#512](https://github.com/gobuffalo/buffalo/issues/512)
+- Running buffalo commands outside of the directory should error out [\#508](https://github.com/gobuffalo/buffalo/issues/508)
+- Add explicit version \(or range\) to the Node packages [\#503](https://github.com/gobuffalo/buffalo/issues/503)
+- Getting started:  running buffalo new coke with 0.9.0 and go 1.8.3 fails on windows [\#500](https://github.com/gobuffalo/buffalo/issues/500)
+- Unsuccessful: buffalo new \<name\> --skip-pop [\#497](https://github.com/gobuffalo/buffalo/issues/497)
+
+**Merged pull requests:**
+
+- ensure the dep installs the correct version of buffalo [\#546](https://github.com/gobuffalo/buffalo/pull/546) ([markbates](https://github.com/markbates))
+- added a -d flag to buffalo dev to run the app with delve [\#545](https://github.com/gobuffalo/buffalo/pull/545) ([markbates](https://github.com/markbates))
+- Fix resource generation example message [\#544](https://github.com/gobuffalo/buffalo/pull/544) ([slomek](https://github.com/slomek))
+- Adding versions to the NPM packages [\#543](https://github.com/gobuffalo/buffalo/pull/543) ([apaganobeleno](https://github.com/apaganobeleno))
+- updated to a regex to check for illegal characters [\#542](https://github.com/gobuffalo/buffalo/pull/542) ([markbates](https://github.com/markbates))
+- Bugfix special characters [\#541](https://github.com/gobuffalo/buffalo/pull/541) ([apaganobeleno](https://github.com/apaganobeleno))
+- removed the installation of dep in the integration tests [\#539](https://github.com/gobuffalo/buffalo/pull/539) ([markbates](https://github.com/markbates))
+- removed the unused docker environments [\#538](https://github.com/gobuffalo/buffalo/pull/538) ([markbates](https://github.com/markbates))
+- added an `info` command to print of env/versions to help with debugging [\#537](https://github.com/gobuffalo/buffalo/pull/537) ([markbates](https://github.com/markbates))
+- use `--skip-dep` in the integration tests [\#536](https://github.com/gobuffalo/buffalo/pull/536) ([markbates](https://github.com/markbates))
+- webpack should rely on webpack config not -p flag [\#535](https://github.com/gobuffalo/buffalo/pull/535) ([tonyalaribe](https://github.com/tonyalaribe))
+- updated the Dockerfile.build to use 1.8.3 and fix the dep install [\#534](https://github.com/gobuffalo/buffalo/pull/534) ([markbates](https://github.com/markbates))
+- added support for plugin aliases [\#533](https://github.com/gobuffalo/buffalo/pull/533) ([markbates](https://github.com/markbates))
+- enhanced the simple worker with logging [\#531](https://github.com/gobuffalo/buffalo/pull/531) ([markbates](https://github.com/markbates))
+- Use i18n in index template [\#529](https://github.com/gobuffalo/buffalo/pull/529) ([slomek](https://github.com/slomek))
+- Buffalo can't bind on fixed IP fixes \#518 [\#527](https://github.com/gobuffalo/buffalo/pull/527) ([markbates](https://github.com/markbates))
+- time out bad plugins fixes \#513 [\#526](https://github.com/gobuffalo/buffalo/pull/526) ([markbates](https://github.com/markbates))
+- Assets missing on new v0.9.1.2 app without npm fixes \#517 [\#525](https://github.com/gobuffalo/buffalo/pull/525) ([markbates](https://github.com/markbates))
+- added --no-progress to npm install [\#523](https://github.com/gobuffalo/buffalo/pull/523) ([markbates](https://github.com/markbates))
+- Prevents buffalo from executing commands outside the buffalo project [\#514](https://github.com/gobuffalo/buffalo/pull/514) ([apaganobeleno](https://github.com/apaganobeleno))
+- Update string and plain renderer with the charset [\#511](https://github.com/gobuffalo/buffalo/pull/511) ([ryanfaerman](https://github.com/ryanfaerman))
+
+## [v0.9.2](https://github.com/gobuffalo/buffalo/tree/v0.9.2) (2017-07-12)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.2...v0.9.2)
+
 ## [v0.9.1.2](https://github.com/gobuffalo/buffalo/tree/v0.9.1.2) (2017-07-12)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.1...v0.9.1.2)
 
