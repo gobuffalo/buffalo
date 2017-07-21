@@ -29,7 +29,8 @@ func plugs() plugins.List {
 }
 
 func decorate(name string, cmd *cobra.Command) {
-	for _, c := range plugs()[name] {
+	pugs := plugs()
+	for _, c := range pugs[name] {
 		func(c plugins.Command) {
 			cc := &cobra.Command{
 				Use:     c.Name,

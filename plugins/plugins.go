@@ -13,8 +13,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-
-	"golang.org/x/sync/errgroup"
 )
 
 // List maps a Buffalo command to a slice of Command
@@ -36,51 +34,40 @@ func Available() (List, error) {
 	} else {
 		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
 	}
-
-	ch := make(chan Command)
-	wg := &errgroup.Group{}
 	for _, p := range paths {
-		func(p string) {
-			wg.Go(func() error {
-				if _, err := os.Stat(p); err != nil {
-					return nil
-				}
-				err := filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
-					if info.IsDir() {
-						return nil
-					}
-					base := filepath.Base(path)
-					if strings.HasPrefix(base, "buffalo-") {
-						wg.Go(func() error {
-							return askBin(path, ch)
-						})
-					}
-					return nil
-				})
-				return err
-			})
-		}(p)
-	}
-
-	go func() {
-		for c := range ch {
-			bc := c.BuffaloCommand
-			if _, ok := list[bc]; !ok {
-				list[bc] = Commands{}
-			}
-			list[bc] = append(list[bc], c)
+		if _, err := os.Stat(p); err != nil {
+			continue
 		}
-	}()
-
-	err := wg.Wait()
-	close(ch)
-	if err != nil {
-		return list, errors.WithStack(err)
+		err := filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				// May indicate a permissions problem with the path, skip it
+				return nil
+			}
+			if info.IsDir() {
+				return nil
+			}
+			base := filepath.Base(path)
+			if strings.HasPrefix(base, "buffalo-") {
+				commands := askBin(path)
+				for _, c := range commands {
+					bc := c.BuffaloCommand
+					if _, ok := list[bc]; !ok {
+						list[bc] = Commands{}
+					}
+					c.Binary = path
+					list[bc] = append(list[bc], c)
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, errors.WithStack(err)
+		}
 	}
 	return list, nil
 }
 
-func askBin(path string, ch chan Command) error {
+func askBin(path string) Commands {
 	commands := Commands{}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -91,16 +78,12 @@ func askBin(path string, ch chan Command) error {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
-		return nil
+		return commands
 	}
 	err = json.NewDecoder(bb).Decode(&commands)
 	if err != nil {
 		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n", path, err)
-		return nil
+		return commands
 	}
-	for _, c := range commands {
-		c.Binary = path
-		ch <- c
-	}
-	return nil
+	return commands
 }
