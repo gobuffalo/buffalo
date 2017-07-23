@@ -12,6 +12,11 @@ RUN npm install
 {{end -}}
 
 ADD . .
+{{if .withDep -}}
+RUN dep ensure
+{{else -}}
+RUN go get $(go list ./... | grep -v /vendor/)
+{{end -}}
 RUN buffalo build --static -o /bin/app
 
 FROM alpine
