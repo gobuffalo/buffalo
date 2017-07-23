@@ -27,7 +27,7 @@ type App struct {
 	DBType      string
 	CIProvider  string
 	API         bool
-	SkipDep     bool
+	WithDep     bool
 	Docker      string
 }
 
@@ -36,8 +36,9 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
-	if !a.SkipDep {
+	if a.WithDep {
 		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+		g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep/cmd/dep")))
 	}
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
@@ -111,7 +112,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		g.Add(dg)
 	}
 	g.Add(makr.NewCommand(a.goGet()))
-	if !a.SkipDep {
+	if a.WithDep {
 		if v, ok := data["version"].(string); ok {
 			if v != "development" {
 				g.Add(makr.NewCommand(exec.Command("dep", "ensure", fmt.Sprintf("github.com/gobuffalo/buffalo@%s", v))))
@@ -123,7 +124,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 }
 
 func (a App) goGet() *exec.Cmd {
-	if !a.SkipDep {
+	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
 			return exec.Command("dep", "init")
 		}
