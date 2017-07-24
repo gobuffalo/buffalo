@@ -195,7 +195,7 @@ func yarnCheck() error {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
 	}
-	err = run(exec.Command("yarn", "install"))
+	err = run(exec.Command("yarn", "--no-progress", "install"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
 	}
