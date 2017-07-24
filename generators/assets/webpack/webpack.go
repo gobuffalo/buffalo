@@ -2,7 +2,6 @@ package webpack
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 	"path/filepath"
 
@@ -39,13 +38,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 
 	command := "npm"
 	args := []string{"install", "--no-progress", "--save"}
-	// If yarn.lock exists then yarn is used by default (generate webpack)
-	_, ferr := os.Stat("yarn.lock")
-	if ferr == nil {
-		data["withYarn"] = true
-	}
-
-	if _, ok := data["withYarn"]; ok {
+	if b, ok := data["withYarn"].(bool); ok && b {
 		command = "yarn"
 		args = []string{"add"}
 		err := generateYarn(data)
@@ -65,7 +58,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
 
-	c := makr.NewCommand(exec.Command(command, "init", "-y"))
+	c := makr.NewCommand(exec.Command(command, "init", "--no-progress", "-y"))
 	g.Add(c)
 
 	modules := []string{

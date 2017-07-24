@@ -12,6 +12,7 @@ RUN apt-get install -y postgresql postgresql-contrib libpq-dev
 RUN apt-get install -y -q mysql-client
 RUN apt-get install -y vim
 RUN go get -u github.com/golang/dep/cmd/dep
+RUN npm install -g --no-progress yarn
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 

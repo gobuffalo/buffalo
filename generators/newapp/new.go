@@ -23,7 +23,7 @@ type App struct {
 	Verbose     bool
 	SkipPop     bool
 	SkipWebpack bool
-	WithYarn    bool
+	SkipYarn    bool
 	DBType      string
 	CIProvider  string
 	API         bool
