@@ -7,7 +7,11 @@ WORKDIR $GOPATH/src/{{.packagePath}}
 {{if .withWebpack -}}
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
-RUN npm install
+{{if .withYarn -}}
+RUN yarn install --no-progress
+{{else -}}
+RUN npm install --no-progress
+{{end -}}
 {{end -}}
 {{end -}}
 

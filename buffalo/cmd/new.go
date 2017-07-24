@@ -153,6 +153,7 @@ func genNewFiles() error {
 		"withPop":     !app.SkipPop,
 		"withDep":     app.WithDep,
 		"withWebpack": !app.SkipWebpack && !app.API,
+		"withYarn":    app.WithYarn,
 		"dbType":      app.DBType,
 		"version":     Version,
 		"ciProvider":  app.CIProvider,

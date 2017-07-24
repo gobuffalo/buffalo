@@ -31,6 +31,11 @@ var DockerCmd = &cobra.Command{
 			"docker":      dockerOptions.Style,
 			"asWeb":       webpack,
 			"withWepack":  webpack,
+			"withYarn":    false,
+		}
+
+		if _, err := os.Stat("yarn.lock"); err == nil {
+			data["withYarn"] = true
 		}
 
 		g, err := docker.New()
