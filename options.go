@@ -41,7 +41,7 @@ type Options struct {
 
 	Context context.Context
 	cancel  context.CancelFunc
-	prefix  string
+	Prefix  string
 }
 
 // NewOptions returns a new Options instance with sensible defaults

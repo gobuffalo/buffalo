@@ -192,7 +192,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "7. /car/new")
 	r.Contains(res.Body.String(), "8. /car/1/edit")
 	r.Contains(res.Body.String(), "9. /car/1/edit?other=12")
-	r.Contains(res.Body.String(), "10. /?other=12&some=variable")
+	r.Contains(res.Body.String(), "10. /car?other=12&some=variable")
 }
 
 func Test_Resource(t *testing.T) {
@@ -311,8 +311,21 @@ func Test_buildRouteName(t *testing.T) {
 		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
+	a := Automatic(Options{})
+
 	for input, result := range cases {
-		fResult := buildRouteName(input)
+		fResult := a.buildRouteName(input)
+		r.Equal(result, fResult, input)
+	}
+
+	a = Automatic(Options{Prefix: "/test"})
+	cases = map[string]string{
+		"/test":                                      "root",
+		"/test/users":                                "testUsers",
+	}
+
+	for input, result := range cases {
+		fResult := a.buildRouteName(input)
 		r.Equal(result, fResult, input)
 	}
 }
