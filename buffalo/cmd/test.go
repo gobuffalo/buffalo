@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 
 	"github.com/markbates/pop"
@@ -80,7 +81,7 @@ func findSchema() io.Reader {
 }
 
 func testRunner(args []string) error {
-	cmd := exec.Command("go", "test", "-p", "1")
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "test", "-p", "1")
 	cmd.Args = append(cmd.Args, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -92,7 +93,7 @@ func testRunner(args []string) error {
 		}
 	}
 	if !runFlag {
-		out, err := exec.Command("go", "list", "./...").Output()
+		out, err := exec.Command(envy.Get("GO_BIN", "go"), "list", "./...").Output()
 		if err != nil {
 			return err
 		}
