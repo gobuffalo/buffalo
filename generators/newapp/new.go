@@ -11,6 +11,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
 	"github.com/pkg/errors"
 )
@@ -134,7 +135,7 @@ func (a App) goGet() *exec.Cmd {
 		appArgs = append(appArgs, "-v")
 	}
 	appArgs = append(appArgs, "./...")
-	return exec.Command("go", appArgs...)
+	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
 }
 
 const nTravis = `language: go

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +20,7 @@ var infoCmd = &cobra.Command{
 		bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", Version))
 
 		bb.WriteString("\n### Go Version\n")
-		c := exec.Command("go", "version")
+		c := exec.Command(envy.Get("GO_BIN", "go"), "version")
 		c.Stdout = bb
 		err := c.Run()
 		if err != nil {
@@ -27,7 +28,7 @@ var infoCmd = &cobra.Command{
 		}
 
 		bb.WriteString("\n### Go Env\n")
-		c = exec.Command("go", "env")
+		c = exec.Command(envy.Get("GO_BIN", "go"), "env")
 		c.Stdout = bb
 		c.Stderr = bb
 		c.Run()
