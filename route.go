@@ -98,6 +98,10 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 		pendingParams[k] = fmt.Sprintf("%v", v)
 	}
 
+	if len(keys) == 0 {
+		return path
+	}
+
 	if strings.Contains(path, "?") == false {
 		path = path + "?"
 	} else {
