@@ -10,6 +10,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -88,7 +89,7 @@ func updateGoDepsCheck() error {
 			args = append(args, "-u")
 		}
 		args = append(args, dep)
-		c := exec.Command("go", args...)
+		c := exec.Command(envy.Get("GO_BIN", "go"), args...)
 		f := func() error {
 			return run(c)
 		}

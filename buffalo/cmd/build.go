@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	"github.com/gobuffalo/envy"
 	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
@@ -367,7 +368,7 @@ func (b *builder) buildBin() error {
 
 	buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
 
-	return b.exec("go", buildArgs...)
+	return b.exec(envy.Get("GO_BIN", "go"), buildArgs...)
 }
 
 // buildCmd represents the build command
