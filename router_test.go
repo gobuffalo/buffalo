@@ -316,3 +316,24 @@ func Test_buildRouteName(t *testing.T) {
 		r.Equal(result, fResult, input)
 	}
 }
+
+func Test_CatchAll_Route(t *testing.T) {
+	r := require.New(t)
+	rr := render.New(render.Options{
+		// HTMLLayout:     "application.html",
+		TemplateEngine: plush.BuffaloRenderer,
+		TemplatesBox:   packr.NewBox("../templates"),
+		Helpers:        map[string]interface{}{},
+	})
+
+	a := Automatic(Options{})
+	a.GET("/{name:.+}", func(c Context) error {
+		name := c.Param("name")
+		return c.Render(200, rr.String(name))
+	})
+
+	w := willie.New(a)
+	res := w.Request("/john").Get()
+
+	r.Contains(res.Body.String(), "john")
+}
