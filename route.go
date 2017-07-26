@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"net/url"
 	"sort"
 	"strings"
 
@@ -98,6 +99,10 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 		pendingParams[k] = fmt.Sprintf("%v", v)
 	}
 
+	if len(keys) == 0 {
+		return path
+	}
+
 	if strings.Contains(path, "?") == false {
 		path = path + "?"
 	} else {
@@ -115,7 +120,7 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 			format = "&%v=%v"
 		}
 
-		path = path + fmt.Sprintf(format, k, pendingParams[k])
+		path = path + fmt.Sprintf(format, url.QueryEscape(k), url.QueryEscape(pendingParams[k]))
 		index = index + 1
 	}
 
