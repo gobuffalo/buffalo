@@ -158,12 +158,13 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	url = path.Join(a.prefix, url)
 
 	hs := funcKey(h)
-	r := RouteInfo{
+	r := &RouteInfo{
 		Method:      method,
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
 		App:         a,
+		Aliases:     []string{},
 	}
 
 	r.MuxRoute = a.router.Handle(url, r).Methods(method)
@@ -179,7 +180,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 		a.routes = routes
 	}
 
-	return &r
+	return r
 }
 
 //buildRouteName builds a route based on the path passed.

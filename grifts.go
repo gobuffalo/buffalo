@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/markbates/going/randx"
@@ -61,10 +62,10 @@ func routesGrift(a *App) {
 	grift.Add("routes", func(c *grift.Context) error {
 		routes := a.Routes()
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
-		fmt.Fprintln(w, "METHOD\t PATH\t NAME\t HANDLER")
-		fmt.Fprintln(w, "------\t ----\t ----\t -------")
+		fmt.Fprintln(w, "METHOD\t PATH\t ALIASES\t NAME\t HANDLER")
+		fmt.Fprintln(w, "------\t ----\t -------\t ----\t -------")
 		for _, r := range routes {
-			fmt.Fprintf(w, "%s\t %s\t %s\t %s\n", r.Method, r.Path, r.PathName, r.HandlerName)
+			fmt.Fprintf(w, "%s\t %s\t %s\t %s\t %s\n", r.Method, r.Path, strings.Join(r.Aliases, " "), r.PathName, r.HandlerName)
 		}
 		w.Flush()
 		return nil

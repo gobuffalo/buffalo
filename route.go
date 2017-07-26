@@ -29,16 +29,27 @@ type RouteInfo struct {
 	Method      string     `json:"method"`
 	Path        string     `json:"path"`
 	HandlerName string     `json:"handler"`
+	PathName    string     `json:"pathName"`
+	Aliases     []string   `json:"aliases"`
 	MuxRoute    *mux.Route `json:"-"`
 	Handler     Handler    `json:"-"`
-
-	PathName string `json:"pathName"`
-	App      *App   `json:"-"`
+	App         *App       `json:"-"`
 }
 
+// String returns a JSON representation of the RouteInfo
 func (ri RouteInfo) String() string {
 	b, _ := json.MarshalIndent(ri, "", "  ")
 	return string(b)
+}
+
+// Alias path patterns to the this route. This is not the
+// same as a redirect.
+func (ri *RouteInfo) Alias(aliases ...string) *RouteInfo {
+	ri.Aliases = append(ri.Aliases, aliases...)
+	for _, a := range aliases {
+		ri.App.router.Handle(a, ri).Methods(ri.Method)
+	}
+	return ri
 }
 
 // Name allows users to set custom names for the routes.
@@ -59,7 +70,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 
 	ri.PathName = name
 	if routeIndex != -1 {
-		ri.App.Routes()[routeIndex] = reflect.Indirect(reflect.ValueOf(ri)).Interface().(RouteInfo)
+		ri.App.Routes()[routeIndex] = reflect.ValueOf(ri).Interface().(*RouteInfo)
 	}
 
 	return ri
@@ -133,7 +144,7 @@ type RouteHelperFunc func(opts map[string]interface{}) template.HTML
 // RouteList contains a mapping of the routes defined
 // in the application. This listing contains, Method, Path,
 // and the name of the Handler defined to process that route.
-type RouteList []RouteInfo
+type RouteList []*RouteInfo
 
 func (a RouteList) Len() int      { return len(a) }
 func (a RouteList) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
