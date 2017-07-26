@@ -217,6 +217,10 @@ func (a *App) buildRouteName(p string) string {
 		resultParts = append(resultParts, part)
 	}
 
+	if len(resultParts) == 0 {
+		return "unnamed"
+	}
+
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
 	return inflect.CamelizeDownFirst(underscore)
 }
