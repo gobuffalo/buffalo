@@ -319,12 +319,7 @@ func Test_buildRouteName(t *testing.T) {
 
 func Test_CatchAll_Route(t *testing.T) {
 	r := require.New(t)
-	rr := render.New(render.Options{
-		// HTMLLayout:     "application.html",
-		TemplateEngine: plush.BuffaloRenderer,
-		TemplatesBox:   packr.NewBox("../templates"),
-		Helpers:        map[string]interface{}{},
-	})
+	rr := render.New(render.Options{})
 
 	a := Automatic(Options{})
 	a.GET("/{name:.+}", func(c Context) error {
