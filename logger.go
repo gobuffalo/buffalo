@@ -49,8 +49,7 @@ func NewLogger(level string) Logger {
 	l := logrus.New()
 	l.Level, _ = logrus.ParseLevel(level)
 	l.Formatter = &textFormatter{
-		ForceColors:   dev,
-		FullTimestamp: true,
+		ForceColors: dev,
 	}
 	return logrusWrapper{l}
 }
