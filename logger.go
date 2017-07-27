@@ -1,6 +1,9 @@
 package buffalo
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/gobuffalo/envy"
+	"github.com/sirupsen/logrus"
+)
 
 // Logger interface is used throughout Buffalo
 // apps to log a whole manner of things.
@@ -42,8 +45,12 @@ func (l logrusWrapper) WithFields(m map[string]interface{}) Logger {
 	Example: time="2016-12-01T21:02:07-05:00" level=info duration=225.283µs human_size="106 B" method=GET path="/" render=199.79µs request_id=2265736089 size=106 status=200
 */
 func NewLogger(level string) Logger {
+	dev := envy.Get("GO_ENV", "development") == "development"
 	l := logrus.New()
 	l.Level, _ = logrus.ParseLevel(level)
-	l.Formatter = &logrus.TextFormatter{}
+	l.Formatter = &textFormatter{
+		ForceColors:   dev,
+		FullTimestamp: true,
+	}
 	return logrusWrapper{l}
 }

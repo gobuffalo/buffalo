@@ -6,10 +6,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/going/defaults"
+	"github.com/markbates/pop"
 )
 
 // Options are used to configure and define how your application should run.
@@ -61,6 +63,21 @@ func optionsWithDefaults(opts Options) Options {
 
 	if opts.Logger == nil {
 		opts.Logger = NewLogger(opts.LogLevel)
+	}
+
+	pop.Log = func(s string, args ...interface{}) {
+		if pop.Debug {
+			l := opts.Logger
+			if len(args) > 0 {
+				for i, a := range args {
+					l = l.WithField(fmt.Sprintf("$%d", i+1), a)
+				}
+			}
+			if pop.Color {
+				s = color.YellowString(s)
+			}
+			l.Debug(s)
+		}
 	}
 
 	if opts.SessionStore == nil {
