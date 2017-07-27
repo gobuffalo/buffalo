@@ -44,7 +44,7 @@ func RequestLoggerFunc(h Handler) Handler {
 				"human_size": humanize.Bytes(uint64(ws.Size)),
 				"status":     ws.Status,
 			})
-			c.Logger().Info()
+			c.Logger().Info(c.Request().URL.String())
 		}()
 		return h(c)
 	}
