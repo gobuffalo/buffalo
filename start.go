@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/pkg/errors"
@@ -16,6 +17,9 @@ import (
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Start(addr string) error {
+	if !strings.Contains(addr, ":") {
+		addr = fmt.Sprintf(":%s", addr)
+	}
 	fmt.Printf("Starting application at %s\n", addr)
 	server := http.Server{
 		Addr:    fmt.Sprintf(":%s", addr),
