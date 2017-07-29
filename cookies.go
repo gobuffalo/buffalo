@@ -21,7 +21,7 @@ func (c *Cookies) Get(name string) (string, error) {
 	return ck.Value, nil
 }
 
-// Sets a cookie on the response, which will expire after the given duration.
+// Set a cookie on the response, which will expire after the given duration.
 func (c *Cookies) Set(name, value string, maxAge time.Duration) {
 	ck := http.Cookie{
 		Name:   name,
