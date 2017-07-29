@@ -83,7 +83,7 @@ func (d *DefaultContext) Session() *Session {
 	return d.session
 }
 
-// cookies for the associated request and response.
+// Cookies for the associated request and response.
 func (d *DefaultContext) Cookies() *Cookies {
 	return &Cookies{d.request, d.response}
 }
