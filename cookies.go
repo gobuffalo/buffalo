@@ -44,3 +44,16 @@ func (c *Cookies) SetWithExpirationTime(name, value string, expires time.Time) {
 
 	http.SetCookie(c.res, &ck)
 }
+
+// Delete sets a header that tells the browser to remove the cookie with the given name.
+func (c *Cookies) Delete(name string) {
+	ck := http.Cookie{
+		Name:  name,
+		Value: "v",
+		// Setting a time in the distant past, like the unix epoch, removes the cookie,
+		// since it has long expired.
+		Expires: time.Unix(0, 0),
+	}
+
+	http.SetCookie(c.res, &ck)
+}

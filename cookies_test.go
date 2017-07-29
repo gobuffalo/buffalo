@@ -51,3 +51,15 @@ func TestCookies_SetWithExpirationTime(t *testing.T) {
 	h := res.Header().Get("Set-Cookie")
 	r.Equal("name=Rob Pike; Expires=Sat, 29 Jul 2017 19:28:45 GMT", h)
 }
+
+func TestCookies_Delete(t *testing.T) {
+	r := require.New(t)
+	res := httptest.NewRecorder()
+
+	c := Cookies{&http.Request{}, res}
+
+	c.Delete("remove-me")
+
+	h := res.Header().Get("Set-Cookie")
+	r.Equal("remove-me=v; Expires=Thu, 01 Jan 1970 00:00:00 GMT", h)
+}
