@@ -5,12 +5,15 @@ package buffalo
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 const (
@@ -31,7 +34,16 @@ type textFormatter struct {
 
 func (f *textFormatter) init(entry *logrus.Entry) {
 	if entry.Logger != nil {
-		f.isTerminal = logrus.IsTerminal(entry.Logger.Out)
+		f.isTerminal = f.checkIfTerminal(entry.Logger.Out)
+	}
+}
+
+func (f *textFormatter) checkIfTerminal(w io.Writer) bool {
+	switch v := w.(type) {
+	case *os.File:
+		return terminal.IsTerminal(int(v.Fd()))
+	default:
+		return false
 	}
 }
 
