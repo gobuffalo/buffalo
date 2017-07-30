@@ -59,7 +59,7 @@ func (a *App) Redirect(status int, from, to string) *RouteInfo {
 	a.ServeFiles("/assets", http.Dir("path/to/assets"))
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
-	a.router.PathPrefix(p).Handler(http.StripPrefix(p, http.FileServer(root)))
+	a.router.PathPrefix(path).Handler(http.StripPrefix(path, http.FileServer(root)))
 }
 
 // Resource maps an implementation of the Resource interface
@@ -136,6 +136,7 @@ func (a *App) ANY(p string, h Handler) {
 	g.GET("/users/:user_id, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
+
 	g := New(a.Options)
 	g.prefix = path.Join(a.prefix, groupPath)
 	g.Name = g.prefix
@@ -155,7 +156,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
-	url = path.Join(a.prefix, url)
+	name := a.buildRouteName(url)
 
 	hs := funcKey(h)
 	r := &RouteInfo{
@@ -168,7 +169,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	}
 
 	r.MuxRoute = a.router.Handle(url, r).Methods(method)
-	r.Name(buildRouteName(url))
+	r.Name(name)
 
 	routes := a.Routes()
 	routes = append(routes, r)
@@ -184,13 +185,14 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 }
 
 //buildRouteName builds a route based on the path passed.
-func buildRouteName(path string) string {
-	if path == "/" || path == "" {
+func (a *App) buildRouteName(p string) string {
+
+	if p == "/" || p == "" {
 		return "root"
 	}
 
 	resultParts := []string{}
-	parts := strings.Split(path, "/")
+	parts := strings.Split(p, "/")
 
 	for index, part := range parts {
 
