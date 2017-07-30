@@ -59,6 +59,7 @@ func (a *App) Redirect(status int, from, to string) *RouteInfo {
 	a.ServeFiles("/assets", http.Dir("path/to/assets"))
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
+	path := path.Join(a.Prefix, p)
 	a.router.PathPrefix(path).Handler(http.StripPrefix(path, http.FileServer(root)))
 }
 
@@ -136,10 +137,9 @@ func (a *App) ANY(p string, h Handler) {
 	g.GET("/users/:user_id, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
-
 	g := New(a.Options)
-	g.prefix = path.Join(a.prefix, groupPath)
-	g.Name = g.prefix
+	g.Prefix = path.Join(a.Prefix, groupPath)
+	g.Name = g.Prefix
 
 	g.router = a.router
 	g.Middleware = a.Middleware.clone()
@@ -156,6 +156,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
+	url = path.Join(a.Prefix, url)
 	name := a.buildRouteName(url)
 
 	hs := funcKey(h)
@@ -186,8 +187,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 
 //buildRouteName builds a route based on the path passed.
 func (a *App) buildRouteName(p string) string {
-
-	if p == "/" || p == "" {
+	if path.Join(a.Prefix, "/") == p || p == "/" || p == ""  {
 		return "root"
 	}
 

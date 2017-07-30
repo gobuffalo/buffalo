@@ -322,7 +322,7 @@ func Test_buildRouteName(t *testing.T) {
 		r.Equal(result, fResult, input)
 	}
 
-	a = Automatic(Options{BasePath: "/test"})
+	a = Automatic(Options{Prefix: "/test"})
 	cases = map[string]string{
 		"/test":                                      "root",
 		"/test/users":                                "testUsers",
