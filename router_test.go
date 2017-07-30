@@ -324,8 +324,8 @@ func Test_buildRouteName(t *testing.T) {
 
 	a = Automatic(Options{Prefix: "/test"})
 	cases = map[string]string{
-		"/test":                                      "root",
-		"/test/users":                                "testUsers",
+		"/test":       "test",
+		"/test/users": "testUsers",
 	}
 
 	for input, result := range cases {

@@ -187,7 +187,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 
 //buildRouteName builds a route based on the path passed.
 func (a *App) buildRouteName(p string) string {
-	if path.Join(a.Prefix, "/") == p || p == "/" || p == ""  {
+	if p == "/" || p == "" {
 		return "root"
 	}
 
