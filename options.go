@@ -39,9 +39,10 @@ type Options struct {
 	// WorkerOff tells App.Start() whether to start the Worker process or not. Default is "false".
 	WorkerOff bool
 
-	Context context.Context
-	cancel  context.CancelFunc
-	Prefix  string
+	Context  context.Context
+	cancel   context.CancelFunc
+	prefix   string
+	BasePath string
 }
 
 // NewOptions returns a new Options instance with sensible defaults
