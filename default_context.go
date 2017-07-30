@@ -83,6 +83,11 @@ func (d *DefaultContext) Session() *Session {
 	return d.session
 }
 
+// Cookies for the associated request and response.
+func (d *DefaultContext) Cookies() *Cookies {
+	return &Cookies{d.request, d.response}
+}
+
 // Flash messages for the associated Request.
 func (d *DefaultContext) Flash() *Flash {
 	return d.flash

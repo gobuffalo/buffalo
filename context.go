@@ -18,6 +18,7 @@ type Context interface {
 	Response() http.ResponseWriter
 	Request() *http.Request
 	Session() *Session
+	Cookies() *Cookies
 	Params() ParamValues
 	Param(string) string
 	Set(string, interface{})
