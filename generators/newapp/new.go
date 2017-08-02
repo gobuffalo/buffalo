@@ -61,7 +61,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	} else if data["ciProvider"] == "gitlab-ci" {
 		if _, ok := data["withPop"]; ok {
 			if data["dbType"] == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + data["name"].(string) + "_test"
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + data["name"].(string) + "_test?sslmode=disable"
 			} else if data["dbType"] == "mysql" {
 				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + data["name"].(string) + "_test"
 			} else {
@@ -153,6 +153,7 @@ go_import_path: {{ .packagePath }}
 `
 
 const nGitlabCi = `before_script:
+  - apt-get update && apt-get install -y postgresql-client mysql-client
   - ln -s /builds /go/src/$(echo "{{.packagePath}}" | cut -d "/" -f1)
   - cd /go/src/{{.packagePath}}
   - mkdir -p public/assets
@@ -172,11 +173,11 @@ stages:
     TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
-.use-golang-latest: &use-golang-latest
+.use-golang-image: &use-golang-latest
   image: golang:latest
 
-.use-golang-latest: &use-golang-1-7
-  image: golang:1.7
+.use-golang-image: &use-golang-1-8
+  image: golang:1.8
 
 test:latest:
   <<: *use-golang-latest
@@ -188,8 +189,8 @@ test:latest:
   script:
     - buffalo test
 
-test:1.7:
-  <<: *use-golang-1-7
+test:1.8:
+  <<: *use-golang-1-8
   <<: *test-vars
   stage: test
   services:
@@ -215,11 +216,11 @@ stages:
     GO_ENV: "test"
 
 # Golang version choice helper
-.use-golang-latest: &use-golang-latest
+.use-golang-image: &use-golang-latest
   image: golang:latest
 
-.use-golang-latest: &use-golang-1-7
-  image: golang:1.7
+.use-golang-image: &use-golang-1-8
+  image: golang:1.8
 
 test:latest:
   <<: *use-golang-latest
@@ -228,8 +229,8 @@ test:latest:
   script:
     - buffalo test
 
-test:1.7:
-  <<: *use-golang-1-7
+test:1.8:
+  <<: *use-golang-1-8
   <<: *test-vars
   stage: test
   script:
