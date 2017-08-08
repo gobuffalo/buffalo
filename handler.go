@@ -53,7 +53,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	}
 
 	return &DefaultContext{
-		Context:  req.Context(),
+		Context:  contextFromRequest(req),
 		response: ws,
 		request:  req,
 		params:   params,
