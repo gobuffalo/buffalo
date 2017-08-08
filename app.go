@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"sync"
 
-	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -32,22 +31,6 @@ func (a *App) Stop(err error) error {
 		return err
 	}
 	return nil
-}
-
-func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	defer gcontext.Clear(r)
-	ws := &Response{
-		ResponseWriter: w,
-	}
-	if a.MethodOverride != nil {
-		a.MethodOverride(w, r)
-	}
-	var h http.Handler
-	h = a.router
-	// if a.Env == "development" {
-	// 	h = web.ErrorChecker(h)
-	// }
-	h.ServeHTTP(ws, r)
 }
 
 // New returns a new instance of App, without any frills
