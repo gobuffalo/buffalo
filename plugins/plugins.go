@@ -26,6 +26,9 @@ type List map[string]Commands
 // * file/command must start with `buffalo-`
 // * file/command must respond to `available` and return JSON of
 //	 plugins.Commands{}
+//
+// Caveats:
+// * The C:\Windows directory is excluded
 func Available() (List, error) {
 	list := List{}
 	paths := []string{"plugins"}
@@ -35,6 +38,9 @@ func Available() (List, error) {
 		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
 	}
 	for _, p := range paths {
+		if strings.HasPrefix(strings.ToLower(p), `c:\windows`) {
+			continue	
+		}
 		if _, err := os.Stat(p); err != nil {
 			continue
 		}
