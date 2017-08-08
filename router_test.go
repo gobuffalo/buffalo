@@ -315,8 +315,21 @@ func Test_buildRouteName(t *testing.T) {
 		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
+	a := Automatic(Options{})
+
 	for input, result := range cases {
-		fResult := buildRouteName(input)
+		fResult := a.buildRouteName(input)
+		r.Equal(result, fResult, input)
+	}
+
+	a = Automatic(Options{Prefix: "/test"})
+	cases = map[string]string{
+		"/test":       "test",
+		"/test/users": "testUsers",
+	}
+
+	for input, result := range cases {
+		fResult := a.buildRouteName(input)
 		r.Equal(result, fResult, input)
 	}
 }

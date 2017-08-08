@@ -9,6 +9,7 @@ WORKDIR $GOPATH/src/{{.packagePath}}
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
 {{if .withYarn -}}
+ADD yarn.lock .
 RUN yarn install --no-progress
 {{else -}}
 RUN npm install --no-progress
