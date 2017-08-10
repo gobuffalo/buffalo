@@ -72,7 +72,7 @@ func (w Simple) Stop() error {
 
 // Perform a job as soon as possibly using a goroutine.
 func (w Simple) Perform(job Job) error {
-	w.Logger.Infof("Performing job %s\n", job)
+	w.Logger.Debugf("Performing job %s", job)
 	if job.Handler == "" {
 		err := errors.Errorf("no handler name given for %s", job)
 		w.Logger.Error(err)
@@ -86,7 +86,7 @@ func (w Simple) Perform(job Job) error {
 			if err != nil {
 				w.Logger.Error(err)
 			}
-			w.Logger.Infof("Completed job %s\n", job)
+			w.Logger.Debugf("Completed job %s", job)
 		}()
 		return nil
 	}
