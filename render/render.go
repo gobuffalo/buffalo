@@ -18,6 +18,7 @@ func New(opts Options) *Engine {
 	if opts.Helpers == nil {
 		opts.Helpers = map[string]interface{}{}
 	}
+
 	if opts.TemplateEngine == nil {
 		opts.TemplateEngine = plush.BuffaloRenderer
 	}

@@ -1,9 +1,12 @@
 package render
 
 import (
+	"encoding/json"
+	"fmt"
 	"html"
 	"html/template"
 	"io"
+	"log"
 	"path/filepath"
 	"strings"
 
@@ -48,6 +51,32 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 	helpers := map[string]interface{}{
 		"partial": s.partial,
+		"assetPath": func(file string) template.HTML {
+			manifest, err := s.AssetsBox.MustString("manifest.json")
+			if err != nil {
+				log.Println("[INFO] didn't find manifest, using raw path to assets")
+
+				return template.HTML(fmt.Sprintf("assets/%v", file))
+			}
+
+			var manifestData map[string]string
+			err = json.Unmarshal([]byte(manifest), &manifestData)
+
+			if err != nil {
+				log.Println("[Warning] seems your manifest is not correct")
+				return ""
+			}
+
+			if file == "application.css" {
+				file = "main.css"
+			}
+
+			if file == "application.js" {
+				file = "main.js"
+			}
+
+			return template.HTML(fmt.Sprintf("assets/%v", manifestData[file]))
+		},
 	}
 
 	for k, v := range s.Helpers {
