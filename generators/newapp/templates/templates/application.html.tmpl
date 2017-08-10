@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8">
     <title>Buffalo - {{ .titleName }}</title>
-    <link rel="stylesheet" href="<%= assetPath("application.css") %>" type="text/css" media="all" />
+    <%= stylesheetTag("application.css") %>
     <meta name="csrf-param" content="authenticity_token" />
     <meta name="csrf-token" content="<%= authenticity_token %>" />
   </head>
@@ -13,6 +13,6 @@
       <%= yield %>
     </div>
     
-    <link rel="stylesheet" href="<%= assetPath("application.css") %>" type="text/css" media="all" />
+    <%= javascriptTag("application.js") %>
   </body>
 </html>

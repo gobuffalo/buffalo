@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gobuffalo/tags"
+
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
@@ -51,33 +53,9 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 	helpers := map[string]interface{}{
 		"partial": s.partial,
-		"assetPath": func(file string) template.HTML {
-			manifest, err := s.AssetsBox.MustString("manifest.json")
-			if err != nil {
-				log.Println("[INFO] didn't find manifest, using raw path to assets")
-
-				return template.HTML(fmt.Sprintf("assets/%v", file))
-			}
-
-			var manifestData map[string]string
-			err = json.Unmarshal([]byte(manifest), &manifestData)
-
-			if err != nil {
-				log.Println("[Warning] seems your manifest is not correct")
-				return ""
-			}
-
-			if file == "application.css" {
-				file = "main.css"
-			}
-
-			if file == "application.js" {
-				file = "main.js"
-			}
-
-			return template.HTML(fmt.Sprintf("assets/%v", manifestData[file]))
-		},
 	}
+
+	helpers = s.addAssetsHelpers(helpers)
 
 	for k, v := range s.Helpers {
 		helpers[k] = v
@@ -94,6 +72,60 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	return template.HTML(body), nil
+}
+
+func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[string]interface{} {
+	helpers["assetPath"] = func(file string) template.HTML {
+		return template.HTML(s.assetPath(file))
+	}
+
+	helpers["javascriptTag"] = func(file string) template.HTML {
+		jsTag := tags.New("script", tags.Options{
+			"type": "text/javascript",
+			"src":  s.assetPath(file),
+		})
+
+		return jsTag.HTML()
+	}
+
+	helpers["stylesheetTag"] = func(file string) template.HTML {
+		cssTag := tags.New("link", tags.Options{
+			"rel":   "stylesheet",
+			"media": "screen",
+			"href":  s.assetPath(file),
+		})
+
+		return cssTag.HTML()
+	}
+
+	return helpers
+}
+
+func (s templateRenderer) assetPath(file string) string {
+	manifest, err := s.AssetsBox.MustString("manifest.json")
+	if err != nil {
+		log.Println("[INFO] didn't find manifest, using raw path to assets")
+
+		return fmt.Sprintf("assets/%v", file)
+	}
+
+	var manifestData map[string]string
+	err = json.Unmarshal([]byte(manifest), &manifestData)
+
+	if err != nil {
+		log.Println("[Warning] seems your manifest is not correct")
+		return ""
+	}
+
+	if file == "application.css" {
+		file = "main.css"
+	}
+
+	if file == "application.js" {
+		file = "main.js"
+	}
+
+	return fmt.Sprintf("assets/%v", manifestData[file])
 }
 
 // Template renders the named files using the specified
