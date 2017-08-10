@@ -21,6 +21,7 @@ var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
 {{ if .asWeb -}}
 var T *i18n.Translator
+var assetsBox packr.Box
 {{ end }}
 
 // App is where all routes and middleware for buffalo
@@ -72,7 +73,8 @@ func App() *buffalo.App {
     app.GET("/", HomeHandler)
 
     {{ if .asWeb -}}
-    app.ServeFiles("/assets", packr.NewBox("../public/assets"))
+    assetsBox = packr.NewBox("../public/assets")
+    app.ServeFiles("/assets", assetsBox)
     {{ end -}}
   }
 
