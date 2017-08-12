@@ -7,11 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-<<<<<<< HEAD
-=======
 	// this blank import is here because dep doesn't
 	// handle transitive dependencies correctly
->>>>>>> 0691441... fixed an issue with blank imports and golint
 	_ "github.com/russross/blackfriday"
 	"github.com/shurcooL/github_flavored_markdown"
 )
