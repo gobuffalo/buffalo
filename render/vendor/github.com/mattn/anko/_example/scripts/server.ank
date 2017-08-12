@@ -1,0 +1,8 @@
+#!anko
+
+var http = import("net/http")
+
+http.HandleFunc("/", func(w, r) {
+  w.Write(toByteSlice("hello world"))
+})
+http.ListenAndServe(":8080", nil)

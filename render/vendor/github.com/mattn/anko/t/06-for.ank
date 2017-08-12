@@ -1,0 +1,74 @@
+x = 0
+for a in [1,2,3] {
+  x += 1
+}
+is(3, x, "for a in range [1,2,3]")
+
+x = 0
+
+for {
+  x += 1
+  if (x > 3) {
+    break
+  }
+}
+is(4, x, "for loop")
+
+func loop_with_return_stmt() {
+  y = 0
+  for {
+    if y == 5 {
+      return y
+    }
+    y++
+  }
+  return 1
+}
+is(5, loop_with_return_stmt(), "loop with return stmt")
+
+func for_with_return_stmt() {
+  y = 0
+  for k in range(0, 10) {
+    if k == 5 {
+      return y
+    }
+    y++
+  }
+  return 1
+}
+is(5, for_with_return_stmt(), "for loop with return stmt")
+
+x = 0
+for a = 0; a < 10; a++ {
+  x++
+}
+is(10, x, "C-style for loop")
+
+func cstylefor_with_return_stmt() {
+  y = 0
+  for i = 0; i < 10; i++ {
+    if i == 5 {
+      return y
+    }
+    y++
+  }
+
+  return 1
+}
+
+is(5, cstylefor_with_return_stmt(), "C-style for loop with return statement")
+
+resp = {
+    "items": [{
+        "someData": 2,
+    }]
+}
+
+x = 0
+for item in resp.items {
+    x += item.someData
+}
+
+is(2, x, "dereference slice element")
+
+# vim: set ft=anko:

@@ -1,0 +1,19 @@
+sort = import("sort")
+
+is([1,2,3], sort.Ints([3,1,2]), "sort.Ints")
+
+is([1.2,2.5,3.1], sort.Float64s([3.1,1.2,2.5]), "sort.Float64s")
+
+is(["bar","foo"], sort.Strings(["foo", "bar"]), "sort.Strings")
+
+if go18later() {
+  a = [1, 3, 2]
+  sort.Slice(a, func(i, j) {
+    return a[i] < a[j]
+  })
+  is([1,2,3], a, "sort.Slice")
+} else {
+  msg("skip sort.Slice")
+}
+
+# vim: set ft=anko:

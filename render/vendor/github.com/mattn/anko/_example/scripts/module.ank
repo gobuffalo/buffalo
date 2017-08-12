@@ -1,0 +1,10 @@
+#!anko
+
+module Foo {
+  func bar1() {
+    println("Foo.bar1")
+    return 1
+  }
+}
+
+println(Foo.bar1())

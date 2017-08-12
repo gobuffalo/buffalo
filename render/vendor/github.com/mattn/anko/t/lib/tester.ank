@@ -1,0 +1,59 @@
+var colortext = import("github.com/daviddengcn/go-colortext")
+var exec = import("os/exec")
+var regexp = import("regexp")
+
+count = func() {
+  var n = 0
+  return func() {
+    n += 1
+    return n
+  }
+}()
+
+func go18later() {
+  out, err = exec.Command("go", "version").Output()
+  if err {
+    panic(err)
+  }
+  return !regexp.MustCompile("^go version go1\\.[567]").MatchString(toString(out))
+}
+
+func is(expect, got, name) {
+  if (expect == got) {
+    printf("%03d: %s: ", count(), name)
+    colortext.ChangeColor("green", true)
+    println("OK")
+    colortext.ResetColor()
+  } else {
+    printf("%03d: %s: %v %v ", count(), name, expect, got)
+    colortext.ChangeColor("red", true)
+    println("NG")
+    colortext.ResetColor()
+  }
+}
+
+func ok(expect, name) {
+  if (expect) {
+    printf("%03d: %s: ", count(), name)
+    colortext.ChangeColor("green", true)
+    println("OK")
+    colortext.ResetColor()
+  } else {
+    printf("%03d: %s: ", count(), name)
+    colortext.ChangeColor("red", true)
+    println("NG")
+    colortext.ResetColor()
+    throw name + ": expected " + expect + " but got " + got
+  }
+}
+
+func msg(s) {
+  colortext.ChangeColor("magenta", true)
+  println(s)
+  colortext.ResetColor()
+}
+
+if (len(args) > 0) {
+  println(args[0])
+  load(args[0])
+}

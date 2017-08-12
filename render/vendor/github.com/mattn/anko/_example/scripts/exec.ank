@@ -1,0 +1,7 @@
+#!anko
+
+var os, exec = import("os"), import("os/exec")
+
+cmd = exec.Command("ls", "-la")
+cmd.Stdout = os.Stdout
+cmd.Run()

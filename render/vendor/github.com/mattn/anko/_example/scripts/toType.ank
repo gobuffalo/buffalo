@@ -1,0 +1,123 @@
+#!anko
+
+# toInt with ints, floats, strings, bools
+println("\ntoInt examples:\n===============")
+i = 1<<63 - 1
+println("int", i, "toInt:", toInt(i))
+
+i = -1 << 63
+println("int", i, "toInt:", toInt(i))
+
+f = 3.141592653589793
+println("float", f, "toInt:", toInt(f))
+
+f = 1.797693134862315708145274237317043567981e18
+println("float", f, "toInt:", toInt(f))
+
+f = -1.797693134862315708145274237317043567981e18
+println("float", f, "toInt:", toInt(f))
+
+s = "4611686018427387904"
+println("string", s, "toInt:", toInt(s))
+
+s = "-9223372036854775808"
+println("string", s, "toInt:", toInt(s))
+
+s = "3.141592653589793"
+println("string", s, "toInt:", toInt(s))
+
+s = "1.797693134862315708145274237317043567981e18"
+println("string", s, "toInt:", toInt(s))
+
+s = "-1.797693134862315708145274237317043567981e18"
+println("string", s, "toInt:", toInt(s))
+
+s = "1.797693134862315708145274237317043567981e-18"
+println("string", s, "toInt:", toInt(s))
+
+b = true
+println("bool", b, "toInt:", toInt(b))
+
+b = false
+println("bool", b, "toInt:", toInt(b))
+
+println("\ntoFloat examples:\n=================")
+i = 1<<63 - 1
+println("int", i, "toFloat:", toFloat(i))
+
+i = -1 << 63
+println("int", i, "toFloat:", toFloat(i))
+
+s = "4611686018427387904"
+println("string", s, "toFloat:", toFloat(s))
+
+s = "-9223372036854775808"
+println("string", s, "toFloat:", toFloat(s))
+
+s = "3.141592653589793"
+println("string", s, "toFloat:", toFloat(s))
+
+s = "1.797693134862315708145274237317043567981e18"
+println("string", s, "toFloat:", toFloat(s))
+
+s = "-1.797693134862315708145274237317043567981e18"
+println("string", s, "toFloat:", toFloat(s))
+
+s = "1.797693134862315708145274237317043567981e-18"
+println("string", s, "toFloat:", toFloat(s))
+
+b = true
+println("bool", b, "toFloat:", toFloat(b))
+
+b = false
+println("bool", b, "toFloat:", toFloat(b))
+
+println("\ntoBool examples:\n================")
+i = 1
+println("int", i, "toBool:", toBool(i))
+
+i = 0
+println("int", i, "toBool:", toBool(i))
+
+i = -1
+println("int", i, "toBool:", toBool(i))
+
+f = 1.0
+println("float", f, "toBool:", toBool(f))
+
+f = 0.000000000001
+println("float", f, "toBool:", toBool(f))
+
+f = 0.0
+println("float", f, "toBool:", toBool(f))
+
+f = -0.0
+println("float", f, "toBool:", toBool(f))
+
+s = "y"
+println("string", s, "toBool:", toBool(s))
+
+s = "yEs"
+println("string", s, "toBool:", toBool(s))
+
+s = "t"
+println("string", s, "toBool:", toBool(s))
+
+s = "TrUe"
+println("string", s, "toBool:", toBool(s))
+
+s = "1"
+println("string", s, "toBool:", toBool(s))
+
+s = "0"
+println("string", s, "toBool:", toBool(s))
+
+s = "f"
+println("string", s, "toBool:", toBool(s))
+
+s = "FaLsE"
+println("string", s, "toBool:", toBool(s))
+
+s = "foobar"
+println("string", s, "toBool:", toBool(s))
+

@@ -1,0 +1,9 @@
+#!anko
+
+func(x) {
+  return func(y) {
+    x(y)
+  }
+}(func(z) {
+  println("Yay!", z)
+})("hello world")

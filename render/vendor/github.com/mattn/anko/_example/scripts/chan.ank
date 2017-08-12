@@ -1,0 +1,13 @@
+#!anko
+
+c = make(chan int64)
+
+go func() {
+  c <- 1
+  c <- 2
+  c <- 3
+}()
+
+println(<-c)
+println(<-c)
+println(<-c)

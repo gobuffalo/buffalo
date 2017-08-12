@@ -1,0 +1,16 @@
+c = make(chan int64)
+r = []
+
+go func() {
+  c <- 1
+  c <- 2
+  c <- 3
+  close(c)
+}()
+
+for a in c {
+  r += a
+}
+is([1,2,3], r, "chan")
+
+# vim: set ft=anko:

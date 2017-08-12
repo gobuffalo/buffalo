@@ -1,0 +1,14 @@
+#!anko
+
+var os, signal, time = import("os"), import("os/signal"), import("time")
+
+c = make(chan os.Signal, 1)
+signal.Notify(c, os.Interrupt)
+go func() {
+   <-c
+   println("CTRL-C")
+   os.Exit(0)
+}()
+
+d, _ = time.ParseDuration("10s")
+time.Sleep(d)

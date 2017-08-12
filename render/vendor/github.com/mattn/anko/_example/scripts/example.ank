@@ -1,0 +1,70 @@
+#!anko
+
+# declare function
+func foo(x){
+  return x + 1
+}
+
+func bar(x ...){
+  return len(x)
+}
+
+# declare variables
+x = 1
+y = x + 1
+
+# print values 
+println(x * (y + 2 * x + foo(x) / 2))
+
+# if/else condition
+if foo(y) >= 1 {
+  println("こんにちわ世界")
+} else {
+  println("Hello, World")
+}
+
+# array type
+a = [1,2,3]
+println(a)
+println(a[2])
+println(len(a))
+
+# map type
+m = {"foo": "bar", "bar": "baz"}
+for k in keys(m) {
+  println(m[k])
+}
+
+f = func(a) {
+  println(a)
+}
+
+f("あんこ")
+
+f = func(a ...) {
+  println(a)
+}
+
+f("あんこ", "だいすき")
+
+println(1 && 2)
+
+println(bar(1,2,3))
+println("foo")
+println(toByteSlice("あいう"))
+println(toRuneSlice("あいう"))
+
+a = 1
+func foo() {
+  a = 2
+}
+foo()
+println(a)
+
+module Foo {
+  func bar1() {
+    println("Foo.bar1")
+  }
+}
+
+println(Foo.bar1())

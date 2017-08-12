@@ -1,0 +1,11 @@
+a = toRuneSlice("あいうえお")
+b = [12354, 12356, 12358, 12360, 12362]
+x = 0
+for i = 0; i < len(a); i++ {
+  if (a[i] == b[i]) {
+    x++
+  }
+}
+is(x, len(a), "toRuneSlice(str)")
+
+# vim: set ft=anko:

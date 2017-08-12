@@ -1,0 +1,22 @@
+---
+engines:
+  golint:
+    enabled: true
+    checks:
+      GoLint/Naming/MixedCaps:
+        enabled: false
+  govet:
+    enabled: true
+  gofmt:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - "**.go"
+exclude_paths:
+  - "ast/*.go"
+  - "**/*_test.go"
+  - "*_test.go"
+  - "parser/precedences.go"
+  - "token/const.go"
