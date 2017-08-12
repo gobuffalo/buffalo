@@ -212,7 +212,7 @@ var devErrorTmpl = `
     <div class="container">
       <div class="row">
         <div class="col-md-1 col-sm-2 col-xs-3 logo">
-          <a href="/"><img src="/assets/images/logo.svg" alt=""></a>
+          <a href="/"><img src="https://gobuffalo.io/assets/images/logo_med.png" alt=""></a>
         </div>
         <div class="col-md-10 col-sm-6 col-xs-7 titles">
           <h1>
