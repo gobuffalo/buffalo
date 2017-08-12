@@ -15,13 +15,13 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t ./...
+RUN go get -v -t $(go list ./... | grep -v /vendor/)
 
 RUN go install -v ./buffalo
 
-RUN go test -race ./...
+RUN go test -race $(go list ./... | grep -v /vendor/)
 
-RUN golint -set_exit_status ./...
+RUN golint -set_exit_status $(go list ./... | grep -v /vendor/)
 
 
 WORKDIR $GOPATH/src/
@@ -30,7 +30,7 @@ WORKDIR ./hello_world
 
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
 
-RUN go vet -x ./...
+RUN go vet -x $(go list ./... | grep -v /vendor/)
 RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
