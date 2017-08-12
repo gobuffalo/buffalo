@@ -1,6 +1,0 @@
-drop_table("users")
-drop_table("good_friends")
-drop_table("validatable_cars")
-drop_table("not_validatable_cars")
-drop_table("callbacks_users")
-drop_table("books")

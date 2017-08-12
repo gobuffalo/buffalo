@@ -1,8 +1,0 @@
-#!anko
-
-var regexp = import("regexp")
-
-for s in regexp.MustCompile(`[\s_]`).Split("foo_bar_baz", -1) {
-  println(s)
-}
-

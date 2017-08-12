@@ -1,7 +1,0 @@
-#!anko
-
-var url = import("net/url")
-
-u, _ = url.Parse("http://www.google.com/search?q=こんにちわ世界")
-println(u.Path)
-println(u.Host)
