@@ -125,7 +125,7 @@ func (s templateRenderer) assetPath(file string) string {
 		file = "main.js"
 	}
 
-	return fmt.Sprintf("assets/%v", manifestData[file])
+	return fmt.Sprintf("/assets/%v", manifestData[file])
 }
 
 // Template renders the named files using the specified
