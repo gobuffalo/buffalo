@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	_ "github.com/russross/blackfriday"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 
