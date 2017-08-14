@@ -1,0 +1,10 @@
+required = ["github.com/russross/blackfriday"]
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/russross/blackfriday"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/shurcooL/github_flavored_markdown"
+
