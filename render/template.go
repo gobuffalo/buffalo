@@ -79,21 +79,36 @@ func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[s
 		return template.HTML(s.assetPath(file))
 	}
 
-	helpers["javascriptTag"] = func(file string) template.HTML {
-		jsTag := tags.New("script", tags.Options{
-			"type": "text/javascript",
-			"src":  s.assetPath(file),
-		})
+	helpers["javascriptTag"] = func(file string, options tags.Options) template.HTML {
+		if options == nil {
+			options = tags.Options{}
+		}
+
+		if options["type"] == nil {
+			options["type"] = "text/javascript"
+		}
+
+		options["src"] = s.assetPath(file)
+		jsTag := tags.New("script", options)
 
 		return jsTag.HTML()
 	}
 
-	helpers["stylesheetTag"] = func(file string) template.HTML {
-		cssTag := tags.New("link", tags.Options{
-			"rel":   "stylesheet",
-			"media": "screen",
-			"href":  s.assetPath(file),
-		})
+	helpers["stylesheetTag"] = func(file string, options tags.Options) template.HTML {
+		if options == nil {
+			options = tags.Options{}
+		}
+
+		if options["rel"] == nil {
+			options["rel"] = "stylesheet"
+		}
+
+		if options["media"] == nil {
+			options["media"] = "screen"
+		}
+
+		options["href"] = s.assetPath(file)
+		cssTag := tags.New("link", options)
 
 		return cssTag.HTML()
 	}
