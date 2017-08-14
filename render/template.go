@@ -9,7 +9,6 @@ import (
 	"log"
 	"path/filepath"
 	"strings"
-	"github.com/gobuffalo/tags"
 	// this blank import is here because dep doesn't
 	// handle transitive dependencies correctly
 	_ "github.com/russross/blackfriday"
@@ -75,50 +74,9 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	return template.HTML(body), nil
 }
 
-func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[string]interface{} {
-	helpers["assetPath"] = func(file string) template.HTML {
-		return template.HTML(s.assetPath(file))
-	}
-
-	helpers["javascriptTag"] = func(file string, options tags.Options) template.HTML {
-		if options == nil {
-			options = tags.Options{}
-		}
-
-		if options["type"] == nil {
-			options["type"] = "text/javascript"
-		}
-
-		options["src"] = s.assetPath(file)
-		jsTag := tags.New("script", options)
-
-		return jsTag.HTML()
-	}
-
-	helpers["stylesheetTag"] = func(file string, options tags.Options) template.HTML {
-		if options == nil {
-			options = tags.Options{}
-		}
-
-		if options["rel"] == nil {
-			options["rel"] = "stylesheet"
-		}
-
-		if options["media"] == nil {
-			options["media"] = "screen"
-		}
-
-		options["href"] = s.assetPath(file)
-		cssTag := tags.New("link", options)
-
-		return cssTag.HTML()
-	}
-
-	return helpers
-}
-
 func (s templateRenderer) assetPath(file string) string {
 	manifest, err := s.AssetsBox.MustString("manifest.json")
+
 	if err != nil {
 		log.Println("[INFO] didn't find manifest, using raw path to assets")
 
