@@ -9,9 +9,10 @@ import (
 	"log"
 	"path/filepath"
 	"strings"
-
 	"github.com/gobuffalo/tags"
-
+	// this blank import is here because dep doesn't
+	// handle transitive dependencies correctly
+	_ "github.com/russross/blackfriday"
 	"github.com/shurcooL/github_flavored_markdown"
 )
 

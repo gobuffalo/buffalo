@@ -111,6 +111,12 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	}
 	g.Add(makr.NewCommand(a.goGet()))
 
+	if _, err := exec.LookPath("git"); err == nil {
+		g.Add(makr.NewCommand(exec.Command("git", "init")))
+		g.Add(makr.NewCommand(exec.Command("git", "add", ".")))
+		g.Add(makr.NewCommand(exec.Command("git", "commit", "-m", "Initial Commit")))
+	}
+
 	return g, nil
 }
 
