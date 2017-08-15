@@ -35,11 +35,8 @@ type App struct {
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep/cmd/dep")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 
 	files, err := generators.Find("newapp")
 	if err != nil {
