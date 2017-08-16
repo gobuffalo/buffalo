@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/json"
+	"io/ioutil"
 
 	"github.com/gobuffalo/buffalo"
 )
@@ -12,9 +13,16 @@ func ParameterLogger(next buffalo.Handler) buffalo.Handler {
 		defer func() {
 			req := c.Request()
 			if req.Method != "GET" {
-				b, err := json.Marshal(req.Form)
-				if err == nil {
-					c.LogField("form", string(b))
+				if req.Header.Get("Content-Type") == "application/json" {
+					b, err := ioutil.ReadAll(req.Body)
+					if err == nil {
+						c.LogField("body", string(b))
+					}
+				} else {
+					b, err := json.Marshal(req.Form)
+					if err == nil {
+						c.LogField("form", string(b))
+					}
 				}
 			}
 			b, err := json.Marshal(c.Params())
