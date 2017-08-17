@@ -6,6 +6,8 @@ import (
 	"github.com/gobuffalo/tags"
 )
 
+var assetMap map[string]string
+
 func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[string]interface{} {
 	helpers["assetPath"] = func(file string) template.HTML {
 		return template.HTML(s.assetPath(file))

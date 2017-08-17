@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 	// this blank import is here because dep doesn't
@@ -75,21 +76,6 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 }
 
 func (s templateRenderer) assetPath(file string) string {
-	manifest, err := s.AssetsBox.MustString("manifest.json")
-
-	if err != nil {
-		log.Println("[INFO] didn't find manifest, using raw path to assets")
-
-		return fmt.Sprintf("assets/%v", file)
-	}
-
-	var manifestData map[string]string
-	err = json.Unmarshal([]byte(manifest), &manifestData)
-
-	if err != nil {
-		log.Println("[Warning] seems your manifest is not correct")
-		return ""
-	}
 
 	if file == "application.css" {
 		file = "main.css"
@@ -99,7 +85,25 @@ func (s templateRenderer) assetPath(file string) string {
 		file = "main.js"
 	}
 
-	return fmt.Sprintf("/assets/%v", manifestData[file])
+	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
+
+		log.Println("[DEBUG] reading assets manifest")
+		manifest, err := s.AssetsBox.MustString("manifest.json")
+
+		if err != nil {
+			log.Println("[INFO] didn't find manifest, using raw path to assets")
+			return fmt.Sprintf("assets/%v", file)
+		}
+
+		err = json.Unmarshal([]byte(manifest), &assetMap)
+
+		if err != nil {
+			log.Println("[Warning] seems your manifest is not correct")
+			return ""
+		}
+	}
+
+	return fmt.Sprintf("/assets/%v", assetMap[file])
 }
 
 // Template renders the named files using the specified
