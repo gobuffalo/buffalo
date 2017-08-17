@@ -12,6 +12,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://github.com/fatih/color)
 
+* [github.com/fatih/structs](https://github.com/fatih/structs)
+
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
 
 * [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
@@ -165,6 +167,8 @@ Thank you to the following **GIANTS**:
 * [github.com/shurcooL/highlight_diff](https://github.com/shurcooL/highlight_diff)
 
 * [github.com/shurcooL/highlight_go](https://github.com/shurcooL/highlight_go)
+
+* [github.com/shurcooL/octiconssvg](https://github.com/shurcooL/octiconssvg)
 
 * [github.com/shurcooL/sanitized_anchor_name](https://github.com/shurcooL/sanitized_anchor_name)
 

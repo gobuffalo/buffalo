@@ -1,15 +1,38 @@
 # Change Log
 
-## [v0.9.2](https://github.com/gobuffalo/buffalo/tree/v0.9.2) (2017-07-12)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.2...v0.9.2)
+## [v0.9.3](https://github.com/gobuffalo/buffalo/tree/v0.9.3) (2017-08-14)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.2...v0.9.3)
 
+**Merged pull requests:**
+
+- 0.9.3 [\#587](https://github.com/gobuffalo/buffalo/pull/587) ([markbates](https://github.com/markbates))
+- fixed missing error if the user deletes the local logo.svg [\#585](https://github.com/gobuffalo/buffalo/pull/585) ([markbates](https://github.com/markbates))
+- set up git for new applications [\#584](https://github.com/gobuffalo/buffalo/pull/584) ([markbates](https://github.com/markbates))
+
+## [v0.9.2](https://github.com/gobuffalo/buffalo/tree/v0.9.2) (2017-08-12)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.1.2...v0.9.2)
 
 **Implemented enhancements:**
 
 - Buffalo can't bind on fixed IP [\#518](https://github.com/gobuffalo/buffalo/issues/518)
+- colored logs [\#360](https://github.com/gobuffalo/buffalo/issues/360)
+- New Generator - SystemD Unit [\#356](https://github.com/gobuffalo/buffalo/issues/356)
+- Ship webpack with testing set up [\#97](https://github.com/gobuffalo/buffalo/issues/97)
+- Add support for mail [\#94](https://github.com/gobuffalo/buffalo/issues/94)
+
+**Fixed bugs:**
+
+- Last logrus version breaks Buffalo logger\_formatter [\#568](https://github.com/gobuffalo/buffalo/issues/568)
 
 **Closed issues:**
 
+- buffalo new: dep ensure fails [\#580](https://github.com/gobuffalo/buffalo/issues/580)
+- Verbose log of workers [\#579](https://github.com/gobuffalo/buffalo/issues/579)
+- Some problem on paginator helper for mostly empty or large number of objects. [\#573](https://github.com/gobuffalo/buffalo/issues/573)
+- Linux: Buffalo tries to install yarn globally without checking for root rights [\#570](https://github.com/gobuffalo/buffalo/issues/570)
+- A "catch-all" route causes a panic [\#561](https://github.com/gobuffalo/buffalo/issues/561)
+- dep isn't being automatically installed in 0.9.2 [\#551](https://github.com/gobuffalo/buffalo/issues/551)
+- skip dep automatically if it's not installed on `new` [\#550](https://github.com/gobuffalo/buffalo/issues/550)
 - New Command generates invalid app settings [\#540](https://github.com/gobuffalo/buffalo/issues/540)
 - webpack error in Buffalo 0.9.1.2 [\#532](https://github.com/gobuffalo/buffalo/issues/532)
 - \[Question\] db.Transaction and controller unittest [\#528](https://github.com/gobuffalo/buffalo/issues/528)
@@ -26,9 +49,29 @@
 - Add explicit version \(or range\) to the Node packages [\#503](https://github.com/gobuffalo/buffalo/issues/503)
 - Getting started:  running buffalo new coke with 0.9.0 and go 1.8.3 fails on windows [\#500](https://github.com/gobuffalo/buffalo/issues/500)
 - Unsuccessful: buffalo new \<name\> --skip-pop [\#497](https://github.com/gobuffalo/buffalo/issues/497)
+- Create a new context.Cookie wrapper for gorilla Cookiestore [\#391](https://github.com/gobuffalo/buffalo/issues/391)
+- Investigate GopherJS integration [\#358](https://github.com/gobuffalo/buffalo/issues/358)
+- New Generator - Caddyfile [\#355](https://github.com/gobuffalo/buffalo/issues/355)
+- Mail Registration/Authentication. [\#217](https://github.com/gobuffalo/buffalo/issues/217)
 
 **Merged pull requests:**
 
+- Skip the windows directory when looking for plugins [\#582](https://github.com/gobuffalo/buffalo/pull/582) ([ryanfaerman](https://github.com/ryanfaerman))
+- changed log level for perform method of simple worker. [\#581](https://github.com/gobuffalo/buffalo/pull/581) ([sio4](https://github.com/sio4))
+- Fix GitLab CI config generator [\#576](https://github.com/gobuffalo/buffalo/pull/576) ([stanislas-m](https://github.com/stanislas-m))
+- Add Prefix to RootPath \(BaseUrl\) [\#572](https://github.com/gobuffalo/buffalo/pull/572) ([markbates](https://github.com/markbates))
+- Fix \#568: logger\_formatter was broken after logrus update [\#571](https://github.com/gobuffalo/buffalo/pull/571) ([stanislas-m](https://github.com/stanislas-m))
+- Add Context.Cookies [\#569](https://github.com/gobuffalo/buffalo/pull/569) ([bigblind](https://github.com/bigblind))
+- cleaned up logging by removing the big giant empty string. pop also now [\#564](https://github.com/gobuffalo/buffalo/pull/564) ([markbates](https://github.com/markbates))
+- Added support for aliasing a route [\#563](https://github.com/gobuffalo/buffalo/pull/563) ([markbates](https://github.com/markbates))
+- Fixing a panic that happens when implementing a Catch-All route. [\#562](https://github.com/gobuffalo/buffalo/pull/562) ([apaganobeleno](https://github.com/apaganobeleno))
+- Routes escape extra args [\#560](https://github.com/gobuffalo/buffalo/pull/560) ([apaganobeleno](https://github.com/apaganobeleno))
+- Removes extra ? when the route helper doesn't have extra args [\#559](https://github.com/gobuffalo/buffalo/pull/559) ([apaganobeleno](https://github.com/apaganobeleno))
+- override the default `go` path with ENV [\#558](https://github.com/gobuffalo/buffalo/pull/558) ([markbates](https://github.com/markbates))
+- yarn is now the default instead of npm [\#555](https://github.com/gobuffalo/buffalo/pull/555) ([markbates](https://github.com/markbates))
+- make sure yarn uses --no-progress [\#554](https://github.com/gobuffalo/buffalo/pull/554) ([markbates](https://github.com/markbates))
+- reversed the policy on dep. it is now off by default. [\#552](https://github.com/gobuffalo/buffalo/pull/552) ([markbates](https://github.com/markbates))
+- WIP 0.9.2 [\#549](https://github.com/gobuffalo/buffalo/pull/549) ([markbates](https://github.com/markbates))
 - ensure the dep installs the correct version of buffalo [\#546](https://github.com/gobuffalo/buffalo/pull/546) ([markbates](https://github.com/markbates))
 - added a -d flag to buffalo dev to run the app with delve [\#545](https://github.com/gobuffalo/buffalo/pull/545) ([markbates](https://github.com/markbates))
 - Fix resource generation example message [\#544](https://github.com/gobuffalo/buffalo/pull/544) ([slomek](https://github.com/slomek))
