@@ -77,14 +77,6 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 func (s templateRenderer) assetPath(file string) string {
 
-	if file == "application.css" {
-		file = "main.css"
-	}
-
-	if file == "application.js" {
-		file = "main.js"
-	}
-
 	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
 
 		log.Println("[DEBUG] reading assets manifest")

@@ -4,11 +4,13 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
-  entry: [
-    "./assets/js/application.js",
-    "./assets/css/application.scss",
-    "./node_modules/jquery-ujs/src/rails.js"
-  ],
+  entry: {
+    application: [
+      "./assets/js/application.js",
+      "./node_modules/jquery-ujs/src/rails.js"
+    ],
+    application: "./assets/css/application.scss",
+  },
   output: {
     filename: "[name].[hash].js",
     path: __dirname + "/public/assets"
