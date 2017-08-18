@@ -28,6 +28,19 @@ func basicContext() DefaultContext {
 	}
 }
 
+func Test_DefaultContext_Redirect(t *testing.T) {
+	r := require.New(t)
+	a := Automatic(Options{})
+	u := "/foo?bar=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback%2Ffacebook"
+	a.GET("/", func(c Context) error {
+		return c.Redirect(302, u)
+	})
+
+	w := willie.New(a)
+	res := w.Request("/").Get()
+	r.Equal(u, res.Location())
+}
+
 func Test_DefaultContext_Param(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{
