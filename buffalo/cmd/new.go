@@ -107,10 +107,11 @@ func validateInGoPath() error {
 		if err != nil {
 			return err
 		}
+		pwd, _ := os.Getwd()
 		t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 			"name":     app.Name,
 			"gopath":   envy.GoPath(),
-			"current":  app.RootPath,
+			"current":  pwd,
 			"username": u.Username,
 		}))
 		if err != nil {

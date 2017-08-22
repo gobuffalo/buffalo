@@ -1,34 +1,33 @@
-[
-    {
-        "path": "actions/admin_planes.go",
-        "contains": [
-            "type AdminPlanesResource struct",
-            "func (v AdminPlanesResource)"
-        ]
-    },
-    {
-        "path": "actions/admin_planes_test.go",
-        "contains": [
-            "package actions_test",
-            "Test_AdminPlanesResource_List"
-        ]
-    },
-    {
-        "path": "locales/admin/planes.en-us.yaml",
-        "contains": [
-            "translation: \"Plane was successfully created.\""
-        ]
-    },
-    {
-        "path": "templates/admin/planes/_form.html",
-        "contains": [
-            "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
-        ]
-    },
-    {
-        "path": "templates/admin/planes/index.html",
-        "contains": [
-            "newAdminPlanesPath()"
-        ]
-    }
+[{
+    "path": "actions/admin_planes.go",
+    "contains": [
+      "type AdminPlanesResource struct",
+      "func (v AdminPlanesResource)"
+    ]
+  },
+  {
+    "path": "actions/admin_planes_test.go",
+    "contains": [
+      "package actions",
+      "Test_AdminPlanesResource_List"
+    ]
+  },
+  {
+    "path": "locales/admin/planes.en-us.yaml",
+    "contains": [
+      "translation: \"Plane was successfully created.\""
+    ]
+  },
+  {
+    "path": "templates/admin/planes/_form.html",
+    "contains": [
+      "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
+    ]
+  },
+  {
+    "path": "templates/admin/planes/index.html",
+    "contains": [
+      "newAdminPlanesPath()"
+    ]
+  }
 ]

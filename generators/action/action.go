@@ -66,7 +66,7 @@ func {{$.namespace}}{{camelize $action}}(c buffalo.Context) error {
 }
 
 func buildTestsTemplate(filePath string) string {
-	testsTemplate := `package actions_test
+	testsTemplate := `package actions
 
 import (
 	"testing"
