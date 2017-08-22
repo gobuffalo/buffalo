@@ -146,6 +146,7 @@ func genNewFiles() error {
 	packagePath := packagePath(app.RootPath)
 
 	data := map[string]interface{}{
+		"appPath":     app.RootPath,
 		"name":        app.Name,
 		"titleName":   inflect.Titleize(app.Name),
 		"packagePath": packagePath,
