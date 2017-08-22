@@ -349,3 +349,24 @@ func Test_CatchAll_Route(t *testing.T) {
 
 	r.Contains(res.Body.String(), "john")
 }
+
+func Test_Router_Matches_Trailing_Slash(t *testing.T) {
+	r := require.New(t)
+
+	table := []string{
+		"/bar",
+		"/bar/",
+	}
+
+	ts := httptest.NewServer(testApp())
+	defer ts.Close()
+
+	for _, v := range table {
+		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", ts.URL, v), nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal("bar", string(b))
+	}
+}
