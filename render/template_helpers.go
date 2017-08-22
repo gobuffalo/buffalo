@@ -1,12 +1,36 @@
 package render
 
 import (
+	"encoding/json"
 	"html/template"
+	"path/filepath"
+	"sync"
 
 	"github.com/gobuffalo/tags"
 )
 
+var mu = &sync.Mutex{}
 var assetMap map[string]string
+
+func loadManifest(manifest string) error {
+	mu.Lock()
+	defer mu.Unlock()
+
+	err := json.Unmarshal([]byte(manifest), &assetMap)
+	return err
+}
+
+func assetPathFor(file string) string {
+	mu.Lock()
+	defer mu.Unlock()
+
+	filePath := assetMap[file]
+	if filePath == "" {
+		filePath = file
+	}
+
+	return filepath.Join("/assets", filePath)
+}
 
 func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[string]interface{} {
 	helpers["assetPath"] = func(file string) template.HTML {

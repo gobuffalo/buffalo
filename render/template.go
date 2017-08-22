@@ -1,7 +1,6 @@
 package render
 
 import (
-	"encoding/json"
 	"html"
 	"html/template"
 	"io"
@@ -77,29 +76,20 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 func (s templateRenderer) assetPath(file string) string {
 
 	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
-
 		log.Println("[DEBUG] reading assets manifest")
 		manifest, err := s.AssetsBox.MustString("manifest.json")
 
 		if err != nil {
 			log.Println("[DEBUG] didn't find manifest, using raw path to assets")
-			return filepath.Join("/assets", file)
 		}
 
-		err = json.Unmarshal([]byte(manifest), &assetMap)
-
+		err = loadManifest(manifest)
 		if err != nil {
 			log.Println("[Warning] seems your manifest is not correct")
-			return filepath.Join("/assets", file)
 		}
 	}
 
-	assetPath := assetMap[file]
-	if assetPath == "" {
-		return filepath.Join("/assets", file)
-	}
-
-	return filepath.Join("/assets", assetPath)
+	return assetPathFor(file)
 }
 
 // Template renders the named files using the specified
