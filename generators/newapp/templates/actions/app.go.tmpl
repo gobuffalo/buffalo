@@ -1,12 +1,15 @@
 package actions
 
 import (
+  "github.com/gobuffalo/envy"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
+  "github.com/gobuffalo/buffalo/middleware/ssl"
+  "github.com/unrolled/secure"
+
   {{ if .withPop }}
   "{{.modelsPath}}"
   {{ end }}
-  "github.com/gobuffalo/envy"
 
   {{ if .asWeb -}}
   "github.com/gobuffalo/buffalo/middleware/csrf"
@@ -32,6 +35,12 @@ func App() *buffalo.App {
       Env: ENV,
       SessionName: "_{{.name}}_session",
     })
+    // Automatically redirect to SSL
+    app.Use(ssl.ForceSSL(secure.Options{
+      SSLRedirect:     ENV != "development",
+      SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+    }))
+
     // Automatically save the session if the underlying
     // Handler does not return an error.
     app.Use(middleware.SessionSaver)
