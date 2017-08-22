@@ -38,7 +38,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
-	files, err := generators.Find("newapp")
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "newapp"))
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

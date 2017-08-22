@@ -14,7 +14,7 @@ import (
 // New generates a new actions/resource file and a stub test.
 func New(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
-	files, err := generators.Find("resource")
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "resource"))
 	if err != nil {
 		return nil, err
 	}

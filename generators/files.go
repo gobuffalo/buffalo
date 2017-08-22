@@ -10,6 +10,9 @@ import (
 	"github.com/gobuffalo/envy"
 )
 
+// TemplatesPath is the "base" path for generator templates
+var TemplatesPath = filepath.Join("github.com", "gobuffalo", "buffalo", "generators")
+
 // File represents the file to be templated
 type File struct {
 	ReadPath  string
@@ -26,7 +29,7 @@ func Find(path string) (Files, error) {
 	if err != nil {
 		return nil, err
 	}
-	root := filepath.Join(gp, "src", "github.com", "gobuffalo", "buffalo", "generators", path, "templates")
+	root := filepath.Join(gp, "src", path, "templates")
 	files := Files{}
 	err = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
 		if info != nil && !info.IsDir() {
