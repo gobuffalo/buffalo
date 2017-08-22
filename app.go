@@ -129,7 +129,7 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router:   mux.NewRouter(),
+		router:   mux.NewRouter().StrictSlash(true),
 		moot:     &sync.Mutex{},
 		routes:   RouteList{},
 		children: []*App{},
