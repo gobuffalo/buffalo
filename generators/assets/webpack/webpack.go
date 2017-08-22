@@ -49,7 +49,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 
 	g.Add(logo)
 
-	files, err := generators.Find(filepath.Join("assets", "webpack"))
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "assets", "webpack"))
 	if err != nil {
 		return g, err
 	}

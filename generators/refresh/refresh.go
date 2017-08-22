@@ -1,6 +1,8 @@
 package refresh
 
 import (
+	"path/filepath"
+
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
 )
@@ -9,7 +11,7 @@ import (
 func New() (*makr.Generator, error) {
 	g := makr.New()
 
-	files, err := generators.Find("refresh")
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "refresh"))
 	if err != nil {
 		return nil, err
 	}

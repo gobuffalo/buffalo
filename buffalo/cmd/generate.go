@@ -14,7 +14,6 @@ var generateCmd = &cobra.Command{
 func init() {
 	generate.Version = Version
 	generateCmd.AddCommand(generate.ResourceCmd)
-	generateCmd.AddCommand(generate.GothCmd)
 	generateCmd.AddCommand(generate.WebpackCmd)
 	generateCmd.AddCommand(generate.ActionCmd)
 	generateCmd.AddCommand(generate.DockerCmd)
