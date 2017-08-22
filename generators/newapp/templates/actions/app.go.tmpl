@@ -37,7 +37,7 @@ func App() *buffalo.App {
     })
     // Automatically redirect to SSL
     app.Use(ssl.ForceSSL(secure.Options{
-      SSLRedirect:     ENV != "development",
+      SSLRedirect:     ENV == "production",
       SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
     }))
 
