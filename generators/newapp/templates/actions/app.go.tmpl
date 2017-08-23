@@ -9,13 +9,17 @@ import (
 
   {{ if .withPop }}
   "{{.modelsPath}}"
-  {{ end }}
+  {{ end -}}
 
   {{ if .asWeb -}}
   "github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   "github.com/gobuffalo/packr"
-  {{ end }}
+  {{ end -}}
+
+  {{ if .asAPI -}}
+  "github.com/gobuffalo/x/sessions"
+  {{ end -}}
 )
 
 // ENV is used to help switch settings based on where the
@@ -33,6 +37,9 @@ func App() *buffalo.App {
   if app == nil {
     app = buffalo.Automatic(buffalo.Options{
       Env: ENV,
+      {{ if .asAPI -}}
+      SessionStore: sessions.Null{},
+      {{ end -}}
       SessionName: "_{{.name}}_session",
     })
     // Automatically redirect to SSL
@@ -41,9 +48,11 @@ func App() *buffalo.App {
       SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
     }))
 
+    {{ if .asWeb -}}
     // Automatically save the session if the underlying
     // Handler does not return an error.
     app.Use(middleware.SessionSaver)
+    {{ end -}}
 
     {{ if .asAPI -}}
     // Set the request content type to JSON
