@@ -135,7 +135,7 @@ const nTravis = `
 language: go
 
 go:
-  - 1.8
+  - 1.8.x
 
 env:
   - GO_ENV=test
