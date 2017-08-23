@@ -78,6 +78,10 @@ func (s templateRenderer) assetPath(file string) string {
 	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
 		manifest, err := s.AssetsBox.MustString("manifest.json")
 
+		if err != nil {
+			log.Println("[DEBUG] didn't find manifest, using raw path to assets")
+		}
+
 		err = loadManifest(manifest)
 		if err != nil {
 			log.Println("[Warning] seems your manifest is not correct")
