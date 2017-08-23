@@ -9,20 +9,20 @@ import (
 	"github.com/gobuffalo/tags"
 )
 
-var mu = &sync.Mutex{}
+var assetsMutex = &sync.Mutex{}
 var assetMap map[string]string
 
 func loadManifest(manifest string) error {
-	mu.Lock()
-	defer mu.Unlock()
+	assetsMutex.Lock()
+	defer assetsMutex.Unlock()
 
 	err := json.Unmarshal([]byte(manifest), &assetMap)
 	return err
 }
 
 func assetPathFor(file string) string {
-	mu.Lock()
-	defer mu.Unlock()
+	assetsMutex.Lock()
+	defer assetsMutex.Unlock()
 
 	filePath := assetMap[file]
 	if filePath == "" {
