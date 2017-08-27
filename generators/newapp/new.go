@@ -35,13 +35,10 @@ type App struct {
 func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("golang.org/x/tools/cmd/goimports")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/golang/dep/cmd/dep")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
-	g.Add(makr.NewCommand(makr.GoInstall("github.com/motemen/gore")))
 
-	files, err := generators.Find("newapp")
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "newapp"))
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -134,20 +131,38 @@ func (a App) goGet() *exec.Cmd {
 	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
 }
 
-const nTravis = `language: go
-env:
-- GO_ENV=test
-
-before_script:
-  - psql -c 'create database {{.name}}_test;' -U postgres
-	- mysql -e 'CREATE DATABASE {{.name}}_test;'
-  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
+const nTravis = `
+language: go
 
 go:
-  - 1.7.x
-  - master
+  - 1.8.x
 
-go_import_path: {{ .packagePath }}
+env:
+  - GO_ENV=test
+
+{{ if eq .dbType "postgres" -}}
+services:
+  - postgresql
+{{ end -}}
+
+before_script:
+	{{ if eq .dbType "postgres" -}}
+	- psql -c 'create database {{.name}}_test;' -U postgres
+	{{ end -}}
+	- mkdir -p $TRAVIS_BUILD_DIR/public/assets
+
+go_import_path: {{.packagePath}}
+
+install:
+  - go get github.com/gobuffalo/buffalo/buffalo
+	{{ if .withDep -}}
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
+	{{ else -}}
+	- go get $(go list ./... | grep -v /vendor/)
+	{{ end -}}
+
+script: buffalo test
 `
 
 const nGitlabCi = `before_script:

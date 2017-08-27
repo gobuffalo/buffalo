@@ -31,10 +31,6 @@ func newSodaGenerator() *makr.Generator {
 	c.Should = should
 	g.Add(c)
 
-	c = makr.NewCommand(makr.GoInstall("github.com/markbates/pop/soda"))
-	c.Should = should
-	g.Add(c)
-
 	g.Add(&makr.Func{
 		Should: should,
 		Runner: func(rootPath string, data makr.Data) error {

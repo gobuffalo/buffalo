@@ -107,10 +107,11 @@ func validateInGoPath() error {
 		if err != nil {
 			return err
 		}
+		pwd, _ := os.Getwd()
 		t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 			"name":     app.Name,
 			"gopath":   envy.GoPath(),
-			"current":  app.RootPath,
+			"current":  pwd,
 			"username": u.Username,
 		}))
 		if err != nil {
@@ -145,6 +146,7 @@ func genNewFiles() error {
 	packagePath := packagePath(app.RootPath)
 
 	data := map[string]interface{}{
+		"appPath":     app.RootPath,
 		"name":        app.Name,
 		"titleName":   inflect.Titleize(app.Name),
 		"packagePath": packagePath,
@@ -180,7 +182,7 @@ func init() {
 	RootCmd.AddCommand(newCmd)
 	newCmd.Flags().BoolVar(&app.API, "api", false, "skip all front-end code and configure for an API server")
 	newCmd.Flags().BoolVarP(&app.Force, "force", "f", false, "delete and remake if the app already exists")
-	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get/install commands")
+	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get commands")
 	newCmd.Flags().BoolVar(&app.SkipPop, "skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().BoolVar(&app.WithDep, "with-dep", false, "adds github.com/golang/dep to your app")
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
