@@ -2,11 +2,10 @@
   "path": ".travis.yml",
   "contains": [
     "language: go",
-    "1.7.x",
-    "master",
+    "1.8.x",
     "go_import_path:"
   ]
-},{
+}, {
   "path": "database.yml",
   "contains": [
     "dialect: \"sqlite3\"",

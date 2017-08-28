@@ -1,11 +1,12 @@
 package buffalo
 
 import (
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestCookies_Get(t *testing.T) {
@@ -36,7 +37,7 @@ func TestCookies_Set(t *testing.T) {
 	c.Set("name", "Rob Pike", time.Hour*24)
 
 	h := res.Header().Get("Set-Cookie")
-	r.Equal("name=Rob Pike; Max-Age=86400", h)
+	r.Equal("name=\"Rob Pike\"; Max-Age=86400", h)
 }
 
 func TestCookies_SetWithExpirationTime(t *testing.T) {
@@ -49,7 +50,7 @@ func TestCookies_SetWithExpirationTime(t *testing.T) {
 	c.SetWithExpirationTime("name", "Rob Pike", e)
 
 	h := res.Header().Get("Set-Cookie")
-	r.Equal("name=Rob Pike; Expires=Sat, 29 Jul 2017 19:28:45 GMT", h)
+	r.Equal("name=\"Rob Pike\"; Expires=Sat, 29 Jul 2017 19:28:45 GMT", h)
 }
 
 func TestCookies_Delete(t *testing.T) {
