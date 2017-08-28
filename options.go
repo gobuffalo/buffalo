@@ -41,10 +41,23 @@ type Options struct {
 	// WorkerOff tells App.Start() whether to start the Worker process or not. Default is "false".
 	WorkerOff bool
 
+	// PreHandlers are http.Handlers that are called between the http.Server
+	// and the buffalo Application.
+	PreHandlers []http.Handler
+	// PreWare takes an http.Handler and returns and http.Handler
+	// and acts as a pseudo-middleware between the http.Server and
+	// a Buffalo application.
+	PreWares []PreWare
+
 	Context context.Context
 	cancel  context.CancelFunc
 	Prefix  string
 }
+
+// PreWare takes an http.Handler and returns and http.Handler
+// and acts as a pseudo-middleware between the http.Server and
+// a Buffalo application.
+type PreWare func(http.Handler) http.Handler
 
 // NewOptions returns a new Options instance with sensible defaults
 func NewOptions() Options {
@@ -55,6 +68,13 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	opts.Name = defaults.String(opts.Name, "/")
+
+	if opts.PreWares == nil {
+		opts.PreWares = []PreWare{}
+	}
+	if opts.PreHandlers == nil {
+		opts.PreHandlers = []http.Handler{}
+	}
 
 	if opts.Context == nil {
 		opts.Context = context.Background()
