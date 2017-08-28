@@ -110,6 +110,92 @@ func Test_Mount_Handler(t *testing.T) {
 	}
 }
 
+func Test_PreHandlers(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	bh := func(c Context) error {
+		req := c.Request()
+		return c.Render(200, render.String(req.Method+"-"+req.URL.String()))
+	}
+	a.GET("/ph", bh)
+	a.POST("/ph", bh)
+	mh := func(res http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" {
+			res.WriteHeader(418)
+			res.Write([]byte("boo"))
+		}
+	}
+	a.PreHandlers = append(a.PreHandlers, http.HandlerFunc(mh))
+
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	table := []struct {
+		Code   int
+		Method string
+		Result string
+	}{
+		{Code: 418, Method: "GET", Result: "boo"},
+		{Code: 200, Method: "POST", Result: "POST-/ph"},
+	}
+
+	for _, v := range table {
+		req, err := http.NewRequest(v.Method, ts.URL+"/ph", nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, err := ioutil.ReadAll(res.Body)
+		r.NoError(err)
+		r.Equal(v.Code, res.StatusCode)
+		r.Equal(v.Result, string(b))
+	}
+}
+
+func Test_PreWares(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	bh := func(c Context) error {
+		req := c.Request()
+		return c.Render(200, render.String(req.Method+"-"+req.URL.String()))
+	}
+	a.GET("/ph", bh)
+	a.POST("/ph", bh)
+
+	mh := func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+			if req.Method == "GET" {
+				res.WriteHeader(418)
+				res.Write([]byte("boo"))
+			}
+		})
+	}
+
+	a.PreWares = append(a.PreWares, mh)
+
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	table := []struct {
+		Code   int
+		Method string
+		Result string
+	}{
+		{Code: 418, Method: "GET", Result: "boo"},
+		{Code: 200, Method: "POST", Result: "POST-/ph"},
+	}
+
+	for _, v := range table {
+		req, err := http.NewRequest(v.Method, ts.URL+"/ph", nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, err := ioutil.ReadAll(res.Body)
+		r.NoError(err)
+		r.Equal(v.Code, res.StatusCode)
+		r.Equal(v.Result, string(b))
+	}
+}
+
 func Test_Router(t *testing.T) {
 	r := require.New(t)
 
