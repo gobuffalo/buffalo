@@ -83,6 +83,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		"jquery-ujs@~1.2.2",
 		"copy-webpack-plugin@~4.0.1",
 		"uglifyjs-webpack-plugin@~0.4.6",
+		"webpack-manifest-plugin@~1.2.1",
 	}
 
 	args = append(args, modules...)
