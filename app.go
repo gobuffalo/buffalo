@@ -108,6 +108,10 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if a.MethodOverride != nil {
 		a.MethodOverride(w, r)
 	}
+	if ok := a.processPreHandlers(ws, r); !ok {
+		return
+	}
+
 	var h http.Handler
 	h = a.router
 	if a.Env == "development" {
@@ -160,4 +164,34 @@ func Automatic(opts Options) *App {
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
 	return a
+}
+
+func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) bool {
+	sh := func(h http.Handler) bool {
+		h.ServeHTTP(res, req)
+		if br, ok := res.(*Response); ok {
+			if (br.Status < 200 || br.Status > 299) && br.Status > 0 {
+				return false
+			}
+			if br.Size > 0 {
+				return false
+			}
+		}
+		return true
+	}
+
+	for _, ph := range a.PreHandlers {
+		if ok := sh(ph); !ok {
+			return false
+		}
+	}
+
+	last := http.Handler(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {}))
+	for _, ph := range a.PreWares {
+		last = ph(last)
+		if ok := sh(last); !ok {
+			return false
+		}
+	}
+	return true
 }

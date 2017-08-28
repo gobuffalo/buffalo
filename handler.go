@@ -63,10 +63,6 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 }
 
 func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	if ok := info.processPreHandlers(res, req); !ok {
-		return
-	}
-
 	a := info.App
 
 	c := a.newContext(info, res, req)
@@ -92,38 +88,4 @@ func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			c.Response().Write([]byte(err.Error()))
 		}
 	}
-}
-
-func (info RouteInfo) processPreHandlers(res http.ResponseWriter, req *http.Request) bool {
-	a := info.App
-
-	sh := func(h http.Handler) bool {
-		h.ServeHTTP(res, req)
-		if br, ok := res.(*Response); ok {
-			if (br.Status < 200 || br.Status > 299) && br.Status > 0 {
-				return false
-			}
-			if br.Size > 0 {
-				return false
-			}
-		}
-		return true
-	}
-
-	for _, ph := range a.PreHandlers {
-		if ok := sh(ph); !ok {
-			return false
-		}
-	}
-
-	last := http.Handler(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {}))
-	if len(a.PreWares) > 0 {
-		for _, ph := range a.PreWares {
-			last = ph(last)
-			if ok := sh(last); !ok {
-				return false
-			}
-		}
-	}
-	return true
 }
