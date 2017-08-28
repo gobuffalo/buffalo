@@ -161,14 +161,12 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 	r := require.New(t)
 
 	cases := map[string]string{
-		"something.txt": "/assets/something.txt",
-		"other.txt":     "/assets/other.txt",
+		"something.txt": "manifest.json is not correct",
+		"other.txt":     "manifest.json is not correct",
 	}
 
 	tdir, err := ioutil.TempDir("", "test")
-	if err != nil {
-		r.Fail("Could not set the Temp dir")
-	}
+	r.NoError(err)
 
 	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`//shdnn Corrupt!`), 0644)
 
@@ -189,8 +187,8 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 
 		bb := &bytes.Buffer{}
 		err = result.Render(bb, render.Data{})
-		r.NoError(err)
-		r.Equal(expected, strings.TrimSpace(bb.String()))
+		r.Error(err)
+		r.Contains(err.Error(), expected)
 
 		os.Remove(tmpFile.Name())
 	}

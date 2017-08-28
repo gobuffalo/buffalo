@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/tags"
+	"github.com/pkg/errors"
 )
 
 var assetsMutex = &sync.Mutex{}
@@ -32,17 +33,25 @@ func assetPathFor(file string) string {
 	return filepath.Join("/assets", filePath)
 }
 
-func (s templateRenderer) addAssetsHelpers(helpers map[string]interface{}) map[string]interface{} {
-	helpers["assetPath"] = func(file string) template.HTML {
-		return template.HTML(s.assetPath(file))
+func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
+	helpers["assetPath"] = func(file string) (string, error) {
+		return s.assetPath(file)
 	}
 
-	helpers["javascriptTag"] = func(file string, options tags.Options) template.HTML {
-		return jsTag(s.assetPath(file), options)
+	helpers["javascriptTag"] = func(file string, options tags.Options) (template.HTML, error) {
+		h, err := s.assetPath(file)
+		if err != nil {
+			return "", errors.WithStack(err)
+		}
+		return jsTag(h, options), nil
 	}
 
-	helpers["stylesheetTag"] = func(file string, options tags.Options) template.HTML {
-		return cssTag(s.assetPath(file), options)
+	helpers["stylesheetTag"] = func(file string, options tags.Options) (template.HTML, error) {
+		h, err := s.assetPath(file)
+		if err != nil {
+			return "", errors.WithStack(err)
+		}
+		return cssTag(h, options), nil
 	}
 
 	return helpers
