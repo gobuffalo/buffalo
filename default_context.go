@@ -175,7 +175,10 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
 	d.Flash().persist(d.Session())
 
-	http.Redirect(d.Response(), d.Request(), fmt.Sprintf(url, args...), status)
+	if len(args) > 0 {
+		url = fmt.Sprintf(url, args...)
+	}
+	http.Redirect(d.Response(), d.Request(), url, status)
 	return nil
 }
 

@@ -13,7 +13,7 @@ import (
 func New(data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
 
-	files, err := generators.Find("grift")
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "grift"))
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ var existsTmpl = `
     var _ = Add("{{.taskName}}", func(c *Context) error {
         return nil
     })
-{{ else }}  
+{{ else }}
     {{ $last := .last }}
     {{ range $index, $element := .parts }}
         {{ $isLast := eq $index $last }}
@@ -62,5 +62,5 @@ var existsTmpl = `
     {{ range $index, $element := .parts }}
         {{ if $index }} }) {{ end }}
     {{ end }}
-               
+
 {{ end }}`

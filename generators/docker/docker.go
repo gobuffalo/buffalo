@@ -26,7 +26,7 @@ func New() (*makr.Generator, error) {
 			if style != "multi" && style != "standard" {
 				return errors.Errorf("unknown Docker style: %s", style)
 			}
-			files, err := generators.Find(filepath.Join("docker", style))
+			files, err := generators.Find(filepath.Join(generators.TemplatesPath, "docker", style))
 			if err != nil {
 				return errors.WithStack(err)
 			}

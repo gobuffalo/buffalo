@@ -4,9 +4,11 @@ import (
 	"html"
 	"html/template"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
 	// this blank import is here because dep doesn't
 	// handle transitive dependencies correctly
 	_ "github.com/russross/blackfriday"
@@ -53,6 +55,8 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		"partial": s.partial,
 	}
 
+	helpers = s.addAssetsHelpers(helpers)
+
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
@@ -68,6 +72,25 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	return template.HTML(body), nil
+}
+
+func (s templateRenderer) assetPath(file string) (string, error) {
+
+	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
+		manifest, err := s.AssetsBox.MustString("manifest.json")
+
+		if err != nil {
+			// log.Println("[DEBUG] didn't find manifest, using raw path to assets")
+			return assetPathFor(file), nil
+		}
+
+		err = loadManifest(manifest)
+		if err != nil {
+			return assetPathFor(file), errors.Wrap(err, "your manifest.json is not correct")
+		}
+	}
+
+	return assetPathFor(file), nil
 }
 
 // Template renders the named files using the specified

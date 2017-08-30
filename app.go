@@ -1,10 +1,10 @@
 package buffalo
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
-	"os/signal"
 	"strings"
 	"sync"
 	"syscall"
@@ -12,6 +12,7 @@ import (
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
+	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 )
 
@@ -42,46 +43,49 @@ func (a *App) Start(addr string) error {
 		Addr:    addr,
 		Handler: a,
 	}
+	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
+	defer cancel()
 
 	go func() {
 		// gracefully shut down the application when the context is cancelled
-		<-a.Context.Done()
+		<-ctx.Done()
 		fmt.Println("Shutting down application")
-		err := server.Shutdown(a.Context)
+
+		err := a.Stop(ctx.Err())
 		if err != nil {
-			a.Logger.Error(errors.WithStack(err))
+			fmt.Println(err)
 		}
+
 		if !a.WorkerOff {
 			// stop the workers
+			fmt.Println("Shutting down worker")
 			err = a.Worker.Stop()
 			if err != nil {
-				a.Logger.Error(errors.WithStack(err))
+				fmt.Println(err)
 			}
 		}
+
+		err = server.Shutdown(ctx)
+		if err != nil {
+			fmt.Println(err)
+		}
+
 	}()
 
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
 		go func() {
-			err := a.Worker.Start(a.Context)
+			err := a.Worker.Start(ctx)
 			if err != nil {
-				a.Stop(errors.WithStack(err))
+				a.Stop(err)
 			}
 		}()
 	}
 
-	// listen for system signals, like CTRL-C
-	go func() {
-		signalChan := make(chan os.Signal, 1)
-		signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
-		<-signalChan
-		a.Stop(nil)
-	}()
-
 	// start the web server
 	err := server.ListenAndServe()
 	if err != nil {
-		return a.Stop(errors.WithStack(err))
+		return a.Stop(err)
 	}
 	return nil
 }
@@ -89,8 +93,8 @@ func (a *App) Start(addr string) error {
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
-	if err != nil {
-		a.Logger.Error(err)
+	if err != nil && errors.Cause(err) != context.Canceled {
+		fmt.Println(err)
 		return err
 	}
 	return nil
@@ -104,6 +108,10 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if a.MethodOverride != nil {
 		a.MethodOverride(w, r)
 	}
+	if ok := a.processPreHandlers(ws, r); !ok {
+		return
+	}
+
 	var h http.Handler
 	h = a.router
 	if a.Env == "development" {
@@ -125,7 +133,7 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router:   mux.NewRouter(),
+		router:   mux.NewRouter().StrictSlash(true),
 		moot:     &sync.Mutex{},
 		routes:   RouteList{},
 		children: []*App{},
@@ -156,4 +164,34 @@ func Automatic(opts Options) *App {
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
 	return a
+}
+
+func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) bool {
+	sh := func(h http.Handler) bool {
+		h.ServeHTTP(res, req)
+		if br, ok := res.(*Response); ok {
+			if (br.Status < 200 || br.Status > 299) && br.Status > 0 {
+				return false
+			}
+			if br.Size > 0 {
+				return false
+			}
+		}
+		return true
+	}
+
+	for _, ph := range a.PreHandlers {
+		if ok := sh(ph); !ok {
+			return false
+		}
+	}
+
+	last := http.Handler(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {}))
+	for _, ph := range a.PreWares {
+		last = ph(last)
+		if ok := sh(last); !ok {
+			return false
+		}
+	}
+	return true
 }

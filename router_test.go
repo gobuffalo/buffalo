@@ -5,12 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"path"
 	"path/filepath"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/plush"
+	"github.com/gorilla/mux"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
@@ -35,6 +37,163 @@ func testApp() *App {
 	rt.OPTIONS("/", h)
 	rt.PATCH("/", h)
 	return a
+}
+
+func otherTestApp() *App {
+	a := New(Options{})
+	f := func(c Context) error {
+		req := c.Request()
+		return c.Render(200, render.String(req.Method+" - "+req.URL.String()))
+	}
+	a.GET("/foo", f)
+	a.POST("/bar", f)
+	a.DELETE("/baz/baz", f)
+	return a
+}
+
+func Test_Mount_Buffalo(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	a.Mount("/admin", otherTestApp())
+
+	table := map[string]string{
+		"/foo":     "GET",
+		"/bar":     "POST",
+		"/baz/baz": "DELETE",
+	}
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	for u, m := range table {
+		p := fmt.Sprintf("%s/%s", ts.URL, path.Join("admin", u))
+		req, err := http.NewRequest(m, p, nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+	}
+}
+
+func muxer() http.Handler {
+	f := func(res http.ResponseWriter, req *http.Request) {
+		fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
+	}
+	mux := mux.NewRouter()
+	mux.HandleFunc("/foo", f).Methods("GET")
+	mux.HandleFunc("/bar", f).Methods("POST")
+	mux.HandleFunc("/baz/baz", f).Methods("DELETE")
+	return mux
+}
+
+func Test_Mount_Handler(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	a.Mount("/admin", muxer())
+
+	table := map[string]string{
+		"/foo":     "GET",
+		"/bar":     "POST",
+		"/baz/baz": "DELETE",
+	}
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	for u, m := range table {
+		p := fmt.Sprintf("%s/%s", ts.URL, path.Join("admin", u))
+		req, err := http.NewRequest(m, p, nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+	}
+}
+
+func Test_PreHandlers(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	bh := func(c Context) error {
+		req := c.Request()
+		return c.Render(200, render.String(req.Method+"-"+req.URL.String()))
+	}
+	a.GET("/ph", bh)
+	a.POST("/ph", bh)
+	mh := func(res http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" {
+			res.WriteHeader(418)
+			res.Write([]byte("boo"))
+		}
+	}
+	a.PreHandlers = append(a.PreHandlers, http.HandlerFunc(mh))
+
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	table := []struct {
+		Code   int
+		Method string
+		Result string
+	}{
+		{Code: 418, Method: "GET", Result: "boo"},
+		{Code: 200, Method: "POST", Result: "POST-/ph"},
+	}
+
+	for _, v := range table {
+		req, err := http.NewRequest(v.Method, ts.URL+"/ph", nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, err := ioutil.ReadAll(res.Body)
+		r.NoError(err)
+		r.Equal(v.Code, res.StatusCode)
+		r.Equal(v.Result, string(b))
+	}
+}
+
+func Test_PreWares(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	bh := func(c Context) error {
+		req := c.Request()
+		return c.Render(200, render.String(req.Method+"-"+req.URL.String()))
+	}
+	a.GET("/ph", bh)
+	a.POST("/ph", bh)
+
+	mh := func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+			if req.Method == "GET" {
+				res.WriteHeader(418)
+				res.Write([]byte("boo"))
+			}
+		})
+	}
+
+	a.PreWares = append(a.PreWares, mh)
+
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	table := []struct {
+		Code   int
+		Method string
+		Result string
+	}{
+		{Code: 418, Method: "GET", Result: "boo"},
+		{Code: 200, Method: "POST", Result: "POST-/ph"},
+	}
+
+	for _, v := range table {
+		req, err := http.NewRequest(v.Method, ts.URL+"/ph", nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, err := ioutil.ReadAll(res.Body)
+		r.NoError(err)
+		r.Equal(v.Code, res.StatusCode)
+		r.Equal(v.Result, string(b))
+	}
 }
 
 func Test_Router(t *testing.T) {
@@ -348,4 +507,25 @@ func Test_CatchAll_Route(t *testing.T) {
 	res := w.Request("/john").Get()
 
 	r.Contains(res.Body.String(), "john")
+}
+
+func Test_Router_Matches_Trailing_Slash(t *testing.T) {
+	r := require.New(t)
+
+	table := []string{
+		"/bar",
+		"/bar/",
+	}
+
+	ts := httptest.NewServer(testApp())
+	defer ts.Close()
+
+	for _, v := range table {
+		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", ts.URL, v), nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal("bar", string(b))
+	}
 }

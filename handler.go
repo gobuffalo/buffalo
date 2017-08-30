@@ -64,6 +64,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	a := info.App
+
 	c := a.newContext(info, res, req)
 
 	defer c.Flash().persist(c.Session())

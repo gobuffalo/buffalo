@@ -1,18 +1,25 @@
 package actions
 
 import (
+  "github.com/gobuffalo/envy"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/buffalo/middleware"
+  "github.com/gobuffalo/buffalo/middleware/ssl"
+  "github.com/unrolled/secure"
+
   {{ if .withPop }}
   "{{.modelsPath}}"
-  {{ end }}
-  "github.com/gobuffalo/envy"
+  {{ end -}}
 
   {{ if .asWeb -}}
   "github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   "github.com/gobuffalo/packr"
-  {{ end }}
+  {{ end -}}
+
+  {{ if .asAPI -}}
+  "github.com/gobuffalo/x/sessions"
+  {{ end -}}
 )
 
 // ENV is used to help switch settings based on where the
@@ -30,11 +37,22 @@ func App() *buffalo.App {
   if app == nil {
     app = buffalo.Automatic(buffalo.Options{
       Env: ENV,
+      {{ if .asAPI -}}
+      SessionStore: sessions.Null{},
+      {{ end -}}
       SessionName: "_{{.name}}_session",
     })
+    // Automatically redirect to SSL
+    app.Use(ssl.ForceSSL(secure.Options{
+      SSLRedirect:     ENV == "production",
+      SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+    }))
+
+    {{ if .asWeb -}}
     // Automatically save the session if the underlying
     // Handler does not return an error.
     app.Use(middleware.SessionSaver)
+    {{ end -}}
 
     {{ if .asAPI -}}
     // Set the request content type to JSON
@@ -72,7 +90,7 @@ func App() *buffalo.App {
     app.GET("/", HomeHandler)
 
     {{ if .asWeb -}}
-    app.ServeFiles("/assets", packr.NewBox("../public/assets"))
+    app.ServeFiles("/assets", assetsBox)
     {{ end -}}
   }
 

@@ -78,3 +78,118 @@ func Test_Template_Partial(t *testing.T) {
 		r.Equal("Foo -> Mark", strings.TrimSpace(bb.String()))
 	}
 }
+
+func Test_AssetPath(t *testing.T) {
+	r := require.New(t)
+
+	cases := map[string]string{
+		"something.txt":         "/assets/something.txt",
+		"images/something.png":  "/assets/images/something.png",
+		"/images/something.png": "/assets/images/something.png",
+		"application.css":       "/assets/application.aabbc123.css",
+	}
+
+	tdir, err := ioutil.TempDir("", "test")
+	if err != nil {
+		r.Fail("Could not set the Temp dir")
+	}
+
+	re := render.New(render.Options{
+		TemplateEngine: plush.BuffaloRenderer,
+		AssetsBox:      packr.NewBox(tdir),
+	}).Template
+
+	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`{
+		"application.css": "application.aabbc123.css"
+	}`), 0644)
+
+	for original, expected := range cases {
+
+		tmpFile, err := ioutil.TempFile(tdir, "test")
+		r.NoError(err)
+
+		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
+		r.NoError(err)
+
+		result := re("text/html", tmpFile.Name())
+
+		bb := &bytes.Buffer{}
+		err = result.Render(bb, render.Data{})
+		r.NoError(err)
+		r.Equal(expected, strings.TrimSpace(bb.String()))
+
+		os.Remove(tmpFile.Name())
+	}
+}
+
+func Test_AssetPathNoManifest(t *testing.T) {
+	r := require.New(t)
+
+	cases := map[string]string{
+		"something.txt": "/assets/something.txt",
+	}
+
+	tdir, err := ioutil.TempDir("", "test")
+	if err != nil {
+		r.Fail("Could not set the Temp dir")
+	}
+
+	re := render.New(render.Options{
+		TemplateEngine: plush.BuffaloRenderer,
+		AssetsBox:      packr.NewBox(tdir),
+	}).Template
+
+	for original, expected := range cases {
+
+		tmpFile, err := ioutil.TempFile(tdir, "test")
+		r.NoError(err)
+
+		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
+		r.NoError(err)
+
+		result := re("text/html", tmpFile.Name())
+
+		bb := &bytes.Buffer{}
+		err = result.Render(bb, render.Data{})
+		r.NoError(err)
+		r.Equal(expected, strings.TrimSpace(bb.String()))
+
+		os.Remove(tmpFile.Name())
+	}
+}
+func Test_AssetPathManifestCorrupt(t *testing.T) {
+	r := require.New(t)
+
+	cases := map[string]string{
+		"something.txt": "manifest.json is not correct",
+		"other.txt":     "manifest.json is not correct",
+	}
+
+	tdir, err := ioutil.TempDir("", "test")
+	r.NoError(err)
+
+	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`//shdnn Corrupt!`), 0644)
+
+	re := render.New(render.Options{
+		TemplateEngine: plush.BuffaloRenderer,
+		AssetsBox:      packr.NewBox(tdir),
+	}).Template
+
+	for original, expected := range cases {
+
+		tmpFile, err := ioutil.TempFile(tdir, "test")
+		r.NoError(err)
+
+		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
+		r.NoError(err)
+
+		result := re("text/html", tmpFile.Name())
+
+		bb := &bytes.Buffer{}
+		err = result.Render(bb, render.Data{})
+		r.Error(err)
+		r.Contains(err.Error(), expected)
+
+		os.Remove(tmpFile.Name())
+	}
+}
