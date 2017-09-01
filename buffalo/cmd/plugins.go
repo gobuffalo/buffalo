@@ -49,6 +49,7 @@ func decorate(name string, cmd *cobra.Command) {
 
 					ax = append(ax, args...)
 					ex := exec.Command(c.Binary, ax...)
+					ex.Env = append(os.Environ(), "BUFFALO_PLUGIN=1")
 					ex.Stdin = os.Stdin
 					ex.Stdout = os.Stdout
 					ex.Stderr = os.Stderr
