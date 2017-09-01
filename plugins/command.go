@@ -4,6 +4,8 @@ package plugins
 type Command struct {
 	// Name "foo"
 	Name string `json:"name"`
+	// UseCommand "bar"
+	UseCommand string `json:"use_command"`
 	// BuffaloCommand "generate"
 	BuffaloCommand string `json:"buffalo_command"`
 	// Description "generates a foo"
