@@ -37,7 +37,16 @@ func decorate(name string, cmd *cobra.Command) {
 				Short:   fmt.Sprintf("[PLUGIN] %s", c.Description),
 				Aliases: c.Aliases,
 				RunE: func(cmd *cobra.Command, args []string) error {
-					ax := []string{c.Name}
+					plugCmd := c.Name
+					if c.UseCommand != "" {
+						plugCmd = c.UseCommand
+					}
+
+					ax := []string{plugCmd}
+					if plugCmd == "-" {
+						ax = []string{}
+					}
+
 					ax = append(ax, args...)
 					ex := exec.Command(c.Binary, ax...)
 					ex.Stdin = os.Stdin
