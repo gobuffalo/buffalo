@@ -76,7 +76,7 @@ func New(data makr.Data) (*makr.Generator, error) {
 		"url-loader@~0.5.9",
 		"file-loader@~0.11.2",
 		"jquery@~3.2.1",
-		"bootstrap@~3.3.7",
+		"bootstrap-sass@~3.3.7",
 		"path@~0.12.7",
 		"font-awesome@~4.7.0",
 		"npm-install-webpack-plugin@4.0.4",
