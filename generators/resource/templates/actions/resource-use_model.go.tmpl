@@ -65,7 +65,7 @@ func (v {{.resourceName}}Resource) Show(c buffalo.Context) error {
 	return c.Render(200, r.HTML("{{.filesPath}}/show.html"))
 }
 
-// New renders the formular for creating a new {{.model}}.
+// New renders the form for creating a new {{.model}}.
 // This function is mapped to the path GET /{{.resourceURL}}/new
 func (v {{.resourceName}}Resource) New(c buffalo.Context) error {
 	// Make {{.varSingular}} available inside the html template
@@ -105,7 +105,7 @@ func (v {{.resourceName}}Resource) Create(c buffalo.Context) error {
 	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
 }
 
-// Edit renders a edit formular for a {{.singular}}. This function is
+// Edit renders a edit form for a {{.singular}}. This function is
 // mapped to the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}/edit
 func (v {{.resourceName}}Resource) Edit(c buffalo.Context) error {
 	// Get the DB connection from the context
