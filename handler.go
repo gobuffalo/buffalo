@@ -3,6 +3,7 @@ package buffalo
 import (
 	"net/http"
 
+	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -63,6 +64,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 }
 
 func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	defer gcontext.Clear(req)
 	a := info.App
 
 	c := a.newContext(info, res, req)
