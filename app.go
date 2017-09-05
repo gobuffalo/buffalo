@@ -9,7 +9,6 @@ import (
 	"sync"
 	"syscall"
 
-	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
@@ -101,7 +100,6 @@ func (a *App) Stop(err error) error {
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	defer gcontext.Clear(r)
 	ws := &Response{
 		ResponseWriter: w,
 	}
