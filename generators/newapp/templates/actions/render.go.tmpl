@@ -5,21 +5,19 @@ import (
   "github.com/gobuffalo/buffalo/render"
 )
 
-var assetsBox packr.Box
+var r *render.Engine
 
 func init() {
-  assetsBox = packr.NewBox("../public/assets")
-
   r = render.New(render.Options{
     {{ if .asWeb -}}
-    // HTML layout to be used for all HTML requests:
-    HTMLLayout:     "application.html",
+      // HTML layout to be used for all HTML requests:
+      HTMLLayout:     "application.html",
 
-    // Box containing all of the templates:
-    TemplatesBox: packr.NewBox("../templates"),
-
-    // Add template helpers here:
-    Helpers: render.Helpers{},
-  {{ end -}}
+      // Box containing all of the templates:
+      TemplatesBox: packr.NewBox("../templates"),
+      
+      // Add template helpers here:
+      Helpers: render.Helpers{},
+    {{ end -}}
   })
 }
