@@ -5,7 +5,6 @@ import (
   "github.com/gobuffalo/buffalo/render"
 )
 
-var r *render.Engine
 var assetsBox packr.Box
 
 func init() {
@@ -18,9 +17,6 @@ func init() {
 
     // Box containing all of the templates:
     TemplatesBox: packr.NewBox("../templates"),
-    
-    // Box containing all the public assets:
-    AssetsBox: assetsBox,
 
     // Add template helpers here:
     Helpers: render.Helpers{},
