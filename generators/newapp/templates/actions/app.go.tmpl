@@ -90,7 +90,7 @@ func App() *buffalo.App {
     app.GET("/", HomeHandler)
 
     {{ if .asWeb -}}
-    app.ServeFiles("/assets", assetsBox)
+    app.ServeFiles("/assets", packr.NewBox("../public/assets"))
     {{ end -}}
   }
 
