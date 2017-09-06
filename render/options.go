@@ -13,9 +13,6 @@ type Options struct {
 	// TemplatesBox is the location of the templates directory on disk.
 	TemplatesBox packr.Box
 
-	// AssetsBox is the location of the public assets the app will serve.
-	AssetsBox packr.Box
-
 	// Helpers to be rendered with the templates
 	Helpers Helpers
 

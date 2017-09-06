@@ -52,6 +52,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/reflectx)
 
+* [github.com/joho/godotenv](https://github.com/joho/godotenv)
+
 * [github.com/lib/pq](https://github.com/lib/pq)
 
 * [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
@@ -83,6 +85,8 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
 
 * [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
+
+* [github.com/markbates/sigtx](https://github.com/markbates/sigtx)
 
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 

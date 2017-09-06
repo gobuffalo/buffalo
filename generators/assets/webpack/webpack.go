@@ -76,14 +76,13 @@ func New(data makr.Data) (*makr.Generator, error) {
 		"url-loader@~0.5.9",
 		"file-loader@~0.11.2",
 		"jquery@~3.2.1",
-		"bootstrap@~3.3.7",
+		"bootstrap-sass@~3.3.7",
 		"path@~0.12.7",
 		"font-awesome@~4.7.0",
 		"npm-install-webpack-plugin@4.0.4",
 		"jquery-ujs@~1.2.2",
 		"copy-webpack-plugin@~4.0.1",
 		"uglifyjs-webpack-plugin@~0.4.6",
-		"webpack-manifest-plugin@~1.2.1",
 	}
 
 	args = append(args, modules...)

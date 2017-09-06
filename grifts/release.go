@@ -39,7 +39,6 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 	}
 
 	grift.Run("shoulders", c)
-	grift.Run("deplist", c)
 
 	err = tagRelease(v)
 	if err != nil {
