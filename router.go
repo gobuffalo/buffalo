@@ -106,6 +106,10 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 */
 func (a *App) Resource(p string, r Resource) *App {
 	g := a.Group(p)
+
+	// Set Option
+	g.URLNameOverride = a.URLNameOverride
+
 	p = "/"
 
 	rv := reflect.ValueOf(r)
@@ -215,6 +219,14 @@ func (a *App) buildRouteName(p string) string {
 
 	resultParts := []string{}
 	parts := strings.Split(p, "/")
+
+	if a.URLNameOverride {
+		if a.root == nil && a.Prefix == p {
+			return "root"
+		} else if (a.root != nil && a.root.Prefix != p) || p != a.Prefix {
+			parts = append(parts[:1], parts[1+1:]...)
+		}
+	}
 
 	for index, part := range parts {
 
