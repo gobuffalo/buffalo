@@ -102,7 +102,7 @@ func (v {{.resourceName}}Resource) Create(c buffalo.Context) error {
 	// If there are no errors set a success message
 	c.Flash().Add("success", "{{.model}} was created successfully")
 	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
+	return c.Redirect(302, "{{.varSingular}}Path",{{.varSingular}}.ID)
 }
 
 // Edit renders a edit form for a {{.singular}}. This function is
@@ -153,7 +153,7 @@ func (v {{.resourceName}}Resource) Update(c buffalo.Context) error {
 	// If there are no errors set a success message
 	c.Flash().Add("success", "{{.model}} was updated successfully")
 	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
+	return c.Redirect(302, "{{.varSingular}}Path",{{.varSingular}}.ID)
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
@@ -175,5 +175,5 @@ func (v {{.resourceName}}Resource) Destroy(c buffalo.Context) error {
 	// If there are no errors set a flash message
 	c.Flash().Add("success", "{{.model}} was destroyed successfully")
 	// Redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}")
+	return c.Redirect(302, "{{.varPlural}}Path")
 }

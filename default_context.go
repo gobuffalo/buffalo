@@ -15,6 +15,7 @@ import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
+	"regexp"
 )
 
 // assert that DefaultContext is implementing Context
@@ -175,9 +176,18 @@ func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
 	d.Flash().persist(d.Session())
 
+	urlForName := getRouteByPathName(url, d.data["routes"].(RouteList))
+
+	if len(urlForName) > 0 {
+		url = urlForName
+	}
+
+	fmt.Printf("Redirect url %s \n", url)
+
 	if len(args) > 0 {
 		url = fmt.Sprintf(url, args...)
 	}
+
 	http.Redirect(d.Response(), d.Request(), url, status)
 	return nil
 }
@@ -197,6 +207,18 @@ func (d *DefaultContext) String() string {
 	}
 	sort.Strings(bb)
 	return strings.Join(bb, "\n\n")
+}
+
+func getRouteByPathName(pn string, routes RouteList) string {
+	for _, r  := range routes {
+		if r.PathName == pn {
+			path := r.Path
+			re := regexp.MustCompile("{(.*?)}")
+			s := re.ReplaceAllString(path, "%s")
+			return s
+		}
+	}
+	return ""
 }
 
 var defaultUpgrader = websocket.Upgrader{
