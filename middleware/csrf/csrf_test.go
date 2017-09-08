@@ -21,7 +21,7 @@ func ctCSRFApp() *buffalo.App {
 		}
 		return c.Render(420, nil)
 	}
-	a := buffalo.Automatic(buffalo.Options{})
+	a := buffalo.New(buffalo.Options{})
 	a.Use(middleware.CSRF)
 	a.GET("/csrf", h)
 	a.POST("/csrf", h)
