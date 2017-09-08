@@ -151,6 +151,7 @@ func New(opts Options) *App {
 	return a
 }
 
+// Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead.
 func Automatic(opts Options) *App {
 	warningMsg := "Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead."
 	_, file, no, ok := runtime.Caller(1)
