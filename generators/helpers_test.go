@@ -35,7 +35,7 @@ var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
 var app *buffalo.App
 func App() *buffalo.App {
 	if app == nil {
-		app = buffalo.Automatic(buffalo.Options{
+		app = buffalo.New(buffalo.Options{
 			Env: ENV,
 		})
 
@@ -74,7 +74,7 @@ var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
 var app *buffalo.App
 func App() *buffalo.App {
 	if app == nil {
-		app = buffalo.Automatic(buffalo.Options{
+		app = buffalo.New(buffalo.Options{
 			Env: ENV,
 		})
 
