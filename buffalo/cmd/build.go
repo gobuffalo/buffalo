@@ -12,12 +12,14 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/envy"
 	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
+	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -405,8 +407,18 @@ var buildCmd = &cobra.Command{
 		if buildTags != "" {
 			b.buildTags = append(b.buildTags, buildTags)
 		}
-		defer b.cleanupBuild()
 
+		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt, syscall.SIGKILL, syscall.SIGTERM)
+		go func() {
+			<-ctx.Done()
+			if ctx.Err() == context.Canceled {
+				fmt.Println("~~~BUILD CANCELLED ~~~")
+				b.cleanupBuild()
+			}
+		}()
+		defer cancel()
+
+		defer b.cleanupBuild()
 		b.cleanupTarget()
 		return b.run()
 	},
