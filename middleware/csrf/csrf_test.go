@@ -1,14 +1,23 @@
 package csrf_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
+
+func TestMain(m *testing.M) {
+	env := envy.Get("GO_ENV", "development")
+	envy.Set("GO_ENV", "development")
+	defer envy.Set("GO_ENV", env)
+	os.Exit(m.Run())
+}
 
 type csrfForm struct {
 	AuthenticityToken string `form:"authenticity_token"`
