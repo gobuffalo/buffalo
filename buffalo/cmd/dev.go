@@ -6,12 +6,14 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"syscall"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/refresh/refresh"
 	"github.com/markbates/sigtx"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 )
@@ -43,8 +45,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 		}()
 		os.Setenv("GO_ENV", "development")
 
-		ctx := context.Background()
-		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
+		ctx, cancel := sigtx.WithCancel(context.Background(), syscall.SIGKILL, syscall.SIGTERM, os.Interrupt)
 		defer cancel()
 
 		wg, ctx := errgroup.WithContext(ctx)
@@ -57,7 +58,11 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 			return startWebpack(ctx)
 		})
 
-		return wg.Wait()
+		err := wg.Wait()
+		if err != context.Canceled {
+			return errors.WithStack(err)
+		}
+		return nil
 	},
 }
 
