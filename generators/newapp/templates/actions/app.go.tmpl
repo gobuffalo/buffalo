@@ -48,12 +48,6 @@ func App() *buffalo.App {
       SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
     }))
 
-    {{ if .asWeb -}}
-    // Automatically save the session if the underlying
-    // Handler does not return an error.
-    app.Use(middleware.SessionSaver)
-    {{ end -}}
-
     {{ if .asAPI -}}
     // Set the request content type to JSON
     app.Use(middleware.SetContentType("application/json"))
