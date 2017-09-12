@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -12,7 +11,9 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/refresh/refresh"
+	"github.com/markbates/sigtx"
 	"github.com/spf13/cobra"
+	"golang.org/x/sync/errgroup"
 )
 
 var devOptions = struct {
@@ -26,7 +27,7 @@ var devCmd = &cobra.Command{
 	Long: `Runs your Buffalo app in 'development' mode.
 This includes rebuilding your application when files change.
 This behavior can be changed in your .buffalo.dev.yml file.`,
-	Run: func(c *cobra.Command, args []string) {
+	RunE: func(c *cobra.Command, args []string) error {
 		if runtime.GOOS == "windows" {
 			color.NoColor = true
 		}
@@ -41,24 +42,22 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 			fmt.Printf(msg, cause)
 		}()
 		os.Setenv("GO_ENV", "development")
+
 		ctx := context.Background()
-		ctx, cancelFunc := context.WithCancel(ctx)
-		go func() {
-			err := startDevServer(ctx)
-			if err != nil {
-				cancelFunc()
-				log.Fatal(err)
-			}
-		}()
-		go func() {
-			err := startWebpack(ctx)
-			if err != nil {
-				cancelFunc()
-				log.Fatal(err)
-			}
-		}()
-		// wait for the ctx to finish
-		<-ctx.Done()
+		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
+		defer cancel()
+
+		wg, ctx := errgroup.WithContext(ctx)
+
+		wg.Go(func() error {
+			return startDevServer(ctx)
+		})
+
+		wg.Go(func() error {
+			return startWebpack(ctx)
+		})
+
+		return wg.Wait()
 	},
 }
 
@@ -69,7 +68,7 @@ func startWebpack(ctx context.Context) error {
 		// there's no webpack, so don't do anything
 		return nil
 	}
-	cmd := exec.Command(webpack.BinPath, "--watch")
+	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
