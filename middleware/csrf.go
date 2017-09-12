@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"runtime"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware/csrf"
@@ -25,9 +24,6 @@ var (
 // CSRF is deprecated, and will be removed in v0.10.0. Use csrf.New instead.
 var CSRF = func(next buffalo.Handler) buffalo.Handler {
 	warningMsg := "middleware.CSRF is deprecated, and will be removed in v0.10.0. Use csrf.New instead."
-	_, file, no, ok := runtime.Caller(1)
-	if ok {
-		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
-	}
+	fmt.Println(warningMsg)
 	return csrf.Middleware(next)
 }
