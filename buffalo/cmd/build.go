@@ -481,7 +481,11 @@ func main() {
 	case "version":
 		printVersion()
 	case "task", "t", "tasks":
-		err := grift.Run(args[2], grift.NewContext(args[2]))
+		c := grift.NewContext(args[2])
+		if len(args) > 2 {
+			c.Args = args[3:]
+		}
+		err := grift.Run(args[2], c)
 		if err != nil {
 			log.Fatal(err)
 		}
