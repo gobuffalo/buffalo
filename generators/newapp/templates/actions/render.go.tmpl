@@ -6,8 +6,11 @@ import (
 )
 
 var r *render.Engine
+var assetsBox packr.Box
 
 func init() {
+  assetsBox = packr.NewBox("../public/assets")
+
   r = render.New(render.Options{
     {{ if .asWeb -}}
       // HTML layout to be used for all HTML requests:
@@ -15,6 +18,7 @@ func init() {
 
       // Box containing all of the templates:
       TemplatesBox: packr.NewBox("../templates"),
+      AssetsBox:    assetsBox,
       
       // Add template helpers here:
       Helpers: render.Helpers{},
