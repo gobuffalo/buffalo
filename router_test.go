@@ -75,6 +75,31 @@ func Test_Mount_Buffalo(t *testing.T) {
 	}
 }
 
+func Test_Mount_Buffalo_on_Group(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	g := a.Group("/users")
+	g.Mount("/admin", otherTestApp())
+
+	table := map[string]string{
+		"/foo":     "GET",
+		"/bar":     "POST",
+		"/baz/baz": "DELETE",
+	}
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	for u, m := range table {
+		p := fmt.Sprintf("%s/%s", ts.URL, path.Join("users", "admin", u))
+		req, err := http.NewRequest(m, p, nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+	}
+}
+
 func muxer() http.Handler {
 	f := func(res http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
