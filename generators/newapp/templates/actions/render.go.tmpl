@@ -1,7 +1,9 @@
 package actions
 
 import (
+  {{ if .asWeb -}}
   "github.com/gobuffalo/packr"
+  {{ end -}}
   "github.com/gobuffalo/buffalo/render"
 )
 
