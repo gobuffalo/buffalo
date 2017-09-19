@@ -128,6 +128,9 @@ func (b *builder) buildDatabase() error {
 func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
 	p := pack.New(context.Background(), b.workDir)
+	if extractAssets {
+		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
+	}
 	return p.Run()
 }
 
@@ -318,7 +321,6 @@ func (b *builder) run() error {
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return b.buildBin()
 	}
 
 	err = b.buildPackrEmbedded()
