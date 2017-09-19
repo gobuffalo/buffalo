@@ -54,6 +54,9 @@ func (s *Session) Clear() {
 
 // Get a session using a request and response.
 func (a *App) getSession(r *http.Request, w http.ResponseWriter) *Session {
+	if a.root != nil {
+		return a.root.getSession(r, w)
+	}
 	session, _ := a.SessionStore.Get(r, a.SessionName)
 	return &Session{
 		Session: session,
