@@ -90,6 +90,10 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 	default:
 		err := c.Request().ParseForm()
+		if cd, ok := c.(*DefaultContext); ok {
+			delete(cd.data, "app")
+			delete(cd.data, "routes")
+		}
 		data := map[string]interface{}{
 			"routes":      c.Value("routes"),
 			"error":       msg,
