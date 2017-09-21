@@ -62,7 +62,7 @@ func (v {{.resourceName}}Resource) Show(c buffalo.Context) error {
 
   // To find the {{.model}} the parameter {{.resourceSingularUnder}}_id is used.
   if err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id")); err != nil {
-    return c.Render(404, err)
+    return c.Error(404, err)
   }
 
   // Make {{.varSingular}} available inside the html template
