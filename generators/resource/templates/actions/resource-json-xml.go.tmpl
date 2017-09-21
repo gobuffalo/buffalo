@@ -116,7 +116,7 @@ func (v {{.camel}}Resource) Update(c buffalo.Context) error {
   }
 
   // Bind {{.singular}} to the html form elements
-  if err = c.Bind({{.varSingular}}); err != nil {
+  if err := c.Bind({{.varSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
@@ -148,8 +148,7 @@ func (v {{.camel}}Resource) Destroy(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  err = tx.Destroy({{.varSingular}})
-  if err != nil {
+  if err := tx.Destroy({{.varSingular}}); err != nil {
     return errors.WithStack(err)
   }
 

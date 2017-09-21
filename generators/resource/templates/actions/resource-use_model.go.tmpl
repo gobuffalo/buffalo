@@ -151,7 +151,7 @@ func (v {{.resourceName}}Resource) Update(c buffalo.Context) error {
   }
 
   // Bind {{.model}} to the html form elements
-  if err = c.Bind({{.varSingular}}); err != nil {
+  if err := c.Bind({{.varSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
@@ -193,7 +193,7 @@ func (v {{.resourceName}}Resource) Destroy(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  if err = tx.Destroy({{.varSingular}}); err != nil {
+  if err := tx.Destroy({{.varSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
