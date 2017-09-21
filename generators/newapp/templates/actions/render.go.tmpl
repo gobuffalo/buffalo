@@ -8,7 +8,9 @@ import (
 )
 
 var r *render.Engine
+{{ if .asWeb -}}
 var assetsBox = packr.NewBox("../public/assets")
+{{ end -}}
 
 func init() {
   r = render.New(render.Options{
