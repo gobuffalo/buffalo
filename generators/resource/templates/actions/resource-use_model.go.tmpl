@@ -3,8 +3,8 @@ package actions
 import (
 
   "github.com/pkg/errors"
-	"github.com/gobuffalo/buffalo"
-	"github.com/markbates/pop"
+  "github.com/gobuffalo/buffalo"
+  "github.com/markbates/pop"
   "{{.modelsPath}}"
 )
 
@@ -22,158 +22,184 @@ import (
 
 // {{.resourceName}}Resource is the resource for the {{.singular}} model
 type {{.resourceName}}Resource struct{
-	buffalo.Resource
+  buffalo.Resource
 }
 
 // List gets all {{.modelPlural}}. This function is mapped to the path
 // GET /{{.under}}
 func (v {{.resourceName}}Resource) List(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	{{.varPlural}} := &models.{{.modelPlural}}{}
-	// Paginate results. Params "page" and "per_page" control pagination.
-	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
-	// You can order your list here. Just change
-	err := q.All({{.varPlural}})
-	// to:
-	// err := q.Order("created_at desc").All({{.varPlural}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// Make {{.modelPlural}} available inside the html template
-	c.Set("{{.varPlural}}", {{.varPlural}})
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  {{.varPlural}} := &models.{{.modelPlural}}{}
+
+  // Paginate results. Params "page" and "per_page" control pagination.
+  // Default values are "page=1" and "per_page=20".
+  q := tx.PaginateFromParams(c.Params())
+
+  // Retrieve all {{.modelPlural}} from the DB
+  if err := q.All({{.varPlural}}); err != nil {
+    return errors.WithStack(err)
+  }
+
+  // Make {{.modelPlural}} available inside the html template
+  c.Set("{{.varPlural}}", {{.varPlural}})
+
   // Add the paginator to the context so it can be used in the template.
-	c.Set("pagination", q.Paginator)
-	return c.Render(200, r.HTML("{{.filesPath}}/index.html"))
+  c.Set("pagination", q.Paginator)
+
+  return c.Render(200, r.HTML("{{.filesPath}}/index.html"))
 }
 
 // Show gets the data for one {{.model}}. This function is mapped to
 // the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.resourceName}}Resource) Show(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	// Allocate an empty {{.model}}
-	{{.varSingular}} := &models.{{.model}}{}
-	// To find the {{.model}} the parameter {{.resourceSingularUnder}}_id is used.
-	err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id"))
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// Make {{.varSingular}} available inside the html template
-	c.Set("{{.varSingular}}", {{.varSingular}})
-	return c.Render(200, r.HTML("{{.filesPath}}/show.html"))
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  // Allocate an empty {{.model}}
+  {{.varSingular}} := &models.{{.model}}{}
+
+  // To find the {{.model}} the parameter {{.resourceSingularUnder}}_id is used.
+  if err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id")); err != nil {
+    return c.Render(404, err)
+  }
+
+  // Make {{.varSingular}} available inside the html template
+  c.Set("{{.varSingular}}", {{.varSingular}})
+
+  return c.Render(200, r.HTML("{{.filesPath}}/show.html"))
 }
 
 // New renders the form for creating a new {{.model}}.
 // This function is mapped to the path GET /{{.resourceURL}}/new
 func (v {{.resourceName}}Resource) New(c buffalo.Context) error {
-	// Make {{.varSingular}} available inside the html template
-	c.Set("{{.varSingular}}", &models.{{.model}}{})
-	return c.Render(200, r.HTML("{{.filesPath}}/new.html"))
+  // Make {{.varSingular}} available inside the html template
+  c.Set("{{.varSingular}}", &models.{{.model}}{})
+
+  return c.Render(200, r.HTML("{{.filesPath}}/new.html"))
 }
 
 // Create adds a {{.model}} to the DB. This function is mapped to the
 // path POST /{{.resourceURL}}
 func (v {{.resourceName}}Resource) Create(c buffalo.Context) error {
-	// Allocate an empty {{.model}}
-	{{.varSingular}} := &models.{{.model}}{}
-	// Bind {{.varSingular}} to the html form elements
-	err := c.Bind({{.varSingular}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	// Validate the data from the html form
-	verrs, err := tx.ValidateAndCreate({{.varSingular}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	if verrs.HasAny() {
-		// Make {{.varSingular}} available inside the html template
-		c.Set("{{.varSingular}}", {{.varSingular}})
-		// Make the errors available inside the html template
-		c.Set("errors", verrs)
-		// Render again the new.html template that the user can
-		// correct the input.
-		return c.Render(422, r.HTML("{{.filesPath}}/new.html"))
-	}
-	// If there are no errors set a success message
-	c.Flash().Add("success", "{{.model}} was created successfully")
-	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
+  // Allocate an empty {{.model}}
+  {{.varSingular}} := &models.{{.model}}{}
+
+  // Bind {{.varSingular}} to the html form elements
+  if err := c.Bind({{.varSingular}}); err != nil {
+    return errors.WithStack(err)
+  }
+
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  // Validate the data from the html form
+  verrs, err := tx.ValidateAndCreate({{.varSingular}})
+  if err != nil {
+    return errors.WithStack(err)
+  }
+
+  if verrs.HasAny() {
+    // Make {{.varSingular}} available inside the html template
+    c.Set("{{.varSingular}}", {{.varSingular}})
+
+    // Make the errors available inside the html template
+    c.Set("errors", verrs)
+
+    // Render again the new.html template that the user can
+    // correct the input.
+    return c.Render(422, r.HTML("{{.filesPath}}/new.html"))
+  }
+
+  // If there are no errors set a success message
+  c.Flash().Add("success", "{{.model}} was created successfully")
+
+  // and redirect to the {{.under}} index page
+  return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
 }
 
 // Edit renders a edit form for a {{.singular}}. This function is
 // mapped to the path GET /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}/edit
 func (v {{.resourceName}}Resource) Edit(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	// Allocate an empty {{.model}}
-	{{.varSingular}} := &models.{{.model}}{}
-	err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id"))
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// Make {{.varSingular}} available inside the html template
-	c.Set("{{.varSingular}}", {{.varSingular}})
-	return c.Render(200, r.HTML("{{.filesPath}}/edit.html"))
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  // Allocate an empty {{.model}}
+  {{.varSingular}} := &models.{{.model}}{}
+
+  if err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id")); err != nil {
+    return c.Error(404, err)
+  }
+
+  // Make {{.varSingular}} available inside the html template
+  c.Set("{{.varSingular}}", {{.varSingular}})
+  return c.Render(200, r.HTML("{{.filesPath}}/edit.html"))
 }
 
 // Update changes a {{.singular}} in the DB. This function is mapped to
 // the path PUT /{{.under}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.resourceName}}Resource) Update(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	// Allocate an empty {{.model}}
-	{{.varSingular}} := &models.{{.model}}{}
-	err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id"))
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// Bind {{.model}} to the html form elements
-	err = c.Bind({{.varSingular}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	verrs, err := tx.ValidateAndUpdate({{.varSingular}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	if verrs.HasAny() {
-		// Make {{.varSingular}} available inside the html template
-		c.Set("{{.varSingular}}", {{.varSingular}})
-		// Make the errors available inside the html template
-		c.Set("errors", verrs)
-		// Render again the edit.html template that the user can
-		// correct the input.
-		return c.Render(422, r.HTML("{{.filesPath}}/edit.html"))
-	}
-	// If there are no errors set a success message
-	c.Flash().Add("success", "{{.model}} was updated successfully")
-	// and redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  // Allocate an empty {{.model}}
+  {{.varSingular}} := &models.{{.model}}{}
+
+  if err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id")); err != nil {
+    return c.Error(404, err)
+  }
+
+  // Bind {{.model}} to the html form elements
+  if err = c.Bind({{.varSingular}}); err != nil {
+    return errors.WithStack(err)
+  }
+
+  verrs, err := tx.ValidateAndUpdate({{.varSingular}})
+  if err != nil {
+    return errors.WithStack(err)
+  }
+
+  if verrs.HasAny() {
+    // Make {{.varSingular}} available inside the html template
+    c.Set("{{.varSingular}}", {{.varSingular}})
+
+    // Make the errors available inside the html template
+    c.Set("errors", verrs)
+
+    // Render again the edit.html template that the user can
+    // correct the input.
+    return c.Render(422, r.HTML("{{.filesPath}}/edit.html"))
+  }
+
+  // If there are no errors set a success message
+  c.Flash().Add("success", "{{.model}} was updated successfully")
+
+  // and redirect to the {{.under}} index page
+  return c.Redirect(302, "/{{.resourceURL}}/%s",{{.varSingular}}.ID)
 }
 
 // Destroy deletes a {{.singular}} from the DB. This function is mapped
 // to the path DELETE /{{.resourceURL}}/{{"{"}}{{.modelSingularUnder}}_id}
 func (v {{.resourceName}}Resource) Destroy(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx := c.Value("tx").(*pop.Connection)
-	// Allocate an empty {{.model}}
-	{{.varSingular}} := &models.{{.model}}{}
-	// To find the {{.model}} the parameter {{.modelSingularUnder}}_id is used.
-	err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id"))
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	err = tx.Destroy({{.varSingular}})
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	// If there are no errors set a flash message
-	c.Flash().Add("success", "{{.model}} was destroyed successfully")
-	// Redirect to the {{.under}} index page
-	return c.Redirect(302, "/{{.resourceURL}}")
+  // Get the DB connection from the context
+  tx := c.Value("tx").(*pop.Connection)
+
+  // Allocate an empty {{.model}}
+  {{.varSingular}} := &models.{{.model}}{}
+
+  // To find the {{.model}} the parameter {{.modelSingularUnder}}_id is used.
+  if err := tx.Find({{.varSingular}}, c.Param("{{.resourceSingularUnder}}_id")); err != nil {
+    return c.Error(404, err)
+  }
+
+  if err = tx.Destroy({{.varSingular}}); err != nil {
+    return errors.WithStack(err)
+  }
+
+  // If there are no errors set a flash message
+  c.Flash().Add("success", "{{.model}} was destroyed successfully")
+
+  // Redirect to the {{.under}} index page
+  return c.Redirect(302, "/{{.resourceURL}}")
 }
