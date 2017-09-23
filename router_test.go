@@ -75,6 +75,31 @@ func Test_Mount_Buffalo(t *testing.T) {
 	}
 }
 
+func Test_Mount_Buffalo_on_Group(t *testing.T) {
+	r := require.New(t)
+	a := testApp()
+	g := a.Group("/users")
+	g.Mount("/admin", otherTestApp())
+
+	table := map[string]string{
+		"/foo":     "GET",
+		"/bar":     "POST",
+		"/baz/baz": "DELETE",
+	}
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	for u, m := range table {
+		p := fmt.Sprintf("%s/%s", ts.URL, path.Join("users", "admin", u))
+		req, err := http.NewRequest(m, p, nil)
+		r.NoError(err)
+		res, err := http.DefaultClient.Do(req)
+		r.NoError(err)
+		b, _ := ioutil.ReadAll(res.Body)
+		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+	}
+}
+
 func muxer() http.Handler {
 	f := func(res http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
@@ -258,15 +283,15 @@ func Test_Router_Group_Middleware(t *testing.T) {
 
 	a := testApp()
 	a.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 1)
+	r.Len(a.Middleware.stack, 4)
 
 	g := a.Group("/api/v1")
-	r.Len(a.Middleware.stack, 1)
-	r.Len(g.Middleware.stack, 1)
+	r.Len(a.Middleware.stack, 4)
+	r.Len(g.Middleware.stack, 4)
 
 	g.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 1)
-	r.Len(g.Middleware.stack, 2)
+	r.Len(a.Middleware.stack, 4)
+	r.Len(g.Middleware.stack, 5)
 }
 
 func Test_Router_Redirect(t *testing.T) {
@@ -304,7 +329,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	}
 
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 
 	var carsResource Resource
 	carsResource = CarsResource{&BaseResource{}}
@@ -405,7 +430,7 @@ func Test_Resource(t *testing.T) {
 		},
 	}
 
-	a := Automatic(Options{})
+	a := New(Options{})
 	a.Resource("/users", &userResource{})
 	a.Resource("/api/v1/users", &userResource{})
 
@@ -474,14 +499,14 @@ func Test_buildRouteName(t *testing.T) {
 		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
-	a := Automatic(Options{})
+	a := New(Options{})
 
 	for input, result := range cases {
 		fResult := a.buildRouteName(input)
 		r.Equal(result, fResult, input)
 	}
 
-	a = Automatic(Options{Prefix: "/test"})
+	a = New(Options{Prefix: "/test"})
 	cases = map[string]string{
 		"/test":       "test",
 		"/test/users": "testUsers",
@@ -497,7 +522,7 @@ func Test_CatchAll_Route(t *testing.T) {
 	r := require.New(t)
 	rr := render.New(render.Options{})
 
-	a := Automatic(Options{})
+	a := New(Options{})
 	a.GET("/{name:.+}", func(c Context) error {
 		name := c.Param("name")
 		return c.Render(200, rr.String(name))

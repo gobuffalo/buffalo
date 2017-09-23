@@ -27,7 +27,7 @@ func Test_FlashAdd(t *testing.T) {
 
 func Test_FlashRender(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
@@ -46,7 +46,7 @@ func Test_FlashRender(t *testing.T) {
 
 func Test_FlashRenderEmpty(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
@@ -68,7 +68,7 @@ const errorsTPL = `
 
 func Test_FlashRenderEntireFlash(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
@@ -89,7 +89,7 @@ const keyTPL = `<%= for (k, v) in flash { %>
 
 func Test_FlashRenderCustomKey(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
@@ -104,7 +104,7 @@ func Test_FlashRenderCustomKey(t *testing.T) {
 
 func Test_FlashRenderCustomKeyNotDefined(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {

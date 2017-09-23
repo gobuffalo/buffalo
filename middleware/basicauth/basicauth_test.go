@@ -18,7 +18,7 @@ func app() *buffalo.App {
 	auth := func(c buffalo.Context, u, p string) (bool, error) {
 		return (u == "tester" && p == "pass123"), nil
 	}
-	a := buffalo.Automatic(buffalo.Options{})
+	a := buffalo.New(buffalo.Options{})
 	a.Use(basicauth.Middleware(auth))
 	a.GET("/", h)
 	return a

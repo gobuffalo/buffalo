@@ -14,7 +14,7 @@ func ctApp() *buffalo.App {
 	h := func(c buffalo.Context) error {
 		return c.Render(200, render.String(c.Request().Header.Get("Content-Type")))
 	}
-	a := buffalo.Automatic(buffalo.Options{})
+	a := buffalo.New(buffalo.Options{})
 	a.GET("/set", middleware.SetContentType("application/json")(h))
 	a.GET("/add", middleware.AddContentType("application/json")(h))
 	return a

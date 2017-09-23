@@ -1,6 +1,9 @@
 package middleware
 
 import (
+	"fmt"
+
+	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware/csrf"
 )
 
@@ -18,6 +21,9 @@ var (
 	ErrBadCSRFToken = csrf.ErrBadToken
 )
 
-// CSRF enable CSRF protection on routes using this middleware.
-// This middleware is adapted from gorilla/csrf
-var CSRF = csrf.Middleware
+// CSRF is deprecated, and will be removed in v0.10.0. Use csrf.New instead.
+var CSRF = func(next buffalo.Handler) buffalo.Handler {
+	warningMsg := "middleware.CSRF is deprecated, and will be removed in v0.10.0. Use csrf.New instead."
+	fmt.Println(warningMsg)
+	return csrf.Middleware(next)
+}

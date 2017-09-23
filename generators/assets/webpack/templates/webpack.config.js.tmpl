@@ -1,15 +1,18 @@
 var webpack = require("webpack");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
-  entry: [
+  entry: {
+    application: [
       "./assets/js/application.js",
       "./node_modules/jquery-ujs/src/rails.js",
       "./assets/css/application.scss"
-  ],
+    ]
+  },
   output: {
-    filename: "application.js",
+    filename: "[name].[hash].js",
     path: __dirname + "/public/assets"
   },
   plugins: [
@@ -17,7 +20,7 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery"
     }),
-    new ExtractTextPlugin("application.css"),
+    new ExtractTextPlugin("[name].[hash].css"),
     new CopyWebpackPlugin([{
       from: "./assets",
       to: ""
@@ -41,6 +44,9 @@ module.exports = {
         screw_ie8: true
       },
       comments: false
+    }),
+    new ManifestPlugin({
+      fileName: "manifest.json",
     })
   ],
   module: {
