@@ -135,6 +135,7 @@ func (a *App) Resource(p string, r Resource) *App {
 	g.PUT(path.Join(spath), r.Update)
 	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
+	g.Prefix = path.Join(g.Prefix, spath)
 	return g
 }
 

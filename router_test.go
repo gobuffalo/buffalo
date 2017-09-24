@@ -483,6 +483,72 @@ func (u *userResource) Destroy(c Context) error {
 	return c.Render(200, render.String(`destroy <%=params["user_id"] %>`))
 }
 
+func Test_ResourceOnResource(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+	ur := a.Resource("/users", &userResource{})
+	ur.Resource("/people", &userResource{})
+
+	ts := httptest.NewServer(a)
+	defer ts.Close()
+
+	type trs struct {
+		Method string
+		Path   string
+		Result string
+	}
+	tests := []trs{
+		{
+			Method: "GET",
+			Path:   "/people",
+			Result: "list",
+		},
+		{
+			Method: "GET",
+			Path:   "/people/new",
+			Result: "new",
+		},
+		{
+			Method: "GET",
+			Path:   "/people/1",
+			Result: "show 1",
+		},
+		{
+			Method: "GET",
+			Path:   "/people/1/edit",
+			Result: "edit 1",
+		},
+		{
+			Method: "POST",
+			Path:   "/people",
+			Result: "create",
+		},
+		{
+			Method: "PUT",
+			Path:   "/people/1",
+			Result: "update 1",
+		},
+		{
+			Method: "DELETE",
+			Path:   "/people/1",
+			Result: "destroy 1",
+		},
+	}
+	c := http.Client{}
+	for _, test := range tests {
+		u := ts.URL + path.Join("/users/42", test.Path)
+		req, err := http.NewRequest(test.Method, u, nil)
+		r.NoError(err)
+		res, err := c.Do(req)
+		r.NoError(err)
+		b, err := ioutil.ReadAll(res.Body)
+		r.NoError(err)
+		r.Equal(test.Result, string(b))
+	}
+
+}
+
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
