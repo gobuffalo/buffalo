@@ -80,7 +80,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	c.Response().WriteHeader(status)
 
 	msg := fmt.Sprintf("%+v", err)
-	ct := c.Request().Header.Get("Content-Type")
+	ct := c.Request().Header.Get("Accept")
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
 		err = json.NewEncoder(c.Response()).Encode(map[string]interface{}{
