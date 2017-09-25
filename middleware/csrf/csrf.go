@@ -13,6 +13,7 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/envy"
+	"github.com/markbates/going/defaults"
 )
 
 const (
@@ -68,7 +69,7 @@ var New = func(next buffalo.Handler) buffalo.Handler {
 
 		req := c.Request()
 
-		ct := req.Header.Get("Content-Type")
+		ct := defaults.String(req.Header.Get("Content-Type"), req.Header.Get("Accept"))
 		// ignore non-html requests
 		if ct != "" && !contains(htmlTypes, ct) {
 			return next(c)
