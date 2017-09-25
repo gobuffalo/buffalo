@@ -4,6 +4,7 @@ import (
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
+	"github.com/gobuffalo/x/httpx"
 	"github.com/markbates/going/randx"
 	"github.com/sirupsen/logrus"
 )
@@ -32,19 +33,20 @@ func RequestLoggerFunc(h Handler) Handler {
 		start := time.Now()
 		defer func() {
 			ws := c.Response().(*Response)
-			ct := c.Request().Header.Get("Content-Type")
+			req := c.Request()
+			ct := httpx.ContentType(req)
 			if ct != "" {
 				c.LogField("content_type", ct)
 			}
 			c.LogFields(logrus.Fields{
-				"method":     c.Request().Method,
-				"path":       c.Request().URL.String(),
+				"method":     req.Method,
+				"path":       req.URL.String(),
 				"duration":   time.Since(start),
 				"size":       ws.Size,
 				"human_size": humanize.Bytes(uint64(ws.Size)),
 				"status":     ws.Status,
 			})
-			c.Logger().Info(c.Request().URL.String())
+			c.Logger().Info(req.URL.String())
 		}()
 		return h(c)
 	}
