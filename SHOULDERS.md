@@ -170,6 +170,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/monoculum/formam](https://github.com/monoculum/formam)
 
+* [github.com/motemen/gore](https://github.com/motemen/gore)
+
 * [github.com/nicksnyder/go-i18n/i18n](https://github.com/nicksnyder/go-i18n/i18n)
 
 * [github.com/nicksnyder/go-i18n/i18n/bundle](https://github.com/nicksnyder/go-i18n/i18n/bundle)
@@ -211,4 +213,6 @@ Thank you to the following **GIANTS**:
 * [github.com/spf13/pflag](https://github.com/spf13/pflag)
 
 * [github.com/unrolled/secure](https://github.com/unrolled/secure)
+
+* [golang.org/x/tools/cmd/goimports](https://golang.org/x/tools/cmd/goimports)
 
