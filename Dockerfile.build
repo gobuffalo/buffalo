@@ -13,6 +13,8 @@ RUN apt-get install -y -q mysql-client
 RUN apt-get install -y vim
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN npm install -g --no-progress yarn
+RUN yarn config set yarn-offline-mirror /npm-packages-offline-cache
+RUN yarn config set yarn-offline-mirror-pruning true
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -22,8 +24,15 @@ ADD . .
 
 RUN go get -v -t ./...
 
+# cache yarn packages to an offline mirror so they're faster to load. hopefully.
+COPY ./generators/assets/webpack/templates/package.json.tmpl ./package.json
+RUN sed -i "s/{{.name}}/Buffalo/" package.json
+RUN yarn install --no-progress
+
 RUN buffalo version
 
 WORKDIR $GOPATH/src
+
+RUN ls -la /npm-packages-offline-cache
 
 EXPOSE 3000

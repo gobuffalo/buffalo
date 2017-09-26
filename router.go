@@ -71,8 +71,9 @@ a.Mount("/admin", muxer())
 $ curl -X DELETE http://localhost:3000/admin/baz/baz
 */
 func (a *App) Mount(p string, h http.Handler) {
+	prefix := path.Join(a.Prefix, p)
 	path := path.Join(p, "{path:.+}")
-	a.ANY(path, WrapHandler(http.StripPrefix(p, h)))
+	a.ANY(path, WrapHandler(http.StripPrefix(prefix, h)))
 }
 
 // ServeFiles maps an path to a directory on disk to serve static files.
@@ -134,6 +135,7 @@ func (a *App) Resource(p string, r Resource) *App {
 	g.PUT(path.Join(spath), r.Update)
 	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
+	g.Prefix = path.Join(g.Prefix, spath)
 	return g
 }
 

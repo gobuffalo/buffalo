@@ -30,7 +30,7 @@ func basicContext() DefaultContext {
 
 func Test_DefaultContext_Redirect(t *testing.T) {
 	r := require.New(t)
-	a := Automatic(Options{})
+	a := New(Options{})
 	u := "/foo?bar=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback%2Ffacebook"
 	a.GET("/", func(c Context) error {
 		return c.Redirect(302, u)
@@ -230,7 +230,7 @@ func Test_DefaultContext_Websocket(t *testing.T) {
 		Received  time.Time `json:"received"`
 	}
 
-	a := Automatic(Options{})
+	a := New(Options{})
 	a.GET("/socket", func(c Context) error {
 		conn, err := c.Websocket()
 		if err != nil {

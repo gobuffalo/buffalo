@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/x/httpx"
 	"github.com/pkg/errors"
 )
 
@@ -80,7 +81,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	c.Response().WriteHeader(status)
 
 	msg := fmt.Sprintf("%+v", err)
-	ct := c.Request().Header.Get("Content-Type")
+	ct := httpx.ContentType(c.Request())
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
 		err = json.NewEncoder(c.Response()).Encode(map[string]interface{}{
@@ -90,8 +91,13 @@ func defaultErrorHandler(status int, err error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 	default:
 		err := c.Request().ParseForm()
+		routes := c.Value("routes")
+		if cd, ok := c.(*DefaultContext); ok {
+			delete(cd.data, "app")
+			delete(cd.data, "routes")
+		}
 		data := map[string]interface{}{
-			"routes":      c.Value("routes"),
+			"routes":      routes,
 			"error":       msg,
 			"status":      status,
 			"data":        c.Data(),

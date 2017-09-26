@@ -10,13 +10,16 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/envy"
 	pack "github.com/gobuffalo/packr/builder"
 	"github.com/gobuffalo/plush"
+	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -125,6 +128,9 @@ func (b *builder) buildDatabase() error {
 func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
 	p := pack.New(context.Background(), b.workDir)
+	if extractAssets {
+		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
+	}
 	return p.Run()
 }
 
@@ -315,7 +321,6 @@ func (b *builder) run() error {
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return b.buildBin()
 	}
 
 	err = b.buildPackrEmbedded()
@@ -404,8 +409,18 @@ var buildCmd = &cobra.Command{
 		if buildTags != "" {
 			b.buildTags = append(b.buildTags, buildTags)
 		}
-		defer b.cleanupBuild()
 
+		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt, syscall.SIGKILL, syscall.SIGTERM)
+		go func() {
+			<-ctx.Done()
+			if ctx.Err() == context.Canceled {
+				fmt.Println("~~~BUILD CANCELLED ~~~")
+				b.cleanupBuild()
+			}
+		}()
+		defer cancel()
+
+		defer b.cleanupBuild()
 		b.cleanupTarget()
 		return b.run()
 	},
@@ -418,7 +433,7 @@ func init() {
 	pwd, _ := os.Getwd()
 	output := filepath.Join("bin", filepath.Base(pwd))
 
-	if os.Getenv("GOOS") == "windows" {
+	if runtime.GOOS == "windows" {
 		output += ".exe"
 	}
 
@@ -468,7 +483,11 @@ func main() {
 	case "version":
 		printVersion()
 	case "task", "t", "tasks":
-		err := grift.Run(args[2], grift.NewContext(args[2]))
+		c := grift.NewContext(args[2])
+		if len(args) > 2 {
+			c.Args = args[3:]
+		}
+		err := grift.Run(args[2], c)
 		if err != nil {
 			log.Fatal(err)
 		}

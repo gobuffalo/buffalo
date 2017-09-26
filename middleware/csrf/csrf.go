@@ -5,11 +5,15 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/envy"
+	"github.com/markbates/going/defaults"
 )
 
 const (
@@ -44,13 +48,28 @@ var (
 	ErrBadToken = errors.New("CSRF token invalid")
 )
 
-// Middleware enable CSRF protection on routes using this middleware.
-// This middleware is adapted from gorilla/csrf
+// Middleware is deprecated, and will be removed in v0.10.0. Use csrf.New instead.
 var Middleware = func(next buffalo.Handler) buffalo.Handler {
+	warningMsg := "csrf.Middleware is deprecated, and will be removed in v0.10.0. Use csrf.New instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
+	return New(next)
+}
+
+// New enable CSRF protection on routes using this middleware.
+// This middleware is adapted from gorilla/csrf
+var New = func(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
+		// don't run in test mode
+		if envy.Get("GO_ENV", "development") == "test" {
+			return next(c)
+		}
+
 		req := c.Request()
 
-		ct := req.Header.Get("Content-Type")
+		ct := defaults.String(req.Header.Get("Content-Type"), req.Header.Get("Accept"))
 		// ignore non-html requests
 		if ct != "" && !contains(htmlTypes, ct) {
 			return next(c)

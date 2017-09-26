@@ -40,6 +40,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	session := a.getSession(req, ws)
 
 	contextData := map[string]interface{}{
+		"app":           a,
 		"env":           a.Env,
 		"routes":        a.Routes(),
 		"current_route": info,
