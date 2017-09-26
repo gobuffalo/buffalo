@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/x/httpx"
 	"github.com/markbates/pop/nulls"
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
@@ -73,16 +74,14 @@ func Register(contentType string, fn Binder) {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "https://github.com/monoculum/formam".
 func Exec(req *http.Request, value interface{}) error {
-	ct := strings.ToLower(req.Header.Get("Content-Type"))
-	if ct != "" {
-		cts := strings.Split(ct, ";")
-		c := cts[0]
-		if b, ok := binders[strings.TrimSpace(c)]; ok {
-			return b(req, value)
-		}
-		return errors.Errorf("could not find a binder for %s", c)
+	ct := httpx.ContentType(req)
+	if ct == "" {
+		return errors.New("blank content type")
 	}
-	return errors.New("blank content type")
+	if b, ok := binders[ct]; ok {
+		return b(req, value)
+	}
+	return errors.Errorf("could not find a binder for %s", ct)
 }
 
 func init() {

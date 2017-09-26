@@ -3,8 +3,10 @@ package buffalo
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -118,9 +120,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.ServeHTTP(ws, r)
 }
 
-// New returns a new instance of App, without any frills
-// or thrills. Most people will want to use Automatic which
-// adds some sane, and useful, defaults.
+// New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 
@@ -142,26 +142,26 @@ func New(opts Options) *App {
 		a.ErrorHandlers.Get(404)(404, err, c)
 	})
 
-	return a
-}
-
-// Automatic returns a new instance of App with sane defaults,
-// some not so sane defaults, and a few bits and pieces to make
-// your life that much easier. You'll want to use this almost
-// all of the time to build your applications.
-//
-// https://www.youtube.com/watch?v=BKbOplYmjZM
-func Automatic(opts Options) *App {
-	opts = optionsWithDefaults(opts)
-
-	a := New(opts)
-
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
+	a.Use(sessionSaver)
+
 	return a
+}
+
+// Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead.
+func Automatic(opts Options) *App {
+	warningMsg := "Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
+
+	log.Println(warningMsg)
+	return New(opts)
 }
 
 func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) bool {

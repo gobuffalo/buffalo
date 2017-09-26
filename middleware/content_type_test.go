@@ -6,15 +6,16 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/x/httpx"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
 func ctApp() *buffalo.App {
 	h := func(c buffalo.Context) error {
-		return c.Render(200, render.String(c.Request().Header.Get("Content-Type")))
+		return c.Render(200, render.String(httpx.ContentType(c.Request())))
 	}
-	a := buffalo.Automatic(buffalo.Options{})
+	a := buffalo.New(buffalo.Options{})
 	a.GET("/set", middleware.SetContentType("application/json")(h))
 	a.GET("/add", middleware.AddContentType("application/json")(h))
 	return a

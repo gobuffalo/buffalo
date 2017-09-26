@@ -1,18 +1,16 @@
 package middleware
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/buffalo"
-	"github.com/pkg/errors"
 )
 
-// SessionSaver will automatically save a session if the
-// request was successful.
+// SessionSaver is deprecated, and will be removed in v0.10.0. This now happens automatically. This middleware is no longer required.
 func SessionSaver(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-		err := next(c)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		return c.Session().Save()
+		warningMsg := "SessionSaver is deprecated, and will be removed in v0.10.0. This now happens automatically. This middleware is no longer required."
+		fmt.Println(warningMsg)
+		return next(c)
 	}
 }

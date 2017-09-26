@@ -82,6 +82,9 @@ func findSchema() io.Reader {
 
 func testRunner(args []string) error {
 	cmd := exec.Command(envy.Get("GO_BIN", "go"), "test", "-p", "1")
+	if _, err := exec.LookPath("gotest"); err == nil {
+		cmd = exec.Command("gotest", "-p", "1")
+	}
 	cmd.Args = append(cmd.Args, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout

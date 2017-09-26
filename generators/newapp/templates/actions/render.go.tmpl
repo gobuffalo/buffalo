@@ -1,11 +1,16 @@
 package actions
 
 import (
+  {{ if .asWeb -}}
   "github.com/gobuffalo/packr"
+  {{ end -}}
   "github.com/gobuffalo/buffalo/render"
 )
 
 var r *render.Engine
+{{ if .asWeb -}}
+var assetsBox = packr.NewBox("../public/assets")
+{{ end -}}
 
 func init() {
   r = render.New(render.Options{
@@ -15,7 +20,8 @@ func init() {
 
       // Box containing all of the templates:
       TemplatesBox: packr.NewBox("../templates"),
-      
+      AssetsBox:    assetsBox,
+
       // Add template helpers here:
       Helpers: render.Helpers{},
     {{ end -}}

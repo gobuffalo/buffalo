@@ -12,7 +12,7 @@ import (
 )
 
 func app() *buffalo.App {
-	app := buffalo.Automatic(buffalo.Options{})
+	app := buffalo.New(buffalo.Options{})
 
 	r := render.New(render.Options{
 		TemplatesBox: packr.NewBox("./templates"),

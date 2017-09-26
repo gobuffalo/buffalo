@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
+	"github.com/pkg/errors"
 )
 
 // Session wraps the "github.com/gorilla/sessions" API
@@ -53,10 +54,23 @@ func (s *Session) Clear() {
 
 // Get a session using a request and response.
 func (a *App) getSession(r *http.Request, w http.ResponseWriter) *Session {
+	if a.root != nil {
+		return a.root.getSession(r, w)
+	}
 	session, _ := a.SessionStore.Get(r, a.SessionName)
 	return &Session{
 		Session: session,
 		req:     r,
 		res:     w,
+	}
+}
+
+func sessionSaver(next Handler) Handler {
+	return func(c Context) error {
+		err := next(c)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return c.Session().Save()
 	}
 }

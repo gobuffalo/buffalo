@@ -146,21 +146,21 @@ services:
 {{ end -}}
 
 before_script:
-	{{ if eq .dbType "postgres" -}}
-	- psql -c 'create database {{.name}}_test;' -U postgres
-	{{ end -}}
-	- mkdir -p $TRAVIS_BUILD_DIR/public/assets
+{{ if eq .dbType "postgres" -}}
+  - psql -c 'create database {{.name}}_test;' -U postgres
+{{ end -}}
+  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go_import_path: {{.packagePath}}
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo
-	{{ if .withDep -}}
+{{ if .withDep -}}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
-	{{ else -}}
-	- go get $(go list ./... | grep -v /vendor/)
-	{{ end -}}
+{{ else -}}
+  - go get $(go list ./... | grep -v /vendor/)
+{{ end -}}
 
 script: buffalo test
 `

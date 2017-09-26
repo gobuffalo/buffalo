@@ -11,7 +11,7 @@ import (
 func Test_App_Dev_NotFound(t *testing.T) {
 	r := require.New(t)
 
-	a := Automatic(Options{})
+	a := New(Options{})
 	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
@@ -27,7 +27,7 @@ func Test_App_Dev_NotFound(t *testing.T) {
 func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	r := require.New(t)
 
-	a := Automatic(Options{})
+	a := New(Options{})
 	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
