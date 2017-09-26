@@ -12,6 +12,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://github.com/fatih/color)
 
+* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://github.com/fatih/color/vendor/github.com/mattn/go-colorable)
+
+* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://github.com/fatih/color/vendor/github.com/mattn/go-isatty)
+
 * [github.com/fatih/structs](https://github.com/fatih/structs)
 
 * [github.com/fsnotify/fsnotify](https://github.com/fsnotify/fsnotify)
@@ -20,7 +24,11 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/envy](https://github.com/gobuffalo/envy)
 
+* [github.com/gobuffalo/makr](https://github.com/gobuffalo/makr)
+
 * [github.com/gobuffalo/packr](https://github.com/gobuffalo/packr)
+
+* [github.com/gobuffalo/packr/builder](https://github.com/gobuffalo/packr/builder)
 
 * [github.com/gobuffalo/plush](https://github.com/gobuffalo/plush)
 
@@ -37,6 +45,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/form)
 
 * [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/form/bootstrap)
+
+* [github.com/gobuffalo/x/httpx](https://github.com/gobuffalo/x/httpx)
 
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
@@ -58,13 +68,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
 
+* [github.com/markbates/deplist](https://github.com/markbates/deplist)
+
 * [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
 
 * [github.com/markbates/going/randx](https://github.com/markbates/going/randx)
 
 * [github.com/markbates/going/wait](https://github.com/markbates/going/wait)
 
-* [github.com/markbates/grift](https://github.com/markbates/grift)
+* [github.com/markbates/grift/cmd](https://github.com/markbates/grift/cmd)
 
 * [github.com/markbates/grift/grift](https://github.com/markbates/grift/grift)
 
@@ -80,7 +92,11 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
 
-* [github.com/markbates/refresh](https://github.com/markbates/refresh)
+* [github.com/markbates/pop/soda/cmd](https://github.com/markbates/pop/soda/cmd)
+
+* [github.com/markbates/pop/soda/cmd/generate](https://github.com/markbates/pop/soda/cmd/generate)
+
+* [github.com/markbates/pop/soda/cmd/schema](https://github.com/markbates/pop/soda/cmd/schema)
 
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
 
@@ -154,7 +170,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/monoculum/formam](https://github.com/monoculum/formam)
 
-* [github.com/motemen/gore](https://github.com/motemen/gore)
+* [github.com/nicksnyder/go-i18n/i18n](https://github.com/nicksnyder/go-i18n/i18n)
+
+* [github.com/nicksnyder/go-i18n/i18n/bundle](https://github.com/nicksnyder/go-i18n/i18n/bundle)
+
+* [github.com/nicksnyder/go-i18n/i18n/language](https://github.com/nicksnyder/go-i18n/i18n/language)
+
+* [github.com/nicksnyder/go-i18n/i18n/translation](https://github.com/nicksnyder/go-i18n/i18n/translation)
+
+* [github.com/pelletier/go-toml](https://github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
@@ -184,5 +208,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/spf13/cobra](https://github.com/spf13/cobra)
 
-* [golang.org/x/tools/cmd/goimports](https://golang.org/x/tools/cmd/goimports)
+* [github.com/spf13/pflag](https://github.com/spf13/pflag)
+
+* [github.com/unrolled/secure](https://github.com/unrolled/secure)
 
