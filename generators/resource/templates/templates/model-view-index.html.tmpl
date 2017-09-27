@@ -1,7 +1,9 @@
-<h1>{{.modelPlural}}</h1>
-<p>
-  <a href="<%= new{{.routeName}}Path() %>" class="btn btn-primary">Create New {{.model}}</a>
-</p>
+<div class="page-header">
+  <h1>{{.modelPlural}}</h1>
+</div>
+<ul class="list-unstyled list-inline">
+  <li><a href="<%= new{{.routeName}}Path() %>" class="btn btn-primary">Create New {{.model}}</a></li>
+</ul>
 
 <table class="table table-striped">
   <thead>

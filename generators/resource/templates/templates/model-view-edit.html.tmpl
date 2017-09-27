@@ -1,4 +1,6 @@
-<h1>Edit {{.model}}</h1>
+<div class="page-header">
+  <h1>Edit {{.model}}</h1>
+</div>
 
 <%= form_for({{.varSingular}}, {action: {{.routeFirstDownSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID }), method: "PUT"}) { %>
   <%= partial("{{.filesPath}}/form.html") %>

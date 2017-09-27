@@ -1,4 +1,6 @@
-<h1>New {{.model}}</h1>
+<div class="page-header">
+  <h1>New {{.model}}</h1>
+</div>
 
 <%= form_for({{.varSingular}}, {action: {{.routeFirstDown}}Path(), method: "POST"}) { %>
   <%= partial("{{.filesPath}}/form.html") %>
