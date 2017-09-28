@@ -30,6 +30,7 @@ var hasDB bool
 var ldflags string
 var buildTags string
 var static bool
+var compress bool
 
 type builder struct {
 	cleanup      []string
@@ -128,6 +129,7 @@ func (b *builder) buildDatabase() error {
 func (b *builder) buildPackrEmbedded() error {
 	defer os.Chdir(b.workDir)
 	p := pack.New(context.Background(), b.workDir)
+	p.Compress = compress
 	if extractAssets {
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
 	}
@@ -441,6 +443,7 @@ func init() {
 	buildCmd.Flags().StringVarP(&buildTags, "tags", "t", "", "compile with specific build tags")
 	buildCmd.Flags().BoolVarP(&extractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	buildCmd.Flags().BoolVarP(&static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"' (USE FOR CGO)")
+	buildCmd.Flags().BoolVarP(&compress, "compress", "c", true, "compress static files in the binary")
 	buildCmd.Flags().StringVar(&ldflags, "ldflags", "", "set any ldflags to be passed to the go build")
 }
 
