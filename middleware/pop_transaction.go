@@ -3,6 +3,8 @@ package middleware
 import (
 	"time"
 
+	"github.com/pkg/errors"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/markbates/pop"
 )
@@ -17,7 +19,7 @@ var PopTransaction = func(db *pop.Connection) buffalo.MiddlewareFunc {
 		return func(c buffalo.Context) error {
 			// wrap all requests in a transaction and set the length
 			// of time doing things in the db to the log.
-			return db.Transaction(func(tx *pop.Connection) error {
+			err := db.Transaction(func(tx *pop.Connection) error {
 				start := tx.Elapsed
 				defer func() {
 					finished := tx.Elapsed
@@ -25,8 +27,22 @@ var PopTransaction = func(db *pop.Connection) buffalo.MiddlewareFunc {
 					c.LogField("db", elapsed)
 				}()
 				c.Set("tx", tx)
-				return h(c)
+				if err := h(c); err != nil {
+					return err
+				}
+				if res, ok := c.Response().(*buffalo.Response); ok {
+					if res.Status < 200 || res.Status >= 400 {
+						return errNonSuccess
+					}
+				}
+				return nil
 			})
+			if err != nil && errors.Cause(err) != errNonSuccess {
+				return err
+			}
+			return nil
 		}
 	}
 }
+
+var errNonSuccess = errors.New("non success status code")
