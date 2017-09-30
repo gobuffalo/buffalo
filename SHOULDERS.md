@@ -24,19 +24,19 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/plush](https://github.com/gobuffalo/plush)
 
-* [github.com/gobuffalo/plush/ast](https://github.com/gobuffalo/plush/ast)
+* [github.com/gobuffalo/plush/ast](https://github.com/gobuffalo/plush/tree/master/ast)
 
-* [github.com/gobuffalo/plush/lexer](https://github.com/gobuffalo/plush/lexer)
+* [github.com/gobuffalo/plush/lexer](https://github.com/gobuffalo/plush/tree/master/lexer)
 
-* [github.com/gobuffalo/plush/parser](https://github.com/gobuffalo/plush/parser)
+* [github.com/gobuffalo/plush/parser](https://github.com/gobuffalo/plush/tree/master/parser)
 
-* [github.com/gobuffalo/plush/token](https://github.com/gobuffalo/plush/token)
+* [github.com/gobuffalo/plush/token](https://github.com/gobuffalo/plush/tree/master/token)
 
 * [github.com/gobuffalo/tags](https://github.com/gobuffalo/tags)
 
-* [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/form)
+* [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/tree/master/form)
 
-* [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/form/bootstrap)
+* [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/tree/master/form/bootstrap)
 
 * [github.com/gorilla/context](https://github.com/gorilla/context)
 
@@ -50,101 +50,101 @@ Thank you to the following **GIANTS**:
 
 * [github.com/jmoiron/sqlx](https://github.com/jmoiron/sqlx)
 
-* [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/reflectx)
+* [github.com/jmoiron/sqlx/reflectx](https://github.com/jmoiron/sqlx/tree/master/reflectx)
 
 * [github.com/joho/godotenv](https://github.com/joho/godotenv)
 
 * [github.com/lib/pq](https://github.com/lib/pq)
 
-* [github.com/lib/pq/oid](https://github.com/lib/pq/oid)
+* [github.com/lib/pq/oid](https://github.com/lib/pq/tree/master/oid)
 
-* [github.com/markbates/going/defaults](https://github.com/markbates/going/defaults)
+* [github.com/markbates/going/defaults](https://github.com/markbates/going/tree/master/defaults)
 
-* [github.com/markbates/going/randx](https://github.com/markbates/going/randx)
+* [github.com/markbates/going/randx](https://github.com/markbates/going/tree/master/randx)
 
-* [github.com/markbates/going/wait](https://github.com/markbates/going/wait)
+* [github.com/markbates/going/wait](https://github.com/markbates/going/tree/master/wait)
 
 * [github.com/markbates/grift](https://github.com/markbates/grift)
 
-* [github.com/markbates/grift/grift](https://github.com/markbates/grift/grift)
+* [github.com/markbates/grift/grift](https://github.com/markbates/grift/tree/master/grift)
 
 * [github.com/markbates/inflect](https://github.com/markbates/inflect)
 
 * [github.com/markbates/pop](https://github.com/markbates/pop)
 
-* [github.com/markbates/pop/columns](https://github.com/markbates/pop/columns)
+* [github.com/markbates/pop/columns](https://github.com/markbates/pop/tree/master/columns)
 
-* [github.com/markbates/pop/fizz](https://github.com/markbates/pop/fizz)
+* [github.com/markbates/pop/fizz](https://github.com/markbates/pop/tree/master/fizz)
 
-* [github.com/markbates/pop/fizz/translators](https://github.com/markbates/pop/fizz/translators)
+* [github.com/markbates/pop/fizz/translators](https://github.com/markbates/pop/tree/master/fizz/translators)
 
-* [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
+* [github.com/markbates/pop/nulls](https://github.com/markbates/pop/tree/master/nulls)
 
 * [github.com/markbates/refresh](https://github.com/markbates/refresh)
 
-* [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
+* [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/tree/master/refresh)
 
-* [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/refresh/web)
+* [github.com/markbates/refresh/refresh/web](https://github.com/markbates/refresh/tree/master/refresh/web)
 
 * [github.com/markbates/sigtx](https://github.com/markbates/sigtx)
 
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 
-* [github.com/markbates/validate/validators](https://github.com/markbates/validate/validators)
+* [github.com/markbates/validate/validators](https://github.com/markbates/validate/tree/master/validators)
 
-* [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
+* [github.com/mattn/anko/ast](https://github.com/mattn/anko/tree/master/ast)
 
-* [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
+* [github.com/mattn/anko/builtins](https://github.com/mattn/anko/tree/master/builtins)
 
-* [github.com/mattn/anko/builtins/encoding/json](https://github.com/mattn/anko/builtins/encoding/json)
+* [github.com/mattn/anko/builtins/encoding/json](https://github.com/mattn/anko/tree/master/builtins/encoding/json)
 
-* [github.com/mattn/anko/builtins/errors](https://github.com/mattn/anko/builtins/errors)
+* [github.com/mattn/anko/builtins/errors](https://github.com/mattn/anko/builtins/tree/master/errors)
 
-* [github.com/mattn/anko/builtins/flag](https://github.com/mattn/anko/builtins/flag)
+* [github.com/mattn/anko/builtins/flag](https://github.com/mattn/anko/builtins/tree/master/flag)
 
-* [github.com/mattn/anko/builtins/fmt](https://github.com/mattn/anko/builtins/fmt)
+* [github.com/mattn/anko/builtins/fmt](https://github.com/mattn/anko/builtins/tree/master/fmt)
 
-* [github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext](https://github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext)
+* [github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext](https://github.com/mattn/anko/tree/master/builtins/github.com/daviddengcn/go-colortext)
 
-* [github.com/mattn/anko/builtins/io](https://github.com/mattn/anko/builtins/io)
+* [github.com/mattn/anko/builtins/io](https://github.com/mattn/anko/tree/master/builtins/io)
 
-* [github.com/mattn/anko/builtins/io/ioutil](https://github.com/mattn/anko/builtins/io/ioutil)
+* [github.com/mattn/anko/builtins/io/ioutil](https://github.com/mattn/anko/tree/master/builtins/io/ioutil)
 
-* [github.com/mattn/anko/builtins/math](https://github.com/mattn/anko/builtins/math)
+* [github.com/mattn/anko/builtins/math](https://github.com/mattn/anko/tree/master/builtins/math)
 
-* [github.com/mattn/anko/builtins/math/big](https://github.com/mattn/anko/builtins/math/big)
+* [github.com/mattn/anko/builtins/math/big](https://github.com/mattn/anko/tree/master/builtins/math/big)
 
-* [github.com/mattn/anko/builtins/math/rand](https://github.com/mattn/anko/builtins/math/rand)
+* [github.com/mattn/anko/builtins/math/rand](https://github.com/mattn/anko/tree/master/builtins/math/rand)
 
-* [github.com/mattn/anko/builtins/net](https://github.com/mattn/anko/builtins/net)
+* [github.com/mattn/anko/builtins/net](https://github.com/mattn/anko/tree/master/builtins/net)
 
-* [github.com/mattn/anko/builtins/net/http](https://github.com/mattn/anko/builtins/net/http)
+* [github.com/mattn/anko/builtins/net/http](https://github.com/mattn/anko/tree/master/builtins/net/http)
 
-* [github.com/mattn/anko/builtins/net/url](https://github.com/mattn/anko/builtins/net/url)
+* [github.com/mattn/anko/builtins/net/url](https://github.com/mattn/anko/tree/master/builtins/net/url)
 
-* [github.com/mattn/anko/builtins/os](https://github.com/mattn/anko/builtins/os)
+* [github.com/mattn/anko/builtins/os](https://github.com/mattn/anko/tree/master/builtins/os)
 
-* [github.com/mattn/anko/builtins/os/exec](https://github.com/mattn/anko/builtins/os/exec)
+* [github.com/mattn/anko/builtins/os/exec](https://github.com/mattn/anko/tree/master/builtins/os/exec)
 
-* [github.com/mattn/anko/builtins/os/signal](https://github.com/mattn/anko/builtins/os/signal)
+* [github.com/mattn/anko/builtins/os/signal](https://github.com/mattn/anko/tree/master/builtins/os/signal)
 
-* [github.com/mattn/anko/builtins/path](https://github.com/mattn/anko/builtins/path)
+* [github.com/mattn/anko/builtins/path](https://github.com/mattn/anko/tree/master/builtins/path)
 
-* [github.com/mattn/anko/builtins/path/filepath](https://github.com/mattn/anko/builtins/path/filepath)
+* [github.com/mattn/anko/builtins/path/filepath](https://github.com/mattn/anko/tree/master/builtins/path/filepath)
 
-* [github.com/mattn/anko/builtins/regexp](https://github.com/mattn/anko/builtins/regexp)
+* [github.com/mattn/anko/builtins/regexp](https://github.com/mattn/anko/tree/master/builtins/regexp)
 
-* [github.com/mattn/anko/builtins/runtime](https://github.com/mattn/anko/builtins/runtime)
+* [github.com/mattn/anko/builtins/runtime](https://github.com/mattn/anko/tree/master/builtins/runtime)
 
-* [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/builtins/sort)
+* [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/tree/master/builtins/sort)
 
-* [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/builtins/strings)
+* [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/tree/master/builtins/strings)
 
-* [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/builtins/time)
+* [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/tree/master/builtins/time)
 
-* [github.com/mattn/anko/parser](https://github.com/mattn/anko/parser)
+* [github.com/mattn/anko/parser](https://github.com/mattn/anko/tree/master/parser)
 
-* [github.com/mattn/anko/vm](https://github.com/mattn/anko/vm)
+* [github.com/mattn/anko/vm](https://github.com/mattn/anko/tree/master/vm)
 
 * [github.com/mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
 
@@ -164,7 +164,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/serenize/snaker](https://github.com/serenize/snaker)
 
-* [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
+* [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/tree/master/diffmatchpatch)
 
 * [github.com/shurcooL/github_flavored_markdown](https://github.com/shurcooL/github_flavored_markdown)
 
