@@ -1,5 +1,59 @@
 # Change Log
 
+## [v0.9.5](https://github.com/gobuffalo/buffalo/tree/v0.9.5) (2017-09-30)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.4...v0.9.5)
+
+**Fixed bugs:**
+
+- Templates and migrations are bundled in binary with the `-e` flag [\#567](https://github.com/gobuffalo/buffalo/issues/567)
+
+**Closed issues:**
+
+- upgrade build causes could not find folder for box:\(projectpath\)/actions/templates [\#660](https://github.com/gobuffalo/buffalo/issues/660)
+- Mounting a resource on a resource produces bad routes [\#656](https://github.com/gobuffalo/buffalo/issues/656)
+- Using Goth for login/password auth? [\#652](https://github.com/gobuffalo/buffalo/issues/652)
+- CSS for error pages is broken in v0.9.5 [\#650](https://github.com/gobuffalo/buffalo/issues/650)
+- Import error generating new app as API only [\#648](https://github.com/gobuffalo/buffalo/issues/648)
+- Any simple way to use custom layout? [\#640](https://github.com/gobuffalo/buffalo/issues/640)
+- Need an invite to slack channel? [\#639](https://github.com/gobuffalo/buffalo/issues/639)
+- building linux binaries from the Mac with sqlite [\#638](https://github.com/gobuffalo/buffalo/issues/638)
+- mount at group router not work [\#637](https://github.com/gobuffalo/buffalo/issues/637)
+- Duplicate Session Set-Cookie Header [\#631](https://github.com/gobuffalo/buffalo/issues/631)
+- Error: you need to be inside your buffalo project path to run this command [\#629](https://github.com/gobuffalo/buffalo/issues/629)
+- A few questions [\#628](https://github.com/gobuffalo/buffalo/issues/628)
+- deployed binary cannot pass in argument to task [\#625](https://github.com/gobuffalo/buffalo/issues/625)
+- Build on Windows produces incorrect extension [\#623](https://github.com/gobuffalo/buffalo/issues/623)
+- `buffalo dev` code auto rebuild doesn't work with NFS [\#620](https://github.com/gobuffalo/buffalo/issues/620)
+
+**Merged pull requests:**
+
+- Fix links in SHOULDERS.md [\#669](https://github.com/gobuffalo/buffalo/pull/669) ([jorinvo](https://github.com/jorinvo))
+- PopTransaction middleware should roll back if there is a non success status code [\#668](https://github.com/gobuffalo/buffalo/pull/668) ([markbates](https://github.com/markbates))
+- Fixes default error pages showing with broken style. [\#667](https://github.com/gobuffalo/buffalo/pull/667) ([paganotoni](https://github.com/paganotoni))
+- added support for compressing assets in binaries [\#666](https://github.com/gobuffalo/buffalo/pull/666) ([markbates](https://github.com/markbates))
+- cleaned up the generated resource html a bit [\#665](https://github.com/gobuffalo/buffalo/pull/665) ([markbates](https://github.com/markbates))
+- Added go-i18n to the giants [\#662](https://github.com/gobuffalo/buffalo/pull/662) ([fdonzello](https://github.com/fdonzello))
+- get the content type using the httpx package [\#661](https://github.com/gobuffalo/buffalo/pull/661) ([markbates](https://github.com/markbates))
+- Mounting a resource on a resource produces bad routes fixes \#656 [\#657](https://github.com/gobuffalo/buffalo/pull/657) ([markbates](https://github.com/markbates))
+- fix: remove mixed tabs and spaces from .travis.yml template [\#655](https://github.com/gobuffalo/buffalo/pull/655) ([DanielHeckrath](https://github.com/DanielHeckrath))
+- Resource error changes [\#654](https://github.com/gobuffalo/buffalo/pull/654) ([markbates](https://github.com/markbates))
+- don't make an assetsBox if in api mode [\#653](https://github.com/gobuffalo/buffalo/pull/653) ([markbates](https://github.com/markbates))
+- make the app available to the context [\#651](https://github.com/gobuffalo/buffalo/pull/651) ([markbates](https://github.com/markbates))
+- Fix API mode import errors [\#649](https://github.com/gobuffalo/buffalo/pull/649) ([tsmith1024](https://github.com/tsmith1024))
+- Templates and migrations are bundled in binary with the `-e` flag fix… [\#646](https://github.com/gobuffalo/buffalo/pull/646) ([markbates](https://github.com/markbates))
+- changed where the assetsBox is initialized [\#645](https://github.com/gobuffalo/buffalo/pull/645) ([markbates](https://github.com/markbates))
+- sessions lookups should happen up the app parent chain [\#644](https://github.com/gobuffalo/buffalo/pull/644) ([markbates](https://github.com/markbates))
+- mount at group router not work fixes \#637 [\#641](https://github.com/gobuffalo/buffalo/pull/641) ([markbates](https://github.com/markbates))
+- deployed binary cannot pass in argument to task fixes \#625 [\#636](https://github.com/gobuffalo/buffalo/pull/636) ([markbates](https://github.com/markbates))
+- Feature assets fingerprint [\#635](https://github.com/gobuffalo/buffalo/pull/635) ([paganotoni](https://github.com/paganotoni))
+- do a better job of capturing signals for buffalo dev [\#634](https://github.com/gobuffalo/buffalo/pull/634) ([markbates](https://github.com/markbates))
+- middleware.SessionSaver is now built-in. [\#633](https://github.com/gobuffalo/buffalo/pull/633) ([markbates](https://github.com/markbates))
+- added deprecation notices around middleware.CSRF as well as prevent the CSRF middleware from running in test mode [\#632](https://github.com/gobuffalo/buffalo/pull/632) ([markbates](https://github.com/markbates))
+- gracefully capture and handle signal's during buffalo build [\#630](https://github.com/gobuffalo/buffalo/pull/630) ([markbates](https://github.com/markbates))
+- deprecated "Automatic" in favor of just "New". [\#627](https://github.com/gobuffalo/buffalo/pull/627) ([markbates](https://github.com/markbates))
+- cache yarn packages in the base docker image. also made the list of [\#626](https://github.com/gobuffalo/buffalo/pull/626) ([markbates](https://github.com/markbates))
+- Check GOOS from runtime rather than env var [\#624](https://github.com/gobuffalo/buffalo/pull/624) ([hut8](https://github.com/hut8))
+
 ## [v0.9.4](https://github.com/gobuffalo/buffalo/tree/v0.9.4) (2017-09-05)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.3...v0.9.4)
 
@@ -23,6 +77,7 @@
 
 **Merged pull requests:**
 
+- fix for gorilla context memory leak [\#619](https://github.com/gobuffalo/buffalo/pull/619) ([nutbunnies](https://github.com/nutbunnies))
 - reverts assets-figerprint [\#618](https://github.com/gobuffalo/buffalo/pull/618) ([paganotoni](https://github.com/paganotoni))
 - v0.9.4 [\#617](https://github.com/gobuffalo/buffalo/pull/617) ([markbates](https://github.com/markbates))
 - use bootstrap-sass not regular bootstrap [\#616](https://github.com/gobuffalo/buffalo/pull/616) ([markbates](https://github.com/markbates))
