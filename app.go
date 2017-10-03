@@ -3,8 +3,8 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"net"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,7 +16,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
-	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 )
 
@@ -47,6 +46,7 @@ func (a *App) Start(addr string) error {
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		a.Stop(err)
+		return err
 	}
 
 	fmt.Printf("Starting application at %s:%d\n",
@@ -60,19 +60,18 @@ func (a *App) Start(addr string) error {
 	}
 	a.moot.Unlock()
 
+	errChan := make(chan error, 2)
+
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
 		go func() {
-			ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
-			defer cancel()
-			err := a.Worker.Start(ctx)
+			err := a.Worker.Start(a.Context)
 			if err != nil {
-				a.Stop(err)
+				errChan <- err
 			}
 		}()
 	}
 
-	errChan := make(chan error)
 	go func() {
 		errChan <- a.server.Serve(listener)
 	}()
