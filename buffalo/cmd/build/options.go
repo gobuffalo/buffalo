@@ -8,7 +8,6 @@ import (
 
 type Options struct {
 	meta.App
-	BinName       string   `json:"bin_name"`
 	ExtractAssets bool     `json:"extract_assets"`
 	HasDB         bool     `json:"has_db"`
 	LDFlags       string   `json:"ld_flags"`

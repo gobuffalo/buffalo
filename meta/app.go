@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/envy"
@@ -14,6 +15,7 @@ type App struct {
 	Root        string `json:"root"`
 	GoPath      string `json:"go_path"`
 	Name        Name   `json:"name"`
+	Bin         string `json:"bin"`
 	PackagePath string `json:"package_path"`
 	ActionsPath string `json:"actions_path"`
 	ModelsPath  string `json:"models_path"`
@@ -36,6 +38,12 @@ func New(root string) App {
 		PackagePath: pp,
 		ActionsPath: pp + "/actions",
 		ModelsPath:  pp + "/models",
+	}
+
+	app.Bin = filepath.Join("bin", filepath.Base(root))
+
+	if runtime.GOOS == "windows" {
+		app.Bin += ".exe"
 	}
 
 	if _, err := os.Stat(filepath.Join(root, "database.yml")); err == nil {

@@ -36,7 +36,7 @@ func (b *Builder) disableAssetsHandling() error {
 }
 
 func (b *Builder) buildAssetsArchive() error {
-	outputDir := filepath.Dir(filepath.Join(b.Root, b.BinName))
+	outputDir := filepath.Dir(filepath.Join(b.Root, b.Bin))
 
 	target := filepath.Join(outputDir, "assets.zip")
 	source := filepath.Join(b.Root, "public", "assets")

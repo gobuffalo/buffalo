@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
 	"github.com/gobuffalo/buffalo/meta"
@@ -52,7 +51,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.BinName))
+		fmt.Printf("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
 
 		return nil
 	},
@@ -65,13 +64,7 @@ func init() {
 
 	options.App = meta.New(pwd)
 
-	output := filepath.Join("bin", filepath.Base(pwd))
-
-	if runtime.GOOS == "windows" {
-		output += ".exe"
-	}
-
-	xbuildCmd.Flags().StringVarP(&options.BinName, "output", "o", output, "set the name of the binary")
+	xbuildCmd.Flags().StringVarP(&options.Bin, "output", "o", options.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&tags, "tags", "t", "", "compile with specific build tags")
 	xbuildCmd.Flags().BoolVarP(&options.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	xbuildCmd.Flags().BoolVarP(&options.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")

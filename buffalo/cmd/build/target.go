@@ -9,7 +9,7 @@ import (
 
 func (b *Builder) prepTarget() error {
 	// Create output directory if not exists
-	outputDir := filepath.Join(b.Root, filepath.Dir(b.BinName))
+	outputDir := filepath.Join(b.Root, filepath.Dir(b.Bin))
 	logrus.Debugf("preparing target dir %s", outputDir)
 	os.RemoveAll(outputDir)
 
