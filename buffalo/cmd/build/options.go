@@ -6,6 +6,7 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 )
 
+// Options for a build
 type Options struct {
 	meta.App
 	ExtractAssets bool     `json:"extract_assets"`

@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/envy"
 )
 
+// App represents meta data for a Buffalo application on disk
 type App struct {
 	Pwd         string `json:"pwd"`
 	Root        string `json:"root"`
@@ -26,6 +27,7 @@ type App struct {
 	WithDocker  bool   `json:"with_docker"`
 }
 
+// New App based on the details found at the provided root path
 func New(root string) App {
 	pwd, _ := os.Getwd()
 	pp := packagePath(root)

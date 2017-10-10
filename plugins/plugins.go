@@ -39,7 +39,7 @@ func Available() (List, error) {
 	}
 	for _, p := range paths {
 		if strings.HasPrefix(strings.ToLower(p), `c:\windows`) {
-			continue	
+			continue
 		}
 		if _, err := os.Stat(p); err != nil {
 			continue

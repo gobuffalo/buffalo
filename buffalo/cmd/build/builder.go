@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Builder builds a Buffalo binary
 type Builder struct {
 	Options
 	ctx       context.Context
@@ -18,6 +19,7 @@ type Builder struct {
 	originals map[string][]byte
 }
 
+// New Builder
 func New(ctx context.Context, opts Options) *Builder {
 	if _, err := os.Stat(filepath.Join(opts.Root, "database.yml")); err == nil {
 		opts.HasDB = true
@@ -43,6 +45,7 @@ func New(ctx context.Context, opts Options) *Builder {
 	return b
 }
 
+// Run builds a Buffalo binary
 func (b *Builder) Run() error {
 	defer b.Cleanup()
 	logrus.Debug(b.Options)
@@ -57,6 +60,8 @@ func (b *Builder) Run() error {
 	return nil
 }
 
+// Cleanup after run. This is automatically run at the end of `Run`.
+// It is provided publicly in-case a manual clean up is necessary.
 func (b *Builder) Cleanup() error {
 	builder.Clean(b.Root)
 	me := multiError{}
