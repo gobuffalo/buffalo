@@ -10,6 +10,8 @@ import (
 
 // var cfgFile string
 
+var anywhereCommands = []string{"new", "version", "info"}
+
 // RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
 	SilenceErrors: true,
@@ -18,7 +20,6 @@ var RootCmd = &cobra.Command{
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Printf("Buffalo version %s\n\n", Version)
 
-		anywhereCommands := []string{"new", "version", "info"}
 		isFreeCommand := false
 		for _, freeCmd := range anywhereCommands {
 			if freeCmd == cmd.Name() {
