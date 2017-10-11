@@ -1,13 +1,13 @@
 <div class="page-header">
-  <h1>{{.modelPlural}}</h1>
+  <h1>{{.opts.ModelName.ModelPlural}}</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= new{{.routeName}}Path() %>" class="btn btn-primary">Create New {{.model}}</a></li>
+  <li><a href="<%= new{{.opts.Name.Resource}}Path() %>" class="btn btn-primary">Create New {{.opts.ModelName.Model}}</a></li>
 </ul>
 
 <table class="table table-striped">
   <thead>
-  {{ range $p := .modelProps -}}
+  {{ range $p := .opts.Props -}}
     {{ if ne $p.Type "text" -}}
     <th>{{ $p.Name }}</th>
     {{ end -}}
@@ -15,18 +15,18 @@
     <th>&nbsp;</th>
   </thead>
   <tbody>
-    <%= for ({{.varSingular}}) in {{.varPlural}} { %>
+    <%= for ({{.opts.ModelName.VarCaseSingular}}) in {{.opts.ModelName.VarCasePlural}} { %>
       <tr>
-      {{ range $mp := .modelProps -}}
+      {{ range $mp := .opts.Props -}}
         {{ if ne $mp.Type "text" -}}
-        <td><%= {{$.varSingular}}.{{$mp.Name}} %></td>
+        <td><%= {{$.opts.ModelName.VarCaseSingular}}.{{$mp.Name}} %></td>
         {{ end -}}
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="<%= {{.routeFirstDownSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= edit{{.routeNameSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= {{.routeFirstDownSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.ModelName.UnderSingular}}_id: {{.opts.ModelName.VarCaseSingular}}.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= edit{{.opts.Name.Model}}Path({ {{.opts.ModelName.UnderSingular}}_id: {{.opts.ModelName.VarCaseSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.ModelName.UnderSingular}}_id: {{.opts.ModelName.VarCaseSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>

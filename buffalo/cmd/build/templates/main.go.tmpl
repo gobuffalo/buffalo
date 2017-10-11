@@ -6,14 +6,14 @@ import (
   "os"
 
   "github.com/markbates/grift/grift"
-  _ "<%= opts.ActionsPath %>"
+  _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
   "github.com/gobuffalo/packr"
   "github.com/markbates/pop"
-  "<%= opts.ModelsPath %>"
+  "<%= opts.ModelsPkg %>"
   <% } %>
   <%= if (opts.WithGrifts) { %>
-  _ "<%= opts.GriftsPath %>"
+  _ "<%= opts.GriftsPkg %>"
   <% } %>
 )
 
