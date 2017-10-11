@@ -18,8 +18,6 @@ var RootCmd = &cobra.Command{
 	Use:           "buffalo",
 	Short:         "Helps you build your Buffalo applications that much easier!",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Printf("Buffalo version %s\n\n", Version)
-
 		isFreeCommand := false
 		for _, freeCmd := range anywhereCommands {
 			if freeCmd == cmd.Name() {
