@@ -20,11 +20,13 @@ type App struct {
 	PackagePath string `json:"package_path"`
 	ActionsPath string `json:"actions_path"`
 	ModelsPath  string `json:"models_path"`
+	GriftsPath  string `json:"grifts_path"`
 	WithPop     bool   `json:"with_pop"`
 	WithDep     bool   `json:"with_dep"`
 	WithWebpack bool   `json:"with_webpack"`
 	WithYarn    bool   `json:"with_yarn"`
 	WithDocker  bool   `json:"with_docker"`
+	WithGrifts  bool   `json:"with_grifts"`
 }
 
 // New App based on the details found at the provided root path
@@ -40,6 +42,7 @@ func New(root string) App {
 		PackagePath: pp,
 		ActionsPath: pp + "/actions",
 		ModelsPath:  pp + "/models",
+		GriftsPath:  pp + "/grifts",
 	}
 
 	app.Bin = filepath.Join("bin", filepath.Base(root))
@@ -62,6 +65,9 @@ func New(root string) App {
 	}
 	if _, err := os.Stat(filepath.Join(root, "Dockerfile")); err == nil {
 		app.WithDocker = true
+	}
+	if _, err := os.Stat(filepath.Join(root, "grifts")); err == nil {
+		app.WithGrifts = true
 	}
 
 	return app

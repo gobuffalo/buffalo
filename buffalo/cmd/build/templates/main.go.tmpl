@@ -6,14 +6,14 @@ import (
   "os"
 
   "github.com/markbates/grift/grift"
-  _ "<%= aPack %>"
-  <%= if (modelsPack) { %>
+  _ "<%= opts.ActionsPath %>"
+  <%= if (opts.WithPop) { %>
   "github.com/gobuffalo/packr"
   "github.com/markbates/pop"
-  "<%= modelsPack %>"
+  "<%= opts.ModelsPath %>"
   <% } %>
-  <%= if (griftsPack) { %>
-  _ "<%= griftsPack %>"
+  <%= if (opts.WithGrifts) { %>
+  _ "<%= opts.GriftsPath %>"
   <% } %>
 )
 
@@ -27,7 +27,7 @@ func main() {
   }
   c := args[1]
   switch c {
-  <%= if (modelsPack) { %>
+  <%= if (opts.WithPop) { %>
   case "migrate":
     migrate()
   <% } %>
@@ -51,10 +51,10 @@ func main() {
 }
 
 func printVersion() {
-  fmt.Printf("<%= name %> version %s (%s)\n\n", version, buildTime)
+  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n\n", version, buildTime)
 }
 
-<%= if (modelsPack) { %>
+<%= if (opts.WithPop) { %>
 func migrate() {
   box, err := pop.NewMigrationBox(packr.NewBox("./migrations"), models.DB)
   if err != nil {

@@ -3,7 +3,6 @@ package build
 import (
 	"context"
 	"os"
-	"path/filepath"
 
 	"github.com/gobuffalo/packr/builder"
 	"github.com/pkg/errors"
@@ -21,9 +20,6 @@ type Builder struct {
 
 // New Builder
 func New(ctx context.Context, opts Options) *Builder {
-	if _, err := os.Stat(filepath.Join(opts.Root, "database.yml")); err == nil {
-		opts.HasDB = true
-	}
 	b := &Builder{
 		ctx:       ctx,
 		Options:   opts,

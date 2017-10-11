@@ -25,19 +25,8 @@ func (b *Builder) transformMain() error {
 }
 
 func (b *Builder) createBuildMain() error {
-	pkg := packagePath(b.Root)
-
 	ctx := plush.NewContext()
-	ctx.Set("root", b.Root)
-	ctx.Set("hasDB", b.HasDB)
-	if b.HasDB {
-		ctx.Set("modelsPack", pkg+"/models")
-	}
-	if _, err := os.Stat(filepath.Join(b.Root, "grifts")); err == nil {
-		ctx.Set("griftsPack", pkg+"/grifts")
-	}
-	ctx.Set("aPack", pkg+"/a")
-	ctx.Set("name", filepath.Base(b.Root))
+	ctx.Set("opts", b.Options)
 
 	t, err := templates.MustString("main.go.tmpl")
 	if err != nil {

@@ -53,7 +53,7 @@ func (b *Builder) buildADatabase() error {
 	defer dgo.Close()
 
 	bb := &bytes.Buffer{}
-	if b.HasDB {
+	if b.WithPop {
 		// copy the database.yml file to the migrations folder so it's available through packr
 		os.MkdirAll(filepath.Join(b.Root, "migrations"), 0755)
 		d, err := os.Open("database.yml")

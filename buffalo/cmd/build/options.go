@@ -10,7 +10,6 @@ import (
 type Options struct {
 	meta.App
 	ExtractAssets bool     `json:"extract_assets"`
-	HasDB         bool     `json:"has_db"`
 	LDFlags       string   `json:"ld_flags"`
 	Tags          []string `json:"tags"`
 	Static        bool     `json:"static"`
