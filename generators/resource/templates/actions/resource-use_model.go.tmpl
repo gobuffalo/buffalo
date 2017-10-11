@@ -14,36 +14,36 @@ import (
 // edit this file.
 
 // Following naming logic is implemented in Buffalo:
-// Model: Singular ({{.opts.ModelName.Model}})
-// DB Table: Plural ({{.opts.ModelName.Table}})
+// Model: Singular ({{.opts.Model.Model}})
+// DB Table: Plural ({{.opts.Model.Table}})
 // Resource: Plural ({{.opts.Name.Resource}})
 // Path: Plural (/{{.opts.Name.URL}})
 // View Template Folder: Plural (/templates/{{.opts.FilesPath}}/)
 
-// {{.opts.Name.Resource}}Resource is the resource for the {{.opts.ModelName.Model}} model
+// {{.opts.Name.Resource}}Resource is the resource for the {{.opts.Model.Model}} model
 type {{.opts.Name.Resource}}Resource struct{
   buffalo.Resource
 }
 
-// List gets all {{.opts.ModelName.ModelPlural}}. This function is mapped to the path
+// List gets all {{.opts.Model.ModelPlural}}. This function is mapped to the path
 // GET /{{.opts.Name.URL}}
 func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   // Get the DB connection from the context
   tx := c.Value("tx").(*pop.Connection)
 
-  {{.opts.ModelName.VarCasePlural}} := &models.{{.opts.ModelName.ModelPlural}}{}
+  {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.ModelPlural}}{}
 
   // Paginate results. Params "page" and "per_page" control pagination.
   // Default values are "page=1" and "per_page=20".
   q := tx.PaginateFromParams(c.Params())
 
-  // Retrieve all {{.opts.ModelName.ModelPlural}} from the DB
-  if err := q.All({{.opts.ModelName.VarCasePlural}}); err != nil {
+  // Retrieve all {{.opts.Model.ModelPlural}} from the DB
+  if err := q.All({{.opts.Model.VarCasePlural}}); err != nil {
     return errors.WithStack(err)
   }
 
-  // Make {{.opts.ModelName.ModelPlural}} available inside the html template
-  c.Set("{{.opts.ModelName.PluralUnder}}", {{.opts.ModelName.VarCasePlural}})
+  // Make {{.opts.Model.ModelPlural}} available inside the html template
+  c.Set("{{.opts.Model.PluralUnder}}", {{.opts.Model.VarCasePlural}})
 
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
@@ -51,43 +51,43 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/index.html"))
 }
 
-// Show gets the data for one {{.opts.ModelName.Model}}. This function is mapped to
-// the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.ModelName.UnderSingular}}_id}
+// Show gets the data for one {{.opts.Model.Model}}. This function is mapped to
+// the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
 func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
   tx := c.Value("tx").(*pop.Connection)
 
-  // Allocate an empty {{.opts.ModelName.Model}}
-  {{.opts.ModelName.VarCaseSingular}} := &models.{{.opts.ModelName.Model}}{}
+  // Allocate an empty {{.opts.Model.Model}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  // To find the {{.opts.ModelName.Model}} the parameter {{.opts.ModelName.UnderSingular}}_id is used.
-  if err := tx.Find({{.opts.ModelName.VarCaseSingular}}, c.Param("{{.opts.ModelName.UnderSingular}}_id")); err != nil {
+  // To find the {{.opts.Model.Model}} the parameter {{.opts.Model.UnderSingular}}_id is used.
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
     return c.Error(404, err)
   }
 
-  // Make {{.opts.ModelName.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.ModelName.UnderSingular}}", {{.opts.ModelName.VarCaseSingular}})
+  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
+  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/show.html"))
 }
 
-// New renders the form for creating a new {{.opts.ModelName.Model}}.
+// New renders the form for creating a new {{.opts.Model.Model}}.
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
-  // Make {{.opts.ModelName.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.ModelName.UnderSingular}}", &models.{{.opts.ModelName.Model}}{})
+  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
+  c.Set("{{.opts.Model.UnderSingular}}", &models.{{.opts.Model.Model}}{})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/new.html"))
 }
 
-// Create adds a {{.opts.ModelName.Model}} to the DB. This function is mapped to the
+// Create adds a {{.opts.Model.Model}} to the DB. This function is mapped to the
 // path POST /{{.opts.Name.URL}}
 func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
-  // Allocate an empty {{.opts.ModelName.Model}}
-  {{.opts.ModelName.VarCaseSingular}} := &models.{{.opts.ModelName.Model}}{}
+  // Allocate an empty {{.opts.Model.Model}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  // Bind {{.opts.ModelName.VarCaseSingular}} to the html form elements
-  if err := c.Bind({{.opts.ModelName.VarCaseSingular}}); err != nil {
+  // Bind {{.opts.Model.VarCaseSingular}} to the html form elements
+  if err := c.Bind({{.opts.Model.VarCaseSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
@@ -95,14 +95,14 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   tx := c.Value("tx").(*pop.Connection)
 
   // Validate the data from the html form
-  verrs, err := tx.ValidateAndCreate({{.opts.ModelName.VarCaseSingular}})
+  verrs, err := tx.ValidateAndCreate({{.opts.Model.VarCaseSingular}})
   if err != nil {
     return errors.WithStack(err)
   }
 
   if verrs.HasAny() {
-    // Make {{.opts.ModelName.VarCaseSingular}} available inside the html template
-    c.Set("{{.opts.ModelName.UnderSingular}}", {{.opts.ModelName.VarCaseSingular}})
+    // Make {{.opts.Model.VarCaseSingular}} available inside the html template
+    c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
 
     // Make the errors available inside the html template
     c.Set("errors", verrs)
@@ -113,56 +113,56 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.ModelName.Model}} was created successfully")
+  c.Flash().Add("success", "{{.opts.Model.Model}} was created successfully")
 
   // and redirect to the {{.opts.Name.URL}} index page
-  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.ModelName.VarCaseSingular}}.ID)
+  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.Model.VarCaseSingular}}.ID)
 }
 
-// Edit renders a edit form for a {{.opts.ModelName.Model}}. This function is
-// mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.ModelName.UnderSingular}}_id}/edit
+// Edit renders a edit form for a {{.opts.Model.Model}}. This function is
+// mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}/edit
 func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
   // Get the DB connection from the context
   tx := c.Value("tx").(*pop.Connection)
 
-  // Allocate an empty {{.opts.ModelName.Model}}
-  {{.opts.ModelName.VarCaseSingular}} := &models.{{.opts.ModelName.Model}}{}
+  // Allocate an empty {{.opts.Model.Model}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  if err := tx.Find({{.opts.ModelName.VarCaseSingular}}, c.Param("{{.opts.ModelName.UnderSingular}}_id")); err != nil {
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
     return c.Error(404, err)
   }
 
-  // Make {{.opts.ModelName.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.ModelName.UnderSingular}}", {{.opts.ModelName.VarCaseSingular}})
+  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
+  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/edit.html"))
 }
 
-// Update changes a {{.opts.ModelName.Model}} in the DB. This function is mapped to
-// the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.ModelName.UnderSingular}}_id}
+// Update changes a {{.opts.Model.Model}} in the DB. This function is mapped to
+// the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
 func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
   tx := c.Value("tx").(*pop.Connection)
 
-  // Allocate an empty {{.opts.ModelName.Model}}
-  {{.opts.ModelName.VarCaseSingular}} := &models.{{.opts.ModelName.Model}}{}
+  // Allocate an empty {{.opts.Model.Model}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  if err := tx.Find({{.opts.ModelName.VarCaseSingular}}, c.Param("{{.opts.ModelName.UnderSingular}}_id")); err != nil {
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
     return c.Error(404, err)
   }
 
-  // Bind {{.opts.ModelName.Model}} to the html form elements
-  if err := c.Bind({{.opts.ModelName.VarCaseSingular}}); err != nil {
+  // Bind {{.opts.Model.Model}} to the html form elements
+  if err := c.Bind({{.opts.Model.VarCaseSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
-  verrs, err := tx.ValidateAndUpdate({{.opts.ModelName.VarCaseSingular}})
+  verrs, err := tx.ValidateAndUpdate({{.opts.Model.VarCaseSingular}})
   if err != nil {
     return errors.WithStack(err)
   }
 
   if verrs.HasAny() {
-    // Make {{.opts.ModelName.VarCaseSingular}} available inside the html template
-    c.Set("{{.opts.ModelName.UnderSingular}}", {{.opts.ModelName.VarCaseSingular}})
+    // Make {{.opts.Model.VarCaseSingular}} available inside the html template
+    c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
 
     // Make the errors available inside the html template
     c.Set("errors", verrs)
@@ -173,32 +173,32 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   }
 
   // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.ModelName.Model}} was updated successfully")
+  c.Flash().Add("success", "{{.opts.Model.Model}} was updated successfully")
 
   // and redirect to the {{.opts.Name.URL}} index page
-  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.ModelName.VarCaseSingular}}.ID)
+  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.Model.VarCaseSingular}}.ID)
 }
 
-// Destroy deletes a {{.opts.ModelName.Model}} from the DB. This function is mapped
-// to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.ModelName.UnderSingular}}_id}
+// Destroy deletes a {{.opts.Model.Model}} from the DB. This function is mapped
+// to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
 func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
   tx := c.Value("tx").(*pop.Connection)
 
-  // Allocate an empty {{.opts.ModelName.Model}}
-  {{.opts.ModelName.VarCaseSingular}} := &models.{{.opts.ModelName.Model}}{}
+  // Allocate an empty {{.opts.Model.Model}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  // To find the {{.opts.ModelName.Model}} the parameter {{.opts.ModelName.UnderSingular}}_id is used.
-  if err := tx.Find({{.opts.ModelName.VarCaseSingular}}, c.Param("{{.opts.ModelName.UnderSingular}}_id")); err != nil {
+  // To find the {{.opts.Model.Model}} the parameter {{.opts.Model.UnderSingular}}_id is used.
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
     return c.Error(404, err)
   }
 
-  if err := tx.Destroy({{.opts.ModelName.VarCaseSingular}}); err != nil {
+  if err := tx.Destroy({{.opts.Model.VarCaseSingular}}); err != nil {
     return errors.WithStack(err)
   }
 
   // If there are no errors set a flash message
-  c.Flash().Add("success", "{{.opts.ModelName.Model}} was destroyed successfully")
+  c.Flash().Add("success", "{{.opts.Model.Model}} was destroyed successfully")
 
   // Redirect to the {{.opts.Name.URL}} index page
   return c.Redirect(302, "/{{.opts.Name.URL}}")

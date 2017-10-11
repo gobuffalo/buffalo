@@ -12,10 +12,10 @@ import (
 type Options struct {
 	App           meta.App
 	Name          meta.Name `json:"name"`
+	Model         meta.Name `json:"model"`
 	SkipMigration bool      `json:"skip_migration"`
 	SkipModel     bool      `json:"skip_model"`
 	MimeType      string    `json:"mime_type"`
-	ModelName     meta.Name `json:"model_name"`
 	FilesPath     string    `json:"files_path"`
 	ActionsPath   string    `json:"actions_path"`
 	Props         []Prop    `json:"props"`
@@ -33,7 +33,7 @@ func NewOptions(modelName string, args ...string) (Options, error) {
 
 	if len(o.Args) > 0 {
 		o.Name = meta.Name(o.Args[0])
-		o.ModelName = meta.Name(o.Args[0])
+		o.Model = meta.Name(o.Args[0])
 	}
 	o.Props = modelPropertiesFromArgs(o.Args)
 
@@ -41,11 +41,11 @@ func NewOptions(modelName string, args ...string) (Options, error) {
 	o.ActionsPath = o.FilesPath
 	if strings.Contains(string(o.Name), "/") {
 		parts := strings.Split(string(o.Name), "/")
-		o.ModelName = meta.Name(parts[len(parts)-1])
+		o.Model = meta.Name(parts[len(parts)-1])
 		o.ActionsPath = strings.Join(parts, "_")
 	}
 	if modelName != "" {
-		o.ModelName = meta.Name(modelName)
+		o.Model = meta.Name(modelName)
 	}
 	return o, o.Validate()
 }
@@ -57,7 +57,7 @@ func (o Options) Validate() error {
 		return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
 	}
 
-	if len(o.Args) == 0 && o.ModelName == "" {
+	if len(o.Args) == 0 && o.Model == "" {
 		return errors.New("you must specify a resource name")
 	}
 	return nil

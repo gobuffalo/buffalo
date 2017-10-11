@@ -69,7 +69,7 @@ func New(opts Options, data makr.Data) (*makr.Generator, error) {
 func modelCommand(opts Options) makr.Command {
 	args := opts.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", opts.ModelName.UnderSingular()}, args...)
+	args = append([]string{"db", "g", "model", opts.Model.UnderSingular()}, args...)
 
 	if opts.SkipMigration {
 		args = append(args, "--skip-migration")
