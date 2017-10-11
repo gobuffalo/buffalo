@@ -8,45 +8,44 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
-	"github.com/markbates/inflect"
 )
 
 // New generates a new actions/resource file and a stub test.
-func New(data makr.Data) (*makr.Generator, error) {
+func New(opts Options, data makr.Data) (*makr.Generator, error) {
 	g := makr.New()
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "resource"))
-	if err != nil {
-		return nil, err
-	}
-	// Get the flags
-	useModel := data["useModel"].(string)
-	skipModel := data["skipModel"].(bool)
-	mimeType := data["mimeType"].(string)
+	data["opts"] = opts
+	data["actions"] = []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"}
 
 	tmplName := "resource-use_model"
 
-	if mimeType == "json" || mimeType == "xml" {
+	mimeType := opts.MimeType
+	if mimeType == "JSON" || mimeType == "XML" {
 		tmplName = "resource-json-xml"
-	} else if skipModel {
+	} else if opts.SkipModel {
 		tmplName = "resource-name"
+	}
+
+	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "resource"))
+	if err != nil {
+		return nil, err
 	}
 
 	for _, f := range files {
 		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
-			folder := data["filesPath"].(string)
+			folder := opts.FilesPath
 			if strings.Contains(f.WritePath, "actions") {
-				folder = data["actionsPath"].(string)
+				folder = opts.ActionsPath
 			}
-
-			g.Add(makr.NewFile(strings.Replace(f.WritePath, tmplName, folder, -1), f.Body))
+			p := strings.Replace(f.WritePath, tmplName, folder, -1)
+			g.Add(makr.NewFile(p, f.Body))
 		}
-		if mimeType == "html" {
+		if mimeType == "HTML" {
 			// Adding the html templates to the generator
 			if strings.Contains(f.WritePath, "model-view-") {
 				targetPath := filepath.Join(
 					filepath.Dir(f.WritePath),
-					data["filesPath"].(string),
+					opts.FilesPath,
 					strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
 				)
 				g.Add(makr.NewFile(targetPath, f.Body))
@@ -56,27 +55,24 @@ func New(data makr.Data) (*makr.Generator, error) {
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", data["resourceURL"], data["resourceName"]))
+			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", opts.Name.URL(), opts.Name.ModelPlural()))
 		},
 	})
 
-	if !skipModel && useModel == "" {
-		g.Add(modelCommand(data))
+	if !opts.SkipModel {
+		g.Add(modelCommand(opts))
 	}
 
 	return g, nil
 }
 
-func modelCommand(data makr.Data) makr.Command {
-	modelName := inflect.Underscore(data["modelSingularUnder"].(string))
-
-	args := data["args"].([]string)
+func modelCommand(opts Options) makr.Command {
+	args := opts.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", modelName}, args...)
+	args = append([]string{"db", "g", "model", opts.ModelName.UnderSingular()}, args...)
 
-	if skipMigration := data["skipMigration"].(bool); skipMigration {
+	if opts.SkipMigration {
 		args = append(args, "--skip-migration")
 	}
-
 	return makr.NewCommand(exec.Command("buffalo", args...))
 }

@@ -1,4 +1,4 @@
-{{ range $p := .modelProps -}}
+{{ range $p := .opts.Props -}}
 {{ if eq $p.Type "text" -}}
 <%= f.TextArea("{{$p.Name}}", {rows: 10}) %>
 {{ else -}}

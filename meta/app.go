@@ -17,10 +17,10 @@ type App struct {
 	GoPath      string `json:"go_path"`
 	Name        Name   `json:"name"`
 	Bin         string `json:"bin"`
-	PackagePath string `json:"package_path"`
-	ActionsPath string `json:"actions_path"`
-	ModelsPath  string `json:"models_path"`
-	GriftsPath  string `json:"grifts_path"`
+	PackagePkg  string `json:"package_path"`
+	ActionsPkg  string `json:"actions_path"`
+	ModelsPkg   string `json:"models_path"`
+	GriftsPkg   string `json:"grifts_path"`
 	WithPop     bool   `json:"with_pop"`
 	WithDep     bool   `json:"with_dep"`
 	WithWebpack bool   `json:"with_webpack"`
@@ -35,14 +35,14 @@ func New(root string) App {
 	pp := packagePath(root)
 
 	app := App{
-		Pwd:         pwd,
-		Root:        root,
-		GoPath:      envy.GoPath(),
-		Name:        Name(filepath.Base(root)),
-		PackagePath: pp,
-		ActionsPath: pp + "/actions",
-		ModelsPath:  pp + "/models",
-		GriftsPath:  pp + "/grifts",
+		Pwd:        pwd,
+		Root:       root,
+		GoPath:     envy.GoPath(),
+		Name:       Name(filepath.Base(root)),
+		PackagePkg: pp,
+		ActionsPkg: pp + "/actions",
+		ModelsPkg:  pp + "/models",
+		GriftsPkg:  pp + "/grifts",
 	}
 
 	app.Bin = filepath.Join("bin", filepath.Base(root))
