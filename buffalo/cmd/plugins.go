@@ -32,6 +32,7 @@ func decorate(name string, cmd *cobra.Command) {
 	pugs := plugs()
 	for _, c := range pugs[name] {
 		func(c plugins.Command) {
+			anywhereCommands = append(anywhereCommands, c.Name)
 			cc := &cobra.Command{
 				Use:     c.Name,
 				Short:   fmt.Sprintf("[PLUGIN] %s", c.Description),
