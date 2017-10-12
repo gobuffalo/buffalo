@@ -67,12 +67,12 @@ $ buffalo test
 to compile binary:
 ```text
 $ mkdir bin
-$ GO_ENV=production GOOS=linux buffalo build -o bin/app
+$ GO_ENV=production buffalo build -o bin/app
 ```
 
 to cross compile for linux
 ```text
-$ GOOS=linux GO_ENV=production GOOS=linux buffalo build -o bin/app
+$ GOOS=linux GO_ENV=production buffalo build -o bin/app
 ```
 
 ## Shoulders of Giants
