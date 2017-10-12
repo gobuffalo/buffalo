@@ -2,6 +2,7 @@ var webpack = require("webpack");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require('webpack-manifest-plugin');
+var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
 module.exports = {
   entry: {
@@ -35,8 +36,22 @@ module.exports = {
       minimize: true,
       debug: false
     }),
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: true
+      },
+      compress: {
+        screw_ie8: true
+      },
+      comments: false
+    }),
     new ManifestPlugin({
       fileName: "manifest.json",
+    }),
+    new WebpackCleanupPlugin({//too slow
+      exclude: [],//any assets to allow in public/assets
     })
   ],
   module: {
