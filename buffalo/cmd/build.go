@@ -61,11 +61,25 @@ func (b *builder) execQuiet(name string, args ...string) error {
 }
 
 func (b *builder) buildWebpack() error {
-	_, err := os.Stat("webpack.config.js")
+	envName := envy.Get("GO_ENV", "development")
+	configFile := "webpack.config.js"
+
+	fmt.Println("build: environment: ", envName)
+	if envName != "" {
+		testConfigName := "webpack." + envName + ".config.js"
+		_, err := os.Stat(testConfigName)
+		if err == nil {
+			// build webpack
+			configFile = testConfigName
+		}
+	}
+
+	_, err := os.Stat(configFile)
 	if err == nil {
 		// build webpack
-		return b.exec(webpack.BinPath)
+		return b.exec(webpack.BinPath, "--config", configFile)
 	}
+
 	return nil
 }
 

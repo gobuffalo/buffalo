@@ -62,6 +62,19 @@ Just like running your application, Buffalo doesn't stop you from using the stan
 $ buffalo test
 ```
 
+## To build for deployment
+
+to compile binary:
+```text
+$ mkdir bin
+$ GO_ENV=production GOOS=linux buffalo build -o bin/app
+```
+
+to cross compile for linux
+```text
+$ GOOS=linux GO_ENV=production GOOS=linux buffalo build -o bin/app
+```
+
 ## Shoulders of Giants
 
 Buffalo would not be possible if not for all of the great projects it depends on. Please see [SHOULDERS.md](SHOULDERS.md) to see a list of them.
