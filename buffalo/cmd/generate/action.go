@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"github.com/kr/pretty"
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/action"
@@ -26,16 +25,10 @@ var ActionCmd = &cobra.Command{
 		}
 		o.SkipTemplate = actionOptions.SkipTemplate
 		o.Method = actionOptions.Method
-		pretty.Println("### o ->", o)
 
 		data := makr.Data{}
 
-		g, err := action.New(o, data)
-		if err != nil {
-			return err
-		}
-
-		return g.Run(".", data)
+		return action.Run(o, ".", data)
 	},
 }
 

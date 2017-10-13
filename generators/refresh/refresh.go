@@ -5,20 +5,21 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
-// New generator for a .buffalo.dev.yml file
-func New() (*makr.Generator, error) {
+// Run generator for a .buffalo.dev.yml file
+func Run(root string, data makr.Data) error {
 	g := makr.New()
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "refresh"))
 	if err != nil {
-		return nil, err
+		return errors.WithStack(err)
 	}
 
 	for _, f := range files {
 		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
 
-	return g, nil
+	return g.Run(root, data)
 }

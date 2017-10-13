@@ -7,15 +7,17 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
-//New allows to create a new grift task generator
-func New(data makr.Data) (*makr.Generator, error) {
+//Run allows to create a new grift task generator
+func Run(root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "grift"))
 	if err != nil {
-		return nil, err
+		return errors.WithStack(err)
 	}
 
 	path := filepath.Join("grifts", data["filename"].(string))
@@ -26,13 +28,13 @@ func New(data makr.Data) (*makr.Generator, error) {
 	} else {
 		template, err := ioutil.ReadFile(path)
 		if err != nil {
-			return nil, err
+			return errors.WithStack(err)
 		}
 
 		g.Add(makr.NewFile(path, string(template)+existsTmpl))
 	}
 
-	return g, nil
+	return g.Run(root, data)
 }
 
 var existsTmpl = `

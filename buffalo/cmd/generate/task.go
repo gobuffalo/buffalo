@@ -40,11 +40,6 @@ var TaskCmd = &cobra.Command{
 			"last":      len(parts) - 1,
 		}
 
-		g, err := grift.New(data)
-		if err != nil {
-			return err
-		}
-
-		return g.Run(".", data)
+		return grift.Run(".", data)
 	},
 }

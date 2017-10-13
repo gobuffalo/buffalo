@@ -10,7 +10,7 @@ import (
 
 // Options for generating a new resource
 type Options struct {
-	App           meta.App
+	App           meta.App  `json:"app"`
 	Name          meta.Name `json:"name"`
 	Model         meta.Name `json:"model"`
 	SkipMigration bool      `json:"skip_migration"`

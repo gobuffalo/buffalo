@@ -13,9 +13,10 @@ import (
 
 var runningTests bool
 
-// New action generator
-func New(opts Options, data makr.Data) (*makr.Generator, error) {
+// Run action generator
+func Run(opts Options, root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
 
 	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", opts.Name.File()))
 	actionsTemplate := buildActionsTemplate(filePath)
@@ -44,7 +45,7 @@ func New(opts Options, data makr.Data) (*makr.Generator, error) {
 	if !opts.SkipTemplate {
 		addTemplateFiles(opts, actionsToAdd, data)
 	}
-	return g, nil
+	return g.Run(root, data)
 }
 
 func buildActionsTemplate(filePath string) string {

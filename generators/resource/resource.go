@@ -6,13 +6,17 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
 )
 
-// New generates a new actions/resource file and a stub test.
-func New(opts Options, data makr.Data) (*makr.Generator, error) {
+// Run generates a new actions/resource file and a stub test.
+func Run(opts Options, root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
+
 	data["opts"] = opts
 	data["actions"] = []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"}
 
@@ -27,7 +31,7 @@ func New(opts Options, data makr.Data) (*makr.Generator, error) {
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "resource"))
 	if err != nil {
-		return nil, err
+		return errors.WithStack(err)
 	}
 
 	for _, f := range files {
@@ -63,7 +67,7 @@ func New(opts Options, data makr.Data) (*makr.Generator, error) {
 		g.Add(modelCommand(opts))
 	}
 
-	return g, nil
+	return g.Run(root, data)
 }
 
 func modelCommand(opts Options) makr.Command {
