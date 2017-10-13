@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
+	"github.com/gobuffalo/buffalo/generators/soda"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
 	"github.com/pkg/errors"
@@ -31,26 +32,26 @@ type App struct {
 	Docker      string
 }
 
-// Generator returns a generator to create a new application
-func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
+// Run returns a generator to create a new application
+func (a *App) Run(root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
+
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "newapp"))
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return errors.WithStack(err)
 	}
 
 	for _, f := range files {
 		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
-	rr, err := refresh.New()
-	if err != nil {
-		return nil, err
+	if err := refresh.Run(root, data); err != nil {
+		return errors.WithStack(err)
 	}
-	g.Add(rr)
 
 	if data["ciProvider"] == "travis" {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
@@ -71,21 +72,19 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 
 	if !a.API {
 		if a.SkipWebpack {
-			wg, err := standard.New(data)
-			if err != nil {
-				return g, errors.WithStack(err)
+			if err := standard.Run(root, data); err != nil {
+				return errors.WithStack(err)
 			}
-			g.Add(wg)
 		} else {
-			wg, err := webpack.New(data)
-			if err != nil {
-				return g, errors.WithStack(err)
+			if err := webpack.Run(root, data); err != nil {
+				return errors.WithStack(err)
 			}
-			g.Add(wg)
 		}
 	}
 	if !a.SkipPop {
-		g.Add(newSodaGenerator())
+		if err := soda.Run(root, data); err != nil {
+			return errors.WithStack(err)
+		}
 	}
 	if a.API {
 		g.Add(makr.Func{
@@ -100,11 +99,13 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		})
 	}
 	if a.Docker != "none" {
-		dg, err := docker.New()
-		if err != nil {
-			return g, errors.WithStack(err)
+		o := docker.NewOptions()
+		if v, ok := data["version"].(string); ok {
+			o.Version = v
 		}
-		g.Add(dg)
+		if err := docker.Run(root, o); err != nil {
+			return errors.WithStack(err)
+		}
 	}
 	g.Add(makr.NewCommand(a.goGet()))
 
@@ -113,8 +114,7 @@ func (a *App) Generator(data makr.Data) (*makr.Generator, error) {
 		g.Add(makr.NewCommand(exec.Command("git", "add", ".")))
 		g.Add(makr.NewCommand(exec.Command("git", "commit", "-m", "Initial Commit")))
 	}
-
-	return g, nil
+	return g.Run(root, data)
 }
 
 func (a App) goGet() *exec.Cmd {

@@ -84,11 +84,7 @@ func startDevServer(ctx context.Context) error {
 	cfgFile := "./.buffalo.dev.yml"
 	_, err := os.Stat(cfgFile)
 	if err != nil {
-		g, err := rg.New()
-		if err != nil {
-			return err
-		}
-		err = g.Run("./", map[string]interface{}{
+		err = rg.Run("./", map[string]interface{}{
 			"name": "buffalo",
 		})
 	}

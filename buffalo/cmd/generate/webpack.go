@@ -17,11 +17,7 @@ var WebpackCmd = &cobra.Command{
 			"withWebpack": true,
 			"withYarn":    withYarn,
 		}
-		wg, err := webpack.New(data)
-		if err != nil {
-			return err
-		}
-		return wg.Run(".", data)
+		return webpack.Run(".", data)
 	},
 }
 
