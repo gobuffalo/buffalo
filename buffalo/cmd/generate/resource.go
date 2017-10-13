@@ -37,11 +37,7 @@ var ResourceCmd = &cobra.Command{
 		}
 
 		data := makr.Data{}
-		g, err := resource.New(o, data)
-		if err != nil {
-			return err
-		}
-		return g.Run(".", data)
+		return resource.Run(o, ".", data)
 	},
 }
 

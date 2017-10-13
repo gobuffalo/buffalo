@@ -8,12 +8,12 @@ import (
 
 // Options for generating new actions
 type Options struct {
-	App          meta.App
-	Name         meta.Name
-	Method       string
-	SkipTemplate bool
-	Actions      []meta.Name
-	Args         []string
+	App          meta.App    `json:"app"`
+	Name         meta.Name   `json:"name"`
+	Method       string      `json:"method"`
+	SkipTemplate bool        `json:"skip_template"`
+	Actions      []meta.Name `json:"actions"`
+	Args         []string    `json:"args"`
 }
 
 // NewOptions returns a well formed set of Options

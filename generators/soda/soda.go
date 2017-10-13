@@ -1,12 +1,14 @@
-package newapp
+package soda
 
 import (
 	"github.com/gobuffalo/makr"
 	sg "github.com/markbates/pop/soda/cmd/generate"
 )
 
-func newSodaGenerator() *makr.Generator {
+// Run the soda generator
+func Run(root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
 
 	should := func(data makr.Data) bool {
 		if _, ok := data["withPop"]; ok {
@@ -39,7 +41,7 @@ func newSodaGenerator() *makr.Generator {
 		},
 	})
 
-	return g
+	return g.Run(root, data)
 }
 
 const nModels = `package models

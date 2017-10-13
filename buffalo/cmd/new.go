@@ -165,11 +165,7 @@ func genNewFiles() error {
 		"docker":      app.Docker,
 	}
 
-	g, err := app.Generator(data)
-	if err != nil {
-		return err
-	}
-	return g.Run(app.RootPath, data)
+	return app.Run(app.RootPath, data)
 }
 
 func init() {
