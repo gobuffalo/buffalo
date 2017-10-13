@@ -33,6 +33,9 @@ type App struct {
 func New(root string) App {
 	pwd, _ := os.Getwd()
 	pp := packagePath(root)
+	if root == "." {
+		root = pwd
+	}
 
 	app := App{
 		Pwd:        pwd,
