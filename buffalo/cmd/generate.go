@@ -20,8 +20,5 @@ func init() {
 	generateCmd.AddCommand(generate.TaskCmd)
 	decorate("generate", generateCmd)
 
-	generate.ActionCmd.Flags().BoolVarP(&generate.SkipActionTemplate, "skip-template", "", false, "makes resource generator not to generate template for actions")
-	generate.ActionCmd.Flags().StringVarP(&generate.ActionMethod, "method", "m", "GET", "allows to set a different method for the action being generated.")
-
 	RootCmd.AddCommand(generateCmd)
 }
