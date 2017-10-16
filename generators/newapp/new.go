@@ -37,6 +37,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	for _, f := range files {
 		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
+	data["name"] = a.Name
 	if err := refresh.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
