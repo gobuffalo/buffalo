@@ -13,19 +13,19 @@ import (
 )
 
 // Run generates a new actions/resource file and a stub test.
-func Run(opts Options, root string, data makr.Data) error {
+func (res Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 	defer g.Fmt(root)
 
-	data["opts"] = opts
+	data["opts"] = res
 	data["actions"] = []string{"List", "Show", "New", "Create", "Edit", "Update", "Destroy"}
 
 	tmplName := "resource-use_model"
 
-	mimeType := opts.MimeType
+	mimeType := res.MimeType
 	if mimeType == "JSON" || mimeType == "XML" {
 		tmplName = "resource-json-xml"
-	} else if opts.SkipModel {
+	} else if res.SkipModel {
 		tmplName = "resource-name"
 	}
 
@@ -37,9 +37,9 @@ func Run(opts Options, root string, data makr.Data) error {
 	for _, f := range files {
 		// Adding the resource template to the generator
 		if strings.Contains(f.WritePath, tmplName) {
-			folder := opts.FilesPath
+			folder := res.FilesPath
 			if strings.Contains(f.WritePath, "actions") {
-				folder = opts.ActionsPath
+				folder = res.ActionsPath
 			}
 			p := strings.Replace(f.WritePath, tmplName, folder, -1)
 			g.Add(makr.NewFile(p, f.Body))
@@ -49,7 +49,7 @@ func Run(opts Options, root string, data makr.Data) error {
 			if strings.Contains(f.WritePath, "model-view-") {
 				targetPath := filepath.Join(
 					filepath.Dir(f.WritePath),
-					opts.FilesPath,
+					res.FilesPath,
 					strings.Replace(filepath.Base(f.WritePath), "model-view-", "", -1),
 				)
 				g.Add(makr.NewFile(targetPath, f.Body))
@@ -59,23 +59,23 @@ func Run(opts Options, root string, data makr.Data) error {
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", opts.Name.URL(), opts.Name.ModelPlural()))
+			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", res.Name.URL(), res.Name.ModelPlural()))
 		},
 	})
 
-	if !opts.SkipModel {
-		g.Add(modelCommand(opts))
+	if !res.SkipModel {
+		g.Add(res.modelCommand())
 	}
 
 	return g.Run(root, data)
 }
 
-func modelCommand(opts Options) makr.Command {
-	args := opts.Args
+func (res Generator) modelCommand() makr.Command {
+	args := res.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", opts.Model.UnderSingular()}, args...)
+	args = append([]string{"db", "g", "model", res.Model.UnderSingular()}, args...)
 
-	if opts.SkipMigration {
+	if res.SkipMigration {
 		args = append(args, "--skip-migration")
 	}
 	return makr.NewCommand(exec.Command("buffalo", args...))

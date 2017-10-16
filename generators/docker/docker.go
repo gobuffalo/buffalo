@@ -9,14 +9,14 @@ import (
 )
 
 // Run Docker generator
-func Run(root string, opts Options) error {
+func (d Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool {
-			return opts.Style != "none"
+			return d.Style != "none"
 		},
 		Runner: func(root string, data makr.Data) error {
-			style := opts.Style
+			style := d.Style
 			if style != "multi" && style != "standard" {
 				return errors.Errorf("unknown Docker style: %s", style)
 			}
@@ -31,7 +31,6 @@ func Run(root string, opts Options) error {
 			return fg.Run(root, data)
 		},
 	})
-	return g.Run(root, makr.Data{
-		"opts": opts,
-	})
+	data["opts"] = d
+	return g.Run(root, data)
 }

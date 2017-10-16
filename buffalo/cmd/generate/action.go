@@ -19,16 +19,16 @@ var ActionCmd = &cobra.Command{
 	Aliases: []string{"a", "actions"},
 	Short:   "Generates new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		o, err := action.NewOptions(args...)
+		a, err := action.New(args...)
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		o.SkipTemplate = actionOptions.SkipTemplate
-		o.Method = actionOptions.Method
+		a.SkipTemplate = actionOptions.SkipTemplate
+		a.Method = actionOptions.Method
 
 		data := makr.Data{}
 
-		return action.Run(o, ".", data)
+		return a.Run(".", data)
 	},
 }
 

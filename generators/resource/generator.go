@@ -8,8 +8,8 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 )
 
-// Options for generating a new resource
-type Options struct {
+// Generator for generating a new resource
+type Generator struct {
 	App           meta.App  `json:"app"`
 	Name          meta.Name `json:"name"`
 	Model         meta.Name `json:"model"`
@@ -22,9 +22,9 @@ type Options struct {
 	Args          []string  `json:"args"`
 }
 
-// NewOptions constructs new options for generating a resource
-func NewOptions(modelName string, args ...string) (Options, error) {
-	o := Options{
+// New constructs new options for generating a resource
+func New(modelName string, args ...string) (Generator, error) {
+	o := Generator{
 		MimeType: "HTML",
 		Args:     args,
 	}
@@ -51,7 +51,7 @@ func NewOptions(modelName string, args ...string) (Options, error) {
 }
 
 // Validate that the options have what you need to build a new resource
-func (o Options) Validate() error {
+func (o Generator) Validate() error {
 	mt := o.MimeType
 	if mt != "HTML" && mt != "JSON" && mt != "XML" {
 		return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")

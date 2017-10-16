@@ -6,8 +6,8 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 )
 
-// Options for generating new actions
-type Options struct {
+// Generator for generating new actions
+type Generator struct {
 	App          meta.App    `json:"app"`
 	Name         meta.Name   `json:"name"`
 	Method       string      `json:"method"`
@@ -16,10 +16,10 @@ type Options struct {
 	Args         []string    `json:"args"`
 }
 
-// NewOptions returns a well formed set of Options
+// New returns a well formed set of Options
 // for generating new actions
-func NewOptions(args ...string) (Options, error) {
-	o := Options{
+func New(args ...string) (Generator, error) {
+	o := Generator{
 		App:     meta.New("."),
 		Actions: []meta.Name{},
 		Args:    args,

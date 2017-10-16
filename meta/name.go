@@ -108,3 +108,8 @@ func (n Name) VarCaseSingular() string {
 func (n Name) VarCasePlural() string {
 	return inflect.CamelizeDownFirst(inflect.Pluralize(n.Resource()))
 }
+
+// Lower case version of a string
+func (n Name) Lower() string {
+	return strings.ToLower(string(n))
+}

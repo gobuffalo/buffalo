@@ -16,26 +16,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-// App is the representation of a new Buffalo application
-type App struct {
-	RootPath    string
-	Name        string
-	Force       bool
-	Verbose     bool
-	SkipPop     bool
-	SkipWebpack bool
-	SkipYarn    bool
-	DBType      string
-	CIProvider  string
-	API         bool
-	WithDep     bool
-	Docker      string
-}
-
 // Run returns a generator to create a new application
-func (a *App) Run(root string, data makr.Data) error {
+func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
-	defer g.Fmt(root)
+	defer g.Fmt(a.Root)
+
+	if a.Force {
+		os.RemoveAll(a.Root)
+	}
 
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
 	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
@@ -53,14 +41,14 @@ func (a *App) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
-	if data["ciProvider"] == "travis" {
+	if a.CIProvider == "travis" {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
-	} else if data["ciProvider"] == "gitlab-ci" {
-		if _, ok := data["withPop"]; ok {
-			if data["dbType"] == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + data["name"].(string) + "_test?sslmode=disable"
-			} else if data["dbType"] == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + data["name"].(string) + "_test"
+	} else if a.CIProvider == "gitlab-ci" {
+		if a.WithPop {
+			if a.DBType == "postgres" {
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
+			} else if a.DBType == "mysql" {
+				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + a.Name.File() + "_test"
 			} else {
 				data["testDbUrl"] = ""
 			}
@@ -70,23 +58,30 @@ func (a *App) Run(root string, data makr.Data) error {
 		}
 	}
 
-	if !a.API {
-		if a.SkipWebpack {
-			if err := standard.Run(root, data); err != nil {
+	if !a.AsAPI {
+		if a.WithWebpack {
+			w := webpack.New()
+			w.App = a.App
+			if err := w.Run(root, data); err != nil {
 				return errors.WithStack(err)
 			}
 		} else {
-			if err := webpack.Run(root, data); err != nil {
+			if err := standard.Run(root, data); err != nil {
 				return errors.WithStack(err)
 			}
 		}
 	}
-	if !a.SkipPop {
-		if err := soda.Run(root, data); err != nil {
+	if a.WithPop {
+		sg := soda.New()
+		sg.App = a.App
+		sg.Dialect = a.DBType
+		data["appPath"] = a.Root
+		data["name"] = a.Name.File()
+		if err := sg.Run(root, data); err != nil {
 			return errors.WithStack(err)
 		}
 	}
-	if a.API {
+	if a.AsAPI {
 		g.Add(makr.Func{
 			Runner: func(path string, data makr.Data) error {
 				return os.RemoveAll(filepath.Join(path, "templates"))
@@ -99,11 +94,10 @@ func (a *App) Run(root string, data makr.Data) error {
 		})
 	}
 	if a.Docker != "none" {
-		o := docker.NewOptions()
-		if v, ok := data["version"].(string); ok {
-			o.Version = v
-		}
-		if err := docker.Run(root, o); err != nil {
+		o := docker.New()
+		o.App = a.App
+		o.Version = a.Version
+		if err := o.Run(root, data); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -114,10 +108,11 @@ func (a *App) Run(root string, data makr.Data) error {
 		g.Add(makr.NewCommand(exec.Command("git", "add", ".")))
 		g.Add(makr.NewCommand(exec.Command("git", "commit", "-m", "Initial Commit")))
 	}
+	data["opts"] = a
 	return g.Run(root, data)
 }
 
-func (a App) goGet() *exec.Cmd {
+func (a Generator) goGet() *exec.Cmd {
 	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
 			return exec.Command("dep", "init")
@@ -140,22 +135,22 @@ go:
 env:
   - GO_ENV=test
 
-{{ if eq .dbType "postgres" -}}
+{{ if eq .opts.DBType "postgres" -}}
 services:
   - postgresql
 {{ end -}}
 
 before_script:
-{{ if eq .dbType "postgres" -}}
-  - psql -c 'create database {{.name}}_test;' -U postgres
+{{ if eq .opts.DBType "postgres" -}}
+  - psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
 {{ end -}}
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
-go_import_path: {{.packagePath}}
+go_import_path: {{.opts.PackagePkg}}
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo
-{{ if .withDep -}}
+{{ if .opts.WithDep -}}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
 {{ else -}}
@@ -167,8 +162,8 @@ script: buffalo test
 
 const nGitlabCi = `before_script:
   - apt-get update && apt-get install -y postgresql-client mysql-client
-  - ln -s /builds /go/src/$(echo "{{.packagePath}}" | cut -d "/" -f1)
-  - cd /go/src/{{.packagePath}}
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
   - go get -t -v ./...
@@ -180,8 +175,8 @@ stages:
 .test-vars: &test-vars
   variables:
     GO_ENV: "test"
-    POSTGRES_DB: "{{.name}}_test"
-    MYSQL_DATABASE: "{{.name}}_test"
+    POSTGRES_DB: "{{.opts.Name.File}}_test"
+    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
     TEST_DATABASE_URL: "{{.testDbUrl}}"
 
@@ -214,8 +209,8 @@ test:1.8:
 `
 
 const nGitlabCiNoPop = `before_script:
-  - ln -s /builds /go/src/$(echo "{{.packagePath}}" | cut -d "/" -f1)
-  - cd /go/src/{{.packagePath}}
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
   - go get -t -v ./...

@@ -6,15 +6,12 @@ import (
 )
 
 // Run the soda generator
-func Run(root string, data makr.Data) error {
+func (sd Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 	defer g.Fmt(root)
 
 	should := func(data makr.Data) bool {
-		if _, ok := data["withPop"]; ok {
-			return ok
-		}
-		return false
+		return sd.App.WithPop
 	}
 
 	f := makr.NewFile("models/models.go", nModels)
@@ -36,7 +33,7 @@ func Run(root string, data makr.Data) error {
 	g.Add(&makr.Func{
 		Should: should,
 		Runner: func(rootPath string, data makr.Data) error {
-			data["dialect"] = data["dbType"]
+			data["dialect"] = sd.Dialect
 			return sg.GenerateConfig("./database.yml", data)
 		},
 	})
