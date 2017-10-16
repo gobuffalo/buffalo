@@ -21,12 +21,12 @@ var logo = &makr.RemoteFile{
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
 // Run webpack generator
-func Run(root string, data makr.Data) error {
+func (w Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
 	command := "yarn"
 
-	if b, ok := data["withYarn"].(bool); ok && !b {
+	if !w.WithYarn {
 		command = "npm"
 	} else {
 		err := installYarn(data)
@@ -36,8 +36,7 @@ func Run(root string, data makr.Data) error {
 	}
 
 	// if there's no npm, return!
-	_, err := exec.LookPath("npm")
-	if err != nil {
+	if _, err := exec.LookPath("npm"); err != nil {
 		fmt.Println("Could not find npm. Skipping webpack generation.")
 
 		return standard.Run(root, data)
@@ -56,6 +55,7 @@ func Run(root string, data makr.Data) error {
 
 	args := []string{"install", "--no-progress", "--save"}
 	g.Add(makr.NewCommand(exec.Command(command, args...)))
+	data["opts"] = w
 	return g.Run(root, data)
 }
 

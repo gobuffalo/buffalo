@@ -24,7 +24,7 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		o, err := resource.NewOptions(resourceOptions.Name, args...)
+		o, err := resource.New(resourceOptions.Name, args...)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -36,8 +36,7 @@ var ResourceCmd = &cobra.Command{
 			return err
 		}
 
-		data := makr.Data{}
-		return resource.Run(o, ".", data)
+		return o.Run(".", makr.Data{})
 	},
 }
 

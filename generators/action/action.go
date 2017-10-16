@@ -6,27 +6,27 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
 )
 
-var runningTests bool
-
 // Run action generator
-func Run(opts Options, root string, data makr.Data) error {
+func (act Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 	defer g.Fmt(root)
 
-	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", opts.Name.File()))
-	actionsTemplate := buildActionsTemplate(filePath)
-	testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", opts.Name.File()))
-	testsTemplate := buildTestsTemplate(testFilePath)
-	actionsToAdd := findActionsToAdd(opts.Name, filePath, opts.Actions)
-	testsToAdd := findTestsToAdd(opts.Name, testFilePath, opts.Actions)
-	handlersToAdd := findHandlersToAdd(opts.Name, filepath.Join("actions", "app.go"), opts.Actions)
+	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", act.Name.File()))
+	actionsTemplate := act.buildActionsTemplate(filePath)
+	testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", act.Name.File()))
+	testsTemplate := act.buildTestsTemplate(testFilePath)
+	actionsToAdd := act.findActionsToAdd(filePath)
+	testsToAdd := act.findTestsToAdd(testFilePath)
+	handlersToAdd := act.findHandlersToAdd(filepath.Join("actions", "app.go"))
 
-	data["opts"] = opts
+	data["opts"] = act
 	data["actions"] = actionsToAdd
 	data["tests"] = testsToAdd
 
@@ -37,18 +37,20 @@ func Run(opts Options, root string, data makr.Data) error {
 		Runner: func(root string, data makr.Data) error {
 			routes := []string{}
 			for _, a := range handlersToAdd {
-				routes = append(routes, fmt.Sprintf("app.%s(\"/%s/%s\", %s)", strings.ToUpper(opts.Method), opts.Name, a, opts.Name.Camel()+a.Camel()))
+				routes = append(routes, fmt.Sprintf("app.%s(\"/%s/%s\", %s)", strings.ToUpper(act.Method), act.Name, a, act.Name.Camel()+a.Camel()))
 			}
 			return generators.AddInsideAppBlock(routes...)
 		},
 	})
-	if !opts.SkipTemplate {
-		addTemplateFiles(opts, actionsToAdd, data)
+	if !act.SkipTemplate {
+		if err := act.addTemplateFiles(actionsToAdd, data); err != nil {
+			return errors.WithStack(err)
+		}
 	}
 	return g.Run(root, data)
 }
 
-func buildActionsTemplate(filePath string) string {
+func (act Generator) buildActionsTemplate(filePath string) string {
 	actionsTemplate := actionsHeaderTmpl
 	fileContents, err := ioutil.ReadFile(filePath)
 	if err == nil {
@@ -59,7 +61,7 @@ func buildActionsTemplate(filePath string) string {
 	return actionsTemplate
 }
 
-func buildTestsTemplate(filePath string) string {
+func (act Generator) buildTestsTemplate(filePath string) string {
 	testsTemplate := testHeaderTmpl
 
 	fileContents, err := ioutil.ReadFile(filePath)
@@ -71,19 +73,23 @@ func buildTestsTemplate(filePath string) string {
 	return testsTemplate
 }
 
-func addTemplateFiles(opts Options, actionsToAdd []meta.Name, data makr.Data) {
+func (act Generator) addTemplateFiles(actionsToAdd []meta.Name, data makr.Data) error {
 	for _, action := range actionsToAdd {
 		vg := makr.New()
-		viewPath := filepath.Join("templates", fmt.Sprintf("%s", opts.Name.File()), fmt.Sprintf("%s.html", action.File()))
+		viewPath := filepath.Join("templates", fmt.Sprintf("%s", act.Name.File()), fmt.Sprintf("%s.html", action.File()))
 		vg.Add(makr.NewFile(viewPath, viewTmpl))
-		vg.Run(".", makr.Data{
-			"opts":   opts,
+		err := vg.Run(".", makr.Data{
+			"opts":   act,
 			"action": action.Camel(),
 		})
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	}
+	return nil
 }
 
-func findActionsToAdd(name meta.Name, path string, actions []meta.Name) []meta.Name {
+func (act Generator) findActionsToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
@@ -91,10 +97,10 @@ func findActionsToAdd(name meta.Name, path string, actions []meta.Name) []meta.N
 
 	actionsToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", name.Camel(), action.Camel())
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", name.Camel(), action.Camel())
+			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 
@@ -104,7 +110,7 @@ func findActionsToAdd(name meta.Name, path string, actions []meta.Name) []meta.N
 	return actionsToAdd
 }
 
-func findHandlersToAdd(name meta.Name, path string, actions []meta.Name) []meta.Name {
+func (act Generator) findHandlersToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
@@ -112,8 +118,8 @@ func findHandlersToAdd(name meta.Name, path string, actions []meta.Name) []meta.
 
 	handlersToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", name.URL(), action.URL(), name.Camel(), action.Camel())
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", act.Name.URL(), action.URL(), act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
 			fmt.Printf("--> [warning] skipping %s from app.go since it already exists\n", funcSignature)
 			continue
@@ -125,7 +131,7 @@ func findHandlersToAdd(name meta.Name, path string, actions []meta.Name) []meta.
 	return handlersToAdd
 }
 
-func findTestsToAdd(name meta.Name, path string, actions []meta.Name) []meta.Name {
+func (act Generator) findTestsToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
@@ -133,10 +139,10 @@ func findTestsToAdd(name meta.Name, path string, actions []meta.Name) []meta.Nam
 
 	actionsToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", name.Camel(), action.Camel())
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", name.Camel(), action.Camel())
+			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 

@@ -2,10 +2,11 @@ package generate
 
 import (
 	"github.com/gobuffalo/buffalo/generators/docker"
+	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
 
-var dockerOptions = docker.NewOptions()
+var dockerOptions = docker.New()
 
 // DockerCmd generates a new Dockerfile
 var DockerCmd = &cobra.Command{
@@ -13,7 +14,7 @@ var DockerCmd = &cobra.Command{
 	Short: "Generates a Dockerfile",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dockerOptions.Version = Version
-		return docker.Run(".", dockerOptions)
+		return dockerOptions.Run(".", makr.Data{})
 	},
 }
 
