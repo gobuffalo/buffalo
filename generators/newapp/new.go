@@ -19,7 +19,6 @@ import (
 // Run returns a generator to create a new application
 func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
-	defer g.Fmt(a.Root)
 
 	if a.Force {
 		os.RemoveAll(a.Root)
@@ -103,6 +102,13 @@ func (a Generator) Run(root string, data makr.Data) error {
 		}
 	}
 	g.Add(makr.NewCommand(a.goGet()))
+
+	g.Add(makr.Func{
+		Runner: func(root string, data makr.Data) error {
+			g.Fmt(root)
+			return nil
+		},
+	})
 
 	if _, err := exec.LookPath("git"); err == nil {
 		g.Add(makr.NewCommand(exec.Command("git", "init")))
