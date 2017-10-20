@@ -38,6 +38,12 @@ func New(ctx context.Context, opts Options) *Builder {
 		b.buildBin,
 	}
 
+	if b.Options.SkipAssets {
+		logrus.Debug("skipping assets compilation step")
+		b.steps = append(b.steps[:6], b.steps[7:]...)
+		return b
+	}
+
 	return b
 }
 
