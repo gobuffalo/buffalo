@@ -67,6 +67,7 @@ func init() {
 	xbuildCmd.Flags().StringVarP(&options.Bin, "output", "o", options.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&tags, "tags", "t", "", "compile with specific build tags")
 	xbuildCmd.Flags().BoolVarP(&options.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
+	xbuildCmd.Flags().BoolVarP(&options.SkipAssets, "skip-assets", "k", false, "avoids compiling the assets, usefull if app was generated with --api")
 	xbuildCmd.Flags().BoolVarP(&options.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
 	xbuildCmd.Flags().StringVar(&options.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
 	xbuildCmd.Flags().BoolVarP(&options.Debug, "debug", "d", false, "print debugging information")
