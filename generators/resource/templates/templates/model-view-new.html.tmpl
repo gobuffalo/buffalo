@@ -1,8 +1,8 @@
 <div class="page-header">
-  <h1>New {{.model}}</h1>
+  <h1>New {{.opts.Model.Model}}</h1>
 </div>
 
-<%= form_for({{.varSingular}}, {action: {{.routeFirstDown}}Path(), method: "POST"}) { %>
-  <%= partial("{{.filesPath}}/form.html") %>
-  <a href="<%= {{.routeFirstDown}}Path() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<%= form_for({{.opts.Model.VarCaseSingular}}, {action: {{.opts.Name.VarCasePlural}}Path(), method: "POST"}) { %>
+  <%= partial("{{.opts.FilesPath}}/form.html") %>
+  <a href="<%= {{.opts.Name.VarCasePlural}}Path() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

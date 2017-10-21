@@ -1,4 +1,4 @@
-package cmd
+package newapp
 
 import (
 	"testing"
@@ -19,9 +19,14 @@ func Test_nameHasIllegalCharacter(t *testing.T) {
 		"github.com/markbates/coke": true,
 	}
 	for k, v := range m {
+		g, _ := New(k)
 		t.Run(k, func(st *testing.T) {
 			r := require.New(st)
-			r.Equal(v, nameHasIllegalCharacter(k))
+			if v {
+				r.Error(g.Validate())
+			} else {
+				r.NoError(g.Validate())
+			}
 		})
 	}
 }

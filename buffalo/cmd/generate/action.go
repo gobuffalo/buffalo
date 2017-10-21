@@ -1,20 +1,17 @@
 package generate
 
 import (
-	"errors"
-	"os"
+	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/action"
 	"github.com/gobuffalo/makr"
-	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
 
-//SkipActionTemplate indicates whether we generator should not generate the view layer when generating actions.
-var SkipActionTemplate = false
-
-//ActionMethod is the method generated action will be binded to.
-var ActionMethod = "GET"
+var actionOptions = struct {
+	SkipTemplate bool
+	Method       string
+}{}
 
 //ActionCmd is the cmd that generates actions.
 var ActionCmd = &cobra.Command{
@@ -22,28 +19,20 @@ var ActionCmd = &cobra.Command{
 	Aliases: []string{"a", "actions"},
 	Short:   "Generates new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 2 {
-			return errors.New("you should provide action name and handler name at least")
-		}
-
-		if _, err := os.Stat("actions"); err != nil {
-			return errors.New("actions directory not found, ensure you're inside your buffalo folder")
-		}
-
-		name := args[0]
-
-		data := makr.Data{
-			"filename":     inflect.Underscore(name),
-			"namespace":    inflect.Camelize(name),
-			"method":       ActionMethod,
-			"skipTemplate": SkipActionTemplate,
-		}
-
-		g, err := action.New(name, args[1:], data)
+		a, err := action.New(args...)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
+		a.SkipTemplate = actionOptions.SkipTemplate
+		a.Method = actionOptions.Method
 
-		return g.Run(".", data)
+		data := makr.Data{}
+
+		return a.Run(".", data)
 	},
+}
+
+func init() {
+	ActionCmd.Flags().BoolVarP(&actionOptions.SkipTemplate, "skip-template", "", false, "skip generation of templates for action(s)")
+	ActionCmd.Flags().StringVarP(&actionOptions.Method, "method", "m", "GET", "change the HTTP method for the generate action(s)")
 }
