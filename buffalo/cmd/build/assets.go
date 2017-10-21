@@ -9,7 +9,7 @@ import (
 
 func (b *Builder) buildAssets() error {
 
-	if b.WithWebpack && !b.Options.SkipAssets {
+	if b.WithWebpack && b.Options.WithAssets {
 		envy.Set("NODE_ENV", "production")
 		err := b.exec(webpack.BinPath)
 		if err != nil {
@@ -20,7 +20,7 @@ func (b *Builder) buildAssets() error {
 	p := pack.New(b.ctx, b.Root)
 	p.Compress = b.Compress
 
-	if b.ExtractAssets && !b.Options.SkipAssets {
+	if b.ExtractAssets && b.Options.WithAssets {
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
 		err := b.buildExtractedAssets()
 		if err != nil {
