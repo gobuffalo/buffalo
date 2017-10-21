@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 {{ range $a := .actions }}
-func (as *ActionSuite) Test_{{$.resourceName}}Resource_{{ camelize $a }}() {
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_{{ camelize $a }}() {
 	as.Fail("Not Implemented!")
 }
 {{ end }}

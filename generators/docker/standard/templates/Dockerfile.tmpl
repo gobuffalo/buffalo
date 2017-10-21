@@ -1,13 +1,13 @@
-FROM gobuffalo/buffalo:{{.version}}
+FROM gobuffalo/buffalo:{{.opts.Version}}
 
-RUN mkdir -p $GOPATH/src/{{.packagePath}}
-WORKDIR $GOPATH/src/{{.packagePath}}
+RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
+WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
-{{if .asWeb -}}
-{{if .withWebpack -}}
+{{if .opts.AsWeb -}}
+{{if .opts.App.WithWebpack -}}
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
-{{if .withYarn -}}
+{{if .opts.App.WithYarn -}}
 ADD yarn.lock .
 RUN yarn install --no-progress
 {{else -}}
@@ -17,7 +17,7 @@ RUN npm install --no-progress
 {{end -}}
 
 ADD . .
-{{if .withDep -}}
+{{if .opts.App.WithDep -}}
 RUN dep ensure
 {{else -}}
 RUN go get $(go list ./... | grep -v /vendor/)
@@ -28,4 +28,4 @@ EXPOSE 3000
 
 # Comment out to run the migrations before running the binary:
 # CMD /bin/app migrate; /bin/app
-CMD /bin/app
+CMD exec /bin/app

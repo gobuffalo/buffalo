@@ -1,0 +1,21 @@
+package a
+
+import (
+	"log"
+	"strings"
+	"github.com/markbates/pop"
+)
+
+func init() {
+	dropDatabaseYml()
+}
+
+func dropDatabaseYml() {
+	if DB_CONFIG != "" {
+		r := strings.NewReader(DB_CONFIG)
+		err := pop.LoadFrom(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}

@@ -7,17 +7,17 @@ import (
   "github.com/gobuffalo/buffalo/middleware/ssl"
   "github.com/unrolled/secure"
 
-  {{ if .withPop }}
-  "{{.modelsPath}}"
+  {{ if .opts.WithPop }}
+  "{{.opts.ModelsPkg}}"
   {{ end -}}
 
-  {{ if .asWeb -}}
+  {{ if .opts.AsWeb -}}
   "github.com/gobuffalo/buffalo/middleware/csrf"
   "github.com/gobuffalo/buffalo/middleware/i18n"
   "github.com/gobuffalo/packr"
   {{ end -}}
 
-  {{ if .asAPI -}}
+  {{ if .opts.AsAPI -}}
   "github.com/gobuffalo/x/sessions"
   {{ end -}}
 )
@@ -26,7 +26,7 @@ import (
 // application is being run. Default is "development".
 var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
-{{ if .asWeb -}}
+{{ if .opts.AsWeb -}}
 var T *i18n.Translator
 {{ end }}
 
@@ -37,10 +37,10 @@ func App() *buffalo.App {
   if app == nil {
     app = buffalo.New(buffalo.Options{
       Env: ENV,
-      {{ if .asAPI -}}
+      {{ if .opts.AsAPI -}}
       SessionStore: sessions.Null{},
       {{ end -}}
-      SessionName: "_{{.name}}_session",
+      SessionName: "_{{.opts.Name.File}}_session",
     })
     // Automatically redirect to SSL
     app.Use(ssl.ForceSSL(secure.Options{
@@ -48,7 +48,7 @@ func App() *buffalo.App {
       SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
     }))
 
-    {{ if .asAPI -}}
+    {{ if .opts.AsAPI -}}
     // Set the request content type to JSON
     app.Use(middleware.SetContentType("application/json"))
     {{ end }}
@@ -57,20 +57,20 @@ func App() *buffalo.App {
       app.Use(middleware.ParameterLogger)
     }
 
-    {{ if .asWeb -}}
+    {{ if .opts.AsWeb -}}
     // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
     // Remove to disable this.
     app.Use(csrf.New)
     {{ end }}
 
-    {{ if .withPop }}
+    {{ if .opts.WithPop }}
     // Wraps each request in a transaction.
     //  c.Value("tx").(*pop.PopTransaction)
     // Remove to disable this.
     app.Use(middleware.PopTransaction(models.DB))
     {{ end }}
 
-    {{ if .asWeb -}}
+    {{ if .opts.AsWeb -}}
     // Setup and use translations:
     var err error
     if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
@@ -81,7 +81,7 @@ func App() *buffalo.App {
 
     app.GET("/", HomeHandler)
 
-    {{ if .asWeb -}}
+    {{ if .opts.AsWeb -}}
     app.ServeFiles("/assets", assetsBox)
     {{ end -}}
   }

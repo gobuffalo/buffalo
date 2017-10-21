@@ -5,62 +5,28 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/pkg/errors"
 )
 
-//New allows to create a new grift task generator
-func New(data makr.Data) (*makr.Generator, error) {
+//Run allows to create a new grift task generator
+func (gg Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
 
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "grift"))
-	if err != nil {
-		return nil, err
-	}
+	header := tmplHeader
+	path := filepath.Join("grifts", gg.Name.File()+".go")
 
-	path := filepath.Join("grifts", data["filename"].(string))
-	file := files[0]
-
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		g.Add(makr.NewFile(path, file.Body))
-	} else {
+	if _, err := os.Stat(path); err == nil {
 		template, err := ioutil.ReadFile(path)
 		if err != nil {
-			return nil, err
+			return errors.WithStack(err)
 		}
-
-		g.Add(makr.NewFile(path, string(template)+existsTmpl))
+		header = string(template)
 	}
 
-	return g, nil
+	g.Add(makr.NewFile(path, header+tmplBody))
+
+	data["opts"] = gg
+	return g.Run(root, data)
 }
-
-var existsTmpl = `
-{{ if .plainTask -}}
-    var _ = Desc("{{.taskName}}", "TODO")
-    var _ = Add("{{.taskName}}", func(c *Context) error {
-        return nil
-    })
-{{ else }}
-    {{ $last := .last }}
-    {{ range $index, $element := .parts }}
-        {{ $isLast := eq $index $last }}
-        {{ if not $isLast }}
-            {{if eq $index 0}}
-                var _ = Namespace("{{$element}}", func(){
-            {{ else }}
-                Namespace("{{$element}}", func(){
-            {{end}}
-        {{ else }}
-            Desc("{{$element}}", "TODO")
-            Add("{{$element}}", func(c *Context) error{
-                return nil
-            })
-        {{ end }}
-    {{ end }}
-
-    {{ range $index, $element := .parts }}
-        {{ if $index }} }) {{ end }}
-    {{ end }}
-
-{{ end }}`

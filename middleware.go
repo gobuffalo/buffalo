@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"sync"
 )
 
 // MiddlewareFunc defines the interface for a piece of Buffalo
@@ -139,12 +140,17 @@ func funcKey(funcs ...interface{}) string {
 		}
 		rv := reflect.ValueOf(f)
 		ptr := rv.Pointer()
+		keyMapMutex.Lock()
 		if n, ok := keyMap[ptr]; ok {
+			keyMapMutex.Unlock()
 			names = append(names, n)
 			continue
 		}
+		keyMapMutex.Unlock()
 		n := ptrName(ptr)
+		keyMapMutex.Lock()
 		keyMap[ptr] = n
+		keyMapMutex.Unlock()
 		names = append(names, n)
 	}
 	return strings.Join(names, "/")
@@ -166,7 +172,10 @@ func setFuncKey(f interface{}, name string) {
 		rv = rv.Elem()
 	}
 	ptr := rv.Pointer()
+	keyMapMutex.Lock()
 	keyMap[ptr] = name
+	keyMapMutex.Unlock()
 }
 
 var keyMap = map[uintptr]string{}
+var keyMapMutex = sync.Mutex{}
