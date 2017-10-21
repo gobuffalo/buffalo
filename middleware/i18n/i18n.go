@@ -93,7 +93,7 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 
 			// set up the helper function for the views:
 			c.Set(t.HelperName, func(s string) (string, error) {
-				return t.TranslateSingular(c, s)
+				return t.Translate(c, s)
 			})
 			c.Set(t.HelperNamePlural, func(s string, i interface{}) (string, error) {
 				return t.TranslatePlural(c, s, i)
@@ -103,9 +103,9 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 	}
 }
 
-// TranslateSingular translates a string given a Context
+// Translate translates a string given a Context
 // s is the translation ID
-func (t *Translator) TranslateSingular(c buffalo.Context, s string) (string, error) {
+func (t *Translator) Translate(c buffalo.Context, s string) (string, error) {
 	if langs := c.Value("languages"); langs == nil {
 		c.Set("languages", t.LanguageFinder(t, c))
 	}
@@ -117,7 +117,7 @@ func (t *Translator) TranslateSingular(c buffalo.Context, s string) (string, err
 	return T(s, c.Data()), nil
 }
 
-// TranslatePlural is the plural version of TranslateSingular
+// TranslatePlural is the plural version of Translate
 // s is the translation ID
 // i must be an integer type (int, int8, int16, int32, int64) or a float formatted as a string (e.g. "123.45")
 func (t *Translator) TranslatePlural(c buffalo.Context, s string, i interface{}) (string, error) {
