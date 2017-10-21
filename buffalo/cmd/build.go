@@ -14,9 +14,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var options = build.Options{}
-var tags = ""
-var debug bool
+var buildOptions = struct {
+	build.Options
+	SkipAssets bool
+	Tags       string
+}{
+	Options: build.Options{},
+}
 
 var xbuildCmd = &cobra.Command{
 	Use:     "build",
@@ -26,13 +30,15 @@ var xbuildCmd = &cobra.Command{
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
 
-		if options.Debug {
+		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
+
+		if buildOptions.Debug {
 			logrus.SetLevel(logrus.DebugLevel)
 		}
 
-		b := build.New(ctx, options)
-		if tags != "" {
-			b.Tags = append(b.Tags, tags)
+		b := build.New(ctx, buildOptions.Options)
+		if buildOptions.Tags != "" {
+			b.Tags = append(b.Tags, buildOptions.Tags)
 		}
 
 		go func() {
@@ -62,15 +68,15 @@ func init() {
 
 	pwd, _ := os.Getwd()
 
-	options.App = meta.New(pwd)
+	buildOptions.App = meta.New(pwd)
 
-	xbuildCmd.Flags().StringVarP(&options.Bin, "output", "o", options.Bin, "set the name of the binary")
-	xbuildCmd.Flags().StringVarP(&tags, "tags", "t", "", "compile with specific build tags")
-	xbuildCmd.Flags().BoolVarP(&options.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
-	xbuildCmd.Flags().BoolVarP(&options.WithAssets, "with-assets", "k", true, "build assets defaults to true, useful if app was generated with --api")
-	xbuildCmd.Flags().BoolVarP(&options.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
-	xbuildCmd.Flags().StringVar(&options.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
-	xbuildCmd.Flags().BoolVarP(&options.Debug, "debug", "d", false, "print debugging information")
-	xbuildCmd.Flags().BoolVarP(&options.Compress, "compress", "c", true, "compress static files in the binary")
+	xbuildCmd.Flags().StringVarP(&buildOptions.Bin, "output", "o", buildOptions.Bin, "set the name of the binary")
+	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.SkipAssets, "skip-assets", "k", false, "skip running webpack and building assets")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
+	xbuildCmd.Flags().StringVar(&buildOptions.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.Debug, "debug", "d", false, "print debugging information")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.Compress, "compress", "c", true, "compress static files in the binary")
 
 }
