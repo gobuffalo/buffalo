@@ -1,14 +1,14 @@
 # This is a multi-stage Dockerfile and requires >= Docker 17.05
 # https://docs.docker.com/engine/userguide/eng-image/multistage-build/
-FROM gobuffalo/buffalo:{{.version}} as builder
+FROM gobuffalo/buffalo:{{.opts.Version}} as builder
 
-RUN mkdir -p $GOPATH/src/{{.packagePath}}
-WORKDIR $GOPATH/src/{{.packagePath}}
+RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
+WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
-{{if .withWebpack -}}
+{{if .opts.App.WithWebpack -}}
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
-{{if .withYarn -}}
+{{if .opts.App.WithYarn -}}
 ADD yarn.lock .
 RUN yarn install --no-progress
 {{else -}}
@@ -17,7 +17,7 @@ RUN npm install --no-progress
 {{end -}}
 
 ADD . .
-{{if .withDep -}}
+{{if .opts.App.WithDep -}}
 RUN dep ensure
 {{else -}}
 RUN go get $(go list ./... | grep -v /vendor/)
@@ -39,4 +39,4 @@ EXPOSE 3000
 
 # Comment out to run the migrations before running the binary:
 # CMD /bin/app migrate; /bin/app
-CMD /bin/app
+CMD exec /bin/app

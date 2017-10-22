@@ -1,0 +1,7 @@
+- id: greeting
+  translation: "Bonjour à tous !"
+
+- id: greeting-plural
+  translation:
+    one: "Bonjour, tout seul !"
+    other: "Bonjour, {{.Count}} personnes !"
