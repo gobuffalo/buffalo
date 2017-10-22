@@ -12,7 +12,7 @@ import (
 )
 
 // LanguageFinder can be implemented for custom finding of search
-// languages. This can be useful if you want to load a user's langugage
+// languages. This can be useful if you want to load a user's language
 // from something like a database. See Middleware() for more information
 // on how the default implementation searches for languages.
 type LanguageFinder func(*Translator, buffalo.Context) []string
