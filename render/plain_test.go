@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,9 +22,7 @@ func Test_Plain(t *testing.T) {
 
 	type ji func(...string) render.Renderer
 
-	j := render.New(render.Options{
-		TemplateEngine: plush.BuffaloRenderer,
-	}).Plain
+	j := render.New(render.Options{}).Plain
 
 	re := j(tmpFile.Name())
 	r.Equal("text/plain; charset=utf-8", re.ContentType())

@@ -10,7 +10,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr"
-	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,9 +26,7 @@ func Test_Template(t *testing.T) {
 	type ji func(string, ...string) render.Renderer
 
 	table := []ji{
-		render.New(render.Options{
-			TemplateEngine: plush.BuffaloRenderer,
-		}).Template,
+		render.New(render.Options{}).Template,
 	}
 
 	for _, j := range table {
@@ -95,12 +92,11 @@ func Test_AssetPath(t *testing.T) {
 	}
 
 	re := render.New(render.Options{
-		TemplateEngine: plush.BuffaloRenderer,
-		AssetsBox:      packr.NewBox(tdir),
+		AssetsBox: packr.NewBox(tdir),
 	}).Template
 
-	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`{		
-		"application.css": "application.aabbc123.css"		
+	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`{
+		"application.css": "application.aabbc123.css"
 	}`), 0644)
 
 	for original, expected := range cases {
@@ -135,8 +131,7 @@ func Test_AssetPathNoManifest(t *testing.T) {
 	}
 
 	re := render.New(render.Options{
-		TemplateEngine: plush.BuffaloRenderer,
-		AssetsBox:      packr.NewBox(tdir),
+		AssetsBox: packr.NewBox(tdir),
 	}).Template
 
 	for original, expected := range cases {
@@ -171,8 +166,7 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 	ioutil.WriteFile(filepath.Join(tdir, "manifest.json"), []byte(`//shdnn Corrupt!`), 0644)
 
 	re := render.New(render.Options{
-		TemplateEngine: plush.BuffaloRenderer,
-		AssetsBox:      packr.NewBox(tdir),
+		AssetsBox: packr.NewBox(tdir),
 	}).Template
 
 	for original, expected := range cases {
