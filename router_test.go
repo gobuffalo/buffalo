@@ -11,7 +11,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr"
-	"github.com/gobuffalo/plush"
 	"github.com/gorilla/mux"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
@@ -335,10 +334,9 @@ func Test_App_NamedRoutes(t *testing.T) {
 	carsResource = CarsResource{&BaseResource{}}
 
 	rr := render.New(render.Options{
-		HTMLLayout:     "application.html",
-		TemplateEngine: plush.BuffaloRenderer,
-		TemplatesBox:   packr.NewBox("../templates"),
-		Helpers:        map[string]interface{}{},
+		HTMLLayout:   "application.html",
+		TemplatesBox: packr.NewBox("../templates"),
+		Helpers:      map[string]interface{}{},
 	})
 
 	sampleHandler := func(c Context) error {

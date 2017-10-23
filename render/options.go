@@ -20,5 +20,5 @@ type Options struct {
 	Helpers Helpers
 
 	// TemplateEngine to be used for rendering HTML templates
-	TemplateEngine TemplateEngine
+	TemplateEngines map[string]TemplateEngine
 }

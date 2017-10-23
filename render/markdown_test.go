@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -32,9 +31,7 @@ func Test_Markdown(t *testing.T) {
 		r := require.New(st)
 
 		table := []ji{
-			render.New(render.Options{
-				TemplateEngine: plush.BuffaloRenderer,
-			}).HTML,
+			render.New(render.Options{}).HTML,
 		}
 
 		for _, j := range table {
@@ -58,8 +55,7 @@ func Test_Markdown(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			HTMLLayout:     layout.Name(),
-			TemplateEngine: plush.BuffaloRenderer,
+			HTMLLayout: layout.Name(),
 		}).HTML(tmpFile.Name())
 
 		r.Equal("text/html", re.ContentType())
