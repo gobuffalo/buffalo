@@ -18,8 +18,8 @@ import (
   <% } %>
 )
 
-var version = "unknown"
-var buildTime = "unknown"
+var BuildVersion = "unknown"
+var BuildTime = "unknown"
 
 func main() {
   args := os.Args
@@ -52,7 +52,7 @@ func main() {
 }
 
 func printVersion() {
-  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n\n", version, buildTime)
+  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n\n", BuildVersion, BuildTime)
 }
 
 <%= if (opts.WithPop) { %>

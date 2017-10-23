@@ -44,8 +44,8 @@ func (b *Builder) buildBin() error {
 
 	version, buildTime := version()
 	flags := []string{
-		fmt.Sprintf("-X main.version=%s", version),
-		fmt.Sprintf("-X main.buildTime=%s", buildTime),
+		fmt.Sprintf("-X main.BuildVersion=%s", version),
+		fmt.Sprintf("-X main.BuildTime=%s", buildTime),
 	}
 
 	if b.Static {
