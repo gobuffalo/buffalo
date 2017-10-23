@@ -1,20 +1,20 @@
 package actions
 
 import (
-  {{ if .asWeb -}}
+  {{ if .opts.AsWeb -}}
   "github.com/gobuffalo/packr"
   {{ end -}}
   "github.com/gobuffalo/buffalo/render"
 )
 
 var r *render.Engine
-{{ if .asWeb -}}
+{{ if .opts.AsWeb -}}
 var assetsBox = packr.NewBox("../public/assets")
 {{ end -}}
 
 func init() {
   r = render.New(render.Options{
-    {{ if .asWeb -}}
+    {{ if .opts.AsWeb -}}
       // HTML layout to be used for all HTML requests:
       HTMLLayout:     "application.html",
 

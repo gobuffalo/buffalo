@@ -14,10 +14,9 @@ var destroyCmd = &cobra.Command{
 func init() {
 	destroyCmd.AddCommand(destroy.ResourceCmd)
 	destroyCmd.AddCommand(destroy.ActionCmd)
+	destroyCmd.AddCommand(destroy.ModelCmd)
 
-	destroy.ResourceCmd.Flags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
-	destroy.ModelCmd.Flags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
-	destroy.ActionCmd.Flags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
+	destroyCmd.PersistentFlags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
 
 	decorate("destroy", destroyCmd)
 	RootCmd.AddCommand(destroyCmd)

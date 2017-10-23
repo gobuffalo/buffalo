@@ -27,6 +27,9 @@ func app() *buffalo.App {
 	app.GET("/", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("index.html"))
 	})
+	app.GET("/plural", func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("plural.html"))
+	})
 	return app
 }
 
@@ -36,4 +39,34 @@ func Test_i18n(t *testing.T) {
 	w := willie.New(app())
 	res := w.Request("/").Get()
 	r.Equal("Hello, World!\n", res.Body.String())
+}
+
+func Test_i18n_fr(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/")
+	// Set language as "french"
+	req.Headers["Accept-Language"] = "fr-fr"
+	res := req.Get()
+	r.Equal("Bonjour à tous !\n", res.Body.String())
+}
+
+func Test_i18n_plural(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	res := w.Request("/plural").Get()
+	r.Equal("Hello, alone!\nHello, 5 people!\n", res.Body.String())
+}
+
+func Test_i18n_plural_fr(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/plural")
+	// Set language as "french"
+	req.Headers["Accept-Language"] = "fr-fr"
+	res := req.Get()
+	r.Equal("Bonjour, tout seul !\nBonjour, 5 personnes !\n", res.Body.String())
 }

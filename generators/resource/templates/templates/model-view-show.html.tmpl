@@ -1,16 +1,16 @@
 <div class="page-header">
-  <h1>{{.model}}#Show</h1>
+  <h1>{{.opts.Model.Model}}#Show</h1>
 </div>
 
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= {{.routeFirstDown}}Path() %>" class="btn btn-info">Back to all {{.modelPlural}}</a></li>
-  <li><a href="<%= edit{{.routeNameSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID })%>" class="btn btn-warning">Edit</a></li>
-  <li><a href="<%= {{.routeFirstDownSingular}}Path({ {{.resourceSingularUnder}}_id: {{.varSingular}}.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+  <li><a href="<%= {{.opts.Name.VarCasePlural}}Path() %>" class="btn btn-info">Back to all {{.opts.Model.ModelPlural}}</a></li>
+  <li><a href="<%= edit{{.opts.Name.Model}}Path({ {{.opts.Model.UnderSingular}}_id: {{.opts.Model.VarCaseSingular}}.ID })%>" class="btn btn-warning">Edit</a></li>
+  <li><a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.Model.UnderSingular}}_id: {{.opts.Model.VarCaseSingular}}.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
 </ul>
 
-{{ range $p := .modelProps -}}
+{{ range $p := .opts.Props -}}
 <p>
-  <strong>{{ $p.Name }}</strong>: <%= {{$.varSingular}}.{{$p.Name}} %>
+  <strong>{{ $p.Name }}</strong>: <%= {{$.opts.Model.VarCaseSingular}}.{{$p.Name}} %>
 </p>
 {{ end -}}
 

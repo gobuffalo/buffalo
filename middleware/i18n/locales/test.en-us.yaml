@@ -1,2 +1,7 @@
 - id: greeting
   translation: "Hello, World!"
+
+- id: greeting-plural
+  translation:
+    one: "Hello, alone!"
+    other: "Hello, {{.Count}} people!"

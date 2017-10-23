@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/buffalo/plugins"
+	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
 
@@ -32,6 +33,7 @@ func decorate(name string, cmd *cobra.Command) {
 	pugs := plugs()
 	for _, c := range pugs[name] {
 		func(c plugins.Command) {
+			anywhereCommands = append(anywhereCommands, c.Name)
 			cc := &cobra.Command{
 				Use:     c.Name,
 				Short:   fmt.Sprintf("[PLUGIN] %s", c.Description),
@@ -49,7 +51,7 @@ func decorate(name string, cmd *cobra.Command) {
 
 					ax = append(ax, args...)
 					ex := exec.Command(c.Binary, ax...)
-					ex.Env = append(os.Environ(), "BUFFALO_PLUGIN=1")
+					ex.Env = append(envy.Environ(), "BUFFALO_PLUGIN=1")
 					ex.Stdin = os.Stdin
 					ex.Stdout = os.Stdout
 					ex.Stderr = os.Stderr

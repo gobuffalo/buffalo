@@ -20,38 +20,33 @@ var logo = &makr.RemoteFile{
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
-// New webpack generator
-func New(data makr.Data) (*makr.Generator, error) {
+// Run webpack generator
+func (w Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
 	command := "yarn"
 
-	if b, ok := data["withYarn"].(bool); ok && !b {
+	if !w.WithYarn {
 		command = "npm"
 	} else {
 		err := installYarn(data)
 		if err != nil {
-			return g, errors.WithStack(err)
+			return errors.WithStack(err)
 		}
 	}
 
 	// if there's no npm, return!
-	_, err := exec.LookPath("npm")
-	if err != nil {
+	if _, err := exec.LookPath("npm"); err != nil {
 		fmt.Println("Could not find npm. Skipping webpack generation.")
 
-		wg, err := standard.New(data)
-		if err != nil {
-			return g, errors.WithStack(err)
-		}
-		return wg, nil
+		return standard.Run(root, data)
 	}
 
 	g.Add(logo)
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "assets", "webpack"))
 	if err != nil {
-		return g, err
+		return errors.WithStack(err)
 	}
 
 	for _, f := range files {
@@ -60,7 +55,8 @@ func New(data makr.Data) (*makr.Generator, error) {
 
 	args := []string{"install", "--no-progress", "--save"}
 	g.Add(makr.NewCommand(exec.Command(command, args...)))
-	return g, nil
+	data["opts"] = w
+	return g.Run(root, data)
 }
 
 func installYarn(data makr.Data) error {

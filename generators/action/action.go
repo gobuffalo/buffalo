@@ -6,113 +6,101 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/gobuffalo/buffalo/generators"
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
-	"github.com/markbates/inflect"
 )
 
-var runningTests bool
-
-// New action generator
-func New(name string, actions []string, data makr.Data) (*makr.Generator, error) {
+// Run action generator
+func (act Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
+	defer g.Fmt(root)
 
-	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", data["filename"]))
-	actionsTemplate := buildActionsTemplate(filePath)
-	testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", data["filename"]))
-	testsTemplate := buildTestsTemplate(testFilePath)
-	actionsToAdd := findActionsToAdd(name, filePath, actions)
-	testsToAdd := findTestsToAdd(name, testFilePath, actions)
-	handlersToAdd := findHandlersToAdd(name, filepath.Join("actions", "app.go"), actions)
+	filePath := filepath.Join("actions", fmt.Sprintf("%v.go", act.Name.File()))
+	actionsTemplate := act.buildActionsTemplate(filePath)
+	testFilePath := filepath.Join("actions", fmt.Sprintf("%v_test.go", act.Name.File()))
+	testsTemplate := act.buildTestsTemplate(testFilePath)
+	actionsToAdd := act.findActionsToAdd(filePath)
+	testsToAdd := act.findTestsToAdd(testFilePath)
+	handlersToAdd := act.findHandlersToAdd(filepath.Join("actions", "app.go"))
 
+	data["opts"] = act
 	data["actions"] = actionsToAdd
 	data["tests"] = testsToAdd
 
-	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s.go", data["filename"])), actionsTemplate))
-	g.Add(makr.NewFile(filepath.Join("actions", fmt.Sprintf("%s_test.go", data["filename"])), testsTemplate))
+	g.Add(makr.NewFile(filePath, actionsTemplate))
+	g.Add(makr.NewFile(testFilePath, testsTemplate))
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
 			routes := []string{}
 			for _, a := range handlersToAdd {
-				routes = append(routes, fmt.Sprintf("app.%s(\"/%s/%s\", %s)", data["method"], name, a, data["namespace"].(string)+inflect.Camelize(a)))
+				routes = append(routes, fmt.Sprintf("app.%s(\"/%s/%s\", %s)", strings.ToUpper(act.Method), act.Name, a, act.Name.Camel()+a.Camel()))
 			}
 			return generators.AddInsideAppBlock(routes...)
 		},
 	})
-
-	if skipTemplates := data["skipTemplate"].(bool); !skipTemplates {
-		addTemplateFiles(actionsToAdd, data)
+	if !act.SkipTemplate {
+		if err := act.addTemplateFiles(actionsToAdd, data); err != nil {
+			return errors.WithStack(err)
+		}
 	}
-
-	return g, nil
+	return g.Run(root, data)
 }
 
-func buildActionsTemplate(filePath string) string {
-	actionsTemplate := rActionFileT
+func (act Generator) buildActionsTemplate(filePath string) string {
+	actionsTemplate := actionsHeaderTmpl
 	fileContents, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		actionsTemplate = string(fileContents)
 	}
 
-	actionsTemplate = actionsTemplate + `
-{{ range $action := .actions }}
-// {{$.namespace}}{{camelize $action}} default implementation.
-func {{$.namespace}}{{camelize $action}}(c buffalo.Context) error {
-	return c.Render(200, r.HTML("{{$.filename}}/{{underscore $action}}.html"))
-}
-{{end}}`
+	actionsTemplate = actionsTemplate + actionsTmpl
 	return actionsTemplate
 }
 
-func buildTestsTemplate(filePath string) string {
-	testsTemplate := `package actions
+func (act Generator) buildTestsTemplate(filePath string) string {
+	testsTemplate := testHeaderTmpl
 
-import (
-	"testing"
-
-	"github.com/stretchr/testify/require"
-)
-	`
 	fileContents, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		testsTemplate = string(fileContents)
 	}
 
-	testsTemplate = testsTemplate + `
-{{ range $action := .tests}}
-func (as *ActionSuite) Test_{{$.namespace}}_{{camelize $action}}() {
-	as.Fail("Not Implemented!")
-}
-
-{{end}}`
+	testsTemplate = testsTemplate + testsTmpl
 	return testsTemplate
 }
 
-func addTemplateFiles(actionsToAdd []string, data makr.Data) {
+func (act Generator) addTemplateFiles(actionsToAdd []meta.Name, data makr.Data) error {
 	for _, action := range actionsToAdd {
 		vg := makr.New()
-		viewPath := filepath.Join("templates", fmt.Sprintf("%s", data["filename"]), fmt.Sprintf("%s.html", inflect.Underscore(action)))
-		vg.Add(makr.NewFile(viewPath, rViewT))
-		vg.Run(".", makr.Data{
-			"namespace": data["namespace"],
-			"action":    inflect.Camelize(action),
+		viewPath := filepath.Join("templates", fmt.Sprintf("%s", act.Name.File()), fmt.Sprintf("%s.html", action.File()))
+		vg.Add(makr.NewFile(viewPath, viewTmpl))
+		err := vg.Run(".", makr.Data{
+			"opts":   act,
+			"action": action.Camel(),
 		})
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	}
+	return nil
 }
 
-func findActionsToAdd(name, path string, actions []string) []string {
+func (act Generator) findActionsToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	actionsToAdd := []string{}
+	actionsToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", inflect.Camelize(name), inflect.Camelize(action))
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", inflect.Camelize(name), inflect.Camelize(action))
+			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 
@@ -122,16 +110,16 @@ func findActionsToAdd(name, path string, actions []string) []string {
 	return actionsToAdd
 }
 
-func findHandlersToAdd(name, path string, actions []string) []string {
+func (act Generator) findHandlersToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	handlersToAdd := []string{}
+	handlersToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s)", name, action, inflect.Camelize(inflect.Pluralize(name)+"_"+action))
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", act.Name.URL(), action.URL(), act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
 			fmt.Printf("--> [warning] skipping %s from app.go since it already exists\n", funcSignature)
 			continue
@@ -143,18 +131,18 @@ func findHandlersToAdd(name, path string, actions []string) []string {
 	return handlersToAdd
 }
 
-func findTestsToAdd(name, path string, actions []string) []string {
+func (act Generator) findTestsToAdd(path string) []meta.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	actionsToAdd := []string{}
+	actionsToAdd := []meta.Name{}
 
-	for _, action := range actions {
-		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", inflect.Camelize(name), inflect.Camelize(action))
+	for _, action := range act.Actions {
+		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", inflect.Camelize(name), inflect.Camelize(action))
+			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 
