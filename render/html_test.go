@@ -21,7 +21,6 @@ func Test_HTML(t *testing.T) {
 	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
 
-	type ji func(...string) render.Renderer
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 

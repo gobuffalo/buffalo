@@ -10,6 +10,9 @@ type Options struct {
 	// HTMLLayout is the default layout to be used with all HTML renders.
 	HTMLLayout string
 
+	// JavaScriptLayout is the default layout to be used with all JavaScript renders.
+	JavaScriptLayout string
+
 	// TemplatesBox is the location of the templates directory on disk.
 	TemplatesBox packr.Box
 
