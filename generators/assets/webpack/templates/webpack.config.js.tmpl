@@ -3,6 +3,7 @@ var CopyWebpackPlugin = require("copy-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
+var CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -17,6 +18,12 @@ module.exports = {
     path: `${__dirname}/public/assets`
   },
   plugins: [
+    new CleanWebpackPlugin([
+      'public/assets/*.js',
+      'public/assets/*.css'
+    ], {
+      watch: true
+    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"
