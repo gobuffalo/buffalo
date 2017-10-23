@@ -34,6 +34,9 @@ func New(opts Options) *Engine {
 	if _, ok := opts.TemplateEngines["md"]; !ok {
 		opts.TemplateEngines["md"] = MDTemplateEngine
 	}
+	if _, ok := opts.TemplateEngines["tmpl"]; !ok {
+		opts.TemplateEngines["tmpl"] = GoTemplateEngine
+	}
 
 	e := &Engine{
 		Options: opts,
