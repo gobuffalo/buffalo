@@ -3,6 +3,8 @@ package render
 import (
 	"fmt"
 	"io"
+
+	"github.com/pkg/errors"
 )
 
 type stringRenderer struct {
@@ -15,7 +17,11 @@ func (s stringRenderer) ContentType() string {
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {
-	t, err := s.TemplateEngine(s.body, data, s.Helpers)
+	te, ok := s.TemplateEngines["text"]
+	if !ok {
+		return errors.New("could not find a template engine for text")
+	}
+	t, err := te(s.body, data, s.Helpers)
 	if err != nil {
 		return err
 	}

@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
@@ -26,9 +25,7 @@ func Test_HTML(t *testing.T) {
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		j := render.New(render.Options{
-			TemplateEngine: plush.BuffaloRenderer,
-		}).HTML
+		j := render.New(render.Options{}).HTML
 
 		re := j(tmpFile.Name())
 		r.Equal("text/html", re.ContentType())
@@ -49,8 +46,7 @@ func Test_HTML(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			HTMLLayout:     layout.Name(),
-			TemplateEngine: plush.BuffaloRenderer,
+			HTMLLayout: layout.Name(),
 		})
 
 		st.Run("using just the HTMLLayout", func(sst *testing.T) {

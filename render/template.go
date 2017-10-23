@@ -1,11 +1,11 @@
 package render
 
 import (
-	"html"
 	"html/template"
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -13,7 +13,6 @@ import (
 	// this blank import is here because dep doesn't
 	// handle transitive dependencies correctly
 	_ "github.com/russross/blackfriday"
-	"github.com/shurcooL/github_flavored_markdown"
 )
 
 type templateRenderer struct {
@@ -52,6 +51,8 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		return "", err
 	}
 
+	data["contentType"] = strings.ToLower(s.contentType)
+
 	helpers := map[string]interface{}{
 		"partial": s.partial,
 	}
@@ -62,17 +63,36 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
-	if strings.ToLower(filepath.Ext(name)) == ".md" && strings.ToLower(s.contentType) != "text/plain" {
-		source = github_flavored_markdown.Markdown(source)
-		source = []byte(html.UnescapeString(string(source)))
-	}
-
-	body, err := s.TemplateEngine(string(source), data, helpers)
-	if err != nil {
-		return "", err
+	body := string(source)
+	for _, ext := range s.exts(name) {
+		te, ok := s.TemplateEngines[ext]
+		if !ok {
+			return "", errors.Errorf("could not find a template engine for %s", ext)
+		}
+		body, err = te(body, data, helpers)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	return template.HTML(body), nil
+}
+
+func (s templateRenderer) exts(name string) []string {
+	exts := []string{}
+	for {
+		ext := filepath.Ext(name)
+		if ext == "" {
+			break
+		}
+		name = strings.TrimSuffix(name, ext)
+		exts = append(exts, strings.ToLower(ext[1:]))
+	}
+	if len(exts) == 0 {
+		return []string{"html"}
+	}
+	sort.Sort(sort.Reverse(sort.StringSlice(exts)))
+	return exts
 }
 
 func (s templateRenderer) assetPath(file string) (string, error) {

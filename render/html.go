@@ -1,5 +1,12 @@
 package render
 
+import (
+	"html"
+
+	"github.com/gobuffalo/plush"
+	"github.com/shurcooL/github_flavored_markdown"
+)
+
 // HTML renders the named files using the 'text/html'
 // content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
@@ -30,4 +37,13 @@ func (e *Engine) HTML(names ...string) Renderer {
 		names:       names,
 	}
 	return hr
+}
+
+func mdTemplateEngine(input string, data map[string]interface{}, helpers map[string]interface{}) (string, error) {
+	if ct, ok := data["contentType"].(string); ok && ct == "text/plain" {
+		return plush.BuffaloRenderer(string(input), data, helpers)
+	}
+	source := github_flavored_markdown.Markdown([]byte(input))
+	source = []byte(html.UnescapeString(string(source)))
+	return plush.BuffaloRenderer(string(source), data, helpers)
 }
