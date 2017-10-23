@@ -39,7 +39,8 @@ func (e *Engine) HTML(names ...string) Renderer {
 	return hr
 }
 
-func mdTemplateEngine(input string, data map[string]interface{}, helpers map[string]interface{}) (string, error) {
+// MDTemplateEngine runs the input through github flavored markdown before sending it to the Plush engine.
+func MDTemplateEngine(input string, data map[string]interface{}, helpers map[string]interface{}) (string, error) {
 	if ct, ok := data["contentType"].(string); ok && ct == "text/plain" {
 		return plush.BuffaloRenderer(string(input), data, helpers)
 	}

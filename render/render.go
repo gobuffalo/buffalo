@@ -29,7 +29,7 @@ func New(opts Options) *Engine {
 		opts.TemplateEngines["text"] = plush.BuffaloRenderer
 	}
 	if _, ok := opts.TemplateEngines["md"]; !ok {
-		opts.TemplateEngines["md"] = mdTemplateEngine
+		opts.TemplateEngines["md"] = MDTemplateEngine
 	}
 
 	e := &Engine{
