@@ -52,7 +52,7 @@ func main() {
 }
 
 func printVersion() {
-  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n\n", BuildVersion, BuildTime)
+  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n", BuildVersion, BuildTime)
 }
 
 <%= if (opts.WithPop) { %>
