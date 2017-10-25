@@ -3,10 +3,8 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -150,18 +148,6 @@ func New(opts Options) *App {
 	a.Use(sessionSaver)
 
 	return a
-}
-
-// Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead.
-func Automatic(opts Options) *App {
-	warningMsg := "Automatic is deprecated, and will be removed in v0.10.0. Use buffalo.New instead."
-	_, file, no, ok := runtime.Caller(1)
-	if ok {
-		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
-	}
-
-	log.Println(warningMsg)
-	return New(opts)
 }
 
 func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) bool {
