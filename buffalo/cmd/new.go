@@ -24,6 +24,7 @@ var app = newapp.Generator{
 	CIProvider: "none",
 	AsWeb:      true,
 	Docker:     "multi",
+	VCS:        "git",
 }
 
 var newCmd = &cobra.Command{
@@ -107,6 +108,7 @@ func init() {
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
 	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
+	newCmd.Flags().StringVar(&app.VCS, "vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
