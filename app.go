@@ -4,16 +4,18 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"os/signal"
 	"runtime"
 	"strings"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/markbates/refresh/refresh/web"
-	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 )
 
@@ -30,6 +32,8 @@ type App struct {
 	routes        RouteList
 	root          *App
 	children      []*App
+	server        http.Server
+	closed        bool
 }
 
 // Start the application at the specified address/port and listen for OS
@@ -39,23 +43,62 @@ func (a *App) Start(addr string) error {
 	if !strings.Contains(addr, ":") {
 		addr = fmt.Sprintf(":%s", addr)
 	}
-	fmt.Printf("Starting application at %s\n", addr)
-	server := http.Server{
-		Addr:    addr,
+	listener, err := net.Listen("tcp", addr)
+	if err != nil {
+		a.Stop(err)
+		return err
+	}
+
+	fmt.Printf("Starting application at %s:%d\n",
+		listener.Addr().(*net.TCPAddr).IP,
+		listener.Addr().(*net.TCPAddr).Port)
+
+	a.moot.Lock()
+	a.server = http.Server{
+		Addr:    listener.Addr().String(),
 		Handler: a,
 	}
-	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
-	defer cancel()
+	a.moot.Unlock()
+
+	errChan := make(chan error, 2)
+
+	// if configured to do so, start the workers
+	if !a.WorkerOff {
+		go func() {
+			err := a.Worker.Start(a.Context)
+			if err != nil {
+				errChan <- err
+			}
+		}()
+	}
 
 	go func() {
-		// gracefully shut down the application when the context is cancelled
-		<-ctx.Done()
-		fmt.Println("Shutting down application")
+		errChan <- a.server.Serve(listener)
+	}()
 
-		err := a.Stop(ctx.Err())
-		if err != nil {
-			fmt.Println(err)
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGTERM, os.Interrupt)
+
+	for {
+		select {
+		case err := <-errChan:
+			return a.Stop(err)
+		case <-signalChan:
+			return a.Stop(nil)
 		}
+	}
+}
+
+// Stop the application and attempt to gracefully shutdown
+func (a *App) Stop(err error) error {
+	a.moot.Lock()
+	defer a.moot.Unlock()
+	if !a.closed {
+		fmt.Println("Shutting down application")
+		a.closed = true
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Duration(a.ShutDownTimeoutSeconds)*time.Second)
+		defer cancel()
+		a.server.Shutdown(shutdownCtx)
 
 		if !a.WorkerOff {
 			// stop the workers
@@ -66,37 +109,11 @@ func (a *App) Start(addr string) error {
 			}
 		}
 
-		err = server.Shutdown(ctx)
-		if err != nil {
+		a.cancel()
+		if err != nil && errors.Cause(err) != context.Canceled {
 			fmt.Println(err)
+			return err
 		}
-
-	}()
-
-	// if configured to do so, start the workers
-	if !a.WorkerOff {
-		go func() {
-			err := a.Worker.Start(ctx)
-			if err != nil {
-				a.Stop(err)
-			}
-		}()
-	}
-
-	// start the web server
-	err := server.ListenAndServe()
-	if err != nil {
-		return a.Stop(err)
-	}
-	return nil
-}
-
-// Stop the application and attempt to gracefully shutdown
-func (a *App) Stop(err error) error {
-	a.cancel()
-	if err != nil && errors.Cause(err) != context.Canceled {
-		fmt.Println(err)
-		return err
 	}
 	return nil
 }

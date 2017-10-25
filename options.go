@@ -52,6 +52,10 @@ type Options struct {
 	Context context.Context
 	cancel  context.CancelFunc
 	Prefix  string
+
+	// ShutDownTimeoutSeconds is used to cap the time spent waiting for requests to finish after application
+	// receives SIGTERM or SIGINT.  Default 30 seconds.
+	ShutDownTimeoutSeconds int
 }
 
 // PreWare takes an http.Handler and returns and http.Handler
@@ -115,5 +119,6 @@ func optionsWithDefaults(opts Options) Options {
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
 	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
+	opts.ShutDownTimeoutSeconds = defaults.Int(opts.ShutDownTimeoutSeconds, 30)
 	return opts
 }
