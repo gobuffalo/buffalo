@@ -32,12 +32,12 @@ func main() {
   case "migrate":
     migrate()
   <% } %>
-  case "start", "run", "serve":
-    printVersion()
-    originalMain()
   case "version":
     printVersion()
   case "task", "t", "tasks":
+    if len(args) < 3 {
+      log.Fatal("not enough arguments passed to task")
+    }
     c := grift.NewContext(args[2])
     if len(args) > 2 {
       c.Args = args[3:]
@@ -47,7 +47,7 @@ func main() {
       log.Fatal(err)
     }
   default:
-    log.Fatalf("Could not find a command named: %s", c)
+    originalMain()
   }
 }
 
