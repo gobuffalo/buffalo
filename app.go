@@ -3,12 +3,16 @@ package buffalo
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"sync"
 	"syscall"
 
+	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
+	"github.com/markbates/going/defaults"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
@@ -29,10 +33,24 @@ type App struct {
 	children      []*App
 }
 
-// Start the application at the specified address/port and listen for OS
+// Start is deprecated, and will be removed in v0.11.0. Use app.Serve instead.
+func (a *App) Start(port string) error {
+	warningMsg := "Start is deprecated, and will be removed in v0.11.0. Use app.Serve instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
+
+	log.Println(warningMsg)
+
+	a.Addr = defaults.String(a.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", "127.0.0.1"), port))
+	return a.Serve()
+}
+
+// Serve the application at the specified address/port and listen for OS
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
-func (a *App) Start() error {
+func (a *App) Serve() error {
 	fmt.Printf("Starting application at %s\n", a.Options.Addr)
 	server := http.Server{
 		Addr:    a.Options.Addr,
