@@ -1,12 +1,14 @@
 package main
 
 import (
-	"log"
+  "log"
 
   "{{ .opts.ActionsPkg }}"
 )
 
 func main() {
-	app := actions.App()
-	log.Fatal(app.Start())
+  app := actions.App()
+  if err := app.Serve(); err != nil {
+    log.Fatal(err)
+  }
 }
