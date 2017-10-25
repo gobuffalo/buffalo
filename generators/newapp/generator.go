@@ -26,6 +26,7 @@ type Generator struct {
 	AsWeb       bool   `json:"as_web"`
 	AsAPI       bool   `json:"as_api"`
 	Docker      string `json:"docker"`
+	VCS         string `json:"vcs"`
 	SkipPop     bool   `json:"skip_pop"`
 	SkipWebpack bool   `json:"skip_webpack"`
 	SkipYarn    bool   `json:"skip_yarn"`

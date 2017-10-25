@@ -110,10 +110,20 @@ func (a Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
-	if _, err := exec.LookPath("git"); err == nil {
+	if a.VCS == "git" {
+		if _, err := exec.LookPath("git"); err != nil {
+			return errors.WithStack(err)
+		}
 		g.Add(makr.NewCommand(exec.Command("git", "init")))
 		g.Add(makr.NewCommand(exec.Command("git", "add", ".")))
 		g.Add(makr.NewCommand(exec.Command("git", "commit", "-m", "Initial Commit")))
+	} else if a.VCS == "bzr" {
+		if _, err := exec.LookPath("bzr"); err != nil {
+			return errors.WithStack(err)
+		}
+		g.Add(makr.NewCommand(exec.Command("bzr", "init")))
+		g.Add(makr.NewCommand(exec.Command("bzr", "add", ".")))
+		g.Add(makr.NewCommand(exec.Command("bzr", "commit", "-m", "Initial Commit")))
 	}
 	data["opts"] = a
 	return g.Run(root, data)
