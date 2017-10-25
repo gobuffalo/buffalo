@@ -3,7 +3,7 @@ var CopyWebpackPlugin = require("copy-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+var CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -19,9 +19,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin([
-      'public/assets/*.js',
-      'public/assets/*.css'
+      "public/assets/*.js",
+      "public/assets/*.css"
     ], {
+      verbose: false,
       watch: true
     }),
     new webpack.ProvidePlugin({
@@ -30,13 +31,10 @@ module.exports = {
     }),
     new ExtractTextPlugin("[name].[hash].css"),
     new CopyWebpackPlugin(
-      [
-        {
-          from: "./assets",
-          to: ""
-        }
-      ],
-      {
+      [{
+        from: "./assets",
+        to: ""
+      }], {
         ignore: ["css/**", "js/**"]
       }
     ),
@@ -49,24 +47,26 @@ module.exports = {
     })
   ],
   module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        loader: "babel-loader",
-        exclude: /node_modules/
-      },
+    rules: [{
+      test: /\.jsx?$/,
+      loader: "babel-loader",
+      exclude: /node_modules/
+    },
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
-          use: [
-            {
-              loader: "css-loader",
-              options: {sourceMap: true}
-            },
+          use: [{
+            loader: "css-loader",
+            options: {
+              sourceMap: true
+            }
+          },
             {
               loader: "sass-loader",
-              options: {sourceMap: true}
+              options: {
+                sourceMap: true
+              }
             }
           ]
         })
