@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 	"sync"
 	"syscall"
 
@@ -33,13 +32,10 @@ type App struct {
 // Start the application at the specified address/port and listen for OS
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
-func (a *App) Start(addr string) error {
-	if !strings.Contains(addr, ":") {
-		addr = fmt.Sprintf(":%s", addr)
-	}
-	fmt.Printf("Starting application at %s\n", addr)
+func (a *App) Start() error {
+	fmt.Printf("Starting application at %s\n", a.Options.Addr)
 	server := http.Server{
-		Addr:    addr,
+		Addr:    a.Options.Addr,
 		Handler: a,
 	}
 	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
