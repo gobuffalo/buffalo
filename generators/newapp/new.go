@@ -41,6 +41,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
+	// Add CI configuration, if requested
 	if a.CIProvider == "travis" {
 		g.Add(makr.NewFile(".travis.yml", nTravis))
 	} else if a.CIProvider == "gitlab-ci" {
@@ -110,21 +111,15 @@ func (a Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
-	if a.VCS == "git" {
-		if _, err := exec.LookPath("git"); err != nil {
-			return errors.WithStack(err)
+	if a.VCS == "git" || a.VCS == "bzr" {
+		// Execute git or bzr case (same CLI API)
+		if _, err := exec.LookPath(a.VCS); err == nil {
+			g.Add(makr.NewCommand(exec.Command(a.VCS, "init")))
+			g.Add(makr.NewCommand(exec.Command(a.VCS, "add", ".")))
+			g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-m", "Initial Commit")))
 		}
-		g.Add(makr.NewCommand(exec.Command("git", "init")))
-		g.Add(makr.NewCommand(exec.Command("git", "add", ".")))
-		g.Add(makr.NewCommand(exec.Command("git", "commit", "-m", "Initial Commit")))
-	} else if a.VCS == "bzr" {
-		if _, err := exec.LookPath("bzr"); err != nil {
-			return errors.WithStack(err)
-		}
-		g.Add(makr.NewCommand(exec.Command("bzr", "init")))
-		g.Add(makr.NewCommand(exec.Command("bzr", "add", ".")))
-		g.Add(makr.NewCommand(exec.Command("bzr", "commit", "-m", "Initial Commit")))
 	}
+
 	data["opts"] = a
 	return g.Run(root, data)
 }
