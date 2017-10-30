@@ -3,6 +3,7 @@ package render
 import (
 	"html/template"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -67,7 +68,8 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			return "", errors.Errorf("could not find a template engine for %s", ext)
+			log.Printf("could not find a template engine for %s\n", ext)
+			continue
 		}
 		body, err = te(body, data, helpers)
 		if err != nil {
