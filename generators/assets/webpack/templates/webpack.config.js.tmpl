@@ -19,8 +19,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin([
-      "public/assets/*.js",
-      "public/assets/*.css"
+      "public/assets"
     ], {
       verbose: false,
       watch: true
@@ -35,6 +34,7 @@ module.exports = {
         from: "./assets",
         to: ""
       }], {
+        copyUnmodified: true,
         ignore: ["css/**", "js/**"]
       }
     ),
