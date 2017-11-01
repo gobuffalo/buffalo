@@ -14,8 +14,16 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 
 ## Installation
 
-```text
-$ go get -u github.com/gobuffalo/buffalo/buffalo
+Let's get the source first, with its dependencies:
+
+```bash
+$ go get -u -v github.com/gobuffalo/buffalo
+```
+
+Then, install the `buffalo` tool:
+
+```bash
+$ go install -v github.com/gobuffalo/buffalo/buffalo
 ```
 
 _NOTE_: Buffalo has a minimum Go dependency of `1.8.1`.
