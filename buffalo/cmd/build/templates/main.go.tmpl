@@ -1,0 +1,69 @@
+package main
+
+import (
+  "fmt"
+  "log"
+  "os"
+
+  "github.com/markbates/grift/grift"
+  _ "<%= opts.PackagePkg %>/a"
+  _ "<%= opts.ActionsPkg %>"
+  <%= if (opts.WithPop) { %>
+  "github.com/gobuffalo/packr"
+  "github.com/markbates/pop"
+  "<%= opts.ModelsPkg %>"
+  <% } %>
+  <%= if (opts.WithGrifts) { %>
+  _ "<%= opts.GriftsPkg %>"
+  <% } %>
+)
+
+var BuildVersion = "unknown"
+var BuildTime = "unknown"
+
+func main() {
+  args := os.Args
+  if len(args) == 1 {
+    originalMain()
+  }
+  c := args[1]
+  switch c {
+  <%= if (opts.WithPop) { %>
+  case "migrate":
+    migrate()
+  <% } %>
+  case "version":
+    printVersion()
+  case "task", "t", "tasks":
+    if len(args) < 3 {
+      log.Fatal("not enough arguments passed to task")
+    }
+    c := grift.NewContext(args[2])
+    if len(args) > 2 {
+      c.Args = args[3:]
+    }
+    err := grift.Run(args[2], c)
+    if err != nil {
+      log.Fatal(err)
+    }
+  default:
+    originalMain()
+  }
+}
+
+func printVersion() {
+  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n", BuildVersion, BuildTime)
+}
+
+<%= if (opts.WithPop) { %>
+func migrate() {
+  box, err := pop.NewMigrationBox(packr.NewBox("./migrations"), models.DB)
+  if err != nil {
+    log.Fatalf("Failed to unpack migrations: %s", err)
+  }
+  err = box.Up()
+  if err != nil {
+    log.Fatalf("Failed to run migrations: %s", err)
+  }
+}
+<% } %>

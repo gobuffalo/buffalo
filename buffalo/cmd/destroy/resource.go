@@ -23,10 +23,6 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Destroys resource files.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if _, err := os.Stat(".buffalo.dev.yml"); os.IsNotExist(err) {
-			return errors.New("destroy needs to run in your buffalo project root")
-		}
-
 		if len(args) == 0 {
 			return errors.New("you need to provide a valid resource name in order to destroy it")
 		}

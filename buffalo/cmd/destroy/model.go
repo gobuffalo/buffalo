@@ -2,7 +2,6 @@ package destroy
 
 import (
 	"errors"
-	"os"
 
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -15,10 +14,6 @@ var ModelCmd = &cobra.Command{
 	Aliases: []string{"m"},
 	Short:   "Destroys model files.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if _, err := os.Stat(".buffalo.dev.yml"); os.IsNotExist(err) {
-			return errors.New("destroy needs to run in your buffalo project root")
-		}
-
 		if len(args) == 0 {
 			return errors.New("you need to provide a valid model name in order to destroy it")
 		}

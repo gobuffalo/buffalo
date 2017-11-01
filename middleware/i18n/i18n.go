@@ -12,7 +12,7 @@ import (
 )
 
 // LanguageFinder can be implemented for custom finding of search
-// languages. This can be useful if you want to load a user's langugage
+// languages. This can be useful if you want to load a user's language
 // from something like a database. See Middleware() for more information
 // on how the default implementation searches for languages.
 type LanguageFinder func(*Translator, buffalo.Context) []string
@@ -31,6 +31,8 @@ type Translator struct {
 	SessionName string
 	// HelperName - name of the view helper. default is "t"
 	HelperName     string
+	// HelperNamePlural - name of the view plural helper. default is "tp"
+	HelperNamePlural string
 	LanguageFinder LanguageFinder
 }
 
@@ -57,12 +59,13 @@ func (t *Translator) AddTranslation(lang *language.Language, translations ...tra
 // also call t.Load() and load the translations from disk.
 func New(box packr.Box, language string) (*Translator, error) {
 	t := &Translator{
-		Box:             box,
-		DefaultLanguage: language,
-		CookieName:      "lang",
-		SessionName:     "lang",
-		HelperName:      "t",
-		LanguageFinder:  defaultLanguageFinder,
+		Box:              box,
+		DefaultLanguage:  language,
+		CookieName:       "lang",
+		SessionName:      "lang",
+		HelperName:       "t",
+		HelperNamePlural: "tp",
+		LanguageFinder:   defaultLanguageFinder,
 	}
 	return t, t.Load()
 }
@@ -92,12 +95,16 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 			c.Set(t.HelperName, func(s string) (string, error) {
 				return t.Translate(c, s)
 			})
+			c.Set(t.HelperNamePlural, func(s string, i interface{}) (string, error) {
+				return t.TranslatePlural(c, s, i)
+			})
 			return next(c)
 		}
 	}
 }
 
-// Translate a string given a Context
+// Translate translates a string given a Context
+// s is the translation ID
 func (t *Translator) Translate(c buffalo.Context, s string) (string, error) {
 	if langs := c.Value("languages"); langs == nil {
 		c.Set("languages", t.LanguageFinder(t, c))
@@ -108,6 +115,21 @@ func (t *Translator) Translate(c buffalo.Context, s string) (string, error) {
 		return "", err
 	}
 	return T(s, c.Data()), nil
+}
+
+// TranslatePlural is the plural version of Translate
+// s is the translation ID
+// i must be an integer type (int, int8, int16, int32, int64) or a float formatted as a string (e.g. "123.45")
+func (t *Translator) TranslatePlural(c buffalo.Context, s string, i interface{}) (string, error) {
+	if langs := c.Value("languages"); langs == nil {
+		c.Set("languages", t.LanguageFinder(t, c))
+	}
+	langs := c.Value("languages").([]string)
+	T, err := i18n.Tfunc(langs[0], langs[1:]...)
+	if err != nil {
+		return "", err
+	}
+	return T(s, i, c.Data()), nil
 }
 
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {

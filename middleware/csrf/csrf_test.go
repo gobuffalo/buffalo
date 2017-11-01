@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo/middleware"
+	"github.com/gobuffalo/buffalo/middleware/csrf"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/willie"
@@ -31,7 +31,7 @@ func ctCSRFApp() *buffalo.App {
 		return c.Render(420, nil)
 	}
 	a := buffalo.New(buffalo.Options{})
-	a.Use(middleware.CSRF)
+	a.Use(csrf.New)
 	a.GET("/csrf", h)
 	a.POST("/csrf", h)
 	return a

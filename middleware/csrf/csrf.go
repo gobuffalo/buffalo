@@ -5,10 +5,8 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"net/http"
 	"net/url"
-	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
@@ -47,16 +45,6 @@ var (
 	// the token in the session, or is otherwise malformed.
 	ErrBadToken = errors.New("CSRF token invalid")
 )
-
-// Middleware is deprecated, and will be removed in v0.10.0. Use csrf.New instead.
-var Middleware = func(next buffalo.Handler) buffalo.Handler {
-	warningMsg := "csrf.Middleware is deprecated, and will be removed in v0.10.0. Use csrf.New instead."
-	_, file, no, ok := runtime.Caller(1)
-	if ok {
-		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
-	}
-	return New(next)
-}
 
 // New enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf

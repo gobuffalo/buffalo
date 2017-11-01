@@ -19,8 +19,23 @@ func New(opts Options) *Engine {
 		opts.Helpers = map[string]interface{}{}
 	}
 
-	if opts.TemplateEngine == nil {
-		opts.TemplateEngine = plush.BuffaloRenderer
+	if opts.TemplateEngines == nil {
+		opts.TemplateEngines = map[string]TemplateEngine{}
+	}
+	if _, ok := opts.TemplateEngines["html"]; !ok {
+		opts.TemplateEngines["html"] = plush.BuffaloRenderer
+	}
+	if _, ok := opts.TemplateEngines["text"]; !ok {
+		opts.TemplateEngines["text"] = plush.BuffaloRenderer
+	}
+	if _, ok := opts.TemplateEngines["js"]; !ok {
+		opts.TemplateEngines["js"] = JSTemplateEngine
+	}
+	if _, ok := opts.TemplateEngines["md"]; !ok {
+		opts.TemplateEngines["md"] = MDTemplateEngine
+	}
+	if _, ok := opts.TemplateEngines["tmpl"]; !ok {
+		opts.TemplateEngines["tmpl"] = GoTemplateEngine
 	}
 
 	e := &Engine{

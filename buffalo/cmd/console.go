@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
@@ -21,16 +22,15 @@ var consoleCmd = &cobra.Command{
 		if err != nil {
 			return errors.New("we could not find \"gore\" in your path. You must first install \"gore\" in order to use the Buffalo console:\n\n$ go get -u github.com/motemen/gore")
 		}
-		packagePath := packagePath(rootPath)
-		packages := []string{}
-		for _, p := range []string{"models", "actions"} {
-			s, _ := os.Stat(filepath.Join(rootPath, p))
-			if s != nil {
-				packages = append(packages, filepath.Join(packagePath, p))
-			}
+
+		app := meta.New(".")
+
+		packages := []string{app.ActionsPkg}
+		if app.WithPop {
+			packages = append(packages, app.ModelsPkg)
 		}
 
-		fname := inflect.Parameterize(packagePath) + "_loader.go"
+		fname := inflect.Parameterize(app.PackagePkg) + "_loader.go"
 		g := makr.New()
 		g.Add(makr.NewFile(fname, cMain))
 		err = g.Run(os.TempDir(), makr.Data{
@@ -53,7 +53,6 @@ var consoleCmd = &cobra.Command{
 func init() {
 	decorate("console", consoleCmd)
 	RootCmd.AddCommand(consoleCmd)
-
 }
 
 var cMain = `

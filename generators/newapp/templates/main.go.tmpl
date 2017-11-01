@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
+  "log"
 
-  "{{ .actionsPath }}"
-  "github.com/gobuffalo/envy"
+  "{{ .opts.ActionsPkg }}"
 )
 
 func main() {
-	port := envy.Get("PORT", "3000")
-	app := actions.App()
-	log.Fatal(app.Start(port))
+  app := actions.App()
+  if err := app.Serve(); err != nil {
+    log.Fatal(err)
+  }
 }

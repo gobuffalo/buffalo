@@ -5,16 +5,13 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/plush"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_String(t *testing.T) {
 	r := require.New(t)
 
-	j := render.New(render.Options{
-		TemplateEngine: plush.BuffaloRenderer,
-	}).String
+	j := render.New(render.Options{}).String
 
 	re := j("<%= name %>")
 	r.Equal("text/plain; charset=utf-8", re.ContentType())
