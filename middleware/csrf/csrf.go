@@ -52,6 +52,7 @@ var New = func(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		// don't run in test mode
 		if envy.Get("GO_ENV", "development") == "test" {
+			c.Set(tokenKey, "test")
 			return next(c)
 		}
 
