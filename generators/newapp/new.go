@@ -25,7 +25,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
-	g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+	if a.WithDep {
+		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+	}
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
 	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "newapp"))

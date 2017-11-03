@@ -11,6 +11,7 @@ import (
 // Run Docker generator
 func (d Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
+	data["opts"] = d
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool {
 			return d.Style != "none"
@@ -31,6 +32,5 @@ func (d Generator) Run(root string, data makr.Data) error {
 			return fg.Run(root, data)
 		},
 	})
-	data["opts"] = d
 	return g.Run(root, data)
 }

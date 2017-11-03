@@ -44,8 +44,6 @@ var newCmd = &cobra.Command{
 			app.Root = filepath.Join(app.Root, app.Name.File())
 		}
 
-		app.App = meta.New(app.Root)
-
 		if err := app.Validate(); err != nil {
 			if errors.Cause(err) == newapp.ErrNotInGoPath {
 				return notInGoPath(app)
@@ -94,7 +92,7 @@ func notInGoPath(ag newapp.Generator) error {
 func init() {
 	pwd, _ := os.Getwd()
 
-	app.Root = pwd
+	app.App = meta.New(pwd)
 
 	decorate("new", newCmd)
 	RootCmd.AddCommand(newCmd)
