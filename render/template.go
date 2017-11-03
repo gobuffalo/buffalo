@@ -32,7 +32,7 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 	for _, name := range s.names {
 		body, err = s.exec(name, data)
 		if err != nil {
-			return err
+			return errors.Wrapf(err, "processing template %s", name)
 		}
 		data["yield"] = body
 	}
