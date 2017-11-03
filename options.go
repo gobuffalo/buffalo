@@ -68,10 +68,14 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", "127.0.0.1"), envy.Get("PORT", "3000")))
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	opts.Name = defaults.String(opts.Name, "/")
+	addr := ""
+	if opts.Env == "development" {
+		addr = "127.0.0.1"
+	}
+	opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", addr), envy.Get("PORT", "3000")))
 
 	if opts.PreWares == nil {
 		opts.PreWares = []PreWare{}
