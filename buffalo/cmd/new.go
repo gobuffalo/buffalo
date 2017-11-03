@@ -43,6 +43,11 @@ var newCmd = &cobra.Command{
 		} else {
 			app.Root = filepath.Join(app.Root, app.Name.File())
 		}
+		aa := meta.New(app.Root)
+		app.ActionsPkg = aa.ActionsPkg
+		app.GriftsPkg = aa.GriftsPkg
+		app.ModelsPkg = aa.ModelsPkg
+		app.PackagePkg = aa.PackagePkg
 
 		if err := app.Validate(); err != nil {
 			if errors.Cause(err) == newapp.ErrNotInGoPath {
