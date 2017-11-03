@@ -127,6 +127,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 }
 
 func (a Generator) goGet() *exec.Cmd {
+	cd, _ := os.Getwd()
+	defer os.Chdir(cd)
+	os.Chdir(a.Root)
 	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
 			return exec.Command("dep", "init")
