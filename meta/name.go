@@ -110,12 +110,12 @@ func (n Name) CamelSingular() string {
 
 // VarCaseSingular version of a name. ie. "FooBar" => "fooBar"
 func (n Name) VarCaseSingular() string {
-	return inflect.CamelizeDownFirst(inflect.Singularize(n.Resource()))
+	return inflect.CamelizeDownFirst(inflect.Singularize(inflect.Underscore(n.Resource())))
 }
 
 // VarCasePlural version of a name. ie. "FooBar" => "fooBar"
 func (n Name) VarCasePlural() string {
-	return inflect.CamelizeDownFirst(inflect.Pluralize(n.Resource()))
+	return inflect.CamelizeDownFirst(n.Resource())
 }
 
 // Lower case version of a string
