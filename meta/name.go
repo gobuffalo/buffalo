@@ -51,12 +51,21 @@ func (n Name) Model() string {
 
 // Resource version of a name
 func (n Name) Resource() string {
-	x := strings.Split(string(n), "/")
-	for i, s := range x {
-		x[i] = inflect.Camelize(s)
+	name := inflect.Underscore(string(n))
+	x := strings.FieldsFunc(name, func(r rune) bool {
+		return r == '_' || r == '/'
+	})
+
+	for i, w := range x {
+		if i == len(x)-1 {
+			x[i] = inflect.Camelize(inflect.Pluralize(strings.ToLower(w)))
+			continue
+		}
+
+		x[i] = inflect.Camelize(w)
 	}
 
-	return inflect.Pluralize(strings.Join(x, ""))
+	return strings.Join(x, "")
 }
 
 // ModelPlural version of a name. ie. "user" => "Users"
