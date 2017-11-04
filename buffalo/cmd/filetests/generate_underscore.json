@@ -1,5 +1,5 @@
 [{
-    "path": "actions/person_data.go",
+    "path": "actions/person_event.go",
     "contains": [
       "c.Set(\"personEvents\", personEvents)",
       "c.Set(\"personEvent\", personEvent)"
