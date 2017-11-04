@@ -43,7 +43,7 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   }
 
   // Make {{.opts.Model.ModelPlural}} available inside the html template
-  c.Set("{{.opts.Model.PluralUnder}}", {{.opts.Model.VarCasePlural}})
+  c.Set("{{.opts.Model.VarCasePlural}}", {{.opts.Model.VarCasePlural}})
 
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
@@ -66,7 +66,7 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   }
 
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
+  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/show.html"))
 }
@@ -75,7 +75,7 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", &models.{{.opts.Model.Model}}{})
+  c.Set("{{.opts.Model.VarCaseSingular}}", &models.{{.opts.Model.Model}}{})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/new.html"))
 }
@@ -133,7 +133,7 @@ func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
   }
 
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
+  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/edit.html"))
 }
 
