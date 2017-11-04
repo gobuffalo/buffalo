@@ -11,7 +11,7 @@ const tmplBody = `
 {{ if .opts.Namespaced }}
 		{{ range $index, $element := .opts.Parts }}
 			{{ if $.opts.Last $element}}
-				Desc("{{$element.File}}", "TODO")
+				Desc("{{$element.File}}", "Task Description")
 				Add("{{$element.File}}", func(c *Context) error{
 						return nil
 				})
@@ -27,7 +27,7 @@ const tmplBody = `
 				{{ if $index }} }) {{ end }}
 		{{ end }}
 {{ else }}
-		var _ = Desc("{{.opts.Name.File}}", "TODO")
+		var _ = Desc("{{.opts.Name.File}}", "Task Description")
 		var _ = Add("{{.opts.Name.File}}", func(c *Context) error {
 				return nil
 		})

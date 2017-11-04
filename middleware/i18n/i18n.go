@@ -30,10 +30,10 @@ type Translator struct {
 	// default is "lang"
 	SessionName string
 	// HelperName - name of the view helper. default is "t"
-	HelperName     string
+	HelperName string
 	// HelperNamePlural - name of the view plural helper. default is "tp"
 	HelperNamePlural string
-	LanguageFinder LanguageFinder
+	LanguageFinder   LanguageFinder
 }
 
 // Load translations from the t.Box.
