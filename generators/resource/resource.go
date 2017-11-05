@@ -78,5 +78,10 @@ func (res Generator) modelCommand() makr.Command {
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")
 	}
+
+	if res.MimeType == "JSON" || res.MimeType == "XML" {
+		args = append(args, "--struct-tag", strings.ToLower(res.MimeType))
+	}
+
 	return makr.NewCommand(exec.Command("buffalo", args...))
 }

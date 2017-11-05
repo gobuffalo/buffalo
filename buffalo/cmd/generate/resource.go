@@ -46,7 +46,7 @@ func init() {
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipMigration, "skip-migration", "s", false, "sets resource generator not-to add model migration")
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipModel, "skip-model", "", false, "makes resource generator not to generate model nor migrations")
 	ResourceCmd.Flags().StringVarP(&resourceOptions.Name, "name", "n", "", "allows to define a different model name for the resource being generated.")
-	ResourceCmd.Flags().StringVarP(&resourceOptions.MimeType, "type", "", "html", "sets the resource type (html or json)")
+	ResourceCmd.Flags().StringVarP(&resourceOptions.MimeType, "type", "", "html", "sets the resource type (html, json, xml)")
 }
 
 const resourceExamples = `$ buffalo g resource users
