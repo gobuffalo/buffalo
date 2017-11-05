@@ -51,12 +51,21 @@ func (n Name) Model() string {
 
 // Resource version of a name
 func (n Name) Resource() string {
-	x := strings.Split(string(n), "/")
-	for i, s := range x {
-		x[i] = inflect.Camelize(s)
+	name := inflect.Underscore(string(n))
+	x := strings.FieldsFunc(name, func(r rune) bool {
+		return r == '_' || r == '/'
+	})
+
+	for i, w := range x {
+		if i == len(x)-1 {
+			x[i] = inflect.Camelize(inflect.Pluralize(strings.ToLower(w)))
+			continue
+		}
+
+		x[i] = inflect.Camelize(w)
 	}
 
-	return inflect.Pluralize(strings.Join(x, ""))
+	return strings.Join(x, "")
 }
 
 // ModelPlural version of a name. ie. "user" => "Users"
@@ -101,12 +110,12 @@ func (n Name) CamelSingular() string {
 
 // VarCaseSingular version of a name. ie. "FooBar" => "fooBar"
 func (n Name) VarCaseSingular() string {
-	return inflect.CamelizeDownFirst(inflect.Singularize(n.Resource()))
+	return inflect.CamelizeDownFirst(inflect.Singularize(inflect.Underscore(n.Resource())))
 }
 
 // VarCasePlural version of a name. ie. "FooBar" => "fooBar"
 func (n Name) VarCasePlural() string {
-	return inflect.CamelizeDownFirst(inflect.Pluralize(n.Resource()))
+	return inflect.CamelizeDownFirst(n.Resource())
 }
 
 // Lower case version of a string
