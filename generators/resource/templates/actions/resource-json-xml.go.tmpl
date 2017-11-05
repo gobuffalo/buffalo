@@ -139,10 +139,7 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
-
-  if err := tx.Destroy({{.opts.Model.VarCaseSingular}}); err != nil {
+  if err := c.DB().Destroy({{.opts.Model.VarCaseSingular}}); err != nil {
     return errors.WithStack(err)
   }
 

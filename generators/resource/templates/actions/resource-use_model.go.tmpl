@@ -177,7 +177,7 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
   // To find the {{.opts.Model.Model}} the parameter {{.opts.Model.UnderSingular}}_id is used.
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
+  if err := c.Scope().Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
     return c.Error(404, err)
   }
 
