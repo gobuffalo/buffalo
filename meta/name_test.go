@@ -43,10 +43,13 @@ func Test_Name_Resource(t *testing.T) {
 		V string
 		E string
 	}{
+		{V: "Person", E: "People"},
 		{V: "foo_bar", E: "FooBars"},
 		{V: "admin/widget", E: "AdminWidgets"},
 		{V: "widget", E: "Widgets"},
 		{V: "widgets", E: "Widgets"},
+		{V: "greatPerson", E: "GreatPeople"},
+		{V: "great/person", E: "GreatPeople"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).Resource())
