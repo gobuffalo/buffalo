@@ -14,6 +14,7 @@ import (
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/websocket"
+	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )
 
@@ -197,6 +198,30 @@ func (d *DefaultContext) String() string {
 	}
 	sort.Strings(bb)
 	return strings.Join(bb, "\n\n")
+}
+
+// DB returns a `*pop.Connection` from the current
+// context `c.Value("tx")`. Returns `nil` if no
+// connection is found.
+func (d *DefaultContext) DB() *pop.Connection {
+	if c, ok := d.Value("tx").(*pop.Connection); ok {
+		return c
+	}
+	return nil
+}
+
+// Scope returns a `*pop.Query` if there is one in
+// the current context `c.Value("dbScope")`. If there is
+// no query found, then `DB()` is called, and if not `nil`
+// a new query is returned off that connection.
+func (d *DefaultContext) Scope() *pop.Query {
+	if q, ok := d.Value("dbScope").(*pop.Query); ok {
+		return q
+	}
+	if c := d.DB(); c != nil {
+		return c.Q()
+	}
+	return nil
 }
 
 var defaultUpgrader = websocket.Upgrader{

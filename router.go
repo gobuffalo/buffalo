@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/markbates/inflect"
+	"github.com/markbates/pop"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -136,7 +137,24 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
 	g.Prefix = path.Join(g.Prefix, spath)
+
+	if s, ok := r.(scopeable); ok {
+		// if the resource is scopeable then set a piece of middleware
+		// for the resource group that calls the scope and sets it onto
+		// the context for the `Scope()` method on `Context`.
+		g.Use(func(next Handler) Handler {
+			return func(c Context) error {
+				c.Set("dbScope", s.Scope(c))
+				return next(c)
+			}
+		})
+	}
+
 	return g
+}
+
+type scopeable interface {
+	Scope(c Context) *pop.Query
 }
 
 // ANY accepts a request across any HTTP method for the specified path
