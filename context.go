@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/markbates/pop"
 
 	"github.com/gobuffalo/buffalo/render"
 )
@@ -32,6 +33,8 @@ type Context interface {
 	Redirect(int, string, ...interface{}) error
 	Data() map[string]interface{}
 	Flash() *Flash
+	Scope() *pop.Query
+	DB() *pop.Connection
 }
 
 // ParamValues will most commonly be url.Values,
