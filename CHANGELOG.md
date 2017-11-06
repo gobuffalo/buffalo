@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/gobuffalo/buffalo/tree/HEAD)
-
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.0...HEAD)
+## [v0.10.1](https://github.com/gobuffalo/buffalo/tree/v0.10.1) (2017-11-06)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.5...v0.10.1)
 
 **Implemented enhancements:**
 
@@ -19,6 +18,7 @@
 
 **Closed issues:**
 
+- assets `public` path still embedded into the binary with -e flag ? [\#741](https://github.com/gobuffalo/buffalo/issues/741)
 - Generating a resource composed by 2 words underscored [\#734](https://github.com/gobuffalo/buffalo/issues/734)
 - Clean public folder before build [\#727](https://github.com/gobuffalo/buffalo/issues/727)
 - auto reloading doesn't work when .go file change [\#726](https://github.com/gobuffalo/buffalo/issues/726)
@@ -42,6 +42,7 @@
 
 **Merged pull requests:**
 
+- v0.10.0 [\#740](https://github.com/gobuffalo/buffalo/pull/740) ([markbates](https://github.com/markbates))
 - fixes https://github.com/markbates/grift/issues/18 [\#738](https://github.com/gobuffalo/buffalo/pull/738) ([markbates](https://github.com/markbates))
 - Proper model generation for XML type. [\#737](https://github.com/gobuffalo/buffalo/pull/737) ([seblw](https://github.com/seblw))
 - Wrong names with irregular resource input [\#736](https://github.com/gobuffalo/buffalo/pull/736) ([paganotoni](https://github.com/paganotoni))
@@ -80,11 +81,11 @@
 - replaced old build system with cleaner one from the buffalo-xbuild plugin [\#678](https://github.com/gobuffalo/buffalo/pull/678) ([markbates](https://github.com/markbates))
 - plugins should be exempt from the "inside buffalo project" warning [\#676](https://github.com/gobuffalo/buffalo/pull/676) ([markbates](https://github.com/markbates))
 
-## [v0.10.0](https://github.com/gobuffalo/buffalo/tree/v0.10.0) (2017-10-02)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.5...v0.10.0)
-
 ## [v0.9.5](https://github.com/gobuffalo/buffalo/tree/v0.9.5) (2017-10-02)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.4...v0.9.5)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.0...v0.9.5)
+
+## [v0.10.0](https://github.com/gobuffalo/buffalo/tree/v0.10.0) (2017-10-02)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.4...v0.10.0)
 
 **Fixed bugs:**
 
