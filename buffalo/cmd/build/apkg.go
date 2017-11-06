@@ -31,6 +31,7 @@ func (b *Builder) buildAInit() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
+	defer f.Close()
 	t, err := templates.MustBytes("a.go.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
@@ -60,6 +61,7 @@ func (b *Builder) buildADatabase() error {
 		if err != nil {
 			return errors.WithStack(err)
 		}
+		defer d.Close()
 		_, err = io.Copy(bb, d)
 		if err != nil {
 			return errors.WithStack(err)

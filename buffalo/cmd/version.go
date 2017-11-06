@@ -7,7 +7,7 @@ import (
 )
 
 // Version is the current version of the buffalo binary
-const Version = "v0.10.0"
+const Version = "v0.10.1"
 
 func init() {
 	decorate("version", versionCmd)
