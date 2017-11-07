@@ -51,7 +51,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 			if a.DBType == "postgres" {
 				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + a.Name.File() + "_test"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
 			} else {
 				data["testDbUrl"] = ""
 			}
