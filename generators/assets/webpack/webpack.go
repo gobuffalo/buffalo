@@ -24,6 +24,13 @@ var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 func (w Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
+	// if there's no npm, return!
+	if _, err := exec.LookPath("npm"); err != nil {
+		fmt.Println("Could not find npm. Skipping webpack generation.")
+
+		return standard.Run(root, data)
+	}
+
 	command := "yarn"
 
 	if !w.WithYarn {
@@ -33,13 +40,6 @@ func (w Generator) Run(root string, data makr.Data) error {
 		if err != nil {
 			return errors.WithStack(err)
 		}
-	}
-
-	// if there's no npm, return!
-	if _, err := exec.LookPath("npm"); err != nil {
-		fmt.Println("Could not find npm. Skipping webpack generation.")
-
-		return standard.Run(root, data)
 	}
 
 	g.Add(logo)
