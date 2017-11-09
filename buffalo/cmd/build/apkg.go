@@ -18,6 +18,27 @@ func (b *Builder) prepAPackage() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
+
+	infl := filepath.Join(b.Root, "inflections.json")
+	if _, err := os.Stat(infl); err == nil {
+		logrus.Debugf("preparing %s", infl)
+		// there's an inflection file we need to copy it over
+		fa, err := os.Open(infl)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		defer fa.Close()
+		fb, err := os.Create(filepath.Join(b.Root, "a", "inflections.json"))
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		defer fb.Close()
+		_, err = io.Copy(fb, fa)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
 	b.cleanups = append(b.cleanups, func() error {
 		return os.RemoveAll(a)
 	})
