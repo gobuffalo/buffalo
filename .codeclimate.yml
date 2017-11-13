@@ -19,6 +19,7 @@ exclude_paths:
   - "buffalo/cmd/filetests/*"
   - "examples/**/*"
   - "grifts/**/*"
+  - "vendor/**/*"
   - "**/*_test.go"
   - "*_test.go"
   - "**_test.go"

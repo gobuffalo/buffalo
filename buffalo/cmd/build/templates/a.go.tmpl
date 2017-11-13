@@ -1,21 +1,32 @@
 package a
 
 import (
-	"log"
-	"strings"
-	"github.com/markbates/pop"
+  "log"
+  "strings"
+  "github.com/markbates/pop"
+  "github.com/markbates/inflect"
+  "github.com/gobuffalo/packr"
 )
 
 func init() {
-	dropDatabaseYml()
+  dropDatabaseYml()
+
+  box := packr.NewBox("./")
+  if box.Has("inflections.json") {
+    r := strings.NewReader(box.String("inflections.json"))
+    err := inflect.LoadReader(r)
+    if err != nil {
+      log.Fatal(err)
+    }
+  }
 }
 
 func dropDatabaseYml() {
-	if DB_CONFIG != "" {
-		r := strings.NewReader(DB_CONFIG)
-		err := pop.LoadFrom(r)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
+  if DB_CONFIG != "" {
+    r := strings.NewReader(DB_CONFIG)
+    err := pop.LoadFrom(r)
+    if err != nil {
+      log.Fatal(err)
+    }
+  }
 }
