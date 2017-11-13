@@ -53,6 +53,26 @@ var infoCmd = &cobra.Command{
 			bb.WriteString("NPM Not Found\n")
 		}
 
+		bb.WriteString("\n### Yarn Version\n")
+		if _, err := exec.LookPath("yarn"); err == nil {
+			c = exec.Command("yarn", "--version")
+			c.Stdout = bb
+			c.Stderr = bb
+			c.Run()
+		} else {
+			bb.WriteString("Yarn Not Found\n")
+		}
+
+		bb.WriteString("\n### Dep Version\n")
+		if _, err := exec.LookPath("dep"); err == nil {
+			c = exec.Command("dep", "version")
+			c.Stdout = bb
+			c.Stderr = bb
+			c.Run()
+		} else {
+			bb.WriteString("dep Not Found\n")
+		}
+
 		bb.WriteString("\n### Dep Status\n")
 		if _, err := exec.LookPath("dep"); err == nil {
 			c = exec.Command("dep", "status")
