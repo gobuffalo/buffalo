@@ -30,6 +30,7 @@ var timeFormats = []string{
 	"2006-01-02T15:04:05Z07:00",
 	"01/02/2006",
 	"2006-01-02",
+	"2006-01-02T03:04",
 	time.ANSIC,
 	time.UnixDate,
 	time.RubyDate,
