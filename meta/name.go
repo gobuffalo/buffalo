@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/markbates/inflect"
@@ -121,4 +122,8 @@ func (n Name) VarCasePlural() string {
 // Lower case version of a string
 func (n Name) Lower() string {
 	return strings.ToLower(string(n))
+}
+
+func (n Name) ParamID() string {
+	return fmt.Sprintf("%s_id", strings.Replace(n.UnderSingular(), "/", "_", -1))
 }
