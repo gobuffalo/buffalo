@@ -6,6 +6,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_Name_ParamID(t *testing.T) {
+	r := require.New(t)
+	table := []struct {
+		V string
+		E string
+	}{
+		{V: "foo_bar", E: "foo_bar_id"},
+		{V: "admin/widget", E: "admin_widget_id"},
+		{V: "widget", E: "widget_id"},
+		{V: "User", E: "user_id"},
+	}
+	for _, tt := range table {
+		r.Equal(tt.E, Name(tt.V).ParamID())
+	}
+}
+
 func Test_Name_Title(t *testing.T) {
 	r := require.New(t)
 	table := []struct {
