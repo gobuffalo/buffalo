@@ -2,7 +2,8 @@
     "path": "actions/admin_planes.go",
     "contains": [
       "type AdminPlanesResource struct",
-      "func (v AdminPlanesResource)"
+      "func (v AdminPlanesResource)",
+      "tx.Find(plane, c.Param(\"admin_plane_id\"))"
     ]
   },
   {
@@ -28,6 +29,12 @@
     "path": "templates/admin/planes/index.html",
     "contains": [
       "newAdminPlanesPath()"
+    ]
+  },
+  {
+    "path": "templates/admin/planes/show.html",
+    "contains": [
+      "editAdminPlanePath({ admin_plane_id: plane.ID })"
     ]
   }
 ]
