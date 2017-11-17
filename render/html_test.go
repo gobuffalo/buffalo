@@ -2,8 +2,8 @@ package render_test
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -14,7 +14,12 @@ import (
 func Test_HTML(t *testing.T) {
 	r := require.New(t)
 
-	tmpFile, err := ioutil.TempFile("", "test")
+	tmpDir := filepath.Join(os.TempDir(), "html_test")
+	err := os.MkdirAll(tmpDir, 0766)
+	r.NoError(err)
+	defer os.Remove(tmpDir)
+
+	tmpFile, err := os.Create(filepath.Join(tmpDir, "test.html"))
 	r.NoError(err)
 	defer os.Remove(tmpFile.Name())
 
@@ -37,7 +42,7 @@ func Test_HTML(t *testing.T) {
 	t.Run("with a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		layout, err := ioutil.TempFile("", "test")
+		layout, err := os.Create(filepath.Join(tmpDir, "layout.html"))
 		r.NoError(err)
 		defer os.Remove(layout.Name())
 
@@ -61,7 +66,7 @@ func Test_HTML(t *testing.T) {
 
 		st.Run("overriding the HTMLLayout", func(sst *testing.T) {
 			r := require.New(sst)
-			nlayout, err := ioutil.TempFile("", "test-layout2")
+			nlayout, err := os.Create(filepath.Join(tmpDir, "layout2.html"))
 			r.NoError(err)
 			defer os.Remove(nlayout.Name())
 
