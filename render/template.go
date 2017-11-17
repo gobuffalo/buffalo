@@ -47,12 +47,24 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
+	ct := strings.ToLower(s.contentType)
+	data["contentType"] = ct
+
+	if filepath.Ext(name) == "" {
+		switch {
+		case strings.Contains(ct, "html"):
+			name += ".html"
+		case strings.Contains(ct, "javascript"):
+			name += ".js"
+		case strings.Contains(ct, "markdown"):
+			name += ".md"
+		}
+	}
+
 	source, err := s.TemplatesBox.MustBytes(name)
 	if err != nil {
 		return "", err
 	}
-
-	data["contentType"] = strings.ToLower(s.contentType)
 
 	helpers := map[string]interface{}{
 		"partial": s.partial,

@@ -2,7 +2,6 @@ package render_test
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -47,7 +46,7 @@ func Test_Markdown(t *testing.T) {
 	t.Run("with a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		layout, err := ioutil.TempFile("", "test")
+		layout, err := os.Create(filepath.Join("", "test.html"))
 		r.NoError(err)
 		defer os.Remove(layout.Name())
 

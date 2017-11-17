@@ -16,9 +16,13 @@ import (
 func Test_JavaScript(t *testing.T) {
 	r := require.New(t)
 
-	tmpFile, err := ioutil.TempFile("", "test")
+	tmpDir := filepath.Join(os.TempDir(), "markdown_test")
+	err := os.MkdirAll(tmpDir, 0766)
 	r.NoError(err)
-	defer os.Remove(tmpFile.Name())
+	defer os.Remove(tmpDir)
+
+	tmpFile, err := os.Create(filepath.Join(tmpDir, "test.js"))
+	r.NoError(err)
 
 	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
@@ -39,9 +43,8 @@ func Test_JavaScript(t *testing.T) {
 	t.Run("with a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		layout, err := ioutil.TempFile("", "test")
+		layout, err := os.Create(filepath.Join(tmpDir, "layout.js"))
 		r.NoError(err)
-		defer os.Remove(layout.Name())
 
 		_, err = layout.Write([]byte("<body><%= yield %></body>"))
 		r.NoError(err)
@@ -63,9 +66,8 @@ func Test_JavaScript(t *testing.T) {
 
 		st.Run("overriding the JavaScriptLayout", func(sst *testing.T) {
 			r := require.New(sst)
-			nlayout, err := ioutil.TempFile("", "test-layout2")
+			nlayout, err := os.Create(filepath.Join(tmpDir, "layout2.js"))
 			r.NoError(err)
-			defer os.Remove(nlayout.Name())
 
 			_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
 			r.NoError(err)

@@ -60,20 +60,48 @@ func Test_Template_Partial(t *testing.T) {
 
 	type ji func(string, ...string) render.Renderer
 
-	table := []ji{
-		render.New(render.Options{
-			TemplatesBox: packr.NewBox(tPath),
-		}).Template,
-	}
+	j := render.New(render.Options{
+		TemplatesBox: packr.NewBox(tPath),
+	}).Template
 
-	for _, j := range table {
-		re := j("foo/bar", "index.html")
-		r.Equal("foo/bar", re.ContentType())
-		bb := &bytes.Buffer{}
-		err = re.Render(bb, render.Data{"name": "Mark"})
-		r.NoError(err)
-		r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
-	}
+	re := j("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+	bb := &bytes.Buffer{}
+	err = re.Render(bb, render.Data{"name": "Mark"})
+	r.NoError(err)
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_Partial_WithoutExtension(t *testing.T) {
+	r := require.New(t)
+
+	tPath, err := ioutil.TempDir("", "")
+	r.NoError(err)
+	defer os.Remove(tPath)
+
+	partFile, err := os.Create(filepath.Join(tPath, "_foo.html"))
+	r.NoError(err)
+
+	_, err = partFile.Write([]byte("Foo > <%= name %>"))
+	r.NoError(err)
+
+	tmpFile, err := os.Create(filepath.Join(tPath, "index.html"))
+	r.NoError(err)
+
+	_, err = tmpFile.Write([]byte(`<%= partial("foo") %>`))
+	r.NoError(err)
+
+	type ji func(string, ...string) render.Renderer
+
+	j := render.New(render.Options{
+		TemplatesBox: packr.NewBox(tPath),
+	}).HTML
+
+	re := j("index.html")
+	bb := &bytes.Buffer{}
+	err = re.Render(bb, render.Data{"name": "Mark"})
+	r.NoError(err)
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
 func Test_AssetPath(t *testing.T) {
@@ -101,7 +129,7 @@ func Test_AssetPath(t *testing.T) {
 
 	for original, expected := range cases {
 
-		tmpFile, err := ioutil.TempFile(tdir, "test")
+		tmpFile, err := os.Create(filepath.Join(tdir, "test.html"))
 		r.NoError(err)
 
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
@@ -136,7 +164,7 @@ func Test_AssetPathNoManifest(t *testing.T) {
 
 	for original, expected := range cases {
 
-		tmpFile, err := ioutil.TempFile(tdir, "test")
+		tmpFile, err := os.Create(filepath.Join(tdir, "test.html"))
 		r.NoError(err)
 
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
@@ -171,7 +199,7 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 
 	for original, expected := range cases {
 
-		tmpFile, err := ioutil.TempFile(tdir, "test")
+		tmpFile, err := os.Create(filepath.Join(tdir, "test.html"))
 		r.NoError(err)
 
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
