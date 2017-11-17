@@ -17,6 +17,7 @@ func init() {
 	generateCmd.AddCommand(generate.ActionCmd)
 	generateCmd.AddCommand(generate.DockerCmd)
 	generateCmd.AddCommand(generate.TaskCmd)
+	generateCmd.AddCommand(generate.MailCmd)
 	decorate("generate", generateCmd)
 
 	RootCmd.AddCommand(generateCmd)
