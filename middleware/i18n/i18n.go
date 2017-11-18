@@ -113,7 +113,7 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 	}
 }
 
-// TranslateVariadic returns the translation of the string identified by translationID.
+// Translate returns the translation of the string identified by translationID.
 //
 // See https://github.com/nicksnyder/go-i18n
 //
