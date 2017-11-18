@@ -5,3 +5,6 @@
   translation:
     one: "Hello, alone!"
     other: "Hello, {{.Count}} people!"
+
+- id: test-format
+  translation: "Hello {{.Name}}!"
