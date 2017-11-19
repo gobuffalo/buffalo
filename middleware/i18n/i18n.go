@@ -30,10 +30,8 @@ type Translator struct {
 	// default is "lang"
 	SessionName string
 	// HelperName - name of the view helper. default is "t"
-	HelperName string
-	// HelperNamePlural - name of the view plural helper. default is "tp"
-	HelperNamePlural string
-	LanguageFinder   LanguageFinder
+	HelperName     string
+	LanguageFinder LanguageFinder
 }
 
 // Load translations from the t.Box.
@@ -59,13 +57,12 @@ func (t *Translator) AddTranslation(lang *language.Language, translations ...tra
 // also call t.Load() and load the translations from disk.
 func New(box packr.Box, language string) (*Translator, error) {
 	t := &Translator{
-		Box:              box,
-		DefaultLanguage:  language,
-		CookieName:       "lang",
-		SessionName:      "lang",
-		HelperName:       "t",
-		HelperNamePlural: "tp",
-		LanguageFinder:   defaultLanguageFinder,
+		Box:             box,
+		DefaultLanguage: language,
+		CookieName:      "lang",
+		SessionName:     "lang",
+		HelperName:      "t",
+		LanguageFinder:  defaultLanguageFinder,
 	}
 	return t, t.Load()
 }
@@ -74,6 +71,7 @@ func New(box packr.Box, language string) (*Translator, error) {
 // selected. By default languages are loaded in the following order:
 //
 // Cookie - "lang"
+// Session - "lang"
 // Header - "Accept-Language"
 // Default - "en-US"
 //
@@ -91,45 +89,52 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 				}
 			}
 
+			// set languages in context, if not set yet
+			if langs := c.Value("languages"); langs == nil {
+				c.Set("languages", t.LanguageFinder(t, c))
+			}
+
+			// set translator
+			if T := c.Value("T"); T == nil {
+				langs := c.Value("languages").([]string)
+				T, err := i18n.Tfunc(langs[0], langs[1:]...)
+				if err != nil {
+					return err
+				}
+				c.Set("T", T)
+			}
+
 			// set up the helper function for the views:
-			c.Set(t.HelperName, func(s string) (string, error) {
-				return t.Translate(c, s)
-			})
-			c.Set(t.HelperNamePlural, func(s string, i interface{}) (string, error) {
-				return t.TranslatePlural(c, s, i)
+			c.Set(t.HelperName, func(s string, i ...interface{}) string {
+				return t.Translate(c, s, i...)
 			})
 			return next(c)
 		}
 	}
 }
 
-// Translate translates a string given a Context
-// s is the translation ID
-func (t *Translator) Translate(c buffalo.Context, s string) (string, error) {
-	if langs := c.Value("languages"); langs == nil {
-		c.Set("languages", t.LanguageFinder(t, c))
-	}
-	langs := c.Value("languages").([]string)
-	T, err := i18n.Tfunc(langs[0], langs[1:]...)
-	if err != nil {
-		return "", err
-	}
-	return T(s, c.Data()), nil
-}
-
-// TranslatePlural is the plural version of Translate
-// s is the translation ID
-// i must be an integer type (int, int8, int16, int32, int64) or a float formatted as a string (e.g. "123.45")
-func (t *Translator) TranslatePlural(c buffalo.Context, s string, i interface{}) (string, error) {
-	if langs := c.Value("languages"); langs == nil {
-		c.Set("languages", t.LanguageFinder(t, c))
-	}
-	langs := c.Value("languages").([]string)
-	T, err := i18n.Tfunc(langs[0], langs[1:]...)
-	if err != nil {
-		return "", err
-	}
-	return T(s, i, c.Data()), nil
+// Translate returns the translation of the string identified by translationID.
+//
+// See https://github.com/nicksnyder/go-i18n
+//
+// If there is no translation for translationID, then the translationID itself is returned.
+// This makes it easy to identify missing translations in your app.
+//
+// If translationID is a non-plural form, then the first variadic argument may be a map[string]interface{}
+// or struct that contains template data.
+//
+// If translationID is a plural form, the function accepts two parameter signatures
+// 1. T(count int, data struct{})
+// The first variadic argument must be an integer type
+// (int, int8, int16, int32, int64) or a float formatted as a string (e.g. "123.45").
+// The second variadic argument may be a map[string]interface{} or struct{} that contains template data.
+// 2. T(data struct{})
+// data must be a struct{} or map[string]interface{} that contains a Count field and the template data,
+// Count field must be an integer type (int, int8, int16, int32, int64)
+// or a float formatted as a string (e.g. "123.45").
+func (t *Translator) Translate(c buffalo.Context, translationID string, args ...interface{}) string {
+	T := c.Value("T").(i18n.TranslateFunc)
+	return T(translationID, args...)
 }
 
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {

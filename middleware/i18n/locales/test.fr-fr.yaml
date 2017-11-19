@@ -5,3 +5,9 @@
   translation:
     one: "Bonjour, tout seul !"
     other: "Bonjour, {{.Count}} personnes !"
+
+- id: test-format
+  translation: "Bonjour {{.Name}} !"
+
+- id: test-format-loop
+  translation: "M. {{.FirstName}} {{.LastName}}"
