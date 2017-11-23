@@ -30,9 +30,11 @@ func Test_JavaScript(t *testing.T) {
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		j := render.New(render.Options{}).JavaScript
+		j := render.New(render.Options{
+			TemplatesBox: packr.NewBox(tmpDir),	
+		}).JavaScript
 
-		re := j(tmpFile.Name())
+		re := j(filepath.Base(tmpFile.Name()))
 		r.Equal("application/javascript", re.ContentType())
 		bb := &bytes.Buffer{}
 		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
@@ -50,12 +52,13 @@ func Test_JavaScript(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			JavaScriptLayout: layout.Name(),
+			JavaScriptLayout: filepath.Base(layout.Name()),
+			TemplatesBox: packr.NewBox(tmpDir),
 		})
 
 		st.Run("using just the JavaScriptLayout", func(sst *testing.T) {
 			r := require.New(sst)
-			h := re.JavaScript(tmpFile.Name())
+			h := re.JavaScript(filepath.Base(tmpFile.Name()))
 
 			r.Equal("application/javascript", h.ContentType())
 			bb := &bytes.Buffer{}
@@ -71,7 +74,7 @@ func Test_JavaScript(t *testing.T) {
 
 			_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
 			r.NoError(err)
-			h := re.JavaScript(tmpFile.Name(), nlayout.Name())
+			h := re.JavaScript(filepath.Base(tmpFile.Name()), filepath.Base(nlayout.Name()))
 
 			r.Equal("application/javascript", h.ContentType())
 			bb := &bytes.Buffer{}

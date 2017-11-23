@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/packr"
 	"github.com/stretchr/testify/require"
 )
 
@@ -29,9 +30,11 @@ func Test_HTML(t *testing.T) {
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		j := render.New(render.Options{}).HTML
+		j := render.New(render.Options{
+			TemplatesBox: packr.NewBox(tmpDir),
+		}).HTML
 
-		re := j(tmpFile.Name())
+		re := j(filepath.Base(tmpFile.Name()))
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}
 		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
@@ -50,12 +53,13 @@ func Test_HTML(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			HTMLLayout: layout.Name(),
+			TemplatesBox: packr.NewBox(tmpDir),
+			HTMLLayout: filepath.Base(layout.Name()),
 		})
 
 		st.Run("using just the HTMLLayout", func(sst *testing.T) {
 			r := require.New(sst)
-			h := re.HTML(tmpFile.Name())
+			h := re.HTML(filepath.Base(tmpFile.Name()))
 
 			r.Equal("text/html", h.ContentType())
 			bb := &bytes.Buffer{}
@@ -72,7 +76,7 @@ func Test_HTML(t *testing.T) {
 
 			_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
 			r.NoError(err)
-			h := re.HTML(tmpFile.Name(), nlayout.Name())
+			h := re.HTML(filepath.Base(tmpFile.Name()), filepath.Base(nlayout.Name()))
 
 			r.Equal("text/html", h.ContentType())
 			bb := &bytes.Buffer{}
