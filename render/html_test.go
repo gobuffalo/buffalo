@@ -54,7 +54,7 @@ func Test_HTML(t *testing.T) {
 
 		re := render.New(render.Options{
 			TemplatesBox: packr.NewBox(tmpDir),
-			HTMLLayout: filepath.Base(layout.Name()),
+			HTMLLayout:   filepath.Base(layout.Name()),
 		})
 
 		st.Run("using just the HTMLLayout", func(sst *testing.T) {

@@ -31,7 +31,7 @@ func Test_JavaScript(t *testing.T) {
 		r := require.New(st)
 
 		j := render.New(render.Options{
-			TemplatesBox: packr.NewBox(tmpDir),	
+			TemplatesBox: packr.NewBox(tmpDir),
 		}).JavaScript
 
 		re := j(filepath.Base(tmpFile.Name()))
@@ -53,7 +53,7 @@ func Test_JavaScript(t *testing.T) {
 
 		re := render.New(render.Options{
 			JavaScriptLayout: filepath.Base(layout.Name()),
-			TemplatesBox: packr.NewBox(tmpDir),
+			TemplatesBox:     packr.NewBox(tmpDir),
 		})
 
 		st.Run("using just the JavaScriptLayout", func(sst *testing.T) {
