@@ -2,6 +2,7 @@ package i18n
 
 import (
 	"log"
+	"strings"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/packr"
@@ -21,7 +22,7 @@ type LanguageFinder func(*Translator, buffalo.Context) []string
 type Translator struct {
 	// Box - where are the files?
 	Box packr.Box
-	// DefaultLanguage - default is "en-US"
+	// DefaultLanguage - default is passed as a parameter on New.
 	DefaultLanguage string
 	// CookieName - name of the cookie to find the desired language.
 	// default is "lang"
@@ -32,6 +33,8 @@ type Translator struct {
 	// HelperName - name of the view helper. default is "t"
 	HelperName     string
 	LanguageFinder LanguageFinder
+	// LocalizedViews - enable localized views feature
+	LocalizedViews bool
 }
 
 // Load translations from the t.Box.
@@ -63,6 +66,7 @@ func New(box packr.Box, language string) (*Translator, error) {
 		SessionName:     "lang",
 		HelperName:      "t",
 		LanguageFinder:  defaultLanguageFinder,
+		LocalizedViews:  false,
 	}
 	return t, t.Load()
 }
@@ -92,6 +96,9 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 			// set languages in context, if not set yet
 			if langs := c.Value("languages"); langs == nil {
 				c.Set("languages", t.LanguageFinder(t, c))
+				if t.LocalizedViews {
+					c.Set("templateSuffixes", c.Value("languages"))
+				}
 			}
 
 			// set translator
@@ -157,10 +164,26 @@ func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {
 	// try to get the language from a header:
 	acceptLang := r.Header.Get("Accept-Language")
 	if acceptLang != "" {
-		langs = append(langs, acceptLang)
+		langs = append(langs, parseAcceptLanguage(acceptLang)...)
 	}
 
-	// try to get the language from the session:
+	// finally set the default app language as fallback
 	langs = append(langs, t.DefaultLanguage)
 	return langs
+}
+
+// Inspired from https://siongui.github.io/2015/02/22/go-parse-accept-language/
+// Parse an Accept-Language string to get usable lang values for i18n system
+func parseAcceptLanguage(acptLang string) []string {
+	var lqs []string
+
+	langQStrs := strings.Split(acptLang, ",")
+	for _, langQStr := range langQStrs {
+		trimedLangQStr := strings.Trim(langQStr, " ")
+
+		langQ := strings.Split(trimedLangQStr, ";")
+		lq := langQ[0]
+		lqs = append(lqs, lq)
+	}
+	return lqs
 }

@@ -61,6 +61,21 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		}
 	}
 
+	// Try to use a suffixed version first (if provided)
+	if suffixes, ok := data["templateSuffixes"].([]string); ok {
+		ext := filepath.Ext(name)
+		rawName := strings.TrimSuffix(name, ext)
+
+		for _, suffix := range suffixes {
+			candidateName := rawName + "_" + suffix + ext
+			if s.TemplatesBox.Has(candidateName) {
+				// Replace name with the existing suffixed version
+				name = candidateName
+				break
+			}
+		}
+	}
+
 	source, err := s.TemplatesBox.MustBytes(name)
 	if err != nil {
 		return "", err
