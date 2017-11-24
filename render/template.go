@@ -67,7 +67,12 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		rawName := strings.TrimSuffix(name, ext)
 
 		for _, suffix := range suffixes {
-			candidateName := rawName + "_" + suffix + ext
+			var candidateName string
+			if suffix == "" {
+				candidateName = name
+			} else {
+				candidateName = rawName + "_" + suffix + ext
+			}
 			if s.TemplatesBox.Has(candidateName) {
 				// Replace name with the existing suffixed version
 				name = candidateName
