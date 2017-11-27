@@ -33,8 +33,6 @@ type Translator struct {
 	// HelperName - name of the view helper. default is "t"
 	HelperName     string
 	LanguageFinder LanguageFinder
-	// LocalizedViews - enable localized views feature
-	LocalizedViews bool
 }
 
 // Load translations from the t.Box.
