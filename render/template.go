@@ -62,6 +62,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	// Try to use localized version
+	templateName := name
 	if languages, ok := data["languages"].([]string); ok {
 		ll := len(languages)
 		if ll > 0 {
@@ -75,17 +76,17 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 				if l == defaultLanguage {
 					break
 				}
-				candidateName = rawName + "_" + strings.ToLower(l) + ext
+				candidateName = rawName + "." + strings.ToLower(l) + ext
 				if s.TemplatesBox.Has(candidateName) {
 					// Replace name with the existing suffixed version
-					name = candidateName
+					templateName = candidateName
 					break
 				}
 			}
 		}
 	}
 
-	source, err := s.TemplatesBox.MustBytes(name)
+	source, err := s.TemplatesBox.MustBytes(templateName)
 	if err != nil {
 		return "", err
 	}
