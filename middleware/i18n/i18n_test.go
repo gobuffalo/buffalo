@@ -42,6 +42,15 @@ func app() *buffalo.App {
 		c.Set("Users", usersList)
 		return c.Render(200, r.HTML("format.html"))
 	})
+	app.GET("/localized", func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("localized_view.html"))
+	})
+	// Disable i18n middleware
+	noI18n := func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("localized_view.html"))
+	}
+	app.Middleware.Skip(t.Middleware(), noI18n)
+	app.GET("/localized-disabled", noI18n)
 	return app
 }
 
@@ -100,4 +109,31 @@ func Test_i18n_format_fr(t *testing.T) {
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
 	r.Equal("Bonjour Mark !\n\n\t* M. Mark Bates\n\n\t* M. Chuck Berry\n", res.Body.String())
+}
+
+func Test_i18n_Localized_View(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	// Test with complex Accept-Language
+	req := w.Request("/localized")
+	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
+	res := req.Get()
+	r.Equal("Hello!\n", res.Body.String())
+
+	// Test priority
+	req.Headers["Accept-Language"] = "fr,en-US"
+	res = req.Get()
+	r.Equal("Bonjour !\n", res.Body.String())
+
+	// Test fallback
+	req.Headers["Accept-Language"] = "ru"
+	res = req.Get()
+	r.Equal("Default\n", res.Body.String())
+
+	// Test i18n disabled
+	req = w.Request("/localized-disabled")
+	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
+	res = req.Get()
+	r.Equal("Default\n", res.Body.String())
 }
