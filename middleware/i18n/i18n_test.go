@@ -16,7 +16,7 @@ type User struct {
 	LastName  string
 }
 
-func app(localizedViews bool) *buffalo.App {
+func app() *buffalo.App {
 	app := buffalo.New(buffalo.Options{})
 
 	r := render.New(render.Options{
@@ -27,9 +27,6 @@ func app(localizedViews bool) *buffalo.App {
 	t, err := New(packr.NewBox("./locales"), "en-US")
 	if err != nil {
 		log.Fatal(err)
-	}
-	if localizedViews {
-		t.LocalizedViews = true
 	}
 	app.Use(t.Middleware())
 	app.GET("/", func(c buffalo.Context) error {
@@ -48,13 +45,19 @@ func app(localizedViews bool) *buffalo.App {
 	app.GET("/localized", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("localized_view.html"))
 	})
+	// Disable i18n middleware
+	noI18n := func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("localized_view.html"))
+	}
+	app.Middleware.Skip(t.Middleware(), noI18n)
+	app.GET("/localized-disabled", noI18n)
 	return app
 }
 
 func Test_i18n(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	res := w.Request("/").Get()
 	r.Equal("Hello, World!\n", res.Body.String())
 }
@@ -62,7 +65,7 @@ func Test_i18n(t *testing.T) {
 func Test_i18n_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	req := w.Request("/")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
@@ -73,7 +76,7 @@ func Test_i18n_fr(t *testing.T) {
 func Test_i18n_plural(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	res := w.Request("/plural").Get()
 	r.Equal("Hello, alone!\nHello, 5 people!\n", res.Body.String())
 }
@@ -81,7 +84,7 @@ func Test_i18n_plural(t *testing.T) {
 func Test_i18n_plural_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	req := w.Request("/plural")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
@@ -92,7 +95,7 @@ func Test_i18n_plural_fr(t *testing.T) {
 func Test_i18n_format(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	res := w.Request("/format").Get()
 	r.Equal("Hello Mark!\n\n\t* Mr. Mark Bates\n\n\t* Mr. Chuck Berry\n", res.Body.String())
 }
@@ -100,7 +103,7 @@ func Test_i18n_format(t *testing.T) {
 func Test_i18n_format_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(false))
+	w := willie.New(app())
 	req := w.Request("/format")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
@@ -111,20 +114,26 @@ func Test_i18n_format_fr(t *testing.T) {
 func Test_i18n_Localized_View(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app(true))
+	w := willie.New(app())
 	// Test with complex Accept-Language
 	req := w.Request("/localized")
-	req.Headers["Accept-Language"] = "en-US,en;q=0.5"
+	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res := req.Get()
 	r.Equal("Hello!\n", res.Body.String())
 
 	// Test priority
-	req.Headers["Accept-Language"] = "fr,en"
+	req.Headers["Accept-Language"] = "fr,en-US"
 	res = req.Get()
 	r.Equal("Bonjour !\n", res.Body.String())
 
 	// Test fallback
 	req.Headers["Accept-Language"] = "ru"
+	res = req.Get()
+	r.Equal("Default\n", res.Body.String())
+
+	// Test i18n disabled
+	req = w.Request("/localized-disabled")
+	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res = req.Get()
 	r.Equal("Default\n", res.Body.String())
 }

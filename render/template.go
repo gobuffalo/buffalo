@@ -61,22 +61,26 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		}
 	}
 
-	// Try to use a suffixed version first (if provided)
-	if suffixes, ok := data["templateSuffixes"].([]string); ok {
-		ext := filepath.Ext(name)
-		rawName := strings.TrimSuffix(name, ext)
+	// Try to use localized version
+	if languages, ok := data["languages"].([]string); ok {
+		ll := len(languages)
+		if ll > 0 {
+			// Default language is the last in the list
+			defaultLanguage := languages[ll-1]
+			ext := filepath.Ext(name)
+			rawName := strings.TrimSuffix(name, ext)
 
-		for _, suffix := range suffixes {
-			var candidateName string
-			if suffix == "" {
-				candidateName = name
-			} else {
-				candidateName = rawName + "_" + suffix + ext
-			}
-			if s.TemplatesBox.Has(candidateName) {
-				// Replace name with the existing suffixed version
-				name = candidateName
-				break
+			for _, l := range languages {
+				var candidateName string
+				if l == defaultLanguage {
+					break
+				}
+				candidateName = rawName + "_" + strings.ToLower(l) + ext
+				if s.TemplatesBox.Has(candidateName) {
+					// Replace name with the existing suffixed version
+					name = candidateName
+					break
+				}
 			}
 		}
 	}

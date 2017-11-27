@@ -66,7 +66,6 @@ func New(box packr.Box, language string) (*Translator, error) {
 		SessionName:     "lang",
 		HelperName:      "t",
 		LanguageFinder:  defaultLanguageFinder,
-		LocalizedViews:  false,
 	}
 	return t, t.Load()
 }
@@ -96,9 +95,6 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 			// set languages in context, if not set yet
 			if langs := c.Value("languages"); langs == nil {
 				c.Set("languages", t.LanguageFinder(t, c))
-				if t.LocalizedViews {
-					c.Set("templateSuffixes", normalizeSuffixes(t.DefaultLanguage, c.Value("languages").([]string)))
-				}
 			}
 
 			// set translator
@@ -186,18 +182,4 @@ func parseAcceptLanguage(acptLang string) []string {
 		lqs = append(lqs, lq)
 	}
 	return lqs
-}
-
-func normalizeSuffixes(defaultLang string, langSuffixes []string) []string {
-	var nSuffixes []string
-
-	for _, lang := range langSuffixes {
-		suffix := strings.ToLower(lang)
-		nSuffixes = append(nSuffixes, suffix)
-		if suffix == defaultLang {
-			// Add empty suffix for the default language
-			nSuffixes = append(nSuffixes, "")
-		}
-	}
-	return nSuffixes
 }
