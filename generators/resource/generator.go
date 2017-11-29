@@ -16,6 +16,7 @@ type Generator struct {
 	Model         meta.Name `json:"model"`
 	SkipMigration bool      `json:"skip_migration"`
 	SkipModel     bool      `json:"skip_model"`
+	UseModel      bool      `json:"use_model"`
 	MimeType      string    `json:"mime_type"`
 	FilesPath     string    `json:"files_path"`
 	ActionsPath   string    `json:"actions_path"`

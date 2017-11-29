@@ -63,7 +63,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
-	if !res.SkipModel {
+	if !res.SkipModel && !res.UseModel {
 		g.Add(res.modelCommand())
 	}
 
