@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -107,10 +108,20 @@ func (a *App) Serve() error {
 func (a *App) Stop(err error) error {
 	a.cancel()
 	if err != nil && errors.Cause(err) != context.Canceled {
-		fmt.Println(err)
+		fmt.Println(errorWithHelp(err))
 		return err
 	}
 	return nil
+}
+
+//Try to augment an error with a useful help message
+func errorWithHelp(err error) string {
+	switch {
+	case strings.Contains(err.Error(), "address already in use"):
+		return fmt.Sprintf("%v \n%v", err.Error(), "Try using a different port by setting the PORT environment variable")
+
+	}
+	return err.Error()
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
