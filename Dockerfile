@@ -51,6 +51,10 @@ RUN buffalo build -static
 RUN buffalo g resource users name:text email:text
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_model_migration.json
 
+RUN buffalo g resource admins --use-model users
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_use_model.json
+
+RUN rm actions/admins_test.go
 RUN rm models/user_test.go
 RUN rm models/user.go
 RUN rm actions/users_test.go
