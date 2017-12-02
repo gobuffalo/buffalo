@@ -47,6 +47,10 @@ func (sm SMTPSender) Send(message Message) error {
 		m.Attach(at.Name, settings)
 	}
 
+	for field, value := range message.Headers {
+		m.SetHeader(field, value)
+	}
+
 	err := sm.Dialer.DialAndSend(m)
 
 	if err != nil {

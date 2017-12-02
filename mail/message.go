@@ -15,6 +15,7 @@ type Message struct {
 	CC      []string
 	Bcc     []string
 	Subject string
+	Headers map[string]string
 
 	Bodies      []Body
 	Attachments []Attachment
@@ -76,7 +77,12 @@ func (m *Message) AddAttachment(name, contentType string, r io.Reader) error {
 	return nil
 }
 
+// SetHeader sets the heder field and value for the message
+func (m *Message) SetHeader(field, value string) {
+	m.Headers[field] = value
+}
+
 //NewMessage Builds a new message.
 func NewMessage() Message {
-	return Message{}
+	return Message{Headers: map[string]string{}}
 }

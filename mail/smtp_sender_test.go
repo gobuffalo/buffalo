@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/mail"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/x/fakesmtp"
-	"github.com/gobuffalo/x/mail"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,17 +28,18 @@ func TestSendPlain(t *testing.T) {
 	smtpServer.Clear()
 	r := require.New(t)
 
-	m := mail.Message{
-		From:    "mark@example.com",
-		To:      []string{"something@something.com"},
-		Subject: "Cool Message",
-		CC:      []string{"other@other.com", "my@other.com"},
-		Bcc:     []string{"secret@other.com"},
-	}
+	m := mail.NewMessage()
+	m.From = "mark@example.com"
+	m.To = []string{"something@something.com"}
+	m.Subject = "Cool Message"
+	m.CC = []string{"other@other.com", "my@other.com"}
+	m.Bcc = []string{"secret@other.com"}
 
 	m.AddAttachment("someFile.txt", "text/plain", bytes.NewBuffer([]byte("hello")))
 	m.AddBody(rend.String("Hello <%= Name %>"), render.Data{"Name": "Antonio"})
 	r.Equal(m.Bodies[0].Content, "Hello Antonio")
+
+	m.SetHeader("X-SMTPAPI", `{"send_at": 1409348513}`)
 
 	err := sender.Send(m)
 	r.Nil(err)
@@ -55,4 +56,5 @@ func TestSendPlain(t *testing.T) {
 	r.Contains(lastMessage, "Hello Antonio")
 	r.Contains(lastMessage, "Content-Disposition: attachment; filename=\"someFile.txt\"")
 	r.Contains(lastMessage, "aGVsbG8=") //base64 of the file content
+	r.Contains(lastMessage, `X-SMTPAPI: {"send_at": 1409348513}`)
 }
