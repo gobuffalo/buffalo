@@ -40,6 +40,10 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 
 	grift.Run("shoulders", c)
 
+	if err := push(); err != nil {
+		return errors.WithStack(err)
+	}
+
 	err = tagRelease(v)
 	if err != nil {
 		return err
@@ -124,7 +128,11 @@ func commitAndPush(v string) error {
 		return err
 	}
 
-	cmd = exec.Command("git", "push", "origin", "master")
+	return push()
+}
+
+func push() error {
+	cmd := exec.Command("git", "push", "origin", "master")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout

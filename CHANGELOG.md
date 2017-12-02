@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/gobuffalo/buffalo/tree/HEAD)
-
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.2...HEAD)
+## [v0.10.2](https://github.com/gobuffalo/buffalo/tree/v0.10.2) (2017-11-13)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.1...HEAD)
 
 **Implemented enhancements:**
 
@@ -41,9 +40,6 @@
 - Regession in Resource generator for nested resources fixes \#754 [\#757](https://github.com/gobuffalo/buffalo/pull/757) ([markbates](https://github.com/markbates))
 - print out the yarn version and dep version [\#756](https://github.com/gobuffalo/buffalo/pull/756) ([markbates](https://github.com/markbates))
 - Update Binding Time Formats [\#755](https://github.com/gobuffalo/buffalo/pull/755) ([corylanou](https://github.com/corylanou))
-
-## [v0.10.2](https://github.com/gobuffalo/buffalo/tree/v0.10.2) (2017-11-13)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.1...v0.10.2)
 
 **Fixed bugs:**
 
