@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
@@ -20,6 +21,10 @@ import (
 func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
+	if a.AsAPI {
+		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
+		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
+	}
 	if a.Force {
 		os.RemoveAll(a.Root)
 	}
@@ -36,7 +41,15 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	for _, f := range files {
-		g.Add(makr.NewFile(f.WritePath, f.Body))
+		if a.AsAPI {
+			if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") {
+				continue
+			}
+			g.Add(makr.NewFile(f.WritePath, f.Body))
+		} else {
+			g.Add(makr.NewFile(f.WritePath, f.Body))
+		}
+
 	}
 	data["name"] = a.Name
 	if err := refresh.Run(root, data); err != nil {
@@ -84,18 +97,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 			return errors.WithStack(err)
 		}
 	}
-	if a.AsAPI {
-		g.Add(makr.Func{
-			Runner: func(path string, data makr.Data) error {
-				return os.RemoveAll(filepath.Join(path, "templates"))
-			},
-		})
-		g.Add(makr.Func{
-			Runner: func(path string, data makr.Data) error {
-				return os.RemoveAll(filepath.Join(path, "locales"))
-			},
-		})
-	}
+
 	if a.Docker != "none" {
 		o := docker.New()
 		o.App = a.App
