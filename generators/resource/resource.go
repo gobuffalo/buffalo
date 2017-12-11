@@ -59,7 +59,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", res.Name.URL(), res.Name.Resource()))
+			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", res.Name.URL(), res.Name.Resource()))
 		},
 	})
 
