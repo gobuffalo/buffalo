@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
@@ -75,7 +76,15 @@ func optionsWithDefaults(opts Options) Options {
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
 	}
-	opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", addr), envy.Get("PORT", "3000")))
+	envAddr := envy.Get("ADDR", addr)
+
+	if strings.HasPrefix(envAddr, "unix:") {
+		// UNIX domain socket doesn't have a port
+		opts.Addr = envAddr
+	} else {
+		// TCP case
+		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envy.Get("PORT", "3000")))
+	}
 
 	if opts.PreWares == nil {
 		opts.PreWares = []PreWare{}
