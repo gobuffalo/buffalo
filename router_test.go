@@ -451,6 +451,67 @@ func Test_Resource(t *testing.T) {
 
 }
 
+func Test_ResourceNameOverride(t *testing.T) {
+	type CarsResource struct {
+		*BaseResource
+	}
+
+	r := require.New(t)
+	a := Automatic(Options{Prefix: "/test"})
+	a.URLNameOverride = true
+
+	var carsResource Resource
+	carsResource = CarsResource{&BaseResource{}}
+
+	rr := render.New(render.Options{
+		HTMLLayout:     "application.html",
+		TemplateEngine: plush.BuffaloRenderer,
+		TemplatesBox:   packr.NewBox("../templates"),
+		Helpers:        map[string]interface{}{},
+	})
+
+	sampleHandler := func(c Context) error {
+		c.Set("opts", map[string]interface{}{})
+		return c.Render(200, rr.String(`
+			1. <%= rootPath() %>
+			2. <%= usersPath() %>
+			3. <%= userPath({user_id: 1}) %>
+			4. <%= myPeepsPath() %>
+			5. <%= userPath(opts) %>
+			6. <%= carPath({car_id: 1}) %>
+			7. <%= newCarPath() %>
+			8. <%= editCarPath({car_id: 1}) %>
+			9. <%= editCarPath({car_id: 1, other: 12}) %>
+			10. <%= rootPath({"some":"variable","other": 12}) %>
+			11. <%= rootPath() %>
+			12. <%= rootPath({"special/":"12=ss"}) %>
+		`))
+	}
+
+	a.GET("/", sampleHandler)
+	a.GET("/users", sampleHandler)
+	a.GET("/users/{user_id}", sampleHandler)
+	a.GET("/peeps", sampleHandler).Name("myPeeps")
+	a.Resource("/car", carsResource)
+
+	w := willie.New(a)
+	res := w.Request("/test").Get()
+
+	r.Equal(200, res.Code)
+	r.Contains(res.Body.String(), "1. /test")
+	r.Contains(res.Body.String(), "2. /test/users")
+	r.Contains(res.Body.String(), "3. /test/users/1")
+	r.Contains(res.Body.String(), "4. /test/peeps")
+	r.Contains(res.Body.String(), "5. /test/users/{user_id}")
+	r.Contains(res.Body.String(), "6. /test/car/1")
+	r.Contains(res.Body.String(), "7. /test/car/new")
+	r.Contains(res.Body.String(), "8. /test/car/1/edit")
+	r.Contains(res.Body.String(), "9. /test/car/1/edit?other=12")
+	r.Contains(res.Body.String(), "10. /test?other=12&some=variable")
+	r.Contains(res.Body.String(), "11. /test")
+	r.Contains(res.Body.String(), "12. /test?special%2F=12%3Dss")
+}
+
 type userResource struct{}
 
 func (u *userResource) List(c Context) error {

@@ -56,6 +56,7 @@ type Options struct {
 	Context context.Context
 	cancel  context.CancelFunc
 	Prefix  string
+	URLNameOverride bool
 }
 
 // PreWare takes an http.Handler and returns and http.Handler
