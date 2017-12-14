@@ -30,102 +30,72 @@ var infoCmd = &cobra.Command{
 			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
 		}
 
-		bb.WriteString("\n### Go Version\n")
-		c := exec.Command(envy.Get("GO_BIN", "go"), "version")
-		c.Stdout = bb
-		err := c.Run()
+		err := checkGoInfo()
 		if err != nil {
 			return errors.WithStack(err)
 		}
 
-		bb.WriteString("\n### Go Env\n")
-		c = exec.Command(envy.Get("GO_BIN", "go"), "env")
-		c.Stdout = bb
-		c.Stderr = bb
-		c.Run()
-
-		bb.WriteString("\n### Node Version\n")
-		if _, err := exec.LookPath("node"); err == nil {
-			c = exec.Command("node", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("Node Not Found\n")
-		}
-
-		bb.WriteString("\n### NPM Version\n")
-		if _, err := exec.LookPath("npm"); err == nil {
-			c = exec.Command("npm", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("NPM Not Found\n")
-		}
-
-		bb.WriteString("\n### Yarn Version\n")
-		if _, err := exec.LookPath("yarn"); err == nil {
-			c = exec.Command("yarn", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("Yarn Not Found\n")
-		}
-
-		bb.WriteString("\n### Dep Version\n")
-		if _, err := exec.LookPath("dep"); err == nil {
-			c = exec.Command("dep", "version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("dep Not Found\n")
-		}
-
-		bb.WriteString("\n### Dep Status\n")
-		if _, err := exec.LookPath("dep"); err == nil {
-			c = exec.Command("dep", "status")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("dep Not Found\n")
-		}
-
-		bb.WriteString("\n### PostgreSQL Version\n")
-		if _, err := exec.LookPath("pg_ctl"); err == nil {
-			c = exec.Command("pg_ctl", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("PostgreSQL Not Found\n")
-		}
-
-		bb.WriteString("\n### MySQL Version\n")
-		if _, err := exec.LookPath("mysql"); err == nil {
-			c = exec.Command("mysql", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("MySQL Not Found\n")
-		}
-
-		bb.WriteString("\n### SQLite Version\n")
-		if _, err := exec.LookPath("sqlite3"); err == nil {
-			c = exec.Command("sqlite3", "--version")
-			c.Stdout = bb
-			c.Stderr = bb
-			c.Run()
-		} else {
-			bb.WriteString("SQLite Not Found\n")
-		}
+		checkExternalsTools()
 
 		return nil
 	},
+}
+
+func checkGoInfo() error {
+	bb := os.Stdout
+
+	bb.WriteString("\n### Go Version\n")
+	c := exec.Command(envy.Get("GO_BIN", "go"), "version")
+	c.Stdout = bb
+	err := c.Run()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	bb.WriteString("\n### Go Env\n")
+	c = exec.Command(envy.Get("GO_BIN", "go"), "env")
+	c.Stdout = bb
+	c.Stderr = bb
+	c.Run()
+}
+
+func checkExternalsTools() {
+	bb := os.Stdout
+
+	infoCommands := []struct {
+		Name      string
+		PathName  string
+		Cmd       *exec.Cmd
+		InfoLabel string
+	}{
+		{"Node", "node", exec.Command("node", "--version"), "\n### Node Version\n"},
+		{"NPM", "npm", exec.Command("npm", "--version"), "\n### NPM Version\n"},
+		{"Yarn", "yarn", exec.Command("yarn", "--version"), "\n### Yarn Version\n"},
+		{"dep", "dep", exec.Command("dep", "version"), "\n### Dep Version\n"},
+		{"dep", "dep", exec.Command("dep", "status"), "\n### Dep Status\n"},
+		{"PostgreSQL", "pg_ctl", exec.Command("pg_ctl", "--version"), "\n### PostgreSQL Version\n"},
+		{"MySQL", "mysql", exec.Command("mysql", "--version"), "\n### MySQL Version\n"},
+		{"SQLite", "sqlite3", exec.Command("sqlite3", "--version"), "\n### SQLite Version\n"},
+	}
+
+	for _, cmd := range infoCommands {
+		bb.WriteString(cmd.InfoLabel)
+		execIfExists(cmd.Name, cmd.InfoLabel, cmd.Cmd)
+	}
+
+}
+
+func execIfExists(name string, pathName string, c *exec.Cmd) {
+	bb := os.Stdout
+
+	if _, err := exec.LookPath("mysql"); err != nil {
+		bb.WriteString(fmt.Sprintf("%s Not Found\n", name))
+		return
+	}
+
+	c.Stdout = bb
+	c.Stderr = bb
+	c.Run()
 }
 
 func init() {
