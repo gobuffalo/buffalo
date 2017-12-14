@@ -4,6 +4,8 @@ import (
   "log"
 
   "{{ .opts.ActionsPkg }}"
+  //This loads .env to be able via os.Getenv
+  _ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
