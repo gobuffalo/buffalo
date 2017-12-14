@@ -10,28 +10,27 @@ import (
 
 //SMTPSender allows to send Emails by connecting to a SMTP server.
 type SMTPSender struct {
-	Dialer  *gomail.Dialer
-	message *gomail.Message
+	Dialer *gomail.Dialer
 }
 
 //Send a message using SMTP configuration or returns an error if something goes wrong.
 func (sm SMTPSender) Send(message Message) error {
-	sm.message = gomail.NewMessage()
+	gm := gomail.NewMessage()
 
-	sm.message.SetHeader("From", message.From)
-	sm.message.SetHeader("To", message.To...)
-	sm.message.SetHeader("Subject", message.Subject)
-	sm.message.SetHeader("Cc", message.CC...)
-	sm.message.SetHeader("Bcc", message.Bcc...)
+	gm.SetHeader("From", message.From)
+	gm.SetHeader("To", message.To...)
+	gm.SetHeader("Subject", message.Subject)
+	gm.SetHeader("Cc", message.CC...)
+	gm.SetHeader("Bcc", message.Bcc...)
 
-	sm.addBodies(message)
-	sm.addAttachments(message)
+	sm.addBodies(message, gm)
+	sm.addAttachments(message, gm)
 
 	for field, value := range message.Headers {
-		sm.message.SetHeader(field, value)
+		gm.SetHeader(field, value)
 	}
 
-	err := sm.Dialer.DialAndSend(sm.message)
+	err := sm.Dialer.DialAndSend(gm)
 
 	if err != nil {
 		return errors.WithStack(err)
@@ -40,21 +39,21 @@ func (sm SMTPSender) Send(message Message) error {
 	return nil
 }
 
-func (sm SMTPSender) addBodies(message Message) {
+func (sm SMTPSender) addBodies(message Message, gm *gomail.Message) {
 	if len(message.Bodies) == 0 {
 		return
 	}
 
 	mainBody := message.Bodies[0]
-	sm.message.SetBody(mainBody.ContentType, mainBody.Content, gomail.SetPartEncoding(gomail.Unencoded))
+	gm.SetBody(mainBody.ContentType, mainBody.Content, gomail.SetPartEncoding(gomail.Unencoded))
 
 	for i := 1; i < len(message.Bodies); i++ {
 		alt := message.Bodies[i]
-		sm.message.AddAlternative(alt.ContentType, alt.Content, gomail.SetPartEncoding(gomail.Unencoded))
+		gm.AddAlternative(alt.ContentType, alt.Content, gomail.SetPartEncoding(gomail.Unencoded))
 	}
 }
 
-func (sm SMTPSender) addAttachments(message Message) {
+func (sm SMTPSender) addAttachments(message Message, gm *gomail.Message) {
 	for _, at := range message.Attachments {
 		settings := gomail.SetCopyFunc(func(w io.Writer) error {
 			if _, err := io.Copy(w, at.Reader); err != nil {
@@ -64,7 +63,7 @@ func (sm SMTPSender) addAttachments(message Message) {
 			return nil
 		})
 
-		sm.message.Attach(at.Name, settings)
+		gm.Attach(at.Name, settings)
 	}
 }
 
