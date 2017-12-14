@@ -57,6 +57,8 @@ func checkGoInfo() error {
 	c.Stdout = bb
 	c.Stderr = bb
 	c.Run()
+
+	return nil
 }
 
 func checkExternalsTools() {
