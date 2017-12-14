@@ -34,6 +34,9 @@ var T *i18n.Translator
 // should be defined. This is the nerve center of your
 // application.
 func App() *buffalo.App {
+  //Loading .env file values
+  envy.Load()
+
   if app == nil {
     app = buffalo.New(buffalo.Options{
       Env: ENV,
