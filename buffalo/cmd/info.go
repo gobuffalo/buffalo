@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"reflect"
 
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -18,6 +20,15 @@ var infoCmd = &cobra.Command{
 		bb := os.Stdout
 
 		bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", Version))
+
+		bb.WriteString("\n### App Information\n")
+		app := meta.New(".")
+		rv := reflect.ValueOf(app)
+		rt := rv.Type()
+		for i := 0; i < rt.NumField(); i++ {
+			f := rt.Field(i)
+			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+		}
 
 		bb.WriteString("\n### Go Version\n")
 		c := exec.Command(envy.Get("GO_BIN", "go"), "version")
@@ -51,6 +62,26 @@ var infoCmd = &cobra.Command{
 			c.Run()
 		} else {
 			bb.WriteString("NPM Not Found\n")
+		}
+
+		bb.WriteString("\n### Yarn Version\n")
+		if _, err := exec.LookPath("yarn"); err == nil {
+			c = exec.Command("yarn", "--version")
+			c.Stdout = bb
+			c.Stderr = bb
+			c.Run()
+		} else {
+			bb.WriteString("Yarn Not Found\n")
+		}
+
+		bb.WriteString("\n### Dep Version\n")
+		if _, err := exec.LookPath("dep"); err == nil {
+			c = exec.Command("dep", "version")
+			c.Stdout = bb
+			c.Stderr = bb
+			c.Run()
+		} else {
+			bb.WriteString("dep Not Found\n")
 		}
 
 		bb.WriteString("\n### Dep Status\n")

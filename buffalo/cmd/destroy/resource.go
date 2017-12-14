@@ -70,7 +70,7 @@ func removeActions(fileName string) {
 			return
 		}
 
-		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{&buffalo.BaseResource{}})", fileName, inflect.Camelize(fileName))
+		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, inflect.Camelize(fileName))
 		newContents := strings.Replace(string(content), resourceExpression, "", -1)
 
 		err = ioutil.WriteFile(filepath.Join("actions", "app.go"), []byte(newContents), 0)

@@ -1,6 +1,148 @@
 # Change Log
 
-## [v0.9.5](https://github.com/gobuffalo/buffalo/tree/v0.9.5) (2017-09-30)
+## [v0.10.2](https://github.com/gobuffalo/buffalo/tree/v0.10.2) (2017-11-13)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.1...HEAD)
+
+**Implemented enhancements:**
+
+- Implement \#723 - Localized views [\#771](https://github.com/gobuffalo/buffalo/pull/771) ([stanislas-m](https://github.com/stanislas-m))
+- Simplify i18n [\#763](https://github.com/gobuffalo/buffalo/pull/763) ([stanislas-m](https://github.com/stanislas-m))
+
+**Fixed bugs:**
+
+- CSRF middleware should accept wildcard mimetype [\#767](https://github.com/gobuffalo/buffalo/issues/767)
+- Regession in Resource generator for nested resources [\#754](https://github.com/gobuffalo/buffalo/issues/754)
+- Error: unknown flag: --use-model [\#751](https://github.com/gobuffalo/buffalo/issues/751)
+- Gitlab ci fails with a new project [\#575](https://github.com/gobuffalo/buffalo/issues/575)
+- context.Redirect exits app with code 0 [\#411](https://github.com/gobuffalo/buffalo/issues/411)
+- Fix skip-yarn flag description [\#776](https://github.com/gobuffalo/buffalo/pull/776) ([stanislas-m](https://github.com/stanislas-m))
+- Fix test render packr config [\#770](https://github.com/gobuffalo/buffalo/pull/770) ([stanislas-m](https://github.com/stanislas-m))
+- Fix \#767: CSRF middleware should accept wildcard mimetype [\#768](https://github.com/gobuffalo/buffalo/pull/768) ([stanislas-m](https://github.com/stanislas-m))
+
+**Closed issues:**
+
+- Bug: Failed when install on PC doesn't have gcc [\#777](https://github.com/gobuffalo/buffalo/issues/777)
+- Difficult to find how to override port settings [\#775](https://github.com/gobuffalo/buffalo/issues/775)
+- How to enable CORS [\#766](https://github.com/gobuffalo/buffalo/issues/766)
+- Cannot map table name on pop model [\#764](https://github.com/gobuffalo/buffalo/issues/764)
+- upgrade from buffalo 0.9 to 0.10, buffalo.Automatic not defined [\#760](https://github.com/gobuffalo/buffalo/issues/760)
+- Buffalo slack channel link doesn't work [\#759](https://github.com/gobuffalo/buffalo/issues/759)
+- concurrent hashmap write issue [\#758](https://github.com/gobuffalo/buffalo/issues/758)
+- Installation fails per README instructions [\#753](https://github.com/gobuffalo/buffalo/issues/753)
+- Proposal: move github.com/gobuffalo/x/mail into Buffalo "Core" [\#752](https://github.com/gobuffalo/buffalo/issues/752)
+
+**Merged pull requests:**
+
+- Fix Issue \#751 - unknown flag: --use-model [\#778](https://github.com/gobuffalo/buffalo/pull/778) ([jmbrunskill](https://github.com/jmbrunskill))
+- Running a single test fixes \#769 [\#772](https://github.com/gobuffalo/buffalo/pull/772) ([markbates](https://github.com/markbates))
+- Proposal: move github.com/gobuffalo/x/mail into Buffalo "Core" fixes \#752 [\#762](https://github.com/gobuffalo/buffalo/pull/762) ([markbates](https://github.com/markbates))
+- no longer need extensions for templates in actions or partials for HTML, JS, and Markdown [\#761](https://github.com/gobuffalo/buffalo/pull/761) ([markbates](https://github.com/markbates))
+- Regession in Resource generator for nested resources fixes \#754 [\#757](https://github.com/gobuffalo/buffalo/pull/757) ([markbates](https://github.com/markbates))
+- print out the yarn version and dep version [\#756](https://github.com/gobuffalo/buffalo/pull/756) ([markbates](https://github.com/markbates))
+- Update Binding Time Formats [\#755](https://github.com/gobuffalo/buffalo/pull/755) ([corylanou](https://github.com/corylanou))
+
+**Fixed bugs:**
+
+- Fix CI generation [\#744](https://github.com/gobuffalo/buffalo/pull/744) ([stanislas-m](https://github.com/stanislas-m))
+
+**Closed issues:**
+
+- `buffalo new` is working unexpectedly [\#749](https://github.com/gobuffalo/buffalo/issues/749)
+- Provide a way to load custom inflection rules [\#747](https://github.com/gobuffalo/buffalo/issues/747)
+- Wrong install instructions [\#745](https://github.com/gobuffalo/buffalo/issues/745)
+- How to resolve foreign keys? [\#670](https://github.com/gobuffalo/buffalo/issues/670)
+
+**Merged pull requests:**
+
+- Provide a way to load custom inflection rules fixes \#747 [\#748](https://github.com/gobuffalo/buffalo/pull/748) ([markbates](https://github.com/markbates))
+- check for npm earlier in new apps [\#746](https://github.com/gobuffalo/buffalo/pull/746) ([markbates](https://github.com/markbates))
+- Fix Gitlab MySQL url on new generation [\#742](https://github.com/gobuffalo/buffalo/pull/742) ([bryanstephens](https://github.com/bryanstephens))
+
+## [v0.10.1](https://github.com/gobuffalo/buffalo/tree/v0.10.1) (2017-11-06)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.10.0...v0.10.1)
+
+**Implemented enhancements:**
+
+- Is there a way to define custom flags for generated binary? [\#715](https://github.com/gobuffalo/buffalo/issues/715)
+- \[feature\] build only binary without assets compilation [\#700](https://github.com/gobuffalo/buffalo/issues/700)
+- Add support for Bazaar VCS when creating a new app [\#718](https://github.com/gobuffalo/buffalo/pull/718) ([stanislas-m](https://github.com/stanislas-m))
+- Add plural support for i18n [\#703](https://github.com/gobuffalo/buffalo/pull/703) ([stanislas-m](https://github.com/stanislas-m))
+
+**Fixed bugs:**
+
+- `buffalo new` generates circular dependency in action\_test.go [\#708](https://github.com/gobuffalo/buffalo/issues/708)
+- concurrent hashmap write issue [\#697](https://github.com/gobuffalo/buffalo/issues/697)
+- v0.9.5 fails to quit dev mode after first Ctrl + C [\#690](https://github.com/gobuffalo/buffalo/issues/690)
+
+**Closed issues:**
+
+- assets `public` path still embedded into the binary with -e flag ? [\#741](https://github.com/gobuffalo/buffalo/issues/741)
+- Generating a resource composed by 2 words underscored [\#734](https://github.com/gobuffalo/buffalo/issues/734)
+- Clean public folder before build [\#727](https://github.com/gobuffalo/buffalo/issues/727)
+- auto reloading doesn't work when .go file change [\#726](https://github.com/gobuffalo/buffalo/issues/726)
+- Trying to create a new helper produces "greet\(\) \(reflect.Value\) is an invalid function" [\#722](https://github.com/gobuffalo/buffalo/issues/722)
+- buffalo build -e unable to find template file [\#701](https://github.com/gobuffalo/buffalo/issues/701)
+- assets is not return correct fingerprint [\#698](https://github.com/gobuffalo/buffalo/issues/698)
+- Provide a Buffalo version based on Golang language version 1.7.x [\#696](https://github.com/gobuffalo/buffalo/issues/696)
+- Needs root permission to make new app under Mac OS High Sierra [\#695](https://github.com/gobuffalo/buffalo/issues/695)
+- Issues after running `go get -u github.com/gobuffalo/buffalo/buffalo` [\#694](https://github.com/gobuffalo/buffalo/issues/694)
+- Clean up commands so they can be called programmatically. [\#692](https://github.com/gobuffalo/buffalo/issues/692)
+- assets uglifier for production only? [\#683](https://github.com/gobuffalo/buffalo/issues/683)
+- \[minor bug\] Dockerfile [\#681](https://github.com/gobuffalo/buffalo/issues/681)
+- buffalo 0.9.5 build binary returns weird result [\#679](https://github.com/gobuffalo/buffalo/issues/679)
+- Worker starting during `migrate` [\#677](https://github.com/gobuffalo/buffalo/issues/677)
+- gobuffalo.io is down. [\#672](https://github.com/gobuffalo/buffalo/issues/672)
+- Make buildTime as BuildTime [\#664](https://github.com/gobuffalo/buffalo/issues/664)
+- webpack should using uglifyjsv3 to support JS ES6 [\#663](https://github.com/gobuffalo/buffalo/issues/663)
+- Documentation needs more informations [\#556](https://github.com/gobuffalo/buffalo/issues/556)
+- Buffalo command shows duplicate plugins [\#530](https://github.com/gobuffalo/buffalo/issues/530)
+- documentation update to skip field update [\#286](https://github.com/gobuffalo/buffalo/issues/286)
+
+**Merged pull requests:**
+
+- v0.10.0 [\#740](https://github.com/gobuffalo/buffalo/pull/740) ([markbates](https://github.com/markbates))
+- fixes https://github.com/markbates/grift/issues/18 [\#738](https://github.com/gobuffalo/buffalo/pull/738) ([markbates](https://github.com/markbates))
+- Proper model generation for XML type. [\#737](https://github.com/gobuffalo/buffalo/pull/737) ([seblw](https://github.com/seblw))
+- Wrong names with irregular resource input [\#736](https://github.com/gobuffalo/buffalo/pull/736) ([paganotoni](https://github.com/paganotoni))
+- Fixing underscored multi word resource generation [\#735](https://github.com/gobuffalo/buffalo/pull/735) ([paganotoni](https://github.com/paganotoni))
+- attach the file name for a rendering error [\#733](https://github.com/gobuffalo/buffalo/pull/733) ([markbates](https://github.com/markbates))
+- set the default ADDR to "" for everything other than dev [\#732](https://github.com/gobuffalo/buffalo/pull/732) ([markbates](https://github.com/markbates))
+- fixed issue with the with-dep flag not being set properly [\#731](https://github.com/gobuffalo/buffalo/pull/731) ([markbates](https://github.com/markbates))
+- assign a "test" value when running CSRF in test mode [\#730](https://github.com/gobuffalo/buffalo/pull/730) ([markbates](https://github.com/markbates))
+- Update README.md - Fix for installation procedure [\#729](https://github.com/gobuffalo/buffalo/pull/729) ([rgerardi](https://github.com/rgerardi))
+- Clean all assets on compile [\#728](https://github.com/gobuffalo/buffalo/pull/728) ([knicklabs](https://github.com/knicklabs))
+- log a warning instead of returning an error for missing template engine [\#725](https://github.com/gobuffalo/buffalo/pull/725) ([markbates](https://github.com/markbates))
+- quieted down the CleanWebpackPlugin [\#721](https://github.com/gobuffalo/buffalo/pull/721) ([markbates](https://github.com/markbates))
+- fixes go templates [\#720](https://github.com/gobuffalo/buffalo/pull/720) ([markbates](https://github.com/markbates))
+- App binds to 127.0.0.1:3000 by default  [\#719](https://github.com/gobuffalo/buffalo/pull/719) ([markbates](https://github.com/markbates))
+- removed deprecated methods [\#717](https://github.com/gobuffalo/buffalo/pull/717) ([markbates](https://github.com/markbates))
+- Is there a way to define custom flags for generated binary? fixes \#715 [\#716](https://github.com/gobuffalo/buffalo/pull/716) ([markbates](https://github.com/markbates))
+- map the tmpl extension to go templates [\#714](https://github.com/gobuffalo/buffalo/pull/714) ([markbates](https://github.com/markbates))
+- added a JavaScript renderer as well as an enhanced partial helper for JS that handles HTML partials correctly [\#713](https://github.com/gobuffalo/buffalo/pull/713) ([markbates](https://github.com/markbates))
+- Make buildTime as BuildTime fixes \#664 [\#712](https://github.com/gobuffalo/buffalo/pull/712) ([markbates](https://github.com/markbates))
+- renamed mdTemplateEngine to MDTemplateEngine [\#711](https://github.com/gobuffalo/buffalo/pull/711) ([markbates](https://github.com/markbates))
+- allow for the use of different template engines based on extensions [\#710](https://github.com/gobuffalo/buffalo/pull/710) ([markbates](https://github.com/markbates))
+- remove actionsPath from actions\_test generator template [\#709](https://github.com/gobuffalo/buffalo/pull/709) ([bketelsen](https://github.com/bketelsen))
+- Cleaning up stale webpack output. [\#706](https://github.com/gobuffalo/buffalo/pull/706) ([barrongineer](https://github.com/barrongineer))
+- fixed a typo in comment [\#705](https://github.com/gobuffalo/buffalo/pull/705) ([kberov](https://github.com/kberov))
+- Allows to pass -k to disable assets compilation [\#702](https://github.com/gobuffalo/buffalo/pull/702) ([paganotoni](https://github.com/paganotoni))
+- WIP: Fix \#697: concurrent access on keyMap [\#699](https://github.com/gobuffalo/buffalo/pull/699) ([stanislas-m](https://github.com/stanislas-m))
+- v0.9.5 fails to quit dev mode after first Ctrl + C fixes \#690 [\#693](https://github.com/gobuffalo/buffalo/pull/693) ([markbates](https://github.com/markbates))
+- wow. ok. that was a lot of work, but i think it's going to be totally worth it. [\#691](https://github.com/gobuffalo/buffalo/pull/691) ([markbates](https://github.com/markbates))
+- cleaned up docker and also running all generators seperately [\#689](https://github.com/gobuffalo/buffalo/pull/689) ([markbates](https://github.com/markbates))
+- cleaned up the action generator [\#688](https://github.com/gobuffalo/buffalo/pull/688) ([markbates](https://github.com/markbates))
+- assets uglifier for production only? closes \#683 [\#687](https://github.com/gobuffalo/buffalo/pull/687) ([markbates](https://github.com/markbates))
+- cleaned up the resources generator [\#685](https://github.com/gobuffalo/buffalo/pull/685) ([markbates](https://github.com/markbates))
+- Update Dockerfile.tmpl [\#684](https://github.com/gobuffalo/buffalo/pull/684) ([u007](https://github.com/u007))
+- Update Dockerfile.tmpl [\#682](https://github.com/gobuffalo/buffalo/pull/682) ([u007](https://github.com/u007))
+- removed unnecessary directory checks from commands [\#680](https://github.com/gobuffalo/buffalo/pull/680) ([markbates](https://github.com/markbates))
+- replaced old build system with cleaner one from the buffalo-xbuild plugin [\#678](https://github.com/gobuffalo/buffalo/pull/678) ([markbates](https://github.com/markbates))
+- plugins should be exempt from the "inside buffalo project" warning [\#676](https://github.com/gobuffalo/buffalo/pull/676) ([markbates](https://github.com/markbates))
+
+## [v0.10.0](https://github.com/gobuffalo/buffalo/tree/v0.10.0) (2017-10-02)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.5...v0.10.0)
+
+## [v0.9.5](https://github.com/gobuffalo/buffalo/tree/v0.9.5) (2017-10-02)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.9.4...v0.9.5)
 
 **Fixed bugs:**
@@ -715,13 +857,13 @@
 - missing "public/assets" box on new app without webpack closes \#104 [\#107](https://github.com/gobuffalo/buffalo/pull/107) ([markbates](https://github.com/markbates))
 - Using gentronics to generate the templates and the actions [\#106](https://github.com/gobuffalo/buffalo/pull/106) ([paganotoni](https://github.com/paganotoni))
 - Adds an Actions generator to the cmd package [\#103](https://github.com/gobuffalo/buffalo/pull/103) ([paganotoni](https://github.com/paganotoni))
-- Cleaning up some docs [\#102](https://github.com/gobuffalo/buffalo/pull/102) ([CodyOss](https://github.com/CodyOss))
+- Cleaning up some docs [\#102](https://github.com/gobuffalo/buffalo/pull/102) ([codyoss](https://github.com/codyoss))
 - Avoiding generating log folder when running tests. [\#101](https://github.com/gobuffalo/buffalo/pull/101) ([paganotoni](https://github.com/paganotoni))
 - \[grift\] changing the task to be pointing the buffalo repo [\#100](https://github.com/gobuffalo/buffalo/pull/100) ([paganotoni](https://github.com/paganotoni))
 - making buffalo call grift for the tasks [\#98](https://github.com/gobuffalo/buffalo/pull/98) ([paganotoni](https://github.com/paganotoni))
 - Update build.go [\#93](https://github.com/gobuffalo/buffalo/pull/93) ([arifemre](https://github.com/arifemre))
 - Update new.go [\#92](https://github.com/gobuffalo/buffalo/pull/92) ([arifemre](https://github.com/arifemre))
-- Typo in readme [\#90](https://github.com/gobuffalo/buffalo/pull/90) ([CodyOss](https://github.com/CodyOss))
+- Typo in readme [\#90](https://github.com/gobuffalo/buffalo/pull/90) ([codyoss](https://github.com/codyoss))
 - Typos in readme [\#88](https://github.com/gobuffalo/buffalo/pull/88) ([kennygrant](https://github.com/kennygrant))
 
 ## [v0.7.0](https://github.com/gobuffalo/buffalo/tree/v0.7.0) (2017-01-04)
@@ -851,7 +993,10 @@
 - Working on adding support for a Resource interface [\#30](https://github.com/gobuffalo/buffalo/pull/30) ([markbates](https://github.com/markbates))
 
 ## [v0.4.2](https://github.com/gobuffalo/buffalo/tree/v0.4.2) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...v0.4.2)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.2)
+
+## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
+[Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1...0.4.0)
 
 ## [v0.4.1](https://github.com/gobuffalo/buffalo/tree/v0.4.1) (2016-12-09)
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.1.pre...v0.4.1)
@@ -863,9 +1008,6 @@
 [Full Changelog](https://github.com/gobuffalo/buffalo/compare/v0.4.0.pre...v0.4.0)
 
 ## [v0.4.0.pre](https://github.com/gobuffalo/buffalo/tree/v0.4.0.pre) (2016-12-09)
-[Full Changelog](https://github.com/gobuffalo/buffalo/compare/0.4.0...v0.4.0.pre)
-
-## [0.4.0](https://github.com/gobuffalo/buffalo/tree/0.4.0) (2016-12-09)
 **Closed issues:**
 
 - replace httprouter with gorilla mux [\#27](https://github.com/gobuffalo/buffalo/issues/27)

@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -53,7 +55,6 @@ func (a *App) Start(port string) error {
 func (a *App) Serve() error {
 	fmt.Printf("Starting application at %s\n", a.Options.Addr)
 	server := http.Server{
-		Addr:    a.Options.Addr,
 		Handler: a,
 	}
 	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
@@ -95,11 +96,28 @@ func (a *App) Serve() error {
 		}()
 	}
 
-	// start the web server
-	err := server.ListenAndServe()
+	var err error
+
+	if strings.HasPrefix(a.Options.Addr, "unix:") {
+		// Use an UNIX socket
+		listener, err := net.Listen("unix", a.Options.Addr[5:])
+		if err != nil {
+			return a.Stop(err)
+		}
+		// start the web server
+		err = server.Serve(listener)
+	} else {
+		// Use a TCP socket
+		server.Addr = a.Options.Addr
+
+		// start the web server
+		err = server.ListenAndServe()
+	}
+
 	if err != nil {
 		return a.Stop(err)
 	}
+
 	return nil
 }
 

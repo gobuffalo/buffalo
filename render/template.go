@@ -47,12 +47,49 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
-	source, err := s.TemplatesBox.MustBytes(name)
+	ct := strings.ToLower(s.contentType)
+	data["contentType"] = ct
+
+	if filepath.Ext(name) == "" {
+		switch {
+		case strings.Contains(ct, "html"):
+			name += ".html"
+		case strings.Contains(ct, "javascript"):
+			name += ".js"
+		case strings.Contains(ct, "markdown"):
+			name += ".md"
+		}
+	}
+
+	// Try to use localized version
+	templateName := name
+	if languages, ok := data["languages"].([]string); ok {
+		ll := len(languages)
+		if ll > 0 {
+			// Default language is the last in the list
+			defaultLanguage := languages[ll-1]
+			ext := filepath.Ext(name)
+			rawName := strings.TrimSuffix(name, ext)
+
+			for _, l := range languages {
+				var candidateName string
+				if l == defaultLanguage {
+					break
+				}
+				candidateName = rawName + "." + strings.ToLower(l) + ext
+				if s.TemplatesBox.Has(candidateName) {
+					// Replace name with the existing suffixed version
+					templateName = candidateName
+					break
+				}
+			}
+		}
+	}
+
+	source, err := s.TemplatesBox.MustBytes(templateName)
 	if err != nil {
 		return "", err
 	}
-
-	data["contentType"] = strings.ToLower(s.contentType)
 
 	helpers := map[string]interface{}{
 		"partial": s.partial,

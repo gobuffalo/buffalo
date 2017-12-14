@@ -59,11 +59,11 @@ func (res Generator) Run(root string, data makr.Data) error {
 	g.Add(&makr.Func{
 		Should: func(data makr.Data) bool { return true },
 		Runner: func(root string, data makr.Data) error {
-			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{&buffalo.BaseResource{}})", res.Name.URL(), res.Name.ModelPlural()))
+			return generators.AddInsideAppBlock(fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", res.Name.URL(), res.Name.Resource()))
 		},
 	})
 
-	if !res.SkipModel {
+	if !res.SkipModel && !res.UseModel {
 		g.Add(res.modelCommand())
 	}
 
@@ -78,5 +78,10 @@ func (res Generator) modelCommand() makr.Command {
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")
 	}
+
+	if res.MimeType == "JSON" || res.MimeType == "XML" {
+		args = append(args, "--struct-tag", strings.ToLower(res.MimeType))
+	}
+
 	return makr.NewCommand(exec.Command("buffalo", args...))
 }

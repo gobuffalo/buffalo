@@ -32,10 +32,10 @@ type App struct {
 // New App based on the details found at the provided root path
 func New(root string) App {
 	pwd, _ := os.Getwd()
-	pp := packagePath(root)
 	if root == "." {
 		root = pwd
 	}
+	pp := packagePath(root)
 
 	app := App{
 		Pwd:        pwd,

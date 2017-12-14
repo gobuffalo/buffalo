@@ -51,6 +51,10 @@ RUN buffalo build -static
 RUN buffalo g resource users name:text email:text
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_model_migration.json
 
+RUN buffalo g resource admins --use-model users
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_use_model.json
+
+RUN rm actions/admins_test.go
 RUN rm models/user_test.go
 RUN rm models/user.go
 RUN rm actions/users_test.go
@@ -117,6 +121,15 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 
 RUN buffalo g resource admin/users --name=AdminUser
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name.json
+
+RUN buffalo g resource person
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_irregular.json
+
+RUN buffalo g resource person_event
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_underscore.json
+
+RUN buffalo g mailer welcome_email
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_mailer.json
 
 RUN rm -rf bin
 RUN buffalo build -k -e

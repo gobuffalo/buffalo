@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/markbates/inflect"
 )
 
 // Generator for generating a new resource
@@ -15,6 +16,7 @@ type Generator struct {
 	Model         meta.Name `json:"model"`
 	SkipMigration bool      `json:"skip_migration"`
 	SkipModel     bool      `json:"skip_model"`
+	UseModel      bool      `json:"use_model"`
 	MimeType      string    `json:"mime_type"`
 	FilesPath     string    `json:"files_path"`
 	ActionsPath   string    `json:"actions_path"`
@@ -42,7 +44,7 @@ func New(modelName string, args ...string) (Generator, error) {
 	if strings.Contains(string(o.Name), "/") {
 		parts := strings.Split(string(o.Name), "/")
 		o.Model = meta.Name(parts[len(parts)-1])
-		o.ActionsPath = strings.Join(parts, "_")
+		o.ActionsPath = inflect.Underscore(o.Name.Resource())
 	}
 	if modelName != "" {
 		o.Model = meta.Name(modelName)

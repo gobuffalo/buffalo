@@ -29,7 +29,10 @@ type {{.opts.Name.Resource}}Resource struct{
 // GET /{{.opts.Name.URL}}
 func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.ModelPlural}}{}
 
@@ -43,7 +46,7 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   }
 
   // Make {{.opts.Model.ModelPlural}} available inside the html template
-  c.Set("{{.opts.Model.PluralUnder}}", {{.opts.Model.VarCasePlural}})
+  c.Set("{{.opts.Model.VarCasePlural}}", {{.opts.Model.VarCasePlural}})
 
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
@@ -52,21 +55,24 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
 }
 
 // Show gets the data for one {{.opts.Model.Model}}. This function is mapped to
-// the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
+// the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  // To find the {{.opts.Model.Model}} the parameter {{.opts.Model.UnderSingular}}_id is used.
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
+  // To find the {{.opts.Model.Model}} the parameter {{.opts.Name.ParamID}} is used.
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
 
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
+  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/show.html"))
 }
@@ -75,7 +81,7 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", &models.{{.opts.Model.Model}}{})
+  c.Set("{{.opts.Model.VarCaseSingular}}", &models.{{.opts.Model.Model}}{})
 
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/new.html"))
 }
@@ -92,7 +98,10 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Validate the data from the html form
   verrs, err := tx.ValidateAndCreate({{.opts.Model.VarCaseSingular}})
@@ -120,33 +129,39 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
 }
 
 // Edit renders a edit form for a {{.opts.Model.Model}}. This function is
-// mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}/edit
+// mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}/edit
 func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
 
   // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
+  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
   return c.Render(200, r.HTML("{{.opts.FilesPath}}/edit.html"))
 }
 
 // Update changes a {{.opts.Model.Model}} in the DB. This function is mapped to
-// the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
+// the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
 
@@ -180,16 +195,19 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
 }
 
 // Destroy deletes a {{.opts.Model.Model}} from the DB. This function is mapped
-// to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.Model.UnderSingular}}_id}
+// to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx := c.Value("tx").(*pop.Connection)
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
 
-  // To find the {{.opts.Model.Model}} the parameter {{.opts.Model.UnderSingular}}_id is used.
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Model.UnderSingular}}_id")); err != nil {
+  // To find the {{.opts.Model.Model}} the parameter {{.opts.Name.ParamID}} is used.
+  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
 

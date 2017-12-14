@@ -2,13 +2,13 @@ package render_test
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/packr"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,11 +31,13 @@ func Test_Markdown(t *testing.T) {
 		r := require.New(st)
 
 		table := []ji{
-			render.New(render.Options{}).HTML,
+			render.New(render.Options{
+				TemplatesBox: packr.NewBox(tmpDir),
+			}).HTML,
 		}
 
 		for _, j := range table {
-			re := j(tmpFile.Name())
+			re := j(filepath.Base(tmpFile.Name()))
 			r.Equal("text/html", re.ContentType())
 			bb := &bytes.Buffer{}
 			err = re.Render(bb, map[string]interface{}{"name": "Mark"})
@@ -47,7 +49,7 @@ func Test_Markdown(t *testing.T) {
 	t.Run("with a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		layout, err := ioutil.TempFile("", "test")
+		layout, err := os.Create(filepath.Join(tmpDir, "test.html"))
 		r.NoError(err)
 		defer os.Remove(layout.Name())
 
@@ -55,8 +57,9 @@ func Test_Markdown(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			HTMLLayout: layout.Name(),
-		}).HTML(tmpFile.Name())
+			HTMLLayout:   filepath.Base(layout.Name()),
+			TemplatesBox: packr.NewBox(tmpDir),
+		}).HTML(filepath.Base(tmpFile.Name()))
 
 		r.Equal("text/html", re.ContentType())
 		bb := &bytes.Buffer{}

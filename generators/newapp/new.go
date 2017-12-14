@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
@@ -20,6 +21,10 @@ import (
 func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
+	if a.AsAPI {
+		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
+		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
+	}
 	if a.Force {
 		os.RemoveAll(a.Root)
 	}
@@ -36,7 +41,15 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	for _, f := range files {
-		g.Add(makr.NewFile(f.WritePath, f.Body))
+		if a.AsAPI {
+			if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") {
+				continue
+			}
+			g.Add(makr.NewFile(f.WritePath, f.Body))
+		} else {
+			g.Add(makr.NewFile(f.WritePath, f.Body))
+		}
+
 	}
 	data["name"] = a.Name
 	if err := refresh.Run(root, data); err != nil {
@@ -51,7 +64,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 			if a.DBType == "postgres" {
 				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@mysql:3306/" + a.Name.File() + "_test"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
 			} else {
 				data["testDbUrl"] = ""
 			}
@@ -84,18 +97,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 			return errors.WithStack(err)
 		}
 	}
-	if a.AsAPI {
-		g.Add(makr.Func{
-			Runner: func(path string, data makr.Data) error {
-				return os.RemoveAll(filepath.Join(path, "templates"))
-			},
-		})
-		g.Add(makr.Func{
-			Runner: func(path string, data makr.Data) error {
-				return os.RemoveAll(filepath.Join(path, "locales"))
-			},
-		})
-	}
+
 	if a.Docker != "none" {
 		o := docker.New()
 		o.App = a.App
@@ -143,8 +145,7 @@ func (a Generator) goGet() *exec.Cmd {
 	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
 }
 
-const nTravis = `
-language: go
+const nTravis = `language: go
 
 go:
   - 1.8.x
@@ -155,35 +156,39 @@ env:
 {{ if eq .opts.DBType "postgres" -}}
 services:
   - postgresql
-{{ end -}}
+{{- end }}
 
 before_script:
-{{ if eq .opts.DBType "postgres" -}}
+{{- if eq .opts.DBType "postgres" }}
   - psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
-{{ end -}}
+{{- end }}
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go_import_path: {{.opts.PackagePkg}}
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo
-{{ if .opts.WithDep -}}
+{{- if .opts.WithDep }}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
-{{ else -}}
+{{- else }}
   - go get $(go list ./... | grep -v /vendor/)
-{{ end -}}
+{{- end }}
 
 script: buffalo test
 `
 
 const nGitlabCi = `before_script:
-  - apt-get update && apt-get install -y postgresql-client mysql-client
   - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
   - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
+{{- if .opts.WithDep }}
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
+{{- else }}
   - go get -t -v ./...
+{{- end }}
   - export PATH="$PATH:$GOPATH/bin"
 
 stages:
@@ -192,9 +197,12 @@ stages:
 .test-vars: &test-vars
   variables:
     GO_ENV: "test"
+{{- if eq .opts.DBType "postgres" }}    
     POSTGRES_DB: "{{.opts.Name.File}}_test"
+{{- else if eq .opts.DBType "mysql" }}  
     MYSQL_DATABASE: "{{.opts.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
+{{- end }}
     TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
@@ -209,8 +217,11 @@ test:latest:
   <<: *test-vars
   stage: test
   services:
+{{- if eq .opts.DBType "mysql" }}  
     - mysql:latest
+{{- else if eq .opts.DBType "postgres" }}  
     - postgres:latest
+{{- end }}
   script:
     - buffalo test
 
@@ -219,8 +230,11 @@ test:1.8:
   <<: *test-vars
   stage: test
   services:
+{{- if eq .opts.DBType "mysql" }}  
     - mysql:latest
+{{- else if eq .opts.DBType "postgres" }}  
     - postgres:latest
+{{- end }}
   script:
     - buffalo test
 `
@@ -230,7 +244,12 @@ const nGitlabCiNoPop = `before_script:
   - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
+{{- if .opts.WithDep }}
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
+{{- else }}
   - go get -t -v ./...
+{{- end }}
   - export PATH="$PATH:$GOPATH/bin"
 
 stages:
