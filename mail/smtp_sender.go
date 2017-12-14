@@ -10,31 +10,51 @@ import (
 
 //SMTPSender allows to send Emails by connecting to a SMTP server.
 type SMTPSender struct {
-	Dialer *gomail.Dialer
+	Dialer  *gomail.Dialer
+	message *gomail.Message
 }
 
 //Send a message using SMTP configuration or returns an error if something goes wrong.
 func (sm SMTPSender) Send(message Message) error {
-	m := gomail.NewMessage()
+	sm.message = gomail.NewMessage()
 
-	m.SetHeader("From", message.From)
-	m.SetHeader("To", message.To...)
-	m.SetHeader("Subject", message.Subject)
-	m.SetHeader("Cc", message.CC...)
-	m.SetHeader("Bcc", message.Bcc...)
+	sm.message.SetHeader("From", message.From)
+	sm.message.SetHeader("To", message.To...)
+	sm.message.SetHeader("Subject", message.Subject)
+	sm.message.SetHeader("Cc", message.CC...)
+	sm.message.SetHeader("Bcc", message.Bcc...)
 
-	if len(message.Bodies) > 0 {
-		mainBody := message.Bodies[0]
-		m.SetBody(mainBody.ContentType, mainBody.Content, gomail.SetPartEncoding(gomail.Unencoded))
+	sm.addBodies(message)
+	sm.addAttachments(message)
+
+	for field, value := range message.Headers {
+		sm.message.SetHeader(field, value)
 	}
 
-	if len(message.Bodies) > 1 {
-		for i := 1; i < len(message.Bodies); i++ {
-			alt := message.Bodies[i]
-			m.AddAlternative(alt.ContentType, alt.Content, gomail.SetPartEncoding(gomail.Unencoded))
-		}
+	err := sm.Dialer.DialAndSend(sm.message)
+
+	if err != nil {
+		return errors.WithStack(err)
 	}
 
+	return nil
+}
+
+func (sm SMTPSender) addBodies(message Message) {
+	if len(message.Bodies) == 0 {
+		return
+	}
+
+	mainBody := message.Bodies[0]
+	sm.message.SetBody(mainBody.ContentType, mainBody.Content, gomail.SetPartEncoding(gomail.Unencoded))
+
+	for i := 1; i < len(message.Bodies); i++ {
+		alt := message.Bodies[i]
+		sm.message.AddAlternative(alt.ContentType, alt.Content, gomail.SetPartEncoding(gomail.Unencoded))
+	}
+}
+
+func (sm SMTPSender) addAttachments(message Message) {
 	for _, at := range message.Attachments {
 		settings := gomail.SetCopyFunc(func(w io.Writer) error {
 			if _, err := io.Copy(w, at.Reader); err != nil {
@@ -44,20 +64,8 @@ func (sm SMTPSender) Send(message Message) error {
 			return nil
 		})
 
-		m.Attach(at.Name, settings)
+		sm.message.Attach(at.Name, settings)
 	}
-
-	for field, value := range message.Headers {
-		m.SetHeader(field, value)
-	}
-
-	err := sm.Dialer.DialAndSend(m)
-
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
 }
 
 //NewSMTPSender builds a SMTP mail based in passed config.
