@@ -47,6 +47,9 @@ func Test_Name_Model(t *testing.T) {
 		{V: "admin/widget", E: "AdminWidget"},
 		{V: "widget", E: "Widget"},
 		{V: "widgets", E: "Widget"},
+		{V: "status", E: "Status"},
+		{V: "Statuses", E: "Status"},
+		{V: "statuses", E: "Status"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).Model())
@@ -66,6 +69,10 @@ func Test_Name_Resource(t *testing.T) {
 		{V: "widgets", E: "Widgets"},
 		{V: "greatPerson", E: "GreatPeople"},
 		{V: "great/person", E: "GreatPeople"},
+		{V: "status", E: "Statuses"},
+		{V: "Status", E: "Statuses"},
+		{V: "Statuses", E: "Statuses"},
+		{V: "statuses", E: "Statuses"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).Resource())
@@ -82,6 +89,8 @@ func Test_Name_ModelPlural(t *testing.T) {
 		{V: "admin/widget", E: "AdminWidgets"},
 		{V: "widget", E: "Widgets"},
 		{V: "widgets", E: "Widgets"},
+		{V: "status", E: "Statuses"},
+		{V: "statuses", E: "Statuses"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).ModelPlural())
@@ -117,6 +126,10 @@ func Test_Name_VarCaseSingular(t *testing.T) {
 		{V: "widgets", E: "widget"},
 		{V: "User", E: "user"},
 		{V: "FooBar", E: "fooBar"},
+		{V: "status", E: "status"},
+		{V: "statuses", E: "status"},
+		{V: "Status", E: "status"},
+		{V: "Statuses", E: "status"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).VarCaseSingular())
@@ -135,6 +148,10 @@ func Test_Name_VarCasePlural(t *testing.T) {
 		{V: "widgets", E: "widgets"},
 		{V: "User", E: "users"},
 		{V: "FooBar", E: "fooBars"},
+		{V: "status", E: "statuses"},
+		{V: "statuses", E: "statuses"},
+		{V: "Status", E: "statuses"},
+		{V: "Statuses", E: "statuses"},
 	}
 	for _, tt := range table {
 		r.Equal(tt.E, Name(tt.V).VarCasePlural())
