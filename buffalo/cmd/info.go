@@ -73,8 +73,8 @@ func runInfoCmds() error {
 		{"PostgreSQL", "pg_ctl", exec.Command("pg_ctl", "--version"), "\n### PostgreSQL Version\n"},
 		{"MySQL", "mysql", exec.Command("mysql", "--version"), "\n### MySQL Version\n"},
 		{"SQLite", "sqlite3", exec.Command("sqlite3", "--version"), "\n### SQLite Version\n"},
-		{"dep", "dep", exec.Command("dep", "status"), "\n### Dep Status\n"},
 		{"dep", "dep", exec.Command("dep", "version"), "\n### Dep Version\n"},
+		{"dep", "dep", exec.Command("dep", "status"), "\n### Dep Status\n"},
 	}
 
 	for _, cmd := range commands {
