@@ -25,79 +25,82 @@ var infoCmd = &cobra.Command{
 		app := meta.New(".")
 		rv := reflect.ValueOf(app)
 		rt := rv.Type()
+
 		for i := 0; i < rt.NumField(); i++ {
 			f := rt.Field(i)
 			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
 		}
 
-		err := checkGoInfo()
-		if err != nil {
-			return errors.WithStack(err)
-		}
-
-		checkExternalsTools()
-
-		return nil
+		return runInfoCmds()
 	},
 }
 
-func checkGoInfo() error {
-	bb := os.Stdout
+// func checkGoInfo() error {
+// 	bb := os.Stdout
 
-	bb.WriteString("\n### Go Version\n")
-	c := exec.Command(envy.Get("GO_BIN", "go"), "version")
-	c.Stdout = bb
-	err := c.Run()
-	if err != nil {
-		return errors.WithStack(err)
+// 	bb.WriteString("\n### Go Version\n")
+// 	c := exec.Command(envy.Get("GO_BIN", "go"), "version")
+// 	c.Stdout = bb
+// 	err := c.Run()
+// 	if err != nil {
+// 		return errors.WithStack(err)
+// 	}
+
+// 	bb.WriteString("\n### Go Env\n")
+// 	c = exec.Command(envy.Get("GO_BIN", "go"), "env")
+// 	c.Stdout = bb
+// 	c.Stderr = bb
+// 	c.Run()
+
+// 	return nil
+// }
+
+type infoCommand struct {
+	Name      string
+	PathName  string
+	Cmd       *exec.Cmd
+	InfoLabel string
+}
+
+func runInfoCmds() error {
+
+	commands := []infoCommand{
+		{"Go", envy.Get("GO_BIN", "go"), exec.Command(envy.Get("GO_BIN", "go"), "version"), "\n### Go Version\n"},
+		{"Go", envy.Get("GO_BIN", "go"), exec.Command(envy.Get("GO_BIN", "go"), "env"), "\n### Go Env\n"},
+		{"Node", "node", exec.Command("node", "--version"), "\n### Node Version\n"},
+		{"NPM", "npm", exec.Command("npm", "--version"), "\n### NPM Version\n"},
+		{"Yarn", "yarn", exec.Command("yarn", "--version"), "\n### Yarn Version\n"},
+		{"PostgreSQL", "pg_ctl", exec.Command("pg_ctl", "--version"), "\n### PostgreSQL Version\n"},
+		{"MySQL", "mysql", exec.Command("mysql", "--version"), "\n### MySQL Version\n"},
+		{"SQLite", "sqlite3", exec.Command("sqlite3", "--version"), "\n### SQLite Version\n"},
+		{"dep", "dep", exec.Command("dep", "status"), "\n### Dep Status\n"},
+		{"dep", "dep", exec.Command("dep", "version"), "\n### Dep Version\n"},
 	}
 
-	bb.WriteString("\n### Go Env\n")
-	c = exec.Command(envy.Get("GO_BIN", "go"), "env")
-	c.Stdout = bb
-	c.Stderr = bb
-	c.Run()
+	for _, cmd := range commands {
+		err := execIfExists(cmd)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
 
 	return nil
 }
 
-func checkExternalsTools() {
+func execIfExists(infoCmd infoCommand) error {
 	bb := os.Stdout
+	bb.WriteString(infoCmd.InfoLabel)
 
-	infoCommands := []struct {
-		Name      string
-		PathName  string
-		Cmd       *exec.Cmd
-		InfoLabel string
-	}{
-		{"Node", "node", exec.Command("node", "--version"), "\n### Node Version\n"},
-		{"NPM", "npm", exec.Command("npm", "--version"), "\n### NPM Version\n"},
-		{"Yarn", "yarn", exec.Command("yarn", "--version"), "\n### Yarn Version\n"},
-		{"dep", "dep", exec.Command("dep", "version"), "\n### Dep Version\n"},
-		{"dep", "dep", exec.Command("dep", "status"), "\n### Dep Status\n"},
-		{"PostgreSQL", "pg_ctl", exec.Command("pg_ctl", "--version"), "\n### PostgreSQL Version\n"},
-		{"MySQL", "mysql", exec.Command("mysql", "--version"), "\n### MySQL Version\n"},
-		{"SQLite", "sqlite3", exec.Command("sqlite3", "--version"), "\n### SQLite Version\n"},
+	if _, err := exec.LookPath(infoCmd.PathName); err != nil {
+		bb.WriteString(fmt.Sprintf("%s Not Found\n", infoCmd.Name))
+		return nil
 	}
 
-	for _, cmd := range infoCommands {
-		bb.WriteString(cmd.InfoLabel)
-		execIfExists(cmd.Name, cmd.InfoLabel, cmd.Cmd)
-	}
+	infoCmd.Cmd.Stdout = bb
+	infoCmd.Cmd.Stderr = bb
 
-}
-
-func execIfExists(name string, pathName string, c *exec.Cmd) {
-	bb := os.Stdout
-
-	if _, err := exec.LookPath("mysql"); err != nil {
-		bb.WriteString(fmt.Sprintf("%s Not Found\n", name))
-		return
-	}
-
-	c.Stdout = bb
-	c.Stderr = bb
-	c.Run()
+	err := infoCmd.Cmd.Run()
+	return err
 }
 
 func init() {
