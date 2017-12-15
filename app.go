@@ -68,7 +68,7 @@ func (a *App) Serve() error {
 
 		err := a.Stop(ctx.Err())
 		if err != nil {
-			logrus.Debug(err)
+			logrus.Error(err)
 		}
 
 		if !a.WorkerOff {
@@ -76,13 +76,13 @@ func (a *App) Serve() error {
 			logrus.Info("Shutting down worker")
 			err = a.Worker.Stop()
 			if err != nil {
-				logrus.Debug(err)
+				logrus.Error(err)
 			}
 		}
 
 		err = server.Shutdown(ctx)
 		if err != nil {
-			logrus.Debug(err)
+			logrus.Error(err)
 		}
 
 	}()
@@ -126,7 +126,7 @@ func (a *App) Serve() error {
 func (a *App) Stop(err error) error {
 	a.cancel()
 	if err != nil && errors.Cause(err) != context.Canceled {
-		logrus.Debug(err)
+		logrus.Error(err)
 		return err
 	}
 	return nil
