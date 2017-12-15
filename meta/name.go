@@ -44,7 +44,7 @@ func (n Name) Camel() string {
 func (n Name) Model() string {
 	x := strings.Split(string(n), "/")
 	for i, s := range x {
-		x[i] = inflect.Singularize(inflect.Camelize(s))
+		x[i] = inflect.Camelize(inflect.Singularize(s))
 	}
 
 	return strings.Join(x, "")
