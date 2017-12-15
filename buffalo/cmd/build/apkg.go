@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 func (b *Builder) prepAPackage() error {
@@ -91,7 +91,7 @@ func (b *Builder) buildADatabase() error {
 			logrus.Debugf("no sqlite usage in database.yml detected, applying the nosqlite tag")
 			b.Tags = append(b.Tags, "nosqlite")
 		} else if !b.Static {
-			fmt.Println("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
+			logrus.Debugf("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
 		}
 	} else {
 		logrus.Debugf("no database.yml detected, applying the nosqlite tag")

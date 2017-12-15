@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/generators/refresh"
@@ -39,7 +39,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 					cause = err.Error()
 				}
 			}
-			fmt.Printf(msg, cause)
+			logrus.Info(msg, cause)
 		}()
 		os.Setenv("GO_ENV", "development")
 

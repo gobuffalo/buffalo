@@ -3,12 +3,12 @@ package render
 import (
 	"html/template"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/pkg/errors"
 
 	// this blank import is here because dep doesn't
@@ -105,7 +105,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			log.Printf("could not find a template engine for %s\n", ext)
+			logrus.Warn("could not find a template engine for %s\n", ext)
 			continue
 		}
 		body, err = te(body, data, helpers)

@@ -2,15 +2,14 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +43,7 @@ var xbuildCmd = &cobra.Command{
 		go func() {
 			<-ctx.Done()
 			if ctx.Err() == context.Canceled {
-				fmt.Println("~~~ BUILD CANCELLED ~~~")
+				logrus.Info("~~~ BUILD CANCELLED ~~~")
 				err := b.Cleanup()
 				if err != nil {
 					logrus.Fatal(err)
@@ -57,7 +56,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
+		logrus.Info("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
 
 		return nil
 	},

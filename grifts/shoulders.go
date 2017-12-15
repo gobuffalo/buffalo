@@ -1,7 +1,6 @@
 package grifts
 
 import (
-	"fmt"
 	"html/template"
 	"os"
 	"os/exec"
@@ -9,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
@@ -31,7 +31,7 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 		}
 	}
 	sort.Strings(deps)
-	fmt.Println(strings.Join(deps, "\n"))
+	logrus.Infof(strings.Join(deps, "\n"))
 	c.Set("giants", deps)
 	return nil
 })

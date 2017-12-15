@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/markbates/going/randx"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
@@ -35,7 +36,7 @@ func secretGrift() {
 		rx := regexp.MustCompile(`(\W+)`)
 		bb = rx.ReplaceAll(bb, []byte(""))
 		s := randx.String(6) + string(bb)
-		fmt.Println(s[:127])
+		logrus.Infof(s[:127])
 		return nil
 	})
 }
@@ -49,9 +50,8 @@ func middlewareGrift(a *App) {
 }
 
 func printMiddleware(a *App) {
-	fmt.Println(fmt.Sprintf("-> %s", a.Name))
-	fmt.Println(a.Middleware.String())
-	fmt.Println()
+	logrus.Infof(fmt.Sprintf("-> %s", a.Name))
+	logrus.Infof("%v\n", a.Middleware.String())
 	for _, x := range a.children {
 		printMiddleware(x)
 	}

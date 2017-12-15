@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"sync"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
@@ -23,7 +23,7 @@ func plugs() plugins.List {
 		_plugs, err = plugins.Available()
 		if err != nil {
 			_plugs = plugins.List{}
-			log.Printf("error loading plugins %s\n", err)
+			logrus.Info("error loading plugins %s\n", err)
 		}
 	}
 	return _plugs

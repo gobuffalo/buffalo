@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/Sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +18,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version number of buffalo",
 	Long:  `All software has versions.  This is buffalo's.`,
 	Run: func(c *cobra.Command, args []string) {
-		fmt.Printf("Buffalo version is: %s\n", Version)
+		logrus.Infof("Buffalo version is: %s\n", Version)
 	},
 	// needed to override the root level pre-run func
 	PersistentPreRunE: func(c *cobra.Command, args []string) error {

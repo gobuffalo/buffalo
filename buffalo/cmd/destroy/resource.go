@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
@@ -51,22 +52,22 @@ func confirm(msg string) bool {
 func removeTemplates(fileName string) {
 	if YesToAll || confirm("Want to remove templates? (Y/n)") {
 		templatesFolder := fmt.Sprintf(filepath.Join("templates", fileName))
-		fmt.Printf("- Deleted %v folder\n", templatesFolder)
+		logrus.Info("- Deleted %v folder\n", templatesFolder)
 		os.RemoveAll(templatesFolder)
 	}
 }
 
 func removeActions(fileName string) {
 	if YesToAll || confirm("Want to remove actions? (Y/n)") {
-		fmt.Printf("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v.go", fileName)))
 
-		fmt.Printf("- Deleted %v\n", fmt.Sprintf("actions/%v_test.go", fileName))
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v_test.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v_test.go", fileName)))
 
 		content, err := ioutil.ReadFile(filepath.Join("actions", "app.go"))
 		if err != nil {
-			fmt.Println("[WARNING] error reading app.go content")
+			logrus.Info("[WARNING] error reading app.go content")
 			return
 		}
 
@@ -75,11 +76,11 @@ func removeActions(fileName string) {
 
 		err = ioutil.WriteFile(filepath.Join("actions", "app.go"), []byte(newContents), 0)
 		if err != nil {
-			fmt.Println("[WARNING] error writing new app.go content")
+			logrus.Info("[WARNING] error writing new app.go content")
 			return
 		}
 
-		fmt.Printf("- Deleted References for %v in actions/app.go\n", fileName)
+		logrus.Infof("- Deleted References for %v in actions/app.go\n", fileName)
 	}
 }
 
@@ -96,8 +97,8 @@ func removeModel(name string) {
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))
 
-		fmt.Printf("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
-		fmt.Printf("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
 	}
 }
 
@@ -116,7 +117,7 @@ func removeMatch(folder, pattern string) {
 			if !f.IsDir() && matches {
 				path := filepath.Join(folder, f.Name())
 				os.Remove(path)
-				fmt.Printf("- Deleted %v\n", path)
+				logrus.Infof("- Deleted %v\n", path)
 			}
 		}
 	}

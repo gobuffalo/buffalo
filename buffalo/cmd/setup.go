@@ -3,13 +3,13 @@ package cmd
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
@@ -214,7 +214,7 @@ func nodeCheck() error {
 }
 
 func run(cmd *exec.Cmd) error {
-	fmt.Printf("--> %s\n", strings.Join(cmd.Args, " "))
+	logrus.Info("--> %s\n", strings.Join(cmd.Args, " "))
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout

@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
+
+	"github.com/Sirupsen/logrus"
 
 	"github.com/pkg/errors"
 
@@ -65,10 +66,9 @@ var newCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
-		fmt.Println("You can find your new application at:")
-		fmt.Println(app.Root)
-		fmt.Println("\nPlease read the README.md file in your new application for next steps on running your application.")
+		logrus.Infof("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
+		logrus.Infof("You can find your new application at:\n%v", app.Root)
+		logrus.Info("\nPlease read the README.md file in your new application for next steps on running your application.")
 
 		return nil
 	},
@@ -89,7 +89,7 @@ func notInGoPath(ag newapp.Generator) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(t)
+	logrus.Info(t)
 	os.Exit(-1)
 	return nil
 }

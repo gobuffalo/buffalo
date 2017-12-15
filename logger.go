@@ -1,8 +1,8 @@
 package buffalo
 
 import (
+	"github.com/Sirupsen/logrus"
 	"github.com/gobuffalo/envy"
-	"github.com/sirupsen/logrus"
 )
 
 // Logger interface is used throughout Buffalo

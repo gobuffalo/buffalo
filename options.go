@@ -3,9 +3,10 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
+
+	"github.com/Sirupsen/logrus"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
@@ -121,7 +122,7 @@ func optionsWithDefaults(opts Options) Options {
 		secret := envy.Get("SESSION_SECRET", "")
 		// In production a SESSION_SECRET must be set!
 		if opts.Env == "production" && secret == "" {
-			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+			logrus.Warn("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
