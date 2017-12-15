@@ -89,7 +89,7 @@ func notInGoPath(ag newapp.Generator) error {
 	if err != nil {
 		return err
 	}
-	logrus.Info(t)
+	logrus.Error(t)
 	os.Exit(-1)
 	return nil
 }
