@@ -36,7 +36,7 @@ func secretGrift() {
 		rx := regexp.MustCompile(`(\W+)`)
 		bb = rx.ReplaceAll(bb, []byte(""))
 		s := randx.String(6) + string(bb)
-		logrus.Infof(s[:127])
+		println(s[:127])
 		return nil
 	})
 }
@@ -50,7 +50,7 @@ func middlewareGrift(a *App) {
 }
 
 func printMiddleware(a *App) {
-	logrus.Infof(fmt.Sprintf("-> %s", a.Name))
+	logrus.Infof("-> %s", a.Name)
 	logrus.Infof("%v\n", a.Middleware.String())
 	for _, x := range a.children {
 		printMiddleware(x)

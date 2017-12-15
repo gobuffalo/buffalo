@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 // List maps a Buffalo command to a slice of Command
@@ -83,12 +83,12 @@ func askBin(path string) Commands {
 	cmd.Stderr = bb
 	err := cmd.Run()
 	if err != nil {
-		logrus.Infof("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
 		return commands
 	}
 	err = json.NewDecoder(bb).Decode(&commands)
 	if err != nil {
-		logrus.Infof("[PLUGIN] error loading plugin %s: %s\n", path, err)
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
 		return commands
 	}
 	return commands
