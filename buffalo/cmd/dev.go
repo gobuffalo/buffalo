@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/generators/refresh"

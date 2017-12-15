@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/packr/builder"
 	"github.com/pkg/errors"
 )

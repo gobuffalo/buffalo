@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"

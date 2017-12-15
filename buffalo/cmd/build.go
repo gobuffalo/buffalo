@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/markbates/sigtx"

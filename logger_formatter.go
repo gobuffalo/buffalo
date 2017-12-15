@@ -1,6 +1,6 @@
 package buffalo
 
-// I really don't want to have this, but until (if) https://github.com/Sirupsen/logrus/pull/606 is merged we're stuck with all this code. And yes, this is ALL needed just to remove some blank space in the logs
+// I really don't want to have this, but until (if) https://github.com/sirupsen/logrus/pull/606 is merged we're stuck with all this code. And yes, this is ALL needed just to remove some blank space in the logs
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh/terminal"
 )
 

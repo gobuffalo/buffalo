@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
