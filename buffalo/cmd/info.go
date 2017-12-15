@@ -35,26 +35,6 @@ var infoCmd = &cobra.Command{
 	},
 }
 
-// func checkGoInfo() error {
-// 	bb := os.Stdout
-
-// 	bb.WriteString("\n### Go Version\n")
-// 	c := exec.Command(envy.Get("GO_BIN", "go"), "version")
-// 	c.Stdout = bb
-// 	err := c.Run()
-// 	if err != nil {
-// 		return errors.WithStack(err)
-// 	}
-
-// 	bb.WriteString("\n### Go Env\n")
-// 	c = exec.Command(envy.Get("GO_BIN", "go"), "env")
-// 	c.Stdout = bb
-// 	c.Stderr = bb
-// 	c.Run()
-
-// 	return nil
-// }
-
 type infoCommand struct {
 	Name      string
 	PathName  string
