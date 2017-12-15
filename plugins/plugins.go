@@ -38,7 +38,7 @@ func Available() (List, error) {
 		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
 	}
 	for _, p := range paths {
-		if strings.HasPrefix(strings.ToLower(p), `c:\windows`) {
+		if ignorePath(p) {
 			continue
 		}
 		if _, err := os.Stat(p); err != nil {
@@ -92,4 +92,14 @@ func askBin(path string) Commands {
 		return commands
 	}
 	return commands
+}
+
+func ignorePath(p string) bool {
+	p = strings.ToLower(p)
+	for _, x := range []string{`c:\windows`, `c:\program`} {
+		if strings.HasPrefix(p, x) {
+			return true
+		}
+	}
+	return false
 }
