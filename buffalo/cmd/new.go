@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 
@@ -74,17 +76,34 @@ var newCmd = &cobra.Command{
 	},
 }
 
-func notInGoPath(ag newapp.Generator) error {
+func currentUser() (string, error) {
+	if _, err := exec.LookPath("git"); err == nil {
+		if b, err := exec.Command("git", "config", "github.user").Output(); err != nil {
+			return string(b), nil
+		}
+	}
 	u, err := user.Current()
 	if err != nil {
-		return err
+		return "", err
+	}
+	username := u.Username
+	if t := strings.Split(username, `\`); len(t) > 0 {
+		username = t[len(t)-1]
+	}
+	return username, nil
+}
+
+func notInGoPath(ag newapp.Generator) error {
+	username, err := currentUser()
+	if err != nil {
+		return errors.WithStack(err)
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 		"name":     ag.Name,
 		"gopath":   envy.GoPath(),
 		"current":  pwd,
-		"username": u.Username,
+		"username": username,
 	}))
 	if err != nil {
 		return err
