@@ -29,8 +29,7 @@ func assetPathFor(file string) string {
 	if filePath == "" {
 		filePath = file
 	}
-
-	return filepath.Join("/assets", filePath)
+	return filepath.ToSlash(filepath.Join("/assets", filePath))
 }
 
 func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
