@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
 
@@ -84,6 +85,9 @@ func notInGoPath(ag newapp.Generator) error {
 			return err
 		}
 		username = u.Username
+		if t := strings.Split(username, `\`); len(t) > 0 {
+			username = t[len(t)-1]
+		}
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
