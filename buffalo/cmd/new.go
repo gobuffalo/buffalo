@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
 
@@ -75,16 +76,21 @@ var newCmd = &cobra.Command{
 }
 
 func notInGoPath(ag newapp.Generator) error {
-	u, err := user.Current()
-	if err != nil {
-		return err
+	b, _ := exec.Command("git", "config", "github.user").Output()
+	username := string(b)
+	if username == "" {
+		u, err := user.Current()
+		if err != nil {
+			return err
+		}
+		username = u.Username
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 		"name":     ag.Name,
 		"gopath":   envy.GoPath(),
 		"current":  pwd,
-		"username": u.Username,
+		"username": username,
 	}))
 	if err != nil {
 		return err
