@@ -1,0 +1,29 @@
+version: '{build}'
+
+image: Visual Studio 2017
+
+clone_depth: 5
+
+clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
+
+environment:
+  GOPATH: c:\gopath
+
+services:
+  - mysql
+  - postgresql
+
+install:
+  - cmd: >-
+     choco install mingw
+     set PATH=%GOPATH%\bin;c:\go\bin;c:\tools\mingw64\bin;%PATH%
+     echo %PATH%
+     echo %GOPATH%
+     go version
+     go env
+
+build_script:
+  - cmd: go get -v -t ./...
+
+test_script:
+  - cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test %%G & IF ERRORLEVEL == 1 EXIT 1)
