@@ -9,10 +9,10 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -214,7 +214,7 @@ func nodeCheck() error {
 }
 
 func run(cmd *exec.Cmd) error {
-	logrus.Info("--> %s\n", strings.Join(cmd.Args, " "))
+	logrus.Infof("--> %s\n", strings.Join(cmd.Args, " "))
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout

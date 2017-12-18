@@ -5,11 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -56,7 +56,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		logrus.Info("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
+		logrus.Infof("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
 
 		return nil
 	},

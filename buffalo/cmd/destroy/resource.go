@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/markbates/inflect"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,11 @@ var ResourceCmd = &cobra.Command{
 		fileName := inflect.Pluralize(inflect.Underscore(name))
 
 		removeTemplates(fileName)
-		removeActions(fileName)
+		err := removeActions(fileName)
+		if err != nil {
+			return err
+		}
+
 		removeLocales(fileName)
 		removeModel(name)
 		removeMigrations(fileName)
@@ -52,12 +56,12 @@ func confirm(msg string) bool {
 func removeTemplates(fileName string) {
 	if YesToAll || confirm("Want to remove templates? (Y/n)") {
 		templatesFolder := fmt.Sprintf(filepath.Join("templates", fileName))
-		logrus.Info("- Deleted %v folder\n", templatesFolder)
+		logrus.Infof("- Deleted %v folder\n", templatesFolder)
 		os.RemoveAll(templatesFolder)
 	}
 }
 
-func removeActions(fileName string) {
+func removeActions(fileName string) error {
 	if YesToAll || confirm("Want to remove actions? (Y/n)") {
 		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v.go", fileName)))
@@ -67,8 +71,8 @@ func removeActions(fileName string) {
 
 		content, err := ioutil.ReadFile(filepath.Join("actions", "app.go"))
 		if err != nil {
-			logrus.Info("[WARNING] error reading app.go content")
-			return
+			logrus.Warn("error reading app.go content")
+			return err
 		}
 
 		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, inflect.Camelize(fileName))
@@ -76,8 +80,8 @@ func removeActions(fileName string) {
 
 		err = ioutil.WriteFile(filepath.Join("actions", "app.go"), []byte(newContents), 0)
 		if err != nil {
-			logrus.Info("[WARNING] error writing new app.go content")
-			return
+			logrus.Error("error writing new app.go content")
+			return err
 		}
 
 		logrus.Infof("- Deleted References for %v in actions/app.go\n", fileName)

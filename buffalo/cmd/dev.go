@@ -39,7 +39,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 					cause = err.Error()
 				}
 			}
-			logrus.Error(msg, cause)
+			logrus.Errorf(msg, cause)
 		}()
 		os.Setenv("GO_ENV", "development")
 

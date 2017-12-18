@@ -36,7 +36,7 @@ func secretGrift() {
 		rx := regexp.MustCompile(`(\W+)`)
 		bb = rx.ReplaceAll(bb, []byte(""))
 		s := randx.String(6) + string(bb)
-		println(s[:127])
+		fmt.Println(s[:127])
 		return nil
 	})
 }
