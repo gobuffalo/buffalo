@@ -1,8 +1,8 @@
 version: 1.0.{build}
 clone_depth: 5
-clone_folder: c:\go\src\github.com\gobuffalo\buffalo
+clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
 environment:
-  GOPATH: c:\go
+  GOPATH: c:\gopath
 services:
 - mysql
 - postgresql
