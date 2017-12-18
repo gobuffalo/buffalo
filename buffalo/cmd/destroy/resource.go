@@ -86,6 +86,8 @@ func removeActions(fileName string) error {
 
 		logrus.Infof("- Deleted References for %v in actions/app.go\n", fileName)
 	}
+
+	return nil
 }
 
 func removeLocales(fileName string) {
