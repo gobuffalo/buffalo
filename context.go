@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
+	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
 )
 
@@ -32,6 +33,7 @@ type Context interface {
 	Redirect(int, string, ...interface{}) error
 	Data() map[string]interface{}
 	Flash() *Flash
+	File(string) (binding.File, error)
 }
 
 // ParamValues will most commonly be url.Values,
