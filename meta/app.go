@@ -2,7 +2,6 @@ package meta
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -83,12 +82,8 @@ func (a App) String() string {
 }
 
 func packagePath(root string) string {
-	fmt.Println("root", root)
 	src := filepath.Join(envy.GoPath(), "src")
-	fmt.Println("src", src)
 	path := strings.Replace(root, src+string(filepath.Separator), "", -1)
-	fmt.Println("path", path)
 	path = filepath.ToSlash(path)
-	fmt.Println("package path", path)
 	return path
 }
