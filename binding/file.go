@@ -50,8 +50,21 @@ func init() {
 		}
 
 		ri := reflect.Indirect(reflect.ValueOf(i))
+		rt := ri.Type()
 		for n := range form {
 			f := ri.FieldByName(n)
+			if !f.IsValid() {
+				for i := 0; i < rt.NumField(); i++ {
+					sf := rt.Field(i)
+					if sf.Tag.Get("form") == n {
+						f = ri.Field(i)
+						break
+					}
+				}
+			}
+			if !f.IsValid() {
+				continue
+			}
 			if _, ok := f.Interface().(File); !ok {
 				continue
 			}

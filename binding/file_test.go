@@ -21,10 +21,21 @@ type WithFile struct {
 	MyFile binding.File
 }
 
+type NamedFile struct {
+	MyFile binding.File `form:"afile"`
+}
+
 func App() *buffalo.App {
 	a := buffalo.New(buffalo.Options{})
 	a.POST("/on-struct", func(c buffalo.Context) error {
 		wf := &WithFile{}
+		if err := c.Bind(wf); err != nil {
+			return errors.WithStack(err)
+		}
+		return c.Render(201, render.String(wf.MyFile.Filename))
+	})
+	a.POST("/named-file", func(c buffalo.Context) error {
+		wf := &NamedFile{}
 		if err := c.Bind(wf); err != nil {
 			return errors.WithStack(err)
 		}
@@ -45,6 +56,19 @@ func Test_File_Upload_On_Struct(t *testing.T) {
 	r := require.New(t)
 
 	req, err := newfileUploadRequest("/on-struct", "MyFile", "file_test.go")
+	r.NoError(err)
+	res := httptest.NewRecorder()
+
+	App().ServeHTTP(res, req)
+
+	r.Equal(201, res.Code)
+	r.Equal("file_test.go", res.Body.String())
+}
+
+func Test_File_Upload_On_Struct_WithTag(t *testing.T) {
+	r := require.New(t)
+
+	req, err := newfileUploadRequest("/named-file", "afile", "file_test.go")
 	r.NoError(err)
 	res := httptest.NewRecorder()
 
