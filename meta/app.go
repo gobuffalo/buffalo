@@ -36,7 +36,10 @@ func New(root string) App {
 		root = pwd
 	}
 	name := Name(filepath.Base(root))
-	pp := path.Join(envy.CurrentPackage(), string(name))
+	pp := envy.CurrentPackage()
+	if filepath.Base(pp) != string(name) {
+		pp = path.Join(pp, string(name))
+	}
 
 	app := App{
 		Pwd:        pwd,
