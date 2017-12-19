@@ -82,7 +82,8 @@ func (a App) String() string {
 }
 
 func packagePath(root string) string {
-	src := filepath.ToSlash(filepath.Join(envy.GoPath(), "src"))
-	root = filepath.ToSlash(root)
-	return strings.Replace(root, src+"/", "", 2)
+	src := filepath.Join(envy.GoPath(), "src")
+	path := strings.Replace(root, src+string(filepath.Separator), "", -1)
+	path = filepath.ToSlash(path)
+	return path
 }
