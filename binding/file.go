@@ -8,10 +8,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-// MaxFileSize can be used to set the maximum file size for multipart
-// requests. See https://golang.org/pkg/net/http/#Request.ParseMultipartForm
-// for more information on how this impacts file uploads.
-var MaxFileSize int64 = 5 * 1024 * 1024
+// MaxFileMemory can be used to set the maximum size, in bytes, for files to be
+// stored in memory during uploaded for multipart requests.
+// See https://golang.org/pkg/net/http/#Request.ParseMultipartForm for more
+// information on how this impacts file uploads.
+var MaxFileMemory int64 = 5 * 1024 * 1024
 
 // File holds information regarding an uploaded file
 type File struct {
@@ -36,7 +37,7 @@ func (f File) String() string {
 
 func init() {
 	sb := func(req *http.Request, i interface{}) error {
-		err := req.ParseMultipartForm(MaxFileSize)
+		err := req.ParseMultipartForm(MaxFileMemory)
 		if err != nil {
 			return errors.WithStack(err)
 		}
