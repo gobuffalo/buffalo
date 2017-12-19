@@ -26,9 +26,11 @@ install:
     go version
 
     go env
-before_build:
-- cmd: go get -v -t ./...
 build:
   verbosity: normal
+before_build:
+- cmd: go get -v -t ./...
+build_script:
+- cmd: go install -v github.com/gobuffalo/buffalo/buffalo
 test_script:
 - cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test %%G & IF ERRORLEVEL == 1 EXIT 1)
