@@ -1,4 +1,4 @@
-version: {build}
+version: "{build}"
 clone_depth: 5
 clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
 
