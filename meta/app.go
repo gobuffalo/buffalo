@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/gobuffalo/envy"
 )
@@ -35,7 +34,7 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-	pp := packagePath(root)
+	pp := envy.CurrentPackage()
 
 	app := App{
 		Pwd:        pwd,
@@ -79,10 +78,4 @@ func New(root string) App {
 func (a App) String() string {
 	b, _ := json.Marshal(a)
 	return string(b)
-}
-
-func packagePath(root string) string {
-	src := filepath.ToSlash(filepath.Join(envy.GoPath(), "src"))
-	root = filepath.ToSlash(root)
-	return strings.Replace(root, src+"/", "", 2)
 }
