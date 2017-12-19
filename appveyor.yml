@@ -1,8 +1,15 @@
 version: 1.0.{build}
 clone_depth: 5
 clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
+
 environment:
   GOPATH: c:\gopath
+  matrix:
+  - GOBIN: c:\go
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  - GOBIN: c:\go18
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
 services:
 - mysql
 - postgresql
@@ -10,7 +17,7 @@ install:
 - cmd: >-
     choco install mingw
 
-    set PATH=%GOPATH%\bin;c:\go\bin;c:\tools\mingw64\bin;%PATH%
+    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
 
     echo %PATH%
 
