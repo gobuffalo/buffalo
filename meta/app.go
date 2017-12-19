@@ -3,6 +3,7 @@ package meta
 import (
 	"encoding/json"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 
@@ -34,13 +35,14 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-	pp := envy.CurrentPackage()
+	name := Name(filepath.Base(root))
+	pp := path.Join(envy.CurrentPackage(), string(name))
 
 	app := App{
 		Pwd:        pwd,
 		Root:       root,
 		GoPath:     envy.GoPath(),
-		Name:       Name(filepath.Base(root)),
+		Name:       name,
 		PackagePkg: pp,
 		ActionsPkg: pp + "/actions",
 		ModelsPkg:  pp + "/models",
