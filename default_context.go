@@ -199,6 +199,23 @@ func (d *DefaultContext) String() string {
 	return strings.Join(bb, "\n\n")
 }
 
+// File returns an uploaded file by name, or an error
+func (d *DefaultContext) File(name string) (binding.File, error) {
+	req := d.Request()
+	if err := req.ParseMultipartForm(5 * 1024 * 1024); err != nil {
+		return binding.File{}, err
+	}
+	f, h, err := req.FormFile(name)
+	bf := binding.File{
+		File:       f,
+		FileHeader: h,
+	}
+	if err != nil {
+		return bf, errors.WithStack(err)
+	}
+	return bf, nil
+}
+
 var defaultUpgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
