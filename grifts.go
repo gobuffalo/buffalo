@@ -49,7 +49,7 @@ func middlewareGrift(a *App) {
 }
 
 func printMiddleware(a *App) {
-	fmt.Printf("-> %s ", a.Name)
+	fmt.Printf("-> %s\n", a.Name)
 	fmt.Printf("%v\n", a.Middleware.String())
 	for _, x := range a.children {
 		printMiddleware(x)
