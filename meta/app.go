@@ -3,9 +3,9 @@ package meta
 import (
 	"encoding/json"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/gobuffalo/envy"
 )
@@ -35,13 +35,17 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-	pp := packagePath(root)
+	name := Name(filepath.Base(root))
+	pp := envy.CurrentPackage()
+	if filepath.Base(pp) != string(name) {
+		pp = path.Join(pp, string(name))
+	}
 
 	app := App{
 		Pwd:        pwd,
 		Root:       root,
 		GoPath:     envy.GoPath(),
-		Name:       Name(filepath.Base(root)),
+		Name:       name,
 		PackagePkg: pp,
 		ActionsPkg: pp + "/actions",
 		ModelsPkg:  pp + "/models",
@@ -79,10 +83,4 @@ func New(root string) App {
 func (a App) String() string {
 	b, _ := json.Marshal(a)
 	return string(b)
-}
-
-func packagePath(root string) string {
-	src := filepath.ToSlash(filepath.Join(envy.GoPath(), "src"))
-	root = filepath.ToSlash(root)
-	return strings.Replace(root, src+"/", "", 2)
 }
