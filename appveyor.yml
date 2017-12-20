@@ -32,7 +32,7 @@ build:
 deploy: false
 
 before_build:
-  - cmd: go get -v -t ./...
+  - cmd: go get -v -u -t ./...
 build_script:
 - cmd: >-
     go build -v github.com/gobuffalo/buffalo/buffalo
