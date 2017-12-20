@@ -10,7 +10,6 @@ import (
 	"github.com/markbates/going/randx"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -50,8 +49,8 @@ func middlewareGrift(a *App) {
 }
 
 func printMiddleware(a *App) {
-	logrus.Infof("-> %s", a.Name)
-	logrus.Infof("%v\n", a.Middleware.String())
+	fmt.Printf("-> %s ", a.Name)
+	fmt.Printf("%v\n", a.Middleware.String())
 	for _, x := range a.children {
 		printMiddleware(x)
 	}
