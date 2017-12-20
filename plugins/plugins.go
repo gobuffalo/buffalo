@@ -8,10 +8,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 // List maps a Buffalo command to a slice of Command
@@ -30,7 +33,19 @@ type List map[string]Commands
 func Available() (List, error) {
 	list := List{}
 	paths := []string{"plugins"}
-	paths = append(paths, strings.Split(os.Getenv("BUFFALO_PLUGIN_PATH"), ";")...)
+
+	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
+	if err != nil {
+		logrus.Warn(warningMessage)
+		from = envy.Get("PATH", "")
+	}
+
+	if runtime.GOOS == "windows" {
+		paths = append(paths, strings.Split(from, ";")...)
+	} else {
+		paths = append(paths, strings.Split(from, ":")...)
+	}
+
 	for _, p := range paths {
 		if ignorePath(p) {
 			continue
@@ -97,3 +112,6 @@ func ignorePath(p string) bool {
 	}
 	return false
 }
+
+const warningMessage = `Could not find BUFFALO_PLUGIN_PATH environment variable, default to PATH instead.
+Consider setting the BUFFALO_PLUGIN_PATH variable to speed up loading of plugins and/or to set a custom path for locating them.`
