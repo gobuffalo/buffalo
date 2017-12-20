@@ -113,5 +113,4 @@ func ignorePath(p string) bool {
 	return false
 }
 
-const warningMessage = `Could not find BUFFALO_PLUGIN_PATH environment variable, default to PATH instead.
-Consider setting the BUFFALO_PLUGIN_PATH variable to speed up loading of plugins and/or to set a custom path for locating them.`
+const warningMessage = `Could not find BUFFALO_PLUGIN_PATH environment variable, default to PATH instead. Consider setting the BUFFALO_PLUGIN_PATH variable to speed up loading of plugins and/or to set a custom path for locating them.`
