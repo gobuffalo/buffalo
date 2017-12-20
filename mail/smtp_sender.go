@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/pkg/errors"
-	gomail "gopkg.in/gomail.v2"
+	gomail "gopkg.in/mail.v2"
 )
 
 //SMTPSender allows to send Emails by connecting to a SMTP server.
