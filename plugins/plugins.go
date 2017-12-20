@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 
@@ -27,16 +26,11 @@ type List map[string]Commands
 // * file/command must respond to `available` and return JSON of
 //	 plugins.Commands{}
 //
-// Caveats:
-// * The C:\Windows directory is excluded
+// Limit full path scan with direct plugin path
 func Available() (List, error) {
 	list := List{}
 	paths := []string{"plugins"}
-	if runtime.GOOS == "windows" {
-		paths = append(paths, strings.Split(os.Getenv("PATH"), ";")...)
-	} else {
-		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
-	}
+	paths = append(paths, strings.Split(os.Getenv("BUFFALO_PLUGIN_PATH"), ";")...)
 	for _, p := range paths {
 		if ignorePath(p) {
 			continue
