@@ -73,7 +73,7 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	opts.Name = defaults.String(opts.Name, "/")
-	addr := ""
+	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
 	}
