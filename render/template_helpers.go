@@ -53,6 +53,13 @@ func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 		return cssTag(h, options), nil
 	}
 
+	helpers["imgTag"] = func(file string, options tags.Options) (template.HTML, error) {
+		h, err := s.assetPath(file)
+		if err != nil {
+			return "", errors.WithStack(err)
+		}
+		return imgTag(h, options), nil
+	}
 	return helpers
 }
 
@@ -89,4 +96,15 @@ func cssTag(href string, options tags.Options) template.HTML {
 	cssTag := tags.New("link", options)
 
 	return cssTag.HTML()
+}
+
+func imgTag(src string, options tags.Options) template.HTML {
+	if options == nil {
+		options = tags.Options{}
+	}
+
+	options["src"] = src
+	imgTag := tags.New("img", options)
+
+	return imgTag.HTML()
 }
