@@ -88,13 +88,13 @@ func (b *Builder) buildADatabase() error {
 			return errors.WithStack(err)
 		}
 		if !bytes.Contains(bb.Bytes(), []byte("sqlite")) {
-			logrus.Debugf("no sqlite usage in database.yml detected, applying the nosqlite tag")
+			logrus.Debug("no sqlite usage in database.yml detected, applying the nosqlite tag")
 			b.Tags = append(b.Tags, "nosqlite")
 		} else if !b.Static {
-			fmt.Println("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
+			logrus.Debug("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
 		}
 	} else {
-		logrus.Debugf("no database.yml detected, applying the nosqlite tag")
+		logrus.Debug("no database.yml detected, applying the nosqlite tag")
 		// add the nosqlite build tag if there is no database being used
 		b.Tags = append(b.Tags, "nosqlite")
 	}
