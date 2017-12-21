@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 func (b *Builder) transform(path string, fn func([]byte, io.Writer) error) error {

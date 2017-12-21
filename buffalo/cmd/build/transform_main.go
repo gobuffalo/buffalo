@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 func (b *Builder) transformMain() error {

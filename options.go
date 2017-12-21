@@ -3,9 +3,10 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
@@ -72,7 +73,7 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	opts.Name = defaults.String(opts.Name, "/")
-	addr := ""
+	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
 	}
@@ -121,7 +122,7 @@ func optionsWithDefaults(opts Options) Options {
 		secret := envy.Get("SESSION_SECRET", "")
 		// In production a SESSION_SECRET must be set!
 		if opts.Env == "production" && secret == "" {
-			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+			logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}

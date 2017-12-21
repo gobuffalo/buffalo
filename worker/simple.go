@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 var _ Worker = &Simple{}

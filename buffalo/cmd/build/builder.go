@@ -4,9 +4,9 @@ import (
 	"context"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/packr/builder"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 // Builder builds a Buffalo binary
