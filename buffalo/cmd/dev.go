@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
@@ -12,6 +11,7 @@ import (
 	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/markbates/refresh/refresh"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 )
@@ -39,7 +39,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 					cause = err.Error()
 				}
 			}
-			fmt.Printf(msg, cause)
+			logrus.Errorf(msg, cause)
 		}()
 		os.Setenv("GO_ENV", "development")
 
