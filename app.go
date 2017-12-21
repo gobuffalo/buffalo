@@ -153,6 +153,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
+	envy.Load()
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
