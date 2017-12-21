@@ -5,6 +5,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// NewRobotsHandler creates a robots handler by looking into r.AssetsBox for robots.txt file,
+// if this file doesn't exist it will render a default permissive robots.txt.
 func NewRobotsHandler(r *render.Engine) Handler {
 	return func(c Context) error {
 		contents, err := r.AssetsBox.MustString("robots.txt")
