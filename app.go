@@ -153,6 +153,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
+	envy.Load()
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
@@ -162,7 +163,7 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router:   mux.NewRouter().StrictSlash(true),
+		router:   mux.NewRouter().StrictSlash(!opts.LooseSlash),
 		moot:     &sync.Mutex{},
 		routes:   RouteList{},
 		children: []*App{},
