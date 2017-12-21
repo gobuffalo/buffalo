@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 type debugWriter int

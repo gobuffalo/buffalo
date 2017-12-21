@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -92,12 +91,12 @@ func askBin(path string) Commands {
 	cmd.Stderr = bb
 	err := cmd.Run()
 	if err != nil {
-		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
 		return commands
 	}
 	err = json.NewDecoder(bb).Decode(&commands)
 	if err != nil {
-		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n", path, err)
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
 		return commands
 	}
 	return commands

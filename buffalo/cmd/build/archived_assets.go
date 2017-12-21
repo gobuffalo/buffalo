@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 func (b *Builder) buildExtractedAssets() error {
