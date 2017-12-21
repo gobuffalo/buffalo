@@ -78,7 +78,9 @@ func App() *buffalo.App {
     }
     app.Use(T.Middleware())
     {{ end }}
-
+    
+    // Adding robots handler
+    app.GET("/robots.txt", buffalo.NewRobotsHandler(r))
     app.GET("/", HomeHandler)
 
     {{ if .opts.AsWeb -}}
