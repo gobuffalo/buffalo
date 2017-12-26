@@ -8,7 +8,11 @@
     "babel-core": "~6.25.0",
     "babel-loader": "~7.0.0",
     "babel-preset-env": "~1.5.2",
+    {{ if eq .opts.Bootstrap 4 -}}
+    "bootstrap": "4.0.0-beta.2",
+    {{ else -}}
     "bootstrap-sass": "~3.3.7",
+    {{ end -}}
     "clean-webpack-plugin": "~0.1.17",
     "copy-webpack-plugin": "~4.0.1",
     "css-loader": "~0.28.4",

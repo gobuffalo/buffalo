@@ -78,6 +78,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 		if a.WithWebpack {
 			w := webpack.New()
 			w.App = a.App
+			w.Bootstrap = a.Bootstrap
 			if err := w.Run(root, data); err != nil {
 				return errors.WithStack(err)
 			}
@@ -197,9 +198,9 @@ stages:
 .test-vars: &test-vars
   variables:
     GO_ENV: "test"
-{{- if eq .opts.DBType "postgres" }}    
+{{- if eq .opts.DBType "postgres" }}
     POSTGRES_DB: "{{.opts.Name.File}}_test"
-{{- else if eq .opts.DBType "mysql" }}  
+{{- else if eq .opts.DBType "mysql" }}
     MYSQL_DATABASE: "{{.opts.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
 {{- end }}
@@ -217,9 +218,9 @@ test:latest:
   <<: *test-vars
   stage: test
   services:
-{{- if eq .opts.DBType "mysql" }}  
+{{- if eq .opts.DBType "mysql" }}
     - mysql:latest
-{{- else if eq .opts.DBType "postgres" }}  
+{{- else if eq .opts.DBType "postgres" }}
     - postgres:latest
 {{- end }}
   script:
@@ -230,9 +231,9 @@ test:1.8:
   <<: *test-vars
   stage: test
   services:
-{{- if eq .opts.DBType "mysql" }}  
+{{- if eq .opts.DBType "mysql" }}
     - mysql:latest
-{{- else if eq .opts.DBType "postgres" }}  
+{{- else if eq .opts.DBType "postgres" }}
     - postgres:latest
 {{- end }}
   script:
