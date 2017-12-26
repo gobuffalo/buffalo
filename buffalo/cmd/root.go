@@ -10,7 +10,7 @@ import (
 
 // var cfgFile string
 
-var anywhereCommands = []string{"new", "version", "info"}
+var anywhereCommands = []string{"new", "version", "info", "help"}
 
 // RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
