@@ -1,5 +1,9 @@
 require("expose-loader?$!expose-loader?jQuery!jquery");
+{{ if eq .opts.Bootstrap 4 -}}
+require("bootstrap/dist/js/bootstrap.bundle.js");
+{{ else -}}
 require("bootstrap-sass/assets/javascripts/bootstrap.js");
+{{ end -}}
 
 $(() => {
 
