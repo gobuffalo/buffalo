@@ -54,7 +54,11 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 		return err
 	}
 
-	return commitAndPush(v)
+	if err = commitAndPush(v); err != nil {
+		return err
+	}
+
+	return runReleaser(v)
 })
 
 func installBin() error {
@@ -112,6 +116,14 @@ func tagRelease(v string) error {
 
 func runChangelogGenerator(v string) error {
 	cmd := exec.Command("github_changelog_generator")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
+
+func runReleaser(v string) error {
+	cmd := exec.Command("goreleaser")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
