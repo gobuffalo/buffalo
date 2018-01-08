@@ -9,10 +9,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/markbates/pop"
 	"github.com/spf13/cobra"

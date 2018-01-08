@@ -8,10 +8,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/markbates/grift/grift"
+	"github.com/sirupsen/logrus"
 )
 
 var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages used by buffalo.")
