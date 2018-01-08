@@ -30,3 +30,4 @@ gin-bin
 .vscode
 vendor
 Gopkg.lock
+.grifter/
