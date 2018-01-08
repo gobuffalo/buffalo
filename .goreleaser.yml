@@ -24,9 +24,7 @@ builds:
     flags: -tags nosqlite
   -
     goos:
-      - linux
       - darwin
-      - windows
     goarch:
       - amd64
     goarm:
