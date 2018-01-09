@@ -3,7 +3,7 @@
 <%= f.TextArea("{{$p.Name}}", {rows: 10}) %>
 {{ else -}}
 {{ if eq $p.Type "bool" -}}
-<%= f.CheckboxTag("{{$p.Name}}") %>
+<%= f.CheckboxTag("{{$p.Name}}", {unchecked: false}) %>
 {{ else -}}
 <%= f.InputTag("{{$p.Name}}") %>
 {{ end -}}
