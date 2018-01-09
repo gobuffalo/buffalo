@@ -2,6 +2,7 @@ package i18n
 
 import (
 	"log"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
@@ -42,6 +43,9 @@ func app() *buffalo.App {
 		c.Set("Users", usersList)
 		return c.Render(200, r.HTML("format.html"))
 	})
+	app.GET("/collision", func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("collision.html"))
+	})
 	app.GET("/localized", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("localized_view.html"))
 	})
@@ -59,7 +63,7 @@ func Test_i18n(t *testing.T) {
 
 	w := willie.New(app())
 	res := w.Request("/").Get()
-	r.Equal("Hello, World!\n", res.Body.String())
+	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_fr(t *testing.T) {
@@ -70,7 +74,7 @@ func Test_i18n_fr(t *testing.T) {
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
-	r.Equal("Bonjour à tous !\n", res.Body.String())
+	r.Equal("Bonjour à tous !", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_plural(t *testing.T) {
@@ -78,7 +82,7 @@ func Test_i18n_plural(t *testing.T) {
 
 	w := willie.New(app())
 	res := w.Request("/plural").Get()
-	r.Equal("Hello, alone!\nHello, 5 people!\n", res.Body.String())
+	r.Equal("Hello, alone!\nHello, 5 people!", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_plural_fr(t *testing.T) {
@@ -89,7 +93,7 @@ func Test_i18n_plural_fr(t *testing.T) {
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
-	r.Equal("Bonjour, tout seul !\nBonjour, 5 personnes !\n", res.Body.String())
+	r.Equal("Bonjour, tout seul !\nBonjour, 5 personnes !", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_format(t *testing.T) {
@@ -119,21 +123,29 @@ func Test_i18n_Localized_View(t *testing.T) {
 	req := w.Request("/localized")
 	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res := req.Get()
-	r.Equal("Hello!\n", res.Body.String())
+	r.Equal("Hello!", strings.TrimSpace(res.Body.String()))
 
 	// Test priority
 	req.Headers["Accept-Language"] = "fr,en-US"
 	res = req.Get()
-	r.Equal("Bonjour !\n", res.Body.String())
+	r.Equal("Bonjour !", strings.TrimSpace(res.Body.String()))
 
 	// Test fallback
 	req.Headers["Accept-Language"] = "ru"
 	res = req.Get()
-	r.Equal("Default\n", res.Body.String())
+	r.Equal("Default", strings.TrimSpace(res.Body.String()))
 
 	// Test i18n disabled
 	req = w.Request("/localized-disabled")
 	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res = req.Get()
-	r.Equal("Default\n", res.Body.String())
+	r.Equal("Default", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_i18n_collision(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	res := w.Request("/collision").Get()
+	r.Equal("Collision OK", strings.TrimSpace(res.Body.String()))
 }

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,7 +11,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 // List maps a Buffalo command to a slice of Command
@@ -27,18 +28,25 @@ type List map[string]Commands
 // * file/command must respond to `available` and return JSON of
 //	 plugins.Commands{}
 //
-// Caveats:
-// * The C:\Windows directory is excluded
+// Limit full path scan with direct plugin path
 func Available() (List, error) {
 	list := List{}
 	paths := []string{"plugins"}
-	if runtime.GOOS == "windows" {
-		paths = append(paths, strings.Split(os.Getenv("PATH"), ";")...)
-	} else {
-		paths = append(paths, strings.Split(os.Getenv("PATH"), ":")...)
+
+	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
+	if err != nil {
+		logrus.Warn(warningMessage)
+		from = envy.Get("PATH", "")
 	}
+
+	if runtime.GOOS == "windows" {
+		paths = append(paths, strings.Split(from, ";")...)
+	} else {
+		paths = append(paths, strings.Split(from, ":")...)
+	}
+
 	for _, p := range paths {
-		if strings.HasPrefix(strings.ToLower(p), `c:\windows`) {
+		if ignorePath(p) {
 			continue
 		}
 		if _, err := os.Stat(p); err != nil {
@@ -83,13 +91,25 @@ func askBin(path string) Commands {
 	cmd.Stderr = bb
 	err := cmd.Run()
 	if err != nil {
-		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n%s\n", path, err, bb.String())
 		return commands
 	}
 	err = json.NewDecoder(bb).Decode(&commands)
 	if err != nil {
-		fmt.Printf("[PLUGIN] error loading plugin %s: %s\n", path, err)
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
 		return commands
 	}
 	return commands
 }
+
+func ignorePath(p string) bool {
+	p = strings.ToLower(p)
+	for _, x := range []string{`c:\windows`, `c:\program`} {
+		if strings.HasPrefix(p, x) {
+			return true
+		}
+	}
+	return false
+}
+
+const warningMessage = `Could not find BUFFALO_PLUGIN_PATH environment variable, default to PATH instead. Consider setting the BUFFALO_PLUGIN_PATH variable to speed up loading of plugins and/or to set a custom path for locating them.`

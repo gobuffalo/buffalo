@@ -1,7 +1,6 @@
 package webpack
 
 import (
-	"fmt"
 	"os/exec"
 	"path/filepath"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/makr"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 var logo = &makr.RemoteFile{
@@ -26,7 +26,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 	// if there's no npm, return!
 	if _, err := exec.LookPath("npm"); err != nil {
-		fmt.Println("Could not find npm. Skipping webpack generation.")
+		logrus.Info("Could not find npm. Skipping webpack generation.")
 
 		return standard.Run(root, data)
 	}

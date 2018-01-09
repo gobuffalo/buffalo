@@ -1,7 +1,9 @@
 package i18n
 
 import (
+	"fmt"
 	"log"
+	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
@@ -43,7 +45,12 @@ func (t *Translator) Load() error {
 			log.Fatal(err)
 			return errors.WithStack(err)
 		}
-		return i18n.ParseTranslationFileBytes(path, b)
+
+		base := filepath.Base(path)
+		dir := filepath.Dir(path)
+
+		// Add a prefix to the loaded string, to avoid collision with an ISO lang code
+		return i18n.ParseTranslationFileBytes(fmt.Sprintf("%sbuff%s", dir, base), b)
 	})
 }
 

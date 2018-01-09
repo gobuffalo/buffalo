@@ -1,10 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 
@@ -25,6 +28,7 @@ var app = newapp.Generator{
 	AsWeb:      true,
 	Docker:     "multi",
 	VCS:        "git",
+	Bootstrap:  3,
 }
 
 var newCmd = &cobra.Command{
@@ -65,31 +69,47 @@ var newCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
-		fmt.Println("You can find your new application at:")
-		fmt.Println(app.Root)
-		fmt.Println("\nPlease read the README.md file in your new application for next steps on running your application.")
+		logrus.Infof("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
+		logrus.Infof("You can find your new application at:\n%v", app.Root)
+		logrus.Info("\nPlease read the README.md file in your new application for next steps on running your application.")
 
 		return nil
 	},
 }
 
-func notInGoPath(ag newapp.Generator) error {
+func currentUser() (string, error) {
+	if _, err := exec.LookPath("git"); err == nil {
+		if b, err := exec.Command("git", "config", "github.user").Output(); err != nil {
+			return string(b), nil
+		}
+	}
 	u, err := user.Current()
 	if err != nil {
-		return err
+		return "", err
+	}
+	username := u.Username
+	if t := strings.Split(username, `\`); len(t) > 0 {
+		username = t[len(t)-1]
+	}
+	return username, nil
+}
+
+func notInGoPath(ag newapp.Generator) error {
+	username, err := currentUser()
+	if err != nil {
+		return errors.WithStack(err)
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
 		"name":     ag.Name,
 		"gopath":   envy.GoPath(),
 		"current":  pwd,
-		"username": u.Username,
+		"username": username,
 	}))
 	if err != nil {
 		return err
 	}
-	fmt.Println(t)
+	logrus.Error(t)
 	os.Exit(-1)
 	return nil
 }
@@ -112,6 +132,7 @@ func init() {
 	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().StringVar(&app.VCS, "vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
+	newCmd.Flags().IntVar(&app.Bootstrap, "bootstrap", app.Bootstrap, "specify version for Bootstrap [3, 4]")
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.

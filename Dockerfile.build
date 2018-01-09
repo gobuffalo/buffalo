@@ -25,8 +25,7 @@ ADD . .
 RUN go get -v -t ./...
 
 # cache yarn packages to an offline mirror so they're faster to load. hopefully.
-COPY ./generators/assets/webpack/templates/package.json.tmpl ./package.json
-RUN sed -i "s/{{.name}}/Buffalo/" package.json
+RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json
 RUN yarn install --no-progress
 
 RUN buffalo version

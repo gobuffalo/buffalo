@@ -3,12 +3,15 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"log"
+	"net"
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
@@ -41,7 +44,7 @@ func (a *App) Start(port string) error {
 		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
 	}
 
-	log.Println(warningMsg)
+	logrus.Info(warningMsg)
 
 	a.Addr = defaults.String(a.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", "127.0.0.1"), port))
 	return a.Serve()
@@ -51,9 +54,8 @@ func (a *App) Start(port string) error {
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve() error {
-	fmt.Printf("Starting application at %s\n", a.Options.Addr)
+	logrus.Infof("Starting application at %s", a.Options.Addr)
 	server := http.Server{
-		Addr:    a.Options.Addr,
 		Handler: a,
 	}
 	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
@@ -62,25 +64,25 @@ func (a *App) Serve() error {
 	go func() {
 		// gracefully shut down the application when the context is cancelled
 		<-ctx.Done()
-		fmt.Println("Shutting down application")
+		logrus.Info("Shutting down application")
 
 		err := a.Stop(ctx.Err())
 		if err != nil {
-			fmt.Println(err)
+			logrus.Error(err)
 		}
 
 		if !a.WorkerOff {
 			// stop the workers
-			fmt.Println("Shutting down worker")
+			logrus.Info("Shutting down worker")
 			err = a.Worker.Stop()
 			if err != nil {
-				fmt.Println(err)
+				logrus.Error(err)
 			}
 		}
 
 		err = server.Shutdown(ctx)
 		if err != nil {
-			fmt.Println(err)
+			logrus.Error(err)
 		}
 
 	}()
@@ -95,11 +97,28 @@ func (a *App) Serve() error {
 		}()
 	}
 
-	// start the web server
-	err := server.ListenAndServe()
+	var err error
+
+	if strings.HasPrefix(a.Options.Addr, "unix:") {
+		// Use an UNIX socket
+		listener, err := net.Listen("unix", a.Options.Addr[5:])
+		if err != nil {
+			return a.Stop(err)
+		}
+		// start the web server
+		err = server.Serve(listener)
+	} else {
+		// Use a TCP socket
+		server.Addr = a.Options.Addr
+
+		// start the web server
+		err = server.ListenAndServe()
+	}
+
 	if err != nil {
 		return a.Stop(err)
 	}
+
 	return nil
 }
 
@@ -107,7 +126,7 @@ func (a *App) Serve() error {
 func (a *App) Stop(err error) error {
 	a.cancel()
 	if err != nil && errors.Cause(err) != context.Canceled {
-		fmt.Println(err)
+		logrus.Error(err)
 		return err
 	}
 	return nil
@@ -134,6 +153,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
+	envy.Load()
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
@@ -143,7 +163,7 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router:   mux.NewRouter().StrictSlash(true),
+		router:   mux.NewRouter().StrictSlash(!opts.LooseSlash),
 		moot:     &sync.Mutex{},
 		routes:   RouteList{},
 		children: []*App{},

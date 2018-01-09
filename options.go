@@ -3,8 +3,10 @@ package buffalo
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
@@ -20,15 +22,21 @@ type Options struct {
 	// Addr is the bind address provided to http.Server. Default is "127.0.0.1:3000"
 	// Can be set using ENV vars "ADDR" and "PORT".
 	Addr string
+	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
+	Host string
+
 	// Env is the "environment" in which the App is running. Default is "development".
 	Env string
+
 	// LogLevel defaults to "debug".
 	LogLevel string
 	// Logger to be used with the application. A default one is provided.
 	Logger Logger
+
 	// MethodOverride allows for changing of the request method type. See the default
 	// implementation at buffalo.MethodOverride
 	MethodOverride http.HandlerFunc
+
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
 	// `SESSION_SECRET`.
@@ -36,8 +44,7 @@ type Options struct {
 	// SessionName is the name of the session cookie that is set. This defaults
 	// to "_buffalo_session".
 	SessionName string
-	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
-	Host string
+
 	// Worker implements the Worker interface and can process tasks in the background.
 	// Default is "github.com/gobuffalo/worker.Simple.
 	Worker worker.Worker
@@ -53,8 +60,13 @@ type Options struct {
 	PreWares []PreWare
 
 	Context context.Context
-	cancel  context.CancelFunc
-	Prefix  string
+
+	// LooseSlash defines the trailing slash behavior for new routes. The initial value is false.
+	// This is the opposite of http://www.gorillatoolkit.org/pkg/mux#Router.StrictSlash
+	LooseSlash bool
+
+	cancel context.CancelFunc
+	Prefix string
 }
 
 // PreWare takes an http.Handler and returns and http.Handler
@@ -71,11 +83,19 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
 	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
 	opts.Name = defaults.String(opts.Name, "/")
-	addr := ""
+	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
 	}
-	opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", addr), envy.Get("PORT", "3000")))
+	envAddr := envy.Get("ADDR", addr)
+
+	if strings.HasPrefix(envAddr, "unix:") {
+		// UNIX domain socket doesn't have a port
+		opts.Addr = envAddr
+	} else {
+		// TCP case
+		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envy.Get("PORT", "3000")))
+	}
 
 	if opts.PreWares == nil {
 		opts.PreWares = []PreWare{}
@@ -112,7 +132,7 @@ func optionsWithDefaults(opts Options) Options {
 		secret := envy.Get("SESSION_SECRET", "")
 		// In production a SESSION_SECRET must be set!
 		if opts.Env == "production" && secret == "" {
-			log.Println("WARNING! Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+			logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -44,7 +43,7 @@ var xbuildCmd = &cobra.Command{
 		go func() {
 			<-ctx.Done()
 			if ctx.Err() == context.Canceled {
-				fmt.Println("~~~ BUILD CANCELLED ~~~")
+				logrus.Info("~~~ BUILD CANCELLED ~~~")
 				err := b.Cleanup()
 				if err != nil {
 					logrus.Fatal(err)
@@ -57,7 +56,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
+		logrus.Infof("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
 
 		return nil
 	},

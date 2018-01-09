@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -13,6 +12,7 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/markbates/pop"
 	"github.com/spf13/cobra"
@@ -106,7 +106,7 @@ func testRunner(args []string) error {
 		}
 		cmd.Args = append(cmd.Args, pkgs...)
 	}
-	fmt.Println(strings.Join(cmd.Args, " "))
+	logrus.Info(strings.Join(cmd.Args, " "))
 	return cmd.Run()
 }
 
@@ -127,7 +127,7 @@ func mFlagRunner(args []string) error {
 		}
 		cmd := newTestCmd(args)
 		p = strings.TrimPrefix(p, app.PackagePkg+string(filepath.Separator))
-		fmt.Println(strings.Join(cmd.Args, " "))
+		logrus.Info(strings.Join(cmd.Args, " "))
 		os.Chdir(p)
 		if err := cmd.Run(); err != nil {
 			errs = true
