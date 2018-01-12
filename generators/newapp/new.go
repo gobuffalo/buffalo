@@ -24,6 +24,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	if a.AsAPI {
 		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
 		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
+		defer os.RemoveAll(filepath.Join(a.Root, "public"))
 	}
 	if a.Force {
 		os.RemoveAll(a.Root)
@@ -42,7 +43,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 
 	for _, f := range files {
 		if a.AsAPI {
-			if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") {
+			if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") || strings.Contains(f.WritePath, "public") {
 				continue
 			}
 			g.Add(makr.NewFile(f.WritePath, f.Body))
