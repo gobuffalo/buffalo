@@ -40,11 +40,55 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/plush/token](https://github.com/gobuffalo/plush/token)
 
+* [github.com/gobuffalo/plush/vendor/github.com/fatih/structs](https://github.com/gobuffalo/plush/vendor/github.com/fatih/structs)
+
+* [github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags](https://github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags)
+
+* [github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags/form](https://github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags/form)
+
+* [github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/plush/vendor/github.com/gobuffalo/tags/form/bootstrap)
+
+* [github.com/gobuffalo/plush/vendor/github.com/markbates/going/defaults](https://github.com/gobuffalo/plush/vendor/github.com/markbates/going/defaults)
+
+* [github.com/gobuffalo/plush/vendor/github.com/markbates/going/wait](https://github.com/gobuffalo/plush/vendor/github.com/markbates/going/wait)
+
+* [github.com/gobuffalo/plush/vendor/github.com/markbates/inflect](https://github.com/gobuffalo/plush/vendor/github.com/markbates/inflect)
+
+* [github.com/gobuffalo/plush/vendor/github.com/markbates/validate](https://github.com/gobuffalo/plush/vendor/github.com/markbates/validate)
+
+* [github.com/gobuffalo/plush/vendor/github.com/markbates/validate/validators](https://github.com/gobuffalo/plush/vendor/github.com/markbates/validate/validators)
+
+* [github.com/gobuffalo/plush/vendor/github.com/microcosm-cc/bluemonday](https://github.com/gobuffalo/plush/vendor/github.com/microcosm-cc/bluemonday)
+
+* [github.com/gobuffalo/plush/vendor/github.com/pkg/errors](https://github.com/gobuffalo/plush/vendor/github.com/pkg/errors)
+
+* [github.com/gobuffalo/plush/vendor/github.com/russross/blackfriday](https://github.com/gobuffalo/plush/vendor/github.com/russross/blackfriday)
+
+* [github.com/gobuffalo/plush/vendor/github.com/satori/go.uuid](https://github.com/gobuffalo/plush/vendor/github.com/satori/go.uuid)
+
+* [github.com/gobuffalo/plush/vendor/github.com/serenize/snaker](https://github.com/gobuffalo/plush/vendor/github.com/serenize/snaker)
+
+* [github.com/gobuffalo/plush/vendor/github.com/sergi/go-diff/diffmatchpatch](https://github.com/gobuffalo/plush/vendor/github.com/sergi/go-diff/diffmatchpatch)
+
+* [github.com/gobuffalo/plush/vendor/github.com/shurcooL/github_flavored_markdown](https://github.com/gobuffalo/plush/vendor/github.com/shurcooL/github_flavored_markdown)
+
+* [github.com/gobuffalo/plush/vendor/github.com/shurcooL/highlight_diff](https://github.com/gobuffalo/plush/vendor/github.com/shurcooL/highlight_diff)
+
+* [github.com/gobuffalo/plush/vendor/github.com/shurcooL/highlight_go](https://github.com/gobuffalo/plush/vendor/github.com/shurcooL/highlight_go)
+
+* [github.com/gobuffalo/plush/vendor/github.com/shurcooL/octiconssvg](https://github.com/gobuffalo/plush/vendor/github.com/shurcooL/octiconssvg)
+
+* [github.com/gobuffalo/plush/vendor/github.com/shurcooL/sanitized_anchor_name](https://github.com/gobuffalo/plush/vendor/github.com/shurcooL/sanitized_anchor_name)
+
+* [github.com/gobuffalo/plush/vendor/github.com/sourcegraph/annotate](https://github.com/gobuffalo/plush/vendor/github.com/sourcegraph/annotate)
+
+* [github.com/gobuffalo/plush/vendor/github.com/sourcegraph/syntaxhighlight](https://github.com/gobuffalo/plush/vendor/github.com/sourcegraph/syntaxhighlight)
+
+* [github.com/gobuffalo/plush/vendor/golang.org/x/net/html](https://github.com/gobuffalo/plush/vendor/golang.org/x/net/html)
+
+* [github.com/gobuffalo/plush/vendor/golang.org/x/net/html/atom](https://github.com/gobuffalo/plush/vendor/golang.org/x/net/html/atom)
+
 * [github.com/gobuffalo/tags](https://github.com/gobuffalo/tags)
-
-* [github.com/gobuffalo/tags/form](https://github.com/gobuffalo/tags/form)
-
-* [github.com/gobuffalo/tags/form/bootstrap](https://github.com/gobuffalo/tags/form/bootstrap)
 
 * [github.com/gobuffalo/x/httpx](https://github.com/gobuffalo/x/httpx)
 
@@ -106,8 +150,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/validate](https://github.com/markbates/validate)
 
-* [github.com/markbates/validate/validators](https://github.com/markbates/validate/validators)
-
 * [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
 
 * [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
@@ -154,6 +196,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/builtins/sort)
 
+* [github.com/mattn/anko/builtins/strconv](https://github.com/mattn/anko/builtins/strconv)
+
 * [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/builtins/strings)
 
 * [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/builtins/time)
@@ -187,8 +231,6 @@ Thank you to the following **GIANTS**:
 * [github.com/russross/blackfriday](https://github.com/russross/blackfriday)
 
 * [github.com/satori/go.uuid](https://github.com/satori/go.uuid)
-
-* [github.com/serenize/snaker](https://github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://github.com/sergi/go-diff/diffmatchpatch)
 
