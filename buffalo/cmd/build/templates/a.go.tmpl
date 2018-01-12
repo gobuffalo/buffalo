@@ -6,9 +6,13 @@ import (
   "github.com/markbates/pop"
   "github.com/markbates/inflect"
   "github.com/gobuffalo/packr"
+  "github.com/gobuffalo/envy"
 )
 
 func init() {
+  if err := envy.MustSet("GO_ENV", "<%= opts.Environment %>"); err != nil {
+      log.Fatal(err)
+  }
   dropDatabaseYml()
 
   box := packr.NewBox("./")

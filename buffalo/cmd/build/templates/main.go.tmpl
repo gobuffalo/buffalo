@@ -9,7 +9,6 @@ import (
   _ "<%= opts.PackagePkg %>/a"
   _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
-  "github.com/gobuffalo/envy"
   "github.com/gobuffalo/packr"
   "github.com/markbates/pop"
   "<%= opts.ModelsPkg %>"
@@ -21,10 +20,6 @@ import (
 
 var BuildVersion = "unknown"
 var BuildTime = "unknown"
-
-func init() {
-  envy.Set("GO_ENV", "<%= opts.Environment%>")
-}
 
 func main() {
   args := os.Args
