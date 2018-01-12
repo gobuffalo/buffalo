@@ -16,6 +16,7 @@ type Options struct {
 	Static        bool     `json:"static"`
 	Debug         bool     `json:"debug"`
 	Compress      bool     `json:"compress"`
+	Environment   string   `json:"environment"`
 }
 
 func (o Options) String() string {
