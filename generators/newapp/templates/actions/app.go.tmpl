@@ -82,7 +82,8 @@ func App() *buffalo.App {
     app.GET("/", HomeHandler)
 
     {{ if .opts.AsWeb -}}
-    app.ServeFiles("/assets", assetsBox)
+    // serve files from the public directory:
+    app.ServeFiles("/", assetsBox)
     {{ end -}}
   }
 
