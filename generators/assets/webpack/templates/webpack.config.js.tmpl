@@ -1,18 +1,33 @@
 var webpack = require("webpack");
+var webpack = require("glob");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
 var CleanWebpackPlugin = require("clean-webpack-plugin");
 
+var entries = {
+  application: [
+    './node_modules/jquery-ujs/src/rails.js',
+  ],
+}
+
+glob.sync("./assets/*/*.*").reduce((_, entry) => {
+  let key = entry.replace(/(\.\/assets\/(js|css)\/)|(.js|.scss)/g, '')
+  if(key.startsWith("_") || (/(js|scss)$/i).test(entry) == false) {
+    return
+  }
+  
+  if( entries[key] == null) {
+    entries[key] = [entry]
+    return
+  } 
+  
+  entries[key].push(entry)
+})
+
 module.exports = {
-  entry: {
-    application: [
-      "./assets/js/application.js",
-      "./node_modules/jquery-ujs/src/rails.js",
-      "./assets/css/application.scss"
-    ]
-  },
+  entry: entries,
   output: {
     filename: "[name].[hash].js",
     path: `${__dirname}/public/assets`
