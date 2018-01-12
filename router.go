@@ -3,12 +3,14 @@ package buffalo
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path"
 	"reflect"
 	"sort"
 	"strings"
 
 	"github.com/markbates/inflect"
+	"github.com/pkg/errors"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -83,7 +85,20 @@ func (a *App) Mount(p string, h http.Handler) {
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
 	path := path.Join(a.Prefix, p)
-	a.router.PathPrefix(path).Handler(http.StripPrefix(path, http.FileServer(root)))
+	a.router.PathPrefix(path).Handler(http.StripPrefix(path, a.fileServer(root)))
+}
+
+func (a *App) fileServer(fs http.FileSystem) http.Handler {
+	fsh := http.FileServer(fs)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fs.Open(path.Clean(r.URL.Path))
+		if os.IsNotExist(err) {
+			eh := a.ErrorHandlers.Get(404)
+			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			return
+		}
+		fsh.ServeHTTP(w, r)
+	})
 }
 
 // Resource maps an implementation of the Resource interface
