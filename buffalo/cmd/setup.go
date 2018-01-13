@@ -75,7 +75,7 @@ func updateGoDepsCheck() error {
 	// go old school with the installation
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	wg, ctx := errgroup.WithContext(ctx)
+	wg, _ := errgroup.WithContext(ctx)
 	deps, err := deplist.List()
 	if err != nil {
 		return errors.WithStack(err)
