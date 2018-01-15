@@ -64,6 +64,9 @@ var newCmd = &cobra.Command{
 		app.WithWebpack = !app.SkipWebpack
 		app.WithYarn = !app.SkipYarn
 		app.AsWeb = !app.AsAPI
+		if app.AsAPI {
+			app.WithWebpack = false
+		}
 
 		if err := app.Run(app.Root, makr.Data{}); err != nil {
 			return errors.WithStack(err)
