@@ -15,6 +15,9 @@ import (
 var templates = packr.NewBox("./templates")
 
 func (b *Builder) validateTemplates() error {
+	if b.SkipTemplateValidation {
+		return nil
+	}
 	errs := []string{}
 	err := filepath.Walk(filepath.Join(b.App.Root, "templates"), func(path string, info os.FileInfo, err error) error {
 		if info == nil || info.IsDir() {
