@@ -49,6 +49,9 @@ func app() *buffalo.App {
 	app.GET("/localized", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("localized_view.html"))
 	})
+	app.GET("/languages-list", func(c buffalo.Context) error {
+		return c.Render(200, r.JSON(t.AvailableLanguages()))
+	})
 	// Disable i18n middleware
 	noI18n := func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("localized_view.html"))
@@ -148,4 +151,12 @@ func Test_i18n_collision(t *testing.T) {
 	w := willie.New(app())
 	res := w.Request("/collision").Get()
 	r.Equal("Collision OK", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_i18n_availableLanguages(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	res := w.Request("/languages-list").Get()
+	r.Equal("[\"en-us\",\"fr-fr\"]", strings.TrimSpace(res.Body.String()))
 }
