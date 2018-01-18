@@ -14,7 +14,7 @@ var entries = {
 }
 
 glob.sync("./assets/*/*.*").reduce((_, entry) => {
-  let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|(.js|.scss|.go)/g, '')
+  let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|scss|go)/g, '')
   if(key.startsWith("_") || (/(js|scss|go)$/i).test(entry) == false) {
     return
   }
@@ -38,7 +38,6 @@ module.exports = {
       "public/assets"
     ], {
       verbose: false,
-      watch: true
     }),
     new webpack.ProvidePlugin({
       $: "jquery",
@@ -87,26 +86,8 @@ module.exports = {
           ]
         })
       },
-      {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/font-woff"
-      },
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/font-woff"
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/octet-stream"
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: "file-loader"
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=image/svg+xml"
-      },
+      { test: /\.(woff|woff2|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,use: "url-loader"},
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,use: "file-loader" },
       {
         test: require.resolve("jquery"),
         use: "expose-loader?jQuery!expose-loader?$"
