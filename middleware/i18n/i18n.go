@@ -145,6 +145,11 @@ func (t *Translator) Translate(c buffalo.Context, translationID string, args ...
 	return T(translationID, args...)
 }
 
+// AvailableLanguages gets the list of languages provided by the app
+func (t *Translator) AvailableLanguages() []string {
+	return i18n.LanguageTags()
+}
+
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {
 	langs := []string{}
 
