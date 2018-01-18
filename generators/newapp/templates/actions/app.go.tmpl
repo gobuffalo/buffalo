@@ -18,6 +18,7 @@ import (
   {{ end -}}
 
   {{ if .opts.AsAPI -}}
+  "github.com/rs/cors"
   "github.com/gobuffalo/x/sessions"
   {{ end -}}
 )
@@ -39,6 +40,9 @@ func App() *buffalo.App {
       Env: ENV,
       {{ if .opts.AsAPI -}}
       SessionStore: sessions.Null{},
+      PreWares: []buffalo.PreWare{
+        cors.Default().Handler,
+      },
       {{ end -}}
       SessionName: "_{{.opts.Name.File}}_session",
     })
