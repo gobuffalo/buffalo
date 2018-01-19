@@ -104,6 +104,10 @@ func defaultErrorHandler(status int, err error, c Context) error {
 			"params":      c.Params(),
 			"posted_form": c.Request().Form,
 			"context":     c,
+			"headers":     c.Request().Header,
+			"inspect": func(v interface{}) string {
+				return fmt.Sprintf("%+v", v)
+			},
 		}
 		ctx := plush.NewContextWith(data)
 		t, err := plush.Render(devErrorTmpl, ctx)
