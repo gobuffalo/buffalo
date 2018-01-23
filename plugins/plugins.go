@@ -35,7 +35,6 @@ func Available() (List, error) {
 
 	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
 	if err != nil {
-		logrus.Warn(warningMessage)
 		from = envy.Get("PATH", "")
 	}
 
@@ -111,5 +110,3 @@ func ignorePath(p string) bool {
 	}
 	return false
 }
-
-const warningMessage = `Could not find BUFFALO_PLUGIN_PATH environment variable, default to PATH instead. Consider setting the BUFFALO_PLUGIN_PATH variable to speed up loading of plugins and/or to set a custom path for locating them.`
