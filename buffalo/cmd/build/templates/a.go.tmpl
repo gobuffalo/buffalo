@@ -10,9 +10,11 @@ import (
 )
 
 func init() {
+  <%= if (opts.Environment != "development") %>
   if err := envy.MustSet("GO_ENV", "<%= opts.Environment %>"); err != nil {
       log.Fatal(err)
   }
+  <% } %>
   dropDatabaseYml()
 
   box := packr.NewBox("./")
