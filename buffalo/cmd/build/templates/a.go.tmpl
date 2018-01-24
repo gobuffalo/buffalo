@@ -6,7 +6,9 @@ import (
   "github.com/markbates/pop"
   "github.com/markbates/inflect"
   "github.com/gobuffalo/packr"
+  <%= if (opts.Environment != "development") %>
   "github.com/gobuffalo/envy"
+  <% } %>
 )
 
 func init() {
