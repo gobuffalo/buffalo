@@ -12,7 +12,7 @@ var mailer = mail.Generator{}
 
 // MailCmd for generating mailers
 var MailCmd = &cobra.Command{
-	Use:   "mailer",
+	Use:   "mailer [name]",
 	Short: "Generates a new mailer for Buffalo",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {

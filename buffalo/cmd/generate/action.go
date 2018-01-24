@@ -15,7 +15,7 @@ var actionOptions = struct {
 
 //ActionCmd is the cmd that generates actions.
 var ActionCmd = &cobra.Command{
-	Use:     "action [name] [actionName...]",
+	Use:     "action [name] [handler name...]",
 	Aliases: []string{"a", "actions"},
 	Short:   "Generates new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
