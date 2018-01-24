@@ -2,11 +2,9 @@ package buffalo
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"net/http"
 	"os"
-	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -15,7 +13,6 @@ import (
 
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
-	"github.com/markbates/going/defaults"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
@@ -34,20 +31,6 @@ type App struct {
 	routes        RouteList
 	root          *App
 	children      []*App
-}
-
-// Start is deprecated, and will be removed in v0.11.0. Use app.Serve instead.
-func (a *App) Start(port string) error {
-	warningMsg := "Start is deprecated, and will be removed in v0.11.0. Use app.Serve instead."
-	_, file, no, ok := runtime.Caller(1)
-	if ok {
-		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
-	}
-
-	logrus.Info(warningMsg)
-
-	a.Addr = defaults.String(a.Addr, fmt.Sprintf("%s:%s", envy.Get("ADDR", "127.0.0.1"), port))
-	return a.Serve()
 }
 
 // Serve the application at the specified address/port and listen for OS
