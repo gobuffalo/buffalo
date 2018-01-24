@@ -9,7 +9,7 @@ import (
 
 var r *render.Engine
 {{ if .opts.AsWeb -}}
-var assetsBox = packr.NewBox("../public/assets")
+var assetsBox = packr.NewBox("../public")
 {{ end -}}
 
 func init() {

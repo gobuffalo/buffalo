@@ -188,10 +188,7 @@ func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) boo
 	sh := func(h http.Handler) bool {
 		h.ServeHTTP(res, req)
 		if br, ok := res.(*Response); ok {
-			if (br.Status < 200 || br.Status > 299) && br.Status > 0 {
-				return false
-			}
-			if br.Size > 0 {
+			if br.Status > 0 || br.Size > 0 {
 				return false
 			}
 		}

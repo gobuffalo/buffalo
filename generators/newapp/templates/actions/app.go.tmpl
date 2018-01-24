@@ -18,6 +18,7 @@ import (
   {{ end -}}
 
   {{ if .opts.AsAPI -}}
+  "github.com/rs/cors"
   "github.com/gobuffalo/x/sessions"
   {{ end -}}
 )
@@ -39,6 +40,9 @@ func App() *buffalo.App {
       Env: ENV,
       {{ if .opts.AsAPI -}}
       SessionStore: sessions.Null{},
+      PreWares: []buffalo.PreWare{
+        cors.Default().Handler,
+      },
       {{ end -}}
       SessionName: "_{{.opts.Name.File}}_session",
     })
@@ -82,7 +86,7 @@ func App() *buffalo.App {
     app.GET("/", HomeHandler)
 
     {{ if .opts.AsWeb -}}
-    app.ServeFiles("/assets", assetsBox)
+    app.ServeFiles("/", assetsBox) // serve files from the public directory
     {{ end -}}
   }
 

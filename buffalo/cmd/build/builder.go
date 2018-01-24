@@ -29,6 +29,7 @@ func New(ctx context.Context, opts Options) *Builder {
 
 	b.steps = []func() error{
 		b.prepTarget,
+		b.validateTemplates,
 		b.transformMain,
 		b.createBuildMain,
 		b.prepAPackage,
