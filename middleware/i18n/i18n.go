@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
@@ -143,6 +144,13 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 func (t *Translator) Translate(c buffalo.Context, translationID string, args ...interface{}) string {
 	T := c.Value("T").(i18n.TranslateFunc)
 	return T(translationID, args...)
+}
+
+// AvailableLanguages gets the list of languages provided by the app
+func (t *Translator) AvailableLanguages() []string {
+	lt := i18n.LanguageTags()
+	sort.Strings(lt)
+	return lt
 }
 
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {

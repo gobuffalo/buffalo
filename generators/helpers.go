@@ -37,10 +37,24 @@ func AddInsideAppBlock(expressions ...string) error {
 		return errors.New("could not find desired block on the app.go file")
 	}
 
+	el := fileLines[end:]
+	sl := []string{}
+	sf := []string{}
+	for _, l := range fileLines[:end] {
+		// if there's a app.ServeFiles("/", foo) line it needs to be the last added to the router
+		if strings.Contains(l, "ServeFiles(\"/\"") {
+			sf = append(sf, l)
+			continue
+		}
+		sl = append(sl, l)
+	}
+
 	for i := 0; i < len(expressions); i++ {
 		expressions[i] = fmt.Sprintf("\t\t%s", expressions[i])
 	}
-	fileLines = append(fileLines[:end], append(expressions, fileLines[end:]...)...)
+
+	el = append(sf, el...)
+	fileLines = append(sl, append(expressions, el...)...)
 
 	fileContent := strings.Join(fileLines, "\n")
 	err = ioutil.WriteFile("actions/app.go", []byte(fileContent), 0755)

@@ -59,7 +59,7 @@ func (g Generator) Validate() error {
 		return errors.New("you must enter a name for your new application")
 	}
 
-	if g.DBType != "postgres" && g.DBType != "mysql" && g.DBType != "sqlite3" {
+	if g.DBType != "postgres" && g.DBType != "mysql" && g.DBType != "sqlite3" && g.DBType != "cockroach" {
 		return fmt.Errorf("Unknown db-type %s expecting one of postgres, mysql or sqlite3", g.DBType)
 	}
 
