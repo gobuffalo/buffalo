@@ -22,6 +22,9 @@ builds:
     main: ./buffalo/main.go
     binary: buffalo-no-sqlite
     flags: -tags nosqlite
+    hooks:
+      pre: packr
+      post: packr clean
   -
     goos:
       - darwin
@@ -31,6 +34,9 @@ builds:
       - "6"
     main: ./buffalo/main.go
     binary: buffalo-with-sqlite
+    hooks:
+      pre: packr
+      post: packr clean
 archive:
   name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm
     }}v{{ .Arm }}{{ end }}'
