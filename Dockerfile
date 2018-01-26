@@ -134,3 +134,13 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 RUN rm -rf bin
 RUN buffalo build -k -e
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
+
+WORKDIR $GOPATH/src
+RUN buffalo new --db-type=sqlite3 resource_tests
+
+WORKDIR ./resource_tests
+RUN buffalo db create
+
+RUN buffalo g r collegeBooks title value:int delivered:bool bio:nulls.text val:nulls.Int
+RUN buffalo db migrate
+RUN buffalo test
