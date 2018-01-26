@@ -9,8 +9,9 @@ import (
 
 // Prop of a model. Starts as name:type on the command line.
 type Prop struct {
-	Name meta.Name
-	Type string
+	Name         meta.Name
+	Type         string
+	OriginalType string
 }
 
 // String representation of Prop
@@ -26,10 +27,12 @@ func modelPropertiesFromArgs(args []string) []Prop {
 	for _, a := range args[1:] {
 		ax := strings.Split(a, ":")
 		p := Prop{
-			Name: meta.Name(inflect.ForeignKeyToAttribute(ax[0])),
-			Type: "string",
+			Name:         meta.Name(inflect.ForeignKeyToAttribute(ax[0])),
+			Type:         "string",
+			OriginalType: "string",
 		}
 		if len(ax) > 1 {
+			p.OriginalType = strings.ToLower(ax[1])
 			p.Type = strings.ToLower(strings.TrimPrefix(ax[1], "nulls."))
 		}
 		props = append(props, p)
