@@ -43,15 +43,20 @@ func (t *Translator) Load() error {
 	return t.Box.Walk(func(path string, f packr.File) error {
 		b, err := t.Box.MustBytes(path)
 		if err != nil {
-			log.Fatal(err)
-			return errors.WithStack(err)
+			wErr := errors.Wrapf(err, "Unable to read locale file %s", path)
+			log.Fatal(wErr)
+			return wErr
 		}
 
 		base := filepath.Base(path)
 		dir := filepath.Dir(path)
 
 		// Add a prefix to the loaded string, to avoid collision with an ISO lang code
-		return i18n.ParseTranslationFileBytes(fmt.Sprintf("%sbuff%s", dir, base), b)
+		err = i18n.ParseTranslationFileBytes(fmt.Sprintf("%sbuff%s", dir, base), b)
+		if err != nil {
+			return errors.Wrapf(err, "Unable to parse locale file %s", base)
+		}
+		return nil
 	})
 }
 
@@ -108,7 +113,8 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 				langs := c.Value("languages").([]string)
 				T, err := i18n.Tfunc(langs[0], langs[1:]...)
 				if err != nil {
-					return err
+					c.Logger().Warn(err)
+					c.Logger().Warn("Your locale files are probably empty or missing")
 				}
 				c.Set("T", T)
 			}
