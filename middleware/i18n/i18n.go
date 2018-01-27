@@ -2,7 +2,6 @@ package i18n
 
 import (
 	"fmt"
-	"log"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -43,9 +42,7 @@ func (t *Translator) Load() error {
 	return t.Box.Walk(func(path string, f packr.File) error {
 		b, err := t.Box.MustBytes(path)
 		if err != nil {
-			wErr := errors.Wrapf(err, "Unable to read locale file %s", path)
-			log.Fatal(wErr)
-			return wErr
+			return errors.Wrapf(err, "unable to read locale file %s", path)
 		}
 
 		base := filepath.Base(path)
@@ -54,7 +51,7 @@ func (t *Translator) Load() error {
 		// Add a prefix to the loaded string, to avoid collision with an ISO lang code
 		err = i18n.ParseTranslationFileBytes(fmt.Sprintf("%sbuff%s", dir, base), b)
 		if err != nil {
-			return errors.Wrapf(err, "Unable to parse locale file %s", base)
+			return errors.Wrapf(err, "unable to parse locale file %s", base)
 		}
 		return nil
 	})
