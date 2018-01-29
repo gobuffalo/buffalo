@@ -26,10 +26,6 @@ func (as *ActionSuite) Create{{.opts.Model.Model}}() *models.{{.opts.Model.Model
   					{{ $p.Name }}: "some string",
 				{{ else if eq $p.OriginalType "int" -}}
 					{{ $p.Name }}: 1234567890,
-				{{ else if eq $p.OriginalType "nulls.string" "nulls.text" -}}
-					{{ $p.Name }}: nulls.NewString("some string"),
-				{{ else if eq $p.OriginalType "nulls.int" -}}
-					{{ $p.Name }}: nulls.NewInt(1234567890),
 				{{ end -}}
 			{{ end -}}
 		{{ end -}}
@@ -73,10 +69,6 @@ func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Create() {
   					{{ $p.Name }}: "some string",
 				{{ else if eq $p.OriginalType "int" -}}
 					{{ $p.Name }}: 1234567890,
-				{{ else if eq $p.OriginalType "nulls.string" "nulls.text" -}}
-					{{ $p.Name }}: nulls.NewString("some string"),
-				{{ else if eq $p.OriginalType "nulls.int" -}}
-					{{ $p.Name }}: nulls.NewInt(1234567890),
 				{{ end -}}
 			{{ end -}}
 		{{ end -}}
