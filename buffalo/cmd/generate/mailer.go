@@ -4,6 +4,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/mail"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +20,7 @@ var MailCmd = &cobra.Command{
 			return errors.New("you must supply a name for your mailer")
 		}
 		mailer.App = meta.New(".")
-		mailer.Name = meta.Name(args[0])
+		mailer.Name = inflect.Name(args[0])
 		data := makr.Data{}
 		return mailer.Run(".", data)
 

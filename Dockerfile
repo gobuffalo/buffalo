@@ -6,6 +6,7 @@ RUN go get -v -u github.com/golang/lint/golint
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/markbates/grift
+RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
 RUN go get -v -u github.com/gobuffalo/tags
 
@@ -17,7 +18,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t $(go list ./... | grep -v /vendor/)
+RUN go get -v -t ./...
 
 RUN go install -v ./buffalo
 
