@@ -139,8 +139,6 @@ WORKDIR $GOPATH/src
 RUN buffalo new --db-type=sqlite3 resource_tests
 
 WORKDIR ./resource_tests
-RUN buffalo db create
 
-RUN buffalo g r collegeBooks title value:int delivered:bool bio:nulls.text val:nulls.Int
-RUN buffalo db migrate
-RUN buffalo test
+RUN buffalo g resource collegeBooks title value:int delivered:bool bio:nulls.text val:nulls.Int
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_test.json
