@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -35,7 +36,7 @@ func (d Generator) Run(root string, data makr.Data) error {
 }
 
 func (d Generator) initGenerator(data makr.Data) error {
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "mail", "init"))
+	files, err := generators.FindByBox(packr.NewBox("./init/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
