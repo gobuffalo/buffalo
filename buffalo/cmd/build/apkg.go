@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -53,11 +54,21 @@ func (b *Builder) buildAInit() error {
 		return errors.WithStack(err)
 	}
 	defer f.Close()
-	t, err := templates.MustBytes("a.go.tmpl")
+
+	ctx := plush.NewContext()
+	ctx.Set("opts", b.Options)
+
+	t, err := templates.MustString("a.go.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	_, err = f.Write(t)
+
+	s, err := plush.Render(t, ctx)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	_, err = f.WriteString(s)
 	if err != nil {
 		return errors.WithStack(err)
 	}
