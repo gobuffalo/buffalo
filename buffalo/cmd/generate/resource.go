@@ -3,10 +3,10 @@ package generate
 import (
 	"strings"
 
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +35,7 @@ var ResourceCmd = &cobra.Command{
 		o.SkipMigration = resourceOptions.SkipMigration
 		if resourceOptions.ModelName != "" {
 			o.UseModel = true
-			o.Model = meta.Name(resourceOptions.ModelName)
+			o.Model = inflect.Name(resourceOptions.ModelName)
 		}
 
 		if err := o.Validate(); err != nil {

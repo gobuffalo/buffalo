@@ -8,14 +8,15 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr"
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
 // Generator for creating new mailers
 type Generator struct {
-	App      meta.App  `json:"app"`
-	Name     meta.Name `json:"name"`
-	SkipInit bool      `json:"skip_init"`
+	App      meta.App     `json:"app"`
+	Name     inflect.Name `json:"name"`
+	SkipInit bool         `json:"skip_init"`
 }
 
 // Run the new mailer generator. It will init the mailers directory
