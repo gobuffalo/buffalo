@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
@@ -39,11 +40,11 @@ var newCmd = &cobra.Command{
 			return errors.New("you must enter a name for your new application")
 		}
 
-		app.Name = meta.Name(args[0])
+		app.Name = inflect.Name(args[0])
 		app.Version = Version
 
 		if app.Name == "." {
-			app.Name = meta.Name(filepath.Base(app.Root))
+			app.Name = inflect.Name(filepath.Base(app.Root))
 		} else {
 			app.Root = filepath.Join(app.Root, app.Name.File())
 		}

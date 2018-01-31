@@ -9,6 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
@@ -42,10 +43,10 @@ func New(name string) (Generator, error) {
 		AsWeb:      true,
 		Docker:     "multi",
 	}
-	g.Name = meta.Name(name)
+	g.Name = inflect.Name(name)
 
 	if g.Name == "." {
-		g.Name = meta.Name(filepath.Base(g.Root))
+		g.Name = inflect.Name(filepath.Base(g.Root))
 	} else {
 		g.Root = filepath.Join(g.Root, g.Name.File())
 	}
