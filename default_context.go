@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -165,9 +166,13 @@ func (d *DefaultContext) Error(status int, err error) error {
 	return HTTPError{Status: status, Cause: errors.WithStack(err)}
 }
 
-// Websocket returns an upgraded github.com/gorilla/websocket.Conn
-// that can then be used to work with websockets easily.
+// Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead.
 func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
+	warningMsg := "Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
 	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
 }
 
