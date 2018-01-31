@@ -45,7 +45,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 	g.Add(logo)
 
-	files, err := generators.FindByBox(packr.NewBox("./templates"))
+	files, err := generators.FindByBox(packr.NewBox("../webpack/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
