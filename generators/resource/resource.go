@@ -30,7 +30,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 		tmplName = "resource-name"
 	}
 
-	files, err := generators.FindByBox(packr.NewBox("./templates"))
+	files, err := generators.FindByBox(packr.NewBox("../resource/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

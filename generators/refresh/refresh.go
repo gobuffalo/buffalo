@@ -11,7 +11,7 @@ import (
 func Run(root string, data makr.Data) error {
 	g := makr.New()
 
-	files, err := generators.FindByBox(packr.NewBox("./templates"))
+	files, err := generators.FindByBox(packr.NewBox("../refresh/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

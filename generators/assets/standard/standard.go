@@ -15,7 +15,7 @@ var logo = &makr.RemoteFile{
 
 // Run standard assets generator for those wishing to not use webpack
 func Run(root string, data makr.Data) error {
-	files, err := generators.FindByBox(packr.NewBox("./templates"))
+	files, err := generators.FindByBox(packr.NewBox("../standard/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
