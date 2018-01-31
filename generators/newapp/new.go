@@ -37,7 +37,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
-	files, err := generators.FindByBox(packr.NewBox("./templates"))
+	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
