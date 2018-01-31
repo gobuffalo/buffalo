@@ -140,7 +140,10 @@ func (s templateRenderer) assetPath(file string) (string, error) {
 		manifest, err := s.AssetsBox.MustString("manifest.json")
 
 		if err != nil {
-			return assetPathFor(file), nil
+			manifest, err = s.AssetsBox.MustString("assets/manifest.json")
+			if err != nil {
+				return assetPathFor(file), nil
+			}
 		}
 
 		err = loadManifest(manifest)

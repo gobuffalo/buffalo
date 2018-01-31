@@ -75,7 +75,7 @@ func updateGoDepsCheck() error {
 	// go old school with the installation
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	wg, ctx := errgroup.WithContext(ctx)
+	wg, _ := errgroup.WithContext(ctx)
 	deps, err := deplist.List()
 	if err != nil {
 		return errors.WithStack(err)
@@ -191,7 +191,7 @@ func yarnCheck() error {
 		return errors.WithStack(err)
 	}
 	if _, err := exec.LookPath("yarn"); err != nil {
-		err := run(exec.Command("npm", "install", "yarn"))
+		err := run(exec.Command("npm", "install", "-g", "yarn"))
 		if err != nil {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}

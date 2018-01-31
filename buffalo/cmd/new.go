@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
@@ -39,11 +40,11 @@ var newCmd = &cobra.Command{
 			return errors.New("you must enter a name for your new application")
 		}
 
-		app.Name = meta.Name(args[0])
+		app.Name = inflect.Name(args[0])
 		app.Version = Version
 
 		if app.Name == "." {
-			app.Name = meta.Name(filepath.Base(app.Root))
+			app.Name = inflect.Name(filepath.Base(app.Root))
 		} else {
 			app.Root = filepath.Join(app.Root, app.Name.File())
 		}
@@ -64,6 +65,9 @@ var newCmd = &cobra.Command{
 		app.WithWebpack = !app.SkipWebpack
 		app.WithYarn = !app.SkipYarn
 		app.AsWeb = !app.AsAPI
+		if app.AsAPI {
+			app.WithWebpack = false
+		}
 
 		if err := app.Run(app.Root, makr.Data{}); err != nil {
 			return errors.WithStack(err)
@@ -128,7 +132,7 @@ func init() {
 	newCmd.Flags().BoolVar(&app.WithDep, "with-dep", false, "adds github.com/golang/dep to your app")
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().BoolVar(&app.SkipYarn, "skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
-	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3]")
+	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", "specify the type of database you want to use [postgres, mysql, sqlite3, cockroach]")
 	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().StringVar(&app.VCS, "vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")

@@ -3,13 +3,12 @@ package resource
 import (
 	"strings"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/markbates/inflect"
 )
 
 // Prop of a model. Starts as name:type on the command line.
 type Prop struct {
-	Name meta.Name
+	Name inflect.Name
 	Type string
 }
 
@@ -26,7 +25,7 @@ func modelPropertiesFromArgs(args []string) []Prop {
 	for _, a := range args[1:] {
 		ax := strings.Split(a, ":")
 		p := Prop{
-			Name: meta.Name(inflect.ForeignKeyToAttribute(ax[0])),
+			Name: inflect.Name(inflect.ForeignKeyToAttribute(ax[0])),
 			Type: "string",
 		}
 		if len(ax) > 1 {
