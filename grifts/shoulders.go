@@ -18,7 +18,6 @@ var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages 
 var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 	giants, _ := deplist.List("examples")
 	for _, k := range []string{
-		"github.com/motemen/gore",
 		"golang.org/x/tools/cmd/goimports",
 	} {
 		giants[k] = k

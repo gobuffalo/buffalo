@@ -35,7 +35,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 	if a.WithDep {
 		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 	}
-	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
 	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
 	if err != nil {
