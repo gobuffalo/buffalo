@@ -153,7 +153,7 @@ func New(opts Options) *App {
 	}
 	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		c := a.newContext(RouteInfo{}, res, req)
-		err := errors.Errorf("path not found: %s", req.URL.Path)
+		err := errors.Errorf("path not found: %s %s", req.Method, req.URL.Path)
 		a.ErrorHandlers.Get(404)(404, err, c)
 	})
 
