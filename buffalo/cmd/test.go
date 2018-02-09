@@ -100,7 +100,7 @@ func testRunner(args []string) error {
 	}
 
 	if !runFlag {
-		pkgs, err := testPackages(args)
+		pkgs, err := testPackages()
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -115,7 +115,7 @@ func mFlagRunner(args []string) error {
 	pwd, _ := os.Getwd()
 	defer os.Chdir(pwd)
 
-	pkgs, err := testPackages(args)
+	pkgs, err := testPackages()
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -139,14 +139,7 @@ func mFlagRunner(args []string) error {
 	return nil
 }
 
-func testPackages(givenArgs []string) ([]string, error) {
-	// If there are args, then assume these are the packages to test.
-	//
-	// Instead of always returning all packages from 'go list ./...', just
-	// return the given packages in this case
-	if len(givenArgs) > 0 {
-		return givenArgs, nil
-	}
+func testPackages() ([]string, error) {
 	args := []string{}
 	out, err := exec.Command(envy.Get("GO_BIN", "go"), "list", "./...").Output()
 	if err != nil {
@@ -166,6 +159,7 @@ func newTestCmd(args []string) *exec.Cmd {
 	if _, err := exec.LookPath("gotest"); err == nil {
 		cmd = exec.Command("gotest", "-p", "1")
 	}
+	cmd.Args = append(cmd.Args, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
