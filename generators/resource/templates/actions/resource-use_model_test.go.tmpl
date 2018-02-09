@@ -6,17 +6,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func (as *ActionSuite) TableChange(table string, count int, fn func()) {
-	scount, err := as.DB.Count(table)
-	as.NoError(err)
-
-	fn()
-
-	ecount, err := as.DB.Count(table)
-	as.NoError(err)
-	as.Equal(count, ecount-scount)
-}
-
 // Create{{.opts.Model.Model}} creates a default model
 func (as *ActionSuite) Create{{.opts.Model.Model}}() *models.{{.opts.Model.Model}}{
 	{{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{
