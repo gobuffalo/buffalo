@@ -126,21 +126,21 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/inflect](https://github.com/markbates/inflect)
 
-* [github.com/markbates/pop](https://github.com/markbates/pop)
+* [github.com/gobuffalo/pop](https://github.com/gobuffalo/pop)
 
-* [github.com/markbates/pop/columns](https://github.com/markbates/pop/columns)
+* [github.com/gobuffalo/pop/columns](https://github.com/gobuffalo/pop/columns)
 
-* [github.com/markbates/pop/fizz](https://github.com/markbates/pop/fizz)
+* [github.com/gobuffalo/pop/fizz](https://github.com/gobuffalo/pop/fizz)
 
-* [github.com/markbates/pop/fizz/translators](https://github.com/markbates/pop/fizz/translators)
+* [github.com/gobuffalo/pop/fizz/translators](https://github.com/gobuffalo/pop/fizz/translators)
 
-* [github.com/markbates/pop/nulls](https://github.com/markbates/pop/nulls)
+* [github.com/gobuffalo/pop/nulls](https://github.com/gobuffalo/pop/nulls)
 
-* [github.com/markbates/pop/soda/cmd](https://github.com/markbates/pop/soda/cmd)
+* [github.com/gobuffalo/pop/soda/cmd](https://github.com/gobuffalo/pop/soda/cmd)
 
-* [github.com/markbates/pop/soda/cmd/generate](https://github.com/markbates/pop/soda/cmd/generate)
+* [github.com/gobuffalo/pop/soda/cmd/generate](https://github.com/gobuffalo/pop/soda/cmd/generate)
 
-* [github.com/markbates/pop/soda/cmd/schema](https://github.com/markbates/pop/soda/cmd/schema)
+* [github.com/gobuffalo/pop/soda/cmd/schema](https://github.com/gobuffalo/pop/soda/cmd/schema)
 
 * [github.com/markbates/refresh/refresh](https://github.com/markbates/refresh/refresh)
 

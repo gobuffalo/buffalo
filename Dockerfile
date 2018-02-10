@@ -21,9 +21,9 @@ ADD . .
 
 RUN go get -v -t ./...
 
-RUN go install -v ./buffalo
+RUN go install -v -tags sqlite ./buffalo
 
-RUN go test -race $(go list ./... | grep -v /vendor/)
+RUN go test -tags sqlite -race $(go list ./... | grep -v /vendor/)
 
 RUN golint -set_exit_status $(go list ./... | grep -v /vendor/)
 
