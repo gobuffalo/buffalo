@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/pop/nulls"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/pop/nulls"
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
 )

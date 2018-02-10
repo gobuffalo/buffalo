@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/gobuffalo/buffalo/buffalo/cmd/destroy"
-	"github.com/markbates/pop/soda/cmd"
+	"github.com/gobuffalo/pop/soda/cmd"
 	"github.com/spf13/cobra"
 )
 
