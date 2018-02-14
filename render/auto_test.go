@@ -1,7 +1,8 @@
 package render_test
 
 import (
-	"fmt"
+	"bytes"
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
@@ -14,256 +15,201 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type Car struct {
-	ID   int
-	Name string
-}
-
-type Cars []Car
-
 func Test_Auto_JSON(t *testing.T) {
 	r := require.New(t)
 
-	app := buffalo.New(buffalo.Options{})
-	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, render.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
-	})
+	ctx := context.WithValue(context.Background(), "contentType", "application/json")
 
-	w := willie.New(app)
+	ir := render.Auto(ctx, []string{"John", "Paul", "George", "Ringo"})
+	r.Equal("application/json", ir.ContentType())
 
-	res := w.JSON("/cars").Get()
-	r.Equal(`["Honda","Toyota","Ford","Chevy"]`, strings.TrimSpace(res.Body.String()))
+	bb := &bytes.Buffer{}
+	r.NoError(ir.Render(bb, render.Data{}))
+	r.Equal(`["John","Paul","George","Ringo"]`, strings.TrimSpace(bb.String()))
 }
 
 func Test_Auto_XML(t *testing.T) {
 	r := require.New(t)
 
-	app := buffalo.New(buffalo.Options{})
-	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, render.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
-	})
+	ctx := context.WithValue(context.Background(), "contentType", "application/xml")
 
-	w := willie.New(app)
+	ir := render.Auto(ctx, []string{"John", "Paul", "George", "Ringo"})
+	r.Equal("application/xml", ir.ContentType())
 
-	res := w.XML("/cars").Get()
-	r.Equal("<string>Honda</string>\n<string>Toyota</string>\n<string>Ford</string>\n<string>Chevy</string>", strings.TrimSpace(res.Body.String()))
+	bb := &bytes.Buffer{}
+	r.NoError(ir.Render(bb, render.Data{}))
+	r.Equal("<string>John</string>\n<string>Paul</string>\n<string>George</string>\n<string>Ringo</string>", strings.TrimSpace(bb.String()))
 }
+
+type Beatle struct {
+	ID   int
+	Name string
+}
+
+type Beatles []Beatle
 
 func Test_Auto_HTML_List(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "GET")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/index.html", p), "INDEX: <%= len(cars) %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.GET(fmt.Sprintf("/%s", p), func(c buffalo.Context) error {
-				return c.Render(200, e.Auto(c, Cars{
-					{Name: "Ford"},
-					{Name: "Chevy"},
-				}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s", p).Get()
-
-			r.Contains(res.Body.String(), "INDEX: 2")
+	err := withHTMLFile("beatles/index.html", "INDEX: <%= len(beatles) %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatles{
+			{Name: "John"},
+			{Name: "Paul"},
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method": "GET",
+		}))
+		r.Contains(bb.String(), "INDEX: 2")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Show(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "GET")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/show.html", p), "Show: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.GET(fmt.Sprintf("/%s/{id}", p), func(c buffalo.Context) error {
-				return c.Render(200, e.Auto(c, Car{Name: "Honda"}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s/1", p).Get()
-			r.Contains(res.Body.String(), "Show: Honda")
+	err := withHTMLFile("beatles/show.html", "Show: <%= beatle.Name %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatle{
+			Name: "John",
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method":       "GET",
+			"current_path": "/beatles/1",
+		}))
+		r.Contains(bb.String(), "Show: John")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_New(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "GET")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/new.html", p), "New: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.GET(fmt.Sprintf("/%s/new", p), func(c buffalo.Context) error {
-				return c.Render(200, e.Auto(c, Car{Name: "Honda"}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s/new", p).Get()
-			r.Contains(res.Body.String(), "New: Honda")
+	err := withHTMLFile("beatles/new.html", "New: <%= beatle.Name %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatle{
+			Name: "John",
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method":       "GET",
+			"current_path": "/beatles/new",
+		}))
+		r.Contains(bb.String(), "New: John")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Create(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "POST")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/new.html", p), "New: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.POST(fmt.Sprintf("/%s", p), func(c buffalo.Context) error {
-				return c.Render(201, e.Auto(c, Car{Name: "Honda"}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s", p).Post(nil)
-			r.Contains(res.Body.String(), "New: Honda")
+	err := withHTMLFile("beatles/new.html", "New: <%= beatle.Name %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatle{
+			Name: "John",
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method":       "POST",
+			"current_path": "/beatles",
+		}))
+		r.Contains(bb.String(), "New: John")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 	r := require.New(t)
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		app := buffalo.New(buffalo.Options{})
-		app.POST(fmt.Sprintf("/%s", p), func(c buffalo.Context) error {
-			return c.Render(201, render.Auto(c, Car{
-				ID:   1,
-				Name: "Honda",
-			}))
-		})
+	app := buffalo.New(buffalo.Options{})
+	app.POST("/beatles", func(c buffalo.Context) error {
+		b := Beatle{
+			ID:   1,
+			Name: "John",
+		}
+		return c.Render(302, render.Auto(c, b))
+	})
 
-		w := willie.New(app)
-		res := w.HTML("/%s", p).Post(nil)
-		r.Equal(fmt.Sprintf("/%s/1", p), res.Location())
-		r.Equal(302, res.Code)
-	}
-}
-
-func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
-	r := require.New(t)
-
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/new.html", p), "Create: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.POST(fmt.Sprintf("/%s", p), func(c buffalo.Context) error {
-				b := Car{
-					Name: "Honda",
-				}
-				return c.Render(422, e.Auto(c, b))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s", p).Post(nil)
-			r.Equal(422, res.Code)
-			r.Contains(res.Body.String(), "Create: Honda")
-		})
-		r.NoError(err)
-	}
+	w := willie.New(app)
+	res := w.HTML("/beatles").Post(nil)
+	r.Equal("/beatles/1", res.Location())
 }
 
 func Test_Auto_HTML_Edit(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "GET")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/edit.html", p), "Edit: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.GET(fmt.Sprintf("/%s/{id}/edit", p), func(c buffalo.Context) error {
-				return c.Render(200, e.Auto(c, Car{Name: "Honda"}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s/1/edit", p).Get()
-			r.Contains(res.Body.String(), "Edit: Honda")
+	err := withHTMLFile("beatles/edit.html", "Edit: <%= beatle.Name %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatle{
+			Name: "John",
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method":       "GET",
+			"current_path": "/beatles/1/edit",
+		}))
+		r.Contains(bb.String(), "Edit: John")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Update(t *testing.T) {
 	r := require.New(t)
+	ctx := context.WithValue(context.Background(), "method", "PUT")
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/edit.html", p), "Update: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.PUT(fmt.Sprintf("/%s/{id}", p), func(c buffalo.Context) error {
-				return c.Render(422, e.Auto(c, Car{Name: "Honda"}))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s/1", p).Put(nil)
-
-			r.Contains(res.Body.String(), "Update: Honda")
+	err := withHTMLFile("beatles/edit.html", "Update: <%= beatle.Name %>", func(e *render.Engine) {
+		ir := e.Auto(ctx, Beatle{
+			Name: "John",
 		})
-		r.NoError(err)
-	}
+		r.Equal("text/html", ir.ContentType())
+		bb := &bytes.Buffer{}
+		r.NoError(ir.Render(bb, render.Data{
+			"method": "PUT",
+		}))
+		r.Contains(bb.String(), "Update: John")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Update_Redirect(t *testing.T) {
 	r := require.New(t)
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		app := buffalo.New(buffalo.Options{})
-		app.PUT(fmt.Sprintf("/%s/{id}", p), func(c buffalo.Context) error {
-			b := Car{
-				ID:   1,
-				Name: "Honda",
-			}
-			return c.Render(200, render.Auto(c, b))
-		})
+	app := buffalo.New(buffalo.Options{})
+	app.PUT("/beatles/{id}", func(c buffalo.Context) error {
+		b := Beatle{
+			ID:   1,
+			Name: "John",
+		}
+		return c.Render(302, render.Auto(c, b))
+	})
 
-		w := willie.New(app)
-		res := w.HTML("/%s/1", p).Put(nil)
-		r.Equal(fmt.Sprintf("/%s/1", p), res.Location())
-		r.Equal(302, res.Code)
-	}
-}
-
-func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
-	r := require.New(t)
-
-	for _, p := range []string{"cars", "admin/cars"} {
-		err := withHTMLFile(fmt.Sprintf("%s/edit.html", p), "Update: <%= car.Name %>", func(e *render.Engine) {
-			app := buffalo.New(buffalo.Options{})
-			app.PUT(fmt.Sprintf("/%s/{id}", p), func(c buffalo.Context) error {
-				b := Car{
-					ID:   1,
-					Name: "Honda",
-				}
-				return c.Render(422, e.Auto(c, b))
-			})
-
-			w := willie.New(app)
-			res := w.HTML("/%s/1", p).Put(nil)
-			r.Equal(422, res.Code)
-			r.Contains(res.Body.String(), "Update: Honda")
-		})
-		r.NoError(err)
-	}
+	w := willie.New(app)
+	res := w.HTML("/beatles/1").Put(nil)
+	r.Equal("/beatles/1", res.Location())
 }
 
 func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
 	r := require.New(t)
 
-	for _, p := range []string{"cars", "admin/cars"} {
-		app := buffalo.New(buffalo.Options{})
-		app.DELETE(fmt.Sprintf("/%s/{id}", p), func(c buffalo.Context) error {
-			b := Car{
-				ID:   1,
-				Name: "Honda",
-			}
-			return c.Render(200, render.Auto(c, b))
-		})
+	app := buffalo.New(buffalo.Options{})
+	app.DELETE("/beatles/{id}", func(c buffalo.Context) error {
+		b := Beatle{
+			ID:   1,
+			Name: "John",
+		}
+		return c.Render(302, render.Auto(c, b))
+	})
 
-		w := willie.New(app)
-		res := w.HTML("/%s/1", p).Delete()
-		r.Equal(fmt.Sprintf("/%s", p), res.Location())
-		r.Equal(302, res.Code)
-	}
+	w := willie.New(app)
+	res := w.HTML("/beatles/1").Delete()
+	r.Equal("/beatles", res.Location())
 }
 
 func withHTMLFile(name string, contents string, fn func(*render.Engine)) error {

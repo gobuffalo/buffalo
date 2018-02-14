@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"path"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/markbates/inflect"
@@ -14,52 +14,19 @@ import (
 
 var errNoID = errors.New("no ID on model")
 
-// ErrRedirect indicates to Context#Render that this is a
-// redirect and a template shouldn't be rendered.
 type ErrRedirect struct {
-	Status int
-	URL    string
+	URL string
 }
 
 func (ErrRedirect) Error() string {
 	return ""
 }
 
-// Auto figures out how to render the model based information
-// about the request and the name of the model. Auto supports
-// automatic rendering of HTML, JSON, and XML. Any status code
-// give to Context#Render between 300 - 400 will be respected
-// by Auto. Other status codes are not.
-/*
-# Rules for HTML template lookup:
-GET /users - users/index.html
-GET /users/id - users/show.html
-GET /users/new - users/new.html
-GET /users/id/edit - users/edit.html
-POST /users - (redirect to /users/id or render user/new.html)
-PUT /users/edit - (redirect to /users/id or render user/edit.html)
-DELETE /users/id - redirect to /users
-*/
 func Auto(ctx context.Context, i interface{}) Renderer {
 	e := New(Options{})
 	return e.Auto(ctx, i)
 }
 
-// Auto figures out how to render the model based information
-// about the request and the name of the model. Auto supports
-// automatic rendering of HTML, JSON, and XML. Any status code
-// give to Context#Render between 300 - 400 will be respected
-// by Auto. Other status codes are not.
-/*
-# Rules for HTML template lookup:
-GET /users - users/index.html
-GET /users/id - users/show.html
-GET /users/new - users/new.html
-GET /users/id/edit - users/edit.html
-POST /users - (redirect to /users/id or render user/new.html)
-PUT /users/edit - (redirect to /users/id or render user/edit.html)
-DELETE /users/id - redirect to /users
-*/
 func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
 	ct, ok := ctx.Value("contentType").(string)
 	if !ok {
@@ -91,7 +58,8 @@ func (htmlAutoRenderer) ContentType() string {
 }
 
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
-	name := inflect.Name(ir.typeName().Singular())
+	name := inflect.Name(ir.typeName())
+	name = inflect.Name(name.Singular())
 	pname := inflect.Name(name.Plural())
 
 	if ir.isPlural() {
@@ -100,68 +68,49 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		data[name.VarCaseSingular()] = ir.model
 	}
 
-	cp, ok := data["current_path"].(string)
 	switch data["method"] {
 	case "PUT":
-		code := ir.status(data)
-		// if successful redirect to the GET version of the URL
-		// PUT /users/1 -> redirect -> GET /users/1
-		if code < 400 {
-			return ErrRedirect{
-				Status: code,
-				URL:    cp,
-			}
-		}
-		if ok {
-			// PUT /users/1 -> /users
-			cp = path.Dir(cp)
-		} else {
-			cp = pname.File()
-		}
-		return ir.HTML(fmt.Sprintf("%s/edit.html", cp)).Render(w, data)
-	case "POST":
-		if err := ir.redirect(cp, w, data); err != nil {
-			if er, ok := err.(ErrRedirect); ok && er.Status >= 300 && er.Status < 400 {
+		if err := ir.redirect(pname, w, data); err != nil {
+			if _, ok := err.(ErrRedirect); ok {
 				return err
 			}
+			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
 		}
-		return ir.HTML(fmt.Sprintf("%s/new.html", cp)).Render(w, data)
+		return nil
+	case "POST":
+		if err := ir.redirect(pname, w, data); err != nil {
+			if _, ok := err.(ErrRedirect); ok {
+				return err
+			}
+			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+		}
+		return nil
 	case "DELETE":
-		if ok {
-			// DELETE /users/{id} -> /users
-			cp = path.Dir(cp)
-		} else {
-			cp = "/" + pname.URL()
-		}
 		return ErrRedirect{
-			Status: 302,
-			URL:    cp,
+			URL: "/" + pname.URL(),
 		}
 	}
-	if ok {
+	if cp, ok := data["current_path"].(string); ok {
 		if strings.HasSuffix(cp, "/edit") {
-			// GET /users/{id}/edit -> /users
-			cp = path.Dir(path.Dir(cp))
-			return ir.HTML(fmt.Sprintf("%s/edit.html", cp)).Render(w, data)
+			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
 		}
 		if strings.HasSuffix(cp, "/new") {
-			// GET /users/new -> /users
-			cp = path.Dir(cp)
-			return ir.HTML(fmt.Sprintf("%s/new.html", cp)).Render(w, data)
+			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
 
-		if ir.isPlural() {
-			// GET /users - if it's a slice/array render the index page
-			return ir.HTML(fmt.Sprintf("%s/%s.html", cp, "index")).Render(w, data)
+		x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
+		if err != nil {
+			return errors.WithStack(err)
 		}
-		// GET /users/{id}
-		return ir.HTML(fmt.Sprintf("%s/show.html", path.Dir(cp))).Render(w, data)
+		if x.MatchString(cp) {
+			return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
+		}
 	}
 
-	return errors.New("could not auto render this model, please render it manually")
+	return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
 }
 
-func (ir htmlAutoRenderer) redirect(path string, w io.Writer, data Data) error {
+func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	f := rv.FieldByName("ID")
 	if !f.IsValid() {
@@ -172,34 +121,25 @@ func (ir htmlAutoRenderer) redirect(path string, w io.Writer, data Data) error {
 	rt := reflect.TypeOf(fi)
 	zero := reflect.Zero(rt)
 	if fi != zero.Interface() {
-		url := fmt.Sprintf("%s/%v", path, f.Interface())
+		url := fmt.Sprintf("/%s/%v", name.URL(), f.Interface())
 
 		return ErrRedirect{
-			Status: ir.status(data),
-			URL:    url,
+			URL: url,
 		}
 	}
 	return errNoID
 }
 
-func (ir htmlAutoRenderer) status(data Data) int {
-	if i, ok := data["status"].(int); ok {
-		if i >= 300 {
-			return i
-		}
-	}
-	return 302
-}
-
-func (ir htmlAutoRenderer) typeName() inflect.Name {
+func (ir htmlAutoRenderer) typeName() string {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	rt := rv.Type()
 	switch rt.Kind() {
 	case reflect.Slice, reflect.Array:
 		el := rt.Elem()
-		return inflect.Name(el.Name())
+		return el.Name()
+	default:
+		return rt.Name()
 	}
-	return inflect.Name(rt.Name())
 }
 
 func (ir htmlAutoRenderer) isPlural() bool {
