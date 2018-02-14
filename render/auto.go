@@ -22,12 +22,12 @@ func (ErrRedirect) Error() string {
 	return ""
 }
 
-func Interface(ctx context.Context, i interface{}) Renderer {
+func Auto(ctx context.Context, i interface{}) Renderer {
 	e := New(Options{})
-	return e.Interface(ctx, i)
+	return e.Auto(ctx, i)
 }
 
-func (e *Engine) Interface(ctx context.Context, i interface{}) Renderer {
+func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
 	ct, ok := ctx.Value("contentType").(string)
 	if !ok {
 		ct = "text/html"
@@ -42,22 +42,22 @@ func (e *Engine) Interface(ctx context.Context, i interface{}) Renderer {
 		return e.XML(i)
 	}
 
-	return htmlInterfaceRenderer{
+	return htmlAutoRenderer{
 		Engine: e,
 		model:  i,
 	}
 }
 
-type htmlInterfaceRenderer struct {
+type htmlAutoRenderer struct {
 	*Engine
 	model interface{}
 }
 
-func (htmlInterfaceRenderer) ContentType() string {
+func (htmlAutoRenderer) ContentType() string {
 	return "text/html"
 }
 
-func (ir htmlInterfaceRenderer) Render(w io.Writer, data Data) error {
+func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	name := inflect.Name(ir.typeName())
 	name = inflect.Name(name.Singular())
 	pname := inflect.Name(name.Plural())
@@ -110,7 +110,7 @@ func (ir htmlInterfaceRenderer) Render(w io.Writer, data Data) error {
 	return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
 }
 
-func (ir htmlInterfaceRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
+func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	f := rv.FieldByName("ID")
 	if !f.IsValid() {
@@ -130,7 +130,7 @@ func (ir htmlInterfaceRenderer) redirect(name inflect.Name, w io.Writer, data Da
 	return errNoID
 }
 
-func (ir htmlInterfaceRenderer) typeName() string {
+func (ir htmlAutoRenderer) typeName() string {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	rt := rv.Type()
 	switch rt.Kind() {
@@ -142,7 +142,7 @@ func (ir htmlInterfaceRenderer) typeName() string {
 	}
 }
 
-func (ir htmlInterfaceRenderer) isPlural() bool {
+func (ir htmlAutoRenderer) isPlural() bool {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	rt := rv.Type()
 	switch rt.Kind() {
