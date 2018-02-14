@@ -23,10 +23,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 
 	tmplName := "resource-use_model"
 
-	mimeType := res.MimeType
-	if mimeType == "JSON" || mimeType == "XML" {
-		tmplName = "resource-json-xml"
-	} else if res.SkipModel {
+	if res.SkipModel {
 		tmplName = "resource-name"
 	}
 
@@ -45,7 +42,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 			p := strings.Replace(f.WritePath, tmplName, folder, -1)
 			g.Add(makr.NewFile(p, f.Body))
 		}
-		if mimeType == "HTML" {
+		if !res.SkipTemplates {
 			// Adding the html templates to the generator
 			if strings.Contains(f.WritePath, "model-view-") {
 				targetPath := filepath.Join(
@@ -78,10 +75,6 @@ func (res Generator) modelCommand() makr.Command {
 
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")
-	}
-
-	if res.MimeType == "JSON" || res.MimeType == "XML" {
-		args = append(args, "--struct-tag", strings.ToLower(res.MimeType))
 	}
 
 	return makr.NewCommand(exec.Command("buffalo", args...))
