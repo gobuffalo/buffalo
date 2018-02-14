@@ -2,7 +2,6 @@ package buffalo
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/gobuffalo/x/httpx"
 	gcontext "github.com/gorilla/context"
@@ -41,7 +40,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 	session := a.getSession(req, ws)
 
-	ct := strings.ToUpper(httpx.ContentType(req))
+	ct := httpx.ContentType(req)
 	contextData := map[string]interface{}{
 		"app":           a,
 		"env":           a.Env,

@@ -1,7 +1,6 @@
 package render_test
 
 import (
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -131,7 +130,27 @@ func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 	w := willie.New(app)
 	res := w.HTML("/cars").Post(nil)
 	r.Equal("/cars/1", res.Location())
-	r.Equal(http.StatusTemporaryRedirect, res.Code)
+	r.Equal(302, res.Code)
+}
+
+func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
+	r := require.New(t)
+
+	err := withHTMLFile("cars/new.html", "Create: <%= car.Name %>", func(e *render.Engine) {
+		app := buffalo.New(buffalo.Options{})
+		app.POST("/cars", func(c buffalo.Context) error {
+			b := Car{
+				Name: "Honda",
+			}
+			return c.Render(422, e.Auto(c, b))
+		})
+
+		w := willie.New(app)
+		res := w.HTML("/cars").Post(nil)
+		r.Equal(422, res.Code)
+		r.Contains(res.Body.String(), "Create: Honda")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Edit(t *testing.T) {
@@ -182,7 +201,28 @@ func Test_Auto_HTML_Update_Redirect(t *testing.T) {
 	w := willie.New(app)
 	res := w.HTML("/cars/1").Put(nil)
 	r.Equal("/cars/1", res.Location())
-	r.Equal(http.StatusTemporaryRedirect, res.Code)
+	r.Equal(302, res.Code)
+}
+
+func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
+	r := require.New(t)
+
+	err := withHTMLFile("cars/edit.html", "Update: <%= car.Name %>", func(e *render.Engine) {
+		app := buffalo.New(buffalo.Options{})
+		app.PUT("/cars/{id}", func(c buffalo.Context) error {
+			b := Car{
+				ID:   1,
+				Name: "Honda",
+			}
+			return c.Render(422, e.Auto(c, b))
+		})
+
+		w := willie.New(app)
+		res := w.HTML("/cars/1").Put(nil)
+		r.Equal(422, res.Code)
+		r.Contains(res.Body.String(), "Update: Honda")
+	})
+	r.NoError(err)
 }
 
 func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
@@ -200,7 +240,7 @@ func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
 	w := willie.New(app)
 	res := w.HTML("/cars/1").Delete()
 	r.Equal("/cars", res.Location())
-	r.Equal(http.StatusTemporaryRedirect, res.Code)
+	r.Equal(302, res.Code)
 }
 
 func withHTMLFile(name string, contents string, fn func(*render.Engine)) error {
