@@ -119,7 +119,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		err := rr.Render(bb, data)
 		if err != nil {
 			if er, ok := errors.Cause(err).(render.ErrRedirect); ok {
-				return d.Redirect(status, er.URL)
+				return d.Redirect(http.StatusTemporaryRedirect, er.URL)
 			}
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
