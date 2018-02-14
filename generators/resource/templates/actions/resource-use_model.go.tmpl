@@ -45,9 +45,6 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
     return errors.WithStack(err)
   }
 
-  // Make {{.opts.Model.ModelPlural}} available inside the html template
-  c.Set("{{.opts.Model.VarCasePlural}}", {{.opts.Model.VarCasePlural}})
-
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
 
@@ -70,9 +67,6 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
-
-  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
 
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }
