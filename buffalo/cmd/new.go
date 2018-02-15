@@ -28,7 +28,6 @@ var app = newapp.Generator{
 	CIProvider: "none",
 	AsWeb:      true,
 	Docker:     "multi",
-	VCS:        "git",
 	Bootstrap:  3,
 }
 
