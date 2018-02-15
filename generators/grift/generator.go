@@ -4,20 +4,21 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
 // Generator for creating a new grift task
 type Generator struct {
-	App        meta.App    `json:"app"`
-	Name       meta.Name   `json:"name"`
-	Parts      []meta.Name `json:"parts"`
-	Args       []string    `json:"args"`
-	Namespaced bool        `json:"namespaced"`
+	App        meta.App       `json:"app"`
+	Name       inflect.Name   `json:"name"`
+	Parts      []inflect.Name `json:"parts"`
+	Args       []string       `json:"args"`
+	Namespaced bool           `json:"namespaced"`
 }
 
 // Last checks if the name is the last of the parts
-func (g Generator) Last(n meta.Name) bool {
+func (g Generator) Last(n inflect.Name) bool {
 	return g.Parts[len(g.Parts)-1] == n
 }
 
@@ -26,15 +27,15 @@ func New(args ...string) (Generator, error) {
 	g := Generator{
 		App:   meta.New("."),
 		Args:  args,
-		Parts: []meta.Name{},
+		Parts: []inflect.Name{},
 	}
 	if len(args) > 0 {
 		g.Namespaced = strings.Contains(args[0], ":")
 
 		for _, n := range strings.Split(args[0], ":") {
-			g.Parts = append(g.Parts, meta.Name(n))
+			g.Parts = append(g.Parts, inflect.Name(n))
 		}
-		g.Name = meta.Name(g.Parts[len(g.Parts)-1])
+		g.Name = inflect.Name(g.Parts[len(g.Parts)-1])
 	}
 
 	return g, g.Validate()

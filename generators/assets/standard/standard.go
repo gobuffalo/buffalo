@@ -1,11 +1,10 @@
 package standard
 
 import (
-	"path/filepath"
-
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -16,7 +15,7 @@ var logo = &makr.RemoteFile{
 
 // Run standard assets generator for those wishing to not use webpack
 func Run(root string, data makr.Data) error {
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "assets", "standard"))
+	files, err := generators.FindByBox(packr.NewBox("../standard/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
