@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"path"
 	"reflect"
-	"regexp"
 	"strings"
 
 	"github.com/markbates/inflect"
@@ -91,8 +91,7 @@ func (htmlAutoRenderer) ContentType() string {
 }
 
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
-	name := inflect.Name(ir.typeName())
-	name = inflect.Name(name.Singular())
+	name := inflect.Name(ir.typeName().Singular())
 	pname := inflect.Name(name.Plural())
 
 	if ir.isPlural() {
@@ -101,45 +100,68 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		data[name.VarCaseSingular()] = ir.model
 	}
 
+	cp, ok := data["current_path"].(string)
 	switch data["method"] {
-	case "PUT", "POST":
-		if err := ir.redirect(pname, w, data); err != nil {
+	case "PUT":
+		code := ir.status(data)
+		// if successful redirect to the GET version of the URL
+		// PUT /users/1 -> redirect -> GET /users/1
+		if code < 400 {
+			return ErrRedirect{
+				Status: code,
+				URL:    cp,
+			}
+		}
+		if ok {
+			// PUT /users/1 -> /users
+			cp = path.Dir(cp)
+		} else {
+			cp = pname.File()
+		}
+		return ir.HTML(fmt.Sprintf("%s/edit.html", cp)).Render(w, data)
+	case "POST":
+		if err := ir.redirect(cp, w, data); err != nil {
 			if er, ok := err.(ErrRedirect); ok && er.Status >= 300 && er.Status < 400 {
 				return err
 			}
-			if data["method"] == "PUT" {
-				return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
-			}
-			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
-		return nil
+		return ir.HTML(fmt.Sprintf("%s/new.html", cp)).Render(w, data)
 	case "DELETE":
+		if ok {
+			// DELETE /users/{id} -> /users
+			cp = path.Dir(cp)
+		} else {
+			cp = "/" + pname.URL()
+		}
 		return ErrRedirect{
 			Status: 302,
-			URL:    "/" + pname.URL(),
+			URL:    cp,
 		}
 	}
-	if cp, ok := data["current_path"].(string); ok {
+	if ok {
 		if strings.HasSuffix(cp, "/edit") {
-			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
+			// GET /users/{id}/edit -> /users
+			cp = path.Dir(path.Dir(cp))
+			return ir.HTML(fmt.Sprintf("%s/edit.html", cp)).Render(w, data)
 		}
 		if strings.HasSuffix(cp, "/new") {
-			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+			// GET /users/new -> /users
+			cp = path.Dir(cp)
+			return ir.HTML(fmt.Sprintf("%s/new.html", cp)).Render(w, data)
 		}
 
-		x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
-		if err != nil {
-			return errors.WithStack(err)
+		if ir.isPlural() {
+			// GET /users - if it's a slice/array render the index page
+			return ir.HTML(fmt.Sprintf("%s/%s.html", cp, "index")).Render(w, data)
 		}
-		if x.MatchString(cp) {
-			return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
-		}
+		// GET /users/{id}
+		return ir.HTML(fmt.Sprintf("%s/show.html", path.Dir(cp))).Render(w, data)
 	}
 
-	return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+	return errors.New("could not auto render this model, please render it manually")
 }
 
-func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
+func (ir htmlAutoRenderer) redirect(path string, w io.Writer, data Data) error {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	f := rv.FieldByName("ID")
 	if !f.IsValid() {
@@ -150,32 +172,34 @@ func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) e
 	rt := reflect.TypeOf(fi)
 	zero := reflect.Zero(rt)
 	if fi != zero.Interface() {
-		url := fmt.Sprintf("/%s/%v", name.URL(), f.Interface())
+		url := fmt.Sprintf("%s/%v", path, f.Interface())
 
-		code := 302
-		if i, ok := data["status"].(int); ok {
-			if i >= 300 {
-				code = i
-			}
-		}
 		return ErrRedirect{
-			Status: code,
+			Status: ir.status(data),
 			URL:    url,
 		}
 	}
 	return errNoID
 }
 
-func (ir htmlAutoRenderer) typeName() string {
+func (ir htmlAutoRenderer) status(data Data) int {
+	if i, ok := data["status"].(int); ok {
+		if i >= 300 {
+			return i
+		}
+	}
+	return 302
+}
+
+func (ir htmlAutoRenderer) typeName() inflect.Name {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	rt := rv.Type()
 	switch rt.Kind() {
 	case reflect.Slice, reflect.Array:
 		el := rt.Elem()
-		return el.Name()
-	default:
-		return rt.Name()
+		return inflect.Name(el.Name())
 	}
+	return inflect.Name(rt.Name())
 }
 
 func (ir htmlAutoRenderer) isPlural() bool {
