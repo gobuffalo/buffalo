@@ -3,6 +3,8 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/gobuffalo/plush"
@@ -104,7 +106,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 			"params":      c.Params(),
 			"posted_form": c.Request().Form,
 			"context":     c,
-			"headers":     c.Request().Header,
+			"headers":     inspectHeaders(c.Request().Header),
 			"inspect": func(v interface{}) string {
 				return fmt.Sprintf("%+v", v)
 			},
@@ -119,6 +121,19 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		return err
 	}
 	return err
+}
+
+type inspectHeaders http.Header
+
+func (i inspectHeaders) String() string {
+
+	bb := make([]string, 0, len(i))
+
+	for k, v := range i {
+		bb = append(bb, fmt.Sprintf("%s: %s", k, v))
+	}
+	sort.Strings(bb)
+	return strings.Join(bb, "\n\n")
 }
 
 var devErrorTmpl = `
@@ -157,6 +172,9 @@ var devErrorTmpl = `
 
         <h3>Parameters</h3>
         <pre><%= inspect(params) %></pre>
+
+        <h3>Headers</h3>
+        <pre><%= inspect(headers) %></pre>
 
         <h3>Form</h3>
         <pre><%= inspect(posted_form) %></pre>
