@@ -262,7 +262,7 @@ func Test_DefaultContext_Websocket(t *testing.T) {
 
 	wsURL := strings.Replace(ts.URL, "http", "ws", 1) + "/socket"
 
-	ws, err := websocket.Dial(wsURL, "", "http://127.0.0.1")
+	ws, err := websocket.Dial(wsURL, "", ts.URL)
 	r.NoError(err)
 
 	_, err = ws.Write([]byte("hello, world!"))

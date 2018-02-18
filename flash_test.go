@@ -16,12 +16,12 @@ func Test_FlashAdd(t *testing.T) {
 
 	f.Add("error", "something")
 	r.Equal(f.data, map[string][]string{
-		"error": []string{"something"},
+		"error": {"something"},
 	})
 
 	f.Add("error", "other")
 	r.Equal(f.data, map[string][]string{
-		"error": []string{"something", "other"},
+		"error": {"something", "other"},
 	})
 }
 

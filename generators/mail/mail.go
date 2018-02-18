@@ -7,14 +7,16 @@ import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
 // Generator for creating new mailers
 type Generator struct {
-	App      meta.App  `json:"app"`
-	Name     meta.Name `json:"name"`
-	SkipInit bool      `json:"skip_init"`
+	App      meta.App     `json:"app"`
+	Name     inflect.Name `json:"name"`
+	SkipInit bool         `json:"skip_init"`
 }
 
 // Run the new mailer generator. It will init the mailers directory
@@ -35,7 +37,7 @@ func (d Generator) Run(root string, data makr.Data) error {
 }
 
 func (d Generator) initGenerator(data makr.Data) error {
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "mail", "init"))
+	files, err := generators.FindByBox(packr.NewBox("../mail/init/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

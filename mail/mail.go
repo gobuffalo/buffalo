@@ -1,6 +1,6 @@
 package mail
 
-// Sender interface for any upcomming mailers.
+// Sender interface for any upcoming mailers.
 type Sender interface {
 	Send(Message) error
 }
