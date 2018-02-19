@@ -14,8 +14,8 @@ var entries = {
 }
 
 glob.sync("./assets/*/*.*").reduce((_, entry) => {
-  let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|scss|go)/g, '')
-  if(key.startsWith("_") || (/(js|scss|go)$/i).test(entry) == false) {
+  let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|s[ac]ss|go)/g, '')
+  if(key.startsWith("_") || (/(js|s[ac]ss|go)$/i).test(entry) == false) {
     return
   }
   
