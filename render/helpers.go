@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/tags"
-	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )
 
