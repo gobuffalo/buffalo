@@ -8,7 +8,6 @@ RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/markbates/grift
 RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
-RUN go get -v -u github.com/markbates/willie
 RUN go get -v -u github.com/gobuffalo/tags
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
