@@ -50,7 +50,7 @@ func setTypeValue(propType string) string {
 	case "string", "text":
 		s := fmt.Sprintf("\"%s\"", randx.String(40))
 		return s
-	case "float32", "float64":
+	case "float", "float32", "float64":
 		r := rand.New(rand.NewSource(0)).Float64()
 		s := fmt.Sprintf("%.10f", r)
 		return s
@@ -60,6 +60,8 @@ func setTypeValue(propType string) string {
 		return s
 	case "time":
 		return "time.Now()"
+	case "uuid":
+		return `uuid.FromStringOrNil("6ba7b810-9dad-11d1-80b4-00c04fd430c8")`
 	case "bool":
 		return "false"
 	}
