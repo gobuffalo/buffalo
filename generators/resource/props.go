@@ -50,20 +50,21 @@ func setTypeValue(propType string) string {
 	case "string", "text":
 		s := fmt.Sprintf("\"%s\"", randx.String(40))
 		return s
-	case "float", "float32", "float64":
+	case "float32", "float64":
 		r := rand.New(rand.NewSource(0)).Float64()
 		s := fmt.Sprintf("%.10f", r)
 		return s
-	case "int", "int32", "int64", "unint32":
+	case "int", "int32", "int64":
 		r := rand.New(rand.NewSource(0)).Int()
 		s := strconv.Itoa(r)
 		return s
+	case "time":
+		return "time.Now()"
 	case "bool":
 		return "false"
-	default:
-		if strings.Contains(propType, "null") {
-			return "null"
-		}
-		return propType
 	}
+	if strings.Contains(propType, "null") {
+		return "null"
+	}
+	return "unidentified type"
 }

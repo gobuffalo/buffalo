@@ -55,7 +55,7 @@ func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Create() {
 				{{- if ne $p.TestValue "null" -}}
 					{{- $p.Name }}: {{ $p.TestValue }},
 				{{- end }}
-			{{- end -}}
+			{{ end -}}
 		{{- end -}}
 	}
 
@@ -95,6 +95,17 @@ func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Update() {
 
 		as.NoError(as.DB.Reload({{.opts.Model.VarCaseSingular}}))
 		as.Equal(9876543210, {{.opts.Model.VarCaseSingular}}{{ if .opts.Props }}.{{ $p }}{{ end }})
+
+		{{- else if eq $p.Type "time" }}
+		updated{{$.opts.Name.Resource}}.{{$p}} = time.Now().AddDate(0, 1, 0)
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		expectedTime := time.Now().AddDate(0, 1, 0).Format("Jan 2, 2006 - 3:04 PM")
+		updatedTime := testing.Name.Format("Jan 2, 2006 - 3:04 PM")
+
+		as.NoError(as.DB.Reload(testing))
+		as.Equal(expectedTime, updatedTime)
 
 		{{- else if eq $p.Type "bool" }}
 		updated{{$.opts.Name.Resource}}.{{$p}} = true
