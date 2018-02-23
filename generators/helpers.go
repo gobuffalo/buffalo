@@ -8,6 +8,8 @@ import (
 	"go/token"
 	"io/ioutil"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 // AddRoute adds a new route inside the `action/app.go` file.
@@ -58,6 +60,39 @@ func AddInsideAppBlock(expressions ...string) error {
 
 	fileContent := strings.Join(fileLines, "\n")
 	err = ioutil.WriteFile("actions/app.go", []byte(fileContent), 0755)
+	return err
+}
+
+// AddInsideActionTestBlock will add anything inside of the action declaration block inside of `actions/action_test.go`
+func AddInsideActionTestBlock() error {
+	src, err := ioutil.ReadFile("actions/actions_test.go")
+	if err != nil {
+		return err
+	}
+
+	srcContent := string(src)
+	fileLines := strings.Split(srcContent, "\n")
+
+	if strings.Contains(srcContent, "TableChange") {
+		logrus.Warnf("TableChange already exist on actions_test file")
+		return err
+	}
+
+	fileLines = append(fileLines, `
+		func (as *ActionSuite) TableChange(table string, count int, fn func()) {
+			scount, err := as.DB.Count(table)
+			as.NoError(err)
+		
+			fn()
+		
+			ecount, err := as.DB.Count(table)
+			as.NoError(err)
+			as.Equal(count, ecount-scount)
+		}
+	`)
+
+	fileContent := strings.Join(fileLines, "\n")
+	err = ioutil.WriteFile("actions/actions_test.go", []byte(fileContent), 0755)
 	return err
 }
 
