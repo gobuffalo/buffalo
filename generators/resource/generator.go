@@ -16,8 +16,8 @@ type Generator struct {
 	Model         inflect.Name `json:"model"`
 	SkipMigration bool         `json:"skip_migration"`
 	SkipModel     bool         `json:"skip_model"`
+	SkipTemplates bool         `json:"skip_templates"`
 	UseModel      bool         `json:"use_model"`
-	MimeType      string       `json:"mime_type"`
 	FilesPath     string       `json:"files_path"`
 	ActionsPath   string       `json:"actions_path"`
 	Props         []Prop       `json:"props"`
@@ -27,8 +27,7 @@ type Generator struct {
 // New constructs new options for generating a resource
 func New(modelName string, args ...string) (Generator, error) {
 	o := Generator{
-		MimeType: "HTML",
-		Args:     args,
+		Args: args,
 	}
 	pwd, _ := os.Getwd()
 	o.App = meta.New(pwd)
@@ -54,11 +53,6 @@ func New(modelName string, args ...string) (Generator, error) {
 
 // Validate that the options have what you need to build a new resource
 func (o Generator) Validate() error {
-	mt := o.MimeType
-	if mt != "HTML" && mt != "JSON" && mt != "XML" {
-		return errors.New("invalid resource type, you need to choose between \"html\", \"xml\" and \"json\"")
-	}
-
 	if len(o.Args) == 0 && o.Model == "" {
 		return errors.New("you must specify a resource name")
 	}
