@@ -15,6 +15,7 @@ import (
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/websocket"
+	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )
 
@@ -114,10 +115,14 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		data["flash"] = d.Flash().data
 		data["session"] = d.Session()
 		data["request"] = d.Request()
+		data["status"] = status
 		bb := &bytes.Buffer{}
 
 		err := rr.Render(bb, data)
 		if err != nil {
+			if er, ok := errors.Cause(err).(render.ErrRedirect); ok {
+				return d.Redirect(er.Status, er.URL)
+			}
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 
@@ -127,6 +132,9 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 
 		d.Response().Header().Set("Content-Type", rr.ContentType())
+		if p, ok := data["pagination"].(*pop.Paginator); ok {
+			d.Response().Header().Set("X-Pagination", p.String())
+		}
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {

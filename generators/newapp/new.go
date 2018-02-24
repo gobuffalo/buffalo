@@ -1,6 +1,7 @@
 package newapp
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -97,9 +98,16 @@ func (a Generator) setupVCS(g *makr.Generator) {
 		return
 	}
 
+	// Create .gitignore or .bzrignore
+	g.Add(makr.NewFile(fmt.Sprintf(".%signore", a.VCS), nVCSIgnore))
 	g.Add(makr.NewCommand(exec.Command(a.VCS, "init")))
-	g.Add(makr.NewCommand(exec.Command(a.VCS, "add", ".")))
-	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-m", "Initial Commit")))
+	args := []string{"add", "."}
+	if a.VCS == "bzr" {
+		// Ensure Bazaar is as quiet as Git
+		args = append(args, "-q")
+	}
+	g.Add(makr.NewCommand(exec.Command(a.VCS, args...)))
+	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-q", "-m", "Initial Commit")))
 }
 
 func (a Generator) setupDocker(root string, data makr.Data) error {
@@ -331,4 +339,20 @@ test:1.8:
   stage: test
   script:
     - buffalo test
+`
+
+const nVCSIgnore = `vendor/
+**/*.log
+**/*.sqlite
+.idea/
+bin/
+tmp/
+node_modules/
+.sass-cache/
+*-packr.go
+public/assets/
+{{ .opts.Name.File }}
+.vscode/
+.grifter/
+.env
 `

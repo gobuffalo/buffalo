@@ -22,6 +22,7 @@ type App struct {
 	ActionsPkg  string       `json:"actions_path"`
 	ModelsPkg   string       `json:"models_path"`
 	GriftsPkg   string       `json:"grifts_path"`
+	VCS         string       `json:"vcs"`
 	WithPop     bool         `json:"with_pop"`
 	WithDep     bool         `json:"with_dep"`
 	WithWebpack bool         `json:"with_webpack"`
@@ -76,6 +77,11 @@ func New(root string) App {
 	}
 	if _, err := os.Stat(filepath.Join(root, "grifts")); err == nil {
 		app.WithGrifts = true
+	}
+	if _, err := os.Stat(filepath.Join(root, ".git")); err == nil {
+		app.VCS = "git"
+	} else if _, err := os.Stat(filepath.Join(root, ".bzr")); err == nil {
+		app.VCS = "bzr"
 	}
 
 	return app

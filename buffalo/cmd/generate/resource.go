@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"strings"
-
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 
@@ -14,9 +12,9 @@ import (
 var resourceOptions = struct {
 	SkipMigration bool
 	SkipModel     bool
+	SkipTemplates bool
 	ModelName     string
 	Name          string
-	MimeType      string
 }{}
 
 // ResourceCmd generates a new actions/resource file and a stub test.
@@ -30,9 +28,9 @@ var ResourceCmd = &cobra.Command{
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		o.MimeType = strings.ToUpper(resourceOptions.MimeType)
 		o.SkipModel = resourceOptions.SkipModel
 		o.SkipMigration = resourceOptions.SkipMigration
+		o.SkipTemplates = resourceOptions.SkipTemplates
 		if resourceOptions.ModelName != "" {
 			o.UseModel = true
 			o.Model = inflect.Name(resourceOptions.ModelName)
@@ -51,9 +49,9 @@ var resourceMN string
 func init() {
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipMigration, "skip-migration", "s", false, "tells resource generator not-to add model migration")
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipModel, "skip-model", "", false, "tells resource generator not to generate model nor migrations")
+	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipTemplates, "skip-templates", "", false, "tells resource generator not to generate templates for the resource")
 	ResourceCmd.Flags().StringVarP(&resourceOptions.ModelName, "use-model", "", "", "tells resource generator to reference an existing model in generated code")
 	ResourceCmd.Flags().StringVarP(&resourceOptions.Name, "name", "n", "", "allows to define a different model name for the resource being generated.")
-	ResourceCmd.Flags().StringVarP(&resourceOptions.MimeType, "type", "", "html", "sets the resource type (html, json, xml)")
 }
 
 const resourceExamples = `$ buffalo g resource users

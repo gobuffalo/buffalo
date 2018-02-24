@@ -56,22 +56,21 @@ func (a *App) Redirect(status int, from, to string) *RouteInfo {
 }
 
 // Mount mounts a http.Handler (or Buffalo app) and passes through all requests to it.
-/*
-func muxer() http.Handler {
-	f := func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
-	}
-	mux := mux.NewRouter()
-	mux.HandleFunc("/foo", f).Methods("GET")
-	mux.HandleFunc("/bar", f).Methods("POST")
-	mux.HandleFunc("/baz/baz", f).Methods("DELETE")
-	return mux
-}
-
-a.Mount("/admin", muxer())
-
-$ curl -X DELETE http://localhost:3000/admin/baz/baz
-*/
+//
+//	func muxer() http.Handler {
+//		f := func(res http.ResponseWriter, req *http.Request) {
+//			fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
+//		}
+//		mux := mux.NewRouter()
+//		mux.HandleFunc("/foo", f).Methods("GET")
+//		mux.HandleFunc("/bar", f).Methods("POST")
+//		mux.HandleFunc("/baz/baz", f).Methods("DELETE")
+//		return mux
+//	}
+//
+//	a.Mount("/admin", muxer())
+//
+//	$ curl -X DELETE http://localhost:3000/admin/baz/baz
 func (a *App) Mount(p string, h http.Handler) {
 	prefix := path.Join(a.Prefix, p)
 	path := path.Join(p, "{path:.+}")

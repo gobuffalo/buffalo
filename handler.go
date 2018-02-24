@@ -3,6 +3,7 @@ package buffalo
 import (
 	"net/http"
 
+	"github.com/gobuffalo/x/httpx"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -39,12 +40,15 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 	session := a.getSession(req, ws)
 
+	ct := httpx.ContentType(req)
 	contextData := map[string]interface{}{
 		"app":           a,
 		"env":           a.Env,
 		"routes":        a.Routes(),
 		"current_route": info,
 		"current_path":  req.URL.Path,
+		"contentType":   ct,
+		"method":        req.Method,
 	}
 
 	for _, route := range a.Routes() {
@@ -53,14 +57,15 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	}
 
 	return &DefaultContext{
-		Context:  req.Context(),
-		response: ws,
-		request:  req,
-		params:   params,
-		logger:   a.Logger,
-		session:  session,
-		flash:    newFlash(session),
-		data:     contextData,
+		Context:     req.Context(),
+		contentType: ct,
+		response:    ws,
+		request:     req,
+		params:      params,
+		logger:      a.Logger,
+		session:     session,
+		flash:       newFlash(session),
+		data:        contextData,
 	}
 }
 
