@@ -22,6 +22,7 @@ var ic = ImportConverter{
 }
 
 var checks = []Check{
+	DepUpdate,
 	ic.Process,
 	WebpackCheck,
 	PackageJSONCheck,
