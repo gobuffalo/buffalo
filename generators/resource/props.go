@@ -55,13 +55,13 @@ func setTypeValue(propType string) string {
 		s := fmt.Sprintf("%.10f", r)
 		return s
 	case "int", "int32", "int64":
-		r := rand.New(rand.NewSource(0)).Int()
-		s := strconv.Itoa(r)
+		r := rand.Int31()
+		s := strconv.Itoa(int(r))
 		return s
 	case "time":
 		return "time.Now()"
 	case "uuid":
-		return `uuid.FromStringOrNil("6ba7b810-9dad-11d1-80b4-00c04fd430c8")`
+		return `uuid.Must(uuid.NewV4())`
 	case "bool":
 		return "false"
 	}
