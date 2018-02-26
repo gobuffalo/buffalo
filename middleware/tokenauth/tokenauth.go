@@ -32,8 +32,8 @@ type Options struct {
 	GetKey     func(jwt.SigningMethod) (interface{}, error)
 }
 
-// Middleware enables jwt token verification
-// if no Sign method is provided, by default uses HMAC
+// New enables jwt token verification if no Sign method is provided,
+// by default uses HMAC
 func New(options Options) buffalo.MiddlewareFunc {
 	// set sign method to HMAC if not provided
 	if options.SignMethod == nil {
