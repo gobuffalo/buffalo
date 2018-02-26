@@ -14,8 +14,8 @@ import (
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/pop"
 	"github.com/gorilla/websocket"
-	"github.com/markbates/pop"
 	"github.com/pkg/errors"
 )
 
