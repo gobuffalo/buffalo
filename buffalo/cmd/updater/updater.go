@@ -22,12 +22,11 @@ var ic = ImportConverter{
 }
 
 var checks = []Check{
-	DepUpdate,
 	ic.Process,
 	WebpackCheck,
 	PackageJSONCheck,
 	DepEnsure,
-	MainCheck,
+	DeprecrationsCheck,
 }
 
 func ask(q string) bool {

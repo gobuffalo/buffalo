@@ -1,13 +1,15 @@
 package updater
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
-	"github.com/BurntSushi/toml"
+	"github.com/gobuffalo/envy"
+	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 )
 
 type lockToml struct {
@@ -18,39 +20,31 @@ type lockToml struct {
 	Version  string   `toml:"version"`
 }
 
-// DepUpdate will attempt to update dependencies belonging to the Buffalo project
-func DepUpdate(r *Runner) error {
-	if !r.App.WithDep {
-		return nil
-	}
-
-	if !ask("Would you like to update dependencies related to the Buffalo project?\n(github.com/gobuffalo/* or github.com/markbates/*)") {
-		fmt.Println("\tskipping updating dependencies")
-		return nil
-	}
-
-	p := struct {
-		Projects []lockToml `toml:"projects"`
-	}{}
-
-	_, err := toml.DecodeFile("./Gopkg.lock", &p)
+func goGetUpdate(r *Runner) error {
+	fmt.Println("~~~ Running go get ~~~")
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	wg, _ := errgroup.WithContext(ctx)
+	deps, err := deplist.List()
 	if err != nil {
 		return errors.WithStack(err)
 	}
-
-	for _, l := range p.Projects {
-		if strings.Contains(l.Name, "github.com/gobuffalo") || strings.Contains(l.Name, "github.com/markbates") {
-			fmt.Printf("~~~ updating Buffalo dependency %s ~~~\n", l.Name)
-			cc := exec.Command("dep", "ensure", "-v", "-update", l.Name)
+	for dep := range deps {
+		args := []string{"get", "-u"}
+		args = append(args, dep)
+		cc := exec.Command(envy.Get("GO_BIN", "go"), args...)
+		f := func() error {
 			cc.Stdin = os.Stdin
 			cc.Stderr = os.Stderr
 			cc.Stdout = os.Stdout
-			if err := cc.Run(); err != nil {
-				errors.WithStack(err)
-			}
+			return cc.Run()
 		}
+		wg.Go(f)
 	}
-
+	err = wg.Wait()
+	if err != nil {
+		return errors.Errorf("We encountered the following error trying to install and update the dependencies for this application:\n%s", err)
+	}
 	return nil
 }
 
@@ -58,12 +52,35 @@ func DepUpdate(r *Runner) error {
 // imports are added to dep.
 func DepEnsure(r *Runner) error {
 	if !r.App.WithDep {
-		return nil
+		return goGetUpdate(r)
 	}
 	fmt.Println("~~~ Running dep ensure ~~~")
 	cc := exec.Command("dep", "ensure", "-v")
 	cc.Stdin = os.Stdin
 	cc.Stderr = os.Stderr
 	cc.Stdout = os.Stdout
-	return cc.Run()
+	if err := cc.Run(); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, p := range []string{"github.com/gobuffalo/tags@v2.0.0", "github.com/gobuffalo/suite@v2.0.0"} {
+		cc = exec.Command("dep", "ensure", "-v", "-add", p)
+		cc.Stdin = os.Stdin
+		cc.Stderr = os.Stderr
+		cc.Stdout = os.Stdout
+		if err := cc.Run(); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	for _, p := range []string{"github.com/markbates/inflect"} {
+		cc = exec.Command("dep", "ensure", "-v", "-update", p)
+		cc.Stdin = os.Stdin
+		cc.Stderr = os.Stderr
+		cc.Stdout = os.Stdout
+		if err := cc.Run(); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+	return nil
 }
