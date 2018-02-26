@@ -2,14 +2,15 @@ package tokenauth_test
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gobuffalo/envy"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gobuffalo/envy"
+	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware/tokenauth"
@@ -24,9 +25,9 @@ func appHMAC() *buffalo.App {
 	envy.Set("JWT_SECRET", "secret")
 	a := buffalo.New(buffalo.Options{})
 	// if method not specified it will use HMAC
-	a.Use(tokenauth.Middleware(tokenauth.Options{
-		GetKey:tokenauth.GetHMACKey,
-		}))
+	a.Use(tokenauth.New(tokenauth.Options{
+		GetKey: tokenauth.GetHMACKey,
+	}))
 	a.GET("/", h)
 	return a
 }
@@ -36,8 +37,8 @@ func appRSA() *buffalo.App {
 	}
 	envy.Set("JWT_PUBLIC_KEY", "test_certs/sample_key.pub")
 	a := buffalo.New(buffalo.Options{})
-	a.Use(tokenauth.Middleware(tokenauth.Options{
-		SignMethod:    jwt.SigningMethodRS256,
+	a.Use(tokenauth.New(tokenauth.Options{
+		SignMethod: jwt.SigningMethodRS256,
 	}))
 	a.GET("/", h)
 	return a
@@ -49,9 +50,9 @@ func appRSAPSS() *buffalo.App {
 	}
 	envy.Set("JWT_PUBLIC_KEY", "test_certs/sample_key.pub")
 	a := buffalo.New(buffalo.Options{})
-	a.Use(tokenauth.Middleware(tokenauth.Options{
-		SignMethod:    jwt.SigningMethodPS256,
-		GetKey:tokenauth.GetKeyRSAPSS,
+	a.Use(tokenauth.New(tokenauth.Options{
+		SignMethod: jwt.SigningMethodPS256,
+		GetKey:     tokenauth.GetKeyRSAPSS,
 	}))
 	a.GET("/", h)
 	return a
@@ -64,8 +65,8 @@ func appECDSA() *buffalo.App {
 	envy.Set("JWT_PUBLIC_KEY", "test_certs/ec256-public.pem")
 
 	a := buffalo.New(buffalo.Options{})
-	a.Use(tokenauth.Middleware(tokenauth.Options{
-		SignMethod:    jwt.SigningMethodES256,
+	a.Use(tokenauth.New(tokenauth.Options{
+		SignMethod: jwt.SigningMethodES256,
 	}))
 	a.GET("/", h)
 	return a
@@ -158,6 +159,7 @@ func TestTokenRSA(t *testing.T) {
 	res = req.Get()
 	r.Equal(http.StatusOK, res.Code)
 }
+
 // Test ECDSA
 func TestTokenECDSA(t *testing.T) {
 	r := require.New(t)
