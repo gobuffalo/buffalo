@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/markbates/pop"
+	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/uuid"
 	"github.com/markbates/willie"
 	"github.com/pkg/errors"
-	"github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 )
 
