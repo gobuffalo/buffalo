@@ -63,24 +63,36 @@ func DepEnsure(r *Runner) error {
 		return errors.WithStack(err)
 	}
 
-	for _, p := range []string{"github.com/gobuffalo/tags@v2.0.0", "github.com/gobuffalo/suite@v2.0.0"} {
-		cc = exec.Command("dep", "ensure", "-v", "-add", p)
-		cc.Stdin = os.Stdin
-		cc.Stderr = os.Stderr
-		cc.Stdout = os.Stdout
-		if err := cc.Run(); err != nil {
-			return errors.WithStack(err)
-		}
+	apkg := []string{
+		"github.com/gobuffalo/tags@v2.0.0",
+		"github.com/gobuffalo/suite@v2.0.0",
+	}
+	args := []string{"ensure", "-v", "-add"}
+
+	for _, p := range apkg {
+		args = append(args, p)
+	}
+	cc = exec.Command("dep", args...)
+	cc.Stdin = os.Stdin
+	cc.Stderr = os.Stderr
+	cc.Stdout = os.Stdout
+	if err := cc.Run(); err != nil {
+		return errors.WithStack(err)
 	}
 
-	for _, p := range []string{"github.com/markbates/inflect"} {
-		cc = exec.Command("dep", "ensure", "-v", "-update", p)
-		cc.Stdin = os.Stdin
-		cc.Stderr = os.Stderr
-		cc.Stdout = os.Stdout
-		if err := cc.Run(); err != nil {
-			return errors.WithStack(err)
-		}
+	upkg := []string{
+		"github.com/gobuffalo/buffalo",
+		"github.com/gobuffalo/plush",
+		"github.com/markbates/inflect",
 	}
-	return nil
+
+	args = []string{"ensure", "-v", "-update"}
+	for _, p := range upkg {
+		args = append(args, p)
+	}
+	cc = exec.Command("dep", args...)
+	cc.Stdin = os.Stdin
+	cc.Stderr = os.Stderr
+	cc.Stdout = os.Stdout
+	return cc.Run()
 }
