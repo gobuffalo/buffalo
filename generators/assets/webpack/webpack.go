@@ -13,6 +13,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// TemplateBox contains all templates needed for the webpack generator
+var TemplateBox = packr.NewBox("../webpack/templates")
+
 var logo = &makr.RemoteFile{
 	File:       makr.NewFile("assets/images/logo.svg", ""),
 	RemotePath: assets.LogoURL,
@@ -45,7 +48,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 	g.Add(logo)
 
-	files, err := generators.FindByBox(packr.NewBox("../webpack/templates"))
+	files, err := generators.FindByBox(TemplateBox)
 	if err != nil {
 		return errors.WithStack(err)
 	}
