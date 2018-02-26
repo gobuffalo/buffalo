@@ -29,10 +29,10 @@ type {{.opts.Name.Resource}}Resource struct{
 // GET /{{.opts.Name.URL}}
 func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.ModelPlural}}{}
 
@@ -45,20 +45,20 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
     return errors.WithStack(err)
   }
 
-  // Add the paginator to the context so it can be used in the template.
-  c.Set("pagination", q.Paginator)
+  // Add the paginator to the headers so clients know how to paginate.
+  c.Response().Header().Set("X-Pagination", q.Paginator.String())
 
-  return c.Render(200, r.Auto(c, {{.opts.Model.VarCasePlural}}))
+  return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCasePlural}}))
 }
 
 // Show gets the data for one {{.opts.Model.Model}}. This function is mapped to
 // the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
@@ -68,13 +68,12 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+  return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCaseSingular}}))
 }
 
-// New renders the form for creating a new {{.opts.Model.Model}}.
-// This function is mapped to the path GET /{{.opts.Name.URL}}/new
+// New default implementation. Returns a 404
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
-  return c.Render(200, r.Auto(c, &models.{{.opts.Model.Model}}{}))
+  return c.Error(404, errors.New("not available"))
 }
 
 // Create adds a {{.opts.Model.Model}} to the DB. This function is mapped to the
@@ -89,10 +88,10 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Validate the data from the html form
   verrs, err := tx.ValidateAndCreate({{.opts.Model.VarCaseSingular}})
@@ -101,48 +100,26 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   if verrs.HasAny() {
-    // Make the errors available inside the html template
-    c.Set("errors", verrs)
-
-    // Render again the new.html template that the user can
-    // correct the input.
-    return c.Render(422, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+    // Render errors as {{.opts.MimeType}}
+    return c.Render(400, r.{{.opts.MimeType}}(verrs))
   }
 
-  // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was created successfully")
-
-  // and redirect to the {{.opts.Name.URL}} index page
-  return c.Render(201, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+  return c.Render(201, r.{{.opts.MimeType}}({{.opts.Model.VarCaseSingular}}))
 }
 
-// Edit renders a edit form for a {{.opts.Model.Model}}. This function is
-// mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}/edit
+// Edit default implementation. Returns a 404
 func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
-  // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
-
-  // Allocate an empty {{.opts.Model.Model}}
-  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
-
-  if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
-    return c.Error(404, err)
-  }
-
-  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+  return c.Error(404, errors.New("not available"))
 }
 
 // Update changes a {{.opts.Model.Model}} in the DB. This function is mapped to
 // the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
@@ -162,29 +139,21 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   }
 
   if verrs.HasAny() {
-    // Make the errors available inside the html template
-    c.Set("errors", verrs)
-
-    // Render again the edit.html template that the user can
-    // correct the input.
-    return c.Render(422, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+    // Render errors as {{.opts.MimeType}}
+    return c.Render(400, r.{{.opts.MimeType}}(verrs))
   }
 
-  // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was updated successfully")
-
-  // and redirect to the {{.opts.Name.URL}} index page
-  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+  return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCaseSingular}}))
 }
 
 // Destroy deletes a {{.opts.Model.Model}} from the DB. This function is mapped
 // to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
 func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
-  tx, ok := c.Value("tx").(*pop.Connection)
-  if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
-  }
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
 
   // Allocate an empty {{.opts.Model.Model}}
   {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
@@ -198,9 +167,5 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
     return errors.WithStack(err)
   }
 
-  // If there are no errors set a flash message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was destroyed successfully")
-
-  // Redirect to the {{.opts.Name.URL}} index page
-  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
+  return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCaseSingular}}))
 }
