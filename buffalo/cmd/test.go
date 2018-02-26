@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/markbates/pop"
+	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
 )
 

@@ -2,7 +2,7 @@ package soda
 
 import (
 	"github.com/gobuffalo/makr"
-	sg "github.com/markbates/pop/soda/cmd/generate"
+	sg "github.com/gobuffalo/pop/soda/cmd/generate"
 )
 
 // Run the soda generator
@@ -26,7 +26,7 @@ func (sd Generator) Run(root string, data makr.Data) error {
 	f.Should = should
 	g.Add(f)
 
-	c := makr.NewCommand(makr.GoGet("github.com/markbates/pop/..."))
+	c := makr.NewCommand(makr.GoGet("github.com/gobuffalo/pop/..."))
 	c.Should = should
 	g.Add(c)
 
@@ -47,7 +47,7 @@ import (
 	"log"
 
 	"github.com/gobuffalo/envy"
-	"github.com/markbates/pop"
+	"github.com/gobuffalo/pop"
 )
 
 // DB is a connection to your database to be used
