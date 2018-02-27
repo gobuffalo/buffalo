@@ -4,12 +4,13 @@
 package tokenauth
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gobuffalo/envy"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gobuffalo/envy"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/pkg/errors"
@@ -27,13 +28,13 @@ var (
 
 // Options for the JWT middleware
 type Options struct {
-	SignMethod    jwt.SigningMethod
-	GetKey        func(jwt.SigningMethod)(interface{}, error)
+	SignMethod jwt.SigningMethod
+	GetKey     func(jwt.SigningMethod) (interface{}, error)
 }
 
-// Middleware enables jwt token verification
-// if no Sign method is provided, by default uses HMAC
-func Middleware(options Options) buffalo.MiddlewareFunc {
+// New enables jwt token verification if no Sign method is provided,
+// by default uses HMAC
+func New(options Options) buffalo.MiddlewareFunc {
 	// set sign method to HMAC if not provided
 	if options.SignMethod == nil {
 		options.SignMethod = jwt.SigningMethodHS256
@@ -84,9 +85,9 @@ func Middleware(options Options) buffalo.MiddlewareFunc {
 
 // selectGetKeyFunc is an helper function to choose the GetKey function
 // according to the Signing method used
-func selectGetKeyFunc(method jwt.SigningMethod) func(jwt.SigningMethod)(interface{}, error){
+func selectGetKeyFunc(method jwt.SigningMethod) func(jwt.SigningMethod) (interface{}, error) {
 	switch method.(type) {
-	case *jwt.SigningMethodRSA :
+	case *jwt.SigningMethodRSA:
 		return GetKeyRSA
 	case *jwt.SigningMethodECDSA:
 		return GetKeyECDSA
@@ -104,7 +105,7 @@ func GetHMACKey(jwt.SigningMethod) (interface{}, error) {
 }
 
 // GetKeyRSA gets the public key file location from env and returns rsa.PublicKey
-func GetKeyRSA(jwt.SigningMethod) (interface{}, error){
+func GetKeyRSA(jwt.SigningMethod) (interface{}, error) {
 	key, err := envy.MustGet("JWT_PUBLIC_KEY")
 	if err != nil {
 		return nil, err
@@ -115,13 +116,14 @@ func GetKeyRSA(jwt.SigningMethod) (interface{}, error){
 	}
 	return jwt.ParseRSAPublicKeyFromPEM(keyData)
 }
+
 // GetKeyRSAPSS uses GetKeyRSA() since both requires rsa.PublicKey
-func GetKeyRSAPSS(signingMethod jwt.SigningMethod) (interface{}, error){
+func GetKeyRSAPSS(signingMethod jwt.SigningMethod) (interface{}, error) {
 	return GetKeyRSA(signingMethod)
 }
 
 // GetKeyECDSA gets the public.pem file location from env and returns ecdsa.PublicKey
-func GetKeyECDSA(jwt.SigningMethod) (interface{}, error){
+func GetKeyECDSA(jwt.SigningMethod) (interface{}, error) {
 	key, err := envy.MustGet("JWT_PUBLIC_KEY")
 	if err != nil {
 		return nil, err
@@ -132,7 +134,6 @@ func GetKeyECDSA(jwt.SigningMethod) (interface{}, error){
 	}
 	return jwt.ParseECPublicKeyFromPEM(keyData)
 }
-
 
 // getJwtToken gets the token from the Authorisation header
 // removes the Bearer part from the authorisation header value.
