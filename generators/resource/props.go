@@ -64,6 +64,41 @@ func setTypeValue(propType string) string {
 		return `uuid.Must(uuid.NewV4())`
 	case "bool":
 		return "false"
+	case "slices.string":
+		rn := rand.Intn(4) + 2
+		ss := ""
+
+		for i := 0; i < rn; i++ {
+			s := randx.String(rn)
+			ss = ss + fmt.Sprintf(`"%s",`, s)
+		}
+		return fmt.Sprintf("[]string{%s}", ss)
+	case "slices.int":
+		rn := rand.Intn(4) + 2
+		is := ""
+
+		for i := 0; i < rn; i++ {
+			n := rand.Int31()
+			is = is + fmt.Sprintf(`%v,`, n)
+		}
+		return fmt.Sprintf("[]int{%s}", is)
+	case "slices.float":
+		rn := rand.Intn(4) + 2
+		fs := ""
+
+		for i := 0; i < rn; i++ {
+			f := rand.New(rand.NewSource(0)).Float64()
+			fs = fs + fmt.Sprintf(`%v,`, f)
+		}
+		return fmt.Sprintf("[]float64{%s}", fs)
+	case "slices.uuid":
+		rn := rand.Intn(1) + 1
+		us := ""
+
+		for i := 0; i < rn; i++ {
+			us = us + `uuid.Must(uuid.NewV4()),`
+		}
+		return fmt.Sprintf("[]uuid.UUID{%s}", us)
 	}
 	if strings.Contains(propType, "null") {
 		return "null"
