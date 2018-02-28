@@ -9,6 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/pop"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
@@ -59,8 +60,15 @@ func (g Generator) Validate() error {
 		return errors.New("you must enter a name for your new application")
 	}
 
-	if g.DBType != "postgres" && g.DBType != "mysql" && g.DBType != "sqlite3" && g.DBType != "cockroach" {
-		return fmt.Errorf("Unknown db-type %s expecting one of postgres, mysql or sqlite3", g.DBType)
+	var found bool
+	for _, d := range pop.AvailableDialects {
+		if d == g.DBType {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return fmt.Errorf("Unknown db-type %s expecting one of %s", g.DBType, strings.Join(pop.AvailableDialects, ", "))
 	}
 
 	for _, n := range forbiddenAppNames {
