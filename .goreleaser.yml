@@ -21,7 +21,6 @@ builds:
       - "6"
     main: ./buffalo/main.go
     binary: buffalo-no-sqlite
-    flags: -tags nosqlite
     hooks:
       pre: packr
       post: packr clean
@@ -34,6 +33,7 @@ builds:
       - "6"
     main: ./buffalo/main.go
     binary: buffalo-with-sqlite
+    flags: -tags sqlite
     hooks:
       pre: packr
       post: packr clean

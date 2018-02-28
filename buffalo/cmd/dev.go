@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"bytes"
 	"context"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -111,6 +113,11 @@ func startDevServer(ctx context.Context) error {
 		return err
 	}
 	c.Debug = devOptions.Debug
+	if b, err := ioutil.ReadFile("database.yml"); err == nil {
+		if bytes.Contains(b, []byte("sqlite")) {
+			c.BuildFlags = append(c.BuildFlags, "-tags", "sqlite")
+		}
+	}
 	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
 }

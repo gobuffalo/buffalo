@@ -10,6 +10,7 @@ RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
+RUN go get -v -u github.com/mattn/go-sqlite3
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
