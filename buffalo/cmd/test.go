@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -170,6 +171,11 @@ func testPackages(givenArgs []string) ([]string, error) {
 
 func newTestCmd(args []string) *exec.Cmd {
 	cargs := []string{"test", "-p", "1"}
+	if b, err := ioutil.ReadFile("database.yml"); err == nil {
+		if bytes.Contains(b, []byte("sqlite")) {
+			cargs = append(cargs, "-tags", "sqlite")
+		}
+	}
 	cargs = append(cargs, args...)
 	cmd := exec.Command(envy.Get("GO_BIN", "go"), cargs...)
 	cmd.Stdin = os.Stdin
