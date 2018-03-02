@@ -22,6 +22,10 @@ RUN dep ensure
 {{else -}}
 RUN go get $(go list ./... | grep -v /vendor/)
 {{end -}}
+
+# Bind the app to 0.0.0.0 so it can be seen from outside the container
+ENV ADDR=0.0.0.0
+
 RUN buffalo build --static -o /bin/app
 
 FROM alpine
