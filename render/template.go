@@ -86,6 +86,11 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		}
 	}
 
+	// Set current_template to context
+	if _, ok := data["current_template"]; !ok {
+		data["current_template"] = templateName
+	}
+
 	source, err := s.TemplatesBox.MustBytes(templateName)
 	if err != nil {
 		return "", err
