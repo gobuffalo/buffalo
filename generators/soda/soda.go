@@ -1,6 +1,7 @@
 package soda
 
 import (
+	"flag"
 	"github.com/gobuffalo/makr"
 	sg "github.com/gobuffalo/pop/soda/cmd/generate"
 )
