@@ -194,8 +194,13 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
+	trailing := strings.HasSuffix(url, "/")
 	url = path.Join(a.Prefix, url)
 	name := a.buildRouteName(url)
+
+	if trailing && url != "/" {
+		url += "/"
+	}
 
 	hs := funcKey(h)
 	r := &RouteInfo{

@@ -13,6 +13,7 @@ import (
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
 	"github.com/markbates/willie"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -616,5 +617,46 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
 		r.Equal("bar", string(b))
+	}
+}
+
+func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
+	r := require.New(t)
+
+	app := testApp()
+	app.GET("/top-comments/", func(c Context) error {
+		return c.Render(200, render.String("hello!"))
+	})
+
+	table := []struct {
+		path        string
+		shouldError bool
+		status      int
+	}{
+		{path: "/top-comments/", shouldError: false, status: 200},
+		{path: "/top-comments", shouldError: true, status: 301},
+	}
+
+	for _, tt := range table {
+		ts := httptest.NewServer(app)
+		defer ts.Close()
+		c := http.DefaultClient
+		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			if tt.shouldError {
+				return errors.New("boom!")
+			}
+			return nil
+		}
+
+		req, err := http.NewRequest("GET", ts.URL+tt.path, nil)
+		r.NoError(err)
+
+		res, err := c.Do(req)
+		if tt.shouldError {
+			r.Error(err)
+		} else {
+			r.NoError(err)
+		}
+		r.Equal(tt.status, res.StatusCode)
 	}
 }
