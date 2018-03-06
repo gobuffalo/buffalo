@@ -29,6 +29,9 @@ func app() *buffalo.App {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// Setup URL prefix Language finder
+	t.LanguageFinders = append(t.LanguageFinders, URLPrefixLanguageFinder)
+
 	app.Use(t.Middleware())
 	app.GET("/", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("index.html"))
@@ -58,6 +61,9 @@ func app() *buffalo.App {
 	}
 	app.Middleware.Skip(t.Middleware(), noI18n)
 	app.GET("/localized-disabled", noI18n)
+	app.GET("/{lang:fr|en}/index", func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("index.html"))
+	})
 	return app
 }
 
@@ -159,4 +165,17 @@ func Test_i18n_availableLanguages(t *testing.T) {
 	w := willie.New(app())
 	res := w.Request("/languages-list").Get()
 	r.Equal("[\"en-us\",\"fr-fr\"]", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_i18n_URL_prefix(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/fr/index")
+	res := req.Get()
+	r.Equal("Bonjour à tous !", strings.TrimSpace(res.Body.String()))
+
+	req = w.Request("/en/index")
+	res = req.Get()
+	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
 }
