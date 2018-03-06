@@ -132,7 +132,6 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 		}
 
 		path = path + fmt.Sprintf(format, url.QueryEscape(k), url.QueryEscape(pendingParams[k]))
-		index = index + 1
 	}
 
 	return path

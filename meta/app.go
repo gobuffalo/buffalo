@@ -3,30 +3,32 @@ package meta
 import (
 	"encoding/json"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/gobuffalo/envy"
+	"github.com/markbates/inflect"
 )
 
 // App represents meta data for a Buffalo application on disk
 type App struct {
-	Pwd         string `json:"pwd"`
-	Root        string `json:"root"`
-	GoPath      string `json:"go_path"`
-	Name        Name   `json:"name"`
-	Bin         string `json:"bin"`
-	PackagePkg  string `json:"package_path"`
-	ActionsPkg  string `json:"actions_path"`
-	ModelsPkg   string `json:"models_path"`
-	GriftsPkg   string `json:"grifts_path"`
-	WithPop     bool   `json:"with_pop"`
-	WithDep     bool   `json:"with_dep"`
-	WithWebpack bool   `json:"with_webpack"`
-	WithYarn    bool   `json:"with_yarn"`
-	WithDocker  bool   `json:"with_docker"`
-	WithGrifts  bool   `json:"with_grifts"`
+	Pwd         string       `json:"pwd"`
+	Root        string       `json:"root"`
+	GoPath      string       `json:"go_path"`
+	Name        inflect.Name `json:"name"`
+	Bin         string       `json:"bin"`
+	PackagePkg  string       `json:"package_path"`
+	ActionsPkg  string       `json:"actions_path"`
+	ModelsPkg   string       `json:"models_path"`
+	GriftsPkg   string       `json:"grifts_path"`
+	VCS         string       `json:"vcs"`
+	WithPop     bool         `json:"with_pop"`
+	WithDep     bool         `json:"with_dep"`
+	WithWebpack bool         `json:"with_webpack"`
+	WithYarn    bool         `json:"with_yarn"`
+	WithDocker  bool         `json:"with_docker"`
+	WithGrifts  bool         `json:"with_grifts"`
 }
 
 // New App based on the details found at the provided root path
@@ -35,13 +37,17 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-	pp := packagePath(root)
+	name := Name(filepath.Base(root))
+	pp := envy.CurrentPackage()
+	if filepath.Base(pp) != string(name) {
+		pp = path.Join(pp, string(name))
+	}
 
 	app := App{
 		Pwd:        pwd,
 		Root:       root,
 		GoPath:     envy.GoPath(),
-		Name:       Name(filepath.Base(root)),
+		Name:       name,
 		PackagePkg: pp,
 		ActionsPkg: pp + "/actions",
 		ModelsPkg:  pp + "/models",
@@ -72,6 +78,11 @@ func New(root string) App {
 	if _, err := os.Stat(filepath.Join(root, "grifts")); err == nil {
 		app.WithGrifts = true
 	}
+	if _, err := os.Stat(filepath.Join(root, ".git")); err == nil {
+		app.VCS = "git"
+	} else if _, err := os.Stat(filepath.Join(root, ".bzr")); err == nil {
+		app.VCS = "bzr"
+	}
 
 	return app
 }
@@ -79,10 +90,4 @@ func New(root string) App {
 func (a App) String() string {
 	b, _ := json.Marshal(a)
 	return string(b)
-}
-
-func packagePath(root string) string {
-	src := filepath.ToSlash(filepath.Join(envy.GoPath(), "src"))
-	root = filepath.ToSlash(root)
-	return strings.Replace(root, src+"/", "", 2)
 }

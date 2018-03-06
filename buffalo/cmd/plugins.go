@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
+	"runtime"
 	"sync"
 
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/envy"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +24,7 @@ func plugs() plugins.List {
 		_plugs, err = plugins.Available()
 		if err != nil {
 			_plugs = plugins.List{}
-			log.Printf("error loading plugins %s\n", err)
+			logrus.Errorf("error loading plugins %s\n", err)
 		}
 	}
 	return _plugs
@@ -51,7 +52,9 @@ func decorate(name string, cmd *cobra.Command) {
 
 					ax = append(ax, args...)
 					ex := exec.Command(c.Binary, ax...)
-					ex.Env = append(envy.Environ(), "BUFFALO_PLUGIN=1")
+					if runtime.GOOS != "windows" {
+						ex.Env = append(envy.Environ(), "BUFFALO_PLUGIN=1")
+					}
 					ex.Stdin = os.Stdin
 					ex.Stdout = os.Stdout
 					ex.Stderr = os.Stderr

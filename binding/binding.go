@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/pop/nulls"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/pop/nulls"
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
 )
@@ -123,7 +123,6 @@ func init() {
 	binders["application/html"] = sb
 	binders["text/html"] = sb
 	binders["application/x-www-form-urlencoded"] = sb
-	binders["multipart/form-data"] = sb
 	binders["html"] = sb
 }
 

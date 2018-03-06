@@ -3,13 +3,13 @@ package render
 import (
 	"html/template"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	// this blank import is here because dep doesn't
 	// handle transitive dependencies correctly
@@ -105,7 +105,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			log.Printf("could not find a template engine for %s\n", ext)
+			logrus.Errorf("could not find a template engine for %s\n", ext)
 			continue
 		}
 		body, err = te(body, data, helpers)
@@ -140,7 +140,10 @@ func (s templateRenderer) assetPath(file string) (string, error) {
 		manifest, err := s.AssetsBox.MustString("manifest.json")
 
 		if err != nil {
-			return assetPathFor(file), nil
+			manifest, err = s.AssetsBox.MustString("assets/manifest.json")
+			if err != nil {
+				return assetPathFor(file), nil
+			}
 		}
 
 		err = loadManifest(manifest)

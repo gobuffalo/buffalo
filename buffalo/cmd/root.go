@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 // var cfgFile string
 
-var anywhereCommands = []string{"new", "version", "info"}
+var anywhereCommands = []string{"new", "version", "info", "help"}
 
 // RootCmd is the hook for all of the other commands in the buffalo binary.
 var RootCmd = &cobra.Command{
@@ -41,7 +41,7 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Printf("Error: %s\n\n", err)
+		logrus.Errorf("Error: %s\n\n", err)
 		os.Exit(-1)
 	}
 }

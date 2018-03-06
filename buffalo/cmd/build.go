@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -44,7 +43,7 @@ var xbuildCmd = &cobra.Command{
 		go func() {
 			<-ctx.Done()
 			if ctx.Err() == context.Canceled {
-				fmt.Println("~~~ BUILD CANCELLED ~~~")
+				logrus.Info("~~~ BUILD CANCELLED ~~~")
 				err := b.Cleanup()
 				if err != nil {
 					logrus.Fatal(err)
@@ -57,7 +56,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		fmt.Printf("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
+		logrus.Infof("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
 
 		return nil
 	},
@@ -78,5 +77,6 @@ func init() {
 	xbuildCmd.Flags().StringVar(&buildOptions.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Debug, "debug", "d", false, "print debugging information")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Compress, "compress", "c", true, "compress static files in the binary")
-
+	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating plush templates")
+	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
 }

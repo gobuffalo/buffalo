@@ -1,18 +1,34 @@
 var webpack = require("webpack");
+var glob = require("glob");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
 var CleanWebpackPlugin = require("clean-webpack-plugin");
 
+var entries = {
+  application: [
+    './node_modules/jquery-ujs/src/rails.js',
+    './assets/css/application.scss',
+  ],
+}
+
+glob.sync("./assets/*/*.*").reduce((_, entry) => {
+  let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|s[ac]ss|go)/g, '')
+  if(key.startsWith("_") || (/(js|s[ac]ss|go)$/i).test(entry) == false) {
+    return
+  }
+  
+  if( entries[key] == null) {
+    entries[key] = [entry]
+    return
+  } 
+  
+  entries[key].push(entry)
+})
+
 module.exports = {
-  entry: {
-    application: [
-      "./assets/js/application.js",
-      "./node_modules/jquery-ujs/src/rails.js",
-      "./assets/css/application.scss"
-    ]
-  },
+  entry: entries,
   output: {
     filename: "[name].[hash].js",
     path: `${__dirname}/public/assets`
@@ -22,7 +38,6 @@ module.exports = {
       "public/assets"
     ], {
       verbose: false,
-      watch: true
     }),
     new webpack.ProvidePlugin({
       $: "jquery",
@@ -53,7 +68,7 @@ module.exports = {
       exclude: /node_modules/
     },
       {
-        test: /\.scss$/,
+        test: /\.s[ac]ss$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [{
@@ -71,29 +86,15 @@ module.exports = {
           ]
         })
       },
-      {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/font-woff"
-      },
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/font-woff"
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=application/octet-stream"
-      },
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: "file-loader"
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: "url-loader?limit=10000&mimetype=image/svg+xml"
-      },
+      { test: /\.(woff|woff2|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,use: "url-loader"},
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,use: "file-loader" },
       {
         test: require.resolve("jquery"),
         use: "expose-loader?jQuery!expose-loader?$"
+      },
+      {
+        test: /\.go$/,
+        use: "gopherjs-loader"
       }
     ]
   }

@@ -1,7 +1,9 @@
 package i18n
 
 import (
-	"log"
+	"fmt"
+	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/gobuffalo/buffalo"
@@ -40,10 +42,18 @@ func (t *Translator) Load() error {
 	return t.Box.Walk(func(path string, f packr.File) error {
 		b, err := t.Box.MustBytes(path)
 		if err != nil {
-			log.Fatal(err)
-			return errors.WithStack(err)
+			return errors.Wrapf(err, "unable to read locale file %s", path)
 		}
-		return i18n.ParseTranslationFileBytes(path, b)
+
+		base := filepath.Base(path)
+		dir := filepath.Dir(path)
+
+		// Add a prefix to the loaded string, to avoid collision with an ISO lang code
+		err = i18n.ParseTranslationFileBytes(fmt.Sprintf("%sbuff%s", dir, base), b)
+		if err != nil {
+			return errors.Wrapf(err, "unable to parse locale file %s", base)
+		}
+		return nil
 	})
 }
 
@@ -100,7 +110,8 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 				langs := c.Value("languages").([]string)
 				T, err := i18n.Tfunc(langs[0], langs[1:]...)
 				if err != nil {
-					return err
+					c.Logger().Warn(err)
+					c.Logger().Warn("Your locale files are probably empty or missing")
 				}
 				c.Set("T", T)
 			}
@@ -136,6 +147,13 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 func (t *Translator) Translate(c buffalo.Context, translationID string, args ...interface{}) string {
 	T := c.Value("T").(i18n.TranslateFunc)
 	return T(translationID, args...)
+}
+
+// AvailableLanguages gets the list of languages provided by the app
+func (t *Translator) AvailableLanguages() []string {
+	lt := i18n.LanguageTags()
+	sort.Strings(lt)
+	return lt
 }
 
 func defaultLanguageFinder(t *Translator, c buffalo.Context) []string {

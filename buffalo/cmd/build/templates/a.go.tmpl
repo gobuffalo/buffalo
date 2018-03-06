@@ -3,12 +3,20 @@ package a
 import (
   "log"
   "strings"
-  "github.com/markbates/pop"
+  "github.com/gobuffalo/pop"
   "github.com/markbates/inflect"
   "github.com/gobuffalo/packr"
+  <%= if (opts.Environment != "development") { %>
+  "github.com/gobuffalo/envy"
+  <% } %>
 )
 
 func init() {
+  <%= if (opts.Environment != "development") { %>
+  if err := envy.MustSet("GO_ENV", "<%= opts.Environment %>"); err != nil {
+      log.Fatal(err)
+  }
+  <% } %>
   dropDatabaseYml()
 
   box := packr.NewBox("./")

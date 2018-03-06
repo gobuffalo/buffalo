@@ -6,8 +6,11 @@ RUN go get -v -u github.com/golang/lint/golint
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/markbates/grift
+RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
 RUN go get -v -u github.com/gobuffalo/tags
+RUN go get -v -u github.com/gobuffalo/pop
+RUN go get -v -u github.com/mattn/go-sqlite3
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -17,11 +20,11 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t $(go list ./... | grep -v /vendor/)
+RUN go get -v -t ./...
 
-RUN go install -v ./buffalo
+RUN go install -v -tags sqlite ./buffalo
 
-RUN go test -race $(go list ./... | grep -v /vendor/)
+RUN go test -tags sqlite -race $(go list ./... | grep -v /vendor/)
 
 RUN golint -set_exit_status $(go list ./... | grep -v /vendor/)
 
@@ -59,20 +62,6 @@ RUN rm models/user_test.go
 RUN rm models/user.go
 RUN rm actions/users_test.go
 RUN rm -rv templates/users
-
-RUN buffalo g resource --type=json users name:text email:text
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_json-xml.json
-
-RUN rm models/user_test.go
-RUN rm models/user.go
-RUN rm actions/users_test.go
-
-RUN buffalo g resource --type=xml users name:text email:text
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_json-xml.json
-
-RUN rm models/user_test.go
-RUN rm models/user.go
-RUN rm actions/users_test.go
 
 RUN buffalo g resource ouch
 RUN buffalo d resource -y ouch

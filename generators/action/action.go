@@ -6,10 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
 )
 
@@ -73,7 +74,7 @@ func (act Generator) buildTestsTemplate(filePath string) string {
 	return testsTemplate
 }
 
-func (act Generator) addTemplateFiles(actionsToAdd []meta.Name, data makr.Data) error {
+func (act Generator) addTemplateFiles(actionsToAdd []inflect.Name, data makr.Data) error {
 	for _, action := range actionsToAdd {
 		vg := makr.New()
 		viewPath := filepath.Join("templates", fmt.Sprintf("%s", act.Name.File()), fmt.Sprintf("%s.html", action.File()))
@@ -89,18 +90,18 @@ func (act Generator) addTemplateFiles(actionsToAdd []meta.Name, data makr.Data) 
 	return nil
 }
 
-func (act Generator) findActionsToAdd(path string) []meta.Name {
+func (act Generator) findActionsToAdd(path string) []inflect.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	actionsToAdd := []meta.Name{}
+	actionsToAdd := []inflect.Name{}
 
 	for _, action := range act.Actions {
 		funcSignature := fmt.Sprintf("func %s%s(c buffalo.Context) error", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping %v%v since it already exists\n", act.Name.Camel(), action.Camel())
+			logrus.Warnf("--> skipping %v%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 
@@ -110,18 +111,18 @@ func (act Generator) findActionsToAdd(path string) []meta.Name {
 	return actionsToAdd
 }
 
-func (act Generator) findHandlersToAdd(path string) []meta.Name {
+func (act Generator) findHandlersToAdd(path string) []inflect.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	handlersToAdd := []meta.Name{}
+	handlersToAdd := []inflect.Name{}
 
 	for _, action := range act.Actions {
 		funcSignature := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", act.Name.URL(), action.URL(), act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping %s from app.go since it already exists\n", funcSignature)
+			logrus.Warnf("--> skipping %s from app.go since it already exists\n", funcSignature)
 			continue
 		}
 
@@ -131,18 +132,18 @@ func (act Generator) findHandlersToAdd(path string) []meta.Name {
 	return handlersToAdd
 }
 
-func (act Generator) findTestsToAdd(path string) []meta.Name {
+func (act Generator) findTestsToAdd(path string) []inflect.Name {
 	fileContents, err := ioutil.ReadFile(path)
 	if err != nil {
 		fileContents = []byte("")
 	}
 
-	actionsToAdd := []meta.Name{}
+	actionsToAdd := []inflect.Name{}
 
 	for _, action := range act.Actions {
 		funcSignature := fmt.Sprintf("func (as *ActionSuite) Test_%v_%v() {", act.Name.Camel(), action.Camel())
 		if strings.Contains(string(fileContents), funcSignature) {
-			fmt.Printf("--> [warning] skipping Test_%v_%v since it already exists\n", act.Name.Camel(), action.Camel())
+			logrus.Warnf("--> skipping Test_%v_%v since it already exists\n", act.Name.Camel(), action.Camel())
 			continue
 		}
 

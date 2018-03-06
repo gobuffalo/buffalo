@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,8 +13,9 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
-	"github.com/markbates/pop"
+	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
 )
 
@@ -82,40 +83,47 @@ func findSchema() io.Reader {
 }
 
 func testRunner(args []string) error {
-	cmd := newTestCmd(args)
-	var runFlag bool
 	var mFlag bool
+	cargs := []string{}
+	pargs := []string{}
+	var larg string
 	for i, a := range args {
-		if a == "-run" {
-			runFlag = true
-		}
-		if a == "-m" {
+		switch a {
+		case "-run":
+			cargs = append(cargs, "-run", args[i+1])
+		case "-m":
 			mFlag = true
-			args[i] = "-testify.m"
+			cargs = append(cargs, "-testify.m", args[i+1])
+		case "-v":
+			cargs = append(cargs, "-v")
+		default:
+			if larg != "-run" && larg != "-m" {
+				pargs = append(pargs, a)
+			}
 		}
+		larg = a
 	}
 
+	cmd := newTestCmd(cargs)
 	if mFlag {
-		return mFlagRunner(args)
+		return mFlagRunner(cargs, pargs)
 	}
 
-	if !runFlag {
-		pkgs, err := testPackages()
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		cmd.Args = append(cmd.Args, pkgs...)
+	pkgs, err := testPackages(pargs)
+	if err != nil {
+		return errors.WithStack(err)
 	}
-	fmt.Println(strings.Join(cmd.Args, " "))
+	cmd.Args = append(cmd.Args, pkgs...)
+	logrus.Info(strings.Join(cmd.Args, " "))
 	return cmd.Run()
 }
 
-func mFlagRunner(args []string) error {
+func mFlagRunner(args []string, pargs []string) error {
 	app := meta.New(".")
 	pwd, _ := os.Getwd()
 	defer os.Chdir(pwd)
 
-	pkgs, err := testPackages()
+	pkgs, err := testPackages(pargs)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -127,7 +135,7 @@ func mFlagRunner(args []string) error {
 		}
 		cmd := newTestCmd(args)
 		p = strings.TrimPrefix(p, app.PackagePkg+string(filepath.Separator))
-		fmt.Println(strings.Join(cmd.Args, " "))
+		logrus.Info(strings.Join(cmd.Args, " "))
 		os.Chdir(p)
 		if err := cmd.Run(); err != nil {
 			errs = true
@@ -139,7 +147,14 @@ func mFlagRunner(args []string) error {
 	return nil
 }
 
-func testPackages() ([]string, error) {
+func testPackages(givenArgs []string) ([]string, error) {
+	// If there are args, then assume these are the packages to test.
+	//
+	// Instead of always returning all packages from 'go list ./...', just
+	// return the given packages in this case
+	if len(givenArgs) > 0 {
+		return givenArgs, nil
+	}
 	args := []string{}
 	out, err := exec.Command(envy.Get("GO_BIN", "go"), "list", "./...").Output()
 	if err != nil {
@@ -155,11 +170,14 @@ func testPackages() ([]string, error) {
 }
 
 func newTestCmd(args []string) *exec.Cmd {
-	cmd := exec.Command(envy.Get("GO_BIN", "go"), "test", "-p", "1")
-	if _, err := exec.LookPath("gotest"); err == nil {
-		cmd = exec.Command("gotest", "-p", "1")
+	cargs := []string{"test", "-p", "1"}
+	if b, err := ioutil.ReadFile("database.yml"); err == nil {
+		if bytes.Contains(b, []byte("sqlite")) {
+			cargs = append(cargs, "-tags", "sqlite")
+		}
 	}
-	cmd.Args = append(cmd.Args, args...)
+	cargs = append(cargs, args...)
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), cargs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

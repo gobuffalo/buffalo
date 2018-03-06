@@ -1,10 +1,9 @@
 package docker
 
 import (
-	"path/filepath"
-
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -17,11 +16,16 @@ func (d Generator) Run(root string, data makr.Data) error {
 			return d.Style != "none"
 		},
 		Runner: func(root string, data makr.Data) error {
-			style := d.Style
-			if style != "multi" && style != "standard" {
-				return errors.Errorf("unknown Docker style: %s", style)
+			var box packr.Box
+			switch d.Style {
+			case "standard":
+				box = packr.NewBox("./standard/templates")
+			case "multi":
+				box = packr.NewBox("./multi/templates")
+			default:
+				return errors.Errorf("unknown Docker style: %s", d.Style)
 			}
-			files, err := generators.Find(filepath.Join(generators.TemplatesPath, "docker", style))
+			files, err := generators.FindByBox(box)
 			if err != nil {
 				return errors.WithStack(err)
 			}

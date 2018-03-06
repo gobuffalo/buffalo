@@ -28,3 +28,6 @@ gin-bin
 *.sqlite*
 .idea/
 .vscode
+vendor
+Gopkg.lock
+.grifter/
