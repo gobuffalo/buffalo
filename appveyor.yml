@@ -39,4 +39,4 @@ build_script:
 
     go install github.com/gobuffalo/buffalo/buffalo
 test_script:
-- cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test %%G & IF ERRORLEVEL == 1 EXIT 1)
+- cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test -tags sqlite %%G & IF ERRORLEVEL == 1 EXIT 1)
