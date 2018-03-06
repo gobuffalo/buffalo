@@ -31,10 +31,8 @@ deploy: false
 
 before_build:
 - cmd: >-
-    go get -v -u github.com/mattn/go-sqlite3
-
     go get -v -u -t ./...
-
+    go get github.com/mattn/go-sqlite3
 build_script:
 - cmd: >-
     go build -v -tags sqlite github.com/gobuffalo/buffalo/buffalo
