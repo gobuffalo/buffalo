@@ -33,13 +33,15 @@ deploy: false
 
 before_build:
 - cmd: >-
+    go get -v -u github.com/mattn/go-sqlite3
+
     go get -v -u -t ./...
 
-    go get -v -u github.com/mattn/go-sqlite3
 build_script:
 - cmd: >-
     go build -v github.com/gobuffalo/buffalo/buffalo
 
     go install github.com/gobuffalo/buffalo/buffalo
+
 test_script:
 - cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test -tags sqlite %%G & IF ERRORLEVEL == 1 EXIT 1)
