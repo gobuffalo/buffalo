@@ -244,17 +244,16 @@ body {
 	width: 440px;
 	min-width: 270px;
 	margin: 0 auto;
-	padding: 10px 25px;
+	padding: 10px 25px 35px 10px;
 	border-radius:  4px;
 	box-shadow: #ddd -2px 3px 10px;
-	padding-bottom: 20px;
 	background: #FFFFFF;
 	box-shadow: 0 2px 4px 0 rgba(185,185,185,0.28);
 	border-radius: 5px;
 }
 
 .card p {
-	width: 350px;
+	width: 320px;
 	margin: 15px auto;
 }
 
@@ -318,10 +317,9 @@ body {
 	width: 440px;
 	min-width: 270px;
 	margin: 0 auto;
-	padding: 10px 25px;
+	padding: 10px 25px 35px 10px;
 	border-radius:  4px;
 	box-shadow: #ddd -2px 3px 10px;
-	padding-bottom: 20px;
 	background: #FFFFFF;
 	box-shadow: 0 2px 4px 0 rgba(185,185,185,0.28);
 	border-radius: 5px;
