@@ -29,11 +29,15 @@ func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_List() {
 
 	res := as.HTML("/{{.opts.FilesPath}}").Get()
 	as.Equal(200, res.Code)
-	{{ $test := index .opts.Props 0 }}
-	{{ if eq $test.Type "uuid" -}}
-	as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
-	{{- else -}}
-	as.Contains(res.Body.String(), {{ if .opts.Props }}{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}} {{else}}"{{$.opts.Name.Resource}}"{{ end }})
+	{{- if .opts.Props }}
+		{{ $p := index .opts.Props 0 }}
+		{{ if eq $p.Type "uuid" -}}
+			as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
+		{{ else }}
+		as.Contains(res.Body.String(),{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}})
+		{{- end }}
+	{{ else }}	
+	as.Contains(res.Body.String(), "{{$.opts.Name.Resource}}")
 	{{- end }}
 }
 
@@ -43,10 +47,15 @@ func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Show() {
 
 	res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Get()
 	as.Equal(200, res.Code)
-	{{ if eq $test.Type "uuid" -}}
-	as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
-	{{ else }}
-	as.Contains(res.Body.String(), {{ if .opts.Props }}{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}} {{else}}"{{$.opts.Name.Resource}}"{{ end }})
+	{{- if .opts.Props }}
+		{{ $p := index .opts.Props 0 }}
+		{{ if eq $p.Type "uuid" -}}
+			as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
+		{{ else }}
+		as.Contains(res.Body.String(),{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}})
+		{{- end }}
+	{{ else }}	
+	as.Contains(res.Body.String(), "{{$.opts.Name.Resource}}")
 	{{- end }}
 }
 
