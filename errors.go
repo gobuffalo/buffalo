@@ -253,7 +253,7 @@ body {
 }
 
 .card p {
-	width: 320px;
+	max-width: 320px;
 	margin: 15px auto;
 }
 
@@ -326,7 +326,7 @@ body {
 }
 
 .card p {
-	width: 350px;
+	max-width: 320px;
 	margin: 15px auto;
 }
 
