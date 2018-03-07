@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -82,40 +83,47 @@ func findSchema() io.Reader {
 }
 
 func testRunner(args []string) error {
-	cmd := newTestCmd(args)
-	var runFlag bool
 	var mFlag bool
+	cargs := []string{}
+	pargs := []string{}
+	var larg string
 	for i, a := range args {
-		if a == "-run" {
-			runFlag = true
-		}
-		if a == "-m" {
+		switch a {
+		case "-run":
+			cargs = append(cargs, "-run", args[i+1])
+		case "-m":
 			mFlag = true
-			args[i] = "-testify.m"
+			cargs = append(cargs, "-testify.m", args[i+1])
+		case "-v":
+			cargs = append(cargs, "-v")
+		default:
+			if larg != "-run" && larg != "-m" {
+				pargs = append(pargs, a)
+			}
 		}
+		larg = a
 	}
 
+	cmd := newTestCmd(cargs)
 	if mFlag {
-		return mFlagRunner(args)
+		return mFlagRunner(cargs, pargs)
 	}
 
-	if !runFlag {
-		pkgs, err := testPackages(args)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		cmd.Args = append(cmd.Args, pkgs...)
+	pkgs, err := testPackages(pargs)
+	if err != nil {
+		return errors.WithStack(err)
 	}
+	cmd.Args = append(cmd.Args, pkgs...)
 	logrus.Info(strings.Join(cmd.Args, " "))
 	return cmd.Run()
 }
 
-func mFlagRunner(args []string) error {
+func mFlagRunner(args []string, pargs []string) error {
 	app := meta.New(".")
 	pwd, _ := os.Getwd()
 	defer os.Chdir(pwd)
 
-	pkgs, err := testPackages(args)
+	pkgs, err := testPackages(pargs)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -162,10 +170,14 @@ func testPackages(givenArgs []string) ([]string, error) {
 }
 
 func newTestCmd(args []string) *exec.Cmd {
-	cmd := exec.Command(envy.Get("GO_BIN", "go"), "test", "-p", "1")
-	if _, err := exec.LookPath("gotest"); err == nil {
-		cmd = exec.Command("gotest", "-p", "1")
+	cargs := []string{"test", "-p", "1"}
+	if b, err := ioutil.ReadFile("database.yml"); err == nil {
+		if bytes.Contains(b, []byte("sqlite")) {
+			cargs = append(cargs, "-tags", "sqlite")
+		}
 	}
+	cargs = append(cargs, args...)
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), cargs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
