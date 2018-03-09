@@ -26,11 +26,11 @@ func App() *buffalo.App {
         // [...]
 
         // Setup and use translations:
-		var err error
-		if T, err = i18n.New(packr.NewBox("../locales"), "en"); err != nil {
-			app.Stop(err)
-		}
-		app.Use(T.Middleware())
+	var err error
+	if T, err = i18n.New(packr.NewBox("../locales"), "en"); err != nil {
+		app.Stop(err)
+	}
+	app.Use(T.Middleware())
     }
     return app
 }
