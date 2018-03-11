@@ -1,6 +1,7 @@
 package soda
 
 import (
+	"flag"
 	"github.com/gobuffalo/makr"
 	sg "github.com/gobuffalo/pop/soda/cmd/generate"
 )
@@ -56,6 +57,12 @@ var DB *pop.Connection
 
 func init() {
 	var err error
+
+	// Allow "go test" to work correctly, independently of buffalo test
+	if flag.Lookup("test.v") != nil {
+		envy.Set("GO_ENV", "test")
+	}
+
 	env := envy.Get("GO_ENV", "development")
 	DB, err = pop.Connect(env)
 	if err != nil {
