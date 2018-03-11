@@ -6,7 +6,7 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 
-* [github.com/cockroachdb/cockroach-go/crdb](https://github.com/cockroachdb/cockroach-go/crdb)
+* [github.com/cockroachdb/cockroach-go](https://github.com/cockroachdb/cockroach-go)
 
 * [github.com/daviddengcn/go-colortext](https://github.com/daviddengcn/go-colortext)
 
