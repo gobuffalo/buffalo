@@ -9,6 +9,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
@@ -22,7 +23,7 @@ var setupOptions = struct {
 	dropDatabases bool
 }{}
 
-type setupCheck func() error
+type setupCheck func(meta.App) error
 
 var setupCmd = &cobra.Command{
 	Use:   "setup",
@@ -44,8 +45,9 @@ Tests:
 * Runs "buffalo test" to confirm the application's tests are running properly.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		app := meta.New(".")
 		for _, check := range []setupCheck{assetCheck, updateGoDepsCheck, databaseCheck, testCheck} {
-			err := check()
+			err := check(app)
 			if err != nil {
 				return errors.WithStack(err)
 			}
@@ -54,9 +56,9 @@ Tests:
 	},
 }
 
-func updateGoDepsCheck() error {
+func updateGoDepsCheck(app meta.App) error {
 	deps, _ := deplist.List()
-	if _, err := os.Stat("Gopkg.toml"); err == nil {
+	if app.WithDep {
 		// use github.com/golang/dep
 		args := []string{"ensure"}
 		if setupOptions.verbose {
@@ -75,11 +77,14 @@ func updateGoDepsCheck() error {
 	// go old school with the installation
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	wg, ctx := errgroup.WithContext(ctx)
+	wg, _ := errgroup.WithContext(ctx)
 	deps, err := deplist.List()
 	if err != nil {
 		return errors.WithStack(err)
 	}
+
+	deps["github.com/gobuffalo/suite"] = "github.com/gobuffalo/suite"
+
 	for dep := range deps {
 		args := []string{"get"}
 		if setupOptions.verbose {
@@ -102,7 +107,7 @@ func updateGoDepsCheck() error {
 	return nil
 }
 
-func testCheck() error {
+func testCheck(meta.App) error {
 	err := run(exec.Command("buffalo", "test"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to run your applications tests:\n%s", err)
@@ -110,13 +115,12 @@ func testCheck() error {
 	return nil
 }
 
-func databaseCheck() error {
-	if _, err := os.Stat("./database.yml"); err != nil {
-		// no database.yml, so move on
+func databaseCheck(app meta.App) error {
+	if !app.WithPop {
 		return nil
 	}
 	for _, check := range []setupCheck{dbCreateCheck, dbMigrateCheck, dbSeedCheck} {
-		err := check()
+		err := check(app)
 		if err != nil {
 			return err
 		}
@@ -124,7 +128,7 @@ func databaseCheck() error {
 	return nil
 }
 
-func dbCreateCheck() error {
+func dbCreateCheck(meta.App) error {
 	if setupOptions.dropDatabases {
 		err := run(exec.Command("buffalo", "db", "drop", "-a"))
 		if err != nil {
@@ -138,7 +142,7 @@ func dbCreateCheck() error {
 	return nil
 }
 
-func dbMigrateCheck() error {
+func dbMigrateCheck(meta.App) error {
 	err := run(exec.Command("buffalo", "db", "migrate"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to migrate your database:\n%s", err)
@@ -146,7 +150,7 @@ func dbMigrateCheck() error {
 	return nil
 }
 
-func dbSeedCheck() error {
+func dbSeedCheck(meta.App) error {
 	cmd := exec.Command("buffalo", "t", "list")
 	out, err := cmd.Output()
 	if err != nil {
@@ -162,19 +166,18 @@ func dbSeedCheck() error {
 	return nil
 }
 
-func assetCheck() error {
-	if _, err := os.Stat("./yarn.lock"); err == nil {
-		return yarnCheck()
+func assetCheck(app meta.App) error {
+	if !app.WithWebpack {
+		return nil
 	}
-	if _, err := os.Stat("./package.json"); err == nil {
-		return npmCheck()
+	if app.WithYarn {
+		return yarnCheck(app)
 	}
-	// no asset pipeline, so move on.
-	return nil
+	return npmCheck(app)
 }
 
-func npmCheck() error {
-	err := nodeCheck()
+func npmCheck(app meta.App) error {
+	err := nodeCheck(app)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -185,13 +188,13 @@ func npmCheck() error {
 	return nil
 }
 
-func yarnCheck() error {
-	err := nodeCheck()
+func yarnCheck(app meta.App) error {
+	err := nodeCheck(app)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	if _, err := exec.LookPath("yarn"); err != nil {
-		err := run(exec.Command("npm", "install", "yarn"))
+		err := run(exec.Command("npm", "install", "-g", "yarn"))
 		if err != nil {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
@@ -203,7 +206,7 @@ func yarnCheck() error {
 	return nil
 }
 
-func nodeCheck() error {
+func nodeCheck(meta.App) error {
 	if _, err := exec.LookPath("node"); err != nil {
 		return errors.New("this application requires node, and we could not find it installed on your system please install node and try again")
 	}

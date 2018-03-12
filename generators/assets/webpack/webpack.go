@@ -8,9 +8,13 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
+
+// TemplateBox contains all templates needed for the webpack generator
+var TemplateBox = packr.NewBox("../webpack/templates")
 
 var logo = &makr.RemoteFile{
 	File:       makr.NewFile("assets/images/logo.svg", ""),
@@ -44,7 +48,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 	g.Add(logo)
 
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "assets", "webpack"))
+	files, err := generators.FindByBox(TemplateBox)
 	if err != nil {
 		return errors.WithStack(err)
 	}

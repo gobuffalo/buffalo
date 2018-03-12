@@ -1,8 +1,7 @@
 [{
-    "path": "actions/person_events.go",
-    "contains": [
-      "c.Set(\"personEvents\", personEvents)",
-      "c.Set(\"personEvent\", personEvent)"
-    ]
-  }
-]
+  "path": "actions/person_events.go",
+  "contains": [
+    "c.Render(200, r.Auto(c, personEvents))",
+    "c.Render(200, r.Auto(c, personEvent))"
+  ]
+}]

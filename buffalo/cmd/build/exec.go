@@ -22,7 +22,9 @@ func (debugWriter) Write(data []byte) (int, error) {
 func (b *Builder) exec(name string, args ...string) error {
 	cmd := exec.CommandContext(b.ctx, name, args...)
 	logrus.Debugf("running %s", strings.Join(cmd.Args, " "))
+
 	//cmd.Env = envy.Environ()
+
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = debugWriter(0)

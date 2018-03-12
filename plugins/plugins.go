@@ -20,7 +20,9 @@ import (
 type List map[string]Commands
 
 // Available plugins for the `buffalo` command.
-// It will look in $PATH and the `./plugins` directory.
+// It will look in $GOPATH/bin and the `./plugins` directory.
+// This can be changed by setting the $BUFFALO_PLUGIN_PATH
+// environment variable.
 //
 // Requirements:
 // * file/command must be executable
@@ -35,7 +37,11 @@ func Available() (List, error) {
 
 	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
 	if err != nil {
-		from = envy.Get("PATH", "")
+		from, err = envy.MustGet("GOPATH")
+		if err != nil {
+			return list, errors.WithStack(err)
+		}
+		from = filepath.Join(from, "bin")
 	}
 
 	if runtime.GOOS == "windows" {

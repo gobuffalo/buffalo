@@ -1,6 +1,7 @@
 package newapp
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,6 +15,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/soda"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -24,6 +26,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	if a.AsAPI {
 		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
 		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
+		defer os.RemoveAll(filepath.Join(a.Root, "public"))
 	}
 	if a.Force {
 		os.RemoveAll(a.Root)
@@ -33,80 +36,44 @@ func (a Generator) Run(root string, data makr.Data) error {
 	if a.WithDep {
 		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 	}
-	g.Add(makr.NewCommand(makr.GoGet("github.com/motemen/gore", "-u")))
 
-	files, err := generators.Find(filepath.Join(generators.TemplatesPath, "newapp"))
+	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, f := range files {
-		if a.AsAPI {
-			if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") {
-				continue
-			}
+		if !a.AsAPI {
 			g.Add(makr.NewFile(f.WritePath, f.Body))
-		} else {
-			g.Add(makr.NewFile(f.WritePath, f.Body))
+			continue
 		}
 
+		if strings.Contains(f.WritePath, "locales") || strings.Contains(f.WritePath, "templates") || strings.Contains(f.WritePath, "public") {
+			continue
+		}
+
+		g.Add(makr.NewFile(f.WritePath, f.Body))
 	}
+
 	data["name"] = a.Name
 	if err := refresh.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
 
-	// Add CI configuration, if requested
-	if a.CIProvider == "travis" {
-		g.Add(makr.NewFile(".travis.yml", nTravis))
-	} else if a.CIProvider == "gitlab-ci" {
-		if a.WithPop {
-			if a.DBType == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
-			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
-			} else {
-				data["testDbUrl"] = ""
-			}
-			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
-		} else {
-			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCiNoPop))
-		}
+	a.setupCI(g, data)
+
+	if err := a.setupWebpack(root, data); err != nil {
+		return errors.WithStack(err)
 	}
 
-	if !a.AsAPI {
-		if a.WithWebpack {
-			w := webpack.New()
-			w.App = a.App
-			w.Bootstrap = a.Bootstrap
-			if err := w.Run(root, data); err != nil {
-				return errors.WithStack(err)
-			}
-		} else {
-			if err := standard.Run(root, data); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-	}
-	if a.WithPop {
-		sg := soda.New()
-		sg.App = a.App
-		sg.Dialect = a.DBType
-		data["appPath"] = a.Root
-		data["name"] = a.Name.File()
-		if err := sg.Run(root, data); err != nil {
-			return errors.WithStack(err)
-		}
+	if err := a.setupPop(root, data); err != nil {
+		return errors.WithStack(err)
 	}
 
-	if a.Docker != "none" {
-		o := docker.New()
-		o.App = a.App
-		o.Version = a.Version
-		if err := o.Run(root, data); err != nil {
-			return errors.WithStack(err)
-		}
+	if err := a.setupDocker(root, data); err != nil {
+		return errors.WithStack(err)
 	}
+
 	g.Add(makr.NewCommand(a.goGet()))
 
 	g.Add(makr.Func{
@@ -116,17 +83,109 @@ func (a Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
-	if a.VCS == "git" || a.VCS == "bzr" {
-		// Execute git or bzr case (same CLI API)
-		if _, err := exec.LookPath(a.VCS); err == nil {
-			g.Add(makr.NewCommand(exec.Command(a.VCS, "init")))
-			g.Add(makr.NewCommand(exec.Command(a.VCS, "add", ".")))
-			g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-m", "Initial Commit")))
-		}
-	}
+	a.setupVCS(g)
 
 	data["opts"] = a
 	return g.Run(root, data)
+}
+
+func (a Generator) setupVCS(g *makr.Generator) {
+	if a.VCS != "git" && a.VCS != "bzr" {
+		return
+	}
+	// Execute git or bzr case (same CLI API)
+	if _, err := exec.LookPath(a.VCS); err != nil {
+		return
+	}
+
+	// Create .gitignore or .bzrignore
+	g.Add(makr.NewFile(fmt.Sprintf(".%signore", a.VCS), nVCSIgnore))
+	g.Add(makr.NewCommand(exec.Command(a.VCS, "init")))
+	args := []string{"add", "."}
+	if a.VCS == "bzr" {
+		// Ensure Bazaar is as quiet as Git
+		args = append(args, "-q")
+	}
+	g.Add(makr.NewCommand(exec.Command(a.VCS, args...)))
+	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-q", "-m", "Initial Commit")))
+}
+
+func (a Generator) setupDocker(root string, data makr.Data) error {
+	if a.Docker == "none" {
+		return nil
+	}
+
+	o := docker.New()
+	o.App = a.App
+	o.Version = a.Version
+	if err := o.Run(root, data); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (a Generator) setupPop(root string, data makr.Data) error {
+	if !a.WithPop {
+		return nil
+	}
+
+	sg := soda.New()
+	sg.App = a.App
+	sg.Dialect = a.DBType
+	data["appPath"] = a.Root
+	data["name"] = a.Name.File()
+
+	if err := sg.Run(root, data); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (a Generator) setupWebpack(root string, data makr.Data) error {
+	if a.AsAPI {
+		return nil
+	}
+
+	if a.WithWebpack {
+		w := webpack.New()
+		w.App = a.App
+		w.Bootstrap = a.Bootstrap
+		if err := w.Run(root, data); err != nil {
+			return errors.WithStack(err)
+		}
+
+		return nil
+	}
+
+	if err := standard.Run(root, data); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
+
+	switch a.CIProvider {
+	case "travis":
+		g.Add(makr.NewFile(".travis.yml", nTravis))
+	case "gitlab-ci":
+		if a.WithPop {
+			if a.DBType == "postgres" {
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
+			} else if a.DBType == "mysql" {
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
+			} else {
+				data["testDbUrl"] = ""
+			}
+			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
+			break
+		}
+
+		g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCiNoPop))
+	}
 }
 
 func (a Generator) goGet() *exec.Cmd {
@@ -280,4 +339,20 @@ test:1.8:
   stage: test
   script:
     - buffalo test
+`
+
+const nVCSIgnore = `vendor/
+**/*.log
+**/*.sqlite
+.idea/
+bin/
+tmp/
+node_modules/
+.sass-cache/
+*-packr.go
+public/assets/
+{{ .opts.Name.File }}
+.vscode/
+.grifter/
+.env
 `

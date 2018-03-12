@@ -7,12 +7,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/pop"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 )
@@ -113,10 +115,14 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		data["flash"] = d.Flash().data
 		data["session"] = d.Session()
 		data["request"] = d.Request()
+		data["status"] = status
 		bb := &bytes.Buffer{}
 
 		err := rr.Render(bb, data)
 		if err != nil {
+			if er, ok := errors.Cause(err).(render.ErrRedirect); ok {
+				return d.Redirect(er.Status, er.URL)
+			}
 			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
 		}
 
@@ -126,6 +132,9 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 
 		d.Response().Header().Set("Content-Type", rr.ContentType())
+		if p, ok := data["pagination"].(*pop.Paginator); ok {
+			d.Response().Header().Set("X-Pagination", p.String())
+		}
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
@@ -165,9 +174,13 @@ func (d *DefaultContext) Error(status int, err error) error {
 	return HTTPError{Status: status, Cause: errors.WithStack(err)}
 }
 
-// Websocket returns an upgraded github.com/gorilla/websocket.Conn
-// that can then be used to work with websockets easily.
+// Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead.
 func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
+	warningMsg := "Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead."
+	_, file, no, ok := runtime.Caller(1)
+	if ok {
+		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
+	}
 	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
 }
 
@@ -219,5 +232,4 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 var defaultUpgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-	CheckOrigin:     func(r *http.Request) bool { return true },
 }

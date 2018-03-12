@@ -4,7 +4,7 @@ import (
 
   "github.com/pkg/errors"
   "github.com/gobuffalo/buffalo"
-  "github.com/markbates/pop"
+  "github.com/gobuffalo/pop"
   "{{.opts.App.ModelsPkg}}"
 )
 
@@ -45,13 +45,10 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
     return errors.WithStack(err)
   }
 
-  // Make {{.opts.Model.ModelPlural}} available inside the html template
-  c.Set("{{.opts.Model.VarCasePlural}}", {{.opts.Model.VarCasePlural}})
-
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
 
-  return c.Render(200, r.HTML("{{.opts.FilesPath}}/index.html"))
+  return c.Render(200, r.Auto(c, {{.opts.Model.VarCasePlural}}))
 }
 
 // Show gets the data for one {{.opts.Model.Model}}. This function is mapped to
@@ -71,19 +68,13 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
-
-  return c.Render(200, r.HTML("{{.opts.FilesPath}}/show.html"))
+  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }
 
 // New renders the form for creating a new {{.opts.Model.Model}}.
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
-  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.VarCaseSingular}}", &models.{{.opts.Model.Model}}{})
-
-  return c.Render(200, r.HTML("{{.opts.FilesPath}}/new.html"))
+  return c.Render(200, r.Auto(c, &models.{{.opts.Model.Model}}{}))
 }
 
 // Create adds a {{.opts.Model.Model}} to the DB. This function is mapped to the
@@ -110,22 +101,19 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   if verrs.HasAny() {
-    // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-    c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
-
     // Make the errors available inside the html template
     c.Set("errors", verrs)
 
     // Render again the new.html template that the user can
     // correct the input.
-    return c.Render(422, r.HTML("{{.opts.FilesPath}}/new.html"))
+    return c.Render(422, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", "{{.opts.Model.Model}} was created successfully")
 
   // and redirect to the {{.opts.Name.URL}} index page
-  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.Model.VarCaseSingular}}.ID)
+  return c.Render(201, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }
 
 // Edit renders a edit form for a {{.opts.Model.Model}}. This function is
@@ -144,9 +132,7 @@ func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
-  // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-  c.Set("{{.opts.Model.VarCaseSingular}}", {{.opts.Model.VarCaseSingular}})
-  return c.Render(200, r.HTML("{{.opts.FilesPath}}/edit.html"))
+  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }
 
 // Update changes a {{.opts.Model.Model}} in the DB. This function is mapped to
@@ -176,22 +162,19 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   }
 
   if verrs.HasAny() {
-    // Make {{.opts.Model.VarCaseSingular}} available inside the html template
-    c.Set("{{.opts.Model.UnderSingular}}", {{.opts.Model.VarCaseSingular}})
-
     // Make the errors available inside the html template
     c.Set("errors", verrs)
 
     // Render again the edit.html template that the user can
     // correct the input.
-    return c.Render(422, r.HTML("{{.opts.FilesPath}}/edit.html"))
+    return c.Render(422, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", "{{.opts.Model.Model}} was updated successfully")
 
   // and redirect to the {{.opts.Name.URL}} index page
-  return c.Redirect(302, "/{{.opts.Name.URL}}/%s",{{.opts.Model.VarCaseSingular}}.ID)
+  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }
 
 // Destroy deletes a {{.opts.Model.Model}} from the DB. This function is mapped
@@ -219,5 +202,5 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   c.Flash().Add("success", "{{.opts.Model.Model}} was destroyed successfully")
 
   // Redirect to the {{.opts.Name.URL}} index page
-  return c.Redirect(302, "/{{.opts.Name.URL}}")
+  return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
 }

@@ -57,7 +57,7 @@ func installBin() error {
 }
 
 func localTest() error {
-	cmd := exec.Command("go", "test", "-v", "-race", "./...")
+	cmd := exec.Command("go", "test", "-tags", "sqlite", "-v", "-race", "./...")
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout

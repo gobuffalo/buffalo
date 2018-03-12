@@ -9,7 +9,7 @@ import (
 
 var r *render.Engine
 {{ if .opts.AsWeb -}}
-var assetsBox = packr.NewBox("../public/assets")
+var assetsBox = packr.NewBox("../public")
 {{ end -}}
 
 func init() {
@@ -23,7 +23,11 @@ func init() {
       AssetsBox:    assetsBox,
 
       // Add template helpers here:
-      Helpers: render.Helpers{},
+      Helpers: render.Helpers{
+      // uncomment for non-Bootstrap form helpers:
+      // "form":     plush.FormHelper,
+      // "form_for": plush.FormForHelper,
+      },
     {{ end -}}
   })
 }

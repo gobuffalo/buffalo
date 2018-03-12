@@ -11,9 +11,9 @@ import (
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/pop"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/going/defaults"
-	"github.com/markbates/pop"
 )
 
 // Options are used to configure and define how your application should run.

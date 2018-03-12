@@ -8,25 +8,27 @@ import (
 	"runtime"
 
 	"github.com/gobuffalo/envy"
+	"github.com/markbates/inflect"
 )
 
 // App represents meta data for a Buffalo application on disk
 type App struct {
-	Pwd         string `json:"pwd"`
-	Root        string `json:"root"`
-	GoPath      string `json:"go_path"`
-	Name        Name   `json:"name"`
-	Bin         string `json:"bin"`
-	PackagePkg  string `json:"package_path"`
-	ActionsPkg  string `json:"actions_path"`
-	ModelsPkg   string `json:"models_path"`
-	GriftsPkg   string `json:"grifts_path"`
-	WithPop     bool   `json:"with_pop"`
-	WithDep     bool   `json:"with_dep"`
-	WithWebpack bool   `json:"with_webpack"`
-	WithYarn    bool   `json:"with_yarn"`
-	WithDocker  bool   `json:"with_docker"`
-	WithGrifts  bool   `json:"with_grifts"`
+	Pwd         string       `json:"pwd"`
+	Root        string       `json:"root"`
+	GoPath      string       `json:"go_path"`
+	Name        inflect.Name `json:"name"`
+	Bin         string       `json:"bin"`
+	PackagePkg  string       `json:"package_path"`
+	ActionsPkg  string       `json:"actions_path"`
+	ModelsPkg   string       `json:"models_path"`
+	GriftsPkg   string       `json:"grifts_path"`
+	VCS         string       `json:"vcs"`
+	WithPop     bool         `json:"with_pop"`
+	WithDep     bool         `json:"with_dep"`
+	WithWebpack bool         `json:"with_webpack"`
+	WithYarn    bool         `json:"with_yarn"`
+	WithDocker  bool         `json:"with_docker"`
+	WithGrifts  bool         `json:"with_grifts"`
 }
 
 // New App based on the details found at the provided root path
@@ -75,6 +77,11 @@ func New(root string) App {
 	}
 	if _, err := os.Stat(filepath.Join(root, "grifts")); err == nil {
 		app.WithGrifts = true
+	}
+	if _, err := os.Stat(filepath.Join(root, ".git")); err == nil {
+		app.VCS = "git"
+	} else if _, err := os.Stat(filepath.Join(root, ".bzr")); err == nil {
+		app.VCS = "bzr"
 	}
 
 	return app
