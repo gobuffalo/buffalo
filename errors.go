@@ -72,15 +72,25 @@ func (a *App) PanicHandler(next Handler) Handler {
 	}
 }
 
+func productionErrorResponseFor(status int) []byte {
+	if status == http.StatusNotFound {
+		return []byte(prodNotFoundTmpl)
+	}
+
+	return []byte(prodErrorTmpl)
+}
+
 func defaultErrorHandler(status int, err error, c Context) error {
 	env := c.Value("env")
+
 	c.Logger().Error(err)
+	c.Response().WriteHeader(status)
+
 	if env != nil && env.(string) == "production" {
-		c.Response().WriteHeader(status)
-		c.Response().Write([]byte(prodErrorTmpl))
+		responseBody := productionErrorResponseFor(status)
+		c.Response().Write(responseBody)
 		return nil
 	}
-	c.Response().WriteHeader(status)
 
 	msg := fmt.Sprintf("%+v", err)
 	ct := httpx.ContentType(c.Request())
@@ -220,11 +230,146 @@ var devErrorTmpl = `
 </html>
 `
 var prodErrorTmpl = `
-<h1>We're Sorry!</h1>
-<p>
-It looks like something went wrong! Don't worry, we are aware of the problem and are looking into it.
-</p>
-<p>
-Sorry if this has caused you any problems. Please check back again later.
-</p>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+	background: #ECECEC;
+	padding-top: 25px;
+}
+
+.card {
+	box-sizing: border-box;
+	width: 440px;
+	min-width: 270px;
+	margin: 0 auto;
+	padding: 10px 25px 35px 10px;
+	border-radius:  4px;
+	box-shadow: #ddd -2px 3px 10px;
+	background: #FFFFFF;
+	box-shadow: 0 2px 4px 0 rgba(185,185,185,0.28);
+	border-radius: 5px;
+}
+
+.card p {
+	max-width: 320px;
+	margin: 15px auto;
+}
+
+body {
+	font-family: helvetica neue, helvetica, sans-serif;
+	color: #333;
+}
+
+h1 {
+	text-align: center;
+	font-size: 22px;
+}
+
+hr {
+	border: 0.5px solid #D72727;
+  width: 180px;
+}
+
+p.powered {
+	text-align: center;
+	font-family: HelveticaNeue-Light;
+	font-size: 12px;
+	color: #333333;
+}
+
+@media (max-width: 600px) {
+  .card {
+		width: 100%;
+		display: block;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="card">
+		<h1>We're Sorry!</h1>
+		<hr>
+		<p>It looks like something went wrong! Don't worry, we are aware of the problem and are looking into it.</p>
+		<p>Sorry if this has caused you any problems. Please check back again later.</p>
+	</div>
+
+	<p class="powered">powered by <a href="https://gobuffalo.io">gobuffalo.io</a></p>
+</div>
+</body>
+</html>
+`
+
+var prodNotFoundTmpl = `
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+	background: #ECECEC;
+	padding-top: 25px;
+}
+
+.card {
+	box-sizing: border-box;
+	width: 440px;
+	min-width: 270px;
+	margin: 0 auto;
+	padding: 10px 25px 35px 10px;
+	border-radius:  4px;
+	box-shadow: #ddd -2px 3px 10px;
+	background: #FFFFFF;
+	box-shadow: 0 2px 4px 0 rgba(185,185,185,0.28);
+	border-radius: 5px;
+}
+
+.card p {
+	max-width: 320px;
+	margin: 15px auto;
+}
+
+body {
+	font-family: helvetica neue, helvetica, sans-serif;
+	color: #333;
+}
+
+h1 {
+	text-align: center;
+	font-size: 22px;
+}
+
+hr {
+	border: 0.5px solid #1272E2;
+  width: 180px;
+}
+
+p.powered {
+	text-align: center;
+	font-family: HelveticaNeue-Light;
+	font-size: 12px;
+	color: #333333;
+}
+
+@media (max-width: 600px) {
+  .card {
+		width: 100%;
+		display: block;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="card">
+		<h1>Not Found</h1>
+		<hr>
+		<p>The page you’re looking for does not exist, you may have mistyped the address or the page may have been moved.</p>
+	</div>
+
+	<p class="powered">powered by <a href="https://gobuffalo.io">gobuffalo.io</a></p>
+</div>
+</body>
+</html>
 `
