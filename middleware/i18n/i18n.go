@@ -14,14 +14,17 @@ import (
 	"github.com/pkg/errors"
 )
 
-// LanguageFinder can be implemented for custom finding of search
+// LanguageFinder - deprecated
+type LanguageFinder func(*Translator, buffalo.Context) []string
+
+// LanguageExtractor can be implemented for custom finding of search
 // languages. This can be useful if you want to load a user's language
 // from something like a database. See Middleware() for more information
 // on how the default implementation searches for languages.
-type LanguageFinder func(LanguageFinderOptions, buffalo.Context) []string
+type LanguageExtractor func(LanguageExtractorOptions, buffalo.Context) []string
 
-// LanguageFinderOptions is a map of options for a LanguageFinder.
-type LanguageFinderOptions map[string]interface{}
+// LanguageExtractorOptions is a map of options for a LanguageExtractor.
+type LanguageExtractorOptions map[string]interface{}
 
 // Translator for handling all your i18n needs.
 type Translator struct {
@@ -31,10 +34,12 @@ type Translator struct {
 	DefaultLanguage string
 	// HelperName - name of the view helper. default is "t"
 	HelperName string
-	// LanguageFinders - a sorted list of user language extractors.
-	LanguageFinders []LanguageFinder
-	// LanguageFinderOptions - a map with options to give to LanguageFinders.
-	LanguageFinderOptions LanguageFinderOptions
+	// LanguageFinder - deprecated
+	LanguageFinder LanguageFinder
+	// LanguageExtractors - a sorted list of user language extractors.
+	LanguageExtractors []LanguageExtractor
+	// LanguageExtractorOptions - a map with options to give to LanguageExtractors.
+	LanguageExtractorOptions LanguageExtractorOptions
 }
 
 // Load translations from the t.Box.
@@ -71,15 +76,15 @@ func New(box packr.Box, language string) (*Translator, error) {
 		Box:             box,
 		DefaultLanguage: language,
 		HelperName:      "t",
-		LanguageFinderOptions: LanguageFinderOptions{
+		LanguageExtractorOptions: LanguageExtractorOptions{
 			"CookieName":    "lang",
 			"SessionName":   "lang",
 			"URLPrefixName": "lang",
 		},
-		LanguageFinders: []LanguageFinder{
-			CookieLanguageFinder,
-			SessionLanguageFinder,
-			HeaderLanguageFinder,
+		LanguageExtractors: []LanguageExtractor{
+			CookieLanguageExtractor,
+			SessionLanguageExtractor,
+			HeaderLanguageExtractor,
 		},
 	}
 	return t, t.Load()
@@ -109,7 +114,7 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 
 			// set languages in context, if not set yet
 			if langs := c.Value("languages"); langs == nil {
-				c.Set("languages", t.LanguageFinder(c))
+				c.Set("languages", t.extractLanguage(c))
 			}
 
 			// set translator
@@ -163,20 +168,23 @@ func (t *Translator) AvailableLanguages() []string {
 	return lt
 }
 
-// LanguageFinder calls each LanguageFinder in the sorted list, then gather
-// the result languages slice.
-func (t *Translator) LanguageFinder(c buffalo.Context) []string {
+func (t *Translator) extractLanguage(c buffalo.Context) []string {
 	langs := []string{}
-	for _, finder := range t.LanguageFinders {
-		langs = append(langs, finder(t.LanguageFinderOptions, c)...)
+	if t.LanguageFinder != nil {
+		c.Logger().Warnf("i18n.Translator#LanguageFinder has been deprecated in v0.11.1. Use i18n.Translator#LanguageExtractors instead.")
+		langs = t.LanguageFinder(t, c)
+	} else {
+		for _, extractor := range t.LanguageExtractors {
+			langs = append(langs, extractor(t.LanguageExtractorOptions, c)...)
+		}
+		// Add default language, even if no language extractor is defined
+		langs = append(langs, t.DefaultLanguage)
 	}
-	// Add default language, even if no language finder is defined
-	langs = append(langs, t.DefaultLanguage)
 	return langs
 }
 
-// CookieLanguageFinder is a LanguageFinder implementation, using a cookie.
-func CookieLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
+// CookieLanguageExtractor is a LanguageExtractor implementation, using a cookie.
+func CookieLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
 	langs := make([]string, 0)
 	// try to get the language from a cookie:
 	if cookieName := o["CookieName"].(string); cookieName != "" {
@@ -186,13 +194,13 @@ func CookieLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
 			}
 		}
 	} else {
-		c.Logger().Error("i18n middleware: \"CookieName\" is not defined in LanguageFinderOptions")
+		c.Logger().Error("i18n middleware: \"CookieName\" is not defined in LanguageExtractorOptions")
 	}
 	return langs
 }
 
-// SessionLanguageFinder is a LanguageFinder implementation, using a session.
-func SessionLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
+// SessionLanguageExtractor is a LanguageExtractor implementation, using a session.
+func SessionLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
 	langs := make([]string, 0)
 	// try to get the language from the session
 	if sessionName := o["SessionName"].(string); sessionName != "" {
@@ -200,14 +208,14 @@ func SessionLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string 
 			langs = append(langs, s.(string))
 		}
 	} else {
-		c.Logger().Error("i18n middleware: \"SessionName\" is not defined in LanguageFinderOptions")
+		c.Logger().Error("i18n middleware: \"SessionName\" is not defined in LanguageExtractorOptions")
 	}
 	return langs
 }
 
-// HeaderLanguageFinder is a LanguageFinder implementation, using a HTTP Accept-Language
+// HeaderLanguageExtractor is a LanguageExtractor implementation, using a HTTP Accept-Language
 // header.
-func HeaderLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
+func HeaderLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
 	langs := make([]string, 0)
 	// try to get the language from a header:
 	acceptLang := c.Request().Header.Get("Accept-Language")
@@ -217,8 +225,8 @@ func HeaderLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
 	return langs
 }
 
-// URLPrefixLanguageFinder is a LanguageFinder implementation, using a prefix in the URL.
-func URLPrefixLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []string {
+// URLPrefixLanguageExtractor is a LanguageExtractor implementation, using a prefix in the URL.
+func URLPrefixLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
 	langs := make([]string, 0)
 	// try to get the language from an URL prefix:
 	if urlPrefixName := o["URLPrefixName"].(string); urlPrefixName != "" {
@@ -227,7 +235,7 @@ func URLPrefixLanguageFinder(o LanguageFinderOptions, c buffalo.Context) []strin
 			langs = append(langs, paramLang)
 		}
 	} else {
-		c.Logger().Error("i18n middleware: \"URLPrefixName\" is not defined in LanguageFinderOptions")
+		c.Logger().Error("i18n middleware: \"URLPrefixName\" is not defined in LanguageExtractorOptions")
 	}
 	return langs
 }

@@ -29,8 +29,8 @@ func app() *buffalo.App {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Setup URL prefix Language finder
-	t.LanguageFinders = append(t.LanguageFinders, URLPrefixLanguageFinder)
+	// Setup URL prefix Language extractor
+	t.LanguageExtractors = append(t.LanguageExtractors, URLPrefixLanguageExtractor)
 
 	app.Use(t.Middleware())
 	app.GET("/", func(c buffalo.Context) error {
