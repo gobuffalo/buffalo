@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// LanguageFinder - deprecated
+// LanguageFinder - deprecated, use the LanguageExtractor interface instead.
 type LanguageFinder func(*Translator, buffalo.Context) []string
 
 // LanguageExtractor can be implemented for custom finding of search
@@ -34,7 +34,7 @@ type Translator struct {
 	DefaultLanguage string
 	// HelperName - name of the view helper. default is "t"
 	HelperName string
-	// LanguageFinder - deprecated
+	// LanguageFinder - deprecated, use LanguageExtractors instead.
 	LanguageFinder LanguageFinder
 	// LanguageExtractors - a sorted list of user language extractors.
 	LanguageExtractors []LanguageExtractor
