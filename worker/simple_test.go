@@ -65,6 +65,25 @@ func Test_Simple_PerformIn(t *testing.T) {
 	r.True(hit)
 }
 
+func Test_Simple_PerformEvery(t *testing.T) {
+	r := require.New(t)
+
+	var hitCount int
+	wg := &sync.WaitGroup{}
+	wg.Add(5)
+	w := NewSimple()
+	w.Register("x", func(Args) error {
+		hitCount++
+		wg.Done()
+		return nil
+	})
+	w.PerformEvery(Job{
+		Handler: "x",
+	}, 1*time.Millisecond)
+	wg.Wait()
+	r.Equal(hitCount, 5)
+}
+
 func Test_Simple_NoHandler(t *testing.T) {
 	r := require.New(t)
 

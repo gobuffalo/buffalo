@@ -7,6 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/ulule/deepcopier"
 )
 
 var _ Worker = &Simple{}
@@ -109,6 +110,19 @@ func (w Simple) PerformIn(job Job, d time.Duration) error {
 			w.Perform(job)
 		case <-w.ctx.Done():
 			w.cancel()
+		}
+	}()
+	return nil
+}
+
+// PerformEvery performs a job at a specified interval
+// using a goroutine.
+func (w Simple) PerformEvery(job Job, d time.Duration) error {
+	var nextW Simple
+	go func() {
+		for _ = range time.Tick(d) {
+			deepcopier.Copy(w).To(nextW)
+			nextW.Perform(job)
 		}
 	}()
 	return nil
