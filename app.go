@@ -157,6 +157,12 @@ func New(opts Options) *App {
 		a.ErrorHandlers.Get(404)(404, err, c)
 	})
 
+	a.router.MethodNotAllowedHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		c := a.newContext(RouteInfo{}, res, req)
+		err := errors.Errorf("method not found: %s %s", req.Method, req.URL.Path)
+		a.ErrorHandlers.Get(405)(405, err, c)
+	})
+
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}
