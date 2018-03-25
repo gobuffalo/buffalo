@@ -68,6 +68,32 @@ func Test_Auto_HTML_List(t *testing.T) {
 	r.NoError(err)
 }
 
+func Test_Auto_HTML_List_Plural(t *testing.T) {
+	r := require.New(t)
+
+	type Person struct {
+		Name string
+	}
+
+	type People []Person
+
+	err := withHTMLFile("people/index.html", "INDEX: <%= len(people) %>", func(e *render.Engine) {
+		app := buffalo.New(buffalo.Options{})
+		app.GET("/people", func(c buffalo.Context) error {
+			return c.Render(200, e.Auto(c, People{
+				Person{Name: "Ford"},
+				Person{Name: "Chevy"},
+			}))
+		})
+
+		w := willie.New(app)
+		res := w.HTML("/people").Get()
+
+		r.Contains(res.Body.String(), "INDEX: 2")
+	})
+	r.NoError(err)
+}
+
 func Test_Auto_HTML_Show(t *testing.T) {
 	r := require.New(t)
 
