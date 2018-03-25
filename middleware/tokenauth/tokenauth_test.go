@@ -98,7 +98,6 @@ func TestTokenHMAC(t *testing.T) {
 	tokenString, _ := token.SignedString([]byte(secretKey))
 	req.Headers["Authorization"] = fmt.Sprintf("Bearer %s", tokenString)
 	res = req.Get()
-	//fmt.Println(res.Body.String())
 	r.Equal(http.StatusUnauthorized, res.Code)
 	r.Contains(res.Body.String(), "Token is expired")
 
