@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -73,7 +72,11 @@ func (b *Builder) buildAssetsArchive() error {
 		}
 
 		if baseDir != "" {
-			header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
+			rel, err := filepath.Rel(source, path)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			header.Name = filepath.Join(baseDir, rel)
 		}
 
 		if info.IsDir() {
