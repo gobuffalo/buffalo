@@ -37,7 +37,7 @@ type App struct {
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve() error {
-	logrus.Infof("Starting application at %s", a.Options.Addr)
+	logrus.Infof("Starting application at http://%s", a.Options.Addr)
 	server := http.Server{
 		Handler: a,
 	}
