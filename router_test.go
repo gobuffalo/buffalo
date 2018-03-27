@@ -484,7 +484,7 @@ func Test_Resource_ParamKey(t *testing.T) {
 	for _, rr := range rt {
 		paths = append(paths, rr.Path)
 	}
-	r.Contains(paths, "/foo/bazKey/edit")
+	r.Contains(paths, "/foo/{bazKey}/edit")
 }
 
 type userResource struct{}
