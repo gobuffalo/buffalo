@@ -11,3 +11,6 @@
 
 - id: test-format-loop
   translation: "Mr. {{.FirstName}} {{.LastName}}"
+
+- id: refresh-success
+  translation: Language changed!

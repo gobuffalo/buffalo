@@ -161,11 +161,31 @@ func (t *Translator) Translate(c buffalo.Context, translationID string, args ...
 	return T(translationID, args...)
 }
 
-// AvailableLanguages gets the list of languages provided by the app
+// AvailableLanguages gets the list of languages provided by the app.
 func (t *Translator) AvailableLanguages() []string {
 	lt := i18n.LanguageTags()
 	sort.Strings(lt)
 	return lt
+}
+
+// Refresh updates the context, reloading translation functions.
+// It can be used after language change, to be able to use translation functions
+// in the new language (for a flash message, for instance).
+func (t *Translator) Refresh(c buffalo.Context, newLang string) {
+	langs := []string{newLang}
+	langs = append(langs, t.extractLanguage(c)...)
+
+	// Refresh languages
+	c.Set("languages", langs)
+
+	T, err := i18n.Tfunc(langs[0], langs[1:]...)
+	if err != nil {
+		c.Logger().Warn(err)
+		c.Logger().Warn("Your locale files are probably empty or missing")
+	}
+
+	// Refresh translation engine
+	c.Set("T", T)
 }
 
 func (t *Translator) extractLanguage(c buffalo.Context) []string {

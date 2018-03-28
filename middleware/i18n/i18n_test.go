@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
@@ -54,6 +55,18 @@ func app() *buffalo.App {
 	})
 	app.GET("/languages-list", func(c buffalo.Context) error {
 		return c.Render(200, r.JSON(t.AvailableLanguages()))
+	})
+	app.GET("/refresh", func(c buffalo.Context) error {
+		// This flash will be displayed in english
+		c.Flash().Add("success", t.Translate(c, "refresh-success"))
+
+		// Change lang to fr-fr
+		c.Cookies().Set("lang", "fr-fr", time.Minute)
+		t.Refresh(c, "fr-fr")
+
+		// This flash will be displayed in french
+		c.Flash().Add("success", t.Translate(c, "refresh-success"))
+		return c.Render(200, r.HTML("refresh.html"))
 	})
 	// Disable i18n middleware
 	noI18n := func(c buffalo.Context) error {
@@ -178,4 +191,13 @@ func Test_i18n_URL_prefix(t *testing.T) {
 	req = w.Request("/en/index")
 	res = req.Get()
 	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_Refresh(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/refresh")
+	res := req.Get()
+	r.Equal("success: Language changed!#success: Langue modifiée !#", strings.TrimSpace(res.Body.String()))
 }
