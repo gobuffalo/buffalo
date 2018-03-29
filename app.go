@@ -37,7 +37,7 @@ type App struct {
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve() error {
-	logrus.Infof("Starting application at %s", a.Options.Addr)
+	logrus.Infof("Starting application at %s", a.Options.Host)
 	server := http.Server{
 		Handler: a,
 	}
@@ -151,11 +151,17 @@ func New(opts Options) *App {
 		routes:   RouteList{},
 		children: []*App{},
 	}
-	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		c := a.newContext(RouteInfo{}, res, req)
-		err := errors.Errorf("path not found: %s %s", req.Method, req.URL.Path)
-		a.ErrorHandlers.Get(404)(404, err, c)
-	})
+
+	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
+		return func(res http.ResponseWriter, req *http.Request) {
+			c := a.newContext(RouteInfo{}, res, req)
+			err := errors.Errorf(errorf, req.Method, req.URL.Path)
+			a.ErrorHandlers.Get(code)(code, err, c)
+		}
+	}
+
+	a.router.NotFoundHandler = http.HandlerFunc(notFoundHandler("path not found: %s %s", 404))
+	a.router.MethodNotAllowedHandler = http.HandlerFunc(notFoundHandler("method not found: %s %s", 405))
 
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
