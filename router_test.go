@@ -466,6 +466,27 @@ func Test_Resource(t *testing.T) {
 
 }
 
+type paramKeyResource struct {
+	Resource
+}
+
+func (paramKeyResource) ParamKey() string {
+	return "bazKey"
+}
+
+func Test_Resource_ParamKey(t *testing.T) {
+	r := require.New(t)
+	fr := &paramKeyResource{&BaseResource{}}
+	a := New(Options{})
+	a.Resource("/foo", fr)
+	rt := a.Routes()
+	paths := []string{}
+	for _, rr := range rt {
+		paths = append(paths, rr.Path)
+	}
+	r.Contains(paths, "/foo/{bazKey}/edit")
+}
+
 type userResource struct{}
 
 func (u *userResource) List(c Context) error {
