@@ -1,3 +1,4 @@
+var path = require("path");
 var webpack = require("webpack");
 var glob = require("glob");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -5,6 +6,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
 var CleanWebpackPlugin = require("clean-webpack-plugin");
+var WriteFilePlugin = require("write-file-webpack-plugin");
 
 var entries = {
   application: [
@@ -99,6 +101,21 @@ module.exports = {
     ]
   }
 };
+
+if (PROD === "development") {
+  module.exports.devServer = {
+    contentBase: path.join(__dirname, "public", "assets"),
+    compress: true,
+    port: 3030,
+    quiet: true
+  };
+
+  module.exports.plugins.push(
+    new WriteFilePlugin()
+  );
+
+  module.exports.devtool = "cheap-module-eval-source-map";
+}
 
 if (PROD != "development") {
   module.exports.plugins.push(
