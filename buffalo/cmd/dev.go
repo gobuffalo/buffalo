@@ -92,7 +92,13 @@ func startWebpack(ctx context.Context) error {
 		}
 	}
 
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	if _, err := os.Stat(webpack.DevServerPath); err != nil {
+		if os.IsNotExist(err) {
+			return errors.New("webpack-dev-server is not installed, please install webpack-dev-server locally")
+		}
+	}
+
+	cmd := exec.CommandContext(ctx, webpack.DevServerPath)
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
