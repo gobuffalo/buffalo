@@ -103,7 +103,7 @@ func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
 
 	type RoomProviders []RoomProvider
 
-	err := withHTMLFile("room_providers/index.html", "INDEX: <%= len(room_providers) %>", func(e *render.Engine) {
+	err := withHTMLFile("room_providers/index.html", "INDEX: <%= len(roomProviders) %>", func(e *render.Engine) {
 		app := buffalo.New(buffalo.Options{})
 		app.GET("/room_providers", func(c buffalo.Context) error {
 			return c.Render(200, e.Auto(c, RoomProviders{
