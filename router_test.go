@@ -35,6 +35,13 @@ func testApp() *App {
 	rt.DELETE("/", h)
 	rt.OPTIONS("/", h)
 	rt.PATCH("/", h)
+
+	a.ErrorHandlers[405] = func(status int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(status)
+		res.Write([]byte("my custom 405"))
+		return nil
+	}
 	return a
 }
 
@@ -48,6 +55,14 @@ func otherTestApp() *App {
 	a.POST("/bar", f)
 	a.DELETE("/baz/baz", f)
 	return a
+}
+
+func Test_MethodNotFoundError(t *testing.T) {
+	r := require.New(t)
+	w := willie.New(testApp())
+	res := w.HTML("/bar").Post(nil)
+	r.Equal(405, res.Code)
+	r.Contains(res.Body.String(), "my custom 405")
 }
 
 func Test_Mount_Buffalo(t *testing.T) {
@@ -449,6 +464,27 @@ func Test_Resource(t *testing.T) {
 		}
 	}
 
+}
+
+type paramKeyResource struct {
+	Resource
+}
+
+func (paramKeyResource) ParamKey() string {
+	return "bazKey"
+}
+
+func Test_Resource_ParamKey(t *testing.T) {
+	r := require.New(t)
+	fr := &paramKeyResource{&BaseResource{}}
+	a := New(Options{})
+	a.Resource("/foo", fr)
+	rt := a.Routes()
+	paths := []string{}
+	for _, rr := range rt {
+		paths = append(paths, rr.Path)
+	}
+	r.Contains(paths, "/foo/{bazKey}/edit")
 }
 
 type userResource struct{}
