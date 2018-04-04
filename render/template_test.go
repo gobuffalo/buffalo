@@ -78,6 +78,40 @@ func Test_Template_Partial(t *testing.T) {
 	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
+
+func Test_Template_Partial_With_Gloabl_Context(t *testing.T) {
+	r := require.New(t)
+
+	tPath, err := ioutil.TempDir("", "")
+	r.NoError(err)
+	defer os.Remove(tPath)
+
+	partFile, err := os.Create(filepath.Join(tPath, "_foo.html"))
+	r.NoError(err)
+
+	_, err = partFile.Write([]byte("Foo > <%= name %>"))
+	r.NoError(err)
+
+	tmpFile, err := os.Create(filepath.Join(tPath, "index.html"))
+	r.NoError(err)
+
+	_, err = tmpFile.Write([]byte(`<%= partial("foo.html", {other: "value"}) %>`))
+	r.NoError(err)
+
+	type ji func(string, ...string) render.Renderer
+
+	j := render.New(render.Options{
+		TemplatesBox: packr.NewBox(tPath),
+	}).Template
+
+	re := j("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+	bb := &bytes.Buffer{}
+	err = re.Render(bb, render.Data{"name": "Mark"})
+	r.NoError(err)
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
+}
+
 func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	r := require.New(t)
 
