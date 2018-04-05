@@ -47,10 +47,7 @@ func App() *buffalo.App {
       SessionName: "_{{.opts.Name.File}}_session",
     })
     // Automatically redirect to SSL
-    app.Use(ssl.ForceSSL(secure.Options{
-      SSLRedirect:     ENV == "production",
-      SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
-    }))
+    app.Use(forceSSL())
 
     {{ if .opts.AsAPI -}}
     // Set the request content type to JSON
@@ -76,11 +73,7 @@ func App() *buffalo.App {
 
     {{ if .opts.AsWeb -}}
     // Setup and use translations:
-    var err error
-    if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
-      app.Stop(err)
-    }
-    app.Use(T.Middleware())
+    app.Use(translations())
     {{ end }}
 
     app.GET("/", HomeHandler)
@@ -91,4 +84,28 @@ func App() *buffalo.App {
   }
 
   return app
+}
+
+{{ if .opts.AsWeb -}}
+// translations will load locale files, set up the translator `actions.T`,
+// and will return a middleware to use to load the correct locale for each
+// request.
+// for more information: https://gobuffalo.io/en/docs/localization
+func translations() buffalo.MiddlewareFunc {
+  var err error
+  if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
+    app.Stop(err)
+  }
+  return T.Middleware()
+}
+{{ end }}
+
+// forceSSL will return a middleware that will redirect an incoming request
+// if it is not HTTPS. "http://example.com" => "https://example.com".
+// for more information: https://github.com/unrolled/secure/
+func forceSSL() buffalo.MiddlewareFunc {
+  return ssl.ForceSSL(secure.Options{
+    SSLRedirect:     ENV == "production",
+    SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+  })
 }
