@@ -1,11 +1,12 @@
-var Webpack = require("webpack");
-var Glob = require("glob");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var ManifestPlugin = require("webpack-manifest-plugin");
-var CleanWebpackPlugin = require("clean-webpack-plugin");
+const Webpack = require("webpack");
+const Glob = require("glob");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ManifestPlugin = require("webpack-manifest-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
-var configurator = {
+const configurator = {
   entries: function(){
     var entries = {
       application: [
@@ -31,34 +32,20 @@ var configurator = {
     return entries
   },
 
-  plugins(env) {
+  plugins() {
     var plugins = [
       new CleanWebpackPlugin(["public/assets"], {verbose: false,}),
       new Webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
       new ExtractTextPlugin("[name].[hash].css"),
       new CopyWebpackPlugin([{from: "./assets",to: ""}], {copyUnmodified: true,ignore: ["css/**", "js/**"] }),
       new Webpack.LoaderOptionsPlugin({minimize: true,debug: false}),
-      new ManifestPlugin({ fileName: "manifest.json"})
+      new ManifestPlugin({fileName: "manifest.json"})
     ];
-
-    if(env != "development") {
-      plugins.push(new Webpack.optimize.UglifyJsPlugin({
-        beautify: false,
-        mangle: {
-          screw_ie8: true,
-          keep_fnames: true
-        },
-        compress: {
-          screw_ie8: true
-        },
-        comments: false
-      }))
-    }
 
     return plugins
   },
 
-  moduleOptions: function(env) {
+  moduleOptions: function() {
     return {
       rules: [
         {
@@ -90,15 +77,34 @@ var configurator = {
   },
 
   buildConfig: function(){
-    var env = process.env.NODE_ENV || "development";
-
-    return {
+    const env = process.env.NODE_ENV || "development";
+    
+    var config = {
       mode: env,
-      entry: configurator.entries(env),
+      entry: configurator.entries(),
       output: {filename: "[name].[hash].js", path: `${__dirname}/public/assets`},
-      plugins: configurator.plugins(env),
-      module: configurator.moduleOptions(env)
+      plugins: configurator.plugins(),
+      module: configurator.moduleOptions()
     }
+
+    if( env == "development" ){
+      return config
+    }
+
+    const uglifier = new UglifyJsPlugin({
+      uglifyOptions: {
+        beautify: false,
+        mangle: { keep_fnames: true },
+        compress: {},
+        comments: false
+      }
+    })
+
+    config.optimization = {
+      minimizer: [uglifier]
+    }
+
+    return config
   }
 }
 
