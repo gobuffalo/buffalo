@@ -15,7 +15,7 @@ const configurator = {
       ],
     }
     
-    Glob.sync("./assets/*/*.*").reduce((_, entry) => {
+    Glob.sync("./assets/*/*.*").forEach((entry) => {
       if (entry === './assets/css/application.scss') {
         return
       }
