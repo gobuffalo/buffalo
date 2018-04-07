@@ -37,6 +37,17 @@ func DeprecrationsCheck(r *Runner) error {
 		if bytes.Contains(b, []byte("Websocket()")) {
 			r.Warnings = append(r.Warnings, fmt.Sprintf("buffalo.Context#Websocket has been deprecated in v0.11.0. Use github.com/gorilla/websocket directly. [%s]", path))
 		}
+		// i18n middleware changes in v0.11.1
+		if bytes.Contains(b, []byte("T.CookieName")) {
+			b = bytes.Replace(b, []byte("T.CookieName"), []byte("T.LanguageExtractorOptions[\"CookieName\"]"), -1)
+		}
+		if bytes.Contains(b, []byte("T.SessionName")) {
+			b = bytes.Replace(b, []byte("T.SessionName"), []byte("T.LanguageExtractorOptions[\"SessionName\"]"), -1)
+		}
+		if bytes.Contains(b, []byte("T.LanguageFinder=")) || bytes.Contains(b, []byte("T.LanguageFinder ")) {
+			r.Warnings = append(r.Warnings, fmt.Sprintf("i18n.Translator#LanguageFinder has been deprecated in v0.11.1. Use i18n.Translator#LanguageExtractors instead. [%s]", path))
+		}
+		ioutil.WriteFile(path, b, 664)
 
 		return nil
 	})

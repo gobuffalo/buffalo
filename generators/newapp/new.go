@@ -32,9 +32,14 @@ func (a Generator) Run(root string, data makr.Data) error {
 		os.RemoveAll(a.Root)
 	}
 
-	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	if _, err := exec.LookPath("goimports"); err != nil {
+		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	}
+
 	if a.WithDep {
-		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+		if _, err := exec.LookPath("dep"); err != nil {
+			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+		}
 	}
 
 	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))

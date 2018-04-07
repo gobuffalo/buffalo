@@ -11,3 +11,6 @@
 
 - id: test-format-loop
   translation: "M. {{.FirstName}} {{.LastName}}"
+
+- id: refresh-success
+  translation: Langue modifiée !
