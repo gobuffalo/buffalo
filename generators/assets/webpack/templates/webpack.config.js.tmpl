@@ -1,11 +1,10 @@
-var path = require("path");
-var webpack = require("webpack");
-var glob = require("glob");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
-var ManifestPlugin = require("webpack-manifest-plugin");
-var PROD = process.env.NODE_ENV || "development";
-var CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
-var WriteFilePlugin = require("write-file-webpack-plugin");
+const Webpack = require("webpack");
+const Glob = require("glob");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ManifestPlugin = require("webpack-manifest-plugin");
+const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const configurator = {
   entries: function(){
@@ -82,16 +81,6 @@ const configurator = {
     }
 
     if( env === "development" ){
-      config.devServer = {
-        contentBase: path.join(__dirname, "public", "assets"),
-        compress: true,
-        port: 3030,
-        quiet: true
-      }
-      
-      config.plugins.push(new WriteFilePlugin());
-      config.devtool = "cheap-module-eval-source-map";
-      
       return config
     }
 
