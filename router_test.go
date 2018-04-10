@@ -342,11 +342,18 @@ func Test_App_NamedRoutes(t *testing.T) {
 		*BaseResource
 	}
 
+	type ResourcesResource struct {
+		*BaseResource
+	}
+
 	r := require.New(t)
 	a := New(Options{})
 
 	var carsResource Resource
 	carsResource = CarsResource{&BaseResource{}}
+
+	var resourcesResource Resource
+	resourcesResource = ResourcesResource{&BaseResource{}}
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.html",
@@ -358,17 +365,17 @@ func Test_App_NamedRoutes(t *testing.T) {
 		c.Set("opts", map[string]interface{}{})
 		return c.Render(200, rr.String(`
 			1. <%= rootPath() %>
-			2. <%= usersPath() %>
-			3. <%= userPath({user_id: 1}) %>
-			4. <%= myPeepsPath() %>
-			5. <%= userPath(opts) %>
-			6. <%= carPath({car_id: 1}) %>
-			7. <%= newCarPath() %>
-			8. <%= editCarPath({car_id: 1}) %>
-			9. <%= editCarPath({car_id: 1, other: 12}) %>
-			10. <%= rootPath({"some":"variable","other": 12}) %>
-			11. <%= rootPath() %>
-			12. <%= rootPath({"special/":"12=ss"}) %>
+			2. <%= userPath({user_id: 1}) %>
+			3. <%= myPeepsPath() %>
+			5. <%= carPath({car_id: 1}) %>
+			6. <%= newCarPath() %>
+			7. <%= editCarPath({car_id: 1}) %>
+			8. <%= editCarPath({car_id: 1, other: 12}) %>
+			9. <%= rootPath({"some":"variable","other": 12}) %>
+			10. <%= rootPath() %>
+			11. <%= rootPath({"special/":"12=ss"}) %>
+			12. <%= resourcePath({resource_id: 1}) %>
+			13. <%= editResourcePath({resource_id: 1}) %>
 		`))
 	}
 
@@ -377,23 +384,49 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.GET("/users/{user_id}", sampleHandler)
 	a.GET("/peeps", sampleHandler).Name("myPeeps")
 	a.Resource("/car", carsResource)
+	a.Resource("/resources", resourcesResource)
 
 	w := willie.New(a)
 	res := w.Request("/").Get()
 
 	r.Equal(200, res.Code)
 	r.Contains(res.Body.String(), "1. /")
-	r.Contains(res.Body.String(), "2. /users")
-	r.Contains(res.Body.String(), "3. /users/1")
-	r.Contains(res.Body.String(), "4. /peeps")
-	r.Contains(res.Body.String(), "5. /users/{user_id}")
-	r.Contains(res.Body.String(), "6. /car/1")
-	r.Contains(res.Body.String(), "7. /car/new")
-	r.Contains(res.Body.String(), "8. /car/1/edit")
-	r.Contains(res.Body.String(), "9. /car/1/edit?other=12")
-	r.Contains(res.Body.String(), "10. /?other=12&some=variable")
-	r.Contains(res.Body.String(), "11. /")
-	r.Contains(res.Body.String(), "12. /?special%2F=12%3Dss")
+	r.Contains(res.Body.String(), "2. /users/1")
+	r.Contains(res.Body.String(), "3. /peeps")
+	r.Contains(res.Body.String(), "5. /car/1")
+	r.Contains(res.Body.String(), "6. /car/new")
+	r.Contains(res.Body.String(), "7. /car/1/edit")
+	r.Contains(res.Body.String(), "8. /car/1/edit?other=12")
+	r.Contains(res.Body.String(), "9. /?other=12&some=variable")
+	r.Contains(res.Body.String(), "10. /")
+	r.Contains(res.Body.String(), "11. /?special%2F=12%3Dss")
+	r.Contains(res.Body.String(), "12. /resources/1")
+	r.Contains(res.Body.String(), "13. /resources/1/edit")
+}
+
+func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
+	r := require.New(t)
+	a := New(Options{})
+
+	rr := render.New(render.Options{
+		HTMLLayout:   "application.html",
+		TemplatesBox: packr.NewBox("../templates"),
+		Helpers:      map[string]interface{}{},
+	})
+
+	sampleHandler := func(c Context) error {
+		c.Set("opts", map[string]interface{}{})
+		return c.Render(200, rr.String(`
+			<%= userPath(opts) %>
+		`))
+	}
+
+	a.GET("/users/{user_id}", sampleHandler)
+	w := willie.New(a)
+	res := w.Request("/users/1").Get()
+
+	r.Equal(500, res.Code)
+	r.Contains(res.Body.String(), "missing parameters for /users/{user_id}")
 }
 
 func Test_Resource(t *testing.T) {
@@ -464,6 +497,27 @@ func Test_Resource(t *testing.T) {
 		}
 	}
 
+}
+
+type paramKeyResource struct {
+	Resource
+}
+
+func (paramKeyResource) ParamKey() string {
+	return "bazKey"
+}
+
+func Test_Resource_ParamKey(t *testing.T) {
+	r := require.New(t)
+	fr := &paramKeyResource{&BaseResource{}}
+	a := New(Options{})
+	a.Resource("/foo", fr)
+	rt := a.Routes()
+	paths := []string{}
+	for _, rr := range rt {
+		paths = append(paths, rr.Path)
+	}
+	r.Contains(paths, "/foo/{bazKey}/edit")
 }
 
 type userResource struct{}
