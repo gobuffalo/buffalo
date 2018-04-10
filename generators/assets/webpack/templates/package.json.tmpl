@@ -8,10 +8,10 @@
     "babel-core": "~6.26.0",
     "babel-loader": "~7.1.2",
     "babel-preset-env": "~1.5.2",
-    {{ if eq .opts.Bootstrap 4 -}}
-    "bootstrap": "4.0.0",
-    {{ else -}}
+    {{ if eq .opts.Bootstrap 3 -}}
     "bootstrap-sass": "~3.3.7",
+    {{ else -}}
+    "bootstrap": "4.0.0",
     {{ end -}}
     "clean-webpack-plugin": "~0.1.19",
     "copy-webpack-plugin": "~4.5.1",
