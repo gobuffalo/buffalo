@@ -65,13 +65,12 @@ var New = func(next buffalo.Handler) buffalo.Handler {
 		}
 
 		var realToken []byte
-		var err error
 		rawRealToken := c.Session().Get(tokenKey)
 
 		if rawRealToken == nil || len(rawRealToken.([]byte)) != tokenLength {
 			// If the token is missing, or the length if the token is wrong,
 			// generate a new token.
-			realToken, err = generateRandomBytes(tokenLength)
+			realToken, err := generateRandomBytes(tokenLength)
 			if err != nil {
 				return err
 			}
@@ -172,9 +171,8 @@ func compareTokens(a, b []byte) bool {
 // one-time-pad used to mask it.
 func xorToken(a, b []byte) []byte {
 	n := len(a)
-	bn := len(b)
-	if bn < n {
-		n = bn
+	if len(b) < n {
+		n = len(b)
 	}
 
 	res := make([]byte, n)

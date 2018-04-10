@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.9.0
 
 RUN go version
 
