@@ -93,8 +93,7 @@ func (g Generator) Validate() error {
 func (g Generator) validateInGoPath() error {
 	gpMultiple := envy.GoPaths()
 
-	larp := strings.ToLower(meta.ResolveSymlinks(filepath.Dir(g.Root)))
-
+	larp := strings.ToLower(g.Root)
 	for i := 0; i < len(gpMultiple); i++ {
 		lgpm := strings.ToLower(filepath.Join(gpMultiple[i], "src"))
 		if strings.HasPrefix(larp, lgpm) {

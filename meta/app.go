@@ -37,25 +37,6 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-
-	// Handle symlinks
-	var oldPwd = pwd
-	pwd = ResolveSymlinks(pwd)
-	os.Chdir(pwd)
-	if runtime.GOOS != "windows" {
-		// On Non-Windows OS, os.Getwd() uses PWD env var as a prefered
-		// way to get the working dir.
-		os.Setenv("PWD", pwd)
-	}
-	defer func() {
-		// Restore PWD
-		os.Chdir(oldPwd)
-		if runtime.GOOS != "windows" {
-			os.Setenv("PWD", oldPwd)
-		}
-	}()
-
-	// Gather meta data
 	name := Name(filepath.Base(root))
 	pp := envy.CurrentPackage()
 	if filepath.Base(pp) != string(name) {
@@ -104,24 +85,6 @@ func New(root string) App {
 	}
 
 	return app
-}
-
-// ResolveSymlinks takes a path and gets the pointed path
-// if the original one is a symlink.
-func ResolveSymlinks(p string) string {
-	cd, err := os.Lstat(p)
-	if err != nil {
-		return p
-	}
-	if cd.Mode()&os.ModeSymlink != 0 {
-		// This is a symlink
-		r, err := filepath.EvalSymlinks(p)
-		if err != nil {
-			return p
-		}
-		return r
-	}
-	return p
 }
 
 func (a App) String() string {
