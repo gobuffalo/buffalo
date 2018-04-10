@@ -131,7 +131,7 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.Replace(rt.Name(), "Resource", "", 1)
+	name := strings.TrimSuffix(rt.Name(), "Resource")
 	paramName := inflect.Name(name).ParamID()
 
 	type paramKeyable interface {
