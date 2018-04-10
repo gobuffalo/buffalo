@@ -191,7 +191,7 @@ var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
 	d.Flash().persist(d.Session())
 
-	if strings.HasSuffix(url, "Path") {
+	if strings.HasSuffix(url, "Path()") {
 		if len(args) > 1 {
 			return errors.WithStack(errors.Errorf("you must pass only a map[string]interface{} to a route path: %T", args))
 		}
@@ -203,7 +203,7 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 			}
 			m = rv.Convert(mapType).Interface().(map[string]interface{})
 		}
-		h, ok := d.Value(url).(RouteHelperFunc)
+		h, ok := d.Value(strings.TrimSuffix(url, "()")).(RouteHelperFunc)
 		if !ok {
 			return errors.WithStack(errors.Errorf("could not find a route helper named %s", url))
 		}

@@ -65,10 +65,10 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 			return c.Render(200, render.String(c.Param("bar")))
 		})
 		a.GET("/", func(c Context) error {
-			return c.Redirect(302, "fooPath", tt.I)
+			return c.Redirect(302, "fooPath()", tt.I)
 		})
 		a.GET("/nomap", func(c Context) error {
-			return c.Redirect(302, "rootPath")
+			return c.Redirect(302, "rootPath()")
 		})
 
 		w := willie.New(a)
