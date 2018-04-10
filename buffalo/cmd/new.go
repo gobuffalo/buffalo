@@ -30,7 +30,7 @@ var app = newapp.Generator{
 	CIProvider: "none",
 	AsWeb:      true,
 	Docker:     "multi",
-	Bootstrap:  3,
+	Bootstrap:  4,
 }
 
 var newCmd = &cobra.Command{
