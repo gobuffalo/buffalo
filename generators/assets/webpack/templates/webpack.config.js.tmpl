@@ -4,7 +4,7 @@ var glob = require("glob");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 var ManifestPlugin = require("webpack-manifest-plugin");
 var PROD = process.env.NODE_ENV || "development";
-var CleanWebpackPlugin = require("clean-webpack-plugin");
+var CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 var WriteFilePlugin = require("write-file-webpack-plugin");
 
 const configurator = {
