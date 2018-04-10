@@ -41,6 +41,47 @@ func Test_DefaultContext_Redirect(t *testing.T) {
 	r.Equal(u, res.Location())
 }
 
+func Test_DefaultContext_Redirect_Helper(t *testing.T) {
+	r := require.New(t)
+
+	table := []struct {
+		E string
+		I map[string]interface{}
+		S int
+	}{
+		{
+			E: "/foo/baz",
+			I: map[string]interface{}{"bar": "baz"},
+			S: 302,
+		},
+		{
+			S: 500,
+		},
+	}
+
+	for _, tt := range table {
+		a := New(Options{})
+		a.GET("/foo/{bar}", func(c Context) error {
+			return c.Render(200, render.String(c.Param("bar")))
+		})
+		a.GET("/", func(c Context) error {
+			return c.Redirect(302, "fooPath", tt.I)
+		})
+		a.GET("/nomap", func(c Context) error {
+			return c.Redirect(302, "rootPath")
+		})
+
+		w := willie.New(a)
+		res := w.Request("/").Get()
+		r.Equal(tt.S, res.Code)
+		r.Equal(tt.E, res.Location())
+
+		res = w.Request("/nomap").Get()
+		r.Equal(302, res.Code)
+		r.Equal("/", res.Location())
+	}
+}
+
 func Test_DefaultContext_Param(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{
