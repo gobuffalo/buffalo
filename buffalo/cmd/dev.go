@@ -92,7 +92,19 @@ func startWebpack(ctx context.Context) error {
 		}
 	}
 
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	bin := webpack.DevServerPath
+	args := []string{}
+	if _, err := os.Stat(bin); err != nil {
+		logrus.Warnf("%s is not installed, please install webpack-dev-server locally, trying to fallback to %s", bin, webpack.BinPath)
+
+		bin = webpack.BinPath
+		args = append(args, "--watch")
+		if _, err := os.Stat(bin); err != nil {
+			return errors.Errorf("could not find either %s or %s", webpack.DevServerPath, webpack.BinPath)
+		}
+	}
+
+	cmd := exec.CommandContext(ctx, bin, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
