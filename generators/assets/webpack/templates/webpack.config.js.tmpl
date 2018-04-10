@@ -3,7 +3,7 @@ const Glob = require("glob");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
-const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const path = require("path");
 const WriteFilePlugin = require("write-file-webpack-plugin");
@@ -40,9 +40,9 @@ const configurator = {
 
   plugins() {
     var plugins = [
-      new CleanObsoleteChunks(),
+      new CleanWebpackPlugin(["public/assets"], {verbose: false,}),
       new Webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
-      new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
+      new MiniCssExtractPlugin({filename: "[name][contenthash].css"}),
       new CopyWebpackPlugin([{from: "./assets",to: ""}], {copyUnmodified: true,ignore: ["css/**", "js/**"] }),
       new Webpack.LoaderOptionsPlugin({minimize: true,debug: false}),
       new ManifestPlugin({fileName: "manifest.json"})
