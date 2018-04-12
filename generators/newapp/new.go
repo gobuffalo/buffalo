@@ -37,6 +37,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	if a.WithDep {
+		g.Add(makr.NewFile("Gopkg.toml", gopkgToml))
 		if _, err := exec.LookPath("dep"); err != nil {
 			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 		}
@@ -199,7 +200,7 @@ func (a Generator) goGet() *exec.Cmd {
 	os.Chdir(a.Root)
 	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "init")
+			return exec.Command("dep", "ensure", "-v")
 		}
 	}
 	appArgs := []string{"get", "-t"}
@@ -360,4 +361,13 @@ public/assets/
 .vscode/
 .grifter/
 .env
+`
+
+const gopkgToml = `
+# require the cmd package so we can use vBuffalo
+required = ["github.com/gobuffalo/buffalo/buffalo/cmd"]
+
+[prune]
+  go-tests = true
+  unused-packages = true
 `
