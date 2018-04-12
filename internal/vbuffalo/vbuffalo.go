@@ -16,7 +16,9 @@ var mainPath = filepath.Join(pwd, ".grifter", "main.go")
 var binPath = filepath.Join(pwd, "bin", "vbuffalo")
 var app meta.App
 
-func Execute(ex Executeable) error {
+// Execute using vbuffalo. If this doesn't meet the vbuffalo
+// requirements then it should use the passed in function instead.
+func Execute(ex func() error) error {
 	if !exists(".buffalo.dev.yml") {
 		return ex()
 	}

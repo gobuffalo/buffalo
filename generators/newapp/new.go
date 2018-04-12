@@ -364,6 +364,7 @@ public/assets/
 .env
 `
 
+// GopkgTomlTmpl is the default dep Gopkg.toml
 const GopkgTomlTmpl = `
 {{ if .addPrune }}
 [prune]
