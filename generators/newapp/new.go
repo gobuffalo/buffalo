@@ -37,7 +37,8 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	if a.WithDep {
-		g.Add(makr.NewFile("Gopkg.toml", gopkgToml))
+		data["addPrune"] = true
+		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
 		if _, err := exec.LookPath("dep"); err != nil {
 			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 		}
@@ -363,11 +364,22 @@ public/assets/
 .env
 `
 
-const gopkgToml = `
-# require the cmd package so we can use vBuffalo
-required = ["github.com/gobuffalo/buffalo/buffalo/cmd"]
-
+const GopkgTomlTmpl = `
+{{ if .addPrune }}
 [prune]
   go-tests = true
   unused-packages = true
+{{ end }}
+
+  # DO NOT DELETE
+  [[prune.project]] # buffalo
+    name = "github.com/gobuffalo/buffalo"
+    unused-packages = false
+
+{{ if .opts.WithPop }}
+  # DO NOT DELETE
+  [[prune.project]] # pop
+    name = "github.com/gobuffalo/pop"
+    unused-packages = false
+{{ end }}
 `
