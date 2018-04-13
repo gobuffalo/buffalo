@@ -86,6 +86,7 @@ func (a *App) Serve() error {
 		if err = server.Serve(listener); err != nil {
 			return a.Stop(err)
 		}
+		return nil
 	}
 	// Use a TCP socket
 	server.Addr = a.Options.Addr
