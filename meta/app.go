@@ -56,7 +56,7 @@ func New(root string) App {
 	}()
 
 	// Gather meta data
-	name := Name(filepath.Base(root))
+	name := inflect.Name(filepath.Base(root))
 	pp := envy.CurrentPackage()
 	if filepath.Base(pp) != string(name) {
 		pp = path.Join(pp, string(name))
