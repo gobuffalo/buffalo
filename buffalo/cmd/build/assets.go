@@ -23,6 +23,8 @@ func (b *Builder) buildAssets() error {
 
 	if !b.Options.WithAssets {
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
+	} else {
+		p.IgnoredFolders = p.IgnoredFolders[1:]
 	}
 
 	if b.ExtractAssets && b.Options.WithAssets {
