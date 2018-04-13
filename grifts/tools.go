@@ -34,7 +34,7 @@ var _ = grift.Namespace("tools", func() {
 		if err := grift.Run("tools:install", c); err != nil {
 			return err
 		}
-		return run("gometalinter", "--vendor", "./...")
+		return run("gometalinter", "--vendor", "--deadline=3m", "./...")
 	})
 
 })

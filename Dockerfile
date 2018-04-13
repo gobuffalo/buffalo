@@ -17,8 +17,7 @@ ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
 RUN rm -rf $BP
-RUN mkdir -p $BP
-WORKDIR $BP
+RUN mkdir -p $BP WORKDIR $BP
 ADD . .
 
 RUN go get -v -t ./...
@@ -27,7 +26,7 @@ RUN go install -v -tags sqlite ./buffalo
 
 RUN go test -tags sqlite -race ./...
 
-RUN gometalinter --vendor ./...
+RUN gometalinter --vendor --deadline=5m ./...
 
 WORKDIR $GOPATH/src/
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
