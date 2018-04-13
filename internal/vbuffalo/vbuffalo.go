@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/pkg/errors"
@@ -15,6 +16,12 @@ var pwd, _ = os.Getwd()
 var mainPath = filepath.Join(pwd, ".grifter", "main.go")
 var binPath = filepath.Join(pwd, "bin", "vbuffalo")
 var app meta.App
+
+func init() {
+	if runtime.GOOS == "windows" {
+		binPath += ".exe"
+	}
+}
 
 // Execute using vbuffalo. If this doesn't meet the vbuffalo
 // requirements then it should use the passed in function instead.
