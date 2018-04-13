@@ -17,7 +17,8 @@ ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
 RUN rm -rf $BP
-RUN mkdir -p $BP WORKDIR $BP
+RUN mkdir -p $BP
+WORKDIR $BP
 ADD . .
 
 RUN go get -v -t ./...
