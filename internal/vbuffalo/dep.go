@@ -7,7 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/alecthomas/template"
+	"html/template"
+
 	"github.com/gobuffalo/buffalo/generators/newapp"
 	"github.com/pkg/errors"
 )
