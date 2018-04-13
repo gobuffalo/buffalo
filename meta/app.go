@@ -43,7 +43,7 @@ func New(root string) App {
 	pwd = ResolveSymlinks(pwd)
 	os.Chdir(pwd)
 	if runtime.GOOS != "windows" {
-		// On Non-Windows OS, os.Getwd() uses PWD env var as a prefered
+		// On Non-Windows OS, os.Getwd() uses PWD env var as a preferred
 		// way to get the working dir.
 		os.Setenv("PWD", pwd)
 	}

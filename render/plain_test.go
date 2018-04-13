@@ -27,8 +27,6 @@ func Test_Plain(t *testing.T) {
 	_, err = tmpFile.Write([]byte("<%= name %>"))
 	r.NoError(err)
 
-	type ji func(...string) render.Renderer
-
 	j := render.New(render.Options{
 		TemplatesBox: packr.NewBox(tDir),
 	}).Plain

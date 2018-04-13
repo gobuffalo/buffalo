@@ -349,11 +349,9 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r := require.New(t)
 	a := New(Options{})
 
-	var carsResource Resource
-	carsResource = CarsResource{&BaseResource{}}
+	var carsResource Resource = CarsResource{}
 
-	var resourcesResource Resource
-	resourcesResource = ResourcesResource{&BaseResource{}}
+	var resourcesResource Resource = ResourcesResource{}
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.html",
