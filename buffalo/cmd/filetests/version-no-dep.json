@@ -1,0 +1,6 @@
+[{
+  "path": "output.txt",
+  "!contains": [
+    "Buffalo version is: v"
+  ]
+}]

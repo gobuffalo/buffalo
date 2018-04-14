@@ -2,15 +2,18 @@ FROM gobuffalo/buffalo:development
 
 RUN buffalo version
 
-RUN go get -v -u github.com/golang/lint/golint
+RUN go get -v -u github.com/golang/lint/golint 
 RUN go get -v -u github.com/markbates/filetest
+
 RUN go get -v -u github.com/gobuffalo/makr
-RUN go get -v -u github.com/markbates/grift
-RUN go get -v -u github.com/markbates/inflect
-RUN go get -v -u github.com/markbates/refresh
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
 RUN go get -v -u github.com/mattn/go-sqlite3
+
+RUN go get -v -u github.com/markbates/grift
+RUN go get -v -u github.com/markbates/inflect
+RUN go get -v -u github.com/markbates/refresh
+RUN go get -v -u github.com/markbates/willie
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -21,13 +24,9 @@ WORKDIR $BP
 ADD . .
 
 RUN go get -v -t ./...
-
 RUN go install -v -tags sqlite ./buffalo
-
 RUN go test -tags sqlite -race $(go list ./... | grep -v /vendor/)
-
 RUN golint -set_exit_status $(go list ./... | grep -v /vendor/)
-
 
 WORKDIR $GOPATH/src/
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
@@ -123,3 +122,18 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 RUN rm -rf bin
 RUN buffalo build -k -e
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
+
+# Vendored buffalo version.
+WORKDIR $GOPATH/src
+RUN buffalo new app -f --api --with-dep
+WORKDIR $GOPATH/src/app
+RUN buffalo version > output.txt
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/version-dep.json
+
+# Non-Vendored buffalo version.
+WORKDIR $GOPATH/src
+RUN buffalo new app -f --api
+WORKDIR $GOPATH/src/app
+RUN buffalo version > output.txt
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/version-no-dep.json
+
