@@ -148,13 +148,11 @@ func Test_Middleware_Skip_Resource(t *testing.T) {
 	}
 
 	a := New(Options{})
-	var cr Resource
-	cr = &carsResource{&BaseResource{}}
+	var cr Resource = &carsResource{}
 	g := a.Resource("/autos", cr)
 	g.Use(mw1)
 
-	var ur Resource
-	ur = &carsResource{&BaseResource{}}
+	var ur Resource = &carsResource{}
 	g = a.Resource("/cars", ur)
 	g.Use(mw1)
 
