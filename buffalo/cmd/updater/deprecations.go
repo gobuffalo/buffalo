@@ -21,7 +21,7 @@ func DeprecrationsCheck(r *Runner) error {
 		r.Warnings = append(r.Warnings, "app.Start has been removed in v0.11.0. Use app.Serve Instead. [main.go]")
 	}
 
-	return filepath.Walk(filepath.Join(r.App.Root, "actions"), func(path string, info os.FileInfo, err error) error {
+	return filepath.Walk(filepath.Join(r.App.Root, "actions"), func(path string, info os.FileInfo, _ error) error {
 		if info.IsDir() {
 			return nil
 		}
@@ -47,7 +47,7 @@ func DeprecrationsCheck(r *Runner) error {
 		if bytes.Contains(b, []byte("T.LanguageFinder=")) || bytes.Contains(b, []byte("T.LanguageFinder ")) {
 			r.Warnings = append(r.Warnings, fmt.Sprintf("i18n.Translator#LanguageFinder has been deprecated in v0.11.1. Use i18n.Translator#LanguageExtractors instead. [%s]", path))
 		}
-		ioutil.WriteFile(path, b, 664)
+		ioutil.WriteFile(path, b, 0664)
 
 		return nil
 	})

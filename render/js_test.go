@@ -106,6 +106,7 @@ func Test_JavaScript_JS_Partial(t *testing.T) {
 	tf, err := os.Create(filepath.Join(dir, "test.js"))
 	r.NoError(err)
 	_, err = tf.WriteString("let a = 1;\n<%= partial(\"part.js\") %>")
+	r.NoError(err)
 
 	bb := &bytes.Buffer{}
 	err = re.JavaScript("test.js").Render(bb, map[string]interface{}{})
@@ -137,6 +138,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	tf, err := os.Create(filepath.Join(dir, "test.js"))
 	r.NoError(err)
 	_, err = tf.WriteString("let a = \"<%= partial(\"part.html\") %>\"")
+	r.NoError(err)
 
 	bb := &bytes.Buffer{}
 	err = re.JavaScript("test.js").Render(bb, map[string]interface{}{})

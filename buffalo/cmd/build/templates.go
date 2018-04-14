@@ -19,7 +19,7 @@ func (b *Builder) validateTemplates() error {
 		return nil
 	}
 	errs := []string{}
-	err := filepath.Walk(filepath.Join(b.App.Root, "templates"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(filepath.Join(b.App.Root, "templates"), func(path string, info os.FileInfo, _ error) error {
 		if info == nil || info.IsDir() {
 			return nil
 		}
