@@ -342,11 +342,16 @@ func Test_App_NamedRoutes(t *testing.T) {
 		*BaseResource
 	}
 
+	type ResourcesResource struct {
+		*BaseResource
+	}
+
 	r := require.New(t)
 	a := New(Options{})
 
-	var carsResource Resource
-	carsResource = CarsResource{&BaseResource{}}
+	var carsResource Resource = CarsResource{}
+
+	var resourcesResource Resource = ResourcesResource{}
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.html",
@@ -367,6 +372,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 			9. <%= rootPath({"some":"variable","other": 12}) %>
 			10. <%= rootPath() %>
 			11. <%= rootPath({"special/":"12=ss"}) %>
+			12. <%= resourcePath({resource_id: 1}) %>
+			13. <%= editResourcePath({resource_id: 1}) %>
 		`))
 	}
 
@@ -375,6 +382,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.GET("/users/{user_id}", sampleHandler)
 	a.GET("/peeps", sampleHandler).Name("myPeeps")
 	a.Resource("/car", carsResource)
+	a.Resource("/resources", resourcesResource)
 
 	w := willie.New(a)
 	res := w.Request("/").Get()
@@ -390,6 +398,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "9. /?other=12&some=variable")
 	r.Contains(res.Body.String(), "10. /")
 	r.Contains(res.Body.String(), "11. /?special%2F=12%3Dss")
+	r.Contains(res.Body.String(), "12. /resources/1")
+	r.Contains(res.Body.String(), "13. /resources/1/edit")
 }
 
 func Test_App_NamedRoutes_MissingParameter(t *testing.T) {

@@ -5,10 +5,10 @@
   "license": "MIT",
   "repository": "github.com/gobuffalo/buffalo",
   "dependencies": {
-    {{ if eq .opts.Bootstrap 4 -}}
-    "bootstrap": "4.0.0",
-    {{ else -}}
+    {{ if eq .opts.Bootstrap 3 -}}
     "bootstrap-sass": "~3.3.7",
+    {{ else -}}
+    "bootstrap": "4.1.0",
     {{ end -}}
     "font-awesome": "~4.7.0",
     "jquery": "~3.2.1",
@@ -34,6 +34,6 @@
     "url-loader": "~1.0.1",
     "webpack": "~4.5.0",
     "webpack-cli": "2.0.14",
-    "webpack-manifest-plugin": "~2.0.0-rc.2"
+    "webpack-manifest-plugin": "~2.0.0"
   }
 }

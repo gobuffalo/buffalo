@@ -27,7 +27,7 @@ func PackageJSONCheck(r *Runner) error {
 
 	g := newapp.Generator{
 		App:       r.App,
-		Bootstrap: 3,
+		Bootstrap: 4,
 	}
 
 	box := webpack.TemplateBox

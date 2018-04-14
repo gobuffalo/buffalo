@@ -64,8 +64,6 @@ func Test_Template_Partial(t *testing.T) {
 	_, err = tmpFile.Write([]byte(`<%= partial("foo.html") %>`))
 	r.NoError(err)
 
-	type ji func(string, ...string) render.Renderer
-
 	j := render.New(render.Options{
 		TemplatesBox: packr.NewBox(tPath),
 	}).Template
@@ -136,8 +134,6 @@ func Test_Template_Partial_WithoutExtension(t *testing.T) {
 
 	_, err = tmpFile.Write([]byte(`<%= partial("foo") %>`))
 	r.NoError(err)
-
-	type ji func(string, ...string) render.Renderer
 
 	j := render.New(render.Options{
 		TemplatesBox: packr.NewBox(tPath),
