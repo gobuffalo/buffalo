@@ -29,7 +29,7 @@ var RootCmd = &cobra.Command{
 			return nil
 		}
 
-		if insideBuffaloProject() == false {
+		if !insideBuffaloProject() {
 			return errors.New("you need to be inside your buffalo project path to run this command")
 		}
 
