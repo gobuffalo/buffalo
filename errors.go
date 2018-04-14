@@ -80,10 +80,10 @@ func productionErrorResponseFor(status int) []byte {
 	return []byte(prodErrorTmpl)
 }
 
-func defaultErrorHandler(status int, err error, c Context) error {
+func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 
-	c.Logger().Error(err)
+	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
@@ -92,17 +92,22 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		return nil
 	}
 
-	msg := fmt.Sprintf("%+v", err)
+	msg := fmt.Sprintf("%+v", origErr)
 	ct := httpx.ContentType(c.Request())
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
-		err = json.NewEncoder(c.Response()).Encode(map[string]interface{}{
+		err := json.NewEncoder(c.Response()).Encode(map[string]interface{}{
 			"error": msg,
 			"code":  status,
 		})
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	case "application/xml", "text/xml", "xml":
 	default:
-		err := c.Request().ParseForm()
+		if err := c.Request().ParseForm(); err != nil {
+			msg = fmt.Sprintf("%s\n%s", err.Error(), msg)
+		}
 		routes := c.Value("routes")
 		if cd, ok := c.(*DefaultContext); ok {
 			delete(cd.data, "app")
@@ -130,7 +135,7 @@ func defaultErrorHandler(status int, err error, c Context) error {
 		_, err = res.Write([]byte(t))
 		return err
 	}
-	return err
+	return nil
 }
 
 type inspectHeaders http.Header

@@ -101,15 +101,16 @@ func startWebpack(ctx context.Context) error {
 
 func startDevServer(ctx context.Context) error {
 	cfgFile := "./.buffalo.dev.yml"
-	_, err := os.Stat(cfgFile)
-	if err != nil {
+	if _, err := os.Stat(cfgFile); err != nil {
 		err = rg.Run("./", map[string]interface{}{
 			"name": "buffalo",
 		})
+		if err != nil {
+			return err
+		}
 	}
 	c := &refresh.Configuration{}
-	err = c.Load(cfgFile)
-	if err != nil {
+	if err := c.Load(cfgFile); err != nil {
 		return err
 	}
 	c.Debug = devOptions.Debug

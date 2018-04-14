@@ -44,8 +44,6 @@ var ResourceCmd = &cobra.Command{
 	},
 }
 
-var resourceMN string
-
 func init() {
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipMigration, "skip-migration", "s", false, "tells resource generator not-to add model migration")
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipModel, "skip-model", "", false, "tells resource generator not to generate model nor migrations")

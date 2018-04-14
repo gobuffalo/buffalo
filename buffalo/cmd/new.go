@@ -22,15 +22,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootPath string
-
 var app = newapp.Generator{
 	App:        meta.New("."),
 	DBType:     "postgres",
 	CIProvider: "none",
 	AsWeb:      true,
 	Docker:     "multi",
-	Bootstrap:  3,
+	Bootstrap:  4,
 }
 
 var newCmd = &cobra.Command{

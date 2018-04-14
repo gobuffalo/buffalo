@@ -77,7 +77,7 @@ func (act Generator) buildTestsTemplate(filePath string) string {
 func (act Generator) addTemplateFiles(actionsToAdd []inflect.Name, data makr.Data) error {
 	for _, action := range actionsToAdd {
 		vg := makr.New()
-		viewPath := filepath.Join("templates", fmt.Sprintf("%s", act.Name.File()), fmt.Sprintf("%s.html", action.File()))
+		viewPath := filepath.Join("templates", act.Name.File(), fmt.Sprintf("%s.html", action.File()))
 		vg.Add(makr.NewFile(viewPath, viewTmpl))
 		err := vg.Run(".", makr.Data{
 			"opts":   act,
