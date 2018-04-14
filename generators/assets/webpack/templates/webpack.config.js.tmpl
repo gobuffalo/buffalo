@@ -83,7 +83,7 @@ const configurator = {
     }
 
     if( env === "development" ){
-      config.plugins.push(new LiveReloadPlugin())
+      config.plugins.push(new LiveReloadPlugin({appendScriptTag: true}))
       return config
     }
 
