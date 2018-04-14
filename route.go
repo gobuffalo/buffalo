@@ -114,10 +114,10 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 		return path
 	}
 
-	if strings.Contains(path, "?") == false {
+	if !strings.Contains(path, "?") {
 		path = path + "?"
 	} else {
-		if strings.HasSuffix(path, "?") == false {
+		if !strings.HasSuffix(path, "?") {
 			path = path + "&"
 		}
 	}

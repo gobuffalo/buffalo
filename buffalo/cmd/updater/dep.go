@@ -12,14 +12,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-type lockToml struct {
-	Name     string   `toml:"name"`
-	Branch   string   `toml:"branch"`
-	Packages []string `toml:"packages"`
-	Revision string   `toml:"revision"`
-	Version  string   `toml:"version"`
-}
-
 func goGetUpdate(r *Runner) error {
 	fmt.Println("~~~ Running go get ~~~")
 	ctx, cancel := context.WithCancel(context.Background())
@@ -68,10 +60,8 @@ func DepEnsure(r *Runner) error {
 		"github.com/gobuffalo/suite@v2.0.0",
 	}
 	args := []string{"ensure", "-v", "-add"}
+	args = append(args, apkg...)
 
-	for _, p := range apkg {
-		args = append(args, p)
-	}
 	cc = exec.Command("dep", args...)
 	cc.Stdin = os.Stdin
 	cc.Stderr = os.Stderr
@@ -87,9 +77,7 @@ func DepEnsure(r *Runner) error {
 	}
 
 	args = []string{"ensure", "-v", "-update"}
-	for _, p := range upkg {
-		args = append(args, p)
-	}
+	args = append(args, upkg...)
 	cc = exec.Command("dep", args...)
 	cc.Stdin = os.Stdin
 	cc.Stderr = os.Stderr

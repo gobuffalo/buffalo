@@ -125,7 +125,7 @@ func (c ImportConverter) rewriteFile(name string) error {
 		}
 	}
 
-	// if no change occured, then we don't need to write to disk, just return.
+	// if no change occurred, then we don't need to write to disk, just return.
 	if !change {
 		return nil
 	}

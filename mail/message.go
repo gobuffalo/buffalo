@@ -46,7 +46,7 @@ func (m *Message) AddBody(r render.Renderer, data render.Data) error {
 	}
 
 	m.Bodies = append(m.Bodies, Body{
-		Content:     string(buf.Bytes()),
+		Content:     buf.String(),
 		ContentType: r.ContentType(),
 	})
 
