@@ -178,10 +178,10 @@ func (d *DefaultContext) Error(status int, err error) error {
 // Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead.
 func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
 	warningMsg := "Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead."
-	_, file, no, ok := runtime.Caller(1)
-	if ok {
+	if _, file, no, ok := runtime.Caller(1); ok {
 		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
 	}
+	fmt.Println(warningMsg)
 	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
 }
 

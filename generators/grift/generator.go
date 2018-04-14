@@ -35,7 +35,7 @@ func New(args ...string) (Generator, error) {
 		for _, n := range strings.Split(args[0], ":") {
 			g.Parts = append(g.Parts, inflect.Name(n))
 		}
-		g.Name = inflect.Name(g.Parts[len(g.Parts)-1])
+		g.Name = g.Parts[len(g.Parts)-1]
 	}
 
 	return g, g.Validate()
