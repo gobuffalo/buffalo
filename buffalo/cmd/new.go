@@ -22,8 +22,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootPath string
-
 var app = newapp.Generator{
 	App:        meta.New("."),
 	DBType:     "postgres",

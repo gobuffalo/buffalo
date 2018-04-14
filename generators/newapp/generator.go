@@ -106,4 +106,4 @@ func (g Generator) validateInGoPath() error {
 }
 
 var forbiddenAppNames = []string{"buffalo"}
-var nameRX = regexp.MustCompile("^[\\w-]+$")
+var nameRX = regexp.MustCompile(`^[\w-]+$`)
