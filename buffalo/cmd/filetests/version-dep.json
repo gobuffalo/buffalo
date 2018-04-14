@@ -1,6 +1,6 @@
 [{
   "path": "output.txt",
   "contains": [
-    "v0.11.0 [development]"
+    "msg=\"Buffalo version is: v\n"
   ]
 }]

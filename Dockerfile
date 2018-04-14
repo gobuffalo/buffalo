@@ -127,13 +127,13 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/n
 WORKDIR $GOPATH/src
 RUN buffalo new app -f --api --with-dep
 WORKDIR $GOPATH/src/app
-RUN buffalo version > output.txt
+RUN buffalo version > output.txt 2>&1
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/version-dep.json
 
 # Non-Vendored buffalo version.
 WORKDIR $GOPATH/src
 RUN buffalo new app -f --api
 WORKDIR $GOPATH/src/app
-RUN buffalo version > output.txt
+RUN buffalo version > output.txt 2>&1
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/version-no-dep.json
 
