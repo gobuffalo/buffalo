@@ -62,6 +62,9 @@ func execute() error {
 		cmd := exec.Command("go", args...)
 		return run(cmd)
 	})
+	if err != nil {
+		return errors.WithStack(err)
+	}
 
 	cmd := exec.Command(binPath, os.Args[1:]...)
 	return run(cmd)
