@@ -60,6 +60,10 @@ func WebpackCheck(r *Runner) error {
 
 	if !ask("Your webpack.config.js file is different from the latest Buffalo template.\nWould you like to replace yours with the latest template?") {
 		fmt.Println("\tSkipping webpack.config.js")
+		if !bytes.Contains(b, []byte("publicPath:")) {
+			r.Warnings = append(r.Warnings, `It seems your webpack.config.js file doesn't define a "publicPath". You need to define it MANUALLY in the "output" section to ensure assets helpers work correctly.
+See https://webpack.js.org/guides/public-path/`)
+		}
 		return nil
 	}
 
