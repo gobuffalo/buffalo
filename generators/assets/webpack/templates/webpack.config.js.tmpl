@@ -1,10 +1,12 @@
 const Webpack = require("webpack");
 const Glob = require("glob");
+const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const configurator = {
   entries: function(){
@@ -80,7 +82,8 @@ const configurator = {
       module: configurator.moduleOptions()
     }
 
-    if( env == "development" ){
+    if( env === "development" ){
+      config.plugins.push(new LiveReloadPlugin({appendScriptTag: true}))
       return config
     }
 
