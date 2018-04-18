@@ -40,6 +40,18 @@ func goGetUpdate(r *Runner) error {
 	return nil
 }
 
+// packages to add to Gopkg.toml
+var apkg = []string{}
+
+// packages ensure get updated
+var upkg = []string{
+	"github.com/gobuffalo/buffalo",
+	"github.com/gobuffalo/plush",
+	"github.com/gobuffalo/pop",
+	"github.com/gobuffalo/suite",
+	"github.com/markbates/inflect",
+}
+
 // DepEnsure runs `dep ensure -v` to make sure that any newly changed
 // imports are added to dep.
 func DepEnsure(r *Runner) error {
@@ -55,30 +67,26 @@ func DepEnsure(r *Runner) error {
 		return errors.WithStack(err)
 	}
 
-	apkg := []string{
-		"github.com/gobuffalo/tags@v2.0.0",
-		"github.com/gobuffalo/suite@v2.0.0",
-	}
-	args := []string{"ensure", "-v", "-add"}
-	args = append(args, apkg...)
-
-	cc = exec.Command("dep", args...)
-	cc.Stdin = os.Stdin
-	cc.Stderr = os.Stderr
-	cc.Stdout = os.Stdout
-	if err := cc.Run(); err != nil {
-		return errors.WithStack(err)
+	if len(apkg) > 0 {
+		args := []string{"ensure", "-v", "-add"}
+		args = append(args, apkg...)
+		if err := depRunner(args); err != nil {
+			return errors.WithStack(err)
+		}
 	}
 
-	upkg := []string{
-		"github.com/gobuffalo/buffalo",
-		"github.com/gobuffalo/plush",
-		"github.com/markbates/inflect",
+	if len(upkg) > 0 {
+		args := []string{"ensure", "-v", "-update"}
+		args = append(args, upkg...)
+		if err := depRunner(args); err != nil {
+			return errors.WithStack(err)
+		}
 	}
+	return nil
+}
 
-	args = []string{"ensure", "-v", "-update"}
-	args = append(args, upkg...)
-	cc = exec.Command("dep", args...)
+func depRunner(args []string) error {
+	cc := exec.Command("dep", args...)
 	cc.Stdin = os.Stdin
 	cc.Stderr = os.Stderr
 	cc.Stdout = os.Stdout
