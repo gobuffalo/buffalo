@@ -1,0 +1,9 @@
+[{
+  "path": "output.txt",
+  "contains": [
+    "msg=\"Buffalo version is: development"
+  ],
+  "!contains": [
+    "msg=\"Buffalo version is: v"
+  ]
+}]

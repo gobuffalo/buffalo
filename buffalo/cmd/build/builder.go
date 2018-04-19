@@ -47,6 +47,12 @@ func (b *Builder) Run() error {
 	defer b.Cleanup()
 	logrus.Debug(b.Options)
 
+	if b.Debug {
+		builder.DebugLog = func(m string, a ...interface{}) {
+			logrus.Debugf(m, a...)
+		}
+	}
+
 	for _, s := range b.steps {
 		err := s()
 		if err != nil {
