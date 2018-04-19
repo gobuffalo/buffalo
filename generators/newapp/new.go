@@ -377,10 +377,8 @@ const GopkgTomlTmpl = `
     name = "github.com/gobuffalo/buffalo"
     unused-packages = false
 
-{{ if .opts.WithPop }}
   # DO NOT DELETE
   [[prune.project]] # pop
     name = "github.com/gobuffalo/pop"
     unused-packages = false
-{{ end }}
 `

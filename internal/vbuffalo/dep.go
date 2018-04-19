@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"html/template"
@@ -43,7 +42,7 @@ func depEnsure() error {
 			return errors.WithStack(err)
 		}
 
-		return run(exec.Command("dep", "ensure", "-v"))
+		return run("dep", []string{"ensure", "-v"})
 	}
 
 	if addPrune {
