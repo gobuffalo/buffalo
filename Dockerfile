@@ -140,4 +140,3 @@ RUN buffalo new app -f --api
 WORKDIR $GOPATH/src/app
 RUN buffalo version > output.txt 2>&1
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/version-no-dep.json
-
