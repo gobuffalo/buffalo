@@ -2,7 +2,8 @@ FROM gobuffalo/buffalo:development
 
 RUN buffalo version
 
-RUN go get -v -u github.com/golang/lint/golint
+RUN go get -u github.com/alecthomas/gometalinter
+RUN gometalinter --install
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/markbates/grift
@@ -24,10 +25,9 @@ RUN go get -v -t ./...
 
 RUN go install -v -tags sqlite ./buffalo
 
-RUN go test -tags sqlite -race $(go list ./... | grep -v /vendor/)
+RUN go test -tags sqlite -race ./...
 
-RUN golint -set_exit_status $(go list ./... | grep -v /vendor/)
-
+RUN gometalinter --vendor --deadline=5m ./...
 
 WORKDIR $GOPATH/src/
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
@@ -35,7 +35,7 @@ WORKDIR ./hello_world
 
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
 
-RUN go vet -x $(go list ./... | grep -v /vendor/)
+RUN go vet ./...
 RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race

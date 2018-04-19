@@ -22,10 +22,7 @@ type File struct {
 
 // Valid if there is an actual uploaded file
 func (f File) Valid() bool {
-	if f.File == nil {
-		return false
-	}
-	return true
+	return f.File != nil
 }
 
 func (f File) String() string {
