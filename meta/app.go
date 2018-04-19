@@ -1,7 +1,9 @@
 package meta
 
 import (
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -24,6 +26,7 @@ type App struct {
 	GriftsPkg   string       `json:"grifts_path"`
 	VCS         string       `json:"vcs"`
 	WithPop     bool         `json:"with_pop"`
+	WithSQLite  bool         `json:"with_sqlite"`
 	WithDep     bool         `json:"with_dep"`
 	WithWebpack bool         `json:"with_webpack"`
 	WithYarn    bool         `json:"with_yarn"`
@@ -78,9 +81,12 @@ func New(root string) App {
 	if runtime.GOOS == "windows" {
 		app.Bin += ".exe"
 	}
-
-	if _, err := os.Stat(filepath.Join(root, "database.yml")); err == nil {
+	db := filepath.Join(root, "database.yml")
+	if _, err := os.Stat(db); err == nil {
 		app.WithPop = true
+		if b, err := ioutil.ReadFile(db); err == nil {
+			app.WithSQLite = bytes.Contains(bytes.ToLower(b), []byte("sqlite"))
+		}
 	}
 	if _, err := os.Stat(filepath.Join(root, "Gopkg.toml")); err == nil {
 		app.WithDep = true

@@ -68,7 +68,10 @@ var newCmd = &cobra.Command{
 			app.WithWebpack = false
 		}
 
-		if err := app.Run(app.Root, makr.Data{}); err != nil {
+		data := makr.Data{
+			"version": Version,
+		}
+		if err := app.Run(app.Root, data); err != nil {
 			return errors.WithStack(err)
 		}
 
