@@ -7,8 +7,6 @@ environment:
   matrix:
   - GOBIN: c:\go
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  - GOBIN: c:\go18
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 services:
 - mysql
@@ -32,11 +30,16 @@ build:
 deploy: false
 
 before_build:
-  - cmd: go get -v -u -t ./...
+- cmd: >-
+    go get -v -u github.com/mattn/go-sqlite3
+
+    go get -v -u -t ./...
+
 build_script:
 - cmd: >-
-    go build -v github.com/gobuffalo/buffalo/buffalo
+    go build -v -tags sqlite github.com/gobuffalo/buffalo/buffalo
 
-    go install github.com/gobuffalo/buffalo/buffalo
+    go install -tags sqlite github.com/gobuffalo/buffalo/buffalo
+
 test_script:
-- cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test %%G & IF ERRORLEVEL == 1 EXIT 1)
+- cmd: for /f "" %%G in ('go list github.com/gobuffalo/buffalo/... ^| find /i /v "/vendor/"') do ( go test -tags sqlite %%G & IF ERRORLEVEL == 1 EXIT 1)

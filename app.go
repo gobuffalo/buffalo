@@ -37,7 +37,7 @@ type App struct {
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve() error {
-	logrus.Infof("Starting application at %s", a.Options.Addr)
+	logrus.Infof("Starting application at %s", a.Options.Host)
 	server := http.Server{
 		Handler: a,
 	}
@@ -49,22 +49,19 @@ func (a *App) Serve() error {
 		<-ctx.Done()
 		logrus.Info("Shutting down application")
 
-		err := a.Stop(ctx.Err())
-		if err != nil {
+		if err := a.Stop(ctx.Err()); err != nil {
 			logrus.Error(err)
 		}
 
 		if !a.WorkerOff {
 			// stop the workers
 			logrus.Info("Shutting down worker")
-			err = a.Worker.Stop()
-			if err != nil {
+			if err := a.Worker.Stop(); err != nil {
 				logrus.Error(err)
 			}
 		}
 
-		err = server.Shutdown(ctx)
-		if err != nil {
+		if err := server.Shutdown(ctx); err != nil {
 			logrus.Error(err)
 		}
 
@@ -73,14 +70,11 @@ func (a *App) Serve() error {
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
 		go func() {
-			err := a.Worker.Start(ctx)
-			if err != nil {
+			if err := a.Worker.Start(ctx); err != nil {
 				a.Stop(err)
 			}
 		}()
 	}
-
-	var err error
 
 	if strings.HasPrefix(a.Options.Addr, "unix:") {
 		// Use an UNIX socket
@@ -89,16 +83,16 @@ func (a *App) Serve() error {
 			return a.Stop(err)
 		}
 		// start the web server
-		err = server.Serve(listener)
-	} else {
-		// Use a TCP socket
-		server.Addr = a.Options.Addr
-
-		// start the web server
-		err = server.ListenAndServe()
+		if err = server.Serve(listener); err != nil {
+			return a.Stop(err)
+		}
+		return nil
 	}
+	// Use a TCP socket
+	server.Addr = a.Options.Addr
 
-	if err != nil {
+	// start the web server
+	if err := server.ListenAndServe(); err != nil {
 		return a.Stop(err)
 	}
 
@@ -126,8 +120,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var h http.Handler
-	h = a.router
+	var h http.Handler = a.router
 	if a.Env == "development" {
 		h = web.ErrorChecker(h)
 	}
@@ -151,11 +144,17 @@ func New(opts Options) *App {
 		routes:   RouteList{},
 		children: []*App{},
 	}
-	a.router.NotFoundHandler = http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		c := a.newContext(RouteInfo{}, res, req)
-		err := errors.Errorf("path not found: %s %s", req.Method, req.URL.Path)
-		a.ErrorHandlers.Get(404)(404, err, c)
-	})
+
+	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
+		return func(res http.ResponseWriter, req *http.Request) {
+			c := a.newContext(RouteInfo{}, res, req)
+			err := errors.Errorf(errorf, req.Method, req.URL.Path)
+			a.ErrorHandlers.Get(code)(code, err, c)
+		}
+	}
+
+	a.router.NotFoundHandler = notFoundHandler("path not found: %s %s", 404)
+	a.router.MethodNotAllowedHandler = notFoundHandler("method not found: %s %s", 405)
 
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride

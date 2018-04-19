@@ -47,7 +47,7 @@ var ResourceCmd = &cobra.Command{
 
 func confirm(msg string) bool {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Printf(msg)
+	fmt.Print(msg)
 	text, _ := reader.ReadString('\n')
 
 	return (text == "y\n" || text == "Y\n")
@@ -55,7 +55,7 @@ func confirm(msg string) bool {
 
 func removeTemplates(fileName string) {
 	if YesToAll || confirm("Want to remove templates? (Y/n)") {
-		templatesFolder := fmt.Sprintf(filepath.Join("templates", fileName))
+		templatesFolder := filepath.Join("templates", fileName)
 		logrus.Infof("- Deleted %v folder\n", templatesFolder)
 		os.RemoveAll(templatesFolder)
 	}

@@ -82,6 +82,6 @@ Buffalo does not try to reinvent the wheel! Instead, it uses the already great w
 Thank you to the following **GIANTS**:
 
 {{ range $v := .}}
-* [{{$v}}](https://{{$v}})
+* [{{$v}}](https://godoc.org/{{$v}})
 {{ end }}
 `
