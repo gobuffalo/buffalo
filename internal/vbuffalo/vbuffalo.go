@@ -1,6 +1,7 @@
 package vbuffalo
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -18,6 +19,7 @@ var binPath = filepath.Join(pwd, "bin", "vbuffalo")
 var app meta.App
 
 func init() {
+	fmt.Println("vbuffalo")
 	if runtime.GOOS == "windows" {
 		binPath += ".exe"
 	}
@@ -59,15 +61,13 @@ func execute() error {
 			args = append(args, "--tags", "sqlite")
 		}
 		args = append(args, "-o", binPath)
-		cmd := exec.Command("go", args...)
-		return run(cmd)
+		return run("go", args)
 	})
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	cmd := exec.Command(binPath, os.Args[1:]...)
-	return run(cmd)
+	return run(binPath, os.Args[1:])
 }
 
 func cd(dir string, fn func() error) error {
@@ -76,12 +76,16 @@ func cd(dir string, fn func() error) error {
 	return fn()
 }
 
-func run(cmd *exec.Cmd) error {
-	// fmt.Println(strings.Join(cmd.Args, " "))
+func run(name string, args []string) error {
+	// fmt.Println("vbuffalo", name, strings.Join(args, " "))
+	cmd := exec.Command(name, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	if err := cmd.Start(); err != nil {
+		return errors.WithStack(err)
+	}
+	return cmd.Wait()
 }
 
 func exists(f string) bool {
