@@ -10,7 +10,6 @@ import (
   _ "<%= opts.PackagePkg %>/a"
   _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
-  "github.com/gobuffalo/envy"
   "github.com/gobuffalo/packr"
   "github.com/gobuffalo/pop"
   "<%= opts.ModelsPkg %>"
@@ -24,8 +23,6 @@ var BuildVersion = "unknown"
 var BuildTime = "unknown"
 
 func main() {
-  envy.MustSet("BUILD_VERSION", BuildVersion)
-  envy.MustSet("BUILD_TIME", BuildTime)
   args := os.Args
   if len(args) == 1 {
     originalMain()
