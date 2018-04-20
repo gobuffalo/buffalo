@@ -20,7 +20,6 @@ var ErrNotInGoPath = errors.New("currently not in a $GOPATH")
 // Generator is the representation of a new Buffalo application
 type Generator struct {
 	meta.App
-	Version     string `json:"version"`
 	Force       bool   `json:"force"`
 	Verbose     bool   `json:"verbose"`
 	DBType      string `json:"db_type"`
