@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
 	"github.com/markbates/inflect"
@@ -20,6 +21,7 @@ var ErrNotInGoPath = errors.New("currently not in a $GOPATH")
 // Generator is the representation of a new Buffalo application
 type Generator struct {
 	meta.App
+	Version     string `json:"version"`
 	Force       bool   `json:"force"`
 	Verbose     bool   `json:"verbose"`
 	DBType      string `json:"db_type"`
@@ -41,6 +43,7 @@ func New(name string) (Generator, error) {
 		CIProvider: "none",
 		AsWeb:      true,
 		Docker:     "multi",
+		Version:    runtime.Version,
 	}
 	g.Name = inflect.Name(name)
 
