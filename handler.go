@@ -3,6 +3,7 @@ package buffalo
 import (
 	"net/http"
 
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/x/httpx"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
@@ -49,6 +50,8 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		"current_path":  req.URL.Path,
 		"contentType":   ct,
 		"method":        req.Method,
+		"BUILD_VERSION": envy.Get("BUILD_VERSION", "unknown"),
+		"BUILD_TIME":    envy.Get("BUILD_TIME", "unknown"),
 	}
 
 	for _, route := range a.Routes() {
