@@ -55,12 +55,14 @@ func (sm SMTPSender) addBodies(message Message, gm *gomail.Message) {
 
 func (sm SMTPSender) addAttachments(message Message, gm *gomail.Message) {
 	for _, at := range message.Attachments {
+		currentAttachement := at
 		settings := gomail.SetCopyFunc(func(w io.Writer) error {
-			_, err := io.Copy(w, at.Reader)
+			_, err := io.Copy(w, currentAttachement.Reader)
 			return err
 		})
 
-		gm.Attach(at.Name, settings)
+			gm.Attach(currentAttachement.Name, settings)
+
 	}
 }
 
