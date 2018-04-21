@@ -37,6 +37,7 @@ func TestSendPlain(t *testing.T) {
 
 	m.AddAttachment("someFile.txt", "text/plain", bytes.NewBuffer([]byte("hello")))
 	m.AddAttachment("otherFile.txt", "text/plain", bytes.NewBuffer([]byte("bye")))
+	m.AddEmbeded("test.jpg", bytes.NewBuffer([]byte("not a real image")))
 	m.AddBody(rend.String("Hello <%= Name %>"), render.Data{"Name": "Antonio"})
 	r.Equal(m.Bodies[0].Content, "Hello Antonio")
 
@@ -59,5 +60,8 @@ func TestSendPlain(t *testing.T) {
 	r.Contains(lastMessage, "aGVsbG8=") //base64 of the file content
 	r.Contains(lastMessage, "Content-Disposition: attachment; filename=\"otherFile.txt\"")
 	r.Contains(lastMessage, "Ynll") //base64 of the file content
+	r.Contains(lastMessage, "Content-Disposition: inline; filename=\"test.jpg\"")
+	r.Contains(lastMessage, "bm90IGEgcmVhbCBpbWFnZQ==") //base64 of the file content
+
 	r.Contains(lastMessage, `X-SMTPAPI: {"send_at": 1409348513}`)
 }

@@ -19,6 +19,7 @@ type Message struct {
 
 	Bodies      []Body
 	Attachments []Attachment
+	Embedded    []Attachment
 }
 
 // Body represents one of the bodies in the Message could be main or alternative
@@ -32,6 +33,7 @@ type Attachment struct {
 	Name        string
 	Reader      io.Reader
 	ContentType string
+	Embeded     bool
 }
 
 // AddBody the message by receiving a renderer and rendering data, first message will be
@@ -72,6 +74,19 @@ func (m *Message) AddAttachment(name, contentType string, r io.Reader) error {
 		Name:        name,
 		ContentType: contentType,
 		Reader:      r,
+		Embeded:     false,
+	})
+
+	return nil
+}
+
+//AddEmbeded adds the attachment to the list of attachments
+// the Message has and uses inline instead of attachement property.
+func (m *Message) AddEmbeded(name string, r io.Reader) error {
+	m.Attachments = append(m.Attachments, Attachment{
+		Name:    name,
+		Reader:  r,
+		Embeded: true,
 	})
 
 	return nil
