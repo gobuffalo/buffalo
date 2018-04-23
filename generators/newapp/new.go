@@ -239,6 +239,9 @@ script: buffalo test
 `
 
 const nGitlabCi = `before_script:
+{{- if eq .opts.DBType "postgres" }}
+  - apt-get update && apt-get install -y postgresql-client
+{{- end }}
   - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
   - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
