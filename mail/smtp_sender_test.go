@@ -37,7 +37,7 @@ func TestSendPlain(t *testing.T) {
 
 	m.AddAttachment("someFile.txt", "text/plain", bytes.NewBuffer([]byte("hello")))
 	m.AddAttachment("otherFile.txt", "text/plain", bytes.NewBuffer([]byte("bye")))
-	m.AddEmbeded("test.jpg", bytes.NewBuffer([]byte("not a real image")))
+	m.AddEmbedded("test.jpg", bytes.NewBuffer([]byte("not a real image")))
 	m.AddBody(rend.String("Hello <%= Name %>"), render.Data{"Name": "Antonio"})
 	r.Equal(m.Bodies[0].Content, "Hello Antonio")
 

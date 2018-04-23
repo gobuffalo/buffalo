@@ -62,7 +62,7 @@ func (sm SMTPSender) addAttachments(message Message, gm *gomail.Message) {
 			return err
 		})
 
-		if currentAttachement.Embeded {
+		if currentAttachement.Embedded {
 			gm.Embed(currentAttachement.Name, settings)
 		} else {
 			gm.Attach(currentAttachement.Name, settings)
