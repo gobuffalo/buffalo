@@ -71,6 +71,13 @@ func execIfExists(infoCmd infoCommand) error {
 	bb := os.Stdout
 	bb.WriteString(infoCmd.InfoLabel)
 
+	if infoCmd.Name == "dep" {
+		if _, err := os.Stat("Gopkg.toml"); err != nil {
+			bb.WriteString("could not find a Gopkg.toml file\n")
+			return nil
+		}
+	}
+
 	if _, err := exec.LookPath(infoCmd.PathName); err != nil {
 		bb.WriteString(fmt.Sprintf("%s Not Found\n", infoCmd.Name))
 		return nil

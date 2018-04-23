@@ -79,7 +79,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 //BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
 func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	cRoute := ri
-	return func(opts map[string]interface{}) template.HTML {
+	return func(opts map[string]interface{}) (template.HTML, error) {
 		pairs := []string{}
 		for k, v := range opts {
 			pairs = append(pairs, k)
@@ -88,13 +88,13 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return template.HTML(cRoute.Path)
+			return "", fmt.Errorf("missing parameters for %v", cRoute.Path)
 		}
 
 		result := url.Path
 		result = addExtraParamsTo(result, opts)
 
-		return template.HTML(result)
+		return template.HTML(result), nil
 	}
 }
 
@@ -114,10 +114,10 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 		return path
 	}
 
-	if strings.Contains(path, "?") == false {
+	if !strings.Contains(path, "?") {
 		path = path + "?"
 	} else {
-		if strings.HasSuffix(path, "?") == false {
+		if !strings.HasSuffix(path, "?") {
 			path = path + "&"
 		}
 	}
@@ -138,7 +138,7 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 }
 
 //RouteHelperFunc represents the function that takes the route and the opts and build the path
-type RouteHelperFunc func(opts map[string]interface{}) template.HTML
+type RouteHelperFunc func(opts map[string]interface{}) (template.HTML, error)
 
 // RouteList contains a mapping of the routes defined
 // in the application. This listing contains, Method, Path,

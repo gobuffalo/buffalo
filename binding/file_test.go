@@ -106,10 +106,11 @@ func newfileUploadRequest(uri string, paramName, path string) (*http.Request, er
 	if err != nil {
 		return nil, err
 	}
-	_, err = io.Copy(part, file)
+	if _, err = io.Copy(part, file); err != nil {
+		return nil, err
+	}
 
-	err = writer.Close()
-	if err != nil {
+	if err = writer.Close(); err != nil {
 		return nil, err
 	}
 

@@ -22,15 +22,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootPath string
-
 var app = newapp.Generator{
 	App:        meta.New("."),
 	DBType:     "postgres",
 	CIProvider: "none",
 	AsWeb:      true,
 	Docker:     "multi",
-	Bootstrap:  3,
+	Bootstrap:  4,
 }
 
 var newCmd = &cobra.Command{
@@ -70,7 +68,10 @@ var newCmd = &cobra.Command{
 			app.WithWebpack = false
 		}
 
-		if err := app.Run(app.Root, makr.Data{}); err != nil {
+		data := makr.Data{
+			"version": Version,
+		}
+		if err := app.Run(app.Root, data); err != nil {
 			return errors.WithStack(err)
 		}
 
