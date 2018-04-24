@@ -10,6 +10,7 @@ type Generator struct {
 	Version string   `json:"version"`
 	Style   string   `json:"style"`
 	AsWeb   bool     `json:"as_web"`
+	DBType  string   `json:"db_type"`
 }
 
 // New returns a well formed set of options for generating a docker file
@@ -18,6 +19,7 @@ func New() Generator {
 		App:     meta.New("."),
 		Version: "latest",
 		Style:   "multi",
+		DBType:  "postgres",
 	}
 	o.AsWeb = o.App.WithWebpack
 

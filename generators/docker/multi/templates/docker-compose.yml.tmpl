@@ -1,0 +1,54 @@
+version: '3.5'
+services:
+  app:
+    build:
+      context: .
+      target: builder
+    depends_on:
+    - db
+    expose:
+      - "3000"
+    ports:
+    - "3000:3000"
+    volumes:
+    - .:/go/src/{{.opts.App.PackagePkg}}
+    working_dir: /go/src/{{.opts.App.PackagePkg}}
+{{- if eq .opts.DBType "mysql" }}
+    command: bash -c "/wait-for db:3306 && buffalo db migrate && buffalo dev"
+{{- end }}
+{{- if eq .opts.DBType "postgres" }}
+    command: bash -c "/wait-for db:5432 && buffalo db migrate && buffalo dev"
+{{- end }}
+{{- if eq .opts.DBType "cockroach" }}
+    command: bash -c "/wait-for db:26257 && createdb -h db -p 26257 {{ .opts.App.Name.Title }}_development && buffalo db migrate && buffalo dev"
+{{- end }}
+    networks:
+      - appnet
+  db:
+{{- if eq .opts.DBType "mysql" }}
+    image: mysql:5.7.17
+    environment:
+    - MYSQL_ROOT_PASSWORD=root_234
+    - MYSQL_DATABASE={{ .opts.App.Name.Title }}_development
+{{- end }}
+{{- if eq .opts.DBType "postgres" }}
+    image: postgres
+    environment:
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_DB={{ .opts.App.Name.Title }}_development
+{{- end }}
+{{- if eq .opts.DBType "cockroach" }}
+    image: cockroachdb/cockroach
+    command: start --insecure --store=attrs=ssd,path=/var/lib/cockroach/
+    restart: always
+    expose:
+      - "8080"
+      - "26257"
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+{{- end }}
+    networks:
+      - appnet
+networks:
+  appnet:
