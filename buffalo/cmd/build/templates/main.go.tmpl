@@ -41,6 +41,7 @@ func main() {
   args := os.Args
   if len(args) == 1 {
     originalMain()
+    return
   }
   c := args[1]
   switch c {
