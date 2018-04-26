@@ -3,7 +3,7 @@ package vbuffalo
 import (
 	"os"
 
-	"github.com/gobuffalo/buffalo/buffalo/cmd"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
 )
@@ -17,7 +17,7 @@ func writeMain() error {
 	s, err := plush.Render(mainTemplate, plush.NewContextWith(map[string]interface{}{
 		"app":     app,
 		"cmdPkg":  cmdPkg,
-		"version": cmd.Version,
+		"version": runtime.Version,
 	}))
 	if err != nil {
 		return errors.WithStack(err)

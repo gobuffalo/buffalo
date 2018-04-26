@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/markbates/inflect"
@@ -40,7 +41,6 @@ var newCmd = &cobra.Command{
 		}
 
 		app.Name = inflect.Name(args[0])
-		app.Version = Version
 
 		if app.Name == "." {
 			app.Name = inflect.Name(filepath.Base(app.Root))
@@ -69,7 +69,7 @@ var newCmd = &cobra.Command{
 		}
 
 		data := makr.Data{
-			"version": Version,
+			"version": runtime.Version,
 		}
 		if err := app.Run(app.Root, data); err != nil {
 			return errors.WithStack(err)
