@@ -124,7 +124,6 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
-	o.Version = a.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
