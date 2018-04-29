@@ -114,11 +114,13 @@ func startDevServer(ctx context.Context) error {
 		return err
 	}
 	c.Debug = devOptions.Debug
+	tags := []string{"-tags", "development"}
 	if b, err := ioutil.ReadFile("database.yml"); err == nil {
 		if bytes.Contains(b, []byte("sqlite")) {
-			c.BuildFlags = append(c.BuildFlags, "-tags", "sqlite")
+			tags = append(tags, "sqlite")
 		}
 	}
+	c.BuildFlags = append(c.BuildFlags, tags...)
 	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
 }
