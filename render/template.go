@@ -20,6 +20,7 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
+	data        Data
 }
 
 func (s templateRenderer) ContentType() string {
@@ -29,6 +30,14 @@ func (s templateRenderer) ContentType() string {
 func (s templateRenderer) Render(w io.Writer, data Data) error {
 	var body template.HTML
 	var err error
+
+	// Cache the supplied global Data into a copy used
+	// when rendering partials with local variables.
+	s.data = Data{}
+	for k, v := range data {
+		s.data[k] = v
+	}
+
 	for _, name := range s.names {
 		body, err = s.exec(name, data)
 		if err != nil {
@@ -40,10 +49,33 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 	return nil
 }
 
-func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
+func (s templateRenderer) partial(name string, data Data) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
-	return s.exec(name, dd)
+
+	// Render the partial with the union of any local and global context.
+	// data _may_ be a copy of the global Data, or a local variable.
+	// Local variables should take precedence over global.
+	partialData := Data{}
+	for k, v := range s.data {
+		partialData[k] = v
+	}
+	for k, v := range data {
+		partialData[k] = v
+	}
+
+	// A partial may render further partials.
+	// Therefore, s.data must be updated, then restored.
+	originalData := Data{}
+	for k, v := range s.data {
+		originalData[k] = v
+	}
+
+	s.data = partialData
+	html, err := s.exec(name, partialData)
+	s.data = originalData
+
+	return html, err
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {

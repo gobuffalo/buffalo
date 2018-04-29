@@ -76,6 +76,46 @@ func Test_Template_Partial(t *testing.T) {
 	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
+
+func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T) {
+	r := require.New(t)
+
+	tPath, err := ioutil.TempDir("", "")
+	r.NoError(err)
+	defer os.Remove(tPath)
+
+	partFile, err := os.Create(filepath.Join(tPath, "_foo.html"))
+	r.NoError(err)
+
+	_, err = partFile.Write([]byte(`Foo > <%= name %> > <%= partial("bar.html", {name: "Alex"}) %>`))
+	r.NoError(err)
+
+	partFile2, err := os.Create(filepath.Join(tPath, "_bar.html"))
+	r.NoError(err)
+
+	_, err = partFile2.Write([]byte("Bar > <%= name %> > <%= other %>"))
+	r.NoError(err)
+
+	tmpFile, err := os.Create(filepath.Join(tPath, "index.html"))
+	r.NoError(err)
+
+	_, err = tmpFile.Write([]byte(`<%= partial("foo.html", {other: "Other"}) %>`))
+	r.NoError(err)
+
+	type ji func(string, ...string) render.Renderer
+
+	j := render.New(render.Options{
+		TemplatesBox: packr.NewBox(tPath),
+	}).Template
+
+	re := j("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+	bb := &bytes.Buffer{}
+	err = re.Render(bb, render.Data{"name": "Mark"})
+	r.NoError(err)
+	r.Equal("Foo > Mark > Bar > Alex > Other", strings.TrimSpace(bb.String()))
+}
+
 func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	r := require.New(t)
 
