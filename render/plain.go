@@ -18,7 +18,7 @@ func Plain(names ...string) Renderer {
 // and the first file will be the "content" file which will
 // be placed into the "layout" using "<%= yield %>".
 func (e *Engine) Plain(names ...string) Renderer {
-	hr := templateRenderer{
+	hr := &templateRenderer{
 		Engine:      e,
 		contentType: "text/plain; charset=utf-8",
 		names:       names,
