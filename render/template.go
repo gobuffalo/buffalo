@@ -20,13 +20,15 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
+	data        Data
 }
 
 func (s templateRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s templateRenderer) Render(w io.Writer, data Data) error {
+func (s *templateRenderer) Render(w io.Writer, data Data) error {
+	s.data = data
 	var body template.HTML
 	var err error
 	for _, name := range s.names {
@@ -43,7 +45,14 @@ func (s templateRenderer) Render(w io.Writer, data Data) error {
 func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
-	return s.exec(name, dd)
+	m := Data{}
+	for k, v := range s.data {
+		m[k] = v
+	}
+	for k, v := range dd {
+		m[k] = v
+	}
+	return s.exec(name, m)
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
@@ -84,6 +93,11 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 				}
 			}
 		}
+	}
+
+	// Set current_template to context
+	if _, ok := data["current_template"]; !ok {
+		data["current_template"] = templateName
 	}
 
 	source, err := s.TemplatesBox.MustBytes(templateName)
@@ -173,7 +187,7 @@ func Template(c string, names ...string) Renderer {
 // and the first file will be the "content" file which will
 // be placed into the "layout" using "{{yield}}".
 func (e *Engine) Template(c string, names ...string) Renderer {
-	return templateRenderer{
+	return &templateRenderer{
 		Engine:      e,
 		contentType: c,
 		names:       names,
