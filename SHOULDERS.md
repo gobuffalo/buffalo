@@ -8,8 +8,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/cockroachdb/cockroach-go/crdb](https://github.com/cockroachdb/cockroach-go/crdb)
 
-* [github.com/daviddengcn/go-colortext](https://github.com/daviddengcn/go-colortext)
-
 * [github.com/dustin/go-humanize](https://github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://github.com/fatih/color)
@@ -116,55 +114,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/mattn/anko/ast](https://github.com/mattn/anko/ast)
 
-* [github.com/mattn/anko/builtins](https://github.com/mattn/anko/builtins)
-
-* [github.com/mattn/anko/builtins/encoding/json](https://github.com/mattn/anko/builtins/encoding/json)
-
-* [github.com/mattn/anko/builtins/errors](https://github.com/mattn/anko/builtins/errors)
-
-* [github.com/mattn/anko/builtins/flag](https://github.com/mattn/anko/builtins/flag)
-
-* [github.com/mattn/anko/builtins/fmt](https://github.com/mattn/anko/builtins/fmt)
-
-* [github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext](https://github.com/mattn/anko/builtins/github.com/daviddengcn/go-colortext)
-
-* [github.com/mattn/anko/builtins/io](https://github.com/mattn/anko/builtins/io)
-
-* [github.com/mattn/anko/builtins/io/ioutil](https://github.com/mattn/anko/builtins/io/ioutil)
-
-* [github.com/mattn/anko/builtins/math](https://github.com/mattn/anko/builtins/math)
-
-* [github.com/mattn/anko/builtins/math/big](https://github.com/mattn/anko/builtins/math/big)
-
-* [github.com/mattn/anko/builtins/math/rand](https://github.com/mattn/anko/builtins/math/rand)
-
-* [github.com/mattn/anko/builtins/net](https://github.com/mattn/anko/builtins/net)
-
-* [github.com/mattn/anko/builtins/net/http](https://github.com/mattn/anko/builtins/net/http)
-
-* [github.com/mattn/anko/builtins/net/url](https://github.com/mattn/anko/builtins/net/url)
-
-* [github.com/mattn/anko/builtins/os](https://github.com/mattn/anko/builtins/os)
-
-* [github.com/mattn/anko/builtins/os/exec](https://github.com/mattn/anko/builtins/os/exec)
-
-* [github.com/mattn/anko/builtins/os/signal](https://github.com/mattn/anko/builtins/os/signal)
-
-* [github.com/mattn/anko/builtins/path](https://github.com/mattn/anko/builtins/path)
-
-* [github.com/mattn/anko/builtins/path/filepath](https://github.com/mattn/anko/builtins/path/filepath)
-
-* [github.com/mattn/anko/builtins/regexp](https://github.com/mattn/anko/builtins/regexp)
-
-* [github.com/mattn/anko/builtins/runtime](https://github.com/mattn/anko/builtins/runtime)
-
-* [github.com/mattn/anko/builtins/sort](https://github.com/mattn/anko/builtins/sort)
-
-* [github.com/mattn/anko/builtins/strconv](https://github.com/mattn/anko/builtins/strconv)
-
-* [github.com/mattn/anko/builtins/strings](https://github.com/mattn/anko/builtins/strings)
-
-* [github.com/mattn/anko/builtins/time](https://github.com/mattn/anko/builtins/time)
+* [github.com/mattn/anko/core](https://github.com/mattn/anko/core)
 
 * [github.com/mattn/anko/parser](https://github.com/mattn/anko/parser)
 
@@ -175,16 +125,6 @@ Thank you to the following **GIANTS**:
 * [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 
 * [github.com/monoculum/formam](https://github.com/monoculum/formam)
-
-* [github.com/nicksnyder/go-i18n/i18n](https://github.com/nicksnyder/go-i18n/i18n)
-
-* [github.com/nicksnyder/go-i18n/i18n/bundle](https://github.com/nicksnyder/go-i18n/i18n/bundle)
-
-* [github.com/nicksnyder/go-i18n/i18n/language](https://github.com/nicksnyder/go-i18n/i18n/language)
-
-* [github.com/nicksnyder/go-i18n/i18n/translation](https://github.com/nicksnyder/go-i18n/i18n/translation)
-
-* [github.com/pelletier/go-toml](https://github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://github.com/pkg/errors)
 
