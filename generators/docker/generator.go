@@ -2,6 +2,7 @@ package docker
 
 import (
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 )
 
 // Generator for generating a new docker file
@@ -16,7 +17,7 @@ type Generator struct {
 func New() Generator {
 	o := Generator{
 		App:     meta.New("."),
-		Version: "latest",
+		Version: runtime.Version,
 		Style:   "multi",
 	}
 	o.AsWeb = o.App.WithWebpack

@@ -11,8 +11,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-const cmdPkg = "github.com/gobuffalo/buffalo/buffalo/cmd"
-
 var pwd, _ = os.Getwd()
 var mainPath = filepath.Join(pwd, ".grifter", "main.go")
 var binPath = filepath.Join(pwd, "bin", "vbuffalo")
