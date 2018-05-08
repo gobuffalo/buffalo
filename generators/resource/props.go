@@ -19,6 +19,6 @@ func (m Prop) String() string {
 
 // Valid returns if the property name is valid or not
 func (m Prop) Valid() bool {
-	reg := regexp.MustCompile("\\A[a-zA-Z]\\w+\\z")
+	reg := regexp.MustCompile(`\A[a-zA-Z]\w+\z`)
 	return reg.MatchString(string(m.Name))
 }
