@@ -74,3 +74,23 @@ func Test_Template_Partial_Form(t *testing.T) {
 	r.NoError(err)
 
 }
+
+func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T) {
+	r := require.New(t)
+
+	const indexHTML = `<%= partial("foo.html", {other: "Other"}) %>`
+	const fooHTML = `<%= other %>|<%= name %>`
+	const result = `Other|Mark`
+
+	err := withHTMLFile("index.html", indexHTML, func(e *Engine) {
+		err := withHTMLFile("_foo.html", fooHTML, func(e *Engine) {
+			re := e.Template("", "index.html")
+			bb := &bytes.Buffer{}
+			err := re.Render(bb, Data{"name": "Mark"})
+			r.NoError(errors.Cause(err))
+			r.Equal(result, strings.TrimSpace(bb.String()))
+		})
+		r.NoError(err)
+	})
+	r.NoError(err)
+}
