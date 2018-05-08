@@ -24,6 +24,8 @@ func Test_New_WithPropertyNames(t *testing.T) {
 		HasError bool
 	}{
 		{Case: "", Args: []string{"", "body,name"}, HasError: true},
+		{Case: "", Args: []string{"", "body,name:nulls.String"}, HasError: true},
+		{Case: "", Args: []string{"", "body", "name:nulls.String"}, HasError: false},
 		{Case: "", Args: []string{"", "body.name"}, HasError: true},
 		{Case: "", Args: []string{"", "body", "name"}, HasError: false},
 		{Case: "", Args: []string{"", "body-name"}, HasError: false},
