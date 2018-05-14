@@ -1,7 +1,18 @@
 package main
 
-import "github.com/gobuffalo/buffalo/buffalo/cmd"
+import (
+	"log"
+
+	"github.com/gobuffalo/buffalo/buffalo/cmd"
+	"github.com/gobuffalo/buffalo/internal/vbuffalo"
+)
 
 func main() {
-	cmd.Execute()
+	err := vbuffalo.Execute(func() error {
+		cmd.Execute()
+		return nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 }

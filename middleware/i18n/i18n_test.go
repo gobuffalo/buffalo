@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
@@ -29,6 +30,9 @@ func app() *buffalo.App {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// Setup URL prefix Language extractor
+	t.LanguageExtractors = append(t.LanguageExtractors, URLPrefixLanguageExtractor)
+
 	app.Use(t.Middleware())
 	app.GET("/", func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("index.html"))
@@ -52,12 +56,27 @@ func app() *buffalo.App {
 	app.GET("/languages-list", func(c buffalo.Context) error {
 		return c.Render(200, r.JSON(t.AvailableLanguages()))
 	})
+	app.GET("/refresh", func(c buffalo.Context) error {
+		// This flash will be displayed in english
+		c.Flash().Add("success", t.Translate(c, "refresh-success"))
+
+		// Change lang to fr-fr
+		c.Cookies().Set("lang", "fr-fr", time.Minute)
+		t.Refresh(c, "fr-fr")
+
+		// This flash will be displayed in french
+		c.Flash().Add("success", t.Translate(c, "refresh-success"))
+		return c.Render(200, r.HTML("refresh.html"))
+	})
 	// Disable i18n middleware
 	noI18n := func(c buffalo.Context) error {
 		return c.Render(200, r.HTML("localized_view.html"))
 	}
 	app.Middleware.Skip(t.Middleware(), noI18n)
 	app.GET("/localized-disabled", noI18n)
+	app.GET("/{lang:fr|en}/index", func(c buffalo.Context) error {
+		return c.Render(200, r.HTML("index.html"))
+	})
 	return app
 }
 
@@ -159,4 +178,26 @@ func Test_i18n_availableLanguages(t *testing.T) {
 	w := willie.New(app())
 	res := w.Request("/languages-list").Get()
 	r.Equal("[\"en-us\",\"fr-fr\"]", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_i18n_URL_prefix(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/fr/index")
+	res := req.Get()
+	r.Equal("Bonjour à tous !", strings.TrimSpace(res.Body.String()))
+
+	req = w.Request("/en/index")
+	res = req.Get()
+	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
+}
+
+func Test_Refresh(t *testing.T) {
+	r := require.New(t)
+
+	w := willie.New(app())
+	req := w.Request("/refresh")
+	res := req.Get()
+	r.Equal("success: Language changed!#success: Langue modifiée !#", strings.TrimSpace(res.Body.String()))
 }

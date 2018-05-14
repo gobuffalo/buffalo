@@ -84,16 +84,15 @@ func findSchema() io.Reader {
 
 func testRunner(args []string) error {
 	var mFlag bool
+	var query string
 	cargs := []string{}
 	pargs := []string{}
 	var larg string
 	for i, a := range args {
 		switch a {
-		case "-run":
-			cargs = append(cargs, "-run", args[i+1])
-		case "-m":
+		case "-run", "-m":
+			query = args[i+1]
 			mFlag = true
-			cargs = append(cargs, "-testify.m", args[i+1])
 		case "-v":
 			cargs = append(cargs, "-v")
 		default:
@@ -106,7 +105,11 @@ func testRunner(args []string) error {
 
 	cmd := newTestCmd(cargs)
 	if mFlag {
-		return mFlagRunner(cargs, pargs)
+		return mFlagRunner{
+			query: query,
+			args:  cargs,
+			pargs: pargs,
+		}.Run()
 	}
 
 	pkgs, err := testPackages(pargs)
@@ -118,12 +121,18 @@ func testRunner(args []string) error {
 	return cmd.Run()
 }
 
-func mFlagRunner(args []string, pargs []string) error {
+type mFlagRunner struct {
+	query string
+	args  []string
+	pargs []string
+}
+
+func (m mFlagRunner) Run() error {
 	app := meta.New(".")
 	pwd, _ := os.Getwd()
 	defer os.Chdir(pwd)
 
-	pkgs, err := testPackages(pargs)
+	pkgs, err := testPackages(m.pargs)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -133,10 +142,16 @@ func mFlagRunner(args []string, pargs []string) error {
 		if p == app.PackagePkg {
 			continue
 		}
-		cmd := newTestCmd(args)
 		p = strings.TrimPrefix(p, app.PackagePkg+string(filepath.Separator))
-		logrus.Info(strings.Join(cmd.Args, " "))
 		os.Chdir(p)
+
+		cmd := newTestCmd(m.args)
+		if hasTestify(p) {
+			cmd.Args = append(cmd.Args, "-testify.m", m.query)
+		} else {
+			cmd.Args = append(cmd.Args, "-run", m.query)
+		}
+		logrus.Info(strings.Join(cmd.Args, " "))
 		if err := cmd.Run(); err != nil {
 			errs = true
 		}
@@ -145,6 +160,12 @@ func mFlagRunner(args []string, pargs []string) error {
 		return errors.New("errors running tests")
 	}
 	return nil
+}
+
+func hasTestify(p string) bool {
+	cmd := exec.Command("go", "test", "-thisflagdoesntexist")
+	b, _ := cmd.Output()
+	return bytes.Contains(b, []byte("-testify.m"))
 }
 
 func testPackages(givenArgs []string) ([]string, error) {

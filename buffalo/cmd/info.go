@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -19,7 +20,7 @@ var infoCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		bb := os.Stdout
 
-		bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", Version))
+		bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", runtime.Version))
 
 		bb.WriteString("\n### App Information\n")
 		app := meta.New(".")
@@ -70,6 +71,13 @@ func runInfoCmds() error {
 func execIfExists(infoCmd infoCommand) error {
 	bb := os.Stdout
 	bb.WriteString(infoCmd.InfoLabel)
+
+	if infoCmd.Name == "dep" {
+		if _, err := os.Stat("Gopkg.toml"); err != nil {
+			bb.WriteString("could not find a Gopkg.toml file\n")
+			return nil
+		}
+	}
 
 	if _, err := exec.LookPath(infoCmd.PathName); err != nil {
 		bb.WriteString(fmt.Sprintf("%s Not Found\n", infoCmd.Name))

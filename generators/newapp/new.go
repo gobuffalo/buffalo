@@ -32,9 +32,16 @@ func (a Generator) Run(root string, data makr.Data) error {
 		os.RemoveAll(a.Root)
 	}
 
-	g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	if _, err := exec.LookPath("goimports"); err != nil {
+		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+	}
+
 	if a.WithDep {
-		g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+		data["addPrune"] = true
+		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
+		if _, err := exec.LookPath("dep"); err != nil {
+			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+		}
 	}
 
 	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
@@ -117,7 +124,6 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
-	o.Version = a.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
@@ -194,7 +200,7 @@ func (a Generator) goGet() *exec.Cmd {
 	os.Chdir(a.Root)
 	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "init")
+			return exec.Command("dep", "ensure", "-v")
 		}
 	}
 	appArgs := []string{"get", "-t"}
@@ -239,6 +245,9 @@ script: buffalo test
 `
 
 const nGitlabCi = `before_script:
+{{- if eq .opts.DBType "postgres" }}
+  - apt-get update && apt-get install -y postgresql-client
+{{- end }}
   - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
   - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
@@ -355,4 +364,23 @@ public/assets/
 .vscode/
 .grifter/
 .env
+`
+
+// GopkgTomlTmpl is the default dep Gopkg.toml
+const GopkgTomlTmpl = `
+{{ if .addPrune }}
+[prune]
+  go-tests = true
+  unused-packages = true
+{{ end }}
+
+  # DO NOT DELETE
+  [[prune.project]] # buffalo
+    name = "github.com/gobuffalo/buffalo"
+    unused-packages = false
+
+  # DO NOT DELETE
+  [[prune.project]] # pop
+    name = "github.com/gobuffalo/pop"
+    unused-packages = false
 `

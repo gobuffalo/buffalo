@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/pkg/errors"
 )
 
@@ -18,7 +19,7 @@ type Runner struct {
 
 // Run all compatible checks
 func Run() error {
-	fmt.Printf("! This updater will attempt to update your application to Buffalo version: %s\n", Version)
+	fmt.Printf("! This updater will attempt to update your application to Buffalo version: %s\n", runtime.Version)
 	if !ask("Do you wish to continue?") {
 		fmt.Println("~~~ cancelling update ~~~")
 		return nil
