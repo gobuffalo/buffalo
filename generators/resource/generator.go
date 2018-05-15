@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -36,10 +37,11 @@ func New(modelName string, args ...string) (Generator, error) {
 		o.Name = inflect.Name(o.Args[0])
 		o.Model = inflect.Name(o.Args[0])
 	}
-	o.Props = modelPropertiesFromArgs(o.Args)
 
+	o.Props = o.parseProperties(o.Args)
 	o.FilesPath = o.Name.PluralUnder()
 	o.ActionsPath = o.FilesPath
+
 	if strings.Contains(string(o.Name), "/") {
 		parts := strings.Split(string(o.Name), "/")
 		o.Model = inflect.Name(parts[len(parts)-1])
@@ -51,10 +53,38 @@ func New(modelName string, args ...string) (Generator, error) {
 	return o, o.Validate()
 }
 
+func (o Generator) parseProperties(args []string) []Prop {
+	var props []Prop
+	if len(args) == 0 {
+		return props
+	}
+	for _, a := range args[1:] {
+		ax := strings.Split(a, ":")
+		p := Prop{
+			Name: inflect.Name(inflect.ForeignKeyToAttribute(ax[0])),
+			Type: "string",
+		}
+		if len(ax) > 1 {
+			p.Type = strings.ToLower(strings.TrimPrefix(ax[1], "nulls."))
+		}
+		props = append(props, p)
+	}
+	return props
+}
+
 // Validate that the options have what you need to build a new resource
 func (o Generator) Validate() error {
 	if len(o.Args) == 0 && o.Model == "" {
 		return errors.New("you must specify a resource name")
 	}
+
+	for _, prop := range o.Props {
+		if prop.Valid() {
+			continue
+		}
+
+		return fmt.Errorf("invalid name for property %s", prop.Name)
+	}
+
 	return nil
 }

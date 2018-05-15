@@ -1,7 +1,7 @@
 package resource
 
 import (
-	"strings"
+	"regexp"
 
 	"github.com/markbates/inflect"
 )
@@ -17,21 +17,8 @@ func (m Prop) String() string {
 	return string(m.Name)
 }
 
-func modelPropertiesFromArgs(args []string) []Prop {
-	var props []Prop
-	if len(args) == 0 {
-		return props
-	}
-	for _, a := range args[1:] {
-		ax := strings.Split(a, ":")
-		p := Prop{
-			Name: inflect.Name(inflect.ForeignKeyToAttribute(ax[0])),
-			Type: "string",
-		}
-		if len(ax) > 1 {
-			p.Type = strings.ToLower(strings.TrimPrefix(ax[1], "nulls."))
-		}
-		props = append(props, p)
-	}
-	return props
+// Valid returns if the property name is valid or not
+func (m Prop) Valid() bool {
+	reg := regexp.MustCompile(`\A[a-zA-Z]\w+\z`)
+	return reg.MatchString(string(m.Name))
 }
