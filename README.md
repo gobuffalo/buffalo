@@ -24,6 +24,22 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 
 ## Installation
 
+The best way to install Buffalo is from the [releases page](https://github.com/gobuffalo/buffalo/releases). Select your
+version, then install for your platform and architecture. The below example shows how to install `v0.10.3` for the Linux
+platform on amd64:
+
+```bash
+$ curl -L -o buffalo-0.10.3-linux-amd64.tgz https://github.com/gobuffalo/buffalo/releases/download/v0.10.3/buffalo_0.10.3_linux_amd64.tar.gz
+$ tar -xvf buffalo-0.10.3-linux-amd64.tgz
+$ mv ./buffalo-no-sqlite /usr/local/bin/buffalo
+$ chmod +x /usr/local/bin/buffalo
+```
+
+Alternatively, you can build Buffalo directly from the tip of the master branch in this repository. Running this command
+will build you a Buffalo binary that may not be the version you want, and you might get a different binary if you run it again.
+
+We recommend the previous installation method because it guarantees you get a stable binary every time. 
+
 ```bash
 $ go get -u -v github.com/gobuffalo/buffalo/buffalo
 ```
