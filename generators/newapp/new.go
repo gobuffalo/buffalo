@@ -182,7 +182,7 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 			if a.DBType == "postgres" {
 				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
 			} else {
 				data["testDbUrl"] = ""
 			}
@@ -246,7 +246,9 @@ script: buffalo test
 
 const nGitlabCi = `before_script:
 {{- if eq .opts.DBType "postgres" }}
-  - apt-get update && apt-get install -y postgresql-client
+	- apt-get update && apt-get install -y postgresql-client
+{{- else if eq .opts.DBType "mysql" }}
+  - apt-get update && apt-get install -y mysql-client
 {{- end }}
   - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
   - cd /go/src/{{.opts.PackagePkg}}
@@ -281,26 +283,14 @@ stages:
 .use-golang-image: &use-golang-1-8
   image: golang:1.8
 
-test:latest:
-  <<: *use-golang-latest
-  <<: *test-vars
-  stage: test
-  services:
-{{- if eq .opts.DBType "mysql" }}
-    - mysql:latest
-{{- else if eq .opts.DBType "postgres" }}
-    - postgres:latest
-{{- end }}
-  script:
-    - buffalo test
-
-test:1.8:
+test:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
   <<: *use-golang-1-8
   <<: *test-vars
   stage: test
   services:
 {{- if eq .opts.DBType "mysql" }}
-    - mysql:latest
+    - mysql:5
 {{- else if eq .opts.DBType "postgres" }}
     - postgres:latest
 {{- end }}
@@ -335,14 +325,8 @@ stages:
 .use-golang-image: &use-golang-1-8
   image: golang:1.8
 
-test:latest:
-  <<: *use-golang-latest
-  <<: *test-vars
-  stage: test
-  script:
-    - buffalo test
-
-test:1.8:
+test:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
   <<: *use-golang-1-8
   <<: *test-vars
   stage: test
