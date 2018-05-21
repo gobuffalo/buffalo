@@ -24,6 +24,8 @@ Hands down the most important, and the most welcome, pull requests are for docum
 
 Whether it's GoDoc or prose on [http://gobuffalo.io](http://gobuffalo.io) all documentation is welcome.
 
+You can submit PRs to change the website and/or docs on [https://github.com/gobuffalo/gobuffalo](https://github.com/gobuffalo/gobuffalo).
+
 ## Thank You
 
 Once again, we just want to take the chance to say thank you again for wanting to contribute to Buffalo. This is a community project and that means we **need** your help! Thank you so much.

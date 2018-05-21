@@ -57,7 +57,6 @@ Tests:
 }
 
 func updateGoDepsCheck(app meta.App) error {
-	deps, _ := deplist.List()
 	if app.WithDep {
 		// use github.com/golang/dep
 		args := []string{"ensure"}
@@ -189,8 +188,7 @@ func npmCheck(app meta.App) error {
 }
 
 func yarnCheck(app meta.App) error {
-	err := nodeCheck(app)
-	if err != nil {
+	if err := nodeCheck(app); err != nil {
 		return errors.WithStack(err)
 	}
 	if _, err := exec.LookPath("yarn"); err != nil {
@@ -199,8 +197,7 @@ func yarnCheck(app meta.App) error {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
 	}
-	err = run(exec.Command("yarn", "install", "--no-progress"))
-	if err != nil {
+	if err := run(exec.Command("yarn", "install", "--no-progress")); err != nil {
 		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
 	}
 	return nil
