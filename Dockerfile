@@ -11,6 +11,7 @@ RUN go get -v -u github.com/markbates/refresh
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
 RUN go get -v -u github.com/mattn/go-sqlite3
+RUN go get -v -u github.com/gorilla/sessions
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
