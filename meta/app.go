@@ -1,7 +1,9 @@
 package meta
 
 import (
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -24,6 +26,7 @@ type App struct {
 	GriftsPkg   string       `json:"grifts_path"`
 	VCS         string       `json:"vcs"`
 	WithPop     bool         `json:"with_pop"`
+	WithSQLite  bool         `json:"with_sqlite"`
 	WithDep     bool         `json:"with_dep"`
 	WithWebpack bool         `json:"with_webpack"`
 	WithYarn    bool         `json:"with_yarn"`
@@ -37,7 +40,26 @@ func New(root string) App {
 	if root == "." {
 		root = pwd
 	}
-	name := Name(filepath.Base(root))
+
+	// Handle symlinks
+	var oldPwd = pwd
+	pwd = ResolveSymlinks(pwd)
+	os.Chdir(pwd)
+	if runtime.GOOS != "windows" {
+		// On Non-Windows OS, os.Getwd() uses PWD env var as a preferred
+		// way to get the working dir.
+		os.Setenv("PWD", pwd)
+	}
+	defer func() {
+		// Restore PWD
+		os.Chdir(oldPwd)
+		if runtime.GOOS != "windows" {
+			os.Setenv("PWD", oldPwd)
+		}
+	}()
+
+	// Gather meta data
+	name := inflect.Name(filepath.Base(root))
 	pp := envy.CurrentPackage()
 	if filepath.Base(pp) != string(name) {
 		pp = path.Join(pp, string(name))
@@ -59,9 +81,12 @@ func New(root string) App {
 	if runtime.GOOS == "windows" {
 		app.Bin += ".exe"
 	}
-
-	if _, err := os.Stat(filepath.Join(root, "database.yml")); err == nil {
+	db := filepath.Join(root, "database.yml")
+	if _, err := os.Stat(db); err == nil {
 		app.WithPop = true
+		if b, err := ioutil.ReadFile(db); err == nil {
+			app.WithSQLite = bytes.Contains(bytes.ToLower(b), []byte("sqlite"))
+		}
 	}
 	if _, err := os.Stat(filepath.Join(root, "Gopkg.toml")); err == nil {
 		app.WithDep = true
@@ -85,6 +110,24 @@ func New(root string) App {
 	}
 
 	return app
+}
+
+// ResolveSymlinks takes a path and gets the pointed path
+// if the original one is a symlink.
+func ResolveSymlinks(p string) string {
+	cd, err := os.Lstat(p)
+	if err != nil {
+		return p
+	}
+	if cd.Mode()&os.ModeSymlink != 0 {
+		// This is a symlink
+		r, err := filepath.EvalSymlinks(p)
+		if err != nil {
+			return p
+		}
+		return r
+	}
+	return p
 }
 
 func (a App) String() string {
