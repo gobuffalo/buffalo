@@ -131,8 +131,12 @@ func optionsWithDefaults(opts Options) Options {
 	if opts.SessionStore == nil {
 		secret := envy.Get("SESSION_SECRET", "")
 		// In production a SESSION_SECRET must be set!
-		if opts.Env == "production" && secret == "" {
-			logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+		if secret == "" {
+			if opts.Env == "production" {
+				logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+			} else {
+				secret = "buffalo-secret"
+			}
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}
