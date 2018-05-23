@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
 	"github.com/markbates/inflect"
@@ -42,6 +43,7 @@ func New(name string) (Generator, error) {
 		CIProvider: "none",
 		AsWeb:      true,
 		Docker:     "multi",
+		Version:    runtime.Version,
 	}
 	g.Name = inflect.Name(name)
 
@@ -93,7 +95,8 @@ func (g Generator) Validate() error {
 func (g Generator) validateInGoPath() error {
 	gpMultiple := envy.GoPaths()
 
-	larp := strings.ToLower(g.Root)
+	larp := strings.ToLower(meta.ResolveSymlinks(filepath.Dir(g.Root)))
+
 	for i := 0; i < len(gpMultiple); i++ {
 		lgpm := strings.ToLower(filepath.Join(gpMultiple[i], "src"))
 		if strings.HasPrefix(larp, lgpm) {
@@ -105,4 +108,4 @@ func (g Generator) validateInGoPath() error {
 }
 
 var forbiddenAppNames = []string{"buffalo"}
-var nameRX = regexp.MustCompile("^[\\w-]+$")
+var nameRX = regexp.MustCompile(`^[\w-]+$`)

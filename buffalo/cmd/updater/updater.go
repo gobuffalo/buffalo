@@ -7,10 +7,6 @@ import (
 	"strings"
 )
 
-// Version is the current Buffalo version. It is set here by the cmd package.
-// This is due to circular dependencies
-var Version string
-
 var replace = map[string]string{
 	"github.com/markbates/pop":      "github.com/gobuffalo/pop",
 	"github.com/markbates/validate": "github.com/gobuffalo/validate",
