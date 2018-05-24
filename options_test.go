@@ -18,6 +18,8 @@ func TestOptions_NewOptions(t *testing.T) {
 	}{
 		{name: "Development doesn't fail with no secret", env: "development", secret: "", expectErr: "securecookie: the value is not valid"},
 		{name: "Development doesn't fail with secret set", env: "development", secret: "secrets", expectErr: "securecookie: the value is not valid"},
+		{name: "Test doesn't fail with secret set", env: "test", secret: "", expectErr: "securecookie: the value is not valid"},
+		{name: "Test doesn't fail with secret set", env: "test", secret: "secrets", expectErr: "securecookie: the value is not valid"},
 		{name: "Production fails with no secret", env: "production", secret: "", expectErr: "securecookie: hash key is not set"},
 		{name: "Production doesn't fail with secret set", env: "production", secret: "secrets", expectErr: "securecookie: the value is not valid"},
 	}
@@ -33,10 +35,9 @@ func TestOptions_NewOptions(t *testing.T) {
 			r.AddCookie(&http.Cookie{Name: "_buffalo_session"})
 
 			_, err := opts.SessionStore.New(r, "_buffalo_session")
-			
+
 			assert.Error(t, err)
 			assert.Equal(t, test.expectErr, err.Error())
 		})
 	}
 }
-
