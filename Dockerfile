@@ -11,6 +11,7 @@ RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
 RUN go get -v -u github.com/mattn/go-sqlite3
+RUN go get -v -u github.com/gorilla/sessions
 
 RUN go get -v -u github.com/markbates/grift
 RUN go get -v -u github.com/markbates/inflect
