@@ -27,7 +27,7 @@ var BuildTime = ""
 
 func init() {
   BuildTime = strings.Trim(BuildTime, "\"")
-  t, err := time.Parse("2006-01-02T15:04:05-07:00", BuildTime)
+  t, err := time.Parse(time.RFC3339, BuildTime)
   if err != nil {
     fmt.Println(err)
   }
