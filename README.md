@@ -99,3 +99,9 @@ Buffalo would not be possible if not for all of the great projects it depends on
 ## Benchmarks
 
 Oh, yeah, everyone wants benchmarks! What would a web framework be without its benchmarks? Well, guess what? I'm not giving you any! That's right. This is Go! I assure you that it is plenty fast enough for you. If you want benchmarks you can either a) checkout any benchmarks that the [GIANTS](SHOULDERS.md) Buffalo is built upon have published, or b) run your own. I have no interest in playing the benchmark game, and neither should you.
+
+## Contributing
+
+First, thank you so much for wanting to contribute! It means so much that you care enough to want to contribute. We appreciate every PR from the smallest of typos to the be biggest of features.
+
+To contribute, please read the contribution guidelines: [CONTRIBUTING](CONTRIBUTING.md)

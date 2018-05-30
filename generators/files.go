@@ -70,8 +70,10 @@ func Find(path string) (Files, error) {
 					if info != nil && !info.IsDir() {
 						if filepath.Ext(p) == ".tmpl" {
 							f := File{ReadPath: p}
-							rel := strings.TrimPrefix(p, root)
-
+							rel, err := filepath.Rel(root, p)
+							if err != nil {
+								rel = strings.TrimPrefix(p, root)
+							}
 							paths := strings.Split(rel, string(os.PathSeparator))
 
 							li := len(paths) - 1

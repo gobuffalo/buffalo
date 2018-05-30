@@ -1,0 +1,1 @@
+<%= if (len(flash) > 0) { %><%= for (k, messages) in flash { %><%= for (msg) in messages { %><%= k %>: <%= msg %>#<% } %><% } %><% } %>
