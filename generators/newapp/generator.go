@@ -32,6 +32,7 @@ type Generator struct {
 	SkipPop     bool   `json:"skip_pop"`
 	SkipWebpack bool   `json:"skip_webpack"`
 	SkipYarn    bool   `json:"skip_yarn"`
+	SkipYarnAndNPM bool `json:"skip_yarn_and_npm"`
 	Bootstrap   int    `json:"bootstrap"`
 }
 

@@ -63,6 +63,7 @@ var newCmd = &cobra.Command{
 		app.WithPop = !app.SkipPop
 		app.WithWebpack = !app.SkipWebpack
 		app.WithYarn = !app.SkipYarn
+		app.WithPNPM = !app.SkipYarnAndNPM
 		app.AsWeb = !app.AsAPI
 		if app.AsAPI {
 			app.WithWebpack = false
@@ -134,6 +135,7 @@ func init() {
 	newCmd.Flags().BoolVar(&app.WithDep, "with-dep", false, "adds github.com/golang/dep to your app")
 	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().BoolVar(&app.SkipYarn, "skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
+	newCmd.Flags().BoolVar(&app.SkipYarnAndNPM, "use-pnpm", false, "use pnpm instead of yarn and npm for frontend dependencies managment")
 	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
 	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")

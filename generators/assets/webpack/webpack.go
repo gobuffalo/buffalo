@@ -37,10 +37,16 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 	command := "yarn"
 
-	if !w.WithYarn {
+	if !w.WithYarn && !w.WithPNPM {
 		command = "npm"
-	} else {
+	} else if w.WithYarn {
 		err := installYarn(data)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	} else if w.WithPNPM {
+		command = "pnpm"
+		err := installPNPM(data)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -70,6 +76,22 @@ func installYarn(data makr.Data) error {
 	if err != nil {
 		yg := makr.New()
 		yargs := []string{"install", "-g", "yarn"}
+		yg.Add(makr.NewCommand(exec.Command("npm", yargs...)))
+		err = yg.Run(".", data)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func installPNPM(data makr.Data) error {
+	// if there's no pnpm, install it!
+	_, err := exec.LookPath("pnpm")
+	// A new makr is necessary to have yarn available in path
+	if err != nil {
+		yg := makr.New()
+		yargs := []string{"install", "-g", "pnpm"}
 		yg.Add(makr.NewCommand(exec.Command("npm", yargs...)))
 		err = yg.Run(".", data)
 		if err != nil {
