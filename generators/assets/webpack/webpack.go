@@ -86,7 +86,7 @@ func installYarn(data makr.Data) error {
 }
 
 func installPNPM(data makr.Data) error {
-	// if there's no yarn, install it!
+	// if there's no pnpm, install it!
 	_, err := exec.LookPath("pnpm")
 	// A new makr is necessary to have yarn available in path
 	if err != nil {
