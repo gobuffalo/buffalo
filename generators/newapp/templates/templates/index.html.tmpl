@@ -1,10 +1,4 @@
 <style media="screen">
-  * {
-    -webkit-transition: all .38s;
-    /* Safari */
-    transition: all .38s;
-  }
-
   .container {
     min-width: 320px;
   }
@@ -73,7 +67,6 @@
 
   .foot {
     text-align: right;
-    text-align: right;
     color: #c5c5c5;
     font-weight: 300;
   }
@@ -133,7 +126,7 @@
         <a href="<%= rootPath() %>"><img src="<%= rootPath() %>assets/images/logo.svg" alt=""></a>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-10 titles">
-        <h1><%= t("welcome_greeting") %> [{{.opts.Version}}]</h1>
+        <h1><%= t("welcome_greeting") %></h1>
         <h2>
           <a href="https://github.com/gobuffalo/buffalo"><i class="fa fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
         </h2>

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"html/template"
 
@@ -27,7 +28,7 @@ func PackageJSONCheck(r *Runner) error {
 
 	g := newapp.Generator{
 		App:       r.App,
-		Bootstrap: 3,
+		Bootstrap: 4,
 	}
 
 	box := webpack.TemplateBox
@@ -77,6 +78,7 @@ func PackageJSONCheck(r *Runner) error {
 		return errors.WithStack(err)
 	}
 
+	os.RemoveAll(filepath.Join(r.App.Root, "node_modules"))
 	var cmd *exec.Cmd
 	if r.App.WithYarn {
 		cmd = exec.Command("yarn", "install")

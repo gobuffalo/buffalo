@@ -131,10 +131,18 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.Replace(rt.Name(), "Resource", "", 1)
-	paramName := inflect.Singularize(inflect.Underscore(name))
+	name := strings.TrimSuffix(rt.Name(), "Resource")
+	paramName := inflect.Name(name).ParamID()
 
-	spath := path.Join(p, fmt.Sprintf("{%s_id}", paramName))
+	type paramKeyable interface {
+		ParamKey() string
+	}
+
+	if pk, ok := r.(paramKeyable); ok {
+		paramName = pk.ParamKey()
+	}
+
+	spath := path.Join(p, "{"+paramName+"}")
 	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
 	g.GET(p, r.List)
 	setFuncKey(r.New, fmt.Sprintf(rname, "New"))

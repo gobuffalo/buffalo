@@ -91,7 +91,7 @@ func (htmlAutoRenderer) ContentType() string {
 }
 
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
-	name := inflect.Name(ir.typeName())
+	name := inflect.Name(inflect.Underscore(ir.typeName()))
 	name = inflect.Name(name.Singular())
 	pname := inflect.Name(name.Plural())
 
