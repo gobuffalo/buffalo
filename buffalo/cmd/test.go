@@ -26,7 +26,7 @@ var skipSchemaLoad = false
 
 func init() {
 	decorate("test", testCmd)
-	testCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "skip-schema-load", "s", false, "skips loading the schema and instead runs migrations before running tests")
+	testCmd.Flags().BoolVarP(&skipSchemaLoad, "skip-schema-load", "s", false, "skips loading the schema and instead runs migrations before running tests")
 
 	RootCmd.AddCommand(testCmd)
 }
