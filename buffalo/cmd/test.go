@@ -22,11 +22,11 @@ import (
 const vendorPattern = "/vendor/"
 
 var vendorRegex = regexp.MustCompile(vendorPattern)
-var skipSchemaLoad = false
+var forceMigrations = false
 
 func init() {
 	decorate("test", testCmd)
-	testCmd.Flags().BoolVarP(&skipSchemaLoad, "skip-schema-load", "s", false, "skips loading the schema and instead runs migrations before running tests")
+	testCmd.Flags().BoolVarP(&forceMigrations, "force-migrations", "m", false, "skips loading the schema and instead runs migrations before running tests")
 
 	RootCmd.AddCommand(testCmd)
 }
@@ -53,7 +53,7 @@ var testCmd = &cobra.Command{
 				return errors.WithStack(err)
 			}
 
-			if skipSchemaLoad {
+			if forceMigrations {
 				fm, err := pop.NewFileMigrator("./migrations", test)
 
 				if err != nil {
