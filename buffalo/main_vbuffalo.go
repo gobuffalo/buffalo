@@ -1,6 +1,9 @@
+// +build vbuffalo
+
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd"
@@ -8,6 +11,7 @@ import (
 )
 
 func main() {
+	fmt.Println("vbuffalo")
 	err := vbuffalo.Execute(func() error {
 		cmd.Execute()
 		return nil
