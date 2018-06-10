@@ -90,7 +90,12 @@ func findSchema() io.Reader {
 	}
 
 	if test, err := pop.Connect("test"); err == nil {
-		if err := test.MigrateUp("./migrations"); err == nil {
+		fm, err := pop.NewFileMigrator("./migrations", test)
+		if err != nil {
+			return nil
+		}
+
+		if err := fm.Up(); err == nil {
 			if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
 				return f
 			}
