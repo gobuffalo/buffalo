@@ -1,6 +1,7 @@
 FROM golang:latest
 
 RUN go version
+RUN go get -v -u github.com/markbates/deplist/deplist
 
 RUN apt-get update
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
@@ -19,7 +20,6 @@ RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
 RUN go get -v -u github.com/mattn/go-sqlite3
 RUN go get -v -u github.com/markbates/filetest
-RUN go get -v -u github.com/markbates/deplist/deplist
 RUN go get -v -u github.com/markbates/grift
 RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
@@ -38,7 +38,8 @@ ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
-RUN deplist ./...
+
+RUN go get -v $(deplist ./...)
 RUN make install
 
 # RUN go get -tags "sqlite vbuffalo" -v -t ./...
