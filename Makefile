@@ -1,15 +1,18 @@
 TAGS ?= "sqlite vbuffalo"
 INSTALL ?= install -v -tags ${TAGS} ./...
 
-install:
+deps:
+	go install -v github.com/gobuffalo/packr/packr
+
+install: deps
 	packr
 	go $(INSTALL)
 	packr clean
 
-test:
+test: deps
 	go test -tags ${TAGS} ./...
 
-vgo-install:
+vgo-install: deps
 	packr
 	vgo $(INSTALL)
 	packr clean

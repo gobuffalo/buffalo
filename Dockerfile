@@ -2,23 +2,21 @@ FROM gobuffalo/buffalo:development
 
 RUN buffalo version
 
-RUN go get -u github.com/alecthomas/gometalinter
-RUN gometalinter --install
-
-RUN go get -v -u github.com/markbates/filetest
-
+RUN go get -u github.com/golang/dep/cmd/dep
 RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/gobuffalo/packr
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
 RUN go get -v -u github.com/mattn/go-sqlite3
-
+RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/markbates/grift
 RUN go get -v -u github.com/markbates/inflect
 RUN go get -v -u github.com/markbates/refresh
+RUN go get -v -u github.com/markbates/willie
 RUN go get -v -u github.com/gorilla/sessions
 RUN go get -v -u golang.org/x/vgo
-RUN go get -v github.com/markbates/willie
+RUN go get -u github.com/alecthomas/gometalinter
+RUN gometalinter --install
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
