@@ -27,7 +27,7 @@ WORKDIR $BP
 ADD . .
 
 RUN go get -v -t ./...
-RUN go install -v -tags sqlite ./buffalo
+RUN go install -v -tags "sqlite vbuffalo" ./buffalo
 
 RUN go test -tags sqlite -race ./...
 
