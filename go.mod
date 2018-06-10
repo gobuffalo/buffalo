@@ -14,6 +14,7 @@ require (
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.1
 	github.com/gorilla/websocket v1.2.0
+	github.com/markbates/deplist v0.0.0-20170926152145-5ae023fef618
 	github.com/markbates/grift v0.0.0-20180319170132-76f93617a788
 	github.com/markbates/inflect v0.0.0-20180514174915-dd7de90c06bc
 	github.com/markbates/refresh v1.4.0
