@@ -18,6 +18,7 @@ RUN go get -v -u github.com/gobuffalo/makr
 RUN go get -v -u github.com/gobuffalo/packr
 RUN go get -v -u github.com/gobuffalo/tags
 RUN go get -v -u github.com/gobuffalo/pop
+RUN go get -v -u github.com/gobuffalo/x/...
 RUN go get -v -u github.com/mattn/go-sqlite3
 RUN go get -v -u github.com/markbates/filetest
 RUN go get -v -u github.com/markbates/grift
