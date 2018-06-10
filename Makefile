@@ -1,5 +1,5 @@
-TAGS="sqlite vbuffalo"
-INSTALL=install -v -tags ${TAGS} ./...
+TAGS ?= "sqlite vbuffalo"
+INSTALL ?= install -v -tags ${TAGS} ./...
 
 install:
 	packr
