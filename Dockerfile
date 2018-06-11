@@ -50,7 +50,7 @@ RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
     else curl -s https://codecov.io/bash -o codecov && \
     bash codecov -f cover.out -X fix; fi
 
-RUN gometalinter --vendor --deadline=5m ./...
+RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
