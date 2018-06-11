@@ -36,14 +36,14 @@ RUN yarn config set yarn-offline-mirror-pruning true
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
+RUN rm -rfv $BP
 RUN mkdir -p $BP
 WORKDIR $BP
-ADD . .
 
-RUN go get -v $(deplist ./...)
+ADD . .
+RUN go get -tags "sqlite vbuffalo" -v -t github.com/gobuffalo/buffalo/...
 RUN make install
 
-# RUN go get -tags "sqlite vbuffalo" -v -t ./...
 
 # cache yarn packages to an offline mirror so they're faster to load. hopefully.
 RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json
