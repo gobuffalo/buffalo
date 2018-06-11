@@ -16,5 +16,9 @@ install: deps
 	$(GO_BIN) $(INSTALL)
 	packr clean
 
-test: deps
+test:
 	$(GO_BIN) test -tags ${TAGS} ./...
+
+ci-test:
+	$(GO_BIN) test -tags ${TAGS} -race -v ./...
+	docker build .
