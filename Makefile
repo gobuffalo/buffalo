@@ -1,18 +1,20 @@
 TAGS ?= "sqlite vbuffalo"
 INSTALL ?= install -v -tags ${TAGS} ./...
+GO_BIN ?= go
+GO_GET ?= $(GO_BIN) get -tags "sqlite vbuffalo" -v -t github.com/gobuffalo/buffalo/...
+
+ifeq ("$(GO_BIN)","vgo")
+	GO_GET = vgo version
+endif
 
 deps:
-	go install -v github.com/gobuffalo/packr/packr
+	$(GO_BIN) install -v github.com/gobuffalo/packr/packr
 
 install: deps
 	packr
-	go $(INSTALL)
+	$(GO_GET)
+	$(GO_BIN) $(INSTALL)
 	packr clean
 
 test: deps
-	go test -tags ${TAGS} ./...
-
-vgo-install: deps
-	packr
-	vgo $(INSTALL)
-	packr clean
+	$(GO_BIN) test -tags ${TAGS} ./...
