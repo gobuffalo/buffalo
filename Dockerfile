@@ -1,5 +1,18 @@
 FROM gobuffalo/buffalo:development
 
+ARG CODECOV_TOKEN
+ARG CI
+ARG TRAVIS
+ARG TRAVIS_BRANCH
+ARG TRAVIS_COMMIT
+ARG TRAVIS_JOB_ID
+ARG TRAVIS_JOB_NUMBER
+ARG TRAVIS_OS_NAME
+ARG TRAVIS_PULL_REQUEST
+ARG TRAVIS_PULL_REQUEST_SHA
+ARG TRAVIS_REPO_SLUG
+ARG TRAVIS_TAG
+
 RUN buffalo version
 
 RUN go get -u github.com/alecthomas/gometalinter
@@ -30,6 +43,12 @@ RUN go get -v -t ./...
 RUN go install -v -tags sqlite ./buffalo
 
 RUN go test -tags sqlite -race ./...
+RUN go test -tags sqlite -coverprofile cover.out -covermode count ./...
+
+RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
+    echo codecov not enabled ; \
+    else curl -s https://codecov.io/bash -o codecov && \
+    bash codecov -f cover.out -X fix; fi
 
 RUN gometalinter --vendor --deadline=5m ./...
 
