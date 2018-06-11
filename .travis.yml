@@ -1,14 +1,30 @@
+dist: trusty
 sudo: required
+
+# we don't use it, but we also do not want default (ruby) image
+language: go
 
 services:
   - docker
-install: false
 
-go:
-  - 1.8
+# skip default (go get -t -v ./...) install step
+install: true
 
 script:
-  - docker build .
+  - docker build
+      --build-arg CODECOV_TOKEN=$CODECOV_TOKEN
+      --build-arg CI=$CI
+      --build-arg TRAVIS=$TRAVIS
+      --build-arg TRAVIS_BRANCH=$TRAVIS_BRANCH
+      --build-arg TRAVIS_COMMIT=$TRAVIS_COMMIT
+      --build-arg TRAVIS_JOB_ID=$TRAVIS_JOB_ID
+      --build-arg TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER
+      --build-arg TRAVIS_OS_NAME=$TRAVIS_OS_NAME
+      --build-arg TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST
+      --build-arg TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA
+      --build-arg TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG
+      --build-arg TRAVIS_TAG=$TRAVIS_TAG
+      .
 
 addons:
   code_climate:
