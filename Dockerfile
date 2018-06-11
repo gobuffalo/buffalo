@@ -31,7 +31,7 @@ RUN go install -v -tags sqlite ./buffalo
 
 RUN go test -tags sqlite -race ./...
 
-RUN gometalinter --vendor --deadline=5m ./...
+RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
