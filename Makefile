@@ -1,5 +1,6 @@
 TAGS ?= "sqlite vbuffalo"
 INSTALL ?= install -v -tags ${TAGS} ./...
+
 GO_BIN ?= go
 GO_GET ?= $(GO_BIN) get -tags "sqlite vbuffalo" -v -t github.com/gobuffalo/buffalo/...
 
