@@ -21,15 +21,30 @@ import (
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var app = newapp.Generator{
-	App:        meta.New("."),
-	DBType:     "postgres",
-	CIProvider: "none",
-	AsWeb:      true,
-	Docker:     "multi",
-	Bootstrap:  4,
+var rootPath string
+
+func getAppWithConfig() newapp.Generator {
+	pwd, _ := os.Getwd()
+	app := newapp.Generator{
+		App:         meta.New(pwd),
+		AsAPI:       viper.GetBool("api"),
+		Force:       viper.GetBool("force"),
+		Verbose:     viper.GetBool("verbose"),
+		SkipPop:     viper.GetBool("skip-pop"),
+		SkipWebpack: viper.GetBool("skip-webpack"),
+		SkipYarn:    viper.GetBool("skip-yarn"),
+		DBType:      viper.GetString("db-type"),
+		CIProvider:  viper.GetString("ci-provider"),
+		AsWeb:       true,
+		Docker:      viper.GetString("docker"),
+		Bootstrap:   viper.GetInt("bootstrap"),
+	}
+	app.VCS = viper.GetString("vcs")
+	app.WithDep = viper.GetBool("with-dep")
+	return app
 }
 
 var newCmd = &cobra.Command{
@@ -39,7 +54,7 @@ var newCmd = &cobra.Command{
 		if len(args) <= 0 {
 			return errors.New("you must enter a name for your new application")
 		}
-
+		app := getAppWithConfig()
 		app.Name = inflect.Name(args[0])
 
 		if app.Name == "." {
@@ -121,24 +136,21 @@ func notInGoPath(ag newapp.Generator) error {
 }
 
 func init() {
-	pwd, _ := os.Getwd()
-
-	app.App = meta.New(pwd)
-
 	decorate("new", newCmd)
 	RootCmd.AddCommand(newCmd)
-	newCmd.Flags().BoolVar(&app.AsAPI, "api", false, "skip all front-end code and configure for an API server")
-	newCmd.Flags().BoolVarP(&app.Force, "force", "f", false, "delete and remake if the app already exists")
-	newCmd.Flags().BoolVarP(&app.Verbose, "verbose", "v", false, "verbosely print out the go get commands")
-	newCmd.Flags().BoolVar(&app.SkipPop, "skip-pop", false, "skips adding pop/soda to your app")
-	newCmd.Flags().BoolVar(&app.WithDep, "with-dep", false, "adds github.com/golang/dep to your app")
-	newCmd.Flags().BoolVar(&app.SkipWebpack, "skip-webpack", false, "skips adding Webpack to your app")
-	newCmd.Flags().BoolVar(&app.SkipYarn, "skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
-	newCmd.Flags().StringVar(&app.DBType, "db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
-	newCmd.Flags().StringVar(&app.Docker, "docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
-	newCmd.Flags().StringVar(&app.CIProvider, "ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
-	newCmd.Flags().StringVar(&app.VCS, "vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
-	newCmd.Flags().IntVar(&app.Bootstrap, "bootstrap", app.Bootstrap, "specify version for Bootstrap [3, 4]")
+	newCmd.Flags().Bool("api", false, "skip all front-end code and configure for an API server")
+	newCmd.Flags().BoolP("force", "f", false, "delete and remake if the app already exists")
+	newCmd.Flags().BoolP("verbose", "v", false, "verbosely print out the go get commands")
+	newCmd.Flags().Bool("skip-pop", false, "skips adding pop/soda to your app")
+	newCmd.Flags().Bool("with-dep", false, "adds github.com/golang/dep to your app")
+	newCmd.Flags().Bool("skip-webpack", false, "skips adding Webpack to your app")
+	newCmd.Flags().Bool("skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
+	newCmd.Flags().String("db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
+	newCmd.Flags().String("docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
+	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
+	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
+	newCmd.Flags().Int("bootstrap", 3, "specify version for Bootstrap [3, 4]")
+	viper.BindPFlags(newCmd.Flags())
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
