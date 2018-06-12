@@ -41,7 +41,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 
 ADD . .
-RUN go get -tags "sqlite vbuffalo" -v -t github.com/gobuffalo/buffalo/...
+RUN go get -tags "sqlite" -v -t github.com/gobuffalo/buffalo/...
 RUN make install
 
 
