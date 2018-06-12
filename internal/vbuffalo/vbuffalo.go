@@ -1,6 +1,7 @@
 package vbuffalo
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,6 +17,7 @@ var binPath = filepath.Join(pwd, "bin", "vbuffalo")
 var app meta.App
 
 func init() {
+	fmt.Println("vbuffalo")
 	if runtime.GOOS == "windows" {
 		binPath += ".exe"
 	}
@@ -73,6 +75,7 @@ func cd(dir string, fn func() error) error {
 }
 
 func run(name string, args []string) error {
+	// fmt.Println("vbuffalo", name, strings.Join(args, " "))
 	cmd := exec.Command(name, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
