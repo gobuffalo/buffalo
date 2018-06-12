@@ -11,6 +11,7 @@ services:
 install: true
 
 script:
+  - make test
   - docker build
       --build-arg CODECOV_TOKEN=$CODECOV_TOKEN
       --build-arg CI=$CI
