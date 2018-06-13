@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
-	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -16,7 +15,6 @@ import (
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/pop"
-	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 )
 
@@ -175,16 +173,6 @@ func (d *DefaultContext) Error(status int, err error) error {
 	return HTTPError{Status: status, Cause: errors.WithStack(err)}
 }
 
-// Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead.
-func (d *DefaultContext) Websocket() (*websocket.Conn, error) {
-	warningMsg := "Websocket is deprecated, and will be removed in v0.12.0. Use github.com/gorilla/websocket directly instead."
-	if _, file, no, ok := runtime.Caller(1); ok {
-		warningMsg = fmt.Sprintf("%s Called from %s:%d", warningMsg, file, no)
-	}
-	fmt.Println(warningMsg)
-	return defaultUpgrader.Upgrade(d.Response(), d.Request(), nil)
-}
-
 var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
 
 // Redirect a request with the given status to the given URL.
@@ -254,9 +242,4 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 		return bf, errors.WithStack(err)
 	}
 	return bf, nil
-}
-
-var defaultUpgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
 }

@@ -22,9 +22,12 @@ import (
 const vendorPattern = "/vendor/"
 
 var vendorRegex = regexp.MustCompile(vendorPattern)
+var forceMigrations = false
 
 func init() {
 	decorate("test", testCmd)
+	testCmd.Flags().BoolVarP(&forceMigrations, "force-migrations", "m", false, "skips loading the schema and instead runs migrations before running tests")
+
 	RootCmd.AddCommand(testCmd)
 }
 
@@ -50,6 +53,20 @@ var testCmd = &cobra.Command{
 				return errors.WithStack(err)
 			}
 
+			if forceMigrations {
+				fm, err := pop.NewFileMigrator("./migrations", test)
+
+				if err != nil {
+					return err
+				}
+
+				if err := fm.Up(); err != nil {
+					return err
+				}
+
+				return testRunner(args)
+			}
+
 			if schema := findSchema(); schema != nil {
 				err = test.Dialect.LoadSchema(schema)
 				if err != nil {
@@ -73,7 +90,12 @@ func findSchema() io.Reader {
 	}
 
 	if test, err := pop.Connect("test"); err == nil {
-		if err := test.MigrateUp("./migrations"); err == nil {
+		fm, err := pop.NewFileMigrator("./migrations", test)
+		if err != nil {
+			return nil
+		}
+
+		if err := fm.Up(); err == nil {
 			if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
 				return f
 			}

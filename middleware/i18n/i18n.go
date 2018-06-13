@@ -14,9 +14,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// LanguageFinder - deprecated, use the LanguageExtractor interface instead.
-type LanguageFinder func(*Translator, buffalo.Context) []string
-
 // LanguageExtractor can be implemented for custom finding of search
 // languages. This can be useful if you want to load a user's language
 // from something like a database. See Middleware() for more information
@@ -34,8 +31,6 @@ type Translator struct {
 	DefaultLanguage string
 	// HelperName - name of the view helper. default is "t"
 	HelperName string
-	// LanguageFinder - deprecated, use LanguageExtractors instead.
-	LanguageFinder LanguageFinder
 	// LanguageExtractors - a sorted list of user language extractors.
 	LanguageExtractors []LanguageExtractor
 	// LanguageExtractorOptions - a map with options to give to LanguageExtractors.
@@ -190,16 +185,11 @@ func (t *Translator) Refresh(c buffalo.Context, newLang string) {
 
 func (t *Translator) extractLanguage(c buffalo.Context) []string {
 	langs := []string{}
-	if t.LanguageFinder != nil {
-		c.Logger().Warnf("i18n.Translator#LanguageFinder has been deprecated in v0.11.1. Use i18n.Translator#LanguageExtractors instead.")
-		langs = t.LanguageFinder(t, c)
-	} else {
-		for _, extractor := range t.LanguageExtractors {
-			langs = append(langs, extractor(t.LanguageExtractorOptions, c)...)
-		}
-		// Add default language, even if no language extractor is defined
-		langs = append(langs, t.DefaultLanguage)
+	for _, extractor := range t.LanguageExtractors {
+		langs = append(langs, extractor(t.LanguageExtractorOptions, c)...)
 	}
+	// Add default language, even if no language extractor is defined
+	langs = append(langs, t.DefaultLanguage)
 	return langs
 }
 
