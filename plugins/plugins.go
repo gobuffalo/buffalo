@@ -33,9 +33,9 @@ type List map[string]Commands
 // Limit full path scan with direct plugin path
 //
 // If a file/command doesn't respond to being invoked with `available`
-// with one second, buffalo will assume that it is unable to load. This
+// within one second, buffalo will assume that it is unable to load. This
 // can be changed by setting the $BUFFALO_PLUGIN_TIMEOUT environment
-// variable. It must be set to duration that `time.ParseDuration` can
+// variable. It must be set to a duration that `time.ParseDuration` can
 // process.
 func Available() (List, error) {
 	list := List{}
