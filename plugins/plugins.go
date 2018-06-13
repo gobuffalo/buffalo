@@ -80,7 +80,9 @@ func Available() (List, error) {
 			}
 			base := filepath.Base(path)
 			if strings.HasPrefix(base, "buffalo-") {
-				commands := askBin(path, timeout)
+				ctx, cancel := context.WithTimeout(context.Background(), timeout)
+				commands := askBin(ctx, path)
+				cancel()
 				for _, c := range commands {
 					bc := c.BuffaloCommand
 					if _, ok := list[bc]; !ok {
@@ -99,10 +101,9 @@ func Available() (List, error) {
 	return list, nil
 }
 
-func askBin(path string, timeout time.Duration) Commands {
+func askBin(ctx context.Context, path string) Commands {
 	commands := Commands{}
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
+
 	cmd := exec.CommandContext(ctx, path, "available")
 	bb := &bytes.Buffer{}
 	cmd.Stdout = bb
