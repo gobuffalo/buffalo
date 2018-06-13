@@ -2,15 +2,11 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
-
-var cfgFile string
 
 var anywhereCommands = []string{"new", "version", "info", "help"}
 
@@ -50,8 +46,6 @@ func Execute() {
 
 func init() {
 	decorate("root", RootCmd)
-	cobra.OnInitialize(initConfig)
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.buffalo.yaml)")
 }
 
 func insideBuffaloProject() bool {
@@ -60,19 +54,4 @@ func insideBuffaloProject() bool {
 	}
 
 	return true
-}
-
-func initConfig() {
-	if cfgFile != "" { // enable ability to specify config file via flag
-		viper.SetConfigFile(cfgFile)
-	} else {
-		viper.SetConfigName(".buffalo") // name of config file (without extension)
-		viper.AddConfigPath("$HOME")    // adding home directory as first search path
-		viper.AutomaticEnv()            // read in environment variables that match
-	}
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
 }

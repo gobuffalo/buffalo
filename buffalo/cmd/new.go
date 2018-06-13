@@ -25,6 +25,7 @@ import (
 )
 
 var rootPath string
+var cfgFile string
 
 func getAppWithConfig() newapp.Generator {
 	pwd, _ := os.Getwd()
@@ -44,6 +45,14 @@ func getAppWithConfig() newapp.Generator {
 	}
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
+	app.WithPop = !app.SkipPop
+	app.WithWebpack = !app.SkipWebpack
+	app.WithYarn = !app.SkipYarn
+	app.AsWeb = !app.AsAPI
+	if app.AsAPI {
+		app.WithWebpack = false
+	}
+
 	return app
 }
 
@@ -73,14 +82,6 @@ var newCmd = &cobra.Command{
 				return notInGoPath(app)
 			}
 			return errors.WithStack(err)
-		}
-
-		app.WithPop = !app.SkipPop
-		app.WithWebpack = !app.SkipWebpack
-		app.WithYarn = !app.SkipYarn
-		app.AsWeb = !app.AsAPI
-		if app.AsAPI {
-			app.WithWebpack = false
 		}
 
 		data := makr.Data{
@@ -151,6 +152,23 @@ func init() {
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().Int("bootstrap", 3, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
+	cobra.OnInitialize(initConfig)
+	newCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.buffalo.yaml)")
+}
+
+func initConfig() {
+	if cfgFile != "" { // enable ability to specify config file via flag
+		viper.SetConfigFile(cfgFile)
+	} else {
+		viper.SetConfigName(".buffalo") // name of config file (without extension)
+		viper.AddConfigPath("$HOME")    // adding home directory as first search path
+		viper.AutomaticEnv()            // read in environment variables that match
+	}
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	}
 }
 
 const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
