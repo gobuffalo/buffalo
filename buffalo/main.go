@@ -1,5 +1,3 @@
-// +build !vbuffalo
-
 package main
 
 import (
