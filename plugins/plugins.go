@@ -44,6 +44,19 @@ func Available() (List, error) {
 		from = filepath.Join(from, "bin")
 	}
 
+	const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
+	timeout := time.Second
+	rawTimeout, err := envy.MustGet(timeoutEnv)
+	if err == nil {
+		if parsed, err := time.ParseDuration(rawTimeout); err == nil {
+			timeout = parsed
+		} else {
+			logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, timeout, err)
+		}
+	} else {
+		logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, timeout)
+	}
+
 	if runtime.GOOS == "windows" {
 		paths = append(paths, strings.Split(from, ";")...)
 	} else {
@@ -67,7 +80,7 @@ func Available() (List, error) {
 			}
 			base := filepath.Base(path)
 			if strings.HasPrefix(base, "buffalo-") {
-				commands := askBin(path)
+				commands := askBin(path, timeout)
 				for _, c := range commands {
 					bc := c.BuffaloCommand
 					if _, ok := list[bc]; !ok {
@@ -86,9 +99,9 @@ func Available() (List, error) {
 	return list, nil
 }
 
-func askBin(path string) Commands {
+func askBin(path string, timeout time.Duration) Commands {
 	commands := Commands{}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, path, "available")
 	bb := &bytes.Buffer{}
