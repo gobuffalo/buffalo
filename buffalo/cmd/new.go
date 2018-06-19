@@ -24,7 +24,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var rootPath string
 var cfgFile string
 
 func getAppWithConfig() newapp.Generator {
