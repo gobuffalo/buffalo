@@ -37,7 +37,7 @@ func (b *Builder) buildBin() error {
 		buildArgs = append(buildArgs, "-v")
 	}
 	b.Tags = append(b.Tags, b.Environment)
-	buildArgs = append(buildArgs, "-tags", strings.Join(b.Tags, " "))
+	buildArgs = append(buildArgs, "-tags", `"`+strings.Join(b.Tags, " ")+`"`)
 
 	buildArgs = append(buildArgs, "-o", b.Bin)
 
