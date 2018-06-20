@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
@@ -133,4 +134,14 @@ func ResolveSymlinks(p string) string {
 func (a App) String() string {
 	b, _ := json.Marshal(a)
 	return string(b)
+}
+
+func (a App) BuildTags(env string, tags ...string) string {
+	tags = append(tags, env)
+	if b, err := ioutil.ReadFile("database.yml"); err == nil {
+		if bytes.Contains(b, []byte("sqlite")) {
+			tags = append(tags, "sqlite")
+		}
+	}
+	return strings.Join(tags, " ") + `"`
 }

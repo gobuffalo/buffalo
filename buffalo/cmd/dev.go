@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
@@ -115,13 +114,15 @@ func startDevServer(ctx context.Context) error {
 		return err
 	}
 	c.Debug = devOptions.Debug
+
 	tags := []string{"development"}
 	if b, err := ioutil.ReadFile("database.yml"); err == nil {
 		if bytes.Contains(b, []byte("sqlite")) {
 			tags = append(tags, "sqlite")
 		}
 	}
-	tf := `-tags "` + strings.Join(tags, " ") + `"`
+	app := meta.New(".")
+	tf := `-tags "` + app.BuildTags("development")
 	c.BuildFlags = append(c.BuildFlags, tf)
 	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
