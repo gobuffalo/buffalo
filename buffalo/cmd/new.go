@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var configError error
 
 func getAppWithConfig() newapp.Generator {
 	pwd, _ := os.Getwd()
@@ -61,6 +61,9 @@ var newCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) <= 0 {
 			return errors.New("you must enter a name for your new application")
+		}
+		if configError != nil {
+			return configError
 		}
 		app := getAppWithConfig()
 		app.Name = inflect.Name(args[0])
@@ -151,22 +154,35 @@ func init() {
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().Int("bootstrap", 3, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
-	cobra.OnInitialize(initConfig)
-	newCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.buffalo.yaml)")
+	cfgFile := newCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.buffalo.yaml)")
+	skipConfig := newCmd.Flags().Bool("skip-config", false, "skips using the config file")
+	cobra.OnInitialize(initConfig(skipConfig, cfgFile))
 }
 
-func initConfig() {
-	if cfgFile != "" { // enable ability to specify config file via flag
-		viper.SetConfigFile(cfgFile)
-	} else {
-		viper.SetConfigName(".buffalo") // name of config file (without extension)
-		viper.AddConfigPath("$HOME")    // adding home directory as first search path
-		viper.AutomaticEnv()            // read in environment variables that match
-	}
+func initConfig(skipConfig *bool, cfgFile *string) func() {
+	return func() {
+		if *skipConfig {
+			return
+		}
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		var err error
+		if *cfgFile != "" { // enable ability to specify config file via flag
+			viper.SetConfigFile(*cfgFile)
+			// Will error only if the --config flag is used
+			if err = viper.ReadInConfig(); err != nil {
+				configError = err
+			}
+		} else {
+			viper.SetConfigName(".buffalo") // name of config file (without extension)
+			viper.AddConfigPath("$HOME")    // adding home directory as first search path
+			viper.AutomaticEnv()            // read in environment variables that match
+			err = viper.ReadInConfig()
+		}
+
+		if err == nil {
+			fmt.Println("Using config file:", viper.ConfigFileUsed())
+		}
+
 	}
 }
 
