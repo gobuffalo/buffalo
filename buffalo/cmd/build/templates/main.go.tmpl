@@ -4,11 +4,11 @@ import (
   "fmt"
   "log"
   "os"
+  "os/exec"
   "time"
   "strings"
 
   "github.com/markbates/grift/grift"
-  "github.com/gobuffalo/buffalo/buffalo/cmd"
   "github.com/gobuffalo/buffalo/runtime"
   _ "<%= opts.PackagePkg %>/a"
   _ "<%= opts.ActionsPkg %>"
@@ -64,7 +64,19 @@ func main() {
       log.Fatal(err)
     }
   default:
-    cmd.Execute()
+    if _, err := exec.LookPath("buffalo"); err != nil {
+      if err != nil {
+        log.Fatal(err)
+      }
+    }
+    cmd := exec.Command("buffalo", args[1:]...)
+    cmd.Stdin = os.Stdin
+    cmd.Stdout = os.Stdout
+    cmd.Stderr = os.Stderr
+    err := cmd.Run()
+    if err != nil {
+      log.Fatal(err)
+    }
   }
 }
 
