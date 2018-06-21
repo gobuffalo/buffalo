@@ -99,7 +99,6 @@ func (b *Builder) buildADatabase() error {
 			return errors.WithStack(err)
 		}
 		if bytes.Contains(bb.Bytes(), []byte("sqlite")) {
-			b.Tags = append(b.Tags, "sqlite")
 			if !b.Static {
 				logrus.Debug("you are building a SQLite application, please consider using the `--static` flag to compile a static binary")
 			}

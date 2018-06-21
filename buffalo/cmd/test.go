@@ -214,7 +214,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 func newTestCmd(args []string) *exec.Cmd {
 	cargs := []string{"test", "-p", "1"}
 	app := meta.New(".")
-	tf := `-tags "` + app.BuildTags("development").String()
+	tf := "-tags " + app.BuildTags("development").String()
 	cargs = append(cargs, tf)
 	cargs = append(cargs, args...)
 	cmd := exec.Command(envy.Get("GO_BIN", "go"), cargs...)
