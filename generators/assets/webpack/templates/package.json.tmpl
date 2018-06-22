@@ -4,6 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "repository": "github.com/gobuffalo/buffalo",
+  {{ if eq .opts.WithYarn true -}}
+  "scripts": {
+    "buffalo:build": "webpack -p --progress",
+    "buffalo:dev": "webpack --watch",
+    "buffalo:test": ""
+  },
+  {{ end -}}
   "dependencies": {
     {{ if eq .opts.Bootstrap 3 -}}
     "bootstrap-sass": "~3.3.7",

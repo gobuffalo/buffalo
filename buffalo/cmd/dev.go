@@ -68,7 +68,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 
 func startWebpack(ctx context.Context) error {
 	app := meta.New(".")
-	if !app.WithWebpack {
+	if !app.WithWebpack && !app.WithYarn {
 		// there's no webpack, so don't do anything
 		return nil
 	}
@@ -90,7 +90,10 @@ func startWebpack(ctx context.Context) error {
 		}
 	}
 
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	cmd := exec.CommandContext(ctx, "yarn", "buffalo:dev")
+	if !app.WithYarn {
+		cmd = exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	}
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
