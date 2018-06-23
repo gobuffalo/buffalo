@@ -4,6 +4,7 @@
 <a href="https://godoc.org/github.com/gobuffalo/buffalo"><img src="https://godoc.org/github.com/gobuffalo/buffalo?status.svg" alt="GoDoc" /></a>
 <a href="https://travis-ci.org/gobuffalo/buffalo"><img src="https://travis-ci.org/gobuffalo/buffalo.svg?branch=master" alt="Build Status" /></a>
 <a href="https://ci.appveyor.com/project/markbates/buffalo/branch/master"><img src="https://ci.appveyor.com/api/projects/status/fjv5u499p78uvbxa/branch/master?svg=true&passingText=Windows%20-%20OK&failingText=Windows%20-%20failed&pendingText=Windows%20-%20pending" alt="Windows Build status" /></a>
+<a href="https://codecov.io/gh/gobuffalo/buffalo"><img src="https://codecov.io/gh/gobuffalo/buffalo/branch/master/graph/badge.svg" alt="Code coverage status" /></a>
 <a href="https://goreportcard.com/report/github.com/gobuffalo/buffalo"><img src="https://goreportcard.com/badge/github.com/gobuffalo/buffalo" alt="Go Report Card" /></a>
 <a href="https://www.codetriage.com/gobuffalo/buffalo"><img src="https://www.codetriage.com/gobuffalo/buffalo/badges/users.svg" alt="Open Source Helpers" /></a>
 </p>
@@ -43,6 +44,15 @@ $ buffalo new <name>
 ```
 
 That will generate a whole new Buffalo application that is ready to go. It'll even run `go get` for you to make sure you have all of the necessary dependencies needed to run your application.
+
+By default `buffalo new` command will look for a configuration file at `$HOME/.buffalo.yml` and if it exists will try to load it. You can override the flags found in that file by passing the right ones in the command line or use the `--config` flag to specify a different YAML file. If the `--skip-config` flag is used `buffalo new` command will not load any config file and will use only the flags passed by the command line. An example of a config file can be:
+
+```yaml
+skip-yarn: true
+db-type: postgres
+bootstrap: 4
+with-dep: true
+```
 
 To see a list of available flags for the `new` command, just check out its help.
 
