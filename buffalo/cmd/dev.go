@@ -69,7 +69,7 @@ This behavior can be changed in your .buffalo.dev.yml file.`,
 func startWebpack(ctx context.Context) error {
 	app := meta.New(".")
 	if !app.WithWebpack && !app.WithYarn {
-		// there's no webpack, so don't do anything
+		// there's no webpack or yarn, so don't do anything
 		return nil
 	}
 
