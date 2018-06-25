@@ -73,7 +73,7 @@ var testCmd = &cobra.Command{
 				}
 			}
 		}
-		if app.WithYarn {
+		if buildOptions.App.WithYarn {
 			cmd := exec.Command("yarn", "buffalo:test")
 			cmd.Stdin = os.Stdin
 			cmd.Stderr = os.Stderr
