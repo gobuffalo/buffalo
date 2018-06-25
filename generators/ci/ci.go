@@ -12,6 +12,7 @@ func (cg Generator) Run(root string, data makr.Data) error {
 	should := func(data makr.Data) bool {
 		return cg.Provider != "none"
 	}
+	data["opts"] = cg
 	var f makr.File
 	switch cg.Provider {
 	case "travis":
@@ -53,24 +54,24 @@ env:
 {{ if eq .opts.DBType "postgres" -}}
 services:
   - postgresql
-{{- else if eq .opts.DBType "mysql" }}
+{{- else if eq .opts.DBType "mysql" -}}
 services:
   - mysql
 {{- end }}
 
 before_script:
 {{- if eq .opts.DBType "postgres" }}
-  - psql -c 'CREATE DATABASE {{.opts.Name.File}}_test;' -U postgres
+  - psql -c 'CREATE DATABASE {{.opts.App.Name.File}}_test;' -U postgres
 {{- else if eq .opts.DBType "mysql" }}
-  - mysql -e 'CREATE DATABASE {{.opts.Name.File}}_test;'
+  - mysql -e 'CREATE DATABASE {{.opts.App.Name.File}}_test;'
 {{- end }}
   - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
-go_import_path: {{.opts.PackagePkg}}
+go_import_path: {{.opts.App.PackagePkg}}
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
+{{- if .opts.App.WithDep }}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
 {{- else }}
@@ -86,11 +87,11 @@ const nGitlabCi = `before_script:
 {{- else if eq .opts.DBType "mysql" }}
   - apt-get update && apt-get install -y mysql-client
 {{- end }}
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
+  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
+{{- if .opts.App.WithDep }}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
 {{- else }}
@@ -105,9 +106,9 @@ stages:
   variables:
     GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
-    POSTGRES_DB: "{{.opts.Name.File}}_test"
+    POSTGRES_DB: "{{.opts.App.Name.File}}_test"
 {{- else if eq .opts.DBType "mysql" }}
-    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
+    MYSQL_DATABASE: "{{.opts.App.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
 {{- end }}
     TEST_DATABASE_URL: "{{.testDbUrl}}"
@@ -135,11 +136,11 @@ test:
 `
 
 const nGitlabCiNoPop = `before_script:
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
+  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
+{{- if .opts.App.WithDep }}
   - go get github.com/golang/dep/cmd/dep
   - dep ensure
 {{- else }}
