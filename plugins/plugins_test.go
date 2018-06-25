@@ -8,9 +8,12 @@ import (
 	"time"
 
 	"github.com/gobuffalo/envy"
+	"github.com/stretchr/testify/require"
 )
 
 func TestAskBin_respectsTimeout(t *testing.T) {
+	r := require.New(t)
+
 	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
 	if err != nil {
 		t.Skipf("BUFFALO_PLUGIN_PATH not set.")
@@ -47,8 +50,7 @@ func TestAskBin_respectsTimeout(t *testing.T) {
 
 	select {
 	case <-time.After(tooShort + 80*time.Millisecond):
-		t.Log("did not time-out quickly enough")
-		t.Fail()
+		r.Fail("did not time-out quickly enough")
 	case <-done:
 		t.Log("timed-out successfully")
 	}
