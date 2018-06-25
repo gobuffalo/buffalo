@@ -34,7 +34,7 @@ func TestAskBin_respectsTimeout(t *testing.T) {
 			return
 		}
 	} else {
-		t.Error(err)
+		r.Error(err, "plugin path not able to be read")
 		return
 	}
 
