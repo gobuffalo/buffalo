@@ -169,7 +169,7 @@ func Test_Middleware_Skip_Resource(t *testing.T) {
 
 	// fmt.Println("make list call")
 	log = []string{}
-	res = w.Request("/cars").Get()
+	res = w.Request("/cars/").Get()
 	r.Len(log, 2)
 	r.Equal([]string{"mw1 start", "mw1 end"}, log)
 	r.Equal("list", res.Body.String())

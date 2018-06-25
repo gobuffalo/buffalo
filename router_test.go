@@ -252,12 +252,12 @@ func Test_Router(t *testing.T) {
 	defer ts.Close()
 
 	for _, v := range table {
-		req, err := http.NewRequest(v, fmt.Sprintf("%s/router/tests", ts.URL), nil)
+		req, err := http.NewRequest(v, fmt.Sprintf("%s/router/tests/", ts.URL), nil)
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(fmt.Sprintf("%s|/router/tests", v), string(b))
+		r.Equal(fmt.Sprintf("%s|/router/tests/", v), string(b))
 	}
 }
 
@@ -440,7 +440,7 @@ func Test_Resource(t *testing.T) {
 	tests := []trs{
 		{
 			Method: "GET",
-			Path:   "",
+			Path:   "/",
 			Result: "list",
 		},
 		{
@@ -460,7 +460,7 @@ func Test_Resource(t *testing.T) {
 		},
 		{
 			Method: "POST",
-			Path:   "",
+			Path:   "/",
 			Result: "create",
 		},
 		{
@@ -567,7 +567,7 @@ func Test_ResourceOnResource(t *testing.T) {
 	tests := []trs{
 		{
 			Method: "GET",
-			Path:   "/people",
+			Path:   "/people/",
 			Result: "list",
 		},
 		{
@@ -587,7 +587,7 @@ func Test_ResourceOnResource(t *testing.T) {
 		},
 		{
 			Method: "POST",
-			Path:   "/people",
+			Path:   "/people/",
 			Result: "create",
 		},
 		{
@@ -603,7 +603,7 @@ func Test_ResourceOnResource(t *testing.T) {
 	}
 	c := http.Client{}
 	for _, test := range tests {
-		u := ts.URL + path.Join("/users/42", test.Path)
+		u := ts.URL + "/users/42" + test.Path
 		req, err := http.NewRequest(test.Method, u, nil)
 		r.NoError(err)
 		res, err := c.Do(req)
