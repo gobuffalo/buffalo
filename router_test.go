@@ -666,27 +666,6 @@ func Test_CatchAll_Route(t *testing.T) {
 	r.Contains(res.Body.String(), "john")
 }
 
-func Test_Router_Matches_Trailing_Slash(t *testing.T) {
-	r := require.New(t)
-
-	table := []string{
-		"/bar",
-		"/bar/",
-	}
-
-	ts := httptest.NewServer(testApp())
-	defer ts.Close()
-
-	for _, v := range table {
-		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", ts.URL, v), nil)
-		r.NoError(err)
-		res, err := http.DefaultClient.Do(req)
-		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal("bar", string(b))
-	}
-}
-
 func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 	r := require.New(t)
 
@@ -695,13 +674,18 @@ func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 		return c.Render(200, render.String("hello!"))
 	})
 
+	app.GET("/without-slash", func(c Context) error {
+		return c.Render(200, render.String("hello"))
+	})
+
 	table := []struct {
-		path        string
-		shouldError bool
-		status      int
+		path   string
+		status int
 	}{
-		{path: "/top-comments/", shouldError: false, status: 200},
-		{path: "/top-comments", shouldError: true, status: 301},
+		{path: "/top-comments/", status: 200},
+		{path: "/top-comments", status: 404},
+		{path: "/without-slash", status: 200},
+		{path: "/without-slash/", status: 404},
 	}
 
 	for _, tt := range table {
@@ -709,9 +693,49 @@ func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 		defer ts.Close()
 		c := http.DefaultClient
 		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
-			if tt.shouldError {
-				return errors.New("boom")
-			}
+			return errors.New("should not redirect")
+		}
+
+		req, err := http.NewRequest("GET", ts.URL+tt.path, nil)
+		r.NoError(err)
+
+		res, err := c.Do(req)
+		r.NoError(err)
+		r.Equal(tt.status, res.StatusCode)
+	}
+}
+
+func Test_Router_Respects_Loose_Trailing_Slashes(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{LooseSlash: true})
+
+	app.GET("/top-comments/", func(c Context) error {
+		return c.Render(200, render.String("hello!"))
+	})
+
+	app.GET("/without-slash", func(c Context) error {
+		return c.Render(200, render.String("hello"))
+	})
+
+	table := []struct {
+		path           string
+		redirected     bool
+		shouldRedirect bool
+		status         int
+	}{
+		{path: "/top-comments/", shouldRedirect: false, status: 200},
+		{path: "/top-comments", shouldRedirect: true, status: 200},
+		{path: "/without-slash", shouldRedirect: false, status: 200},
+		{path: "/without-slash/", shouldRedirect: true, status: 200},
+	}
+
+	for _, tt := range table {
+		ts := httptest.NewServer(app)
+		defer ts.Close()
+		c := http.DefaultClient
+		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			tt.redirected = true // path was redirected
 			return nil
 		}
 
@@ -719,11 +743,8 @@ func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 		r.NoError(err)
 
 		res, err := c.Do(req)
-		if tt.shouldError {
-			r.Error(err)
-		} else {
-			r.NoError(err)
-		}
+		r.Equal(tt.shouldRedirect, tt.redirected)
+		r.NoError(err)
 		r.Equal(tt.status, res.StatusCode)
 	}
 }
