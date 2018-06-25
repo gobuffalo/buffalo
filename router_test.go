@@ -710,7 +710,7 @@ func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 		c := http.DefaultClient
 		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			if tt.shouldError {
-				return errors.New("boom!")
+				return errors.New("boom")
 			}
 			return nil
 		}
