@@ -73,12 +73,16 @@ var testCmd = &cobra.Command{
 				}
 			}
 		}
-		if buildOptions.App.WithYarn {
-			cmd := exec.Command("yarn", "buffalo:test")
-			cmd.Stdin = os.Stdin
-			cmd.Stderr = os.Stderr
-			cmd.Stdout = os.Stdout
-			err := cmd.Run()
+		if meta.New(".").WithYarn {
+			found, err := YarnScriptExists("buffalo:test")
+			if found {
+				cmd := exec.Command("yarn", "buffalo:test")
+				cmd.Stdin = os.Stdin
+				cmd.Stderr = os.Stderr
+				cmd.Stdout = os.Stdout
+				err = cmd.Run()
+			}
+
 			if err != nil {
 				return errors.WithStack(err)
 			}
