@@ -90,9 +90,13 @@ func startWebpack(ctx context.Context) error {
 		}
 	}
 
-	cmd := exec.CommandContext(ctx, "yarn", "buffalo:dev")
-	if !app.WithYarn {
-		cmd = exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	if app.WithYarn {
+		if found, err := YarnScriptExists("buffao:dev") ; err != nil {
+			return errors.WithStack(err)
+		} else if found {
+			cmd = exec.CommandContext(ctx, "yarn", "buffalo:dev")
+		}	
 	}
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
