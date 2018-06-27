@@ -166,7 +166,5 @@ Thank you to the following **GIANTS**:
 
 * [github.com/spf13/pflag](https://godoc.org/github.com/spf13/pflag)
 
-* [github.com/unrolled/secure](https://godoc.org/github.com/unrolled/secure)
-
 * [golang.org/x/tools/cmd/goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)
 
