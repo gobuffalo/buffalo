@@ -12,7 +12,7 @@ type BuildTags []string
 // String returns the tags in the form of:
 // "foo bar baz" (with the quotes!)
 func (t BuildTags) String() string {
-	return `"` + strings.Join(t, " ") + `"`
+	return strings.Join(t, " ")
 }
 
 // BuildTags combines the passed in env, and any additional tags,

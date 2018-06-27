@@ -15,7 +15,7 @@ func Test_BuildTags(t *testing.T) {
 		tags := app.BuildTags("dev")
 		r.Len(tags, 1)
 		r.Equal("dev", tags[0])
-		r.Equal(`"dev"`, tags.String())
+		r.Equal(`dev`, tags.String())
 	})
 	t.Run("with database.yml", func(st *testing.T) {
 		t.Run("with sqlite", func(st *testing.T) {
@@ -29,7 +29,7 @@ func Test_BuildTags(t *testing.T) {
 			r.Len(tags, 2)
 			r.Equal("dev", tags[0])
 			r.Equal("sqlite", tags[1])
-			r.Equal(`"dev sqlite"`, tags.String())
+			r.Equal(`dev sqlite`, tags.String())
 		})
 		t.Run("without sqlite", func(st *testing.T) {
 			r := require.New(st)
@@ -41,7 +41,7 @@ func Test_BuildTags(t *testing.T) {
 			tags := app.BuildTags("dev")
 			r.Len(tags, 1)
 			r.Equal("dev", tags[0])
-			r.Equal(`"dev"`, tags.String())
+			r.Equal(`dev`, tags.String())
 		})
 	})
 }
