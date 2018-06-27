@@ -75,8 +75,6 @@ func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	c := a.newContext(info, res, req)
 
-	defer c.Flash().persist(c.Session())
-
 	err := a.Middleware.handler(info)(c)
 
 	if err != nil {

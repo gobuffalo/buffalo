@@ -58,7 +58,6 @@ func New(opts Options) *App {
 	}
 	a.Use(a.PanicHandler)
 	a.Use(RequestLogger)
-	a.Use(sessionSaver)
 
 	return a
 }
