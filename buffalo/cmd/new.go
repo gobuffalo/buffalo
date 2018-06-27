@@ -152,7 +152,7 @@ func init() {
 	newCmd.Flags().String("docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
-	newCmd.Flags().Int("bootstrap", 3, "specify version for Bootstrap [3, 4]")
+	newCmd.Flags().Int("bootstrap", 4, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
 	cfgFile := newCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.buffalo.yaml)")
 	skipConfig := newCmd.Flags().Bool("skip-config", false, "skips using the config file")
