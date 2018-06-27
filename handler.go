@@ -78,6 +78,7 @@ func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	err := a.Middleware.handler(info)(c)
 
 	if err != nil {
+		c.Flash().persist(c.Session())
 		status := 500
 		// unpack root cause and check for HTTPError
 		cause := errors.Cause(err)
