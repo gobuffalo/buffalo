@@ -31,6 +31,12 @@ type List map[string]Commands
 //	 plugins.Commands{}
 //
 // Limit full path scan with direct plugin path
+//
+// If a file/command doesn't respond to being invoked with `available`
+// within one second, buffalo will assume that it is unable to load. This
+// can be changed by setting the $BUFFALO_PLUGIN_TIMEOUT environment
+// variable. It must be set to a duration that `time.ParseDuration` can
+// process.
 func Available() (List, error) {
 	list := List{}
 	paths := []string{"plugins"}
@@ -42,6 +48,19 @@ func Available() (List, error) {
 			return list, errors.WithStack(err)
 		}
 		from = filepath.Join(from, "bin")
+	}
+
+	const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
+	timeout := time.Second
+	rawTimeout, err := envy.MustGet(timeoutEnv)
+	if err == nil {
+		if parsed, err := time.ParseDuration(rawTimeout); err == nil {
+			timeout = parsed
+		} else {
+			logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, timeout, err)
+		}
+	} else {
+		logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, timeout)
 	}
 
 	if runtime.GOOS == "windows" {
@@ -67,7 +86,9 @@ func Available() (List, error) {
 			}
 			base := filepath.Base(path)
 			if strings.HasPrefix(base, "buffalo-") {
-				commands := askBin(path)
+				ctx, cancel := context.WithTimeout(context.Background(), timeout)
+				commands := askBin(ctx, path)
+				cancel()
 				for _, c := range commands {
 					bc := c.BuffaloCommand
 					if _, ok := list[bc]; !ok {
@@ -86,10 +107,9 @@ func Available() (List, error) {
 	return list, nil
 }
 
-func askBin(path string) Commands {
+func askBin(ctx context.Context, path string) Commands {
 	commands := Commands{}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+
 	cmd := exec.CommandContext(ctx, path, "available")
 	bb := &bytes.Buffer{}
 	cmd.Stdout = bb
