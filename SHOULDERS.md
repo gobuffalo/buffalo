@@ -26,6 +26,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
+* [github.com/gobuffalo/envy/vendor/github.com/joho/godotenv](https://godoc.org/github.com/gobuffalo/envy/vendor/github.com/joho/godotenv)
+
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
 * [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
@@ -86,8 +88,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/jmoiron/sqlx/reflectx](https://godoc.org/github.com/jmoiron/sqlx/reflectx)
 
-* [github.com/joho/godotenv](https://godoc.org/github.com/joho/godotenv)
-
 * [github.com/lib/pq](https://godoc.org/github.com/lib/pq)
 
 * [github.com/lib/pq/oid](https://godoc.org/github.com/lib/pq/oid)
@@ -127,6 +127,16 @@ Thank you to the following **GIANTS**:
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
+
+* [github.com/nicksnyder/go-i18n/i18n](https://godoc.org/github.com/nicksnyder/go-i18n/i18n)
+
+* [github.com/nicksnyder/go-i18n/i18n/bundle](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/bundle)
+
+* [github.com/nicksnyder/go-i18n/i18n/language](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/language)
+
+* [github.com/nicksnyder/go-i18n/i18n/translation](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/translation)
+
+* [github.com/pelletier/go-toml](https://godoc.org/github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 

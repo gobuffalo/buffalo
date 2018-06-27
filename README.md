@@ -45,6 +45,15 @@ $ buffalo new <name>
 
 That will generate a whole new Buffalo application that is ready to go. It'll even run `go get` for you to make sure you have all of the necessary dependencies needed to run your application.
 
+By default `buffalo new` command will look for a configuration file at `$HOME/.buffalo.yml` and if it exists will try to load it. You can override the flags found in that file by passing the right ones in the command line or use the `--config` flag to specify a different YAML file. If the `--skip-config` flag is used `buffalo new` command will not load any config file and will use only the flags passed by the command line. An example of a config file can be:
+
+```yaml
+skip-yarn: true
+db-type: postgres
+bootstrap: 4
+with-dep: true
+```
+
 To see a list of available flags for the `new` command, just check out its help.
 
 ```text

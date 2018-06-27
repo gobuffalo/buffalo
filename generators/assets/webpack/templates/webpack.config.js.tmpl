@@ -16,22 +16,22 @@ const configurator = {
         './assets/css/application.scss',
       ],
     }
-    
+
     Glob.sync("./assets/*/*.*").forEach((entry) => {
       if (entry === './assets/css/application.scss') {
         return
       }
-      
+
       let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|s[ac]ss|go)/g, '')
       if(key.startsWith("_") || (/(js|s[ac]ss|go)$/i).test(entry) == false) {
         return
       }
-      
+
       if( entries[key] == null) {
         entries[key] = [entry]
         return
-      } 
-      
+      }
+
       entries[key].push(entry)
     })
 
@@ -73,7 +73,7 @@ const configurator = {
 
   buildConfig: function(){
     const env = process.env.NODE_ENV || "development";
-    
+
     var config = {
       mode: env,
       entry: configurator.entries(),

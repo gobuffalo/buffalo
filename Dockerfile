@@ -34,6 +34,8 @@ RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
     else curl -s https://codecov.io/bash -o codecov && \
     bash codecov -f cover.out -X fix; fi
 
+RUN go get -u github.com/alecthomas/gometalinter
+RUN gometalinter --install
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
