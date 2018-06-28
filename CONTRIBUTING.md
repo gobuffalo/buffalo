@@ -20,7 +20,7 @@ Please take moment and read this fantastic post on how to easily work with Go re
 
 ## Documentation Welcome
 
-Hands down the most important, and the most welcome, pull requests are for documentation. We LOVE documentation PRs, and so don't all those that come after you.
+Hands down the most important, and the most welcome, pull requests are for documentation. We LOVE documentation PRs, and so do all those that come after you.
 
 Whether it's GoDoc or prose on [http://gobuffalo.io](http://gobuffalo.io) all documentation is welcome.
 
