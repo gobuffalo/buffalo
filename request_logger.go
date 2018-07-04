@@ -32,7 +32,11 @@ func RequestLoggerFunc(h Handler) Handler {
 
 		start := time.Now()
 		defer func() {
-			ws := c.Response().(*Response)
+			var size int
+			var status int
+			if ws, ok := c.Response().(*Response); ok {
+				size = ws.Size
+			}
 			req := c.Request()
 			ct := httpx.ContentType(req)
 			if ct != "" {
@@ -42,9 +46,9 @@ func RequestLoggerFunc(h Handler) Handler {
 				"method":     req.Method,
 				"path":       req.URL.String(),
 				"duration":   time.Since(start),
-				"size":       ws.Size,
-				"human_size": humanize.Bytes(uint64(ws.Size)),
-				"status":     ws.Status,
+				"size":       size,
+				"human_size": humanize.Bytes(uint64(size)),
+				"status":     status,
 			})
 			c.Logger().Info(req.URL.String())
 		}()

@@ -28,6 +28,9 @@ var devErrorTmpl = `
   <div class="container content">
     <div class="row">
       <div class="col-md-12">
+        <h3>Cause Error</h3>
+        <pre><%= inspect(cause) %></pre>
+
         <h3>Error Trace</h3>
         <pre><%= error %></pre>
 
