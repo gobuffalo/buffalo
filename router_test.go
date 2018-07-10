@@ -13,6 +13,7 @@ import (
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
 	"github.com/markbates/willie"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -251,12 +252,12 @@ func Test_Router(t *testing.T) {
 	defer ts.Close()
 
 	for _, v := range table {
-		req, err := http.NewRequest(v, fmt.Sprintf("%s/router/tests", ts.URL), nil)
+		req, err := http.NewRequest(v, fmt.Sprintf("%s/router/tests/", ts.URL), nil)
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(fmt.Sprintf("%s|/router/tests", v), string(b))
+		r.Equal(fmt.Sprintf("%s|/router/tests/", v), string(b))
 	}
 }
 
@@ -439,7 +440,7 @@ func Test_Resource(t *testing.T) {
 	tests := []trs{
 		{
 			Method: "GET",
-			Path:   "",
+			Path:   "/",
 			Result: "list",
 		},
 		{
@@ -459,7 +460,7 @@ func Test_Resource(t *testing.T) {
 		},
 		{
 			Method: "POST",
-			Path:   "",
+			Path:   "/",
 			Result: "create",
 		},
 		{
@@ -566,7 +567,7 @@ func Test_ResourceOnResource(t *testing.T) {
 	tests := []trs{
 		{
 			Method: "GET",
-			Path:   "/people",
+			Path:   "/people/",
 			Result: "list",
 		},
 		{
@@ -586,7 +587,7 @@ func Test_ResourceOnResource(t *testing.T) {
 		},
 		{
 			Method: "POST",
-			Path:   "/people",
+			Path:   "/people/",
 			Result: "create",
 		},
 		{
@@ -602,7 +603,7 @@ func Test_ResourceOnResource(t *testing.T) {
 	}
 	c := http.Client{}
 	for _, test := range tests {
-		u := ts.URL + path.Join("/users/42", test.Path)
+		u := ts.URL + "/users/42" + test.Path
 		req, err := http.NewRequest(test.Method, u, nil)
 		r.NoError(err)
 		res, err := c.Do(req)
@@ -665,23 +666,85 @@ func Test_CatchAll_Route(t *testing.T) {
 	r.Contains(res.Body.String(), "john")
 }
 
-func Test_Router_Matches_Trailing_Slash(t *testing.T) {
+func Test_Router_Respects_Trailing_Slashes(t *testing.T) {
 	r := require.New(t)
 
-	table := []string{
-		"/bar",
-		"/bar/",
+	app := testApp()
+	app.GET("/top-comments/", func(c Context) error {
+		return c.Render(200, render.String("hello!"))
+	})
+
+	app.GET("/without-slash", func(c Context) error {
+		return c.Render(200, render.String("hello"))
+	})
+
+	table := []struct {
+		path   string
+		status int
+	}{
+		{path: "/top-comments/", status: 200},
+		{path: "/top-comments", status: 404},
+		{path: "/without-slash", status: 200},
+		{path: "/without-slash/", status: 404},
 	}
 
-	ts := httptest.NewServer(testApp())
-	defer ts.Close()
+	for _, tt := range table {
+		ts := httptest.NewServer(app)
+		defer ts.Close()
+		c := http.DefaultClient
+		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return errors.New("should not redirect")
+		}
 
-	for _, v := range table {
-		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", ts.URL, v), nil)
+		req, err := http.NewRequest("GET", ts.URL+tt.path, nil)
 		r.NoError(err)
-		res, err := http.DefaultClient.Do(req)
+
+		res, err := c.Do(req)
 		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal("bar", string(b))
+		r.Equal(tt.status, res.StatusCode)
+	}
+}
+
+func Test_Router_Respects_Loose_Trailing_Slashes(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{LooseSlash: true})
+
+	app.GET("/top-comments/", func(c Context) error {
+		return c.Render(200, render.String("hello!"))
+	})
+
+	app.GET("/without-slash", func(c Context) error {
+		return c.Render(200, render.String("hello"))
+	})
+
+	table := []struct {
+		path           string
+		redirected     bool
+		shouldRedirect bool
+		status         int
+	}{
+		{path: "/top-comments/", shouldRedirect: false, status: 200},
+		{path: "/top-comments", shouldRedirect: true, status: 200},
+		{path: "/without-slash", shouldRedirect: false, status: 200},
+		{path: "/without-slash/", shouldRedirect: true, status: 200},
+	}
+
+	for _, tt := range table {
+		ts := httptest.NewServer(app)
+		defer ts.Close()
+		c := http.DefaultClient
+		c.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			tt.redirected = true // path was redirected
+			return nil
+		}
+
+		req, err := http.NewRequest("GET", ts.URL+tt.path, nil)
+		r.NoError(err)
+
+		res, err := c.Do(req)
+		r.Equal(tt.shouldRedirect, tt.redirected)
+		r.NoError(err)
+		r.Equal(tt.status, res.StatusCode)
 	}
 }
