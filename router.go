@@ -84,6 +84,7 @@ func (a *App) Mount(p string, h http.Handler) {
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
 	path := path.Join(a.Prefix, p)
+	a.filepaths = append(a.filepaths, path)
 	a.router.PathPrefix(path).Handler(http.StripPrefix(path, a.fileServer(root)))
 }
 
@@ -203,6 +204,9 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	defer a.moot.Unlock()
 
 	url = path.Join(a.Prefix, url)
+	if !strings.HasSuffix(url, "/") {
+		url += "/"
+	}
 	name := a.buildRouteName(url)
 
 	hs := funcKey(h)

@@ -92,6 +92,19 @@ func (a *App) Stop(err error) error {
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	var fp bool
+	for _, p := range a.filepaths {
+		if strings.HasPrefix(path, p) {
+			fp = true
+			break
+		}
+	}
+	if !fp && !strings.HasSuffix(path, "/") {
+		path += "/"
+	}
+	r.URL.Path = path
+
 	ws := &Response{
 		ResponseWriter: w,
 	}
