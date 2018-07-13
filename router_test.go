@@ -686,7 +686,20 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 		t.Run(tt.mapped+"|"+tt.browser, func(st *testing.T) {
 			r := require.New(st)
 
-			app := New(Options{})
+			app := New(Options{
+				PreWares: []PreWare{
+					func(h http.Handler) http.Handler {
+						var f http.HandlerFunc
+						f = func(res http.ResponseWriter, req *http.Request) {
+							path := req.URL.Path
+							req.URL.Path = strings.TrimSuffix(path, "/")
+							r.False(strings.HasSuffix(req.URL.Path, "/"))
+							h.ServeHTTP(res, req)
+						}
+						return f
+					},
+				},
+			})
 			app.GET(tt.mapped, func(c Context) error {
 				return c.Render(200, render.String(c.Request().URL.Path))
 			})

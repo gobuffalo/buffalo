@@ -93,19 +93,6 @@ func (a *App) Stop(err error) error {
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
-	var fp bool
-	for _, p := range a.filepaths {
-		if strings.HasPrefix(path, p) {
-			fp = true
-			break
-		}
-	}
-	if !fp && !strings.HasSuffix(path, "/") && filepath.Ext(path) == "" {
-		path += "/"
-	}
-	r.URL.Path = path
-
 	ws := &Response{
 		ResponseWriter: w,
 	}
@@ -115,6 +102,8 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if ok := a.processPreHandlers(ws, r); !ok {
 		return
 	}
+
+	r.URL.Path = a.normalizePath(r.URL.Path)
 
 	var h http.Handler = a.router
 	if a.Env == "development" {
@@ -148,4 +137,22 @@ func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) boo
 		}
 	}
 	return true
+}
+
+func (a *App) normalizePath(path string) string {
+	if filepath.Ext(path) != "" {
+		return path
+	}
+	if strings.HasSuffix(path, "/") {
+		return path
+	}
+	for _, p := range a.filepaths {
+		if p == "/" {
+			continue
+		}
+		if strings.HasPrefix(path, p) {
+			return path
+		}
+	}
+	return path + "/"
 }

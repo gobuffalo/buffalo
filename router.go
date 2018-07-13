@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -205,9 +204,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	defer a.moot.Unlock()
 
 	url = path.Join(a.Prefix, url)
-	if !strings.HasSuffix(url, "/") && filepath.Ext(url) == "" {
-		url += "/"
-	}
+	url = a.normalizePath(url)
 	name := a.buildRouteName(url)
 
 	hs := funcKey(h)
