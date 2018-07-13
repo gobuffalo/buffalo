@@ -34,7 +34,7 @@ func (sd Generator) Run(root string, data makr.Data) error {
 		Should: should,
 		Runner: func(rootPath string, data makr.Data) error {
 			data["dialect"] = sd.Dialect
-			return sg.GenerateConfig("./database.yml", data)
+			return sg.Config("./database.yml", data)
 		},
 	})
 
