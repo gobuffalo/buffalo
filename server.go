@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"syscall"
 
@@ -100,7 +101,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	if !fp && !strings.HasSuffix(path, "/") {
+	if !fp && !strings.HasSuffix(path, "/") && filepath.Ext(path) == "" {
 		path += "/"
 	}
 	r.URL.Path = path

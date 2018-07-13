@@ -678,6 +678,8 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 		{"/foo", "/foo/", "/foo/"},
 		{"/foo/", "/foo", "/foo/"},
 		{"/foo/", "/foo/", "/foo/"},
+		{"/index.html", "/index.html", "/index.html"},
+		{"/foo.gif", "/foo.gif", "/foo.gif"},
 	}
 
 	for _, tt := range table {
