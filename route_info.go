@@ -91,12 +91,12 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	}
 }
 
-func (info RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	a := info.App
+func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	a := ri.App
 
-	c := a.newContext(info, res, req)
+	c := a.newContext(ri, res, req)
 
-	err := a.Middleware.handler(info)(c)
+	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
 		c.Flash().persist(c.Session())
