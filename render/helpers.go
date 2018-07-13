@@ -5,13 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/tags"
 	"github.com/pkg/errors"
 )
 
 func init() {
-	plush.Helpers.Add("paginator", func(pagination *pop.Paginator, opts map[string]interface{}, help plush.HelperContext) (template.HTML, error) {
+	plush.Helpers.Add("paginator", func(pagination interface{}, opts map[string]interface{}, help plush.HelperContext) (template.HTML, error) {
 		if opts["path"] == nil {
 			if req, ok := help.Value("request").(*http.Request); ok {
 				opts["path"] = req.URL.String()
