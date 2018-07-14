@@ -82,6 +82,7 @@ func productionErrorResponseFor(status int) []byte {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
+	cause := errors.Cause(origErr)
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
@@ -97,6 +98,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
 		err := json.NewEncoder(c.Response()).Encode(map[string]interface{}{
+			"cause": cause,
 			"error": msg,
 			"code":  status,
 		})
@@ -115,6 +117,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 		data := map[string]interface{}{
 			"routes":      routes,
+			"cause":       cause,
 			"error":       msg,
 			"status":      status,
 			"data":        c.Data(),

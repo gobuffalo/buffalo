@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"net/http"
 	"net/url"
 	"sort"
 	"strings"
@@ -12,16 +13,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/markbates/inflect"
+	"github.com/pkg/errors"
 )
-
-// Routes returns a list of all of the routes defined
-// in this application.
-func (a *App) Routes() RouteList {
-	if a.root != nil {
-		return a.root.routes
-	}
-	return a.routes
-}
 
 // RouteInfo provides information about the underlying route that
 // was built.
@@ -98,6 +91,33 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	}
 }
 
+func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	a := ri.App
+
+	c := a.newContext(ri, res, req)
+
+	err := a.Middleware.handler(ri)(c)
+
+	if err != nil {
+		c.Flash().persist(c.Session())
+		status := 500
+		// unpack root cause and check for HTTPError
+		cause := errors.Cause(err)
+		httpError, ok := cause.(HTTPError)
+		if ok {
+			status = httpError.Status
+		}
+		eh := a.ErrorHandlers.Get(status)
+		err = eh(status, err, c)
+		if err != nil {
+			// things have really hit the fan if we're here!!
+			a.Logger.Error(err)
+			c.Response().WriteHeader(500)
+			c.Response().Write([]byte(err.Error()))
+		}
+	}
+}
+
 func addExtraParamsTo(path string, opts map[string]interface{}) string {
 	pendingParams := map[string]string{}
 	keys := []string{}
@@ -139,16 +159,3 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 
 //RouteHelperFunc represents the function that takes the route and the opts and build the path
 type RouteHelperFunc func(opts map[string]interface{}) (template.HTML, error)
-
-// RouteList contains a mapping of the routes defined
-// in the application. This listing contains, Method, Path,
-// and the name of the Handler defined to process that route.
-type RouteList []*RouteInfo
-
-func (a RouteList) Len() int      { return len(a) }
-func (a RouteList) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-func (a RouteList) Less(i, j int) bool {
-	x := a[i].Path // + a[i].Method
-	y := a[j].Path // + a[j].Method
-	return x < y
-}
