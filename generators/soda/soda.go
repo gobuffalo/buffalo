@@ -2,7 +2,7 @@ package soda
 
 import (
 	"github.com/gobuffalo/makr"
-	sg "github.com/gobuffalo/pop/soda/cmd/generate"
+	"github.com/gobuffalo/pop/soda/cmd/generate"
 )
 
 // Run the soda generator
@@ -34,7 +34,7 @@ func (sd Generator) Run(root string, data makr.Data) error {
 		Should: should,
 		Runner: func(rootPath string, data makr.Data) error {
 			data["dialect"] = sd.Dialect
-			return sg.GenerateConfig("./database.yml", data)
+			return generate.Config("./database.yml", data)
 		},
 	})
 
