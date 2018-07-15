@@ -60,3 +60,24 @@ func Test_App_RouteName(t *testing.T) {
 	}
 
 }
+
+func Test_RouteList_Lookup(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+	r.Nil(a.root)
+
+	a.GET("/foo", voidHandler)
+	a.GET("/test", voidHandler)
+
+	routes := a.Routes()
+	for _, route := range routes {
+		lRoute, err := routes.Lookup(route.PathName)
+		r.NoError(err)
+		r.Equal(lRoute, route)
+	}
+	lRoute, err := routes.Lookup("a")
+	r.Error(err)
+	r.Nil(lRoute)
+
+}
