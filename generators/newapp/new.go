@@ -37,6 +37,8 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	if a.WithDep {
+		data["addPrune"] = true
+		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
 		if _, err := exec.LookPath("dep"); err != nil {
 			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
 		}
@@ -122,7 +124,6 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
-	o.Version = a.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
@@ -181,7 +182,7 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 			if a.DBType == "postgres" {
 				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
 			} else {
 				data["testDbUrl"] = ""
 			}
@@ -199,7 +200,7 @@ func (a Generator) goGet() *exec.Cmd {
 	os.Chdir(a.Root)
 	if a.WithDep {
 		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "init")
+			return exec.Command("dep", "ensure", "-v")
 		}
 	}
 	appArgs := []string{"get", "-t"}
@@ -244,6 +245,11 @@ script: buffalo test
 `
 
 const nGitlabCi = `before_script:
+{{- if eq .opts.DBType "postgres" }}
+	- apt-get update && apt-get install -y postgresql-client
+{{- else if eq .opts.DBType "mysql" }}
+  - apt-get update && apt-get install -y mysql-client
+{{- end }}
   - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
   - cd /go/src/{{.opts.PackagePkg}}
   - mkdir -p public/assets
@@ -277,26 +283,14 @@ stages:
 .use-golang-image: &use-golang-1-8
   image: golang:1.8
 
-test:latest:
-  <<: *use-golang-latest
-  <<: *test-vars
-  stage: test
-  services:
-{{- if eq .opts.DBType "mysql" }}
-    - mysql:latest
-{{- else if eq .opts.DBType "postgres" }}
-    - postgres:latest
-{{- end }}
-  script:
-    - buffalo test
-
-test:1.8:
+test:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
   <<: *use-golang-1-8
   <<: *test-vars
   stage: test
   services:
 {{- if eq .opts.DBType "mysql" }}
-    - mysql:latest
+    - mysql:5
 {{- else if eq .opts.DBType "postgres" }}
     - postgres:latest
 {{- end }}
@@ -331,14 +325,8 @@ stages:
 .use-golang-image: &use-golang-1-8
   image: golang:1.8
 
-test:latest:
-  <<: *use-golang-latest
-  <<: *test-vars
-  stage: test
-  script:
-    - buffalo test
-
-test:1.8:
+test:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
   <<: *use-golang-1-8
   <<: *test-vars
   stage: test
@@ -360,4 +348,23 @@ public/assets/
 .vscode/
 .grifter/
 .env
+`
+
+// GopkgTomlTmpl is the default dep Gopkg.toml
+const GopkgTomlTmpl = `
+{{ if .addPrune }}
+[prune]
+  go-tests = true
+  unused-packages = true
+{{ end }}
+
+  # DO NOT DELETE
+  [[prune.project]] # buffalo
+    name = "github.com/gobuffalo/buffalo"
+    unused-packages = false
+
+  # DO NOT DELETE
+  [[prune.project]] # pop
+    name = "github.com/gobuffalo/pop"
+    unused-packages = false
 `

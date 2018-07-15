@@ -4,8 +4,12 @@ import (
   "fmt"
   "log"
   "os"
+  "os/exec"
+  "time"
+  "strings"
 
   "github.com/markbates/grift/grift"
+  "github.com/gobuffalo/buffalo/runtime"
   _ "<%= opts.PackagePkg %>/a"
   _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
@@ -18,13 +22,26 @@ import (
   <% } %>
 )
 
-var BuildVersion = "unknown"
-var BuildTime = "unknown"
+var BuildVersion = ""
+var BuildTime = ""
+
+func init() {
+  BuildTime = strings.Trim(BuildTime, "\"")
+  t, err := time.Parse(time.RFC3339, BuildTime)
+  if err != nil {
+    fmt.Println(err)
+  }
+  runtime.SetBuild(runtime.BuildInfo{
+    Version: BuildVersion,
+    Time: t,
+  })
+}
 
 func main() {
   args := os.Args
   if len(args) == 1 {
     originalMain()
+    return
   }
   c := args[1]
   switch c {
@@ -47,12 +64,24 @@ func main() {
       log.Fatal(err)
     }
   default:
-    originalMain()
+    if _, err := exec.LookPath("buffalo"); err != nil {
+      if err != nil {
+        log.Fatal(err)
+      }
+    }
+    cmd := exec.Command("buffalo", args[1:]...)
+    cmd.Stdin = os.Stdin
+    cmd.Stdout = os.Stdout
+    cmd.Stderr = os.Stderr
+    err := cmd.Run()
+    if err != nil {
+      log.Fatal(err)
+    }
   }
 }
 
 func printVersion() {
-  fmt.Printf("<%= opts.Name.Title() %> version %s (%s)\n", BuildVersion, BuildTime)
+  fmt.Printf("<%= opts.Name.Title() %> version %s\n", runtime.Build())
 }
 
 <%= if (opts.WithPop) { %>

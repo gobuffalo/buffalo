@@ -81,7 +81,7 @@ func NewOptions() Options {
 
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
-	opts.LogLevel = defaults.String(opts.LogLevel, "debug")
+	opts.LogLevel = defaults.String(opts.LogLevel, envy.Get("LOG_LEVEL", "debug"))
 	opts.Name = defaults.String(opts.Name, "/")
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
@@ -131,8 +131,12 @@ func optionsWithDefaults(opts Options) Options {
 	if opts.SessionStore == nil {
 		secret := envy.Get("SESSION_SECRET", "")
 		// In production a SESSION_SECRET must be set!
-		if opts.Env == "production" && secret == "" {
-			logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+		if secret == "" {
+			if opts.Env == "development" || opts.Env == "test" {
+				secret = "buffalo-secret"
+			} else {
+				logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+			}
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
 	}

@@ -26,14 +26,16 @@ builds:
       post: packr clean
   -
     goos:
+      - linux
       - darwin
+      - windows
     goarch:
       - amd64
     goarm:
       - "6"
     main: ./buffalo/main.go
-    binary: buffalo-with-sqlite
-    flags: -tags sqlite
+    binary: buffalo-with-zbuffalo
+    flags: -tags zbuffalo
     hooks:
       pre: packr
       post: packr clean

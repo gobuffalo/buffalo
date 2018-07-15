@@ -32,7 +32,7 @@ func (e *Engine) JavaScript(names ...string) Renderer {
 	if e.JavaScriptLayout != "" && len(names) == 1 {
 		names = append(names, e.JavaScriptLayout)
 	}
-	hr := templateRenderer{
+	hr := &templateRenderer{
 		Engine:      e,
 		contentType: "application/javascript",
 		names:       names,

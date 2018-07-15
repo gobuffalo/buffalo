@@ -1,17 +1,19 @@
 FROM gobuffalo/buffalo:development
 
-RUN buffalo version
+ARG CODECOV_TOKEN
+ARG CI
+ARG TRAVIS
+ARG TRAVIS_BRANCH
+ARG TRAVIS_COMMIT
+ARG TRAVIS_JOB_ID
+ARG TRAVIS_JOB_NUMBER
+ARG TRAVIS_OS_NAME
+ARG TRAVIS_PULL_REQUEST
+ARG TRAVIS_PULL_REQUEST_SHA
+ARG TRAVIS_REPO_SLUG
+ARG TRAVIS_TAG
 
-RUN go get -u github.com/alecthomas/gometalinter
-RUN gometalinter --install
-RUN go get -v -u github.com/markbates/filetest
-RUN go get -v -u github.com/gobuffalo/makr
-RUN go get -v -u github.com/markbates/grift
-RUN go get -v -u github.com/markbates/inflect
-RUN go get -v -u github.com/markbates/refresh
-RUN go get -v -u github.com/gobuffalo/tags
-RUN go get -v -u github.com/gobuffalo/pop
-RUN go get -v -u github.com/mattn/go-sqlite3
+RUN buffalo version
 
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
@@ -22,14 +24,37 @@ WORKDIR $BP
 ADD . .
 
 RUN go get -v -t ./...
+RUN make install
 
-RUN go install -v -tags sqlite ./buffalo
+RUN go test -tags sqlite -race  ./...
+RUN go test -tags sqlite -coverprofile cover.out -covermode count ./...
 
-RUN go test -tags sqlite -race ./...
+RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
+    echo codecov not enabled ; \
+    else curl -s https://codecov.io/bash -o codecov && \
+    bash codecov -f cover.out -X fix; fi
 
-RUN gometalinter --vendor --deadline=5m ./...
+RUN go get -u github.com/alecthomas/gometalinter
+RUN gometalinter --install
+RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
+
+# START: tests bins are built with tags properly
+RUN mkdir -p $GOPATH/src/github.com/markbates
+WORKDIR $GOPATH/src/github.com/markbates
+RUN buffalo new --skip-webpack coke --db-type=sqlite3
+WORKDIR $GOPATH/src/github.com/markbates/coke
+RUN buffalo db create -a -d
+RUN buffalo g resource widget name
+RUN buffalo b -d
+# works fine:
+RUN ./bin/coke migrate
+RUN rm -rfv $GOPATH/src/github.com/markbates/coke
+# :END
+
+WORKDIR $GOPATH/src/
+
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
 WORKDIR ./hello_world
 

@@ -14,7 +14,7 @@ func Test_javascriptTag(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["javascriptTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("application.js", nil)
@@ -27,7 +27,7 @@ func Test_javascriptTag_Options(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["javascriptTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("application.js", tags.Options{"class": "foo"})
@@ -40,7 +40,7 @@ func Test_stylesheetTag(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["stylesheetTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("application.css", nil)
@@ -53,7 +53,7 @@ func Test_stylesheetTag_Options(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["stylesheetTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("application.css", tags.Options{"class": "foo"})
@@ -65,7 +65,7 @@ func Test_imgTag(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["imgTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("foo.png", nil)
@@ -78,7 +78,7 @@ func Test_imgTag_Options(t *testing.T) {
 	re := New(Options{
 		AssetsBox: packr.NewBox(""),
 	})
-	tr := re.Template("").(templateRenderer)
+	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
 	f := h["imgTag"].(func(string, tags.Options) (template.HTML, error))
 	s, err := f("foo.png", tags.Options{"class": "foo"})

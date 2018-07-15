@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
 	"github.com/markbates/inflect"
@@ -42,6 +43,7 @@ func New(name string) (Generator, error) {
 		CIProvider: "none",
 		AsWeb:      true,
 		Docker:     "multi",
+		Version:    runtime.Version,
 	}
 	g.Name = inflect.Name(name)
 

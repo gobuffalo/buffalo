@@ -2,7 +2,7 @@ package soda
 
 import (
 	"github.com/gobuffalo/makr"
-	sg "github.com/gobuffalo/pop/soda/cmd/generate"
+	"github.com/gobuffalo/pop/soda/cmd/generate"
 )
 
 // Run the soda generator
@@ -34,7 +34,7 @@ func (sd Generator) Run(root string, data makr.Data) error {
 		Should: should,
 		Runner: func(rootPath string, data makr.Data) error {
 			data["dialect"] = sd.Dialect
-			return sg.GenerateConfig("./database.yml", data)
+			return generate.Config("./database.yml", data)
 		},
 	})
 
@@ -70,6 +70,7 @@ const nModelsTest = `package models_test
 import (
 	"testing"
 
+	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/suite"
 )
 
@@ -78,9 +79,17 @@ type ModelSuite struct {
 }
 
 func Test_ModelSuite(t *testing.T) {
-	as := &ModelSuite{suite.NewModel()}
+	model, err := suite.NewModelWithFixtures(packr.NewBox("../fixtures"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	as := &ModelSuite{
+		Model: model,
+	}
 	suite.Run(t, as)
-}`
+}
+`
 
 const nSeedGrift = `package grifts
 
