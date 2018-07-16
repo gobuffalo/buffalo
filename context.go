@@ -42,14 +42,16 @@ type ParamValues interface {
 }
 
 func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Request) Context {
-	ws := res.(*Response)
+	if ws, ok := res.(*Response); ok {
+		res = ws
+	}
 	params := req.URL.Query()
 	vars := mux.Vars(req)
 	for k, v := range vars {
 		params.Set(k, v)
 	}
 
-	session := a.getSession(req, ws)
+	session := a.getSession(req, res)
 
 	ct := httpx.ContentType(req)
 	contextData := map[string]interface{}{
@@ -70,7 +72,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	return &DefaultContext{
 		Context:     req.Context(),
 		contentType: ct,
-		response:    ws,
+		response:    res,
 		request:     req,
 		params:      params,
 		logger:      a.Logger,
