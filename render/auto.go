@@ -120,10 +120,10 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		}
 	}
 	if cp, ok := data["current_path"].(string); ok {
-		if strings.HasSuffix(cp, "/edit") {
+		if strings.HasSuffix(cp, "/edit/") {
 			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
 		}
-		if strings.HasSuffix(cp, "/new") {
+		if strings.HasSuffix(cp, "/new/") {
 			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
 
