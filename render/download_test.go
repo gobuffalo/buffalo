@@ -2,6 +2,8 @@ package render_test
 
 import (
 	"bytes"
+	"context"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -11,50 +13,78 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_DownloadWithWellKnownExtension(t *testing.T) {
-	assert := require.New(t)
-	data := []byte("data")
+var data = []byte("data")
 
-	type di func([]byte, string, http.ResponseWriter) render.Renderer
+func Test_Download_KnownExtension(t *testing.T) {
+	assert := require.New(t)
+
+	type di func(context.Context, string, io.Reader) render.Renderer
 	table := []di{
 		render.Download,
 		render.New(render.Options{}).Download,
 	}
 
 	for _, d := range table {
-		recorder := httptest.NewRecorder()
-		re := d(data, "filename.pdf", recorder)
+		ctx := testContext{rw: httptest.NewRecorder()}
+		re := d(ctx, "filename.pdf", bytes.NewReader(data))
 		bb := new(bytes.Buffer)
 		err := re.Render(bb, nil)
 
 		assert.NoError(err)
 		assert.Equal(data, bb.Bytes())
-		assert.Equal(strconv.Itoa(len(data)), recorder.Header().Get("Content-Length"))
-		assert.Equal("attachment; filename=filename.pdf", recorder.Header().Get("Content-Disposition"))
+		assert.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
+		assert.Equal("attachment; filename=filename.pdf", ctx.Response().Header().Get("Content-Disposition"))
 		assert.Equal("application/pdf", re.ContentType())
 	}
 }
 
-func Test_DownloadWithUnknownExtension(t *testing.T) {
+func Test_Download_UnknownExtension(t *testing.T) {
 	assert := require.New(t)
-	data := []byte("data")
 
-	type di func([]byte, string, http.ResponseWriter) render.Renderer
+	type di func(context.Context, string, io.Reader) render.Renderer
 	table := []di{
 		render.Download,
 		render.New(render.Options{}).Download,
 	}
 
 	for _, d := range table {
-		recorder := httptest.NewRecorder()
-		re := d(data, "filename", recorder)
+		ctx := testContext{rw: httptest.NewRecorder()}
+		re := d(ctx, "filename", bytes.NewReader(data))
 		bb := new(bytes.Buffer)
 		err := re.Render(bb, nil)
 
 		assert.NoError(err)
 		assert.Equal(data, bb.Bytes())
-		assert.Equal(strconv.Itoa(len(data)), recorder.Header().Get("Content-Length"))
-		assert.Equal("attachment; filename=filename", recorder.Header().Get("Content-Disposition"))
+		assert.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
+		assert.Equal("attachment; filename=filename", ctx.Response().Header().Get("Content-Disposition"))
 		assert.Equal("application/octet-stream", re.ContentType())
 	}
+}
+
+func Test_InvalidContext(t *testing.T) {
+	assert := require.New(t)
+
+	type di func(context.Context, string, io.Reader) render.Renderer
+	table := []di{
+		render.Download,
+		render.New(render.Options{}).Download,
+	}
+
+	for _, d := range table {
+		ctx := context.TODO()
+		re := d(ctx, "filename", bytes.NewReader(data))
+		bb := new(bytes.Buffer)
+		err := re.Render(bb, nil)
+
+		assert.Error(err)
+	}
+}
+
+type testContext struct {
+	context.Context
+	rw http.ResponseWriter
+}
+
+func (c testContext) Response() http.ResponseWriter {
+	return c.rw
 }

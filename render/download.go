@@ -1,22 +1,25 @@
 package render
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"mime"
 	"net/http"
 	"path/filepath"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 type downloadRenderer struct {
-	data     []byte
-	filename string
-	writer   http.ResponseWriter
+	ctx    context.Context
+	name   string
+	reader io.Reader
 }
 
 func (r downloadRenderer) ContentType() string {
-	ext := filepath.Ext(r.filename)
+	ext := filepath.Ext(r.name)
 	t := mime.TypeByExtension(ext)
 	if t == "" {
 		t = "application/octet-stream"
@@ -26,11 +29,23 @@ func (r downloadRenderer) ContentType() string {
 }
 
 func (r downloadRenderer) Render(w io.Writer, d Data) error {
-	r.writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", r.filename))
-	r.writer.Header().Add("Content-Length", strconv.Itoa(len(r.data)))
+	written, err := io.Copy(w, r.reader)
+	if err != nil {
+		return err
+	}
 
-	_, err := w.Write(r.data)
-	return err
+	ctx, ok := r.ctx.(responsible)
+	if !ok {
+		return errors.New("context has no response writer")
+	}
+
+	header := ctx.Response().Header()
+	disposition := fmt.Sprintf("attachment; filename=%s", r.name)
+	header.Add("Content-Disposition", disposition)
+	contentLength := strconv.Itoa(int(written))
+	header.Add("Content-Length", contentLength)
+
+	return nil
 }
 
 // Download renders a file attachment automatically setting following headers:
@@ -41,11 +56,11 @@ func (r downloadRenderer) Render(w io.Writer, d Data) error {
 //
 // Content-Type is set using mime#TypeByExtension with the filename's extension. Content-Type will default to
 // application/octet-stream if using a filename with an unknown extension.
-func Download(data []byte, filename string, writer http.ResponseWriter) Renderer {
+func Download(ctx context.Context, name string, r io.Reader) Renderer {
 	return downloadRenderer{
-		data:     data,
-		filename: filename,
-		writer:   writer,
+		ctx:    ctx,
+		name:   name,
+		reader: r,
 	}
 }
 
@@ -57,6 +72,10 @@ func Download(data []byte, filename string, writer http.ResponseWriter) Renderer
 //
 // Content-Type is set using mime#TypeByExtension with the filename's extension. Content-Type will default to
 // application/octet-stream if using a filename with an unknown extension.
-func (e *Engine) Download(data []byte, filename string, writer http.ResponseWriter) Renderer {
-	return Download(data, filename, writer)
+func (e *Engine) Download(ctx context.Context, name string, r io.Reader) Renderer {
+	return Download(ctx, name, r)
+}
+
+type responsible interface {
+	Response() http.ResponseWriter
 }
