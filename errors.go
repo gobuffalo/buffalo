@@ -58,12 +58,12 @@ func (a *App) PanicHandler(next Handler) Handler {
 			if r != nil { //catch
 				switch t := r.(type) {
 				case error:
-					err = errors.WithStack(t)
 				case string:
-					err = errors.WithStack(errors.New(t))
+					err = errors.New(t)
 				default:
 					err = errors.New(fmt.Sprint(t))
 				}
+				err = errors.WithStack(err)
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
