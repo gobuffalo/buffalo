@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
+	"github.com/gobuffalo/buffalo/generators/ci"
 	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
@@ -67,7 +68,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
-	a.setupCI(g, data)
+	if err := a.setupCI(g, data); err != nil {
+		return errors.WithStack(err)
+	}
 
 	if err := a.setupWebpack(root, data); err != nil {
 		return errors.WithStack(err)
@@ -172,26 +175,25 @@ func (a Generator) setupWebpack(root string, data makr.Data) error {
 	return nil
 }
 
-func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
-
-	switch a.CIProvider {
-	case "travis":
-		g.Add(makr.NewFile(".travis.yml", nTravis))
-	case "gitlab-ci":
-		if a.WithPop {
-			if a.DBType == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
-			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
-			} else {
-				data["testDbUrl"] = ""
-			}
-			g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCi))
-			break
-		}
-
-		g.Add(makr.NewFile(".gitlab-ci.yml", nGitlabCiNoPop))
+func (a Generator) setupCI(g *makr.Generator, data makr.Data) error {
+	if a.CIProvider == "none" {
+		return nil
 	}
+
+	cg := ci.New()
+	cg.App = a.App
+	cg.Provider = a.CIProvider
+	if a.WithPop {
+		cg.DBType = a.DBType
+	} else {
+		cg.DBType = "none"
+	}
+
+	if err := cg.Run(a.Root, data); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 func (a Generator) goGet() *exec.Cmd {
@@ -210,129 +212,6 @@ func (a Generator) goGet() *exec.Cmd {
 	appArgs = append(appArgs, "./...")
 	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
 }
-
-const nTravis = `language: go
-
-go:
-  - 1.8.x
-
-env:
-  - GO_ENV=test
-
-{{ if eq .opts.DBType "postgres" -}}
-services:
-  - postgresql
-{{- end }}
-
-before_script:
-{{- if eq .opts.DBType "postgres" }}
-  - psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
-{{- end }}
-  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
-
-go_import_path: {{.opts.PackagePkg}}
-
-install:
-  - go get github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
-  - go get $(go list ./... | grep -v /vendor/)
-{{- end }}
-
-script: buffalo test
-`
-
-const nGitlabCi = `before_script:
-{{- if eq .opts.DBType "postgres" }}
-	- apt-get update && apt-get install -y postgresql-client
-{{- else if eq .opts.DBType "mysql" }}
-  - apt-get update && apt-get install -y mysql-client
-{{- end }}
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
-  - go get -t -v ./...
-{{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
-
-stages:
-  - test
-
-.test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
-{{- if eq .opts.DBType "postgres" }}
-    POSTGRES_DB: "{{.opts.Name.File}}_test"
-{{- else if eq .opts.DBType "mysql" }}
-    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
-    MYSQL_ROOT_PASSWORD: "root"
-{{- end }}
-    TEST_DATABASE_URL: "{{.testDbUrl}}"
-
-# Golang version choice helper
-.use-golang-image: &use-golang-latest
-  image: golang:latest
-
-.use-golang-image: &use-golang-1-8
-  image: golang:1.8
-
-test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  services:
-{{- if eq .opts.DBType "mysql" }}
-    - mysql:5
-{{- else if eq .opts.DBType "postgres" }}
-    - postgres:latest
-{{- end }}
-  script:
-    - buffalo test
-`
-
-const nGitlabCiNoPop = `before_script:
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
-  - go get -t -v ./...
-{{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
-
-stages:
-  - test
-
-.test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
-
-# Golang version choice helper
-.use-golang-image: &use-golang-latest
-  image: golang:latest
-
-.use-golang-image: &use-golang-1-8
-  image: golang:1.8
-
-test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  script:
-    - buffalo test
-`
 
 const nVCSIgnore = `vendor/
 **/*.log
