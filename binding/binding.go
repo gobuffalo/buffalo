@@ -51,7 +51,7 @@ var timeFormats = []string{
 // RegisterTimeFormats allows to add custom time layouts that
 // the binder will be able to use for decoding.
 func RegisterTimeFormats(layouts ...string) {
-	timeFormats = append(timeFormats, layouts...)
+	timeFormats = append(layouts, timeFormats...)
 }
 
 // RegisterCustomDecorder allows to define custom type decoders.

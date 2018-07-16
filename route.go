@@ -12,6 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/markbates/inflect"
+	"github.com/pkg/errors"
 )
 
 // Routes returns a list of all of the routes defined
@@ -151,4 +152,14 @@ func (a RouteList) Less(i, j int) bool {
 	x := a[i].Path // + a[i].Method
 	y := a[j].Path // + a[j].Method
 	return x < y
+}
+
+// Lookup search a specific PathName in the RouteList and return the *RouteInfo
+func (a RouteList) Lookup(name string) (*RouteInfo, error) {
+	for _, ri := range a {
+		if ri.PathName == name {
+			return ri, nil
+		}
+	}
+	return nil, errors.New("path name not found")
 }
