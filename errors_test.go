@@ -11,18 +11,18 @@ import (
 func Test_PanicHandler(t *testing.T) {
 	app := New(Options{})
 	app.GET("/string", func(c Context) error {
-		panic("string boom!")
+		panic("string boom")
 	})
 	app.GET("/error", func(c Context) error {
-		panic(errors.New("error boom!"))
+		panic(errors.New("error boom"))
 	})
 
 	table := []struct {
 		path     string
 		expected string
 	}{
-		{"/string", "string boom!"},
-		{"/error", "error boom!"},
+		{"/string", "string boom"},
+		{"/error", "error boom"},
 	}
 
 	const stack = `github.com/gobuffalo/buffalo.(*App).PanicHandler`
