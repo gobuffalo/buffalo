@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"syscall"
 
@@ -102,6 +103,8 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.URL.Path = a.normalizePath(r.URL.Path)
+
 	var h http.Handler = a.router
 	if a.Env == "development" {
 		h = web.ErrorChecker(h)
@@ -134,4 +137,22 @@ func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) boo
 		}
 	}
 	return true
+}
+
+func (a *App) normalizePath(path string) string {
+	if filepath.Ext(path) != "" {
+		return path
+	}
+	if strings.HasSuffix(path, "/") {
+		return path
+	}
+	for _, p := range a.filepaths {
+		if p == "/" {
+			continue
+		}
+		if strings.HasPrefix(path, p) {
+			return path
+		}
+	}
+	return path + "/"
 }
