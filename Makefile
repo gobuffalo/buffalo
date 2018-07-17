@@ -23,3 +23,6 @@ test:
 ci-test:
 	$(GO_BIN) test -tags ${TAGS} -race -v ./...
 	docker build .
+
+lint:
+	gometalinter --vendor ./... --deadline=1m --skip=internal
