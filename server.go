@@ -18,7 +18,7 @@ import (
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve(srvs ...servers.Server) error {
-	a.Logger.Infof("Starting application at %s", a.Options.Host)
+	a.Logger.Infof("Starting application at %s", a.Options.Addr)
 
 	if len(srvs) == 0 {
 		if strings.HasPrefix(a.Options.Addr, "unix:") {
