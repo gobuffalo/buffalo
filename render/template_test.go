@@ -71,7 +71,7 @@ func Test_AssetPath(t *testing.T) {
 	}).Template
 
 	ioutil.WriteFile(filepath.Join(aDir, "manifest.json"), []byte(`{
-		"application.css": "application.aabbc123.css"
+		"application.css": "/assets/application.aabbc123.css"
 	}`), 0644)
 
 	for original, expected := range cases {

@@ -26,9 +26,9 @@ func assetPathFor(file string) string {
 	filePath := assetMap[file]
 	assetsMutex.RUnlock()
 	if filePath == "" {
-		filePath = file
+		filePath = filepath.Join("/assets", file)
 	}
-	return filepath.ToSlash(filepath.Join("/assets", filePath))
+	return filepath.ToSlash(filePath)
 }
 
 type helperTag struct {

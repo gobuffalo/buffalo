@@ -73,11 +73,12 @@ const configurator = {
 
   buildConfig: function(){
     const env = process.env.NODE_ENV || "development";
-
+    const ASSET_PATH = process.env.ASSET_PATH || "/assets/";
+    
     var config = {
       mode: env,
       entry: configurator.entries(),
-      output: {filename: "[name].[hash].js", path: `${__dirname}/public/assets`},
+      output: {filename: "[name].[hash].js", path: `${__dirname}/public/assets`, publicPath: ASSET_PATH},
       plugins: configurator.plugins(),
       module: configurator.moduleOptions(),
       resolve: {
