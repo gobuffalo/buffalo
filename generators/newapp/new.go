@@ -132,6 +132,8 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
+	o.DBType = a.DBType
+	o.DockerCompose = a.DockerCompose
 	data["version"] = runtime.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)

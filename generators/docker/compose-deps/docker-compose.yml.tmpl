@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+  {{- if eq .opts.DBType "mysql" }}
+      image: mysql:5.7
+      environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=app_development
+  {{- end }}
+  {{- if eq .opts.DBType "postgres" }}
+      image: postgres:9.6-alpine
+      environment:
+        - POSTGRES_USER=app
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=app_development
+  {{- end }}
+  {{- if eq .opts.DBType "cockroach" }}
+      image: cockroachdb/cockroach:v2.0.4
+      ports:
+        - "26257:26257"
+        - "8080:8080"
+      volumes:
+        - "./cockroach-data/roach1:/cockroach/cockroach-data"
+      command: start --insecure
+  {{- end }}

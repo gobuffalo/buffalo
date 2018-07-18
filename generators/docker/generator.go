@@ -7,10 +7,12 @@ import (
 
 // Generator for generating a new docker file
 type Generator struct {
-	App     meta.App `json:"app"`
-	Version string   `json:"version"`
-	Style   string   `json:"style"`
-	AsWeb   bool     `json:"as_web"`
+	App           meta.App `json:"app"`
+	Version       string   `json:"version"`
+	Style         string   `json:"style"`
+	AsWeb         bool     `json:"as_web"`
+	DBType        string   `json:"db_type"`
+	DockerCompose string   `json:"docker_compose"`
 }
 
 // New returns a well formed set of options for generating a docker file
@@ -19,6 +21,7 @@ func New() Generator {
 		App:     meta.New("."),
 		Version: runtime.Version,
 		Style:   "multi",
+		DBType:  "postgres",
 	}
 	o.AsWeb = o.App.WithWebpack
 
