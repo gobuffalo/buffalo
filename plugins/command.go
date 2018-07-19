@@ -1,18 +1,9 @@
 package plugins
 
-// Command that the plugin supplies
-type Command struct {
-	// Name "foo"
-	Name string `json:"name"`
-	// UseCommand "bar"
-	UseCommand string `json:"use_command"`
-	// BuffaloCommand "generate"
-	BuffaloCommand string `json:"buffalo_command"`
-	// Description "generates a foo"
-	Description string   `json:"description"`
-	Aliases     []string `json:"aliases"`
-	Binary      string   `json:"-"`
-}
+import "github.com/gobuffalo/buffalo-plugins/plugins"
 
-// Commands is a slice of Command
-type Commands []Command
+// Command is deprecated and moved to github.com/gobuffalo/buffalo-plugins/plugins
+type Command = plugins.Command
+
+// Commands is deprecated and moved to github.com/gobuffalo/buffalo-plugins/plugins
+type Commands = plugins.Commands

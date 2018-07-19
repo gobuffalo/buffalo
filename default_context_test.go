@@ -45,7 +45,7 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 		S int
 	}{
 		{
-			E: "/foo/baz",
+			E: "/foo/baz/",
 			I: map[string]interface{}{"bar": "baz"},
 			S: 302,
 		},

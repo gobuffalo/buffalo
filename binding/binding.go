@@ -30,7 +30,7 @@ var timeFormats = []string{
 	"2006-01-02T15:04:05Z07:00",
 	"01/02/2006",
 	"2006-01-02",
-	"2006-01-02T03:04",
+	"2006-01-02T15:04",
 	time.ANSIC,
 	time.UnixDate,
 	time.RubyDate,
@@ -51,7 +51,7 @@ var timeFormats = []string{
 // RegisterTimeFormats allows to add custom time layouts that
 // the binder will be able to use for decoding.
 func RegisterTimeFormats(layouts ...string) {
-	timeFormats = append(timeFormats, layouts...)
+	timeFormats = append(layouts, timeFormats...)
 }
 
 // RegisterCustomDecorder allows to define custom type decoders.
