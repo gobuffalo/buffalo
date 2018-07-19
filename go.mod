@@ -1,40 +1,59 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	dmitri.shuralyov.com/text/kebabcase v0.0.0-20180217051803-40e40b42552a
+	github.com/ajg/form v0.0.0-20160802194845-cc2954064ec9
+	github.com/cockroachdb/cockroach-go v0.0.0-20180212155653-59c0560478b7
+	github.com/davecgh/go-spew v1.1.0
 	github.com/dgrijalva/jwt-go v0.0.0-20180308231308-06ea1031745c
-	github.com/dustin/go-humanize v0.0.0-20180421182945-02af3965c54e
+	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
 	github.com/fatih/structs v1.0.0
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-sql-driver/mysql v1.4.0
-	github.com/gobuffalo/envy v1.6.2
+	github.com/gobuffalo/envy v1.6.3
+	github.com/gobuffalo/fizz v1.0.2
+	github.com/gobuffalo/makr v1.1.0
 	github.com/gobuffalo/packr v1.11.1
-	github.com/gobuffalo/plush v1.0.0
-	github.com/gobuffalo/pop v0.0.0-20180524161724-d5d017d59cf2
-	github.com/gobuffalo/tags v1.9.6
-	github.com/gobuffalo/validate v1.0.0
+	github.com/gobuffalo/plush v0.0.0-20180619220412-2ec029f415ed
+	github.com/gobuffalo/pop v0.0.0-20180710054625-9936c00d4230
+	github.com/gobuffalo/tags v0.0.0-20180702174034-96c7cdfcadcb
+	github.com/gobuffalo/uuid v0.0.0-20180207211247-3a9fb6c5c481
+	github.com/gobuffalo/validate v0.0.0-20180210182920-42d8db6e06e6
 	github.com/gobuffalo/x v0.0.0-20180117215853-11ca13c05abd
+	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
+	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.1.1
-	github.com/gorilla/websocket v1.2.0
-	github.com/jmoiron/sqlx v0.0.0-20180406164412-2aeb6a910c2b
+	github.com/inconshreveable/mousetrap v1.0.0
+	github.com/jmoiron/sqlx v0.0.0-20180614180643-0dae4fefe7c0
+	github.com/joho/godotenv v1.2.0
 	github.com/lib/pq v0.0.0-20180523175426-90697d60dd84
-	github.com/markbates/deplist v0.0.0-20170926152145-5ae023fef618
-	github.com/markbates/grift v0.0.0-20180319170132-76f93617a788
-	github.com/markbates/inflect v0.0.0-20180514174915-dd7de90c06bc
+	github.com/markbates/deplist v1.0.0
+	github.com/markbates/going v1.0.0
+	github.com/markbates/grift v1.0.0
+	github.com/markbates/hmax v1.0.0
+	github.com/markbates/inflect v1.0.0
 	github.com/markbates/refresh v1.4.0
 	github.com/markbates/sigtx v1.0.0
-	github.com/markbates/validate v1.0.0
-	github.com/mattn/go-sqlite3 v1.7.0
-	github.com/microcosm-cc/bluemonday v0.0.0-20180327211928-995366fdf961
+	github.com/markbates/willie v1.0.1
+	github.com/mattn/go-colorable v0.0.9
+	github.com/mattn/go-isatty v0.0.3
+	github.com/mattn/go-sqlite3 v1.9.0
+	github.com/microcosm-cc/bluemonday v1.0.0
 	github.com/mitchellh/go-homedir v0.0.0-20180523094522-3864e76763d9
-	github.com/monoculum/formam v0.0.0-20170814190438-f25191ae7744
+	github.com/monoculum/formam v0.0.0-20170619223434-99ca9dcbaca6
 	github.com/nicksnyder/go-i18n v1.10.0
 	github.com/pelletier/go-toml v1.2.0
-	github.com/russross/blackfriday v1.5.1
-	github.com/satori/go.uuid v1.2.0
+	github.com/pkg/errors v0.8.0
+	github.com/pmezard/go-difflib v1.0.0
+	github.com/russross/blackfriday v0.0.0-20180428102519-11635eb403ff
+	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
 	github.com/sergi/go-diff v1.0.0
 	github.com/shurcooL/github_flavored_markdown v0.0.0-20180602233135-8913699a52e3
+	github.com/shurcooL/go v0.0.0-20180423040247-9e1955d9fb6e
+	github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041
+	github.com/shurcooL/graphql v0.0.0-20180514000029-62c9ce094e75
 	github.com/shurcooL/highlight_diff v0.0.0-20170515013008-09bb4053de1b
 	github.com/shurcooL/highlight_go v0.0.0-20170515013102-78fb10f4a5f8
 	github.com/shurcooL/octicon v0.0.0-20180602230221-c42b0e3b24d9
@@ -44,14 +63,14 @@ require (
 	github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.1
-	github.com/stretchr/objx v0.1.1
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20180416205222-a1cf62cc2159
-	golang.org/x/crypto v0.0.0-20180608092829-8ac0e0d97ce4
-	golang.org/x/net v0.0.0-20180530234432-1e491301e022
+	github.com/unrolled/secure v0.0.0-20180618144512-8287f3899c8e
+	golang.org/x/crypto v0.0.0-20180718160520-a2144134853f
+	golang.org/x/net v0.0.0-20180719001425-81d44fd177a9
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20180610122900-7c1e4f34a39c
-	gopkg.in/check.v1 v1.0.0-20161208181325-20d25e280405
-	gopkg.in/mail.v2 v2.0.0-20180609202316-c55e3fbae0e2
+	golang.org/x/sys v0.0.0-20180715085529-ac767d655b30
+	google.golang.org/appengine v1.1.0
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
+	gopkg.in/mail.v2 v2.0.0-20180301192024-63235f23494b
 	gopkg.in/yaml.v2 v2.2.1
 )
