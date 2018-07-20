@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
@@ -131,7 +129,7 @@ func optionsWithDefaults(opts Options) Options {
 			if opts.Env == "development" || opts.Env == "test" {
 				secret = "buffalo-secret"
 			} else {
-				logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+				opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 			}
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
