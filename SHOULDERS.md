@@ -8,8 +8,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
 
-* [github.com/dgrijalva/jwt-go](https://godoc.org/github.com/dgrijalva/jwt-go)
-
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
@@ -27,6 +25,10 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
 * [github.com/gobuffalo/envy/vendor/github.com/joho/godotenv](https://godoc.org/github.com/gobuffalo/envy/vendor/github.com/joho/godotenv)
+
+* [github.com/gobuffalo/fizz](https://godoc.org/github.com/gobuffalo/fizz)
+
+* [github.com/gobuffalo/fizz/translators](https://godoc.org/github.com/gobuffalo/fizz/translators)
 
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
@@ -50,9 +52,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/pop/columns](https://godoc.org/github.com/gobuffalo/pop/columns)
 
-* [github.com/gobuffalo/pop/fizz](https://godoc.org/github.com/gobuffalo/pop/fizz)
-
-* [github.com/gobuffalo/pop/fizz/translators](https://godoc.org/github.com/gobuffalo/pop/fizz/translators)
+* [github.com/gobuffalo/pop/fix](https://godoc.org/github.com/gobuffalo/pop/fix)
 
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
 
@@ -112,31 +112,11 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
-* [github.com/mattn/anko/ast](https://godoc.org/github.com/mattn/anko/ast)
-
-* [github.com/mattn/anko/core](https://godoc.org/github.com/mattn/anko/core)
-
-* [github.com/mattn/anko/internal/corelib](https://godoc.org/github.com/mattn/anko/internal/corelib)
-
-* [github.com/mattn/anko/parser](https://godoc.org/github.com/mattn/anko/parser)
-
-* [github.com/mattn/anko/vm](https://godoc.org/github.com/mattn/anko/vm)
-
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
-
-* [github.com/nicksnyder/go-i18n/i18n](https://godoc.org/github.com/nicksnyder/go-i18n/i18n)
-
-* [github.com/nicksnyder/go-i18n/i18n/bundle](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/bundle)
-
-* [github.com/nicksnyder/go-i18n/i18n/language](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/language)
-
-* [github.com/nicksnyder/go-i18n/i18n/translation](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/translation)
-
-* [github.com/pelletier/go-toml](https://godoc.org/github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
