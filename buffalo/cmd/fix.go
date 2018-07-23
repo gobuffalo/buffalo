@@ -8,10 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// updateCmd represents the info command
-var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: fmt.Sprintf("will attempt to upgrade a Buffalo application to version %s", runtime.Version),
+// fixCmd represents the info command
+var fixCmd = &cobra.Command{
+	Use:     "fix",
+	Aliases: []string{"update"},
+	Short:   fmt.Sprintf("will attempt to fix a Buffalo application's API to match version %s", runtime.Version),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return updater.Run()
 	},
@@ -19,5 +20,5 @@ var updateCmd = &cobra.Command{
 
 func init() {
 	decorate("update", RootCmd)
-	RootCmd.AddCommand(updateCmd)
+	RootCmd.AddCommand(fixCmd)
 }
