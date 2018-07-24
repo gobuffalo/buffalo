@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/gobuffalo/buffalo/plugins"
+	"github.com/gobuffalo/buffalo-plugins/plugins"
 	"github.com/gobuffalo/envy"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

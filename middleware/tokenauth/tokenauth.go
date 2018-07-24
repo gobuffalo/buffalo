@@ -1,6 +1,42 @@
 // Package tokenauth provides jwt token authorisation middleware
 // supports HMAC, RSA, ECDSA, RSAPSS algorithms
 // uses github.com/dgrijalva/jwt-go for jwt implementation
+//
+// Setting Up tokenauth middleware
+//
+// Using tokenauth with defaults
+//  app.Use(tokenauth.New(tokenauth.Options{}))
+// Specifying Signing method for JWT
+//  app.Use(tokenauth.New(tokenauth.Options{
+//      SignMethod: jwt.SigningMethodRS256,
+//  }))
+// By default the Key used is loaded from the JWT_SECRET or JWT_PUBLIC_KEY env variable depending
+// on the SigningMethod used. However you can retrive the key from a different source.
+//  app.Use(tokenauth.New(tokenauth.Options{
+//      GetKey: func(jwt.SigningMethod) (interface{}, error) {
+//           // Your Implementation here ...
+//      },
+//  }))
+//
+//
+// Creating a new token
+//
+// This can be referred from the underlying JWT package being used https://github.com/dgrijalva/jwt-go
+//
+// Example
+//  claims := jwt.MapClaims{}
+//  claims["userid"] = "123"
+//  claims["exp"] = time.Now().Add(time.Minute * 5).Unix()
+//  // add more claims
+//  token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+//  tokenString, err := token.SignedString([]byte(SecretKey))
+//
+//
+// Getting Claims from JWT token from buffalo context
+//
+// Example of retriving username from claims (this step is same regardless of the signing method used)
+//  claims := c.Value("claims").(jwt.MapClaims)
+//  username := claims["username"].(string)
 package tokenauth
 
 import (

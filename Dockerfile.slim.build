@@ -1,14 +1,10 @@
-FROM golang:latest
+FROM golang:alpine
 EXPOSE 3000
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
-RUN go version && go get -v -u github.com/markbates/deplist/deplist
+RUN apk add --no-cache --upgrade apk-tools \
+&& apk add --no-cache bash curl openssl git build-base yarn nodejs postgresql libpq postgresql-contrib sqlite sqlite-dev mysql-client vim
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash \
-&& sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
-&& wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add - \
-&& apt-get update \
-&& apt-get install -y -q build-essential nodejs sqlite3 libsqlite3-dev postgresql postgresql-contrib libpq-dev mysql-client vim \
-&& rm -rf /var/lib/apt/lists/*
+RUN go version && go get -v -u github.com/markbates/deplist/deplist
 
 
 RUN go get -u github.com/golang/dep/cmd/dep \
