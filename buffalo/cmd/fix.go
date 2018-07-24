@@ -19,6 +19,7 @@ var fixCmd = &cobra.Command{
 }
 
 func init() {
+	decorate("fix", RootCmd)
 	decorate("update", RootCmd)
 	RootCmd.AddCommand(fixCmd)
 }
