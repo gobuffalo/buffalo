@@ -66,9 +66,20 @@ var testCmd = &cobra.Command{
 			}
 
 			if schema := findSchema(); schema != nil {
-				err = test.Dialect.LoadSchema(schema)
-				if err != nil {
+				if err = test.Dialect.LoadSchema(schema); err != nil {
 					return errors.WithStack(err)
+				}
+			} else {
+
+				if test, err := pop.Connect("test"); err == nil {
+					fm, err := pop.NewFileMigrator("./migrations", test)
+					if err != nil {
+						return nil
+					}
+
+					if err := fm.Up(); err != nil {
+						return errors.WithStack(err)
+					}
 				}
 			}
 		}
@@ -84,19 +95,6 @@ func findSchema() io.Reader {
 		schema := &bytes.Buffer{}
 		if err = dev.Dialect.DumpSchema(schema); err == nil {
 			return schema
-		}
-	}
-
-	if test, err := pop.Connect("test"); err == nil {
-		fm, err := pop.NewFileMigrator("./migrations", test)
-		if err != nil {
-			return nil
-		}
-
-		if err := fm.Up(); err == nil {
-			if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
-				return f
-			}
 		}
 	}
 	return nil
@@ -212,7 +210,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 }
 
 func newTestCmd(args []string) *exec.Cmd {
-	cargs := []string{"test", "-p", "1"}
+	cargs := []string{"test", "-p", "1", "-vet", "off"}
 	app := meta.New(".")
 	cargs = append(cargs, "-tags", app.BuildTags("development").String())
 	cargs = append(cargs, args...)
