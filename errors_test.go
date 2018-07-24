@@ -8,6 +8,20 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.GET("/", func(c Context) error {
+		return c.Error(401, errors.New("boom"))
+	})
+
+	w := willie.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(401, res.Code)
+	ct := res.Header().Get("content-type")
+	r.Equal("text/html", ct)
+}
+
 func Test_PanicHandler(t *testing.T) {
 	app := New(Options{})
 	app.GET("/string", func(c Context) error {
