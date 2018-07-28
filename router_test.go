@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"path"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -26,7 +27,9 @@ func testApp() *App {
 	rt := a.Group("/router/tests")
 
 	h := func(c Context) error {
-		return c.Render(200, render.String(c.Request().Method+"|"+c.Value("current_path").(string)))
+		x := c.Request().Method + "|"
+		x += strings.TrimSuffix(c.Value("current_path").(string), "/")
+		return c.Render(200, render.String(x))
 	}
 
 	rt.GET("/", h)
@@ -85,7 +88,7 @@ func Test_Mount_Buffalo(t *testing.T) {
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
 
@@ -110,7 +113,7 @@ func Test_Mount_Buffalo_on_Group(t *testing.T) {
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
 
@@ -119,9 +122,9 @@ func muxer() http.Handler {
 		fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
 	}
 	mux := mux.NewRouter()
-	mux.HandleFunc("/foo", f).Methods("GET")
-	mux.HandleFunc("/bar", f).Methods("POST")
-	mux.HandleFunc("/baz/baz", f).Methods("DELETE")
+	mux.HandleFunc("/foo/", f).Methods("GET")
+	mux.HandleFunc("/bar/", f).Methods("POST")
+	mux.HandleFunc("/baz/baz/", f).Methods("DELETE")
 	return mux
 }
 
@@ -145,7 +148,7 @@ func Test_Mount_Handler(t *testing.T) {
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
 		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal(fmt.Sprintf("%s - %s", m, u), string(b))
+		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
 
@@ -175,7 +178,7 @@ func Test_PreHandlers(t *testing.T) {
 		Result string
 	}{
 		{Code: 418, Method: "GET", Result: "boo"},
-		{Code: 200, Method: "POST", Result: "POST-/ph"},
+		{Code: 200, Method: "POST", Result: "POST-/ph/"},
 	}
 
 	for _, v := range table {
@@ -220,7 +223,7 @@ func Test_PreWares(t *testing.T) {
 		Result string
 	}{
 		{Code: 418, Method: "GET", Result: "boo"},
-		{Code: 200, Method: "POST", Result: "POST-/ph"},
+		{Code: 200, Method: "POST", Result: "POST-/ph/"},
 	}
 
 	for _, v := range table {
@@ -394,7 +397,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "5. /car/1")
 	r.Contains(res.Body.String(), "6. /car/new")
 	r.Contains(res.Body.String(), "7. /car/1/edit")
-	r.Contains(res.Body.String(), "8. /car/1/edit?other=12")
+	r.Contains(res.Body.String(), "8. /car/1/edit/?other=12")
 	r.Contains(res.Body.String(), "9. /?other=12&some=variable")
 	r.Contains(res.Body.String(), "10. /")
 	r.Contains(res.Body.String(), "11. /?special%2F=12%3Dss")
@@ -515,7 +518,7 @@ func Test_Resource_ParamKey(t *testing.T) {
 	for _, rr := range rt {
 		paths = append(paths, rr.Path)
 	}
-	r.Contains(paths, "/foo/{bazKey}/edit")
+	r.Contains(paths, "/foo/{bazKey}/edit/")
 }
 
 type userResource struct{}
@@ -666,22 +669,45 @@ func Test_CatchAll_Route(t *testing.T) {
 }
 
 func Test_Router_Matches_Trailing_Slash(t *testing.T) {
-	r := require.New(t)
-
-	table := []string{
-		"/bar",
-		"/bar/",
+	table := []struct {
+		mapped   string
+		browser  string
+		expected string
+	}{
+		{"/foo", "/foo", "/foo/"},
+		{"/foo", "/foo/", "/foo/"},
+		{"/foo/", "/foo", "/foo/"},
+		{"/foo/", "/foo/", "/foo/"},
+		{"/index.html", "/index.html", "/index.html"},
+		{"/foo.gif", "/foo.gif", "/foo.gif"},
 	}
 
-	ts := httptest.NewServer(testApp())
-	defer ts.Close()
+	for _, tt := range table {
+		t.Run(tt.mapped+"|"+tt.browser, func(st *testing.T) {
+			r := require.New(st)
 
-	for _, v := range table {
-		req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", ts.URL, v), nil)
-		r.NoError(err)
-		res, err := http.DefaultClient.Do(req)
-		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
-		r.Equal("bar", string(b))
+			app := New(Options{
+				PreWares: []PreWare{
+					func(h http.Handler) http.Handler {
+						var f http.HandlerFunc = func(res http.ResponseWriter, req *http.Request) {
+							path := req.URL.Path
+							req.URL.Path = strings.TrimSuffix(path, "/")
+							r.False(strings.HasSuffix(req.URL.Path, "/"))
+							h.ServeHTTP(res, req)
+						}
+						return f
+					},
+				},
+			})
+			app.GET(tt.mapped, func(c Context) error {
+				return c.Render(200, render.String(c.Request().URL.Path))
+			})
+
+			w := willie.New(app)
+			res := w.Request(tt.browser).Get()
+
+			r.Equal(200, res.Code)
+			r.Equal(tt.expected, res.Body.String())
+		})
 	}
 }

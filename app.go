@@ -22,6 +22,7 @@ type App struct {
 	routes        RouteList
 	root          *App
 	children      []*App
+	filepaths     []string
 }
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
@@ -36,7 +37,7 @@ func New(opts Options) *App {
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
 		},
-		router:   mux.NewRouter().StrictSlash(!opts.LooseSlash),
+		router:   mux.NewRouter(),
 		moot:     &sync.Mutex{},
 		routes:   RouteList{},
 		children: []*App{},

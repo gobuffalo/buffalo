@@ -9,6 +9,7 @@ import (
 
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/x/httpx"
+	"github.com/markbates/going/defaults"
 	"github.com/pkg/errors"
 )
 
@@ -58,12 +59,13 @@ func (a *App) PanicHandler(next Handler) Handler {
 			if r != nil { //catch
 				switch t := r.(type) {
 				case error:
-					err = errors.WithStack(t)
+					err = t
 				case string:
-					err = errors.WithStack(errors.New(t))
+					err = errors.New(t)
 				default:
 					err = errors.New(fmt.Sprint(t))
 				}
+				err = errors.WithStack(err)
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
@@ -82,6 +84,8 @@ func productionErrorResponseFor(status int) []byte {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
+	ct := defaults.String(httpx.ContentType(c.Request()), "text/html")
+	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
@@ -93,7 +97,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	}
 
 	msg := fmt.Sprintf("%+v", origErr)
-	ct := httpx.ContentType(c.Request())
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
 		err := json.NewEncoder(c.Response()).Encode(map[string]interface{}{
