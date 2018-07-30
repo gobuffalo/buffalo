@@ -78,6 +78,13 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		}(s)
 	}
 
+	// Run post initializers
+	for _, f := range a.PostInitializers {
+		if err := f(a); err != nil {
+			a.Stop(err)
+		}
+	}
+
 	<-ctx.Done()
 	return a.Context.Err()
 }
