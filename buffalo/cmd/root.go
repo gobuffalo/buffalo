@@ -8,8 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// var cfgFile string
-
 var anywhereCommands = []string{"new", "version", "info", "help"}
 
 // RootCmd is the hook for all of the other commands in the buffalo binary.
@@ -57,23 +55,3 @@ func insideBuffaloProject() bool {
 
 	return true
 }
-
-// func init() {
-// cobra.OnInitialize(initConfig)
-// RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.buffalo.yaml)")
-// }
-
-// func initConfig() {
-// 	if cfgFile != "" { // enable ability to specify config file via flag
-// 		viper.SetConfigFile(cfgFile)
-// 	}
-//
-// 	viper.SetConfigName(".buffalo") // name of config file (without extension)
-// 	viper.AddConfigPath("$HOME")    // adding home directory as first search path
-// 	viper.AutomaticEnv()            // read in environment variables that match
-//
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-// 	}
-// }

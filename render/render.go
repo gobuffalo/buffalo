@@ -28,6 +28,9 @@ func New(opts Options) *Engine {
 	if _, ok := opts.TemplateEngines["text"]; !ok {
 		opts.TemplateEngines["text"] = plush.BuffaloRenderer
 	}
+	if _, ok := opts.TemplateEngines["txt"]; !ok {
+		opts.TemplateEngines["txt"] = plush.BuffaloRenderer
+	}
 	if _, ok := opts.TemplateEngines["js"]; !ok {
 		opts.TemplateEngines["js"] = JSTemplateEngine
 	}

@@ -45,7 +45,7 @@ func Test_Auto_XML(t *testing.T) {
 	w := willie.New(app)
 
 	res := w.XML("/cars").Get()
-	r.Equal("<string>Honda</string>\n<string>Toyota</string>\n<string>Ford</string>\n<string>Chevy</string>", strings.TrimSpace(res.Body.String()))
+	r.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<string>Honda</string>\n<string>Toyota</string>\n<string>Ford</string>\n<string>Chevy</string>", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_Auto_HTML_List(t *testing.T) {
