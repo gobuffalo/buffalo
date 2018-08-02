@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/json"
+	"fmt"
 	"mime/multipart"
 	"net/url"
 	"strings"
@@ -142,6 +143,9 @@ func (pl parameterLogger) maskSecrets(form url.Values) url.Values {
 
 		}
 	}
+
+	fmt.Println(copy)
+	fmt.Println(pl.blacklist)
 
 	return copy
 }

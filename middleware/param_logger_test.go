@@ -36,11 +36,11 @@ func Test_maskSecrets(t *testing.T) {
 
 func Test_maskSecretsCustom(t *testing.T) {
 	r := require.New(t)
-	ParameterFilterBlackList = []string{
-		"FirstName", "LastName", "MiddleName",
+	pl := parameterLogger{
+		blacklist: []string{
+			"FirstName", "LastName", "MiddleName",
+		},
 	}
-
-	pl := parameterLogger{}
 
 	filteredForm := pl.maskSecrets(url.Values{
 		"FirstName":            []string{"Antonio"},
