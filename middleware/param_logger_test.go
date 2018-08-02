@@ -116,6 +116,7 @@ func Test_Logger(t *testing.T) {
 		"CVC":      []string{"123"},
 	})
 
-	r.Equal(lastEntry.Data["form"], "{\"CVC\":[\"[FILTERED]\"],\"Name\":[\"Antonio\"],\"Password\":[\"[FILTERED]\"]")
-
+	r.Contains(lastEntry.Data["form"], "\"CVC\":[\"[FILTERED]\"]")
+	r.Contains(lastEntry.Data["form"], "\"Name\":[\"Antonio\"]")
+	r.Contains(lastEntry.Data["form"], "\"Password\":[\"[FILTERED]\"]")
 }
