@@ -6,24 +6,6 @@ import (
 	"github.com/gobuffalo/mw-csrf"
 )
 
-const (
-	// CSRF token length in bytes.
-	tokenLength int    = 32
-	tokenKey    string = "authenticity_token"
-)
-
-var (
-	// The name value used in form fields.
-	fieldName = tokenKey
-
-	// The HTTP request header to inspect
-	headerName = "X-CSRF-Token"
-
-	// Idempotent (safe) methods as defined by RFC7231 section 4.2.2.
-	safeMethods = []string{"GET", "HEAD", "OPTIONS", "TRACE"}
-	htmlTypes   = []string{"html", "form", "plain", "*/*"}
-)
-
 var (
 	// ErrNoReferer is returned when a HTTPS request provides an empty Referer
 	// header.
