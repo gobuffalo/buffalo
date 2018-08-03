@@ -13,7 +13,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo/middleware/tokenauth"
+	"github.com/gobuffalo/mw-tokenauth"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
