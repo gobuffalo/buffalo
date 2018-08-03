@@ -29,6 +29,6 @@ func Test_XML(t *testing.T) {
 		bb := &bytes.Buffer{}
 		err := re.Render(bb, nil)
 		r.NoError(err)
-		r.Equal("<user>\n  <Name>mark</Name>\n</user>", strings.TrimSpace(bb.String()))
+		r.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<user>\n  <Name>mark</Name>\n</user>", strings.TrimSpace(bb.String()))
 	}
 }

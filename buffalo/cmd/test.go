@@ -25,14 +25,12 @@ var forceMigrations = false
 
 func init() {
 	decorate("test", testCmd)
-	testCmd.Flags().BoolVarP(&forceMigrations, "force-migrations", "m", false, "skips loading the schema and instead runs migrations before running tests")
-
 	RootCmd.AddCommand(testCmd)
 }
 
 var testCmd = &cobra.Command{
 	Use:                "test",
-	Short:              "Runs the tests for your Buffalo app",
+	Short:              "Runs the tests for your Buffalo app. Use --force-migrations if you want to skip schema load.",
 	DisableFlagParsing: true,
 	RunE: func(c *cobra.Command, args []string) error {
 		os.Setenv("GO_ENV", "test")
@@ -52,6 +50,7 @@ var testCmd = &cobra.Command{
 				return errors.WithStack(err)
 			}
 
+			forceMigrations = strings.Contains(strings.Join(args, ""), "--force-migrations")
 			if forceMigrations {
 				fm, err := pop.NewFileMigrator("./migrations", test)
 
@@ -108,6 +107,7 @@ func testRunner(args []string) error {
 	var query string
 	cargs := []string{}
 	pargs := []string{}
+
 	var larg string
 	for i, a := range args {
 		switch a {
