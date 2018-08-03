@@ -40,6 +40,7 @@
 package tokenauth
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -63,6 +64,8 @@ var (
 )
 
 // Options for the JWT middleware
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#Options instead.
 type Options struct {
 	SignMethod jwt.SigningMethod
 	GetKey     func(jwt.SigningMethod) (interface{}, error)
@@ -70,7 +73,10 @@ type Options struct {
 
 // New enables jwt token verification if no Sign method is provided,
 // by default uses HMAC
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#New instead.
 func New(options Options) buffalo.MiddlewareFunc {
+	fmt.Printf("tokenauth.New is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth#New instead.")
 	// set sign method to HMAC if not provided
 	if options.SignMethod == nil {
 		options.SignMethod = jwt.SigningMethodHS256
@@ -135,13 +141,19 @@ func selectGetKeyFunc(method jwt.SigningMethod) func(jwt.SigningMethod) (interfa
 }
 
 // GetHMACKey gets secret key from env
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#GetHMACKey instead.
 func GetHMACKey(jwt.SigningMethod) (interface{}, error) {
+	fmt.Printf("tokenauth.GetHMACKey is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth#GetHMACKey instead.")
 	key, err := envy.MustGet("JWT_SECRET")
 	return []byte(key), err
 }
 
 // GetKeyRSA gets the public key file location from env and returns rsa.PublicKey
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#GetKeyRSA instead.
 func GetKeyRSA(jwt.SigningMethod) (interface{}, error) {
+	fmt.Printf("tokenauth.GetKeyRSA is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth#GetKeyRSA instead.")
 	key, err := envy.MustGet("JWT_PUBLIC_KEY")
 	if err != nil {
 		return nil, err
@@ -154,12 +166,18 @@ func GetKeyRSA(jwt.SigningMethod) (interface{}, error) {
 }
 
 // GetKeyRSAPSS uses GetKeyRSA() since both requires rsa.PublicKey
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#GetKeyRSAPSS instead.
 func GetKeyRSAPSS(signingMethod jwt.SigningMethod) (interface{}, error) {
+	fmt.Printf("tokenauth.GetKeyRSAPSS is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth#GetKeyRSAPSS instead.")
 	return GetKeyRSA(signingMethod)
 }
 
 // GetKeyECDSA gets the public.pem file location from env and returns ecdsa.PublicKey
+//
+// Deprecated: use github.com/gobuffalo/mw-tokenauth#GetKeyECDSA instead.
 func GetKeyECDSA(jwt.SigningMethod) (interface{}, error) {
+	fmt.Printf("tokenauth.GetKeyECDSA is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth#GetKeyECDSA instead.")
 	key, err := envy.MustGet("JWT_PUBLIC_KEY")
 	if err != nil {
 		return nil, err

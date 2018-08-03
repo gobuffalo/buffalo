@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"encoding/json"
+	"fmt"
 	"mime/multipart"
 	"net/url"
 	"strings"
@@ -10,9 +11,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-//ParameterFilterBlackList is the list of parameter names that will be filtered
-//from the application logs (see maskSecrets).
-//Important: this list will be used in case insensitive.
+// ParameterFilterBlackList is the list of parameter names that will be filtered
+// from the application logs (see maskSecrets).
+// Important: this list will be used in case insensitive.
 var ParameterFilterBlackList = []string{
 	"Password",
 	"PasswordConfirmation",
@@ -28,7 +29,10 @@ type parameterLogger struct {
 }
 
 // ParameterLogger logs form and parameter values to the loggers
+//
+// Deprecated: use github.com/gobuffalo/mw-paramlogger#ParameterLogger instead.
 func ParameterLogger(next buffalo.Handler) buffalo.Handler {
+	fmt.Printf("ParameterLogger is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-paramlogger#ParameterLogger instead.")
 	pl := parameterLogger{
 		blacklist: ParameterFilterBlackList,
 	}
@@ -54,9 +58,12 @@ func ParameterLogger(next buffalo.Handler) buffalo.Handler {
 	}
 }
 
-//Middleware is a buffalo middleware function to connect this parameter filterer with buffalo
+// Middleware is a buffalo middleware function to connect this parameter filterer with buffalo
+//
+// Deprecated: use github.com/gobuffalo/mw-paramlogger#Middleware instead.
 func (pl parameterLogger) Middleware(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
+		fmt.Printf("paramlogger Middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-paramlogger#Middleware instead.")
 		defer func() {
 			req := c.Request()
 			if req.Method != "GET" {
@@ -122,9 +129,9 @@ func (pl parameterLogger) addFormFieldTo(c buffalo.Context, form url.Values) err
 	return nil
 }
 
-//maskSecrets matches ParameterFilterBlackList against parameters passed in the
-//request, and returns a copy of the request parameters replacing blacklisted params
-//with [FILTERED].
+// maskSecrets matches ParameterFilterBlackList against parameters passed in the
+// request, and returns a copy of the request parameters replacing blacklisted params
+// with [FILTERED].
 func (pl parameterLogger) maskSecrets(form url.Values) url.Values {
 	if len(pl.blacklist) == 0 {
 		pl.blacklist = ParameterFilterBlackList

@@ -18,12 +18,18 @@ import (
 // languages. This can be useful if you want to load a user's language
 // from something like a database. See Middleware() for more information
 // on how the default implementation searches for languages.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#LanguageExtractor instead.
 type LanguageExtractor func(LanguageExtractorOptions, buffalo.Context) []string
 
 // LanguageExtractorOptions is a map of options for a LanguageExtractor.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#LanguageExtractorOptions instead.
 type LanguageExtractorOptions map[string]interface{}
 
 // Translator for handling all your i18n needs.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#Translator instead.
 type Translator struct {
 	// Box - where are the files?
 	Box packr.Box
@@ -38,7 +44,10 @@ type Translator struct {
 }
 
 // Load translations from the t.Box.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#Load instead.
 func (t *Translator) Load() error {
+	fmt.Printf("i18n.Load is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#Load instead.")
 	return t.Box.Walk(func(path string, f packr.File) error {
 		b, err := t.Box.MustBytes(path)
 		if err != nil {
@@ -59,13 +68,18 @@ func (t *Translator) Load() error {
 
 // AddTranslation directly, without using a file. This is useful if you wish to load translations
 // from a database, instead of disk.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#AddTranslation instead.
 func (t *Translator) AddTranslation(lang *language.Language, translations ...translation.Translation) {
+	fmt.Printf("i18n.AddTranslation is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#AddTranslation instead.")
 	i18n.AddTranslation(lang, translations...)
 }
 
 // New Translator. Requires a packr.Box that points to the location
 // of the translation files, as well as a default language. This will
 // also call t.Load() and load the translations from disk.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#New instead.
 func New(box packr.Box, language string) (*Translator, error) {
 	t := &Translator{
 		Box:             box,
@@ -95,9 +109,12 @@ func New(box packr.Box, language string) (*Translator, error) {
 //
 // These values can be changed on the Translator itself. In development
 // model the translation files will be reloaded on each request.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#Middleware instead.
 func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
+			fmt.Printf("i18n.Middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#Middleware instead.")
 
 			// in development reload the translations
 			if c.Value("env").(string) == "development" {
@@ -151,13 +168,19 @@ func (t *Translator) Middleware() buffalo.MiddlewareFunc {
 // data must be a struct{} or map[string]interface{} that contains a Count field and the template data,
 // Count field must be an integer type (int, int8, int16, int32, int64)
 // or a float formatted as a string (e.g. "123.45").
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#Translate instead.
 func (t *Translator) Translate(c buffalo.Context, translationID string, args ...interface{}) string {
+	fmt.Printf("i18n.Translate is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#Translate instead.")
 	T := c.Value("T").(i18n.TranslateFunc)
 	return T(translationID, args...)
 }
 
 // AvailableLanguages gets the list of languages provided by the app.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#AvailableLanguages instead.
 func (t *Translator) AvailableLanguages() []string {
+	fmt.Printf("i18n.AvailableLanguages is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#AvailableLanguages instead.")
 	lt := i18n.LanguageTags()
 	sort.Strings(lt)
 	return lt
@@ -166,7 +189,10 @@ func (t *Translator) AvailableLanguages() []string {
 // Refresh updates the context, reloading translation functions.
 // It can be used after language change, to be able to use translation functions
 // in the new language (for a flash message, for instance).
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#Refresh instead.
 func (t *Translator) Refresh(c buffalo.Context, newLang string) {
+	fmt.Printf("i18n.Refresh is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n instead.")
 	langs := []string{newLang}
 	langs = append(langs, t.extractLanguage(c)...)
 
@@ -194,7 +220,10 @@ func (t *Translator) extractLanguage(c buffalo.Context) []string {
 }
 
 // CookieLanguageExtractor is a LanguageExtractor implementation, using a cookie.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#CookieLanguageExtractor instead.
 func CookieLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
+	fmt.Printf("CookieLanguageExtractor is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#CookieLanguageExtractor instead.")
 	langs := make([]string, 0)
 	// try to get the language from a cookie:
 	if cookieName := o["CookieName"].(string); cookieName != "" {
@@ -210,7 +239,10 @@ func CookieLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []st
 }
 
 // SessionLanguageExtractor is a LanguageExtractor implementation, using a session.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#SessionLanguageExtractor instead.
 func SessionLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
+	fmt.Printf("SessionLanguageExtractor is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#SessionLanguageExtractor instead.")
 	langs := make([]string, 0)
 	// try to get the language from the session
 	if sessionName := o["SessionName"].(string); sessionName != "" {
@@ -225,7 +257,10 @@ func SessionLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []s
 
 // HeaderLanguageExtractor is a LanguageExtractor implementation, using a HTTP Accept-Language
 // header.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#HeaderLanguageExtractor instead.
 func HeaderLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
+	fmt.Printf("HeaderLanguageExtractor is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#HeaderLanguageExtractor instead.")
 	langs := make([]string, 0)
 	// try to get the language from a header:
 	acceptLang := c.Request().Header.Get("Accept-Language")
@@ -236,7 +271,10 @@ func HeaderLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []st
 }
 
 // URLPrefixLanguageExtractor is a LanguageExtractor implementation, using a prefix in the URL.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#URLPrefixLanguageExtractor instead.
 func URLPrefixLanguageExtractor(o LanguageExtractorOptions, c buffalo.Context) []string {
+	fmt.Printf("URLPrefixLanguageExtractor is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n#URLPrefixLanguageExtractor instead.")
 	langs := make([]string, 0)
 	// try to get the language from an URL prefix:
 	if urlPrefixName := o["URLPrefixName"].(string); urlPrefixName != "" {

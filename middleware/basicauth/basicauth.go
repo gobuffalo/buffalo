@@ -2,6 +2,7 @@ package basicauth
 
 import (
 	"encoding/base64"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -19,12 +20,17 @@ var (
 
 // Authorizer is used to authenticate the basic auth username/password.
 // Should return true/false and/or an error.
+//
+// Deprecated: use github.com/gobuffalo/mw-basicauth#Authorizer instead.
 type Authorizer func(buffalo.Context, string, string) (bool, error)
 
 // Middleware enables basic authentication
+//
+// Deprecated: use github.com/gobuffalo/mw-basicauth#Middleware instead.
 func Middleware(auth Authorizer) buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
+			fmt.Printf("basicauth.Middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-basicauth#Middleware instead.")
 			token := strings.SplitN(c.Request().Header.Get("Authorization"), " ", 2)
 			if len(token) != 2 {
 				c.Response().Header().Set("WWW-Authenticate", `Basic realm="Basic Authentication"`)

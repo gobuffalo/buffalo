@@ -5,6 +5,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -48,8 +49,11 @@ var (
 
 // New enable CSRF protection on routes using this middleware.
 // This middleware is adapted from gorilla/csrf
+//
+// Deprecated: use github.com/gobuffalo/mw-csrf#New instead.
 var New = func(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
+		fmt.Printf("csrf.New is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-csrf#New instead.")
 		// don't run in test mode
 		if envy.Get("GO_ENV", "development") == "test" {
 			c.Set(tokenKey, "test")

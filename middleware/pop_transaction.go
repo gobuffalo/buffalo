@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -15,9 +16,12 @@ import (
 // 2xx or 3xx, otherwise it'll be rolled back. It will also add a
 // field to the log, "db", that shows the total duration spent during
 // the request making database calls.
+//
+// Deprecated: use github.com/gobuffalo/mw-poptx#PopTransaction instead.
 var PopTransaction = func(db *pop.Connection) buffalo.MiddlewareFunc {
 	return func(h buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
+			fmt.Printf("PopTransaction middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-poptx#PopTransaction instead.")
 			// wrap all requests in a transaction and set the length
 			// of time doing things in the db to the log.
 			err := db.Transaction(func(tx *pop.Connection) error {
