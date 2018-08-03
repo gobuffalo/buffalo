@@ -26,5 +26,6 @@ If you, or your company, uses Buffalo, please consider supporting this effort to
 
 #### Generous Backers
 
+* **[Zhorty](https://zhorty.com)**
 * [Your Company Here](http://patreon.com/buffalo)
 
