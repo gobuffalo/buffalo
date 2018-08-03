@@ -40,6 +40,18 @@ func TestCookies_Set(t *testing.T) {
 	r.Equal("name=\"Rob Pike\"; Max-Age=86400", h)
 }
 
+func TestCookies_SetWithPath(t *testing.T) {
+	r := require.New(t)
+	res := httptest.NewRecorder()
+
+	c := Cookies{&http.Request{}, res}
+
+	c.SetWithPath("name", "Rob Pike", "/foo")
+
+	h := res.Header().Get("Set-Cookie")
+	r.Equal("name=\"Rob Pike\"; Path=/foo", h)
+}
+
 func TestCookies_SetWithExpirationTime(t *testing.T) {
 	r := require.New(t)
 	res := httptest.NewRecorder()
