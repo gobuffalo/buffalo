@@ -45,6 +45,20 @@ func (c *Cookies) SetWithExpirationTime(name, value string, expires time.Time) {
 	http.SetCookie(c.res, &ck)
 }
 
+// SetWithPath sets a cookie path on the server in which the cookie will be available on.
+// If set to '/', the cookie will be available within the entire domain.
+// If set to '/foo/', the cookie will only be available within the /foo/ directory and
+// all sub-directories such as /foo/bar/ of domain.
+func (c *Cookies) SetWithPath(name, value, path string) {
+	ck := http.Cookie{
+		Name:  name,
+		Value: value,
+		Path:  path,
+	}
+
+	http.SetCookie(c.res, &ck)
+}
+
 // Delete sets a header that tells the browser to remove the cookie with the given name.
 func (c *Cookies) Delete(name string) {
 	ck := http.Cookie{
