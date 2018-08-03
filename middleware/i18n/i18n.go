@@ -45,6 +45,13 @@ var HeaderLanguageExtractor = i18nm.HeaderLanguageExtractor
 // Deprecated: use github.com/gobuffalo/mw-i18n#URLPrefixLanguageExtractor instead.
 var URLPrefixLanguageExtractor = i18nm.URLPrefixLanguageExtractor
 
+// New Translator. Requires a packr.Box that points to the location
+// of the translation files, as well as a default language. This will
+// also call t.Load() and load the translations from disk.
+//
+// Deprecated: use github.com/gobuffalo/mw-i18n#New instead.
+var New = i18nm.New
+
 func init() {
 	fmt.Printf("github.com/gobuffalo/buffalo/middleware/i18n is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n instead.")
 }
