@@ -1,4 +1,4 @@
-package i18n
+package i18n_test
 
 import (
 	"log"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
+	i18n "github.com/gobuffalo/mw-i18n"
 	"github.com/gobuffalo/packr"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
@@ -26,12 +27,12 @@ func app() *buffalo.App {
 	})
 
 	// Setup and use translations:
-	t, err := New(packr.NewBox("./locales"), "en-US")
+	t, err := i18n.New(packr.NewBox("./locales"), "en-US")
 	if err != nil {
 		log.Fatal(err)
 	}
 	// Setup URL prefix Language extractor
-	t.LanguageExtractors = append(t.LanguageExtractors, URLPrefixLanguageExtractor)
+	t.LanguageExtractors = append(t.LanguageExtractors, i18n.URLPrefixLanguageExtractor)
 
 	app.Use(t.Middleware())
 	app.GET("/", func(c buffalo.Context) error {

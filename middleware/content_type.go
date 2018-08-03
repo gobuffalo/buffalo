@@ -3,22 +3,14 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/mw-contenttype"
 )
 
 // SetContentType on the request to desired type. This will
 // override any content type sent by the client.
 //
 // Deprecated: use github.com/gobuffalo/mw-contenttype#Set instead.
-func SetContentType(s string) buffalo.MiddlewareFunc {
-	return func(next buffalo.Handler) buffalo.Handler {
-		return func(c buffalo.Context) error {
-			fmt.Printf("SetContentType middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-contenttype#Set instead.")
-			c.Request().Header.Set("Content-Type", s)
-			return next(c)
-		}
-	}
-}
+var SetContentType contenttype.Set
 
 // AddContentType will add a secondary content type to
 // a request. If no content type is sent by the client
@@ -26,12 +18,8 @@ func SetContentType(s string) buffalo.MiddlewareFunc {
 // content type will be used.
 //
 // Deprecated: use github.com/gobuffalo/mw-contenttype#Add instead.
-func AddContentType(s string) buffalo.MiddlewareFunc {
-	return func(next buffalo.Handler) buffalo.Handler {
-		return func(c buffalo.Context) error {
-			fmt.Printf("SetContentType middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-contenttype#Add instead.")
-			c.Request().Header.Add("Content-Type", s)
-			return next(c)
-		}
-	}
+var AddContentType contenttype.Add
+
+func init() {
+	fmt.Printf("github.com/gobuffalo/buffalo/middleware is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-contenttype, github.com/gobuffalo/mw-paramlogger and github.com/gobuffalo/mw-poptx instead.")
 }
