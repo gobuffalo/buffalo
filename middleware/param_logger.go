@@ -10,10 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-//ParameterFilterBlackList is the list of parameter names that will be filtered
+//ParameterExclusionList is the list of parameter names that will be filtered
 //from the application logs (see maskSecrets).
 //Important: this list will be used in case insensitive.
-var ParameterFilterBlackList = []string{
+var ParameterExclusionList = []string{
 	"Password",
 	"PasswordConfirmation",
 	"CreditCard",
@@ -30,7 +30,7 @@ type parameterLogger struct {
 // ParameterLogger logs form and parameter values to the loggers
 func ParameterLogger(next buffalo.Handler) buffalo.Handler {
 	pl := parameterLogger{
-		blacklist: ParameterFilterBlackList,
+		blacklist: ParameterExclusionList,
 	}
 
 	return func(c buffalo.Context) error {
@@ -122,12 +122,12 @@ func (pl parameterLogger) addFormFieldTo(c buffalo.Context, form url.Values) err
 	return nil
 }
 
-//maskSecrets matches ParameterFilterBlackList against parameters passed in the
+//maskSecrets matches ParameterExclusionList against parameters passed in the
 //request, and returns a copy of the request parameters replacing blacklisted params
 //with [FILTERED].
 func (pl parameterLogger) maskSecrets(form url.Values) url.Values {
 	if len(pl.blacklist) == 0 {
-		pl.blacklist = ParameterFilterBlackList
+		pl.blacklist = ParameterExclusionList
 	}
 
 	copy := url.Values{}
