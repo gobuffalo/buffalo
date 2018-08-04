@@ -18,7 +18,7 @@ Ready? Let's go (pun totally intended)!
 
 ## Steps to Reproduce the Problem
 
-  Please describe in painful detail what you did (so others can play along with you) to get to this point. This includes things like the exact command(s) you used, or the `curl` command you used, that sort of thing.
+  *Please describe in painful detail what you did (so others can play along with you) to get to this point. This includes things like the exact command(s) you used, or the `curl` command you used, that sort of thing.*
 
   1.
   1.
@@ -26,15 +26,15 @@ Ready? Let's go (pun totally intended)!
 
 ## Expected Behavior
 
-What did you what to happen? Tell us a story. We love to read.
+*What did you what to happen? Tell us a story. We love to read.*
 
 ## Actual Behavior
 
-In the happiest of happy places what should have happened?
+*In the happiest of happy places what should have happened?*
 
 ## Info
 
-Please run `buffalo info` and paste the information below where it says "PASTE_HERE".
+*Please run `buffalo info` and paste the information below where it says "PASTE_HERE".*
 
 <details>
 
