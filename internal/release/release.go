@@ -123,12 +123,9 @@ func Command(name string, args ...string) Runner {
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 
-	fn := func() error {
-		return cmd.Run()
-	}
 	r := Runner{
 		Name: strings.Join(cmd.Args, " "),
-		Fn:   fn,
+		Fn:   cmd.Run,
 	}
 	return r
 }

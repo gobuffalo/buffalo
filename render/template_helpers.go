@@ -38,9 +38,7 @@ type helperTag struct {
 }
 
 func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
-	helpers["assetPath"] = func(file string) (string, error) {
-		return s.assetPath(file)
-	}
+	helpers["assetPath"] = s.assetPath
 
 	ah := []helperTag{
 		{"javascriptTag", jsTag},
