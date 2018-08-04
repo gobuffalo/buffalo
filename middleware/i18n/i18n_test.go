@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/middleware/i18n"
 	"github.com/gobuffalo/buffalo/render"
-	i18n "github.com/gobuffalo/mw-i18n"
 	"github.com/gobuffalo/packr"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"

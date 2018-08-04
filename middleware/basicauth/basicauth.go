@@ -18,7 +18,7 @@ var (
 // Should return true/false and/or an error.
 //
 // Deprecated: use github.com/gobuffalo/mw-basicauth#Authorizer instead.
-type Authorizer basicauth.Authorizer
+type Authorizer = basicauth.Authorizer
 
 // Middleware enables basic authentication
 //

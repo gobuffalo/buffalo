@@ -12,17 +12,17 @@ import (
 // on how the default implementation searches for languages.
 //
 // Deprecated: use github.com/gobuffalo/mw-i18n#LanguageExtractor instead.
-type LanguageExtractor i18nm.LanguageExtractor
+type LanguageExtractor = i18nm.LanguageExtractor
 
 // LanguageExtractorOptions is a map of options for a LanguageExtractor.
 //
 // Deprecated: use github.com/gobuffalo/mw-i18n#LanguageExtractorOptions instead.
-type LanguageExtractorOptions i18nm.LanguageExtractorOptions
+type LanguageExtractorOptions = i18nm.LanguageExtractorOptions
 
 // Translator for handling all your i18n needs.
 //
 // Deprecated: use github.com/gobuffalo/mw-i18n#Translator instead.
-type Translator i18nm.Translator
+type Translator = i18nm.Translator
 
 // CookieLanguageExtractor is a LanguageExtractor implementation, using a cookie.
 //

@@ -58,7 +58,7 @@ var (
 // Options for the JWT middleware
 //
 // Deprecated: use github.com/gobuffalo/mw-tokenauth#Options instead.
-type Options tokenauth.Options
+type Options = tokenauth.Options
 
 // New enables jwt token verification if no Sign method is provided,
 // by default uses HMAC
