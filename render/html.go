@@ -3,8 +3,8 @@ package render
 import (
 	"html"
 
+	"github.com/gobuffalo/github_flavored_markdown"
 	"github.com/gobuffalo/plush"
-	"github.com/shurcooL/github_flavored_markdown"
 )
 
 // HTML renders the named files using the 'text/html'
