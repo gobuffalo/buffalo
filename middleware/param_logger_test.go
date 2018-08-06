@@ -37,7 +37,7 @@ func Test_maskSecrets(t *testing.T) {
 func Test_maskSecretsCustom(t *testing.T) {
 	r := require.New(t)
 	pl := parameterLogger{
-		blacklist: []string{
+		excluded: []string{
 			"FirstName", "LastName", "MiddleName",
 		},
 	}

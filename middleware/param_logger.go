@@ -24,13 +24,13 @@ var filteredIndicator = []string{"[FILTERED]"}
 
 // ParameterLogger logs form and parameter values to the logger
 type parameterLogger struct {
-	blacklist []string
+	excluded []string
 }
 
 // ParameterLogger logs form and parameter values to the loggers
 func ParameterLogger(next buffalo.Handler) buffalo.Handler {
 	pl := parameterLogger{
-		blacklist: ParameterExclusionList,
+		excluded: ParameterExclusionList,
 	}
 
 	return func(c buffalo.Context) error {
@@ -123,19 +123,19 @@ func (pl parameterLogger) addFormFieldTo(c buffalo.Context, form url.Values) err
 }
 
 //maskSecrets matches ParameterExclusionList against parameters passed in the
-//request, and returns a copy of the request parameters replacing blacklisted params
+//request, and returns a copy of the request parameters replacing excluded params
 //with [FILTERED].
 func (pl parameterLogger) maskSecrets(form url.Values) url.Values {
-	if len(pl.blacklist) == 0 {
-		pl.blacklist = ParameterExclusionList
+	if len(pl.excluded) == 0 {
+		pl.excluded = ParameterExclusionList
 	}
 
 	copy := url.Values{}
 	for key, values := range form {
 	blcheck:
-		for _, blacklisted := range pl.blacklist {
+		for _, excluded := range pl.excluded {
 			copy[key] = values
-			if strings.ToUpper(key) == strings.ToUpper(blacklisted) {
+			if strings.ToUpper(key) == strings.ToUpper(excluded) {
 				copy[key] = filteredIndicator
 				break blcheck
 			}
