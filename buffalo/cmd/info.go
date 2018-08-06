@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"reflect"
@@ -32,7 +33,10 @@ var infoCmd = &cobra.Command{
 			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
 		}
 
-		return runInfoCmds()
+		if err := runInfoCmds(); err != nil {
+			return errors.WithStack(err)
+		}
+		return infoGoMod()
 	},
 }
 
@@ -41,6 +45,23 @@ type infoCommand struct {
 	PathName  string
 	Cmd       *exec.Cmd
 	InfoLabel string
+}
+
+func infoGoMod() error {
+	if _, err := os.Stat("go.mod"); err != nil {
+		return nil
+	}
+	f, err := os.Open("go.mod")
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	defer f.Close()
+
+	bb := os.Stdout
+	bb.WriteString("\n### go.mod\n")
+	io.Copy(bb, f)
+
+	return nil
 }
 
 func runInfoCmds() error {
