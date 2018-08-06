@@ -80,7 +80,7 @@ func (g Generator) Validate() error {
 	}
 
 	if !nameRX.MatchString(string(g.Name)) {
-		return fmt.Errorf("name %s is not allowed, application name can only be contain [a-Z0-9-_]", g.Name)
+		return fmt.Errorf("name %s is not allowed, application name can only contain [a-Z0-9-_]", g.Name)
 	}
 
 	if s, _ := os.Stat(g.Root); s != nil {
