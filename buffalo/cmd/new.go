@@ -59,7 +59,7 @@ var newCmd = &cobra.Command{
 	Use:   "new [name]",
 	Short: "Creates a new Buffalo application",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) <= 0 {
+		if len(args) == 0 {
 			return errors.New("you must enter a name for your new application")
 		}
 		if configError != nil {
