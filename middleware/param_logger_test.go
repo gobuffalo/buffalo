@@ -1,10 +1,11 @@
-package middleware
+package middleware_test
 
 import (
 	"net/url"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/markbates/willie"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
@@ -46,7 +47,7 @@ func newTestLogger() testLogger {
 func Test_Logger(t *testing.T) {
 	r := require.New(t)
 	app := buffalo.New(buffalo.Options{})
-	app.Use(ParameterLogger)
+	app.Use(middleware.ParameterLogger)
 	app.Logger = newTestLogger()
 	emptyHandler := func(c buffalo.Context) error {
 		return nil
