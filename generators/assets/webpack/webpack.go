@@ -35,7 +35,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 		return standard.Run(root, data)
 	}
 
-	command := "yarn"
+	command := "yarnpkg"
 
 	if !w.WithYarn {
 		command = "npm"
@@ -65,7 +65,7 @@ func (w Generator) Run(root string, data makr.Data) error {
 
 func installYarn(data makr.Data) error {
 	// if there's no yarn, install it!
-	_, err := exec.LookPath("yarn")
+	_, err := exec.LookPath("yarnpkg")
 	// A new makr is necessary to have yarn available in path
 	if err != nil {
 		yg := makr.New()
