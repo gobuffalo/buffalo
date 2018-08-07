@@ -80,8 +80,8 @@ func Test_NewCmd_Nominal(t *testing.T) {
 		"hello_world",
 		"--skip-pop",
 		"--skip-webpack",
+		"--vcs=none",
 	})
 	err = c.Execute()
 	r.NoError(err)
-
 }
