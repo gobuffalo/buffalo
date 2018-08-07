@@ -64,7 +64,8 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		logrus.Infof("\nYou application was successfully built at %s\n", filepath.Join(b.Root, b.Bin))
+		bin, _ := filepath.Abs(b.Bin)
+		logrus.Infof("\nYou application was successfully built at %s\n", bin)
 
 		return nil
 	},
