@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gobuffalo/mw-paramlogger"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/pkg/errors"
 )
@@ -14,12 +16,9 @@ import (
 // ParameterExclusionList is the list of parameter names that will be filtered
 // from the application logs (see maskSecrets).
 // Important: this list will be used in case insensitive.
-var ParameterExclusionList = []string{
-	"Password",
-	"PasswordConfirmation",
-	"CreditCard",
-	"CVC",
-}
+//
+// Deprecated: use github.com/gobuffalo/mw-paramlogger#ParameterExclusionList instead.
+var ParameterExclusionList = paramlogger.ParameterExclusionList
 
 var filteredIndicator = []string{"[FILTERED]"}
 
@@ -31,32 +30,7 @@ type parameterLogger struct {
 // ParameterLogger logs form and parameter values to the loggers
 //
 // Deprecated: use github.com/gobuffalo/mw-paramlogger#ParameterLogger instead.
-func ParameterLogger(next buffalo.Handler) buffalo.Handler {
-	fmt.Printf("ParameterLogger is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-paramlogger#ParameterLogger instead.")
-	pl := parameterLogger{
-		excluded: ParameterExclusionList,
-	}
-
-	return func(c buffalo.Context) error {
-		defer func() {
-			req := c.Request()
-			if req.Method != "GET" {
-				if err := pl.logForm(c); err != nil {
-					c.Logger().Error(err)
-				}
-			}
-
-			b, err := json.Marshal(c.Params())
-			if err != nil {
-				c.Logger().Error(err)
-			}
-
-			c.LogField("params", string(b))
-		}()
-
-		return next(c)
-	}
-}
+var ParameterLogger = paramlogger.ParameterLogger
 
 // Middleware is a buffalo middleware function to connect this parameter filterer with buffalo
 //
