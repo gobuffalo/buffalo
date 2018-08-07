@@ -1,64 +1,15 @@
-package middleware
+package middleware_test
 
 import (
 	"net/url"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/markbates/willie"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 )
-
-func Test_maskSecrets(t *testing.T) {
-	r := require.New(t)
-	pl := parameterLogger{}
-
-	filteredForm := pl.maskSecrets(url.Values{
-		"FirstName":            []string{"Antonio"},
-		"MiddleName":           []string{"José"},
-		"LastName":             []string{"Pagano"},
-		"Password":             []string{"Secret!"},
-		"password":             []string{"Other"},
-		"pAssWorD":             []string{"Weird one"},
-		"PasswordConfirmation": []string{"Secret!"},
-
-		"SomeCVC": []string{"Untouched"},
-	})
-
-	r.Equal(filteredForm.Get("Password"), filteredIndicator[0])
-	r.Equal(filteredForm.Get("password"), filteredIndicator[0])
-	r.Equal(filteredForm.Get("pAssWorD"), filteredIndicator[0])
-	r.Equal(filteredForm.Get("PasswordConfirmation"), filteredIndicator[0])
-	r.Equal(filteredForm.Get("LastName"), "Pagano")
-	r.Equal(filteredForm.Get("SomeCVC"), "Untouched")
-}
-
-func Test_maskSecretsCustom(t *testing.T) {
-	r := require.New(t)
-	pl := parameterLogger{
-		excluded: []string{
-			"FirstName", "LastName", "MiddleName",
-		},
-	}
-
-	filteredForm := pl.maskSecrets(url.Values{
-		"FirstName":            []string{"Antonio"},
-		"MiddleName":           []string{"José"},
-		"LastName":             []string{"Pagano"},
-		"Password":             []string{"Secret!"},
-		"password":             []string{"Other"},
-		"pAssWorD":             []string{"Weird one"},
-		"PasswordConfirmation": []string{"Secret!"},
-
-		"SomeCVC": []string{"Untouched"},
-	})
-
-	r.Equal(filteredForm.Get("Password"), "Secret!")
-	r.Equal(filteredForm.Get("password"), "Other")
-	r.Equal(filteredForm.Get("LastName"), filteredIndicator[0])
-	r.Equal(filteredForm.Get("SomeCVC"), "Untouched")
-}
 
 var lastEntry *logrus.Entry
 
@@ -96,7 +47,7 @@ func newTestLogger() testLogger {
 func Test_Logger(t *testing.T) {
 	r := require.New(t)
 	app := buffalo.New(buffalo.Options{})
-	app.Use(ParameterLogger)
+	app.Use(middleware.ParameterLogger)
 	app.Logger = newTestLogger()
 	emptyHandler := func(c buffalo.Context) error {
 		return nil
