@@ -1,4 +1,4 @@
-package middleware
+package middleware_test
 
 import (
 	"io/ioutil"
@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/uuid"
 	"github.com/markbates/willie"
@@ -53,7 +54,7 @@ func tx(fn func(tx *pop.Connection)) error {
 
 func app(db *pop.Connection) *buffalo.App {
 	app := buffalo.New(buffalo.Options{})
-	app.Use(PopTransaction(db))
+	app.Use(middleware.PopTransaction(db))
 	app.GET("/success", func(c buffalo.Context) error {
 		w := &widget{}
 		tx := c.Value("tx").(*pop.Connection)
