@@ -10,10 +10,6 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-
-	// this blank import is here because dep doesn't
-	// handle transitive dependencies correctly
-	_ "github.com/russross/blackfriday"
 )
 
 type templateRenderer struct {
