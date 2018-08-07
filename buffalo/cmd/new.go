@@ -9,6 +9,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/spf13/pflag"
+
 	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
@@ -59,6 +61,13 @@ var newCmd = &cobra.Command{
 	Use:   "new [name]",
 	Short: "Creates a new Buffalo application",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// Restore default values after usage (useful for testing)
+		defer func() {
+			cmd.Flags().Visit(func(f *pflag.Flag) {
+				f.Value.Set(f.DefValue)
+			})
+			viper.BindPFlags(cmd.Flags())
+		}()
 		if len(args) == 0 {
 			return errors.New("you must enter a name for your new application")
 		}
