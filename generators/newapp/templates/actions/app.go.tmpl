@@ -57,7 +57,7 @@ func App() *buffalo.App {
     {{ end }}
 
     if ENV == "development" {
-      app.Use(paramlogger.Middleware)
+      app.Use(paramlogger.ParameterLogger)
     }
 
     {{ if .opts.AsWeb -}}
