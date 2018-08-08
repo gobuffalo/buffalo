@@ -126,7 +126,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
 
-* [github.com/shurcooL/github_flavored_markdown](https://godoc.org/github.com/shurcooL/github_flavored_markdown)
+* [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
 
 * [github.com/shurcooL/highlight_diff](https://godoc.org/github.com/shurcooL/highlight_diff)
 
