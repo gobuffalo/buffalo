@@ -1,7 +1,7 @@
 [{
   "path": "actions/app.go",
   "contains": [
-    "app.Use(middleware.SetContentType(\"application/json\"))"
+    "app.Use(contenttype.Set(\"application/json\"))"
   ],
   "!contains": [
     "app.ServeFiles"
