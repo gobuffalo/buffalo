@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -9,11 +10,6 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
-
-	// this blank import is here because dep doesn't
-	// handle transitive dependencies correctly
-	_ "github.com/russross/blackfriday"
 )
 
 type templateRenderer struct {
@@ -52,6 +48,22 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	for k, v := range dd {
 		m[k] = v
 	}
+
+	if _, ok := m["layout"]; ok {
+
+		var body template.HTML
+		var err error
+
+		body, err = s.exec(name, m)
+		if err != nil {
+			return body, err
+		}
+		m["yield"] = body
+		d, f := filepath.Split(fmt.Sprintf("%v", m["layout"]))
+		name = filepath.Join(d, "_"+f)
+
+	}
+
 	return s.exec(name, m)
 }
 
@@ -119,8 +131,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			logrus.Errorf("could not find a template engine for %s\n", ext)
-			continue
+			return "", fmt.Errorf("could not find a template engine for %s", ext)
 		}
 		body, err = te(body, data, helpers)
 		if err != nil {

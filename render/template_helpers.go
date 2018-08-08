@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-var assetsMutex = &sync.Mutex{}
+var assetsMutex = &sync.RWMutex{}
 var assetMap map[string]string
 
 func loadManifest(manifest string) error {
@@ -22,10 +22,9 @@ func loadManifest(manifest string) error {
 }
 
 func assetPathFor(file string) string {
-	assetsMutex.Lock()
-	defer assetsMutex.Unlock()
-
+	assetsMutex.RLock()
 	filePath := assetMap[file]
+	assetsMutex.RUnlock()
 	if filePath == "" {
 		filePath = file
 	}
@@ -38,9 +37,7 @@ type helperTag struct {
 }
 
 func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
-	helpers["assetPath"] = func(file string) (string, error) {
-		return s.assetPath(file)
-	}
+	helpers["assetPath"] = s.assetPath
 
 	ah := []helperTag{
 		{"javascriptTag", jsTag},

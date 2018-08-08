@@ -16,12 +16,12 @@ func TestOptions_NewOptions(t *testing.T) {
 		secret    string
 		expectErr string
 	}{
-		{name: "Development doesn't fail with no secret", env: "development", secret: "", expectErr: "securecookie: the value is not valid"},
-		{name: "Development doesn't fail with secret set", env: "development", secret: "secrets", expectErr: "securecookie: the value is not valid"},
-		{name: "Test doesn't fail with secret set", env: "test", secret: "", expectErr: "securecookie: the value is not valid"},
-		{name: "Test doesn't fail with secret set", env: "test", secret: "secrets", expectErr: "securecookie: the value is not valid"},
-		{name: "Production fails with no secret", env: "production", secret: "", expectErr: "securecookie: hash key is not set"},
-		{name: "Production doesn't fail with secret set", env: "production", secret: "secrets", expectErr: "securecookie: the value is not valid"},
+		{name: "Development doesn't fail with no secret", env: "development", secret: "", expectErr: "securecookie:"},
+		{name: "Development doesn't fail with secret set", env: "development", secret: "secrets", expectErr: "securecookie:"},
+		{name: "Test doesn't fail with secret set", env: "test", secret: "", expectErr: "securecookie:"},
+		{name: "Test doesn't fail with secret set", env: "test", secret: "secrets", expectErr: "securecookie:"},
+		{name: "Production fails with no secret", env: "production", secret: "", expectErr: "securecookie:"},
+		{name: "Production doesn't fail with secret set", env: "production", secret: "secrets", expectErr: "securecookie:"},
 	}
 
 	for _, test := range tests {
@@ -39,7 +39,7 @@ func TestOptions_NewOptions(t *testing.T) {
 				_, err := opts.SessionStore.New(req, "_buffalo_session")
 
 				r.Error(err)
-				r.Equal(test.expectErr, err.Error())
+				r.Contains(err.Error(), test.expectErr)
 			})
 		})
 	}
