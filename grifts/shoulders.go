@@ -1,56 +1,40 @@
 package grifts
 
 import (
-	"html/template"
 	"os"
 	"os/exec"
 	"path"
-	"sort"
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/markbates/deplist"
+	"github.com/gobuffalo/shoulders/shoulders"
 	"github.com/markbates/grift/grift"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
 var _ = grift.Desc("shoulders", "Prints a listing all of the 3rd party packages used by buffalo.")
 var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
-	giants, _ := deplist.List("examples")
-	for _, k := range []string{
-		"golang.org/x/tools/cmd/goimports",
-	} {
-		giants[k] = k
+	view, err := shoulders.New()
+	if err != nil {
+		return errors.WithStack(err)
 	}
-
-	deps := make([]string, 0, len(giants))
-	for k := range giants {
-		if !strings.Contains(k, "github.com/gobuffalo/buffalo") {
-			deps = append(deps, k)
-		}
-	}
-	sort.Strings(deps)
-	logrus.Infof(strings.Join(deps, "\n"))
-	c.Set("giants", deps)
+	logrus.Infof(strings.Join(view.Deps, "\n"))
 	return nil
 })
 
 var _ = grift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
 var _ = grift.Add("shoulders", func(c *grift.Context) error {
-	err := grift.Run("shoulders:list", c)
+	view, err := shoulders.New()
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
+
 	f, err := os.Create(path.Join(envy.GoPath(), "src", "github.com", "gobuffalo", "buffalo", "SHOULDERS.md"))
 	if err != nil {
 		return err
 	}
-	t, err := template.New("").Parse(shouldersTemplate)
-	if err != nil {
-		return err
-	}
-	err = t.Execute(f, c.Value("giants"))
-	if err != nil {
+	if err := view.Write(f); err != nil {
 		return err
 	}
 
@@ -73,15 +57,3 @@ func commitAndPushShoulders() error {
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
-
-var shouldersTemplate = `
-# Buffalo Stands on the Shoulders of Giants
-
-Buffalo does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them altogether in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
-
-Thank you to the following **GIANTS**:
-
-{{ range $v := .}}
-* [{{$v}}](https://godoc.org/{{$v}})
-{{ end }}
-`
