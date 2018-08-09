@@ -26,6 +26,7 @@ var _ = grift.Add("shoulders:list", func(c *grift.Context) error {
 var _ = grift.Desc("shoulders", "Generates a file listing all of the 3rd party packages used by buffalo.")
 var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	view, err := shoulders.New()
+	view.Name = "Buffalo"
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -34,6 +35,7 @@ var _ = grift.Add("shoulders", func(c *grift.Context) error {
 	if err != nil {
 		return err
 	}
+
 	if err := view.Write(f); err != nil {
 		return err
 	}
