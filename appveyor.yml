@@ -18,7 +18,7 @@ install:
 
     choco install dep
 
-    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
+    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;C:\ProgramData\chocolatey\lib\dep\tools;%PATH%
 
     echo %PATH%
 
