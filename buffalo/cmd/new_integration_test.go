@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
 	"github.com/stretchr/testify/require"
@@ -144,6 +145,9 @@ func Test_NewCmd_WithDep(t *testing.T) {
 	}
 
 	t.Run("without dep in PATH", func(tt *testing.T) {
+		if runtime.GOOS == "windows" {
+			t.Skip("Skipping on Windows")
+		}
 		rr := require.New(tt)
 		if dep, err := exec.LookPath("dep"); err == nil {
 			rr.NoError(os.Remove(dep))
