@@ -1,6 +1,8 @@
 package standard
 
 import (
+	"path/filepath"
+
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets"
 	"github.com/gobuffalo/makr"
@@ -9,7 +11,7 @@ import (
 )
 
 var logo = &makr.RemoteFile{
-	File:       makr.NewFile("public/assets/images/logo.svg", ""),
+	File:       makr.NewFile(filepath.Join("public", "assets", "images", "logo.svg"), ""),
 	RemotePath: assets.LogoURL,
 }
 

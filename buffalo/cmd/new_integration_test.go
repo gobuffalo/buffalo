@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -55,7 +55,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
-	cpath := path.Join(gp, "src", "github.com", "gobuffalo")
+	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
@@ -75,7 +75,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(path.Join(tdir, "hello_world"))
+	r.DirExists(filepath.Join(tdir, "hello_world"))
 }
 
 func Test_NewCmd_API(t *testing.T) {
@@ -84,7 +84,7 @@ func Test_NewCmd_API(t *testing.T) {
 
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
-	cpath := path.Join(gp, "src", "github.com", "gobuffalo")
+	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
@@ -104,7 +104,7 @@ func Test_NewCmd_API(t *testing.T) {
 	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(path.Join(tdir, "hello_world"))
+	r.DirExists(filepath.Join(tdir, "hello_world"))
 }
 
 func Test_NewCmd_WithDep(t *testing.T) {
@@ -113,7 +113,7 @@ func Test_NewCmd_WithDep(t *testing.T) {
 
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
-	cpath := path.Join(gp, "src", "github.com", "gobuffalo")
+	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
@@ -134,10 +134,10 @@ func Test_NewCmd_WithDep(t *testing.T) {
 	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(path.Join(tdir, "hello_world"))
-	r.FileExists(path.Join(tdir, "hello_world", "Gopkg.toml"))
-	r.FileExists(path.Join(tdir, "hello_world", "Gopkg.lock"))
-	r.DirExists(path.Join(tdir, "hello_world", "vendor"))
+	r.DirExists(filepath.Join(tdir, "hello_world"))
+	r.FileExists(filepath.Join(tdir, "hello_world", "Gopkg.toml"))
+	r.FileExists(filepath.Join(tdir, "hello_world", "Gopkg.lock"))
+	r.DirExists(filepath.Join(tdir, "hello_world", "vendor"))
 }
 
 func Test_NewCmd_WithPopSQLite3(t *testing.T) {
@@ -146,7 +146,7 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
-	cpath := path.Join(gp, "src", "github.com", "gobuffalo")
+	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
@@ -166,6 +166,6 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(path.Join(tdir, "hello_world"))
-	r.FileExists(path.Join(tdir, "hello_world", "database.yml"))
+	r.DirExists(filepath.Join(tdir, "hello_world"))
+	r.FileExists(filepath.Join(tdir, "hello_world", "database.yml"))
 }
