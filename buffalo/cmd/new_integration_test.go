@@ -146,7 +146,7 @@ func Test_NewCmd_WithDep(t *testing.T) {
 
 	t.Run("without dep in PATH", func(tt *testing.T) {
 		if runtime.GOOS == "windows" {
-			t.Skip("Skipping on Windows")
+			tt.Skip("Skipping on Windows")
 		}
 		rr := require.New(tt)
 		if dep, err := exec.LookPath("dep"); err == nil {
