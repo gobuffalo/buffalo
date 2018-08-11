@@ -16,7 +16,7 @@ install:
 - cmd: >-
     choco install mingw
 
-    set PATH=%USERPROFILE%\go\bin;%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
+    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
 
     echo %PATH%
 
