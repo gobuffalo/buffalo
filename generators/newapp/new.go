@@ -49,7 +49,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 			}
 			gp := os.Getenv("GOPATH")
 			if _, err := os.Stat(filepath.Join(gp, "bin", "dep.exe")); err != nil {
-				return errors.WithStack(err)
+				fmt.Println(err)
 			}
 		}
 	}
