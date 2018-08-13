@@ -1,6 +1,8 @@
 package soda
 
 import (
+	"path/filepath"
+
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/pop/soda/cmd/generate"
 )
@@ -14,15 +16,15 @@ func (sd Generator) Run(root string, data makr.Data) error {
 		return sd.App.WithPop
 	}
 
-	f := makr.NewFile("models/models.go", nModels)
+	f := makr.NewFile(filepath.Join("models", "models.go"), nModels)
 	f.Should = should
 	g.Add(f)
 
-	f = makr.NewFile("models/models_test.go", nModelsTest)
+	f = makr.NewFile(filepath.Join("models", "models_test.go"), nModelsTest)
 	f.Should = should
 	g.Add(f)
 
-	f = makr.NewFile("grifts/db.go", nSeedGrift)
+	f = makr.NewFile(filepath.Join("grifts", "db.go"), nSeedGrift)
 	f.Should = should
 	g.Add(f)
 
