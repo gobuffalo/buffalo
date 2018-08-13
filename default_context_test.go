@@ -88,6 +88,25 @@ func Test_DefaultContext_Param(t *testing.T) {
 	r.Equal("Mark", c.Param("name"))
 }
 
+func Test_DefaultContext_Param_form(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{})
+	var name string
+	app.POST("/", func(c Context) error {
+		name = c.Param("name")
+		return nil
+	})
+
+	w := willie.New(app)
+	res := w.HTML("/").Post(map[string]string{
+		"name": "Mark",
+	})
+
+	r.Equal(200, res.Code)
+	r.Equal("Mark", name)
+}
+
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()

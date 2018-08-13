@@ -4,7 +4,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180806175557-74213b1cee9f
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180812201729-80d79f93229e
 	github.com/gobuffalo/envy v1.6.3
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/makr v1.1.1
@@ -41,6 +41,5 @@ require (
 	github.com/unrolled/secure v0.0.0-20180618144512-8287f3899c8e // indirect
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

@@ -51,6 +51,14 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		params.Set(k, v)
 	}
 
+	if err := req.ParseForm(); err == nil {
+		for k, v := range req.Form {
+			for _, vv := range v {
+				params.Set(k, vv)
+			}
+		}
+	}
+
 	session := a.getSession(req, res)
 
 	ct := httpx.ContentType(req)
