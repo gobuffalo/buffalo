@@ -5,7 +5,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180814214555-d6051145ccb2
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180814223330-728bf60c59f0
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180814222253-a3af4d9a974c
 	github.com/gobuffalo/envy v1.6.3
 	github.com/gobuffalo/github_flavored_markdown v1.0.0

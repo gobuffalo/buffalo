@@ -19,8 +19,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/go-sql-driver/mysql v1.4.0 h1:7LxgVwFb2hIQtMm87NdgAVfXjnt4OePseqT1tKx+opk=
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/gobuffalo/buffalo v0.12.6/go.mod h1:kp1qgfbzOQGfN+iXKPiVsKHXx16/XsnF9eB8nZawdEs=
-github.com/gobuffalo/buffalo-plugins v0.0.0-20180814214555-d6051145ccb2 h1:ROfZtt2tVrIKWB/ZcdJ/AOmd37AaKqUKM55JF2oYX9Q=
-github.com/gobuffalo/buffalo-plugins v0.0.0-20180814214555-d6051145ccb2/go.mod h1:Wpy4cwJmgclzNh1c74giGPG4cJXkBHDrpZ17VYrQsXA=
+github.com/gobuffalo/buffalo-plugins v0.0.0-20180814223330-728bf60c59f0 h1:CqXBNKdQ9dN3u5Pg62KXLi/tq+3uvf1yCz2ndtoq1Fk=
+github.com/gobuffalo/buffalo-plugins v0.0.0-20180814223330-728bf60c59f0/go.mod h1:jDQ4k3MkzBTXxHN223gU+MuDDwI/3Np4IeHFdH7S448=
 github.com/gobuffalo/buffalo-pop v0.0.0-20180814222253-a3af4d9a974c h1:B9KZ3uu10WC80WwnB7BlcDWVmQgY4r4YpO0D84QpnyU=
 github.com/gobuffalo/buffalo-pop v0.0.0-20180814222253-a3af4d9a974c/go.mod h1:pjzWxoot16IF9xupOei/JRVox5XQTOM8YJjKR1fr/VA=
 github.com/gobuffalo/envy v1.6.3 h1:I9iyNACF0Tovfta7iqLrUAXFHYBDBWveQrjpEv2XeWs=
@@ -109,6 +109,7 @@ github.com/mattn/go-sqlite3 v1.9.0 h1:pDRiWfl+++eC2FEFRy6jXmQlvp4Yh3z1MJKg4UeYM/
 github.com/mattn/go-sqlite3 v1.9.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/microcosm-cc/bluemonday v1.0.0 h1:dr58SIfmOwOVr+m4Ye1xLWv8Dk9OFwXAtYnbJSmJ65k=
 github.com/microcosm-cc/bluemonday v1.0.0/go.mod h1:hsXNsILzKxV+sX77C5b8FSuKF00vh2OMYv+xgHpAMF4=
+github.com/mitchellh/go-homedir v0.0.0-20180523094522-3864e76763d9 h1:Y94YB7jrsihrbGSqRNMwRWJ2/dCxr0hdC2oPRohkx0A=
 github.com/mitchellh/go-homedir v0.0.0-20180523094522-3864e76763d9/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
 github.com/mitchellh/go-homedir v0.0.0-20180801233206-58046073cbff h1:jM4Eo4qMmmcqePS3u6X2lcEELtVuXWkWJIS/pRI3oSk=
 github.com/mitchellh/go-homedir v0.0.0-20180801233206-58046073cbff/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
@@ -166,11 +167,13 @@ github.com/unrolled/secure v0.0.0-20180618144512-8287f3899c8e/go.mod h1:mnPT77IA
 golang.org/x/crypto v0.0.0-20180808211826-de0752318171 h1:vYogbvSFj2YXcjQxFHu/rASSOt9sLytpCaSkiwQ135I=
 golang.org/x/crypto v0.0.0-20180808211826-de0752318171/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/net v0.0.0-20180801234040-f4c29de78a2a/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/net v0.0.0-20180808004115-f9ce57c11b24 h1:mEsFm194MmS9vCwxFy+zwu0EU7ZkxxMD1iH++vmGdUY=
 golang.org/x/net v0.0.0-20180808004115-f9ce57c11b24/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180811021610-c39426892332 h1:efGso+ep0DjyCBJPjvoz0HI6UldX4Md2F1rZFe1ir0E=
 golang.org/x/net v0.0.0-20180811021610-c39426892332/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f h1:wMNYb4v58l5UBM7MYRLPG6ZhfOqbKu7X5eyFl8ZhKvA=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
+golang.org/x/sys v0.0.0-20180616030259-6c888cc515d3 h1:FCfAlbS73+IQQJktaKGHldMdL2bGDVpm+OrCEbVz1f4=
 golang.org/x/sys v0.0.0-20180616030259-6c888cc515d3/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180814072032-4e1fef560951 h1:VfGaXvV9wRnTJreeGDE0FWEDiQP1WWUDmutCjCThDz8=
 golang.org/x/sys v0.0.0-20180814072032-4e1fef560951/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
