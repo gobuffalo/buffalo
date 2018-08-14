@@ -48,7 +48,6 @@ require (
 	github.com/pelletier/go-toml v1.2.0
 	github.com/pkg/errors v0.8.0
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/russross/blackfriday v2.0.0+incompatible
 	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
 	github.com/sergi/go-diff v1.0.0
 	github.com/shurcooL/go v0.0.0-20180423040247-9e1955d9fb6e

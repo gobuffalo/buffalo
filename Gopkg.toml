@@ -126,10 +126,6 @@
   version = "0.8.0"
 
 [[constraint]]
-  name = "github.com/russross/blackfriday"
-  version = "2.0.0"
-
-[[constraint]]
   name = "github.com/sirupsen/logrus"
   version = "1.0.6"
 
