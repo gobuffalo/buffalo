@@ -202,3 +202,77 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 	r.DirExists(filepath.Join(tdir, "hello_world"))
 	r.FileExists(filepath.Join(tdir, "hello_world", "database.yml"))
 }
+
+func Test_NewCmd_BasicWorkflowWithDB(t *testing.T) {
+	if envy.Get("GO111MODULE", "off") == "on" {
+		t.Skip("CURRENTLY NOT SUPPORTED")
+	}
+	r := require.New(t)
+	c := RootCmd
+
+	gp, err := envy.MustGet("GOPATH")
+	r.NoError(err)
+	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
+	tdir, err := ioutil.TempDir(cpath, "testapp")
+	r.NoError(err)
+	defer os.RemoveAll(tdir)
+
+	pwd, err := os.Getwd()
+	r.NoError(err)
+	os.Chdir(tdir)
+	defer os.Chdir(pwd)
+
+	// Generate a new "coke" app
+	c.SetArgs([]string{
+		"new",
+		"coke",
+		"--db-type=sqlite3",
+		"--skip-webpack",
+		"--vcs=none",
+	})
+	err = c.Execute()
+	r.NoError(err)
+
+	err = os.Chdir(filepath.Join(tdir, "coke"))
+	r.NoError(err)
+
+	// Create all declared DBs
+	c.SetArgs([]string{
+		"db",
+		"create",
+		"-a",
+		"-d",
+	})
+	err = c.Execute()
+	r.NoError(err)
+
+	// Generate a new "widget" resource
+	c.SetArgs([]string{
+		"g",
+		"resource",
+		"widget",
+		"name",
+	})
+	err = c.Execute()
+	r.NoError(err)
+
+	// Build project
+	c.SetArgs([]string{
+		"b",
+		"-d",
+	})
+	err = c.Execute()
+	r.NoError(err)
+
+	// Run migrations on new exe
+	bin := filepath.Join(tdir, "coke", "bin", "coke")
+	if runtime.GOOS == "windows" {
+		bin += ".exe"
+	}
+	cmd := exec.Command(bin, "migrate")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	err = cmd.Run()
+	r.NoError(err)
+}

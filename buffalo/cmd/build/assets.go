@@ -8,7 +8,6 @@ import (
 )
 
 func (b *Builder) buildAssets() error {
-
 	if b.WithWebpack && b.Options.WithAssets {
 		if err := envy.MustSet("NODE_ENV", "production"); err != nil {
 			return errors.WithStack(err)

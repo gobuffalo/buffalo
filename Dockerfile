@@ -40,21 +40,6 @@ RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
 
-# START: tests bins are built with tags properly
-RUN mkdir -p $GOPATH/src/github.com/markbates
-WORKDIR $GOPATH/src/github.com/markbates
-RUN buffalo new --skip-webpack coke --db-type=sqlite3
-WORKDIR $GOPATH/src/github.com/markbates/coke
-RUN buffalo db create -a -d
-RUN buffalo g resource widget name
-RUN buffalo b -d
-# works fine:
-RUN ./bin/coke migrate
-RUN rm -rfv $GOPATH/src/github.com/markbates/coke
-# :END
-
-WORKDIR $GOPATH/src/
-
 RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
 WORKDIR ./hello_world
 
