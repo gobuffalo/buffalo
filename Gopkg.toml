@@ -79,10 +79,6 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/gobuffalo/mw-poptx"
-
-[[constraint]]
-  branch = "master"
   name = "github.com/gobuffalo/mw-tokenauth"
 
 [[constraint]]
