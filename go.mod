@@ -1,20 +1,13 @@
 module github.com/gobuffalo/buffalo
 
 require (
-	dmitri.shuralyov.com/text/kebabcase v0.0.0-20180217051803-40e40b42552a
-	github.com/ajg/form v0.0.0-20160802194845-cc2954064ec9
-	github.com/cockroachdb/cockroach-go v0.0.0-20180212155653-59c0560478b7
-	github.com/davecgh/go-spew v1.1.0
+	github.com/ajg/form v0.0.0-20160822230020-523a5da1a92f // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/fatih/structs v1.0.0
-	github.com/fsnotify/fsnotify v1.4.7
-	github.com/go-sql-driver/mysql v1.4.0
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180814214555-d6051145ccb2
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180814220930-7cb141701926
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180814222253-a3af4d9a974c
 	github.com/gobuffalo/envy v1.6.3
-	github.com/gobuffalo/fizz v1.0.7
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/makr v1.1.1
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
@@ -30,65 +23,25 @@ require (
 	github.com/gobuffalo/shoulders v0.0.0-20180810153810-ae902c4e78ff
 	github.com/gobuffalo/tags v2.0.6+incompatible
 	github.com/gobuffalo/uuid v2.0.0+incompatible
-	github.com/gobuffalo/validate v2.0.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20180117215853-11ca13c05abd
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
-	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.1.1
-	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
-	github.com/inconshreveable/mousetrap v1.0.0
-	github.com/jmoiron/sqlx v0.0.0-20180614180643-0dae4fefe7c0
-	github.com/joho/godotenv v1.2.0
-	github.com/lib/pq v0.0.0-20180523175426-90697d60dd84
-	github.com/magiconair/properties v1.8.0
 	github.com/markbates/deplist v1.0.2
 	github.com/markbates/going v1.0.1
 	github.com/markbates/grift v1.0.1
-	github.com/markbates/hmax v1.0.0
 	github.com/markbates/inflect v1.0.0
 	github.com/markbates/refresh v1.4.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/markbates/willie v1.0.6
-	github.com/mattn/go-colorable v0.0.9
-	github.com/mattn/go-isatty v0.0.3
-	github.com/mattn/go-sqlite3 v1.9.0
-	github.com/microcosm-cc/bluemonday v1.0.0
-	github.com/mitchellh/go-homedir v0.0.0-20180801233206-58046073cbff
-	github.com/mitchellh/mapstructure v0.0.0-20180715050151-f15292f7a699
-	github.com/monoculum/formam v0.0.0-20170619223434-99ca9dcbaca6
-	github.com/nicksnyder/go-i18n v1.10.0
-	github.com/pelletier/go-toml v1.2.0
+	github.com/monoculum/formam v0.0.0-20170814190438-f25191ae7744
 	github.com/pkg/errors v0.8.0
-	github.com/pmezard/go-difflib v1.0.0
-	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
-	github.com/sergi/go-diff v1.0.0
-	github.com/shurcooL/go v0.0.0-20180423040247-9e1955d9fb6e
-	github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041
-	github.com/shurcooL/graphql v0.0.0-20180514000029-62c9ce094e75
-	github.com/shurcooL/highlight_diff v0.0.0-20170515013008-09bb4053de1b
-	github.com/shurcooL/highlight_go v0.0.0-20170515013102-78fb10f4a5f8
-	github.com/shurcooL/octicon v0.0.0-20180602230221-c42b0e3b24d9
-	github.com/shurcooL/sanitized_anchor_name v0.0.0-20170918181015-86672fcb3f95
 	github.com/sirupsen/logrus v1.0.6
-	github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d
-	github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e
-	github.com/spf13/afero v1.1.1
-	github.com/spf13/cast v1.2.0
 	github.com/spf13/cobra v0.0.3
-	github.com/spf13/jwalterweatherman v0.0.0-20180814060501-14d3d4c51834
 	github.com/spf13/pflag v1.0.2
 	github.com/spf13/viper v1.1.0
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20180618144512-8287f3899c8e
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
-	golang.org/x/net v0.0.0-20180811021610-c39426892332
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20180814072032-4e1fef560951
-	golang.org/x/text v0.3.0
-	google.golang.org/appengine v1.1.0
-	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/mail.v2 v2.0.0-20180301192024-63235f23494b
-	gopkg.in/russross/blackfriday.v1 v1.5.1
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
