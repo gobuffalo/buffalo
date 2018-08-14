@@ -1,8 +1,6 @@
 package middleware
 
-import (
-	"github.com/gobuffalo/mw-poptx"
-)
+import "github.com/gobuffalo/buffalo-pop/pop/popmw"
 
 // PopTransaction is a piece of Buffalo middleware that wraps each
 // request in a transaction. The transaction will automatically get
@@ -11,5 +9,5 @@ import (
 // field to the log, "db", that shows the total duration spent during
 // the request making database calls.
 //
-// Deprecated: use github.com/gobuffalo/mw-poptx#PopTransaction instead.
-var PopTransaction = poptx.PopTransaction
+// Deprecated: use github.com/gobuffalo/buffalo-pop/pop/popmw#Transaction instead.
+var PopTransaction = popmw.Transaction
