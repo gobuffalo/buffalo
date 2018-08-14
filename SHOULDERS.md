@@ -158,8 +158,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
-* [github.com/russross/blackfriday](https://godoc.org/github.com/russross/blackfriday)
-
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
