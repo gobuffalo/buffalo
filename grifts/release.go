@@ -1,7 +1,7 @@
 package grifts
 
 import (
-	"strings"
+	"fmt"
 
 	"github.com/gobuffalo/buffalo/internal/release"
 	"github.com/markbates/grift/grift"
@@ -35,11 +35,7 @@ var _ = grift.Add("release", func(c *grift.Context) error {
 			},
 		})
 		p, err := release.PackAndCommit()
-		if err != nil {
-			if !strings.Contains(err.Error(), "nothing to commit, working tree clean") {
-				return errors.WithStack(err)
-			}
-		}
+		fmt.Println(err)
 		m.Add(p)
 
 		tr, err := release.TagRelease("master", v)
