@@ -62,15 +62,17 @@ func (g Generator) Validate() error {
 		return errors.New("you must enter a name for your new application")
 	}
 
-	var found bool
-	for _, d := range pop.AvailableDialects {
-		if d == g.DBType {
-			found = true
-			break
+	if g.WithPop {
+		var found bool
+		for _, d := range pop.AvailableDialects {
+			if d == g.DBType {
+				found = true
+				break
+			}
 		}
-	}
-	if !found {
-		return fmt.Errorf("Unknown db-type %s expecting one of %s", g.DBType, strings.Join(pop.AvailableDialects, ", "))
+		if !found {
+			return fmt.Errorf("Unknown db-type %s expecting one of %s", g.DBType, strings.Join(pop.AvailableDialects, ", "))
+		}
 	}
 
 	for _, n := range forbiddenAppNames {

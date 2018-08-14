@@ -40,7 +40,13 @@ func (a Generator) Run(root string, data makr.Data) error {
 		data["addPrune"] = true
 		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
 		if _, err := exec.LookPath("dep"); err != nil {
-			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+			// This step needs to be in a separate generator, because goGet() exec.Command
+			// checks if the executable exists (so before running the generator).
+			gg := makr.New()
+			gg.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+			if err := gg.Run(root, data); err != nil {
+				return errors.WithStack(err)
+			}
 		}
 	}
 
@@ -199,9 +205,7 @@ func (a Generator) goGet() *exec.Cmd {
 	defer os.Chdir(cd)
 	os.Chdir(a.Root)
 	if a.WithDep {
-		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "ensure", "-v")
-		}
+		return exec.Command("dep", "ensure", "-v")
 	}
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
