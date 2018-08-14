@@ -1,8 +1,0 @@
-[[constraint]]
-  branch = "master"
-  name = "github.com/russross/blackfriday"
-
-
-[prune]
-  go-tests = true
-  unused-packages = true
