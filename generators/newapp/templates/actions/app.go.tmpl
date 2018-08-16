@@ -43,7 +43,7 @@ var T *i18n.Translator
 // is true of resource declarations as well.
 //
 // It also means that routes are checked in the order they are declared.
-// app.ServeFiles is a CATCH-ALL route, so it should always be
+// `ServeFiles` is a CATCH-ALL route, so it should always be
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 func App() *buffalo.App {
