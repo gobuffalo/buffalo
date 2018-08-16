@@ -1,6 +1,7 @@
 package render_test
 
 import (
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,6 +20,24 @@ type Car struct {
 }
 
 type Cars []Car
+
+func Test_Auto_DefaultContentType(t *testing.T) {
+	r := require.New(t)
+
+	re := render.New(render.Options{
+		DefaultContentType: "application/json",
+	})
+	app := buffalo.New(buffalo.Options{})
+	app.GET("/cars", func(c buffalo.Context) error {
+		return c.Render(200, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
+	})
+
+	res := httptest.NewRecorder()
+	req := httptest.NewRequest("GET", "/cars", nil)
+	app.ServeHTTP(res, req)
+
+	r.Equal(`["Honda","Toyota","Ford","Chevy"]`, strings.TrimSpace(res.Body.String()))
+}
 
 func Test_Auto_JSON(t *testing.T) {
 	r := require.New(t)
