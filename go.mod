@@ -23,18 +23,16 @@ require (
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
 	github.com/gobuffalo/packr v1.13.2
 	github.com/gobuffalo/plush v3.7.14+incompatible
-	github.com/gobuffalo/pop v4.6.4+incompatible
+	github.com/gobuffalo/pop v4.6.5+incompatible
 	github.com/gobuffalo/shoulders v0.0.0-20180815165021-5569039eac2f
 	github.com/gobuffalo/tags v2.0.8+incompatible
 	github.com/gobuffalo/uuid v2.0.2+incompatible
-	github.com/gobuffalo/validate v2.0.1+incompatible // indirect
-	github.com/gobuffalo/x v0.0.0-20180117215853-11ca13c05abd
+	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
-	github.com/gorilla/pat v0.0.0-20180118222023-199c85a7f6d1 // indirect
 	github.com/gorilla/sessions v1.1.1
 	github.com/markbates/deplist v1.0.2
-	github.com/markbates/going v1.0.1
+	github.com/markbates/going v1.0.2 // indirect
 	github.com/markbates/grift v1.0.1
 	github.com/markbates/inflect v1.0.0
 	github.com/markbates/refresh v1.4.1
@@ -48,11 +46,6 @@ require (
 	github.com/spf13/viper v1.1.0
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
-	golang.org/x/net v0.0.0-20180816102801-aaf60122140d // indirect
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20180816055513-1c9583448a9c // indirect
-	golang.org/x/tools v0.0.0-20180816002632-9de19001913f // indirect
-	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
-	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
