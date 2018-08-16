@@ -10,6 +10,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180814223854-e5520399f772
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180814222253-a3af4d9a974c // indirect
 	github.com/gobuffalo/envy v1.6.3
+	github.com/gobuffalo/fizz v1.0.8 // indirect
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/makr v1.1.2
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
@@ -26,6 +27,7 @@ require (
 	github.com/gobuffalo/shoulders v0.0.0-20180815165021-5569039eac2f
 	github.com/gobuffalo/tags v2.0.8+incompatible
 	github.com/gobuffalo/uuid v2.0.2+incompatible
+	github.com/gobuffalo/validate v2.0.1+incompatible // indirect
 	github.com/gobuffalo/x v0.0.0-20180117215853-11ca13c05abd
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
@@ -46,7 +48,10 @@ require (
 	github.com/spf13/viper v1.1.0
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
+	golang.org/x/net v0.0.0-20180816102801-aaf60122140d // indirect
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+	golang.org/x/sys v0.0.0-20180816055513-1c9583448a9c // indirect
+	golang.org/x/tools v0.0.0-20180816002632-9de19001913f // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
