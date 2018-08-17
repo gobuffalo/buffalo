@@ -1,17 +1,29 @@
-# Buffalo Stands on the Shoulders of Giants
+# `github.com/gobuffalo/buffalo` Stands on the Shoulders of Giants
 
-Buffalo does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them altogether in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
+`github.com/gobuffalo/buffalo` does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them altogether in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
 
 Thank you to the following **GIANTS**:
 
 
+* [C](https://godoc.org/C)
+
+* [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
+
+* [github.com/ajg/form](https://godoc.org/github.com/ajg/form)
+
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
+
+* [github.com/cockroachdb/cockroach-go/testserver](https://godoc.org/github.com/cockroachdb/cockroach-go/testserver)
 
 * [github.com/dgrijalva/jwt-go](https://godoc.org/github.com/dgrijalva/jwt-go)
 
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
+
+* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-colorable)
+
+* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-isatty)
 
 * [github.com/fatih/structs](https://godoc.org/github.com/fatih/structs)
 
@@ -63,6 +75,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
 
+* [github.com/gobuffalo/pop/slices](https://godoc.org/github.com/gobuffalo/pop/slices)
+
 * [github.com/gobuffalo/pop/soda/cmd](https://godoc.org/github.com/gobuffalo/pop/soda/cmd)
 
 * [github.com/gobuffalo/pop/soda/cmd/generate](https://godoc.org/github.com/gobuffalo/pop/soda/cmd/generate)
@@ -86,6 +100,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gorilla/context](https://godoc.org/github.com/gorilla/context)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)
+
+* [github.com/gorilla/pat](https://godoc.org/github.com/gorilla/pat)
 
 * [github.com/gorilla/securecookie](https://godoc.org/github.com/gorilla/securecookie)
 
@@ -117,11 +133,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/joho/godotenv](https://godoc.org/github.com/joho/godotenv)
 
+* [github.com/kr/pretty](https://godoc.org/github.com/kr/pretty)
+
 * [github.com/lib/pq](https://godoc.org/github.com/lib/pq)
 
 * [github.com/lib/pq/oid](https://godoc.org/github.com/lib/pq/oid)
 
 * [github.com/magiconair/properties](https://godoc.org/github.com/magiconair/properties)
+
+* [github.com/magiconair/properties/assert](https://godoc.org/github.com/magiconair/properties/assert)
 
 * [github.com/markbates/deplist](https://godoc.org/github.com/markbates/deplist)
 
@@ -135,6 +155,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/grift/grift](https://godoc.org/github.com/markbates/grift/grift)
 
+* [github.com/markbates/hmax](https://godoc.org/github.com/markbates/hmax)
+
 * [github.com/markbates/inflect](https://godoc.org/github.com/markbates/inflect)
 
 * [github.com/markbates/refresh/refresh](https://godoc.org/github.com/markbates/refresh/refresh)
@@ -143,9 +165,9 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
-* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
+* [github.com/markbates/willie](https://godoc.org/github.com/markbates/willie)
 
-* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
+* [github.com/mattn/go-sqlite3](https://godoc.org/github.com/mattn/go-sqlite3)
 
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
@@ -163,17 +185,17 @@ Thank you to the following **GIANTS**:
 
 * [github.com/nicksnyder/go-i18n/i18n/translation](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/translation)
 
+* [github.com/onsi/ginkgo](https://godoc.org/github.com/onsi/ginkgo)
+
+* [github.com/onsi/gomega](https://godoc.org/github.com/onsi/gomega)
+
 * [github.com/pelletier/go-toml](https://godoc.org/github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
-* [github.com/russross/blackfriday](https://godoc.org/github.com/russross/blackfriday)
-
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
-
-* [github.com/shurcooL/github_flavored_markdown](https://godoc.org/github.com/shurcooL/github_flavored_markdown)
 
 * [github.com/shurcooL/highlight_diff](https://godoc.org/github.com/shurcooL/highlight_diff)
 
@@ -203,6 +225,16 @@ Thank you to the following **GIANTS**:
 
 * [github.com/spf13/viper](https://godoc.org/github.com/spf13/viper)
 
+* [github.com/stretchr/testify/assert](https://godoc.org/github.com/stretchr/testify/assert)
+
+* [github.com/stretchr/testify/require](https://godoc.org/github.com/stretchr/testify/require)
+
+* [github.com/stretchr/testify/suite](https://godoc.org/github.com/stretchr/testify/suite)
+
+* [github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew](https://godoc.org/github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew)
+
+* [github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib](https://godoc.org/github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib)
+
 * [golang.org/x/crypto/bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt)
 
 * [golang.org/x/crypto/blowfish](https://godoc.org/golang.org/x/crypto/blowfish)
@@ -219,9 +251,17 @@ Thank you to the following **GIANTS**:
 
 * [golang.org/x/sys/unix](https://godoc.org/golang.org/x/sys/unix)
 
+* [golang.org/x/text/internal/gen](https://godoc.org/golang.org/x/text/internal/gen)
+
+* [golang.org/x/text/internal/testtext](https://godoc.org/golang.org/x/text/internal/testtext)
+
 * [golang.org/x/text/transform](https://godoc.org/golang.org/x/text/transform)
 
+* [golang.org/x/text/unicode/cldr](https://godoc.org/golang.org/x/text/unicode/cldr)
+
 * [golang.org/x/text/unicode/norm](https://godoc.org/golang.org/x/text/unicode/norm)
+
+* [gopkg.in/check.v1](https://godoc.org/gopkg.in/check.v1)
 
 * [gopkg.in/russross/blackfriday.v1](https://godoc.org/gopkg.in/russross/blackfriday.v1)
 
