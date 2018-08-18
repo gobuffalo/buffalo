@@ -5,7 +5,7 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/going/randx"
+	"github.com/gobuffalo/x/randx"
 )
 
 // RequestLogger can be be overridden to a user specified

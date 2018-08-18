@@ -10,7 +10,6 @@ require (
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180818124224-e3bbd0b11d3e // indirect
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/fizz v1.0.8 // indirect
-	github.com/gobuffalo/genny v0.0.0-20180816210803-003f8c59fdd8 // indirect
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/makr v1.1.4
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
@@ -32,7 +31,6 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.1
-	github.com/kr/pty v1.1.2 // indirect
 	github.com/markbates/deplist v1.0.2
 	github.com/markbates/going v1.0.2
 	github.com/markbates/grift v1.0.1
@@ -49,6 +47,5 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180816225734-aabede6cba87
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20180817170705-7d1dc997617f // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
