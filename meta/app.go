@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
@@ -32,6 +33,7 @@ type App struct {
 	WithYarn    bool         `json:"with_yarn"`
 	WithDocker  bool         `json:"with_docker"`
 	WithGrifts  bool         `json:"with_grifts"`
+	WithModules bool         `json:"with_modules"`
 }
 
 // New App based on the details found at the provided root path
@@ -109,6 +111,8 @@ func New(root string) App {
 		app.VCS = "bzr"
 	}
 
+	mods := envy.Get("GO111MODULE", "")
+	app.WithModules = (strings.TrimSpace(mods) == "on")
 	return app
 }
 

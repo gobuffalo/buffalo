@@ -42,11 +42,7 @@ func (b *Builder) buildBin() error {
 
 	buildArgs = append(buildArgs, "-o", b.Bin)
 
-	version, buildTime := version()
-	flags := []string{
-		fmt.Sprintf("-X main.BuildVersion=%s", version),
-		fmt.Sprintf("-X main.BuildTime=%s", buildTime),
-	}
+	flags := []string{}
 
 	if b.Static {
 		flags = append(flags, "-linkmode external", "-extldflags \"-static\"")
@@ -62,8 +58,9 @@ func (b *Builder) buildBin() error {
 		}
 		flags = append(flags, b.LDFlags)
 	}
-
-	buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
+	if len(flags) > 0 {
+		buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
+	}
 
 	return b.exec(envy.Get("GO_BIN", "go"), buildArgs...)
 }
