@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/x/defaults"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/going/defaults"
 	"github.com/pkg/errors"
 )
 
