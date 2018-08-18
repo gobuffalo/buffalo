@@ -1,35 +1,12 @@
 package build
 
 import (
-	"bytes"
-	"fmt"
-	"os"
-	"os/exec"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 )
-
-func version() (string, string) {
-	_, err := exec.LookPath("git")
-	buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
-	version := buildTime
-	if err == nil {
-		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
-		out := &bytes.Buffer{}
-		cmd.Stdout = out
-		cmd.Stderr = os.Stderr
-		cmd.Stdin = os.Stdin
-		err = cmd.Run()
-		if err == nil && out.String() != "" {
-			version = strings.TrimSpace(out.String())
-		}
-	}
-	return version, buildTime
-}
 
 func (b *Builder) buildBin() error {
 	buildArgs := []string{"build", "-i"}
