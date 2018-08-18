@@ -1,12 +1,35 @@
 package build
 
 import (
+	"bytes"
+	"fmt"
+	"os"
+	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 )
+
+func version() (string, string) {
+	_, err := exec.LookPath("git")
+	buildTime := fmt.Sprintf("\"%s\"", time.Now().Format(time.RFC3339))
+	version := buildTime
+	if err == nil {
+		cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+		out := &bytes.Buffer{}
+		cmd.Stdout = out
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
+		err = cmd.Run()
+		if err == nil && out.String() != "" {
+			version = strings.TrimSpace(out.String())
+		}
+	}
+	return version, buildTime
+}
 
 func (b *Builder) buildBin() error {
 	buildArgs := []string{"build", "-i"}
@@ -19,7 +42,11 @@ func (b *Builder) buildBin() error {
 
 	buildArgs = append(buildArgs, "-o", b.Bin)
 
-	flags := []string{}
+	version, buildTime := version()
+	flags := []string{
+		fmt.Sprintf("-X main.BuildVersion=%s", version),
+		fmt.Sprintf("-X main.BuildTime=%s", buildTime),
+	}
 
 	if b.Static {
 		flags = append(flags, "-linkmode external", "-extldflags \"-static\"")
@@ -35,9 +62,8 @@ func (b *Builder) buildBin() error {
 		}
 		flags = append(flags, b.LDFlags)
 	}
-	if len(flags) > 0 {
-		buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
-	}
+
+	buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
 
 	return b.exec(envy.Get("GO_BIN", "go"), buildArgs...)
 }
