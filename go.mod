@@ -1,7 +1,9 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/BurntSushi/toml v0.3.0 // indirect
 	github.com/ajg/form v0.0.0-20160822230020-523a5da1a92f // indirect
+	github.com/codegangsta/negroni v0.3.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
@@ -24,9 +26,13 @@ require (
 	github.com/gobuffalo/tags v2.0.6+incompatible
 	github.com/gobuffalo/uuid v2.0.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20180117215853-11ca13c05abd
+	github.com/golang/protobuf v1.1.0 // indirect
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
+	github.com/gorilla/pat v0.0.0-20180118222023-199c85a7f6d1 // indirect
 	github.com/gorilla/sessions v1.1.1
+	github.com/hpcloud/tail v1.0.0 // indirect
+	github.com/kr/pretty v0.1.0 // indirect
 	github.com/markbates/deplist v1.0.2
 	github.com/markbates/going v1.0.1
 	github.com/markbates/grift v1.0.1
@@ -35,6 +41,8 @@ require (
 	github.com/markbates/sigtx v1.0.0
 	github.com/markbates/willie v1.0.6
 	github.com/monoculum/formam v0.0.0-20170814190438-f25191ae7744
+	github.com/onsi/ginkgo v1.6.0 // indirect
+	github.com/onsi/gomega v1.4.1 // indirect
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.0.6
 	github.com/spf13/cobra v0.0.3
@@ -43,5 +51,9 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
+	gopkg.in/fsnotify.v1 v1.4.7 // indirect
+	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
+	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
