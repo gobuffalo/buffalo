@@ -16,6 +16,9 @@
   ]
 }, {
   "path": "actions/render.go",
+  "contains": [
+    "DefaultContentType: \"application/json\","
+  ],
   "!contains": [
     "HTMLLayout",
     "TemplatesBox",
