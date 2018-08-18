@@ -41,6 +41,10 @@ func New(opts Options) *Engine {
 		opts.TemplateEngines["tmpl"] = GoTemplateEngine
 	}
 
+	if opts.DefaultContentType == "" {
+		opts.DefaultContentType = "text/html"
+	}
+
 	e := &Engine{
 		Options: opts,
 	}
