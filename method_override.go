@@ -3,7 +3,7 @@ package buffalo
 import (
 	"net/http"
 
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/x/defaults"
 )
 
 // MethodOverride is the default implementation for the

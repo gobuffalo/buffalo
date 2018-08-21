@@ -10,8 +10,8 @@ import (
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/x/defaults"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/going/defaults"
 )
 
 // Options are used to configure and define how your application should run.
