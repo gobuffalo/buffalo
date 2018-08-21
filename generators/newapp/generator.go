@@ -95,6 +95,9 @@ func (g Generator) Validate() error {
 }
 
 func (g Generator) validateInGoPath() error {
+	if g.App.WithModules {
+		return nil
+	}
 	gpMultiple := envy.GoPaths()
 
 	larp := strings.ToLower(meta.ResolveSymlinks(filepath.Dir(g.Root)))

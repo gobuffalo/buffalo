@@ -62,20 +62,28 @@ func New(root string) App {
 
 	// Gather meta data
 	name := inflect.Name(filepath.Base(root))
-	pp := envy.CurrentPackage()
-	if filepath.Base(pp) != string(name) {
-		pp = path.Join(pp, string(name))
+
+	mods := envy.Get("GO111MODULE", "")
+	modsOn := (strings.TrimSpace(mods) == "on")
+	pp := name.String()
+
+	if !modsOn {
+		pp := envy.CurrentPackage()
+		if filepath.Base(pp) != string(name) {
+			pp = path.Join(pp, string(name))
+		}
 	}
 
 	app := App{
-		Pwd:        pwd,
-		Root:       root,
-		GoPath:     envy.GoPath(),
-		Name:       name,
-		PackagePkg: pp,
-		ActionsPkg: pp + "/actions",
-		ModelsPkg:  pp + "/models",
-		GriftsPkg:  pp + "/grifts",
+		Pwd:         pwd,
+		Root:        root,
+		GoPath:      envy.GoPath(),
+		Name:        name,
+		PackagePkg:  pp,
+		ActionsPkg:  pp + "/actions",
+		ModelsPkg:   pp + "/models",
+		GriftsPkg:   pp + "/grifts",
+		WithModules: modsOn,
 	}
 
 	app.Bin = filepath.Join("bin", filepath.Base(root))
@@ -111,8 +119,6 @@ func New(root string) App {
 		app.VCS = "bzr"
 	}
 
-	mods := envy.Get("GO111MODULE", "")
-	app.WithModules = (strings.TrimSpace(mods) == "on")
 	return app
 }
 
