@@ -38,6 +38,10 @@
   version = "1.7.0"
 
 [[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/buffalo-plugins"
+
+[[constraint]]
   name = "github.com/gobuffalo/envy"
   version = "1.6.3"
 
@@ -50,6 +54,38 @@
   version = "1.1.1"
 
 [[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-basicauth"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-contenttype"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-csrf"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-forcessl"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-i18n"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-paramlogger"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-poptx"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/mw-tokenauth"
+
+[[constraint]]
   name = "github.com/gobuffalo/packr"
   version = "1.13.1"
 
@@ -60,6 +96,10 @@
 [[constraint]]
   name = "github.com/gobuffalo/pop"
   version = "4.6.4"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gobuffalo/shoulders"
 
 [[constraint]]
   name = "github.com/gobuffalo/tags"
@@ -90,10 +130,6 @@
   version = "1.0.2"
 
 [[constraint]]
-  name = "github.com/markbates/going"
-  version = "1.0.1"
-
-[[constraint]]
   name = "github.com/markbates/grift"
   version = "1.0.1"
 
@@ -118,10 +154,6 @@
   version = "3.0.0"
 
 [[constraint]]
-  name = "github.com/nicksnyder/go-i18n"
-  version = "1.10.0"
-
-[[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
 
@@ -134,12 +166,16 @@
   version = "0.0.3"
 
 [[constraint]]
-  name = "github.com/stretchr/testify"
-  version = "1.2.2"
+  name = "github.com/spf13/pflag"
+  version = "1.0.2"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/unrolled/secure"
+  name = "github.com/spf13/viper"
+  version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "1.2.2"
 
 [[constraint]]
   branch = "master"

@@ -3,23 +3,25 @@ package actions
 import (
   "github.com/gobuffalo/envy"
   "github.com/gobuffalo/buffalo"
-  "github.com/gobuffalo/buffalo/middleware"
-  "github.com/gobuffalo/buffalo/middleware/ssl"
+  "github.com/gobuffalo/mw-forcessl"
+  "github.com/gobuffalo/mw-paramlogger"
   "github.com/unrolled/secure"
 
   {{ if .opts.WithPop }}
   "{{.opts.ModelsPkg}}"
+  "github.com/gobuffalo/mw-poptx"
   {{ end -}}
 
   {{ if .opts.AsWeb -}}
-  "github.com/gobuffalo/buffalo/middleware/csrf"
-  "github.com/gobuffalo/buffalo/middleware/i18n"
+  "github.com/gobuffalo/mw-csrf"
+  "github.com/gobuffalo/mw-i18n"
   "github.com/gobuffalo/packr"
   {{ end -}}
 
   {{ if .opts.AsAPI -}}
   "github.com/rs/cors"
   "github.com/gobuffalo/x/sessions"
+  "github.com/gobuffalo/mw-contenttype"
   {{ end -}}
 )
 
@@ -34,6 +36,16 @@ var T *i18n.Translator
 // App is where all routes and middleware for buffalo
 // should be defined. This is the nerve center of your
 // application.
+//
+// Routing, middleware, groups, etc... are declared TOP -> DOWN.
+// This means if you add a middleware to `app` *after* declaring a
+// group, that group will NOT have that new middleware. The same
+// is true of resource declarations as well.
+//
+// It also means that routes are checked in the order they are declared.
+// `ServeFiles` is a CATCH-ALL route, so it should always be
+// placed last in the route declarations, as it will prevent routes
+// declared after it to never be called.
 func App() *buffalo.App {
   if app == nil {
     app = buffalo.New(buffalo.Options{
@@ -51,11 +63,11 @@ func App() *buffalo.App {
 
     {{ if .opts.AsAPI -}}
     // Set the request content type to JSON
-    app.Use(middleware.SetContentType("application/json"))
+    app.Use(contenttype.Set("application/json"))
     {{ end }}
 
     if ENV == "development" {
-      app.Use(middleware.ParameterLogger)
+      app.Use(paramlogger.ParameterLogger)
     }
 
     {{ if .opts.AsWeb -}}
@@ -66,9 +78,9 @@ func App() *buffalo.App {
 
     {{ if .opts.WithPop }}
     // Wraps each request in a transaction.
-    //  c.Value("tx").(*pop.PopTransaction)
+    //  c.Value("tx").(*pop.Connection)
     // Remove to disable this.
-    app.Use(middleware.PopTransaction(models.DB))
+    app.Use(poptx.PopTransaction(models.DB))
     {{ end }}
 
     {{ if .opts.AsWeb -}}
@@ -106,7 +118,7 @@ func translations() buffalo.MiddlewareFunc {
 // we recommend using a proxy: https://gobuffalo.io/en/docs/proxy
 // for more information: https://github.com/unrolled/secure/
 func forceSSL() buffalo.MiddlewareFunc {
-  return ssl.ForceSSL(secure.Options{
+  return forcessl.Middleware(secure.Options{
     SSLRedirect:     ENV == "production",
     SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
   })

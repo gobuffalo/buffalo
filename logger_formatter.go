@@ -5,16 +5,12 @@ package buffalo
 import (
 	"bytes"
 	"fmt"
-	"io"
-	"os"
-	"regexp"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 const (
@@ -33,16 +29,7 @@ type textFormatter struct {
 
 func (f *textFormatter) init(entry *logrus.Entry) {
 	if entry.Logger != nil {
-		f.isTerminal = f.checkIfTerminal(entry.Logger.Out)
-	}
-}
-
-func (f *textFormatter) checkIfTerminal(w io.Writer) bool {
-	switch v := w.(type) {
-	case *os.File:
-		return terminal.IsTerminal(int(v.Fd()))
-	default:
-		return false
+		f.isTerminal = checkIfTerminal(entry.Logger.Out)
 	}
 }
 
@@ -50,20 +37,21 @@ const defaultTimestampFormat = time.RFC3339
 
 // Format renders a single log entry
 func (f *textFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	var b *bytes.Buffer
+	prefixFieldClashes(entry.Data)
+
 	keys := make([]string, 0, len(entry.Data))
 	for k := range entry.Data {
 		keys = append(keys, k)
 	}
 
 	sort.Strings(keys)
+
+	var b *bytes.Buffer
 	if entry.Buffer != nil {
 		b = entry.Buffer
 	} else {
 		b = &bytes.Buffer{}
 	}
-
-	prefixFieldClashes(entry.Data)
 
 	f.Do(func() { f.init(entry) })
 
@@ -117,11 +105,15 @@ func (f *textFormatter) needsQuoting(text string) bool {
 	if len(text) == 0 {
 		return true
 	}
-	matched, err := regexp.MatchString("[^a-zA-Z\\-\\._\\/@\\^\\+]", text)
-	if err != nil {
-		return false
+	for _, ch := range text {
+		if !((ch >= 'a' && ch <= 'z') ||
+			(ch >= 'A' && ch <= 'Z') ||
+			(ch >= '0' && ch <= '9') ||
+			ch == '-' || ch == '.' || ch == '_' || ch == '/' || ch == '@' || ch == '^' || ch == '+') {
+			return true
+		}
 	}
-	return matched
+	return false
 }
 
 func (f *textFormatter) appendKeyValue(b *bytes.Buffer, key string, value interface{}) {

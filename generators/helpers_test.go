@@ -28,7 +28,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/examples/json-crud/models"
 	"github.com/gobuffalo/buffalo/middleware"
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/x/defaults"
 )
 
 var ENV = defaults.String(os.Getenv("GO_ENV"), "development")
@@ -67,7 +67,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/examples/json-crud/models"
 	"github.com/gobuffalo/buffalo/middleware"
-	"github.com/markbates/going/defaults"
+	"github.com/gobuffalo/x/defaults"
 )
 
 var ENV = defaults.String(os.Getenv("GO_ENV"), "development")

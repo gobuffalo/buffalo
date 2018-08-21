@@ -16,3 +16,20 @@ func WrapHandler(h http.Handler) Handler {
 func WrapHandlerFunc(h http.HandlerFunc) Handler {
 	return WrapHandler(h)
 }
+
+// WrapBuffaloHandler wraps a buffalo.Handler to
+// standard http.Handler
+func WrapBuffaloHandler(h Handler) http.Handler {
+	a := New(Options{})
+	// it doesn't matter what we actually map it
+	// GET, POST, etc... we just need the underlying
+	// RouteInfo, which implements http.Handler
+	ri := a.GET("/", h)
+	return ri
+}
+
+// WrapBuffaloHandlerFunc wraps a buffalo.Handler to
+// standard http.HandlerFunc
+func WrapBuffaloHandlerFunc(h Handler) http.HandlerFunc {
+	return WrapBuffaloHandler(h).ServeHTTP
+}

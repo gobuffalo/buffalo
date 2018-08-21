@@ -24,4 +24,8 @@ type Options struct {
 
 	// TemplateEngine to be used for rendering HTML templates
 	TemplateEngines map[string]TemplateEngine
+
+	// DefaultContentType instructs the engine what it should fall back to if
+	// the "content-type" is unknown
+	DefaultContentType string
 }

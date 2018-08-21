@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gobuffalo/buffalo/middleware/tokenauth"
 	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo/middleware/tokenauth"
 	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )

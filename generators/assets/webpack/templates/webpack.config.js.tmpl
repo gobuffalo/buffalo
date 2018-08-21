@@ -16,25 +16,24 @@ const configurator = {
         './assets/css/application.scss',
       ],
     }
-    
+
     Glob.sync("./assets/*/*.*").forEach((entry) => {
       if (entry === './assets/css/application.scss') {
         return
       }
-      
-      let key = entry.replace(/(\.\/assets\/(js|css|go)\/)|\.(js|s[ac]ss|go)/g, '')
-      if(key.startsWith("_") || (/(js|s[ac]ss|go)$/i).test(entry) == false) {
+
+      let key = entry.replace(/(\.\/assets\/(src|js|css|go)\/)|\.(ts|js|s[ac]ss|go)/g, '')
+      if(key.startsWith("_") || (/(ts|js|s[ac]ss|go)$/i).test(entry) == false) {
         return
       }
-      
+
       if( entries[key] == null) {
         entries[key] = [entry]
         return
-      } 
-      
+      }
+
       entries[key].push(entry)
     })
-
     return entries
   },
 
@@ -43,7 +42,7 @@ const configurator = {
       new CleanObsoleteChunks(),
       new Webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
       new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
-      new CopyWebpackPlugin([{from: "./assets",to: ""}], {copyUnmodified: true,ignore: ["css/**", "js/**"] }),
+      new CopyWebpackPlugin([{from: "./assets",to: ""}], {copyUnmodified: true,ignore: ["css/**", "js/**", "src/**"] }),
       new Webpack.LoaderOptionsPlugin({minimize: true,debug: false}),
       new ManifestPlugin({fileName: "manifest.json"})
     ];
@@ -62,6 +61,7 @@ const configurator = {
             { loader: "sass-loader", options: {sourceMap: true}}
           ]
         },
+        { test: /\.tsx?$/, use: "ts-loader", exclude: /node_modules/},
         { test: /\.jsx?$/,loader: "babel-loader",exclude: /node_modules/ },
         { test: /\.(woff|woff2|ttf|svg)(\?v=\d+\.\d+\.\d+)?$/,use: "url-loader"},
         { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,use: "file-loader" },
@@ -73,13 +73,16 @@ const configurator = {
 
   buildConfig: function(){
     const env = process.env.NODE_ENV || "development";
-    
+
     var config = {
       mode: env,
       entry: configurator.entries(),
       output: {filename: "[name].[hash].js", path: `${__dirname}/public/assets`},
       plugins: configurator.plugins(),
-      module: configurator.moduleOptions()
+      module: configurator.moduleOptions(),
+      resolve: {
+        extensions: ['.ts', '.js', '.json']
+      }
     }
 
     if( env === "development" ){

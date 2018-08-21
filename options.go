@@ -6,14 +6,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/x/defaults"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/going/defaults"
 )
 
 // Options are used to configure and define how your application should run.
@@ -60,10 +58,6 @@ type Options struct {
 	PreWares []PreWare
 
 	Context context.Context
-
-	// LooseSlash defines the trailing slash behavior for new routes. The initial value is false.
-	// This is the opposite of http://www.gorillatoolkit.org/pkg/mux#Router.StrictSlash
-	LooseSlash bool
 
 	cancel context.CancelFunc
 	Prefix string
@@ -135,7 +129,7 @@ func optionsWithDefaults(opts Options) Options {
 			if opts.Env == "development" || opts.Env == "test" {
 				secret = "buffalo-secret"
 			} else {
-				logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+				opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 			}
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))

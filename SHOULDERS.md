@@ -1,7 +1,6 @@
+# `github.com/gobuffalo/buffalo` Stands on the Shoulders of Giants
 
-# Buffalo Stands on the Shoulders of Giants
-
-Buffalo does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them altogether in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
+`github.com/gobuffalo/buffalo` does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them altogether in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
 
 Thank you to the following **GIANTS**:
 
@@ -41,6 +40,16 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
 
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
+
+* [github.com/gobuffalo/mw-contenttype](https://godoc.org/github.com/gobuffalo/mw-contenttype)
+
+* [github.com/gobuffalo/mw-i18n](https://godoc.org/github.com/gobuffalo/mw-i18n)
+
+* [github.com/gobuffalo/mw-paramlogger](https://godoc.org/github.com/gobuffalo/mw-paramlogger)
+
+* [github.com/gobuffalo/mw-poptx](https://godoc.org/github.com/gobuffalo/mw-poptx)
+
+* [github.com/gobuffalo/mw-tokenauth](https://godoc.org/github.com/gobuffalo/mw-tokenauth)
 
 * [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
 
@@ -98,6 +107,26 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/sessions](https://godoc.org/github.com/gorilla/sessions)
 
+* [github.com/hashicorp/hcl](https://godoc.org/github.com/hashicorp/hcl)
+
+* [github.com/hashicorp/hcl/hcl/ast](https://godoc.org/github.com/hashicorp/hcl/hcl/ast)
+
+* [github.com/hashicorp/hcl/hcl/parser](https://godoc.org/github.com/hashicorp/hcl/hcl/parser)
+
+* [github.com/hashicorp/hcl/hcl/printer](https://godoc.org/github.com/hashicorp/hcl/hcl/printer)
+
+* [github.com/hashicorp/hcl/hcl/scanner](https://godoc.org/github.com/hashicorp/hcl/hcl/scanner)
+
+* [github.com/hashicorp/hcl/hcl/strconv](https://godoc.org/github.com/hashicorp/hcl/hcl/strconv)
+
+* [github.com/hashicorp/hcl/hcl/token](https://godoc.org/github.com/hashicorp/hcl/hcl/token)
+
+* [github.com/hashicorp/hcl/json/parser](https://godoc.org/github.com/hashicorp/hcl/json/parser)
+
+* [github.com/hashicorp/hcl/json/scanner](https://godoc.org/github.com/hashicorp/hcl/json/scanner)
+
+* [github.com/hashicorp/hcl/json/token](https://godoc.org/github.com/hashicorp/hcl/json/token)
+
 * [github.com/jmoiron/sqlx](https://godoc.org/github.com/jmoiron/sqlx)
 
 * [github.com/jmoiron/sqlx/reflectx](https://godoc.org/github.com/jmoiron/sqlx/reflectx)
@@ -109,6 +138,10 @@ Thank you to the following **GIANTS**:
 * [github.com/lib/pq](https://godoc.org/github.com/lib/pq)
 
 * [github.com/lib/pq/oid](https://godoc.org/github.com/lib/pq/oid)
+
+* [github.com/magiconair/properties](https://godoc.org/github.com/magiconair/properties)
+
+* [github.com/magiconair/properties/assert](https://godoc.org/github.com/magiconair/properties/assert)
 
 * [github.com/markbates/deplist](https://godoc.org/github.com/markbates/deplist)
 
@@ -139,6 +172,8 @@ Thank you to the following **GIANTS**:
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
+
+* [github.com/mitchellh/mapstructure](https://godoc.org/github.com/mitchellh/mapstructure)
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
@@ -176,9 +211,19 @@ Thank you to the following **GIANTS**:
 
 * [github.com/sourcegraph/syntaxhighlight](https://godoc.org/github.com/sourcegraph/syntaxhighlight)
 
+* [github.com/spf13/afero](https://godoc.org/github.com/spf13/afero)
+
+* [github.com/spf13/afero/mem](https://godoc.org/github.com/spf13/afero/mem)
+
+* [github.com/spf13/cast](https://godoc.org/github.com/spf13/cast)
+
 * [github.com/spf13/cobra](https://godoc.org/github.com/spf13/cobra)
 
+* [github.com/spf13/jwalterweatherman](https://godoc.org/github.com/spf13/jwalterweatherman)
+
 * [github.com/spf13/pflag](https://godoc.org/github.com/spf13/pflag)
+
+* [github.com/spf13/viper](https://godoc.org/github.com/spf13/viper)
 
 * [github.com/stretchr/testify/assert](https://godoc.org/github.com/stretchr/testify/assert)
 
@@ -206,11 +251,18 @@ Thank you to the following **GIANTS**:
 
 * [golang.org/x/sys/unix](https://godoc.org/golang.org/x/sys/unix)
 
-* [golang.org/x/tools/cmd/goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)
+* [golang.org/x/text/internal/gen](https://godoc.org/golang.org/x/text/internal/gen)
+
+* [golang.org/x/text/internal/testtext](https://godoc.org/golang.org/x/text/internal/testtext)
+
+* [golang.org/x/text/transform](https://godoc.org/golang.org/x/text/transform)
+
+* [golang.org/x/text/unicode/cldr](https://godoc.org/golang.org/x/text/unicode/cldr)
+
+* [golang.org/x/text/unicode/norm](https://godoc.org/golang.org/x/text/unicode/norm)
 
 * [gopkg.in/check.v1](https://godoc.org/gopkg.in/check.v1)
 
 * [gopkg.in/russross/blackfriday.v1](https://godoc.org/gopkg.in/russross/blackfriday.v1)
 
 * [gopkg.in/yaml.v2](https://godoc.org/gopkg.in/yaml.v2)
-
