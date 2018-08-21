@@ -3,6 +3,7 @@ package meta
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -13,6 +14,14 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
 )
+
+var modsOn bool = (strings.TrimSpace(envy.Get("GO111MODULE", "off")) == "on")
+
+func init() {
+	if modsOn {
+		fmt.Println("experimental go modules support has been enabled [GO111MODULE=on]")
+	}
+}
 
 // App represents meta data for a Buffalo application on disk
 type App struct {
@@ -63,10 +72,7 @@ func New(root string) App {
 	// Gather meta data
 	name := inflect.Name(filepath.Base(root))
 
-	mods := envy.Get("GO111MODULE", "")
-	modsOn := (strings.TrimSpace(mods) == "on")
 	pp := name.String()
-
 	if !modsOn {
 		pp := envy.CurrentPackage()
 		if filepath.Base(pp) != string(name) {
