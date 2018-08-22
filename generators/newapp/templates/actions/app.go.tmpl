@@ -9,7 +9,7 @@ import (
 
   {{ if .opts.WithPop }}
   "{{.opts.ModelsPkg}}"
-  "github.com/gobuffalo/mw-poptx"
+  "github.com/gobuffalo/buffalo-pop/pop/popmw"
   {{ end -}}
 
   {{ if .opts.AsWeb -}}
@@ -80,7 +80,7 @@ func App() *buffalo.App {
     // Wraps each request in a transaction.
     //  c.Value("tx").(*pop.Connection)
     // Remove to disable this.
-    app.Use(poptx.PopTransaction(models.DB))
+    app.Use(popmw.Transaction(models.DB))
     {{ end }}
 
     {{ if .opts.AsWeb -}}
