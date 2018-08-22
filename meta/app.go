@@ -15,7 +15,7 @@ import (
 	"github.com/markbates/inflect"
 )
 
-var modsOn bool = (strings.TrimSpace(envy.Get("GO111MODULE", "off")) == "on")
+var modsOn = (strings.TrimSpace(envy.Get("GO111MODULE", "off")) == "on")
 
 func init() {
 	if modsOn {
