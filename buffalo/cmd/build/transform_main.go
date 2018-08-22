@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
@@ -24,9 +27,30 @@ func (b *Builder) transformMain() error {
 	})
 }
 
+func (b *Builder) buildVersion(version string) string {
+	_, err := exec.LookPath("git")
+	if err != nil {
+		return version
+	}
+	cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+	out := &bytes.Buffer{}
+	cmd.Stdout = out
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	err = cmd.Run()
+	if err == nil && out.String() != "" {
+		version = strings.TrimSpace(out.String())
+	}
+	return version
+}
+
 func (b *Builder) createBuildMain() error {
 	ctx := plush.NewContext()
 	ctx.Set("opts", b.Options)
+
+	bt := time.Now().Format(time.RFC3339)
+	ctx.Set("buildTime", bt)
+	ctx.Set("buildVersion", b.buildVersion(bt))
 
 	t, err := templates.MustString("main.go.tmpl")
 	if err != nil {

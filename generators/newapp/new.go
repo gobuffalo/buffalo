@@ -87,6 +87,10 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
+	if a.WithModules {
+		g.Add(makr.NewCommand(exec.Command(envy.Get("GO_BIN", "go"), "mod", "init", a.PackagePkg)))
+	}
+
 	g.Add(makr.NewCommand(a.goGet()))
 
 	g.Add(makr.Func{
@@ -204,15 +208,29 @@ func (a Generator) goGet() *exec.Cmd {
 	cd, _ := os.Getwd()
 	defer os.Chdir(cd)
 	os.Chdir(a.Root)
+
 	if a.WithDep {
 		return exec.Command("dep", "ensure", "-v")
 	}
+
+	if a.WithModules {
+		return a.goGetMod()
+	}
+
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")
 	}
 	appArgs = append(appArgs, "./...")
 	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
+}
+
+func (a Generator) goGetMod() *exec.Cmd {
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy")
+	if a.Verbose {
+		cmd.Args = append(cmd.Args, "-v")
+	}
+	return cmd
 }
 
 const nTravis = `language: go
