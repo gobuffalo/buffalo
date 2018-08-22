@@ -30,6 +30,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.1
+	github.com/lib/pq v0.0.0-20180822103908-55f6f2718ccb // indirect
 	github.com/markbates/deplist v1.0.2
 	github.com/markbates/grift v1.0.1
 	github.com/markbates/inflect v1.0.0

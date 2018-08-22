@@ -74,7 +74,7 @@ func New(root string) App {
 
 	pp := name.String()
 	if !modsOn {
-		pp := envy.CurrentPackage()
+		pp = envy.CurrentPackage()
 		if filepath.Base(pp) != string(name) {
 			pp = path.Join(pp, string(name))
 		}
