@@ -15,7 +15,6 @@ import (
 	"github.com/gobuffalo/buffalo/generators/soda"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -50,7 +49,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 		}
 	}
 
-	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
+	files, err := generators.FindByBox(Templates)
 	if err != nil {
 		return errors.WithStack(err)
 	}
