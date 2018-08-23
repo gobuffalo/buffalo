@@ -65,7 +65,7 @@ const footer = "Please recheck your installation: https://gobuffalo.io/en/docs/i
 const goPathAbuse = `It appears you are using multiple GOPATHs:
 %s
 
-Using multiple GOPATHs can cause issues with many third party tooling. Please try using only GOPATH.
+Using multiple GOPATHs can cause issues with many third party tooling. Please try using only one GOPATH.
 `
 
 // ErrTemplatesNotFound means that the `buffalo` binary can't find the template files it needs
