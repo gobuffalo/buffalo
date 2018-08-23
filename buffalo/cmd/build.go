@@ -57,7 +57,7 @@ var xbuildCmd = &cobra.Command{
 		}
 
 		bin, _ := filepath.Abs(b.Bin)
-		logrus.Infof("\nYou application was successfully built at %s\n", bin)
+		logrus.Infof("\nYour application was successfully built at %s\n", bin)
 
 		return nil
 	},
