@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,8 +17,8 @@ func Test_MethodOverride(t *testing.T) {
 		return c.Render(200, render.String("you put me!"))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Post(url.Values{"_method": []string{"PUT"}})
+	w := httptest.New(a)
+	res := w.HTML("/").Post(url.Values{"_method": []string{"PUT"}})
 	r.Equal(200, res.Code)
 	r.Equal("you put me!", res.Body.String())
 }

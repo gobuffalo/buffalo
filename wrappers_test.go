@@ -2,11 +2,10 @@ package buffalo
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,8 +17,8 @@ func Test_WrapHandlerFunc(t *testing.T) {
 		res.Write([]byte("hello"))
 	}))
 
-	w := willie.New(a)
-	res := w.Request("/foo").Get()
+	w := httptest.New(a)
+	res := w.HTML("/foo").Get()
 
 	r.Equal("hello", res.Body.String())
 }
@@ -32,8 +31,8 @@ func Test_WrapHandler(t *testing.T) {
 		res.Write([]byte("hello"))
 	})))
 
-	w := willie.New(a)
-	res := w.Request("/foo").Get()
+	w := httptest.New(a)
+	res := w.HTML("/foo").Get()
 
 	r.Equal("hello", res.Body.String())
 }

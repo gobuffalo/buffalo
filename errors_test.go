@@ -3,7 +3,8 @@ package buffalo
 import (
 	"testing"
 
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
+
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
@@ -15,7 +16,7 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 		return c.Error(401, errors.New("boom"))
 	})
 
-	w := willie.New(app)
+	w := httptest.New(app)
 	res := w.HTML("/").Get()
 	r.Equal(401, res.Code)
 	ct := res.Header().Get("content-type")
@@ -41,7 +42,7 @@ func Test_PanicHandler(t *testing.T) {
 
 	const stack = `github.com/gobuffalo/buffalo.(*App).PanicHandler`
 
-	w := willie.New(app)
+	w := httptest.New(app)
 	for _, tt := range table {
 		t.Run(tt.path, func(st *testing.T) {
 			r := require.New(st)

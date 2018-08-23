@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -21,7 +21,7 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 		return sql.ErrNoRows
 	})
 
-	w := willie.New(app)
+	w := httptest.New(app)
 
 	res := w.HTML("/good").Get()
 	r.Equal(200, res.Code)
