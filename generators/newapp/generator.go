@@ -68,6 +68,9 @@ const goPathAbuse = `It appears you are using multiple GOPATHs:
 Using multiple GOPATHs can cause issues with many third party tooling. Please try using only GOPATH.
 `
 
+// ErrTemplatesNotFound means that the `buffalo` binary can't find the template files it needs
+// to complete a task. This usually occurs when building `buffalo` locally and/or when using multipath
+// GOPATHs.
 var ErrTemplatesNotFound = errors.New("templates are missing")
 
 // Validate that the app generator is good
