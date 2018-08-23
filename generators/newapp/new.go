@@ -33,14 +33,20 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	if _, err := exec.LookPath("goimports"); err != nil {
-		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
+		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
 	}
 
 	if a.WithDep {
 		data["addPrune"] = true
 		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
 		if _, err := exec.LookPath("dep"); err != nil {
-			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
+			// This step needs to be in a separate generator, because goGet() exec.Command
+			// checks if the executable exists (so before running the generator).
+			gg := makr.New()
+			gg.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep")))
+			if err := gg.Run(root, data); err != nil {
+				return errors.WithStack(err)
+			}
 		}
 	}
 
@@ -79,6 +85,10 @@ func (a Generator) Run(root string, data makr.Data) error {
 
 	if err := a.setupDocker(root, data); err != nil {
 		return errors.WithStack(err)
+	}
+
+	if a.WithModules {
+		g.Add(makr.NewCommand(exec.Command(envy.Get("GO_BIN", "go"), "mod", "init", a.PackagePkg)))
 	}
 
 	g.Add(makr.NewCommand(a.goGet()))
@@ -198,17 +208,29 @@ func (a Generator) goGet() *exec.Cmd {
 	cd, _ := os.Getwd()
 	defer os.Chdir(cd)
 	os.Chdir(a.Root)
+
 	if a.WithDep {
-		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "ensure", "-v")
-		}
+		return exec.Command("dep", "ensure", "-v")
 	}
+
+	if a.WithModules {
+		return a.goGetMod()
+	}
+
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")
 	}
 	appArgs = append(appArgs, "./...")
 	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
+}
+
+func (a Generator) goGetMod() *exec.Cmd {
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy")
+	if a.Verbose {
+		cmd.Args = append(cmd.Args, "-v")
+	}
+	return cmd
 }
 
 const nTravis = `language: go
