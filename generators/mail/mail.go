@@ -1,6 +1,7 @@
 package mail
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -11,6 +12,10 @@ import (
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
+
+func init() {
+	fmt.Println("github.com/gobuffalo/buffalo/generators/mail has been deprecated in v0.13.0, and will be removed in v0.14.0. Use github.com/gobuffalo/buffalo/genny/mail directly.")
+}
 
 // Generator for creating new mailers
 type Generator struct {
