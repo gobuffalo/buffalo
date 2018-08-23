@@ -59,8 +59,6 @@ github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6 h1:pZhsgF8RXEngH
 github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6/go.mod h1:91AQfukc52A6hdfIfkxzyr+kpVYDodgAeT5cjX1UIj4=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20180807082017-6b90b69a724a h1:ZNTj3jf8lXOCjT5QzQ/wcmOVbwhddDum3DHSix2W2w0=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20180807082017-6b90b69a724a/go.mod h1:6OJr6VwSzgJMqWMj7TYmRUqzNe2LXu/W1rRW4MAz/ME=
-github.com/gobuffalo/mw-poptx v0.0.0-20180814214442-e78b7f0a596a h1:gFIU1mNCjNFeTtjMI3AZx4UmjXlVELKb11uIs+0uPR8=
-github.com/gobuffalo/mw-poptx v0.0.0-20180814214442-e78b7f0a596a/go.mod h1:3vwk6nIqjlXS4gz4/Z2S6u8QyfFCaOm5fIsmeCxHXB8=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0 h1:v5r9HjKo88iTByIoeNARxrzfZbrQzm/yKlCBXB/RkMw=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0/go.mod h1:UqBF00IfKvd39ni5+yI5MLMjAf4gX7cDKN/26zDOD6c=
 github.com/gobuffalo/packr v1.13.1/go.mod h1:m3J/Q/tkaODAQq3r6NyWhDhJs2cVZS/lU0+0Edmfv3c=

@@ -17,14 +17,12 @@ require (
 	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20180807082017-6b90b69a724a
-	github.com/gobuffalo/mw-poptx v0.0.0-20180814214442-e78b7f0a596a
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
 	github.com/gobuffalo/packr v1.13.2
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.6.8+incompatible
 	github.com/gobuffalo/shoulders v0.0.0-20180815165021-5569039eac2f
 	github.com/gobuffalo/tags v2.0.9+incompatible
-	github.com/gobuffalo/uuid v2.0.3+incompatible
 	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/gorilla/context v1.1.1
