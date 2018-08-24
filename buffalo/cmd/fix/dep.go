@@ -12,6 +12,14 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+func modGetUpdate(r *Runner) error {
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "get", "-u")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
+}
+
 func goGetUpdate(r *Runner) error {
 	fmt.Println("~~~ Running go get ~~~")
 	ctx, cancel := context.WithCancel(context.Background())
@@ -55,6 +63,9 @@ var upkg = []string{
 // DepEnsure runs `dep ensure -v` to make sure that any newly changed
 // imports are added to dep.
 func DepEnsure(r *Runner) error {
+	if !r.App.WithModules {
+		return modGetUpdate(r)
+	}
 	if !r.App.WithDep {
 		return goGetUpdate(r)
 	}
