@@ -68,8 +68,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
-	g.Add(makr.NewCommand(a.goGet()))
-
 	if a.WithDep {
 		data["addPrune"] = true
 		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
@@ -88,6 +86,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 		}
 	}
 
+	g.Add(makr.NewCommand(a.goGet()))
 	g.Add(makr.Func{
 		Runner: func(root string, data makr.Data) error {
 			g.Fmt(root)
