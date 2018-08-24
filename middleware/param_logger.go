@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/mw-paramlogger"
+	paramlogger "github.com/gobuffalo/mw-paramlogger"
 )
 
 // ParameterExclusionList is the list of parameter names that will be filtered
