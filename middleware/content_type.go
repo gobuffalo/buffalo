@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/gobuffalo/mw-contenttype"
+	contenttype "github.com/gobuffalo/mw-contenttype"
 )
 
 // SetContentType on the request to desired type. This will
