@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,8 +15,8 @@ func Test_App_Dev_NotFound(t *testing.T) {
 	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willie.New(a)
-	res := w.Request("/bad").Get()
+	w := httptest.New(a)
+	res := w.HTML("/bad").Get()
 
 	body := res.Body.String()
 	r.Contains(body, "404 - ERROR!")
@@ -31,7 +31,7 @@ func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	a.Env = "development"
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willie.New(a)
+	w := httptest.New(a)
 	res := w.JSON("/bad").Get()
 	r.Equal(404, res.Code)
 
@@ -52,8 +52,8 @@ func Test_App_Override_NotFound(t *testing.T) {
 	}
 	a.GET("/foo", func(c Context) error { return nil })
 
-	w := willie.New(a)
-	res := w.Request("/bad").Get()
+	w := httptest.New(a)
+	res := w.HTML("/bad").Get()
 	r.Equal(404, res.Code)
 
 	body := res.Body.String()

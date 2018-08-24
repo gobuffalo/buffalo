@@ -9,8 +9,8 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware/i18n"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packr"
-	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -84,16 +84,16 @@ func app() *buffalo.App {
 func Test_i18n(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	res := w.Request("/").Get()
+	w := httptest.New(app())
+	res := w.HTML("/").Get()
 	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	req := w.Request("/")
+	w := httptest.New(app())
+	req := w.HTML("/")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
@@ -103,16 +103,16 @@ func Test_i18n_fr(t *testing.T) {
 func Test_i18n_plural(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	res := w.Request("/plural").Get()
+	w := httptest.New(app())
+	res := w.HTML("/plural").Get()
 	r.Equal("Hello, alone!\nHello, 5 people!", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_plural_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	req := w.Request("/plural")
+	w := httptest.New(app())
+	req := w.HTML("/plural")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
@@ -122,16 +122,16 @@ func Test_i18n_plural_fr(t *testing.T) {
 func Test_i18n_format(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	res := w.Request("/format").Get()
+	w := httptest.New(app())
+	res := w.HTML("/format").Get()
 	r.Equal("Hello Mark!\n\n\t* Mr. Mark Bates\n\n\t* Mr. Chuck Berry\n", res.Body.String())
 }
 
 func Test_i18n_format_fr(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	req := w.Request("/format")
+	w := httptest.New(app())
+	req := w.HTML("/format")
 	// Set language as "french"
 	req.Headers["Accept-Language"] = "fr-fr"
 	res := req.Get()
@@ -141,9 +141,9 @@ func Test_i18n_format_fr(t *testing.T) {
 func Test_i18n_Localized_View(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
+	w := httptest.New(app())
 	// Test with complex Accept-Language
-	req := w.Request("/localized")
+	req := w.HTML("/localized")
 	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res := req.Get()
 	r.Equal("Hello!", strings.TrimSpace(res.Body.String()))
@@ -159,7 +159,7 @@ func Test_i18n_Localized_View(t *testing.T) {
 	r.Equal("Default", strings.TrimSpace(res.Body.String()))
 
 	// Test i18n disabled
-	req = w.Request("/localized-disabled")
+	req = w.HTML("/localized-disabled")
 	req.Headers["Accept-Language"] = "en-UK,en-US;q=0.5"
 	res = req.Get()
 	r.Equal("Default", strings.TrimSpace(res.Body.String()))
@@ -168,28 +168,28 @@ func Test_i18n_Localized_View(t *testing.T) {
 func Test_i18n_collision(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	res := w.Request("/collision").Get()
+	w := httptest.New(app())
+	res := w.HTML("/collision").Get()
 	r.Equal("Collision OK", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_availableLanguages(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	res := w.Request("/languages-list").Get()
+	w := httptest.New(app())
+	res := w.HTML("/languages-list").Get()
 	r.Equal("[\"en-us\",\"fr-fr\"]", strings.TrimSpace(res.Body.String()))
 }
 
 func Test_i18n_URL_prefix(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	req := w.Request("/fr/index")
+	w := httptest.New(app())
+	req := w.HTML("/fr/index")
 	res := req.Get()
 	r.Equal("Bonjour à tous !", strings.TrimSpace(res.Body.String()))
 
-	req = w.Request("/en/index")
+	req = w.HTML("/en/index")
 	res = req.Get()
 	r.Equal("Hello, World!", strings.TrimSpace(res.Body.String()))
 }
@@ -197,8 +197,8 @@ func Test_i18n_URL_prefix(t *testing.T) {
 func Test_Refresh(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
-	req := w.Request("/refresh")
+	w := httptest.New(app())
+	req := w.HTML("/refresh")
 	res := req.Get()
 	r.Equal("success: Language changed!#success: Langue modifiée !#", strings.TrimSpace(res.Body.String()))
 }

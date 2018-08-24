@@ -4,16 +4,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/http/httptest"
 	"path"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
-	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -62,7 +61,7 @@ func otherTestApp() *App {
 
 func Test_MethodNotFoundError(t *testing.T) {
 	r := require.New(t)
-	w := willie.New(testApp())
+	w := httptest.New(testApp())
 	res := w.HTML("/bar").Post(nil)
 	r.Equal(405, res.Code)
 	r.Contains(res.Body.String(), "my custom 405")
@@ -272,8 +271,8 @@ func Test_Router_Group(t *testing.T) {
 		return c.Render(201, nil)
 	})
 
-	w := willie.New(a)
-	res := w.Request("/api/v1/users").Get()
+	w := httptest.New(a)
+	res := w.HTML("/api/v1/users").Get()
 	r.Equal(201, res.Code)
 }
 
@@ -290,8 +289,8 @@ func Test_Router_Group_on_Group(t *testing.T) {
 		return c.Render(420, nil)
 	})
 
-	w := willie.New(a)
-	res := w.Request("/api/v1/foo/bar").Get()
+	w := httptest.New(a)
+	res := w.HTML("/api/v1/foo/bar").Get()
 	r.Equal(420, res.Code)
 }
 
@@ -313,8 +312,8 @@ func Test_Router_Group_Middleware(t *testing.T) {
 
 func Test_Router_Redirect(t *testing.T) {
 	r := require.New(t)
-	w := willie.New(testApp())
-	res := w.Request("/foo").Get()
+	w := httptest.New(testApp())
+	res := w.HTML("/foo").Get()
 	r.Equal(301, res.Code)
 	r.Equal("/bar", res.Location())
 }
@@ -332,8 +331,8 @@ func Test_Router_ServeFiles(t *testing.T) {
 	a := New(Options{})
 	a.ServeFiles("/assets", http.Dir(filepath.Dir(tmpFile.Name())))
 
-	w := willie.New(a)
-	res := w.Request("/assets/%s", filepath.Base(tmpFile.Name())).Get()
+	w := httptest.New(a)
+	res := w.HTML("/assets/%s", filepath.Base(tmpFile.Name())).Get()
 
 	r.Equal(200, res.Code)
 	r.Equal(af, res.Body.Bytes())
@@ -387,8 +386,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.Resource("/car", carsResource)
 	a.Resource("/resources", resourcesResource)
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 
 	r.Equal(200, res.Code)
 	r.Contains(res.Body.String(), "1. /")
@@ -423,8 +422,8 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 	}
 
 	a.GET("/users/{user_id}", sampleHandler)
-	w := willie.New(a)
-	res := w.Request("/users/1").Get()
+	w := httptest.New(a)
+	res := w.HTML("/users/1").Get()
 
 	r.Equal(500, res.Code)
 	r.Contains(res.Body.String(), "missing parameters for /users/{user_id}")
@@ -662,8 +661,8 @@ func Test_CatchAll_Route(t *testing.T) {
 		return c.Render(200, rr.String(name))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/john").Get()
+	w := httptest.New(a)
+	res := w.HTML("/john").Get()
 
 	r.Contains(res.Body.String(), "john")
 }
@@ -703,8 +702,8 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 				return c.Render(200, render.String(c.Request().URL.Path))
 			})
 
-			w := willie.New(app)
-			res := w.Request(tt.browser).Get()
+			w := httptest.New(app)
+			res := w.HTML(tt.browser).Get()
 
 			r.Equal(200, res.Code)
 			r.Equal(tt.expected, res.Body.String())

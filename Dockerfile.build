@@ -22,7 +22,7 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/markbates/grift \
 && go get -v -u github.com/markbates/inflect \
 && go get -v -u github.com/markbates/refresh \
-&& go get -v -u github.com/markbates/willie \
+&& go get -v -u github.com/gobuffalo/httptest \
 && go get -v -u github.com/gorilla/sessions \
 && go get -v -u golang.org/x/vgo \
 && go get -u github.com/alecthomas/gometalinter \
