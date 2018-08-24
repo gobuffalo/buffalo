@@ -6,7 +6,7 @@ require (
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180823153124-4e86bafb6c76
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180824182021-c214f41240e9
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180824183631-98104ca448b9
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
