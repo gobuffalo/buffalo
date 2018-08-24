@@ -3,7 +3,7 @@ package ssl
 import (
 	"fmt"
 
-	"github.com/gobuffalo/mw-forcessl"
+	forcessl "github.com/gobuffalo/mw-forcessl"
 )
 
 // ForceSSL uses the github.com/unrolled/secure package to
