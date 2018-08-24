@@ -3,7 +3,7 @@ package csrf
 import (
 	"fmt"
 
-	"github.com/gobuffalo/mw-csrf"
+	csrf "github.com/gobuffalo/mw-csrf"
 )
 
 var (
