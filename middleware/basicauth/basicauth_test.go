@@ -7,7 +7,7 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware/basicauth"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,25 +27,25 @@ func app() *buffalo.App {
 func TestBasicAuth(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(app())
+	w := httptest.New(app())
 
 	authfail := "invalid basic auth"
 
 	// missing authorization
-	res := w.Request("/").Get()
+	res := w.HTML("/").Get()
 	r.Equal(401, res.Code)
 	r.Contains(res.Header().Get("WWW-Authenticate"), `Basic realm="Basic Authentication"`)
 	r.Contains(res.Body.String(), "Unauthorized")
 
 	// bad header value, not Basic
-	req := w.Request("/")
+	req := w.HTML("/")
 	req.Headers["Authorization"] = "badcreds"
 	res = req.Get()
 	r.Equal(401, res.Code)
 	r.Contains(res.Body.String(), "Unauthorized")
 
 	// bad cred values
-	req = w.Request("/")
+	req = w.HTML("/")
 	req.Headers["Authorization"] = "bad creds"
 	res = req.Get()
 	r.Equal(500, res.Code)
@@ -54,7 +54,7 @@ func TestBasicAuth(t *testing.T) {
 	creds := base64.StdEncoding.EncodeToString([]byte("badcredvalue"))
 
 	// invalid cred values in authorization
-	req = w.Request("/")
+	req = w.HTML("/")
 	req.Headers["Authorization"] = fmt.Sprintf("Basic %s", creds)
 	res = req.Get()
 	r.Equal(500, res.Code)
@@ -63,7 +63,7 @@ func TestBasicAuth(t *testing.T) {
 	creds = base64.StdEncoding.EncodeToString([]byte("tester:pass123"))
 
 	// valid cred values
-	req = w.Request("/")
+	req = w.HTML("/")
 	req.Headers["Authorization"] = fmt.Sprintf("Basic %s", creds)
 	res = req.Get()
 	r.Equal(200, res.Code)
