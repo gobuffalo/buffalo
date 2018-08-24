@@ -6,9 +6,8 @@ require (
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180823153124-4e86bafb6c76
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180818124224-e3bbd0b11d3e
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180824182021-c214f41240e9
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/fizz v1.0.10 // indirect
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.4
@@ -28,12 +27,12 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.1
-	github.com/lib/pq v1.0.0 // indirect
 	github.com/markbates/deplist v1.0.2
 	github.com/markbates/grift v1.0.1
 	github.com/markbates/inflect v1.0.0
 	github.com/markbates/refresh v1.4.2
 	github.com/markbates/sigtx v1.0.0
+	github.com/mitchellh/mapstructure v1.0.0 // indirect
 	github.com/monoculum/formam v0.0.0-20180818005819-0a5cdaa81e2e
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.0.6

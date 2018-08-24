@@ -28,6 +28,9 @@ func (sd Generator) Run(root string, data makr.Data) error {
 	f.Should = should
 	g.Add(f)
 
+	c := makr.NewCommand(makr.GoGet("github.com/gobuffalo/buffalo-pop/..."))
+	c.Should = should
+	g.Add(c)
 	if !sd.App.WithModules {
 		c := makr.NewCommand(makr.GoGet("github.com/gobuffalo/pop/..."))
 		c.Should = should
