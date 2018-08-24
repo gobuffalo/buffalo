@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	fmt.Println("github.com/gobuffalo/buffalo/generators/refresh has been deprecated in v0.13.0, and will be removed in v0.14.0. Use github.com/gobuffalo/buffalo/genny/refresh directly.")
+	fmt.Println("github.com/gobuffalo/buffalo/generators/grift has been deprecated in v0.13.0, and will be removed in v0.14.0. Use github.com/gobuffalo/buffalo/genny/grift directly.")
 }
 
 //Run allows to create a new grift task generator
