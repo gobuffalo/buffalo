@@ -299,15 +299,15 @@ func Test_Router_Group_Middleware(t *testing.T) {
 
 	a := testApp()
 	a.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 4)
+	r.Len(a.Middleware.stack, 5)
 
 	g := a.Group("/api/v1")
-	r.Len(a.Middleware.stack, 4)
-	r.Len(g.Middleware.stack, 4)
+	r.Len(a.Middleware.stack, 5)
+	r.Len(g.Middleware.stack, 5)
 
 	g.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 4)
-	r.Len(g.Middleware.stack, 5)
+	r.Len(a.Middleware.stack, 5)
+	r.Len(g.Middleware.stack, 6)
 }
 
 func Test_Router_Redirect(t *testing.T) {
@@ -619,17 +619,17 @@ func Test_ResourceOnResource(t *testing.T) {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
-		"/":                                          "root",
-		"/users":                                     "users",
-		"/users/new":                                 "newUsers",
-		"/users/{user_id}":                           "user",
-		"/users/{user_id}/children":                  "userChildren",
-		"/users/{user_id}/children/{child_id}":       "userChild",
-		"/users/{user_id}/children/new":              "newUserChildren",
+		"/":                                    "root",
+		"/users":                               "users",
+		"/users/new":                           "newUsers",
+		"/users/{user_id}":                     "user",
+		"/users/{user_id}/children":            "userChildren",
+		"/users/{user_id}/children/{child_id}": "userChild",
+		"/users/{user_id}/children/new":        "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                              "adminPlanes",
-		"/admin/planes/{plane_id}":                   "adminPlane",
-		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
+		"/admin/planes":                 "adminPlanes",
+		"/admin/planes/{plane_id}":      "adminPlane",
+		"/admin/planes/{plane_id}/edit": "editAdminPlane",
 	}
 
 	a := New(Options{})
