@@ -43,7 +43,11 @@ func New(opts Options) *App {
 		children: []*App{},
 	}
 
-	a.Middleware = newMiddlewareStack(a.defaultErrorMiddleware)
+	dem := a.defaultErrorMiddleware
+	if a.ErrorMiddleware != nil {
+		dem = a.ErrorMiddleware
+	}
+	a.Middleware = newMiddlewareStack(dem)
 
 	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
 		return func(res http.ResponseWriter, req *http.Request) {
