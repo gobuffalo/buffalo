@@ -68,6 +68,10 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
+	if _, err := exec.LookPath("goimports"); err != nil {
+		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
+	}
+
 	if a.WithDep {
 		data["addPrune"] = true
 		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
@@ -79,10 +83,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 			if err := gg.Run(root, data); err != nil {
 				return errors.WithStack(err)
 			}
-		}
-	} else {
-		if _, err := exec.LookPath("goimports"); err != nil {
-			g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
 		}
 	}
 
