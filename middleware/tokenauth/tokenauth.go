@@ -42,7 +42,7 @@ package tokenauth
 import (
 	"fmt"
 
-	"github.com/gobuffalo/mw-tokenauth"
+	tokenauth "github.com/gobuffalo/mw-tokenauth"
 )
 
 var (
