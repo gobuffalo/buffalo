@@ -19,7 +19,8 @@ import (
 
 // ImportConverter will changes imports from a -> b
 type ImportConverter struct {
-	Data map[string]string
+	Data    map[string]string
+	Aliases map[string]string
 }
 
 // Process will walk all the .go files in an application, excluding ./vendor.
@@ -96,7 +97,13 @@ func (c ImportConverter) rewriteFile(name string) error {
 		// match import path with the given replacement map
 		if rpath, ok := c.match(path); ok {
 			fmt.Printf("[IMPORT] %s: %s -> %s\n", name, path, rpath)
+			fmt.Printf("[ALIAS] %s", c.Aliases[rpath])
+
 			i.Path.Value = strconv.Quote(rpath)
+			if c.Aliases[rpath] != "" {
+				i.Name = ast.NewIdent(c.Aliases[rpath])
+			}
+
 			change = true
 		}
 	}

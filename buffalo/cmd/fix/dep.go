@@ -49,7 +49,13 @@ func goGetUpdate(r *Runner) error {
 }
 
 // packages to add to Gopkg.toml
-var apkg = []string{}
+var apkg = []string{
+	"github.com/gobuffalo/mw-basicauth",
+	"github.com/gobuffalo/mw-csrf",
+	"github.com/gobuffalo/mw-i18n",
+	"github.com/gobuffalo/mw-ssl",
+	"github.com/gobuffalo/mw-tokenauth",
+}
 
 // packages ensure get updated
 var upkg = []string{
