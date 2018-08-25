@@ -95,42 +95,27 @@ func (c ImportConverter) rewriteFile(name string) error {
 		}
 
 		// match import path with the given replacement map
-		if rpath, ok := c.match(path); ok {
-			fmt.Printf("[IMPORT] %s: %s -> %s\n", name, path, rpath)
-			fmt.Printf("[ALIAS] %s", c.Aliases[rpath])
-
-			i.Path.Value = strconv.Quote(rpath)
-			if c.Aliases[rpath] != "" {
-				i.Name = ast.NewIdent(c.Aliases[rpath])
-			}
-
-			change = true
+		rpath, ok := c.match(path)
+		if !ok {
+			continue
 		}
+
+		fmt.Printf("[IMPORT] %s: %s -> %s\n", name, path, rpath)
+		i.Path.Value = strconv.Quote(rpath)
+
+		if c.Aliases[rpath] != "" {
+			i.Name = ast.NewIdent(c.Aliases[rpath])
+		}
+
+		change = true
 	}
 
-	for _, cg := range f.Comments {
-		for _, cl := range cg.List {
-			if strings.HasPrefix(cl.Text, "// import \"") {
-
-				// trim off extra comment stuff
-				ctext := cl.Text
-				ctext = strings.TrimPrefix(ctext, "// import")
-				ctext = strings.TrimSpace(ctext)
-
-				// unquote the comment import path value
-				ctext, err := strconv.Unquote(ctext)
-				if err != nil {
-					return err
-				}
-
-				// match the comment import path with the given replacement map
-				if ctext, ok := c.match(ctext); ok {
-					cl.Text = "// import " + strconv.Quote(ctext)
-					change = true
-				}
-			}
-		}
+	changef, err := c.handleFileComments(f)
+	if err != nil {
+		return err
 	}
+
+	change = change || changef
 
 	// if no change occurred, then we don't need to write to disk, just return.
 	if !change {
@@ -161,6 +146,38 @@ func (c ImportConverter) rewriteFile(name string) error {
 
 	// rename the .temp to .go
 	return os.Rename(temp, name)
+}
+
+func (c ImportConverter) handleFileComments(f *ast.File) (bool, error) {
+	change := false
+
+	for _, cg := range f.Comments {
+		for _, cl := range cg.List {
+			if !strings.HasPrefix(cl.Text, "// import \"") {
+				continue
+			}
+
+			// trim off extra comment stuff
+			ctext := cl.Text
+			ctext = strings.TrimPrefix(ctext, "// import")
+			ctext = strings.TrimSpace(ctext)
+
+			// unquote the comment import path value
+			ctext, err := strconv.Unquote(ctext)
+			if err != nil {
+				return false, err
+			}
+
+			// match the comment import path with the given replacement map
+			if ctext, ok := c.match(ctext); ok {
+				cl.Text = "// import " + strconv.Quote(ctext)
+				change = true
+			}
+
+		}
+	}
+
+	return change, nil
 }
 
 // match takes an import path and replacement map.
