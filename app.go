@@ -15,14 +15,15 @@ import (
 type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware    *MiddlewareStack
-	ErrorHandlers ErrorHandlers
-	router        *mux.Router
-	moot          *sync.Mutex
-	routes        RouteList
-	root          *App
-	children      []*App
-	filepaths     []string
+	Middleware      *MiddlewareStack
+	ErrorHandlers   ErrorHandlers
+	ErrorMiddleware MiddlewareFunc
+	router          *mux.Router
+	moot            *sync.Mutex
+	routes          RouteList
+	root            *App
+	children        []*App
+	filepaths       []string
 }
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
@@ -31,8 +32,7 @@ func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
-		Options:    opts,
-		Middleware: newMiddlewareStack(),
+		Options: opts,
 		ErrorHandlers: ErrorHandlers{
 			404: defaultErrorHandler,
 			500: defaultErrorHandler,
@@ -42,6 +42,12 @@ func New(opts Options) *App {
 		routes:   RouteList{},
 		children: []*App{},
 	}
+
+	dem := a.defaultErrorMiddleware
+	if a.ErrorMiddleware != nil {
+		dem = a.ErrorMiddleware
+	}
+	a.Middleware = newMiddlewareStack(dem)
 
 	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
 		return func(res http.ResponseWriter, req *http.Request) {
