@@ -5,19 +5,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var destroyCmd = &cobra.Command{
+var DestroyCmd = &cobra.Command{
 	Use:     "destroy",
 	Short:   "Allows to destroy generated code.",
 	Aliases: []string{"d"},
 }
 
 func init() {
-	destroyCmd.AddCommand(destroy.ResourceCmd)
-	destroyCmd.AddCommand(destroy.ActionCmd)
-	destroyCmd.AddCommand(destroy.ModelCmd)
+	DestroyCmd.AddCommand(destroy.ResourceCmd)
+	DestroyCmd.AddCommand(destroy.ActionCmd)
 
-	destroyCmd.PersistentFlags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
+	DestroyCmd.PersistentFlags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
 
-	decorate("destroy", destroyCmd)
-	RootCmd.AddCommand(destroyCmd)
+	decorate("destroy", DestroyCmd)
+	RootCmd.AddCommand(DestroyCmd)
 }

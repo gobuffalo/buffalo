@@ -2,12 +2,14 @@ package destroy
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
@@ -32,13 +34,14 @@ var ResourceCmd = &cobra.Command{
 		fileName := inflect.Pluralize(inflect.Underscore(name))
 
 		removeTemplates(fileName)
-		err := removeActions(fileName)
-		if err != nil {
-			return err
+		if err := removeActions(fileName); err != nil {
+			return errors.WithStack(err)
 		}
 
 		removeLocales(fileName)
-		removeModel(name)
+		if err := removeModel(name); err != nil {
+			return errors.WithStack(err)
+		}
 		removeMigrations(fileName)
 
 		return nil
@@ -96,16 +99,15 @@ func removeLocales(fileName string) {
 	}
 }
 
-func removeModel(name string) {
+func removeModel(name string) error {
 	if YesToAll || confirm("Want to remove model? (Y/n)") {
-		modelFileName := inflect.Singularize(inflect.Underscore(name))
-
-		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
-		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))
-
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
+		cmd := exec.Command("buffalo", "pop", "destroy", "model", "-y", name)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
+		return cmd.Run()
 	}
+	return nil
 }
 
 func removeMigrations(fileName string) {
