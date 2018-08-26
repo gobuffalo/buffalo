@@ -37,6 +37,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	for _, f := range files {
+		if !a.WithPop && strings.Contains(f.WritePath, "inflections") {
+			continue
+		}
 		if !a.AsAPI {
 			g.Add(makr.NewFile(f.WritePath, f.Body))
 			continue
