@@ -9,10 +9,11 @@ import (
 	"go/token"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"golang.org/x/tools/go/ast/astutil"
 
 	"github.com/pkg/errors"
 )
@@ -86,27 +87,13 @@ func (c ImportConverter) rewriteFile(name string) error {
 
 	// iterate through the import paths. if a change occurs update bool.
 	change := false
-	for _, i := range f.Imports {
 
-		// unquote the import path value.
-		path, err := strconv.Unquote(i.Path.Value)
-		if err != nil {
-			return err
-		}
-
-		// match import path with the given replacement map
-		rpath, ok := c.match(path)
-		if !ok {
+	for key, value := range c.Data {
+		if !astutil.DeleteImport(fset, f, key) {
 			continue
 		}
 
-		fmt.Printf("[IMPORT] %s: %s -> %s\n", name, path, rpath)
-		i.Path.Value = strconv.Quote(rpath)
-
-		if c.Aliases[rpath] != "" {
-			i.Name = ast.NewIdent(c.Aliases[rpath])
-		}
-
+		astutil.AddNamedImport(fset, f, c.Aliases[value], value)
 		change = true
 	}
 
@@ -183,12 +170,13 @@ func (c ImportConverter) handleFileComments(f *ast.File) (bool, error) {
 // match takes an import path and replacement map.
 func (c ImportConverter) match(importpath string) (string, bool) {
 	for key, value := range c.Data {
-		if len(importpath) >= len(key) {
-			if importpath[:len(key)] == key {
-				result := path.Join(value, importpath[len(key):])
-				return result, true
-			}
+		if !strings.HasPrefix(importpath, key) {
+			continue
 		}
+
+		result := strings.Replace(importpath, key, value, 1)
+		return result, true
 	}
+
 	return importpath, false
 }

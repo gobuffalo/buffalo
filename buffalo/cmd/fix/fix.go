@@ -22,11 +22,13 @@ var replace = map[string]string{
 var ic = ImportConverter{
 	Data: replace,
 	Aliases: map[string]string{
-		"github.com/gobuffalo/mw-basicauth": "basicauth",
-		"github.com/gobuffalo/mw-csrf":      "csrf",
-		"github.com/gobuffalo/mw-i18n":      "i18n",
-		"github.com/gobuffalo/mw-ssl":       "ssl",
-		"github.com/gobuffalo/mw-tokenauth": "tokenauth",
+		"github.com/gobuffalo/mw-basicauth":   "basicauth",
+		"github.com/gobuffalo/mw-csrf":        "csrf",
+		"github.com/gobuffalo/mw-i18n":        "i18n",
+		"github.com/gobuffalo/mw-ssl":         "ssl",
+		"github.com/gobuffalo/mw-tokenauth":   "tokenauth",
+		"github.com/gobuffalo/mw-paramlogger": "paramlogger",
+		"github.com/gobuffalo/mw-contenttype": "contenttype",
 	},
 }
 
