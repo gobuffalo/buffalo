@@ -6,8 +6,8 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/middleware"
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/willie"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,11 +24,11 @@ func ctApp() *buffalo.App {
 func Test_SetContentType(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(ctApp())
-	res := w.Request("/set").Get()
+	w := httptest.New(ctApp())
+	res := w.HTML("/set").Get()
 	r.Equal("application/json", res.Body.String())
 
-	req := w.Request("/set")
+	req := w.HTML("/set")
 	req.Headers["Content-Type"] = "text/plain"
 
 	res = req.Get()
@@ -38,11 +38,11 @@ func Test_SetContentType(t *testing.T) {
 func Test_AddContentType(t *testing.T) {
 	r := require.New(t)
 
-	w := willie.New(ctApp())
-	res := w.Request("/add").Get()
+	w := httptest.New(ctApp())
+	res := w.HTML("/add").Get()
 	r.Equal("application/json", res.Body.String())
 
-	req := w.Request("/add")
+	req := w.HTML("/add")
 	req.Headers["Content-Type"] = "text/plain"
 
 	res = req.Get()
