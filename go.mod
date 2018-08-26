@@ -5,8 +5,8 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180824202734-994e4f0c8840
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180824202655-0bd1deeb94a9
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180826142327-5e3989f1058d
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180824212937-dc22d2772c3f
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
@@ -20,7 +20,7 @@ require (
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
 	github.com/gobuffalo/packr v1.13.3
 	github.com/gobuffalo/plush v3.7.16+incompatible
-	github.com/gobuffalo/pop v4.6.8+incompatible
+	github.com/gobuffalo/pop v4.7.0+incompatible
 	github.com/gobuffalo/shoulders v0.0.0-20180815165021-5569039eac2f
 	github.com/gobuffalo/tags v2.0.10+incompatible
 	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
