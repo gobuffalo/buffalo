@@ -29,44 +29,53 @@ type ImportConverter struct {
 // used by this version Buffalo.
 func (c ImportConverter) Process(r *Runner) error {
 	fmt.Println("~~~ Rewriting Imports ~~~")
-	err := filepath.Walk(".", func(p string, info os.FileInfo, err error) error {
-		for _, n := range []string{"vendor", "node_modules", ".git"} {
-			if strings.HasPrefix(p, n+string(filepath.Separator)) {
-				return nil
-			}
-		}
-		if info.IsDir() {
-			return nil
-		}
-		ext := filepath.Ext(p)
-		if ext == ".go" {
-			if err := c.rewriteFile(p); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		return nil
-	})
+
+	err := filepath.Walk(".", c.processFile)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	if r.App.WithDep {
-		b, err := ioutil.ReadFile("Gopkg.toml")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		for k := range c.Data {
-			if bytes.Contains(b, []byte(k)) {
-				r.Warnings = append(r.Warnings, fmt.Sprintf("Your Gopkg.toml contains the following import that need to be changed MANUALLY: %s", k))
-			}
+	if !r.App.WithDep {
+		return nil
+	}
+
+	b, err := ioutil.ReadFile("Gopkg.toml")
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	for k := range c.Data {
+		if bytes.Contains(b, []byte(k)) {
+			r.Warnings = append(r.Warnings, fmt.Sprintf("Your Gopkg.toml contains the following import that need to be changed MANUALLY: %s", k))
 		}
 	}
+
 	return nil
 }
 
-// TAKEN FROM https://gist.github.com/jackspirou/61ce33574e9f411b8b4a
-// rewriteFile rewrites import statments in the named file
-// according to the rules supplied by the map of strings.
+func (c ImportConverter) processFile(p string, info os.FileInfo, err error) error {
+	for _, n := range []string{"vendor", "node_modules", ".git"} {
+		if strings.HasPrefix(p, n+string(filepath.Separator)) {
+			return nil
+		}
+	}
+
+	if info.IsDir() {
+		return nil
+	}
+
+	ext := filepath.Ext(p)
+	if ext != ".go" {
+		return nil
+	}
+
+	if err := c.rewriteFile(p); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (c ImportConverter) rewriteFile(name string) error {
 
 	// create an empty fileset.
@@ -85,9 +94,7 @@ func (c ImportConverter) rewriteFile(name string) error {
 		return err
 	}
 
-	// iterate through the import paths. if a change occurs update bool.
 	change := false
-
 	for key, value := range c.Data {
 		if !astutil.DeleteImport(fset, f, key) {
 			continue
@@ -113,26 +120,35 @@ func (c ImportConverter) rewriteFile(name string) error {
 	ast.SortImports(fset, f)
 
 	// create a temporary file, this easily avoids conflicts.
-	temp := name + ".temp"
-	w, err := os.Create(temp)
-	if err != nil {
-		return err
-	}
-
-	// write changes to .temp file, and include proper formatting.
-	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(w, fset, f)
-	if err != nil {
-		return err
-	}
-
-	// close the writer
-	err = w.Close()
+	temp, err := c.writeTempResult(name, fset, f)
 	if err != nil {
 		return err
 	}
 
 	// rename the .temp to .go
 	return os.Rename(temp, name)
+}
+
+func (c ImportConverter) writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
+	temp := name + ".temp"
+	w, err := os.Create(temp)
+	if err != nil {
+		return "", err
+	}
+
+	// write changes to .temp file, and include proper formatting.
+	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(w, fset, f)
+	if err != nil {
+		return "", err
+	}
+
+	// close the writer
+	err = w.Close()
+	if err != nil {
+		return "", err
+	}
+
+	return temp, nil
 }
 
 func (c ImportConverter) handleFileComments(f *ast.File) (bool, error) {
