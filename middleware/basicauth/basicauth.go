@@ -3,7 +3,7 @@ package basicauth
 import (
 	"fmt"
 
-	"github.com/gobuffalo/mw-basicauth"
+	basicauth "github.com/gobuffalo/mw-basicauth"
 )
 
 var (
