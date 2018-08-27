@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -71,6 +72,35 @@ func (a *App) PanicHandler(next Handler) Handler {
 			}
 		}()
 		return next(c)
+	}
+}
+
+func (a *App) defaultErrorMiddleware(next Handler) Handler {
+	return func(c Context) error {
+		err := next(c)
+		if err == nil {
+			return nil
+		}
+		status := 500
+		// unpack root cause and check for HTTPError
+		cause := errors.Cause(err)
+		switch cause {
+		case sql.ErrNoRows:
+			status = 404
+		default:
+			if h, ok := cause.(HTTPError); ok {
+				status = h.Status
+			}
+		}
+		eh := a.ErrorHandlers.Get(status)
+		err = eh(status, err, c)
+		if err != nil {
+			// things have really hit the fan if we're here!!
+			a.Logger.Error(err)
+			c.Response().WriteHeader(500)
+			c.Response().Write([]byte(err.Error()))
+		}
+		return nil
 	}
 }
 
