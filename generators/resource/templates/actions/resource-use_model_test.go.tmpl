@@ -5,8 +5,160 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
-{{ range $a := .actions }}
-func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_{{ camelize $a }}() {
-	as.Fail("Not Implemented!")
+
+// Create{{.opts.Model.Model}} creates a default model
+func (as *ActionSuite) Create{{.opts.Model.Model}}() *models.{{.opts.Model.Model}}{
+	{{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{
+		{{ if .opts.Props -}}
+			{{ range $p := .opts.Props -}}
+				{{- if ne $p.TestValue "null" -}}
+					{{- $p.Name }}: {{ $p.TestValue }},
+				{{- end }}
+			{{ end -}}
+		{{- end -}}
+	}
+	as.NoError(as.DB.Create({{.opts.Model.VarCaseSingular}}))
+	return {{.opts.Model.VarCaseSingular}}
 }
-{{ end }}
+
+// Test_{{$.opts.Name.Resource}}Resource_List Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_List() {
+	{{- if .opts.Props }}
+	{{.opts.Model.VarCaseSingular}} := as.Create{{.opts.Model.Model}}()
+	{{ end }}
+
+	res := as.HTML("/{{.opts.FilesPath}}").Get()
+	as.Equal(200, res.Code)
+	{{- if .opts.Props }}
+		{{ $p := index .opts.Props 0 }}
+		{{ if eq $p.Type "uuid" -}}
+			as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
+		{{ else }}
+		as.Contains(res.Body.String(),{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}})
+		{{- end }}
+	{{ else }}	
+	as.Contains(res.Body.String(), "{{$.opts.Name.Resource}}")
+	{{- end }}
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_Show Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Show() {
+	{{.opts.Model.VarCaseSingular}} := as.Create{{.opts.Model.Model}}()
+
+	res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Get()
+	as.Equal(200, res.Code)
+	{{- if .opts.Props }}
+		{{ $p := index .opts.Props 0 }}
+		{{ if eq $p.Type "uuid" -}}
+			as.Contains(res.Body.String(), {{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}}.String())
+		{{ else }}
+		as.Contains(res.Body.String(),{{.opts.Model.VarCaseSingular}}.{{index .opts.Props 0}})
+		{{- end }}
+	{{ else }}	
+	as.Contains(res.Body.String(), "{{$.opts.Name.Resource}}")
+	{{- end }}
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_New Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_New() {
+	res := as.HTML("/{{.opts.FilesPath}}/new").Get()
+	as.Equal(200, res.Code)
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_Create Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Create() {
+	{{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{
+		{{ if .opts.Props -}}
+			{{ range $p := .opts.Props -}}
+				{{- if ne $p.TestValue "null" -}}
+					{{- $p.Name }}: {{ $p.TestValue }},
+				{{- end }}
+			{{ end -}}
+		{{- end -}}
+	}
+
+	as.TableChange("{{.opts.FilesPath}}", 1, func() {
+		res := as.HTML("/{{.opts.FilesPath}}").Post({{.opts.Model.VarCaseSingular}})
+		as.Equal(302, res.Code)
+	})
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_Edit Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Edit() {
+	{{.opts.Model.VarCaseSingular}} := as.Create{{.opts.Model.Model}}()
+	res := as.HTML("/{{.opts.FilesPath}}/%s/edit", {{.opts.Model.VarCaseSingular}}.ID).Get()
+	as.Equal(200, res.Code)
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_UpdateDefault Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Update() {
+	{{ if .opts.Props -}}
+	{{.opts.Model.VarCaseSingular}} := as.Create{{.opts.Model.Model}}()
+	as.TableChange("{{.opts.FilesPath}}", 0, func() {
+		updated{{$.opts.Name.Resource}} := {{.opts.Model.VarCaseSingular}}		
+		{{- $p := index .opts.Props 0 }}
+		{{ if eq $p.Type "string" "text" -}}
+		updated{{$.opts.Name.Resource}}.{{$p}} = "New Name"
+
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		as.NoError(as.DB.Reload({{.opts.Model.VarCaseSingular}}))
+		as.Equal("New Name", {{.opts.Model.VarCaseSingular}}{{ if .opts.Props }}.{{ $p }}{{ end }})
+
+		{{- else if eq $p.Type "int" }}
+		updated{{$.opts.Name.Resource}}.{{$p}} = 9876543210
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		as.NoError(as.DB.Reload({{.opts.Model.VarCaseSingular}}))
+		as.Equal(9876543210, {{.opts.Model.VarCaseSingular}}{{ if .opts.Props }}.{{ $p }}{{ end }})
+
+		{{- else if eq $p.Type "time" }}
+		updated{{$.opts.Name.Resource}}.{{$p}} = time.Now().AddDate(0, 1, 0)
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		expectedTime := time.Now().AddDate(0, 1, 0).Format("Jan 2, 2006 - 3:04 PM")
+		updatedTime := testing.Name.Format("Jan 2, 2006 - 3:04 PM")
+
+		as.NoError(as.DB.Reload(testing))
+		as.Equal(expectedTime, updatedTime)
+
+		{{- else if eq $p.Type "bool" }}
+		updated{{$.opts.Name.Resource}}.{{$p}} = true
+
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		{{- else if eq $p.Type "float" "float32" "float64" }}
+		updated{{$.opts.Name.Resource}}.{{$p}} = 1.23456789
+
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+
+		as.NoError(as.DB.Reload({{.opts.Model.VarCaseSingular}}))
+		as.Equal(1.23456789, {{.opts.Model.VarCaseSingular}}{{ if .opts.Props }}.{{ $p }}{{ end }})
+
+		{{- else if eq $p.Type "uuid" }}
+		updated{{$.opts.Name.Resource}}.{{$p}}, _ = uuid.NewV4()
+
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Put(updated{{$.opts.Name.Resource}})
+		as.Equal(302, res.Code)
+		{{ end -}}
+	})
+	{{- else }}
+		// Buffalo generated a resource with no properties
+		// No need to run this test
+	{{- end }}
+}
+
+// Test_{{$.opts.Name.Resource}}Resource_Destroy Default Implementation
+func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_Destroy() {
+	{{.opts.Model.VarCaseSingular}} := as.Create{{.opts.Model.Model}}()
+	as.TableChange("{{.opts.FilesPath}}", -1, func() {
+		res := as.HTML("/{{.opts.FilesPath}}/%s", {{.opts.Model.VarCaseSingular}}.ID).Delete()
+		as.Equal(302, res.Code)
+		as.Equal("/{{.opts.FilesPath}}", res.Location())
+	})
+}

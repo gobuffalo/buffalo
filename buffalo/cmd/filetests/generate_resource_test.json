@@ -1,0 +1,14 @@
+[{
+    "path": "actions/college_books_test.go",
+    "contains": [
+      "func (as *ActionSuite) CreateCollegeBook() *models.CollegeBook {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_List() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_Show() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_New() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_Create() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_Edit() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_Update() {",
+      "func (as *ActionSuite) Test_CollegeBooksResource_Destroy() {"
+    ]
+  }
+]

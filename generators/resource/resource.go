@@ -61,6 +61,13 @@ func (res Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
+	g.Add(&makr.Func{
+		Should: func(data makr.Data) bool { return true },
+		Runner: func(root string, data makr.Data) error {
+			return generators.AddInsideActionTestBlock()
+		},
+	})
+
 	if !res.SkipModel && !res.UseModel {
 		g.Add(res.modelCommand())
 	}
