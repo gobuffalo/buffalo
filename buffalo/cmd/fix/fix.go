@@ -128,14 +128,17 @@ func (mw MiddlewareTransformer) transformPackages(r *Runner) error {
 		}
 
 		if strings.Contains(newContents, "paramlogger.ParameterLogger") {
+			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 			astutil.AddNamedImport(fset, f, "paramlogger", "github.com/gobuffalo/mw-paramlogger")
 		}
 
 		if strings.Contains(newContents, "popmw.PopTransaction") {
+			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 			astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
 		}
 
 		if strings.Contains(newContents, "contenttype.Add") || strings.Contains(newContents, "contenttype.Set") {
+			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 			astutil.AddNamedImport(fset, f, "contenttype", "github.com/gobuffalo/mw-contenttype")
 		}
 
