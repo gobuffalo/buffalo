@@ -107,11 +107,7 @@ func (mw MiddlewareTransformer) rewriteMiddlewareUses(p string) error {
 	newContents = strings.Replace(newContents, "middleware.PopTransaction", "popmw.Transaction", -1)
 
 	err = ioutil.WriteFile(p, []byte(newContents), 0)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (mw MiddlewareTransformer) writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
