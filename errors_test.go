@@ -56,3 +56,31 @@ func Test_PanicHandler(t *testing.T) {
 		})
 	}
 }
+
+func Test_defaultErrorMiddleware(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	var x string
+	var ok bool
+	app.ErrorHandlers[422] = func(code int, err error, c Context) error {
+		x, ok = c.Value("T").(string)
+		c.Response().WriteHeader(code)
+		c.Response().Write([]byte(err.Error()))
+		return nil
+	}
+	app.Use(func(next Handler) Handler {
+		return func(c Context) error {
+			c.Set("T", "t")
+			return c.Error(422, errors.New("boom"))
+		}
+	})
+	app.GET("/", func(c Context) error {
+		return nil
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(422, res.Code)
+	r.True(ok)
+	r.Equal("t", x)
+}
