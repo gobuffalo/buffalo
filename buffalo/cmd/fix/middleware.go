@@ -20,39 +20,12 @@ type MiddlewareTransformer struct {
 }
 
 func (mw MiddlewareTransformer) transformPackages(r *Runner) error {
-	err := filepath.Walk(".", func(p string, fi os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
+	return filepath.Walk(".", mw.processFile)
+}
 
-		if fi.IsDir() {
-			return nil
-		}
-
-		for _, n := range []string{"vendor", "node_modules", ".git"} {
-			if strings.HasPrefix(p, n+string(filepath.Separator)) {
-				return nil
-			}
-		}
-
-		ext := filepath.Ext(p)
-		if ext != ".go" {
-			return nil
-		}
-
-		read, err := ioutil.ReadFile(p)
-		if err != nil {
-			return err
-		}
-
-		newContents := string(read)
-		newContents = strings.Replace(newContents, "middleware.SetContentType", "contenttype.Set", -1)
-		newContents = strings.Replace(newContents, "middleware.AddContentType", "contenttype.Add", -1)
-		newContents = strings.Replace(newContents, "middleware.ParameterLogger", "paramlogger.ParameterLogger", -1)
-		newContents = strings.Replace(newContents, "middleware.PopTransaction", "popmw.Transaction", -1)
-
-		err = ioutil.WriteFile(p, []byte(newContents), 0)
-		if err != nil {
+func (mw MiddlewareTransformer) processFile(p string, fi os.FileInfo, err error) error {
+	er := onlyRelevantFiles(p, fi, err, func(p string) error {
+		if err := mw.rewriteMiddlewareUses(p); err != nil {
 			return err
 		}
 
@@ -77,25 +50,12 @@ func (mw MiddlewareTransformer) transformPackages(r *Runner) error {
 			}
 		}
 
-		if strings.Contains(newContents, "paramlogger.ParameterLogger") {
-			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
-			astutil.AddNamedImport(fset, f, "paramlogger", "github.com/gobuffalo/mw-paramlogger")
+		if err := mw.addMissingRootMiddlewareImports(fset, f, p); err != nil {
+			return err
 		}
 
-		if strings.Contains(newContents, "popmw.Transaction") {
-			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
-			astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
-		}
-
-		if strings.Contains(newContents, "contenttype.Add") || strings.Contains(newContents, "contenttype.Set") {
-			astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
-			astutil.AddNamedImport(fset, f, "contenttype", "github.com/gobuffalo/mw-contenttype")
-		}
-
-		// since the imports changed, resort them.
 		ast.SortImports(fset, f)
 
-		// create a temporary file, this easily avoids conflicts.
 		temp, err := mw.writeTempResult(p, fset, f)
 		if err != nil {
 			return err
@@ -104,7 +64,54 @@ func (mw MiddlewareTransformer) transformPackages(r *Runner) error {
 		// rename the .temp to .go
 		return os.Rename(temp, p)
 	})
-	return err
+
+	return er
+}
+
+func (mw MiddlewareTransformer) addMissingRootMiddlewareImports(fset *token.FileSet, f *ast.File, p string) error {
+	read, err := ioutil.ReadFile(p)
+	if err != nil {
+		return err
+	}
+
+	content := string(read)
+
+	if strings.Contains(content, "paramlogger.ParameterLogger") {
+		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
+		astutil.AddNamedImport(fset, f, "paramlogger", "github.com/gobuffalo/mw-paramlogger")
+	}
+
+	if strings.Contains(content, "popmw.Transaction") {
+		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
+		astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
+	}
+
+	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") {
+		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
+		astutil.AddNamedImport(fset, f, "contenttype", "github.com/gobuffalo/mw-contenttype")
+	}
+
+	return ioutil.WriteFile(p, []byte(content), 0)
+}
+
+func (mw MiddlewareTransformer) rewriteMiddlewareUses(p string) error {
+	read, err := ioutil.ReadFile(p)
+	if err != nil {
+		return err
+	}
+
+	newContents := string(read)
+	newContents = strings.Replace(newContents, "middleware.SetContentType", "contenttype.Set", -1)
+	newContents = strings.Replace(newContents, "middleware.AddContentType", "contenttype.Add", -1)
+	newContents = strings.Replace(newContents, "middleware.ParameterLogger", "paramlogger.ParameterLogger", -1)
+	newContents = strings.Replace(newContents, "middleware.PopTransaction", "popmw.Transaction", -1)
+
+	err = ioutil.WriteFile(p, []byte(newContents), 0)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (mw MiddlewareTransformer) writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
@@ -127,4 +134,28 @@ func (mw MiddlewareTransformer) writeTempResult(name string, fset *token.FileSet
 	}
 
 	return temp, nil
+}
+
+//onlyRelevantFiles processes only .go files excluding folders like node_modules and vendor.
+func onlyRelevantFiles(p string, fi os.FileInfo, err error, fn func(p string) error) error {
+	if err != nil {
+		return err
+	}
+
+	if fi.IsDir() {
+		return nil
+	}
+
+	for _, n := range []string{"vendor", "node_modules", ".git"} {
+		if strings.HasPrefix(p, n+string(filepath.Separator)) {
+			return nil
+		}
+	}
+
+	ext := filepath.Ext(p)
+	if ext != ".go" {
+		return nil
+	}
+
+	return fn(p)
 }

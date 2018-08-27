@@ -53,26 +53,16 @@ func (c ImportConverter) Process(r *Runner) error {
 }
 
 func (c ImportConverter) processFile(p string, info os.FileInfo, err error) error {
-	for _, n := range []string{"vendor", "node_modules", ".git"} {
-		if strings.HasPrefix(p, n+string(filepath.Separator)) {
-			return nil
+	er := onlyRelevantFiles(p, info, err, func(p string) error {
+		err := c.rewriteFile(p)
+		if err != nil {
+			err = errors.WithStack(err)
 		}
-	}
 
-	if info.IsDir() {
-		return nil
-	}
+		return err
+	})
 
-	ext := filepath.Ext(p)
-	if ext != ".go" {
-		return nil
-	}
-
-	if err := c.rewriteFile(p); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
+	return er
 }
 
 func (c ImportConverter) rewriteFile(name string) error {
