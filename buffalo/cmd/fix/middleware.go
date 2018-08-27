@@ -56,7 +56,7 @@ func (mw MiddlewareTransformer) processFile(p string, fi os.FileInfo, err error)
 
 		ast.SortImports(fset, f)
 
-		temp, err := mw.writeTempResult(p, fset, f)
+		temp, err := writeTempResult(p, fset, f)
 		if err != nil {
 			return err
 		}
@@ -110,7 +110,7 @@ func (mw MiddlewareTransformer) rewriteMiddlewareUses(p string) error {
 	return err
 }
 
-func (mw MiddlewareTransformer) writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
+func writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
 	temp := name + ".temp"
 	w, err := os.Create(temp)
 	if err != nil {

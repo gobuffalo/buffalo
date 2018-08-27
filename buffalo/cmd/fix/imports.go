@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go/ast"
 	"go/parser"
-	"go/printer"
 	"go/token"
 	"io/ioutil"
 	"os"
@@ -109,35 +108,13 @@ func (c ImportConverter) rewriteFile(name string) error {
 	ast.SortImports(fset, f)
 
 	// create a temporary file, this easily avoids conflicts.
-	temp, err := c.writeTempResult(name, fset, f)
+	temp, err := writeTempResult(name, fset, f)
 	if err != nil {
 		return err
 	}
 
 	// rename the .temp to .go
 	return os.Rename(temp, name)
-}
-
-func (c ImportConverter) writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, error) {
-	temp := name + ".temp"
-	w, err := os.Create(temp)
-	if err != nil {
-		return "", err
-	}
-
-	// write changes to .temp file, and include proper formatting.
-	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(w, fset, f)
-	if err != nil {
-		return "", err
-	}
-
-	// close the writer
-	err = w.Close()
-	if err != nil {
-		return "", err
-	}
-
-	return temp, nil
 }
 
 func (c ImportConverter) handleFileComments(f *ast.File) (bool, error) {
