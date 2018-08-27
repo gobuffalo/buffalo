@@ -106,9 +106,12 @@ func New(root string) App {
 			app.WithSQLite = bytes.Contains(bytes.ToLower(b), []byte("sqlite"))
 		}
 	}
-	if _, err := os.Stat(filepath.Join(root, "Gopkg.toml")); err == nil {
+
+	_, err := os.Stat(filepath.Join(root, "Gopkg.toml"))
+	if err == nil {
 		app.WithDep = true
 	}
+
 	if _, err := os.Stat(filepath.Join(root, "webpack.config.js")); err == nil {
 		app.WithWebpack = true
 	}

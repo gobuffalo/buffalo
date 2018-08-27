@@ -22,7 +22,7 @@ var mr = MiddlewareTransformer{
 		"github.com/gobuffalo/buffalo/middleware/basicauth": "github.com/gobuffalo/mw-basicauth",
 		"github.com/gobuffalo/buffalo/middleware/csrf":      "github.com/gobuffalo/mw-csrf",
 		"github.com/gobuffalo/buffalo/middleware/i18n":      "github.com/gobuffalo/mw-i18n",
-		"github.com/gobuffalo/buffalo/middleware/ssl":       "github.com/gobuffalo/mw-ssl",
+		"github.com/gobuffalo/buffalo/middleware/ssl":       "github.com/gobuffalo/mw-forcessl",
 		"github.com/gobuffalo/buffalo/middleware/tokenauth": "github.com/gobuffalo/mw-tokenauth",
 	},
 
@@ -30,7 +30,7 @@ var mr = MiddlewareTransformer{
 		"github.com/gobuffalo/mw-basicauth":          "basicauth",
 		"github.com/gobuffalo/mw-csrf":               "csrf",
 		"github.com/gobuffalo/mw-i18n":               "i18n",
-		"github.com/gobuffalo/mw-ssl":                "ssl",
+		"github.com/gobuffalo/mw-forcessl":           "ssl",
 		"github.com/gobuffalo/mw-tokenauth":          "tokenauth",
 		"github.com/gobuffalo/mw-paramlogger":        "paramlogger",
 		"github.com/gobuffalo/mw-contenttype":        "contenttype",
