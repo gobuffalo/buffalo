@@ -55,6 +55,9 @@ var apkg = []string{
 	"github.com/gobuffalo/mw-i18n",
 	"github.com/gobuffalo/mw-ssl",
 	"github.com/gobuffalo/mw-tokenauth",
+	"github.com/gobuffalo/mw-paramlogger",
+	"github.com/gobuffalo/mw-contenttype",
+	"github.com/gobuffalo/buffalo-pop/pop/popmw",
 }
 
 // packages ensure get updated
