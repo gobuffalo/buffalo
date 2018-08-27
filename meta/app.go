@@ -72,11 +72,13 @@ func New(root string) App {
 	// Gather meta data
 	name := inflect.Name(filepath.Base(root))
 
-	pp := name.String()
-	if !modsOn {
-		pp = envy.CurrentPackage()
-		if filepath.Base(pp) != string(name) {
-			pp = path.Join(pp, string(name))
+	pp := envy.CurrentPackage()
+	if filepath.Base(pp) != string(name) {
+		pp = path.Join(pp, string(name))
+	}
+	if modsOn {
+		if !strings.HasPrefix(pwd, filepath.Join(envy.GoPath(), "src")) {
+			pp = name.String()
 		}
 	}
 
