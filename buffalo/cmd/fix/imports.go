@@ -20,8 +20,7 @@ import (
 
 // ImportConverter will changes imports from a -> b
 type ImportConverter struct {
-	Data    map[string]string
-	Aliases map[string]string
+	Data map[string]string
 }
 
 // Process will walk all the .go files in an application, excluding ./vendor.
@@ -94,25 +93,25 @@ func (c ImportConverter) rewriteFile(name string) error {
 		return err
 	}
 
-	change := false
+	changed := false
 	for key, value := range c.Data {
 		if !astutil.DeleteImport(fset, f, key) {
 			continue
 		}
 
-		astutil.AddNamedImport(fset, f, c.Aliases[value], value)
-		change = true
+		astutil.AddImport(fset, f, value)
+		changed = true
 	}
 
-	changef, err := c.handleFileComments(f)
+	commentsChanged, err := c.handleFileComments(f)
 	if err != nil {
 		return err
 	}
 
-	change = change || changef
+	changed = changed || commentsChanged
 
 	// if no change occurred, then we don't need to write to disk, just return.
-	if !change {
+	if !changed {
 		return nil
 	}
 
