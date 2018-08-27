@@ -1,3 +1,5 @@
+// +build integration_test
+
 package cmd
 
 import (

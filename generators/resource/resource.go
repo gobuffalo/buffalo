@@ -2,7 +2,6 @@ package resource
 
 import (
 	"fmt"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr"
+	sodag "github.com/gobuffalo/pop/soda/cmd/generate"
 )
 
 // Run generates a new actions/resource file and a stub test.
@@ -68,14 +68,17 @@ func (res Generator) Run(root string, data makr.Data) error {
 	return g.Run(root, data)
 }
 
-func (res Generator) modelCommand() makr.Command {
-	args := res.Args
-	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", res.Model.UnderSingular()}, args...)
-
-	if res.SkipMigration {
-		args = append(args, "--skip-migration")
+func (res Generator) modelCommand() *makr.Func {
+	return &makr.Func{
+		Should: func(data makr.Data) bool { return true },
+		Runner: func(root string, data makr.Data) error {
+			opts := map[string]interface{}{
+				"skipMigration": res.SkipMigration,
+				"marshalType":   "json",
+				"migrationType": "fizz",
+				"path":          fmt.Sprintf("%s/migrations", res.App.Root),
+			}
+			return sodag.Model(res.Model.UnderSingular(), opts, res.Args)
+		},
 	}
-
-	return makr.NewCommand(exec.Command("buffalo", args...))
 }
