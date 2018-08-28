@@ -48,7 +48,7 @@ func (es *EventSource) Flush() {
 // CloseNotify return true across the channel when the connection
 // in the browser has been severed.
 func (es *EventSource) CloseNotify() <-chan bool {
-	//#nomegacheck
+	//lint:ignore SA1019 We will remove this one later
 	return es.w.(http.CloseNotifier).CloseNotify()
 }
 
