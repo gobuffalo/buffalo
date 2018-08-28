@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const vendorPattern = "/vendor/"
+const vendorPattern = ".*/vendor/"
 
 var vendorRegex = regexp.MustCompile(vendorPattern)
 var forceMigrations = false
