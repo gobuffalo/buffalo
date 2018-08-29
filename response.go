@@ -47,7 +47,7 @@ func (w *Response) Flush() {
 
 // CloseNotify implements the http.CloseNotifier interface
 func (w *Response) CloseNotify() <-chan bool {
-	//#nomegacheck
+	//lint:ignore SA1019 We will remove this one later
 	if cn, ok := w.ResponseWriter.(http.CloseNotifier); ok {
 		return cn.CloseNotify()
 	}
