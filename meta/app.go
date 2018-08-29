@@ -106,7 +106,6 @@ func New(root string) App {
 			app.WithSQLite = bytes.Contains(bytes.ToLower(b), []byte("sqlite"))
 		}
 	}
-
 	if _, err := os.Stat(filepath.Join(root, "Gopkg.toml")); err == nil {
 		app.WithDep = true
 	}
