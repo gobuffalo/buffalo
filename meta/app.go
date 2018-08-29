@@ -107,11 +107,9 @@ func New(root string) App {
 		}
 	}
 
-	_, err := os.Stat(filepath.Join(root, "Gopkg.toml"))
-	if err == nil {
+	if _, err := os.Stat(filepath.Join(root, "Gopkg.toml")); err == nil {
 		app.WithDep = true
 	}
-
 	if _, err := os.Stat(filepath.Join(root, "webpack.config.js")); err == nil {
 		app.WithWebpack = true
 	}
