@@ -78,7 +78,9 @@ func (res Generator) modelCommand() *makr.Func {
 				"migrationType": "fizz",
 				"path":          fmt.Sprintf("%s/migrations", res.App.Root),
 			}
-			return sodag.Model(res.Model.UnderSingular(), opts, res.Args)
+			args := res.Args
+			args = append(args[:0], args[0+1:]...)
+			return sodag.Model(res.Model.UnderSingular(), opts, args)
 		},
 	}
 }
