@@ -75,19 +75,17 @@ func (mw MiddlewareTransformer) addMissingRootMiddlewareImports(fset *token.File
 	}
 
 	content := string(read)
-
+	
+	astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 	if strings.Contains(content, "paramlogger.ParameterLogger") {
-		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 		astutil.AddNamedImport(fset, f, "paramlogger", "github.com/gobuffalo/mw-paramlogger")
 	}
 
 	if strings.Contains(content, "popmw.Transaction") {
-		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 		astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
 	}
 
-	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") {
-		astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
+	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") 		
 		astutil.AddNamedImport(fset, f, "contenttype", "github.com/gobuffalo/mw-contenttype")
 	}
 
@@ -105,6 +103,7 @@ func (mw MiddlewareTransformer) rewriteMiddlewareUses(p string) error {
 	newContents = strings.Replace(newContents, "middleware.AddContentType", "contenttype.Add", -1)
 	newContents = strings.Replace(newContents, "middleware.ParameterLogger", "paramlogger.ParameterLogger", -1)
 	newContents = strings.Replace(newContents, "middleware.PopTransaction", "popmw.Transaction", -1)
+	newContents = strings.Replace(newContents, "ssl.ForceSSL", "forcessl.Middleware", -1)
 
 	err = ioutil.WriteFile(p, []byte(newContents), 0)
 	return err
