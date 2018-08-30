@@ -29,16 +29,14 @@ func (mw MiddlewareTransformer) processFile(p string, fi os.FileInfo, err error)
 			return err
 		}
 
-		// create an empty fileset.
-		fset := token.NewFileSet()
-
-		f, err := parser.ParseFile(fset, p, nil, parser.ParseComments)
+		fset, f, err := buildASTFor(p)
 		if err != nil {
 			e := err.Error()
 			msg := "expected 'package', found 'EOF'"
 			if e[len(e)-len(msg):] == msg {
 				return nil
 			}
+
 			return err
 		}
 
@@ -129,6 +127,16 @@ func writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, err
 	}
 
 	return temp, nil
+}
+
+func buildASTFor(p string) (token.FileSet, ast.File, error){
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, p, nil, parser.ParseComments)
+	if err != nil {
+		return fset, f, err
+	}
+
+	return f, fset, nil
 }
 
 //onlyRelevantFiles processes only .go files excluding folders like node_modules and vendor.
