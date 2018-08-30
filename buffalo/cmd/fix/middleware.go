@@ -73,7 +73,7 @@ func (mw MiddlewareTransformer) addMissingRootMiddlewareImports(fset *token.File
 	}
 
 	content := string(read)
-	
+
 	astutil.DeleteImport(fset, f, "github.com/gobuffalo/buffalo/middleware")
 	if strings.Contains(content, "paramlogger.ParameterLogger") {
 		astutil.AddNamedImport(fset, f, "paramlogger", "github.com/gobuffalo/mw-paramlogger")
@@ -83,7 +83,7 @@ func (mw MiddlewareTransformer) addMissingRootMiddlewareImports(fset *token.File
 		astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
 	}
 
-	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") 		
+	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") {
 		astutil.AddNamedImport(fset, f, "contenttype", "github.com/gobuffalo/mw-contenttype")
 	}
 
@@ -129,14 +129,14 @@ func writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, err
 	return temp, nil
 }
 
-func buildASTFor(p string) (token.FileSet, ast.File, error){
+func buildASTFor(p string) (*token.FileSet, *ast.File, error) {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, p, nil, parser.ParseComments)
 	if err != nil {
 		return fset, f, err
 	}
 
-	return f, fset, nil
+	return fset, f, nil
 }
 
 //onlyRelevantFiles processes only .go files excluding folders like node_modules and vendor.
