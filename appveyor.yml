@@ -4,6 +4,7 @@ clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
 
 environment:
   GOPATH: c:\gopath
+  GO111MODULE: auto
   matrix:
   - GOBIN: c:\go
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
