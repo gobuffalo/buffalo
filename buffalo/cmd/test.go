@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/meta"
@@ -18,9 +17,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const vendorPattern = "/vendor/"
-
-var vendorRegex = regexp.MustCompile(vendorPattern)
 var forceMigrations = false
 
 func init() {
@@ -204,7 +200,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 	}
 	pkgs := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
 	for _, p := range pkgs {
-		if !vendorRegex.Match(p) {
+		if strings.Contains(string(p), "/vendor/") {
 			args = append(args, string(p))
 		}
 	}
