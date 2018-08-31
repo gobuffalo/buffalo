@@ -51,7 +51,6 @@ type closeNotifier interface {
 
 // CloseNotify implements the closeNotifier interface
 func (w *Response) CloseNotify() <-chan bool {
-	//lint:ignore SA1019 We will remove this one later
 	if cn, ok := w.ResponseWriter.(closeNotifier); ok {
 		return cn.CloseNotify()
 	}
