@@ -40,6 +40,14 @@ var xbuildCmd = &cobra.Command{
 			b.Tags = append(b.Tags, buildOptions.Tags)
 		}
 
+		if b.WithYarn {
+			found, err := YarnScriptExists("buffalo:dev")
+			if err != nil {
+				logrus.Fatal(err)
+			}
+			b.WithYarn = found
+		}
+
 		go func() {
 			<-ctx.Done()
 			if ctx.Err() == context.Canceled {

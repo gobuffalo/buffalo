@@ -9,12 +9,18 @@ import (
 
 func (b *Builder) buildAssets() error {
 
-	if b.WithWebpack && b.Options.WithAssets {
+	if b.Options.WithAssets {
 		if err := envy.MustSet("NODE_ENV", "production"); err != nil {
 			return errors.WithStack(err)
 		}
-		if err := b.exec(webpack.BinPath); err != nil {
-			return errors.WithStack(err)
+		if b.WithYarn {
+			if err := b.exec("yarn", "buffalo:build"); err != nil {
+				return errors.WithStack(err)
+			}
+		} else if b.WithWebpack {
+			if err := b.exec(webpack.BinPath); err != nil {
+				return errors.WithStack(err)
+			}
 		}
 	}
 
