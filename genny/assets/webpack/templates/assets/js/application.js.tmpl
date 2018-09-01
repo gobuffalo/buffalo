@@ -1,0 +1,10 @@
+require("expose-loader?$!expose-loader?jQuery!jquery");
+{{ if eq .opts.Bootstrap 3 -}}
+require("bootstrap-sass/assets/javascripts/bootstrap.js");
+{{ else -}}
+require("bootstrap/dist/js/bootstrap.bundle.js");
+{{ end -}}
+
+$(() => {
+
+});

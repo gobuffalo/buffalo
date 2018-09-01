@@ -1,0 +1,7 @@
+{{ if eq .opts.Bootstrap 3 -}}
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap-sprockets.scss";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+{{ else -}}
+@import "~bootstrap/scss/bootstrap.scss";
+{{ end -}}
+@import "~font-awesome/css/font-awesome.css";

@@ -44,32 +44,33 @@ func New(opts *Options) (*genny.Group, error) {
 func initGenerator(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
+	g.Box(packr.NewBox("../mail/init/templates"))
 	h := template.FuncMap{}
 	data := map[string]interface{}{
 		"opts": opts,
 	}
 	t := gotools.TemplateTransformer(data, h)
+	g.Transformer(t)
 
-	g.RunFn(func(r *genny.Runner) error {
+	g.Should = func(r *genny.Runner) bool {
 		path := filepath.Join("mailers", "mailers.go")
 		_, err := r.FindFile(path)
-		if err == nil {
-			return nil
-		}
-		box := packr.NewBox("../mail/init/templates")
-		box.Walk(func(path string, bf packr.File) error {
-			f := genny.NewFile(path, bf)
-			f, err := t.Transform(f)
-			if err != nil {
-				return errors.WithStack(err)
-			}
-			if err := r.File(f); err != nil {
-				return errors.WithStack(err)
-			}
-			return nil
-		})
-		return nil
-	})
+		return err != nil
+	}
+	// 	box := packr.NewBox("../mail/init/templates")
+	// 	box.Walk(func(path string, bf packr.File) error {
+	// 		f := genny.NewFile(path, bf)
+	// 		f, err := t.Transform(f)
+	// 		if err != nil {
+	// 			return errors.WithStack(err)
+	// 		}
+	// 		if err := r.File(f); err != nil {
+	// 			return errors.WithStack(err)
+	// 		}
+	// 		return nil
+	// 	})
+	// 	return nil
+	// })
 	return g, nil
 }
 

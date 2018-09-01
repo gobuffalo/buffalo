@@ -1,6 +1,7 @@
 package webpack
 
 import (
+	"fmt"
 	"os/exec"
 	"path/filepath"
 
@@ -12,6 +13,10 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
+
+func init() {
+	fmt.Println("github.com/gobuffalo/buffalo/generators/assets/webpack has been deprecated in v0.13.0, and will be removed in v0.14.0. Use github.com/gobuffalo/buffalo/genny/assets/webpack directly.")
+}
 
 // TemplateBox contains all templates needed for the webpack generator
 var TemplateBox = packr.NewBox("../webpack/templates")

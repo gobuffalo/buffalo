@@ -44,9 +44,7 @@ func Test_New_WithMailers(t *testing.T) {
 	r := require.New(t)
 
 	run := genny.DryRunner(context.Background())
-	g := genny.New()
-	g.File(genny.NewFile(filepath.Join("mailers", "mailers.go"), strings.NewReader("")))
-	run.With(g)
+	run.Disk.Add(genny.NewFile(filepath.Join("mailers", "mailers.go"), strings.NewReader("")))
 
 	gg, err := New(&Options{Name: "foo"})
 	r.NoError(err)
@@ -66,5 +64,4 @@ func Test_New_WithMailers(t *testing.T) {
 	r.Equal(filepath.Join("templates", "mail", "foo.html"), f.Name())
 	body = f.String()
 	r.Contains(body, `<h3>../templates/mail/foo.html</h3>`)
-
 }
