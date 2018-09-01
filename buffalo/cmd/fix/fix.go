@@ -33,7 +33,7 @@ var mr = MiddlewareTransformer{
 		"github.com/gobuffalo/mw-basicauth":          "basicauth",
 		"github.com/gobuffalo/mw-csrf":               "csrf",
 		"github.com/gobuffalo/mw-i18n":               "i18n",
-		"github.com/gobuffalo/mw-forcessl":           "ssl",
+		"github.com/gobuffalo/mw-forcessl":           "forcessl",
 		"github.com/gobuffalo/mw-tokenauth":          "tokenauth",
 		"github.com/gobuffalo/mw-paramlogger":        "paramlogger",
 		"github.com/gobuffalo/mw-contenttype":        "contenttype",
