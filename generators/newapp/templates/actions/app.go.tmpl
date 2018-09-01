@@ -62,7 +62,7 @@ func App() *buffalo.App {
     // Automatically redirect to SSL
     app.Use(forceSSL())
 
-    // Log requests parameters
+    // Log request parameters (filters apply).
     app.Use(paramlogger.ParameterLogger)
 
     {{ if .opts.AsAPI -}}
