@@ -52,6 +52,10 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 }
 
 func Test_NewCmd_Nominal(t *testing.T) {
+	gm := envy.Get("GO111MODULE", "off")
+	defer os.Setenv("GO111MODULE", gm)
+	os.Setenv("GO111MODULE", "off")
+
 	r := require.New(t)
 	c := RootCmd
 
@@ -110,9 +114,10 @@ func Test_NewCmd_API(t *testing.T) {
 }
 
 func Test_NewCmd_WithDep(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CONFLICTS WITH MODULES")
-	}
+	gm := envy.Get("GO111MODULE", "off")
+	defer os.Setenv("GO111MODULE", gm)
+	os.Setenv("GO111MODULE", "off")
+
 	c := RootCmd
 
 	r := require.New(t)

@@ -97,6 +97,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 	a.setupVCS(g)
 
 	data["opts"] = a
+	fmt.Println("### root ->", root)
 	return g.Run(root, data)
 }
 
