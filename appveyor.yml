@@ -8,20 +8,6 @@ environment:
   - GOBIN: c:\go
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-install:
-- cmd: >-
-    choco install mingw
-
-    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
-
-    echo %PATH%
-
-    echo %GOPATH%
-
-    go version
-
-    go env
-
 build:
   verbosity: normal
 
@@ -31,10 +17,10 @@ build_script:
 - cmd: >-
     set GO111MODULE=on
 
-    go build -v -tags sqlite github.com/gobuffalo/buffalo/buffalo
+    go build -v github.com/gobuffalo/buffalo/buffalo
 
-    go install -tags sqlite github.com/gobuffalo/buffalo/buffalo
+    go install github.com/gobuffalo/buffalo/buffalo
 
 test_script:
   - set GO111MODULE=on
-  - go test -race -tags sqlite ./...
+  - go test -race ./...
