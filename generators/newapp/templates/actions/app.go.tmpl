@@ -3,8 +3,8 @@ package actions
 import (
   "github.com/gobuffalo/envy"
   "github.com/gobuffalo/buffalo"
-  "github.com/gobuffalo/mw-forcessl"
-  "github.com/gobuffalo/mw-paramlogger"
+  forcessl "github.com/gobuffalo/mw-forcessl"
+  paramlogger "github.com/gobuffalo/mw-paramlogger"
   "github.com/unrolled/secure"
 
   {{ if .opts.WithPop }}
@@ -13,15 +13,15 @@ import (
   {{ end -}}
 
   {{ if .opts.AsWeb -}}
-  "github.com/gobuffalo/mw-csrf"
-  "github.com/gobuffalo/mw-i18n"
+  csrf "github.com/gobuffalo/mw-csrf"
+  i18n "github.com/gobuffalo/mw-i18n"
   "github.com/gobuffalo/packr"
   {{ end -}}
 
   {{ if .opts.AsAPI -}}
   "github.com/rs/cors"
   "github.com/gobuffalo/x/sessions"
-  "github.com/gobuffalo/mw-contenttype"
+  contenttype "github.com/gobuffalo/mw-contenttype"
   {{ end -}}
 )
 
@@ -58,7 +58,7 @@ func App() *buffalo.App {
       {{ end -}}
       SessionName: "_{{.opts.Name.File}}_session",
     })
-    
+
     // Automatically redirect to SSL
     app.Use(forceSSL(), paramlogger.ParameterLogger)
 
