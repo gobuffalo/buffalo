@@ -31,9 +31,7 @@ func (mw MiddlewareTransformer) processFile(p string, fi os.FileInfo, err error)
 
 		fset, f, err := buildASTFor(p)
 		if err != nil {
-			e := err.Error()
-			msg := "expected 'package', found 'EOF'"
-			if e[len(e)-len(msg):] == msg {
+			if e := err.Error(); strings.Contains(e, "expected 'package', found 'EOF'") {
 				return nil
 			}
 
