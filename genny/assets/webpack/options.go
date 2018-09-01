@@ -11,6 +11,7 @@ type Options struct {
 	Bootstrap int `json:"bootstrap"`
 }
 
+// Validate options
 func (opts *Options) Validate() error {
 	if opts.Bootstrap == 0 {
 		opts.Bootstrap = 4

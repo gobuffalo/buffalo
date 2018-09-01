@@ -7,23 +7,16 @@ import (
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
 // New generator to create a grift task
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
-	if len(opts.Args) == 0 {
-		return g, errors.New("you need to provide a name for the grift task")
-	}
 
-	opts.Namespaced = strings.Contains(opts.Args[0], ":")
-
-	for _, n := range strings.Split(opts.Args[0], ":") {
-		opts.Parts = append(opts.Parts, inflect.Name(n))
+	if err := opts.Validate(); err != nil {
+		return g, errors.WithStack(err)
 	}
-	opts.Name = opts.Parts[len(opts.Parts)-1]
 
 	data := map[string]interface{}{
 		"opts": opts,

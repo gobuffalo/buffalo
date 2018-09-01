@@ -15,7 +15,7 @@ func Test_New(t *testing.T) {
 
 	app := meta.New(".")
 	app.Name = inflect.Name("foo")
-	g, err := New(app)
+	g, err := New(&Options{app})
 	r.NoError(err)
 
 	run := genny.DryRunner(context.Background())

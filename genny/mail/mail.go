@@ -58,20 +58,6 @@ func initGenerator(opts *Options) (*genny.Generator, error) {
 		_, err := r.FindFile(path)
 		return err != nil
 	}
-	// 	box := packr.NewBox("../mail/init/templates")
-	// 	box.Walk(func(path string, bf packr.File) error {
-	// 		f := genny.NewFile(path, bf)
-	// 		f, err := t.Transform(f)
-	// 		if err != nil {
-	// 			return errors.WithStack(err)
-	// 		}
-	// 		if err := r.File(f); err != nil {
-	// 			return errors.WithStack(err)
-	// 		}
-	// 		return nil
-	// 	})
-	// 	return nil
-	// })
 	return g, nil
 }
 

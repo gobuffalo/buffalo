@@ -1,21 +1,24 @@
 package refresh
 
 import (
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/plushgen"
 	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/plush"
+	"github.com/pkg/errors"
 )
 
 // New generator to generate refresh templates
-func New(app meta.App) (*genny.Generator, error) {
+func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
+	if err := opts.Validate(); err != nil {
+		return g, errors.WithStack(err)
+	}
 	g.Box(packr.NewBox("../refresh/templates"))
 
 	ctx := plush.NewContext()
-	ctx.Set("app", app)
+	ctx.Set("app", opts.App)
 	g.Transformer(plushgen.Transformer(ctx))
-	g.Transformer(genny.Replace("-dot-", "."))
+	g.Transformer(genny.Dot())
 	return g, nil
 }
