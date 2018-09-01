@@ -60,7 +60,10 @@ func App() *buffalo.App {
     })
 
     // Automatically redirect to SSL
-    app.Use(forceSSL(), paramlogger.ParameterLogger)
+    app.Use(forceSSL())
+
+    // Log requests parameters
+    app.Use(paramlogger.ParameterLogger)
 
     {{ if .opts.AsAPI -}}
     // Set the request content type to JSON
