@@ -57,7 +57,7 @@ func confirm(msg string) bool {
 }
 
 func removeTemplates(fileName string) {
-	if YesToAll || confirm("Want to remove templates? (Y/n)") {
+	if YesToAll || confirm("Want to remove templates? (y/N)") {
 		templatesFolder := filepath.Join("templates", fileName)
 		logrus.Infof("- Deleted %v folder\n", templatesFolder)
 		os.RemoveAll(templatesFolder)
@@ -65,7 +65,7 @@ func removeTemplates(fileName string) {
 }
 
 func removeActions(fileName string) error {
-	if YesToAll || confirm("Want to remove actions? (Y/n)") {
+	if YesToAll || confirm("Want to remove actions? (y/N)") {
 		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v.go", fileName)))
 
@@ -94,24 +94,27 @@ func removeActions(fileName string) error {
 }
 
 func removeLocales(fileName string) {
-	if YesToAll || confirm("Want to remove locales? (Y/n)") {
+	if YesToAll || confirm("Want to remove locales? (y/N)") {
 		removeMatch("locales", fmt.Sprintf("%v.*.yaml", fileName))
 	}
 }
 
-func removeModel(name string) error {
-	if YesToAll || confirm("Want to remove model? (Y/n)") {
-		cmd := exec.Command("buffalo", "pop", "destroy", "model", "-y", name)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Stdin = os.Stdin
-		return cmd.Run()
+
+func removeModel(name string) {
+	if YesToAll || confirm("Want to remove model? (y/N)") {
+		modelFileName := inflect.Singularize(inflect.Underscore(name))
+
+		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
+		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))
+
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
+		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
 	}
 	return nil
 }
 
 func removeMigrations(fileName string) {
-	if YesToAll || confirm("Want to remove migrations? (Y/n)") {
+	if YesToAll || confirm("Want to remove migrations? (y/N)") {
 		removeMatch("migrations", fmt.Sprintf("*_create_%v.up.*", fileName))
 		removeMatch("migrations", fmt.Sprintf("*_create_%v.down.*", fileName))
 	}
