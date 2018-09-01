@@ -13,14 +13,6 @@ build:
 
 deploy: false
 
-build_script:
-- cmd: >-
-    set GO111MODULE=on
-
-    go build -v github.com/gobuffalo/buffalo/buffalo
-
-    go install github.com/gobuffalo/buffalo/buffalo
-
 test_script:
   - set GO111MODULE=on
   - go test -race ./...
