@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -39,9 +38,7 @@ var ResourceCmd = &cobra.Command{
 		}
 
 		removeLocales(fileName)
-		if err := removeModel(name); err != nil {
-			return errors.WithStack(err)
-		}
+		removeModel(name)
 		removeMigrations(fileName)
 
 		return nil
@@ -99,7 +96,6 @@ func removeLocales(fileName string) {
 	}
 }
 
-
 func removeModel(name string) {
 	if YesToAll || confirm("Want to remove model? (y/N)") {
 		modelFileName := inflect.Singularize(inflect.Underscore(name))
@@ -110,7 +106,6 @@ func removeModel(name string) {
 		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
 		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
 	}
-	return nil
 }
 
 func removeMigrations(fileName string) {
