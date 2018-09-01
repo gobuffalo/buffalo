@@ -58,17 +58,14 @@ func App() *buffalo.App {
       {{ end -}}
       SessionName: "_{{.opts.Name.File}}_session",
     })
+    
     // Automatically redirect to SSL
-    app.Use(forceSSL())
+    app.Use(forceSSL(), paramlogger.ParameterLogger)
 
     {{ if .opts.AsAPI -}}
     // Set the request content type to JSON
     app.Use(contenttype.Set("application/json"))
     {{ end }}
-
-    if ENV == "development" {
-      app.Use(paramlogger.ParameterLogger)
-    }
 
     {{ if .opts.AsWeb -}}
     // Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
