@@ -14,7 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// // BinPath is the path to the local install of webpack
+// BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
 // New generator for create webpack asset files
