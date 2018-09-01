@@ -8,9 +8,6 @@ environment:
 
 stack: go 1.11
 
-before_test:
-  - setx GO111MODULE on
-  - go get -v -t -tags sqlite ./...
-
 test_script:
+  - go get -v -t -tags sqlite ./...
   - go test -race -tags sqlite ./...
