@@ -8,6 +8,14 @@ environment:
 
 stack: go 1.11
 
+install:
+  - cmd: >-
+      choco install mingw
+      set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
+      echo %PATH%
+      echo %GOPATH%
+      go version
+      go env
 test_script:
   - set GO111MODULE=on
   - go get -v -t -tags sqlite ./...
