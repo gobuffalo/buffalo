@@ -4,13 +4,22 @@ clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
 
 environment:
   GOPATH: c:\gopath
-
-stack: go 1.11
+  matrix:
+  - GOBIN: c:\go
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 build:
   verbosity: normal
 
 deploy: false
+
+stack: go 1.11
+
+build_script:
+- cmd: >-
+    set GO111MODULE=on
+
+    go build -v github.com/gobuffalo/buffalo/buffalo
 
 test_script:
   - set GO111MODULE=on
