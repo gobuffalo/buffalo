@@ -15,6 +15,12 @@ deploy: false
 
 stack: go 1.11
 
+install:
+- cmd: >-
+    choco install mingw
+
+    set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
+
 build_script:
 - cmd: >-
     set GO111MODULE=on
