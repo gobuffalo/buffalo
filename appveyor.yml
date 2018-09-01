@@ -9,5 +9,6 @@ environment:
 stack: go 1.11
 
 test_script:
+  - set GO111MODULE=on
   - go get -v -t -tags sqlite ./...
   - go test -race -tags sqlite ./...
