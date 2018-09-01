@@ -52,9 +52,6 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 }
 
 func Test_NewCmd_Nominal(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
@@ -84,9 +81,6 @@ func Test_NewCmd_Nominal(t *testing.T) {
 }
 
 func Test_NewCmd_API(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
@@ -117,7 +111,7 @@ func Test_NewCmd_API(t *testing.T) {
 
 func Test_NewCmd_WithDep(t *testing.T) {
 	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
+		t.Skip("CONFLICTS WITH MODULES")
 	}
 	c := RootCmd
 
@@ -171,9 +165,6 @@ func Test_NewCmd_WithDep(t *testing.T) {
 }
 
 func Test_NewCmd_WithPopSQLite3(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
