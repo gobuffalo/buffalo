@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,8 +17,8 @@ func Test_WrapHandlerFunc(t *testing.T) {
 		res.Write([]byte("hello"))
 	}))
 
-	w := willie.New(a)
-	res := w.Request("/foo").Get()
+	w := httptest.New(a)
+	res := w.HTML("/foo").Get()
 
 	r.Equal("hello", res.Body.String())
 }
@@ -30,8 +31,72 @@ func Test_WrapHandler(t *testing.T) {
 		res.Write([]byte("hello"))
 	})))
 
-	w := willie.New(a)
-	res := w.Request("/foo").Get()
+	w := httptest.New(a)
+	res := w.HTML("/foo").Get()
 
 	r.Equal("hello", res.Body.String())
+}
+
+func Test_WrapBuffaloHandler(t *testing.T) {
+	r := require.New(t)
+
+	tt := []struct {
+		verb   string
+		path   string
+		status int
+	}{
+		{"GET", "/", 1},
+		{"GET", "/foo", 2},
+		{"POST", "/", 3},
+		{"POST", "/foo", 4},
+	}
+	for _, x := range tt {
+		bf := func(c Context) error {
+			req := c.Request()
+			return c.Render(x.status, render.String(req.Method+req.URL.Path))
+		}
+
+		h := WrapBuffaloHandler(bf)
+		r.NotNil(h)
+
+		req := httptest.NewRequest(x.verb, x.path, nil)
+		res := httptest.NewRecorder()
+
+		h.ServeHTTP(res, req)
+
+		r.Equal(x.status, res.Code)
+		r.Contains(res.Body.String(), x.verb+x.path)
+	}
+}
+
+func Test_WrapBuffaloHandlerFunc(t *testing.T) {
+	r := require.New(t)
+
+	tt := []struct {
+		verb   string
+		path   string
+		status int
+	}{
+		{"GET", "/", 1},
+		{"GET", "/foo", 2},
+		{"POST", "/", 3},
+		{"POST", "/foo", 4},
+	}
+	for _, x := range tt {
+		bf := func(c Context) error {
+			req := c.Request()
+			return c.Render(x.status, render.String(req.Method+req.URL.Path))
+		}
+
+		h := WrapBuffaloHandlerFunc(bf)
+		r.NotNil(h)
+
+		req := httptest.NewRequest(x.verb, x.path, nil)
+		res := httptest.NewRecorder()
+
+		h(res, req)
+
+		r.Equal(x.status, res.Code)
+		r.Contains(res.Body.String(), x.verb+x.path)
+	}
 }

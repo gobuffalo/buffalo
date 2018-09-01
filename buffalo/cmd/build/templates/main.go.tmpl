@@ -6,7 +6,6 @@ import (
   "os"
   "os/exec"
   "time"
-  "strings"
 
   "github.com/markbates/grift/grift"
   "github.com/gobuffalo/buffalo/runtime"
@@ -22,17 +21,13 @@ import (
   <% } %>
 )
 
-var BuildVersion = ""
-var BuildTime = ""
-
 func init() {
-  BuildTime = strings.Trim(BuildTime, "\"")
-  t, err := time.Parse(time.RFC3339, BuildTime)
+t, err := time.Parse(time.RFC3339, "<%= buildTime %>")
   if err != nil {
     fmt.Println(err)
   }
   runtime.SetBuild(runtime.BuildInfo{
-    Version: BuildVersion,
+  Version: "<%= buildVersion %>",
     Time: t,
   })
 }
