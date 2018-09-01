@@ -17,8 +17,8 @@ func Test_IllegalName(t *testing.T) {
 		"123COKE":                   false,
 		"1(3c&ke":                   true,
 		"github.com/markbates/coke": true,
-		"":        true,
-		"buffalo": true,
+		"":                          true,
+		"buffalo":                   true,
 	}
 	for k, v := range m {
 		g, _ := New(k)
