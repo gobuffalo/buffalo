@@ -1,11 +1,16 @@
 package soda
 
 import (
+	"fmt"
 	"path/filepath"
 
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/pop/soda/cmd/generate"
 )
+
+func init() {
+	fmt.Println("github.com/gobuffalo/buffalo/generators/soda has been deprecated in v0.13.0, and will be removed in v0.14.0. Use github.com/gobuffalo/buffalo-pop/genny/newapp directly.")
+}
 
 // Run the soda generator
 func (sd Generator) Run(root string, data makr.Data) error {
