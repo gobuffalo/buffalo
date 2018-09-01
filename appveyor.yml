@@ -1,22 +1,40 @@
-build: off
-
+version: "{build}"
+clone_depth: 5
 clone_folder: c:\gopath\src\github.com\gobuffalo\buffalo
 
 environment:
   GOPATH: c:\gopath
-  GO111MODULE: on
-
-stack: go 1.11
+  matrix:
+  - GOBIN: c:\go
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 install:
 - cmd: >-
     choco install mingw
+
     set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
+
     echo %PATH%
+
     echo %GOPATH%
+
     go version
+
     go env
+
+build:
+  verbosity: normal
+
+deploy: false
+
+build_script:
+- cmd: >-
+    set GO111MODULE=on
+
+    go build -v -tags sqlite github.com/gobuffalo/buffalo/buffalo
+
+    go install -tags sqlite github.com/gobuffalo/buffalo/buffalo
+
 test_script:
   - set GO111MODULE=on
-  - go get -v -t -tags sqlite ./...
   - go test -race -tags sqlite ./...
