@@ -9,7 +9,7 @@ environment:
 stack: go 1.11
 
 before_test:
-  - export GO111MODULE=on
+  - setx GO111MODULE on
   - go get -v -t -tags sqlite ./...
 
 test_script:
