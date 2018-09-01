@@ -3,10 +3,8 @@ package webpack
 import (
 	"os/exec"
 	"path/filepath"
-	"text/template"
 
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/packr"
@@ -26,41 +24,38 @@ func New(opts *Options) (*genny.Generator, error) {
 		return standard.New(&standard.Options{})
 	}
 
-	if opts.Bootstrap == 0 {
-		opts.Bootstrap = 4
-	}
-	bs := opts.Bootstrap
-	if bs < 3 && bs > 4 {
-		return nil, errors.Errorf("bootstrap can only be 3 or 4 not %d", bs)
-	}
-	if (opts.App == meta.App{}) {
-		opts.App = meta.New(".")
+	if err := opts.Validate(); err != nil {
+		return g, errors.WithStack(err)
 	}
 
 	g.Box(packr.NewBox("../webpack/templates"))
+
 	data := map[string]interface{}{
 		"opts": opts,
 	}
-
-	g.RunFn(func(r *genny.Runner) error {
-		command := "yarnpkg"
-
-		if !opts.App.WithYarn {
-			command = "npm"
-		} else {
-			if err := installYarn(r); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		args := []string{"install", "--no-progress", "--save"}
-		return r.Exec(exec.Command(command, args...))
-	})
-
-	h := template.FuncMap{}
-	t := gotools.TemplateTransformer(data, h)
+	t := gotools.TemplateTransformer(data, gotools.TemplateHelpers)
 	g.Transformer(t)
 	g.Transformer(genny.Dot())
+
+	g.RunFn(func(r *genny.Runner) error {
+		return installPkgs(r, opts)
+	})
+
 	return g, nil
+}
+
+func installPkgs(r *genny.Runner, opts *Options) error {
+	command := "yarnpkg"
+
+	if !opts.App.WithYarn {
+		command = "npm"
+	} else {
+		if err := installYarn(r); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+	args := []string{"install", "--no-progress", "--save"}
+	return r.Exec(exec.Command(command, args...))
 }
 
 func installYarn(r *genny.Runner) error {

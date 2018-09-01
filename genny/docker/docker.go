@@ -35,7 +35,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 	t := gotools.TemplateTransformer(data, template.FuncMap{})
 	g.Transformer(t)
-	g.Transformer(genny.Replace("-dot-", "."))
+	g.Transformer(genny.Dot())
 	return g, nil
 }
 

@@ -29,19 +29,20 @@ func New(opts *Options) (*genny.Generator, error) {
 		"opts": opts,
 	}
 	t := gotools.TemplateTransformer(data, template.FuncMap{})
+	g.Transformer(t)
 
 	g.RunFn(func(r *genny.Runner) error {
-		header := tmplHeader
-		path := filepath.Join("grifts", opts.Name.File()+".go.tmpl")
-		if f, err := r.FindFile(path); err == nil {
-			header = f.String()
-		}
-		f := genny.NewFile(path, strings.NewReader(header+tmplBody))
-		f, err := t.Transform(f)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		return r.File(f)
+		return genFile(r, opts)
 	})
 	return g, nil
+}
+
+func genFile(r *genny.Runner, opts *Options) error {
+	header := tmplHeader
+	path := filepath.Join("grifts", opts.Name.File()+".go.tmpl")
+	if f, err := r.FindFile(path); err == nil {
+		header = f.String()
+	}
+	f := genny.NewFile(path, strings.NewReader(header+tmplBody))
+	return r.File(f)
 }

@@ -33,6 +33,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 	t := gotools.TemplateTransformer(data, h)
 	g.Transformer(t)
+
 	fn := opts.Name.File()
 	g.File(genny.NewFile(filepath.Join("mailers", fn+".go.tmpl"), strings.NewReader(mailerTmpl)))
 	g.File(genny.NewFile(filepath.Join("templates", "mail", fn+".html.tmpl"), strings.NewReader(mailTmpl)))
