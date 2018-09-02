@@ -100,6 +100,10 @@ RUN buffalo g actions ouch build edit
 RUN buffalo d action -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_action_all.json
 
+RUN buffalo g mailer ouch
+RUN buffalo d mailer -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_mailer_all.json
+
 RUN buffalo g actions comments show edit
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_all.json
 
