@@ -5,10 +5,18 @@ release:
     name: buffalo
   name_template: '{{.Tag}}'
 brew:
-  commit_author:
-    name: goreleaserbot
-    email: goreleaser@carlosbecker.com
-  install: bin.install "buffalo"
+  name: buffalo
+  github:
+    owner: gobuffalo
+    name: homebrew-buffalo
+  url_template: 'https://github.com/gobuffalo/buffalo/releases/download/v{{ .Version }}/{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  homepage: https://gobuffalo.io
+  description: A Go web development eco-system, designed to make your life easier.
+  install: |
+    bin.install "buffalo-no-sqlite"
+    mv "#{bin}/buffalo-no-sqlite", "#{bin}/buffalo"
+  test: |
+    system "#{bin}/buffalo", "version"
 builds:
   -
     goos:
