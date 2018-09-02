@@ -42,9 +42,15 @@ const configurator = {
       new CleanObsoleteChunks(),
       new Webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
       new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
-      new CopyWebpackPlugin([{from: "./assets",to: ""}], {copyUnmodified: true,ignore: ["css/**", "js/**", "src/**"] }),
+      new CopyWebpackPlugin([{from: "./assets", to: "[path][name].[hash].[ext]"}], {copyUnmodified: true,ignore: ["css/**", "js/**", "src/**"] }),
       new Webpack.LoaderOptionsPlugin({minimize: true,debug: false}),
-      new ManifestPlugin({fileName: "manifest.json"})
+      new ManifestPlugin({
+        fileName: "manifest.json",
+        map: (file) => {
+          file.name = file.name.replace(/(\.[a-f0-9]{32})(\..*)$/, '$2');
+          return file;
+        },
+      })
     ];
 
     return plugins
