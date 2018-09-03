@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
-	github.com/gobuffalo/makr v1.1.4
+	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -41,6 +41,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180830192347-182538f80094
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+	golang.org/x/sys v0.0.0-20180903171548-1b7396714020 // indirect
 	golang.org/x/tools v0.0.0-20180831211245-7ca132754999
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
