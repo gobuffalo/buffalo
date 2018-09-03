@@ -15,6 +15,7 @@ func init() {
 	destroyCmd.AddCommand(destroy.ResourceCmd)
 	destroyCmd.AddCommand(destroy.ActionCmd)
 	destroyCmd.AddCommand(destroy.ModelCmd)
+	destroyCmd.AddCommand(destroy.MailerCmd)
 
 	destroyCmd.PersistentFlags().BoolVarP(&destroy.YesToAll, "yes", "y", false, "confirms all beforehand")
 
