@@ -8,7 +8,7 @@ brew:
   name: buffalo
   github:
     owner: gobuffalo
-    name: homebrew-buffalo
+    name: homebrew-tap
   homepage: https://gobuffalo.io
   description: A Go web development eco-system, designed to make your life easier.
   install: |
