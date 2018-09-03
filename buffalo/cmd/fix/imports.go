@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"go/ast"
 	"go/parser"
-	"go/printer"
 	"go/token"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"golang.org/x/tools/go/ast/astutil"
 
 	"github.com/pkg/errors"
 )
@@ -27,44 +27,43 @@ type ImportConverter struct {
 // used by this version Buffalo.
 func (c ImportConverter) Process(r *Runner) error {
 	fmt.Println("~~~ Rewriting Imports ~~~")
-	err := filepath.Walk(".", func(p string, info os.FileInfo, err error) error {
-		for _, n := range []string{"vendor", "node_modules", ".git"} {
-			if strings.HasPrefix(p, n+string(filepath.Separator)) {
-				return nil
-			}
-		}
-		if info.IsDir() {
-			return nil
-		}
-		ext := filepath.Ext(p)
-		if ext == ".go" {
-			if err := c.rewriteFile(p); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		return nil
-	})
+
+	err := filepath.Walk(".", c.processFile)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	if r.App.WithDep {
-		b, err := ioutil.ReadFile("Gopkg.toml")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		for k := range c.Data {
-			if bytes.Contains(b, []byte(k)) {
-				r.Warnings = append(r.Warnings, fmt.Sprintf("Your Gopkg.toml contains the following import that need to be changed MANUALLY: %s", k))
-			}
+	if !r.App.WithDep {
+		return nil
+	}
+
+	b, err := ioutil.ReadFile("Gopkg.toml")
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	for k := range c.Data {
+		if bytes.Contains(b, []byte(k)) {
+			r.Warnings = append(r.Warnings, fmt.Sprintf("Your Gopkg.toml contains the following import that need to be changed MANUALLY: %s", k))
 		}
 	}
+
 	return nil
 }
 
-// TAKEN FROM https://gist.github.com/jackspirou/61ce33574e9f411b8b4a
-// rewriteFile rewrites import statments in the named file
-// according to the rules supplied by the map of strings.
+func (c ImportConverter) processFile(p string, info os.FileInfo, err error) error {
+	er := onlyRelevantFiles(p, info, err, func(p string) error {
+		err := c.rewriteFile(p)
+		if err != nil {
+			err = errors.WithStack(err)
+		}
+
+		return err
+	})
+
+	return er
+}
+
 func (c ImportConverter) rewriteFile(name string) error {
 
 	// create an empty fileset.
@@ -83,50 +82,25 @@ func (c ImportConverter) rewriteFile(name string) error {
 		return err
 	}
 
-	// iterate through the import paths. if a change occurs update bool.
-	change := false
-	for _, i := range f.Imports {
-
-		// unquote the import path value.
-		path, err := strconv.Unquote(i.Path.Value)
-		if err != nil {
-			return err
+	changed := false
+	for key, value := range c.Data {
+		if !astutil.DeleteImport(fset, f, key) {
+			continue
 		}
 
-		// match import path with the given replacement map
-		if rpath, ok := c.match(path); ok {
-			fmt.Printf("[IMPORT] %s: %s -> %s\n", name, path, rpath)
-			i.Path.Value = strconv.Quote(rpath)
-			change = true
-		}
+		astutil.AddImport(fset, f, value)
+		changed = true
 	}
 
-	for _, cg := range f.Comments {
-		for _, cl := range cg.List {
-			if strings.HasPrefix(cl.Text, "// import \"") {
-
-				// trim off extra comment stuff
-				ctext := cl.Text
-				ctext = strings.TrimPrefix(ctext, "// import")
-				ctext = strings.TrimSpace(ctext)
-
-				// unquote the comment import path value
-				ctext, err := strconv.Unquote(ctext)
-				if err != nil {
-					return err
-				}
-
-				// match the comment import path with the given replacement map
-				if ctext, ok := c.match(ctext); ok {
-					cl.Text = "// import " + strconv.Quote(ctext)
-					change = true
-				}
-			}
-		}
+	commentsChanged, err := c.handleFileComments(f)
+	if err != nil {
+		return err
 	}
+
+	changed = changed || commentsChanged
 
 	// if no change occurred, then we don't need to write to disk, just return.
-	if !change {
+	if !changed {
 		return nil
 	}
 
@@ -134,20 +108,7 @@ func (c ImportConverter) rewriteFile(name string) error {
 	ast.SortImports(fset, f)
 
 	// create a temporary file, this easily avoids conflicts.
-	temp := name + ".temp"
-	w, err := os.Create(temp)
-	if err != nil {
-		return err
-	}
-
-	// write changes to .temp file, and include proper formatting.
-	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(w, fset, f)
-	if err != nil {
-		return err
-	}
-
-	// close the writer
-	err = w.Close()
+	temp, err := writeTempResult(name, fset, f)
 	if err != nil {
 		return err
 	}
@@ -156,15 +117,48 @@ func (c ImportConverter) rewriteFile(name string) error {
 	return os.Rename(temp, name)
 }
 
+func (c ImportConverter) handleFileComments(f *ast.File) (bool, error) {
+	change := false
+
+	for _, cg := range f.Comments {
+		for _, cl := range cg.List {
+			if !strings.HasPrefix(cl.Text, "// import \"") {
+				continue
+			}
+
+			// trim off extra comment stuff
+			ctext := cl.Text
+			ctext = strings.TrimPrefix(ctext, "// import")
+			ctext = strings.TrimSpace(ctext)
+
+			// unquote the comment import path value
+			ctext, err := strconv.Unquote(ctext)
+			if err != nil {
+				return false, err
+			}
+
+			// match the comment import path with the given replacement map
+			if ctext, ok := c.match(ctext); ok {
+				cl.Text = "// import " + strconv.Quote(ctext)
+				change = true
+			}
+
+		}
+	}
+
+	return change, nil
+}
+
 // match takes an import path and replacement map.
 func (c ImportConverter) match(importpath string) (string, bool) {
 	for key, value := range c.Data {
-		if len(importpath) >= len(key) {
-			if importpath[:len(key)] == key {
-				result := path.Join(value, importpath[len(key):])
-				return result, true
-			}
+		if !strings.HasPrefix(importpath, key) {
+			continue
 		}
+
+		result := strings.Replace(importpath, key, value, 1)
+		return result, true
 	}
+
 	return importpath, false
 }
