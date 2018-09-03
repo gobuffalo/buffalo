@@ -30,7 +30,7 @@ func (sd Generator) Run(root string, data makr.Data) error {
 
 	c := makr.NewCommand(makr.GoGet("github.com/gobuffalo/buffalo-pop/..."))
 	if dt, ok := data["db-type"]; ok && dt == "sqlite3" {
-		c.Command.Args = append(c.Command.Args, "-tags", "sqlite")
+		c = makr.NewCommand(makr.GoGet("github.com/gobuffalo/buffalo-pop/...", "-tags", "sqlite"))
 	}
 	c.Should = should
 	g.Add(c)
