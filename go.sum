@@ -47,6 +47,8 @@ github.com/gobuffalo/makr v1.1.1/go.mod h1:1Ga9O4Gqd5xXc+AoI3eLwgu7k+gWamSUXd2Ps
 github.com/gobuffalo/makr v1.1.2/go.mod h1:5/uvRIyR+DQHJrX0UPCPF0WhQGMJG5/xd9XT9qEXQE8=
 github.com/gobuffalo/makr v1.1.4 h1:REIMYySfhRCK0He5MdDaIN/4NpfCtrt8g/ENLcmmzPg=
 github.com/gobuffalo/makr v1.1.4/go.mod h1:Y+o0btAH1kYAMDJW/TX3+oAXEu0bmSLLoC9mIFxtzOw=
+github.com/gobuffalo/makr v1.1.5 h1:lOlpv2iz0dNa4qse0ZYQgbtT+ybwVxWEAcOZbcPmeYc=
+github.com/gobuffalo/makr v1.1.5/go.mod h1:Y+o0btAH1kYAMDJW/TX3+oAXEu0bmSLLoC9mIFxtzOw=
 github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152 h1:gxsF8w9epZSG/LrhrIfBDrqxDwjNPv0J1hkGVCmDExo=
 github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152/go.mod h1:+vSUajk1TCB7xvyLuDIzhIK+XKqn0St6xLK/CxxpUU4=
 github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56 h1:SUFp8EbFjlKXkvqstoxPWx3nVPV3BSKZTswQNTZFaik=
@@ -233,6 +235,8 @@ golang.org/x/sys v0.0.0-20180814072032-4e1fef560951/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20180816055513-1c9583448a9c/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789 h1:T8D7l6WB3tLu+VpKvw06ieD/OhBi1XpJmG1U/FtttZg=
 golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20180903171548-1b7396714020 h1:K7dXUB1Deu0S6Qwu+r8ed4/ZykFje2mTPBFB+Jo5K28=
+golang.org/x/sys v0.0.0-20180903171548-1b7396714020/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180831211245-7ca132754999 h1:mf2VYfMpSMTlp0I/UXrX13w5LejDx34QeUUHH4TrUA8=
