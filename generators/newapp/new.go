@@ -60,8 +60,8 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
-	if err := a.setupPop(root, data); err != nil {
-		return errors.WithStack(err)
+	if sg := a.setupPop(root, data); sg != nil {
+		g.Add(sg)
 	}
 
 	if err := a.setupDocker(root, data); err != nil {
@@ -135,7 +135,7 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 	return nil
 }
 
-func (a Generator) setupPop(root string, data makr.Data) error {
+func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
 	if !a.WithPop {
 		return nil
 	}
@@ -143,14 +143,15 @@ func (a Generator) setupPop(root string, data makr.Data) error {
 	sg := soda.New()
 	sg.App = a.App
 	sg.Dialect = a.DBType
-	data["appPath"] = a.Root
-	data["name"] = a.Name.File()
 
-	if err := sg.Run(root, data); err != nil {
-		return errors.WithStack(err)
+	g := makr.New()
+	for k, v := range data {
+		g.Data[k] = v
 	}
-
-	return nil
+	g.Data["appPath"] = a.Root
+	g.Data["name"] = a.Name.File()
+	g.Add(sg)
+	return g
 }
 
 func (a Generator) setupWebpack(root string, data makr.Data) error {
