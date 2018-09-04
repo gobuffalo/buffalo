@@ -97,6 +97,7 @@ var newCmd = &cobra.Command{
 
 		data := makr.Data{
 			"version": runtime.Version,
+			"db-type": viper.GetString("db-type"),
 		}
 		if err := app.Run(app.Root, data); err != nil {
 			return errors.WithStack(err)
@@ -185,11 +186,7 @@ func initConfig(skipConfig *bool, cfgFile *string) func() {
 			viper.SetConfigName(".buffalo") // name of config file (without extension)
 			viper.AddConfigPath("$HOME")    // adding home directory as first search path
 			viper.AutomaticEnv()            // read in environment variables that match
-			err = viper.ReadInConfig()
-		}
-
-		if err == nil {
-			fmt.Println("Using config file:", viper.ConfigFileUsed())
+			viper.ReadInConfig()
 		}
 
 	}
