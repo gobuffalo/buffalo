@@ -24,21 +24,6 @@ builds:
     hooks:
       pre: packr
       post: packr clean
-  -
-    goos:
-      - linux
-      - darwin
-      - windows
-    goarch:
-      - amd64
-    goarm:
-      - "6"
-    main: ./buffalo/main.go
-    binary: buffalo-with-zbuffalo
-    flags: -tags zbuffalo
-    hooks:
-      pre: packr
-      post: packr clean
 archive:
   name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm
     }}v{{ .Arm }}{{ end }}'

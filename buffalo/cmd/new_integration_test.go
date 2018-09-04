@@ -178,6 +178,7 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
 	r.NoError(err)
+	r.NoError(os.MkdirAll(tdir, 0755))
 	defer os.RemoveAll(tdir)
 
 	pwd, err := os.Getwd()
