@@ -3,7 +3,7 @@ package grifts
 import (
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/release"
+	"github.com/gobuffalo/buffalo/grifts/internal/release"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
 )

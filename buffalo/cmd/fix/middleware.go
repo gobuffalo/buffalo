@@ -130,11 +130,7 @@ func writeTempResult(name string, fset *token.FileSet, f *ast.File) (string, err
 func buildASTFor(p string) (*token.FileSet, *ast.File, error) {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, p, nil, parser.ParseComments)
-	if err != nil {
-		return fset, f, err
-	}
-
-	return fset, f, nil
+	return fset, f, err
 }
 
 //onlyRelevantFiles processes only .go files excluding folders like node_modules and vendor.
