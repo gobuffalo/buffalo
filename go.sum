@@ -78,8 +78,8 @@ github.com/gobuffalo/pop v0.0.0-20180810203029-9f8bf0c11920/go.mod h1:rYdFIDMO4v
 github.com/gobuffalo/pop v4.7.2+incompatible h1:egmMM0F0ypkZG2L1L2G315By8gwIsuj5eeGXO9uJCHY=
 github.com/gobuffalo/pop v4.7.2+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
 github.com/gobuffalo/release v1.0.2/go.mod h1:xTrXdNp8DBGFkCITk3OY6pf3YWWoUoDKYPw8FhRjNFE=
-github.com/gobuffalo/release v1.0.4 h1:RpL+5JLFizbMs0q2zMxllr8Kj4RM2qT3B0O4ci80+w0=
-github.com/gobuffalo/release v1.0.4/go.mod h1:KqF+hG4jYt9CXdnOqaBQJN/pxy2cD1xVEhQEoEACIfk=
+github.com/gobuffalo/release v1.0.5 h1:TPj0JGY6J7UMmrN98OJi/1rGVGgGFG/V1T1KmSA6/c0=
+github.com/gobuffalo/release v1.0.5/go.mod h1:fJfvbgm624b3lCuMeK5w0E9t06dd4EHlUlzSv0icJHA=
 github.com/gobuffalo/shoulders v0.0.0-20180904151418-9cac5899ceee h1:EkfcVBC4WGCgesY08+9NqPWUiUfFo/jJIqpcANMiEpE=
 github.com/gobuffalo/shoulders v0.0.0-20180904151418-9cac5899ceee/go.mod h1:atyzRdR+uoOgsuA3AL82yYx5yJ4vONfDYtQXZCuT9TI=
 github.com/gobuffalo/tags v2.0.6+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=

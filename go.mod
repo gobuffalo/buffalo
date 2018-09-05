@@ -21,7 +21,7 @@ require (
 	github.com/gobuffalo/packr v1.13.3
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.2+incompatible
-	github.com/gobuffalo/release v1.0.4 // indirect
+	github.com/gobuffalo/release v1.0.5 // indirect
 	github.com/gobuffalo/tags v2.0.10+incompatible
 	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
 	github.com/gorilla/context v1.1.1
@@ -41,7 +41,6 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20180904163835-0709b304e793
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33 // indirect
 	golang.org/x/tools v0.0.0-20180904205237-0aa4b8830f48
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

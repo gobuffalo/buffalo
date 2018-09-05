@@ -6,8 +6,8 @@ builds:
     - windows
   env:
     - CGO_ENABLED=0
-  # main: ./main.go
-  # binary: {{.Binary}}
+  main: ./buffalo/main.go
+  binary: buffalo-no-sqlite
   # hooks:
   #   pre: packr
   #   post: packr clean
