@@ -29,7 +29,7 @@ RUN make install
 RUN cat runtime/version.go
 RUN go get -u github.com/alecthomas/gometalinter
 RUN gometalinter --install
-RUN gometalinter --vendor --deadline=1m ./... --skip=internal
+RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 RUN go test -tags "sqlite integration_test" -race  ./...
 RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
