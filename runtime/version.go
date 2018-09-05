@@ -1,7 +1,5 @@
 package runtime
 
 // Version is the current version of the buffalo binary
-// const Version = "v0.12.6"
+const Version = "v0.13.0-beta.0"
 
-// Version is the current version of the buffalo binary
-const Version = "development"
