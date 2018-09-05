@@ -18,7 +18,7 @@ test:
 	$(GO_BIN) test -tags ${TAGS} ./...
 
 ci-test: deps
-	$(GO_BIN) test -tags ${TAGS} -race ./...
+	docker build . --no-cache
 
 lint:
 	gometalinter --vendor ./... --deadline=1m --skip=internal
@@ -30,7 +30,7 @@ update:
 	make test
 
 release-test:
-	$(GO_BIN) test -tags ${TAGS} -race ./...
+	make ci-test
 
 release:
 	$(GO_BIN) get github.com/gobuffalo/release

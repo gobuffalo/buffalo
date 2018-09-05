@@ -23,8 +23,13 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get github.com/gobuffalo/buffalo-pop/...
+RUN go get github.com/gobuffalo/buffalo-pop
 RUN make install
+
+RUN cat runtime/version.go
+RUN go get -u github.com/alecthomas/gometalinter
+RUN gometalinter --install
+RUN gometalinter --vendor --deadline=1m ./... --skip=internal
 
 RUN go test -tags "sqlite integration_test" -race  ./...
 RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
@@ -33,10 +38,6 @@ RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
     echo codecov not enabled ; \
     else curl -s https://codecov.io/bash -o codecov && \
     bash codecov -f cover.out -X fix; fi
-
-RUN go get -u github.com/alecthomas/gometalinter
-RUN gometalinter --install
-RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 WORKDIR $GOPATH/src/
 
