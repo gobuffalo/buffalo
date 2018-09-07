@@ -85,7 +85,7 @@ var newCmd = &cobra.Command{
 
 func currentUser() (string, error) {
 	if _, err := exec.LookPath("git"); err == nil {
-		if b, err := exec.Command("git", "config", "github.user").Output(); err != nil {
+		if b, err := exec.Command("git", "config", "github.user").Output(); err == nil {
 			return string(b), nil
 		}
 	}
