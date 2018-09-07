@@ -23,7 +23,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t ./...
+RUN go get -u github.com/gobuffalo/buffalo-pop/...
 RUN make install
 
 RUN go test -tags "sqlite integration_test" -race  ./...
@@ -157,4 +157,4 @@ RUN go get github.com/gobuffalo/oldapp/0_12_6/...
 WORKDIR $GOPATH/src/github.com/gobuffalo/oldapp/0_12_6
 RUN buffalo fix --y
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
-RUN buffalo build -static 
+RUN buffalo build -static

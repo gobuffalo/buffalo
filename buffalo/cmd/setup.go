@@ -57,6 +57,10 @@ Tests:
 }
 
 func updateGoDepsCheck(app meta.App) error {
+	if app.WithModules {
+		c := exec.Command(envy.Get("GO_BIN", "go"), "get")
+		return run(c)
+	}
 	if app.WithDep {
 		// use github.com/golang/dep
 		args := []string{"ensure"}
@@ -129,12 +133,12 @@ func databaseCheck(app meta.App) error {
 
 func dbCreateCheck(meta.App) error {
 	if setupOptions.dropDatabases {
-		err := run(exec.Command("buffalo", "db", "drop", "-a"))
+		err := run(exec.Command("buffalo", "pop", "drop", "-a"))
 		if err != nil {
 			return errors.Errorf("We encountered an error when trying to drop your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 		}
 	}
-	err := run(exec.Command("buffalo", "db", "create", "-a"))
+	err := run(exec.Command("buffalo", "pop", "create", "-a"))
 	if err != nil {
 		return errors.Errorf("We encountered an error when trying to create your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 	}
@@ -142,7 +146,7 @@ func dbCreateCheck(meta.App) error {
 }
 
 func dbMigrateCheck(meta.App) error {
-	err := run(exec.Command("buffalo", "db", "migrate"))
+	err := run(exec.Command("buffalo", "pop", "migrate"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to migrate your database:\n%s", err)
 	}
