@@ -126,13 +126,13 @@ func optionsWithDefaults(opts Options) Options {
 			}
 			l.Debug(s)
 		case logging.Debug:
-			l.Debugf(s, args)
+			l.Debugf(s, args...)
 		case logging.Info:
-			l.Infof(s, args)
+			l.Infof(s, args...)
 		case logging.Warn:
-			l.Warnf(s, args)
+			l.Warnf(s, args...)
 		default:
-			l.Printf(s, args)
+			l.Printf(s, args...)
 		}
 	}
 
