@@ -23,7 +23,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 ADD . .
 
-RUN go get -v -t ./...
+RUN go get -u github.com/gobuffalo/buffalo-pop/...
 RUN make install
 
 RUN go test -tags "sqlite integration_test" -race  ./...
@@ -100,6 +100,10 @@ RUN buffalo g actions ouch build edit
 RUN buffalo d action -y ouch
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_action_all.json
 
+RUN buffalo g mailer ouch
+RUN buffalo d mailer -y ouch
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/destroy_mailer_all.json
+
 RUN buffalo g actions comments show edit
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_all.json
 
@@ -148,3 +152,9 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 RUN rm -rf bin
 RUN buffalo build -k -e
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
+
+RUN go get github.com/gobuffalo/oldapp/0_12_6/...
+WORKDIR $GOPATH/src/github.com/gobuffalo/oldapp/0_12_6
+RUN buffalo fix --y
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
+RUN buffalo build -static

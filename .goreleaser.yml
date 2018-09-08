@@ -5,10 +5,17 @@ release:
     name: buffalo
   name_template: '{{.Tag}}'
 brew:
-  commit_author:
-    name: goreleaserbot
-    email: goreleaser@carlosbecker.com
-  install: bin.install "buffalo"
+  name: buffalo
+  github:
+    owner: gobuffalo
+    name: homebrew-tap
+  homepage: https://gobuffalo.io
+  description: A Go web development eco-system, designed to make your life easier.
+  install: |
+    bin.install "buffalo-no-sqlite"
+    mv "#{bin}/buffalo-no-sqlite", "#{bin}/buffalo"
+  test: |
+    system "#{bin}/buffalo", "version"
 builds:
   -
     goos:
@@ -21,21 +28,6 @@ builds:
       - "6"
     main: ./buffalo/main.go
     binary: buffalo-no-sqlite
-    hooks:
-      pre: packr
-      post: packr clean
-  -
-    goos:
-      - linux
-      - darwin
-      - windows
-    goarch:
-      - amd64
-    goarm:
-      - "6"
-    main: ./buffalo/main.go
-    binary: buffalo-with-zbuffalo
-    flags: -tags zbuffalo
     hooks:
       pre: packr
       post: packr clean
