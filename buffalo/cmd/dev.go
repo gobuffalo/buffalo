@@ -74,7 +74,7 @@ func startWebpack(ctx context.Context) error {
 	}
 
 	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
-		tool := "yarn"
+		tool := "yarnpkg"
 		if !app.WithYarn {
 			tool = "npm"
 		}

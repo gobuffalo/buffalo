@@ -18,7 +18,7 @@ func Test_App_Routes_without_Root(t *testing.T) {
 	r.Len(routes, 1)
 	route := routes[0]
 	r.Equal("GET", route.Method)
-	r.Equal("/foo", route.Path)
+	r.Equal("/foo/", route.Path)
 	r.NotZero(route.HandlerName)
 }
 
@@ -35,7 +35,7 @@ func Test_App_Routes_with_Root(t *testing.T) {
 	r.Len(routes, 1)
 	route := routes[0]
 	r.Equal("GET", route.Method)
-	r.Equal("/api/v1/foo", route.Path)
+	r.Equal("/api/v1/foo/", route.Path)
 	r.NotZero(route.HandlerName)
 
 	r.Equal(a.Routes(), g.Routes())
@@ -58,5 +58,26 @@ func Test_App_RouteName(t *testing.T) {
 		ri.Name(k)
 		r.Equal(ri.PathName, v)
 	}
+
+}
+
+func Test_RouteList_Lookup(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+	r.Nil(a.root)
+
+	a.GET("/foo", voidHandler)
+	a.GET("/test", voidHandler)
+
+	routes := a.Routes()
+	for _, route := range routes {
+		lRoute, err := routes.Lookup(route.PathName)
+		r.NoError(err)
+		r.Equal(lRoute, route)
+	}
+	lRoute, err := routes.Lookup("a")
+	r.Error(err)
+	r.Nil(lRoute)
 
 }
