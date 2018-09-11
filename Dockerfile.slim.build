@@ -2,7 +2,7 @@ FROM golang:alpine
 EXPOSE 3000
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 RUN apk add --no-cache --upgrade apk-tools \
-&& apk add --no-cache bash curl openssl git build-base yarn nodejs postgresql libpq postgresql-contrib sqlite sqlite-dev mysql-client vim
+&& apk add --no-cache bash curl openssl git build-base nodejs npm postgresql libpq postgresql-contrib sqlite sqlite-dev mysql-client vim
 
 RUN go version && go get -v -u github.com/markbates/deplist/deplist
 
@@ -24,7 +24,7 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -u github.com/alecthomas/gometalinter \
 && gometalinter --install
 
-RUN npm install -g --no-progress yarn \
+RUN npm i -g --no-progress yarn \
 && yarn config set yarn-offline-mirror /npm-packages-offline-cache \
 && yarn config set yarn-offline-mirror-pruning true
 
@@ -32,7 +32,7 @@ RUN npm install -g --no-progress yarn \
 RUN rm -rfv $BP && mkdir -p $BP
 WORKDIR $BP
 
-ADD . .
+COPY . .
 RUN go get -tags "sqlite" -v -t github.com/gobuffalo/buffalo/... && make install
 
 # cache yarn packages to an offline mirror so they're faster to load. hopefully.
