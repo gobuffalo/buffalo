@@ -31,7 +31,12 @@ func RequestLoggerFunc(h Handler) Handler {
 
 		start := time.Now()
 		defer func() {
-			ws := c.Response().(*Response)
+			ws, ok := c.Response().(*Response)
+			if !ok {
+				ws = &Response{
+					ResponseWriter: c.Response(),
+				}
+			}
 			req := c.Request()
 			ct := httpx.ContentType(req)
 			if ct != "" {
