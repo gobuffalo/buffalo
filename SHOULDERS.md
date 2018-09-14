@@ -1,11 +1,9 @@
-# `github.com/gobuffalo/buffalo` Stands on the Shoulders of Giants
+# github.com/gobuffalo/buffalo Stands on the Shoulders of Giants
 
-`github.com/gobuffalo/buffalo` does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them all together in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
+github.com/gobuffalo/buffalo does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them all together in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
 
 Thank you to the following **GIANTS**:
 
-
-* [C](https://godoc.org/C)
 
 * [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
 
@@ -20,10 +18,6 @@ Thank you to the following **GIANTS**:
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
-
-* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-colorable)
-
-* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-isatty)
 
 * [github.com/fatih/structs](https://godoc.org/github.com/fatih/structs)
 
@@ -73,15 +67,13 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/pop/fix](https://godoc.org/github.com/gobuffalo/pop/fix)
 
+* [github.com/gobuffalo/pop/logging](https://godoc.org/github.com/gobuffalo/pop/logging)
+
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
 
 * [github.com/gobuffalo/pop/slices](https://godoc.org/github.com/gobuffalo/pop/slices)
 
-* [github.com/gobuffalo/pop/soda/cmd](https://godoc.org/github.com/gobuffalo/pop/soda/cmd)
-
 * [github.com/gobuffalo/pop/soda/cmd/generate](https://godoc.org/github.com/gobuffalo/pop/soda/cmd/generate)
-
-* [github.com/gobuffalo/pop/soda/cmd/schema](https://godoc.org/github.com/gobuffalo/pop/soda/cmd/schema)
 
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
@@ -182,6 +174,10 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
 * [github.com/markbates/willie](https://godoc.org/github.com/markbates/willie)
+
+* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
+
+* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
 
 * [github.com/mattn/go-sqlite3](https://godoc.org/github.com/mattn/go-sqlite3)
 
@@ -374,6 +370,8 @@ Thank you to the following **GIANTS**:
 * [golang.org/x/text/unicode/norm](https://godoc.org/golang.org/x/text/unicode/norm)
 
 * [golang.org/x/text/unicode/rangetable](https://godoc.org/golang.org/x/text/unicode/rangetable)
+
+* [golang.org/x/tools/go/ast/astutil](https://godoc.org/golang.org/x/tools/go/ast/astutil)
 
 * [gopkg.in/check.v1](https://godoc.org/gopkg.in/check.v1)
 
