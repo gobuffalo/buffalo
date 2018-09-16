@@ -21,7 +21,7 @@ RUN rm $(which buffalo)
 RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
-ADD . .
+COPY . .
 
 RUN go get github.com/gobuffalo/buffalo-pop
 RUN make install
