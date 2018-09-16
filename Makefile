@@ -28,6 +28,7 @@ update:
 	$(GO_BIN) mod tidy
 	packr
 	make test
+	make install
 
 release-test:
 	make ci-test
