@@ -11,9 +11,10 @@ import (
 var YesToAll bool
 
 var replace = map[string]string{
-	"github.com/markbates/pop":      "github.com/gobuffalo/pop",
-	"github.com/markbates/validate": "github.com/gobuffalo/validate",
-	"github.com/satori/go.uuid":     "github.com/gobuffalo/uuid",
+	"github.com/markbates/pop":                     "github.com/gobuffalo/pop",
+	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
+	"github.com/satori/go.uuid":                    "github.com/gobuffalo/uuid",
+	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
 }
 
 var ic = ImportConverter{
@@ -42,6 +43,7 @@ var mr = MiddlewareTransformer{
 }
 
 var checks = []Check{
+	PackrClean,
 	ic.Process,
 	mr.transformPackages,
 	WebpackCheck,

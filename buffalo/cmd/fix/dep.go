@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
@@ -43,19 +45,20 @@ func DepEnsure(r *Runner) error {
 }
 
 func runDepEnsure(r *Runner) error {
-	cc := exec.Command("dep", "ensure", "-v")
-	cc.Stdin = os.Stdin
-	cc.Stderr = os.Stderr
-	cc.Stdout = os.Stdout
-	if err := cc.Run(); err != nil {
-		return errors.WithStack(err)
+	for _, x := range []string{"beta", "rc", "development"} {
+		if strings.Contains(runtime.Version, x) {
+			r.Warnings = append(r.Warnings, fmt.Sprintf("This is not an official release and you will need to MANUALLY adjust your Gopkg.toml file to use this release."))
+		}
 	}
 
 	if len(apkg) > 0 {
 		args := []string{"ensure", "-v", "-add"}
 		args = append(args, apkg...)
 		if err := depRunner(args); err != nil {
-			return errors.WithStack(err)
+			// *sigh* - yeah, i know
+			if !strings.Contains(err.Error(), "is already in Gopkg.toml") {
+				return errors.WithStack(err)
+			}
 		}
 	}
 
