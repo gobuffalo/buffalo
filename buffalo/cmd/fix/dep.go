@@ -48,6 +48,7 @@ func runDepEnsure(r *Runner) error {
 	for _, x := range []string{"beta", "rc", "development"} {
 		if strings.Contains(runtime.Version, x) {
 			r.Warnings = append(r.Warnings, fmt.Sprintf("This is not an official release and you will need to MANUALLY adjust your Gopkg.toml file to use this release."))
+			break
 		}
 	}
 
@@ -86,7 +87,21 @@ func modGetUpdate(r *Runner) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, x := range []string{"beta", "rc"} {
+		if !strings.Contains(runtime.Version, x) {
+			continue
+		}
+		cmd = exec.Command(envy.Get("GO_BIN", "go"), "get", "-u", "github.com/gobuffalo/buffalo@"+runtime.Version)
+		cmd.Stdin = os.Stdin
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		return cmd.Run()
+	}
+	return nil
 }
 
 func goGetUpdate(r *Runner) error {
