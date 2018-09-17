@@ -18,10 +18,9 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20180807082017-6b90b69a724a
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
-	github.com/gobuffalo/packr v1.13.3
+	github.com/gobuffalo/packr v1.13.5
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.2+incompatible
-	github.com/gobuffalo/release v1.0.5 // indirect
 	github.com/gobuffalo/tags v2.0.10+incompatible
 	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
 	github.com/gorilla/context v1.1.1
@@ -39,6 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.2
 	github.com/spf13/viper v1.1.0
 	github.com/stretchr/testify v1.2.2
+	github.com/unrolled/secure v0.0.0-20180914162101-439d7b25425f // indirect
 	golang.org/x/crypto v0.0.0-20180904163835-0709b304e793
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
 	golang.org/x/tools v0.0.0-20180904205237-0aa4b8830f48
