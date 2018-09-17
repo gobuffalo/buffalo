@@ -44,6 +44,7 @@ var mr = MiddlewareTransformer{
 }
 
 var checks = []Check{
+	PackrClean,
 	ic.Process,
 	mr.transformPackages,
 	WebpackCheck,
