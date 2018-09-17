@@ -31,7 +31,7 @@ update:
 	make install
 
 release-test:
-	make ci-test
+	make test
 
 release:
 	$(GO_BIN) get github.com/gobuffalo/release

@@ -19,6 +19,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
 
+* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-colorable)
+
+* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-isatty)
+
 * [github.com/fatih/structs](https://godoc.org/github.com/fatih/structs)
 
 * [github.com/fsnotify/fsnotify](https://godoc.org/github.com/fsnotify/fsnotify)
@@ -174,10 +178,6 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
 * [github.com/markbates/willie](https://godoc.org/github.com/markbates/willie)
-
-* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
-
-* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
 
 * [github.com/mattn/go-sqlite3](https://godoc.org/github.com/mattn/go-sqlite3)
 

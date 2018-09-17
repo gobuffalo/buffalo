@@ -21,6 +21,7 @@ require (
 	github.com/gobuffalo/packr v1.13.5
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.2+incompatible
+	github.com/gobuffalo/release v1.0.16 // indirect
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
 	github.com/gorilla/context v1.1.1
