@@ -1,6 +1,5 @@
 FROM gobuffalo/buffalo:development
 
-ENV GO111MODULE=off
 ARG CODECOV_TOKEN
 ARG CI
 ARG TRAVIS
