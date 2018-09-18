@@ -15,9 +15,9 @@ import (
 type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware      *MiddlewareStack
-	ErrorHandlers   ErrorHandlers
-	ErrorMiddleware MiddlewareFunc
+	Middleware      *MiddlewareStack `json:"-"`
+	ErrorHandlers   ErrorHandlers    `json:"-"`
+	ErrorMiddleware MiddlewareFunc   `json:"-"`
 	router          *mux.Router
 	moot            *sync.Mutex
 	routes          RouteList
