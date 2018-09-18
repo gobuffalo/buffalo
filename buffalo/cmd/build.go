@@ -55,7 +55,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		logrus.Infof("\nYour application was successfully built at %s\n", b.AbsolutePath())
+		logrus.Infof("\nYour application was successfully built at %s\n", b.AbsoluteBinaryPath())
 
 		return nil
 	},
