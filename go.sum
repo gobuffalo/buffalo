@@ -32,8 +32,9 @@ github.com/gobuffalo/buffalo-pop v0.0.0-20180916191218-8a6042d8e9a6/go.mod h1:3E
 github.com/gobuffalo/envy v1.6.3/go.mod h1:gOxUQY+OEwqH1a2m25Sqax1GIhj31tPNOIdFzj8QThs=
 github.com/gobuffalo/envy v1.6.4 h1:kxamN+VYjPMzEdjc2mn4CIKiuYXGxc8VIwXJNixFlNY=
 github.com/gobuffalo/envy v1.6.4/go.mod h1:Abh+Jfw475/NWtYMEt+hnJWRiC8INKWibIMyNt1w2Mc=
-github.com/gobuffalo/events v0.0.0-20180918204941-7abbc01a4882 h1:hrvNfq5yIrhpd4cDvGUl8B2NEVTvpdZRLnLbN8JVbbM=
 github.com/gobuffalo/events v0.0.0-20180918204941-7abbc01a4882/go.mod h1:yd7lVs2blirGy8JJIMKwtJZ7oRuuoa//JLFWFQeYBDY=
+github.com/gobuffalo/events v0.0.0-20180919154406-0bfc5735cd24 h1:ixFUed6c21xfPbvqWlV9ZmKOhQtC9NBrto6Le+FfKOs=
+github.com/gobuffalo/events v0.0.0-20180919154406-0bfc5735cd24/go.mod h1:yd7lVs2blirGy8JJIMKwtJZ7oRuuoa//JLFWFQeYBDY=
 github.com/gobuffalo/fizz v1.0.7/go.mod h1:fbtmvB0dcsGJUxM/S8biqkQtvykqPQGdkcg94zVu8GA=
 github.com/gobuffalo/fizz v1.0.10 h1:MspJcEEBN2eApqiFd4tuoTpYZF6wM5B6/Ink/rJcqOI=
 github.com/gobuffalo/fizz v1.0.10/go.mod h1:jpD+pJ065MDYCc4nA86aUQ/ovwCjGGNl4zq4xrAxJa0=
@@ -152,6 +153,7 @@ github.com/markbates/hmax v1.0.0/go.mod h1:cOkR9dktiESxIMu+65oc/r/bdY4bE8zZw3OLh
 github.com/markbates/inflect v1.0.0 h1:gTffXSQCc+WaIvBcI/IItJQMOemietXr5EIKLXDYqI4=
 github.com/markbates/inflect v1.0.0/go.mod h1:oTeZL2KHA7CUX6X+fovmK9OvIOFuqu0TwdQrZjLTh88=
 github.com/markbates/oncer v0.0.0-20180911182537-c659b9304060/go.mod h1:rwZBl6yM6wSTptDSNbV86jNkXmrr8TYPQ3/qwkrIkp0=
+github.com/markbates/oncer v0.0.0-20180911185008-7302a2cd9114 h1:Gs7r7f9O+uvCdYY2z7q2ybdnDawXzVAxkQ6DvKfbMEU=
 github.com/markbates/oncer v0.0.0-20180911185008-7302a2cd9114/go.mod h1:rwZBl6yM6wSTptDSNbV86jNkXmrr8TYPQ3/qwkrIkp0=
 github.com/markbates/refresh v1.4.1/go.mod h1:og/05QDfszH/SCl3w8VI2Or990yna0wS2lqRcJoDqAg=
 github.com/markbates/refresh v1.4.3/go.mod h1:C/Zey3IPrq0lXq1+SDhCQOuy7dKR3CabthJTTZP8AQg=
