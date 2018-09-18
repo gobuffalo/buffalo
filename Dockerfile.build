@@ -39,7 +39,7 @@ RUN rm -rfv $BP && mkdir -p $BP
 WORKDIR $BP
 
 ADD . .
-RUN go get -tags "sqlite" -v -t github.com/gobuffalo/buffalo/... && make install
+RUN make deps && make install
 
 # cache yarn packages to an offline mirror so they're faster to load. hopefully.
 RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json \
