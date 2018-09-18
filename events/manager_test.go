@@ -9,25 +9,27 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var m, _ = boss.(*manager)
+
 func Test_manager_Listen(t *testing.T) {
 	r := require.New(t)
 
-	boss.Reset()
+	m.Reset()
 
-	r.Len(boss.listeners, 0)
+	r.Len(m.listeners, 0)
 
-	boss.Listen("foo", func(e Event) {})
-	r.Len(boss.listeners, 1)
-	r.NotNil(boss.listeners["foo"])
+	m.Listen("foo", func(e Event) {})
+	r.Len(m.listeners, 1)
+	r.NotNil(m.listeners["foo"])
 
-	boss.StopListening("foo")
-	r.Len(boss.listeners, 0)
+	m.StopListening("foo")
+	r.Len(m.listeners, 0)
 }
 
 func Test_manager_Emit(t *testing.T) {
 	r := require.New(t)
 
-	boss.Reset()
+	m.Reset()
 
 	max := 5
 	wg := &sync.WaitGroup{}
@@ -35,7 +37,7 @@ func Test_manager_Emit(t *testing.T) {
 
 	moot := &sync.Mutex{}
 	var es []Event
-	boss.Listen("foo", func(e Event) {
+	m.Listen("foo", func(e Event) {
 		moot.Lock()
 		defer moot.Unlock()
 		es = append(es, e)
@@ -43,7 +45,7 @@ func Test_manager_Emit(t *testing.T) {
 	})
 
 	for i := 0; i < max; i++ {
-		err := boss.Emit(Event{
+		err := m.Emit(Event{
 			Kind: "FOO",
 		})
 		r.NoError(err)

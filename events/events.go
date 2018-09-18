@@ -1,5 +1,16 @@
 package events
 
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+
+	"github.com/gobuffalo/buffalo-plugins/plugins"
+	"github.com/pkg/errors"
+)
+
 const (
 	// AppStart is emitted when buffalo.App#Serve is called
 	AppStart = "app:start"
@@ -49,4 +60,39 @@ func StopListening(name string) {
 // event manager with a custom one
 func SetManager(m Manager) {
 	boss = m
+}
+
+// LoadPlugins will add listeners for any plugins that support "events"
+func LoadPlugins() error {
+	plugs, err := plugins.Available()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	for _, cmds := range plugs {
+		for _, c := range cmds {
+			if c.BuffaloCommand != "events" {
+				continue
+			}
+			Listen(fmt.Sprintf("plugin-%s-%s", c.Binary, c.Name), func(e Event) {
+				b, err := json.Marshal(e)
+				if err != nil {
+					fmt.Println("error trying to marshal event", e, err)
+					return
+				}
+				cmd := exec.Command(c.Binary, c.UseCommand, string(b))
+				cmd.Stderr = os.Stderr
+				cmd.Stdout = os.Stdout
+				cmd.Stdin = os.Stdin
+				if err := cmd.Run(); err != nil {
+					fmt.Println("error trying to send event", strings.Join(cmd.Args, " "), err)
+				}
+			})
+		}
+
+	}
+	return nil
+}
+
+func init() {
+	LoadPlugins()
 }
