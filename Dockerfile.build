@@ -37,9 +37,9 @@ RUN npm install -g --no-progress yarn \
 
 RUN rm -rfv $BP && mkdir -p $BP
 WORKDIR $BP
-
-ADD . .
+COPY . .
 RUN make deps && make install
+
 
 # cache yarn packages to an offline mirror so they're faster to load. hopefully.
 RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json \
