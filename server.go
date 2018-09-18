@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/gobuffalo/buffalo/servers"
+	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
@@ -19,6 +20,13 @@ import (
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve(srvs ...servers.Server) error {
 	a.Logger.Infof("Starting application at %s", a.Options.Addr)
+
+	if err := events.Emit(events.Event{
+		Kind:    events.AppStart,
+		Payload: a,
+	}); err != nil {
+		return errors.WithStack(err)
+	}
 
 	if len(srvs) == 0 {
 		if strings.HasPrefix(a.Options.Addr, "unix:") {
@@ -40,14 +48,34 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		<-ctx.Done()
 		a.Logger.Info("Shutting down application")
 
+		events.Emit(events.Event{
+			Kind:    events.AppStop,
+			Payload: a,
+			Error:   ctx.Err(),
+		})
+
 		if err := a.Stop(ctx.Err()); err != nil {
+			events.Emit(events.Event{
+				Kind:    events.ErrAppStop,
+				Payload: a,
+				Error:   err,
+			})
 			a.Logger.Error(err)
 		}
 
 		if !a.WorkerOff {
 			// stop the workers
 			a.Logger.Info("Shutting down worker")
+			events.Emit(events.Event{
+				Kind:    events.WorkerStop,
+				Payload: a,
+			})
 			if err := a.Worker.Stop(); err != nil {
+				events.Emit(events.Event{
+					Kind:    events.ErrWorkerStop,
+					Payload: a,
+					Error:   err,
+				})
 				a.Logger.Error(err)
 			}
 		}
@@ -79,6 +107,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 	}
 
 	<-ctx.Done()
+
 	return a.Context.Err()
 }
 

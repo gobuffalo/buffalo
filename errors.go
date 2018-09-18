@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/x/defaults"
 	"github.com/gobuffalo/x/httpx"
@@ -67,6 +68,14 @@ func (a *App) PanicHandler(next Handler) Handler {
 					err = errors.New(fmt.Sprint(t))
 				}
 				err = errors.WithStack(err)
+				events.Emit(events.Event{
+					Kind:  events.ErrPanic,
+					Error: err,
+					Payload: map[string]interface{}{
+						"context": c,
+						"app":     a,
+					},
+				})
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
@@ -92,9 +101,26 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				status = h.Status
 			}
 		}
+		events.Emit(events.Event{
+			Kind:  events.ErrGeneral,
+			Error: err,
+			Payload: map[string]interface{}{
+				"context": c,
+				"app":     a,
+			},
+		})
 		eh := a.ErrorHandlers.Get(status)
 		err = eh(status, err, c)
 		if err != nil {
+			events.Emit(events.Event{
+				Kind:    events.ErrGeneral,
+				Message: "unable to handle error and giving up",
+				Error:   err,
+				Payload: map[string]interface{}{
+					"context": c,
+					"app":     a,
+				},
+			})
 			// things have really hit the fan if we're here!!
 			a.Logger.Error(err)
 			c.Response().WriteHeader(500)
