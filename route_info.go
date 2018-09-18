@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/events"
+	"github.com/gobuffalo/events"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/inflect"

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/events"
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/x/defaults"
 	"github.com/gobuffalo/x/httpx"

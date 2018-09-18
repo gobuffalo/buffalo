@@ -8,8 +8,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/gobuffalo/buffalo/events"
 	"github.com/gobuffalo/buffalo/servers"
+	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
