@@ -10,7 +10,7 @@ import (
 func (b *Builder) buildAssets() error {
 
 	if b.WithWebpack && b.Options.WithAssets {
-		if err := envy.MustSet("NODE_ENV", "production"); err != nil {
+		if err := envy.MustSet("NODE_ENV", envy.Get("GO_ENV", "production")); err != nil {
 			return errors.WithStack(err)
 		}
 		if err := b.exec(webpack.BinPath); err != nil {

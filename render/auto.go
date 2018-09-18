@@ -61,11 +61,11 @@ PUT /users/edit - (redirect to /users/id or render user/edit.html)
 DELETE /users/id - redirect to /users
 */
 func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
-	ct, ok := ctx.Value("contentType").(string)
-	if !ok {
-		ct = "text/html"
+	ct, _ := ctx.Value("contentType").(string)
+	if ct == "" {
+		ct = e.DefaultContentType
 	}
-	ct = strings.ToLower(ct)
+	ct = strings.TrimSpace(strings.ToLower(ct))
 
 	if strings.Contains(ct, "json") {
 		return e.JSON(i)
@@ -120,10 +120,10 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		}
 	}
 	if cp, ok := data["current_path"].(string); ok {
-		if strings.HasSuffix(cp, "/edit") {
+		if strings.HasSuffix(cp, "/edit/") {
 			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
 		}
-		if strings.HasSuffix(cp, "/new") {
+		if strings.HasSuffix(cp, "/new/") {
 			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
 

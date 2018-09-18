@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -48,6 +49,22 @@ func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	for k, v := range dd {
 		m[k] = v
 	}
+
+	if _, ok := m["layout"]; ok {
+
+		var body template.HTML
+		var err error
+
+		body, err = s.exec(name, m)
+		if err != nil {
+			return body, err
+		}
+		m["yield"] = body
+		d, f := filepath.Split(fmt.Sprintf("%v", m["layout"]))
+		name = filepath.Join(d, "_"+f)
+
+	}
+
 	return s.exec(name, m)
 }
 

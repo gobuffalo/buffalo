@@ -3,15 +3,25 @@ package meta
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
 )
+
+var modsOn = (strings.TrimSpace(envy.Get("GO111MODULE", "off")) == "on")
+
+func init() {
+	if modsOn {
+		fmt.Println("experimental go modules support has been enabled [GO111MODULE=on]")
+	}
+}
 
 // App represents meta data for a Buffalo application on disk
 type App struct {
@@ -32,6 +42,7 @@ type App struct {
 	WithYarn    bool         `json:"with_yarn"`
 	WithDocker  bool         `json:"with_docker"`
 	WithGrifts  bool         `json:"with_grifts"`
+	WithModules bool         `json:"with_modules"`
 }
 
 // New App based on the details found at the provided root path
@@ -60,20 +71,27 @@ func New(root string) App {
 
 	// Gather meta data
 	name := inflect.Name(filepath.Base(root))
+
 	pp := envy.CurrentPackage()
 	if filepath.Base(pp) != string(name) {
 		pp = path.Join(pp, string(name))
 	}
+	if modsOn {
+		if !strings.HasPrefix(pwd, filepath.Join(envy.GoPath(), "src")) {
+			pp = name.String()
+		}
+	}
 
 	app := App{
-		Pwd:        pwd,
-		Root:       root,
-		GoPath:     envy.GoPath(),
-		Name:       name,
-		PackagePkg: pp,
-		ActionsPkg: pp + "/actions",
-		ModelsPkg:  pp + "/models",
-		GriftsPkg:  pp + "/grifts",
+		Pwd:         pwd,
+		Root:        root,
+		GoPath:      envy.GoPath(),
+		Name:        name,
+		PackagePkg:  pp,
+		ActionsPkg:  pp + "/actions",
+		ModelsPkg:   pp + "/models",
+		GriftsPkg:   pp + "/grifts",
+		WithModules: modsOn,
 	}
 
 	app.Bin = filepath.Join("bin", filepath.Base(root))
