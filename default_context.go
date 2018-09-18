@@ -3,6 +3,7 @@ package buffalo
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -242,4 +243,16 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 		return bf, errors.WithStack(err)
 	}
 	return bf, nil
+}
+
+// MarshalJSON implements json marshaling for the context
+func (d DefaultContext) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{}
+	for k, v := range d.data {
+		if _, err := json.Marshal(v); err == nil {
+			// it can be marshaled, so add it:
+			m[k] = v
+		}
+	}
+	return json.Marshal(m)
 }

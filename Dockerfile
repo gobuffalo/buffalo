@@ -24,6 +24,7 @@ WORKDIR $BP
 COPY . .
 
 RUN go get github.com/gobuffalo/buffalo-pop
+RUN make deps
 RUN make install
 
 RUN cat runtime/version.go
