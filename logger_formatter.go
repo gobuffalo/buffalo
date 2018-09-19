@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/events"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -38,7 +40,6 @@ const defaultTimestampFormat = time.RFC3339
 // Format renders a single log entry
 func (f *textFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	prefixFieldClashes(entry.Data)
-
 	keys := make([]string, 0, len(entry.Data))
 	for k := range entry.Data {
 		keys = append(keys, k)
@@ -70,7 +71,25 @@ func (f *textFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	}
 
 	b.WriteByte('\n')
-	return b.Bytes(), nil
+	bb := b.Bytes()
+
+	kind := "buffalo:log:" + entry.Level.String()
+	payload := map[string]interface{}{
+		"level": entry.Level.String(),
+	}
+	if len(entry.Data) > 0 {
+		payload["data"] = entry.Data
+	}
+	if len(entry.Message) != 0 {
+		payload["message"] = entry.Message
+	}
+	switch entry.Level {
+	case logrus.ErrorLevel:
+		events.EmitError(kind, errors.New(string(bb)), payload)
+	default:
+		events.EmitPayload(kind, payload)
+	}
+	return bb, nil
 }
 
 func (f *textFormatter) printColored(b *bytes.Buffer, entry *logrus.Entry, keys []string) {

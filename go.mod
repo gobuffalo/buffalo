@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180911185405-ca94b2cb30ad
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180916191218-8a6042d8e9a6
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180918204941-7abbc01a4882
+	github.com/gobuffalo/events v0.0.0-20180919154406-0bfc5735cd24
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
@@ -27,6 +27,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
+	github.com/kr/pty v1.1.3 // indirect
 	github.com/markbates/deplist v1.0.3
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
