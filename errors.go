@@ -68,14 +68,12 @@ func (a *App) PanicHandler(next Handler) Handler {
 					err = errors.New(fmt.Sprint(t))
 				}
 				err = errors.WithStack(err)
-				events.Emit(events.Event{
-					Kind:  events.ErrPanic,
-					Error: err,
-					Payload: map[string]interface{}{
+				events.EmitError(events.ErrPanic, err,
+					map[string]interface{}{
 						"context": c,
 						"app":     a,
 					},
-				})
+				)
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
@@ -101,14 +99,12 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				status = h.Status
 			}
 		}
-		events.Emit(events.Event{
-			Kind:  events.ErrGeneral,
-			Error: err,
-			Payload: map[string]interface{}{
-				"context": c,
-				"app":     a,
-			},
-		})
+		payload := map[string]interface{}{
+			"context": c,
+			"app":     a,
+		}
+		events.EmitError(events.ErrGeneral, err, payload)
+
 		eh := a.ErrorHandlers.Get(status)
 		err = eh(status, err, c)
 		if err != nil {
@@ -116,10 +112,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				Kind:    events.ErrGeneral,
 				Message: "unable to handle error and giving up",
 				Error:   err,
-				Payload: map[string]interface{}{
-					"context": c,
-					"app":     a,
-				},
+				Payload: payload,
 			})
 			// things have really hit the fan if we're here!!
 			a.Logger.Error(err)

@@ -103,26 +103,16 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		"context": c,
 	}
 
-	events.Emit(events.Event{
-		Kind:    events.RouteStarted,
-		Payload: payload,
-	})
+	events.EmitPayload(events.RouteStarted, payload)
 
 	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
-		events.Emit(events.Event{
-			Kind:    events.ErrRoute,
-			Payload: payload,
-			Error:   err,
-		})
+		events.EmitError(events.ErrRoute, err, payload)
 		// things have really hit the fan if we're here!!
 		a.Logger.Error(err)
 		c.Response().WriteHeader(500)
 		c.Response().Write([]byte(err.Error()))
 	}
-	events.Emit(events.Event{
-		Kind:    events.RouteFinished,
-		Payload: payload,
-	})
+	events.EmitPayload(events.RouteFinished, payload)
 }
