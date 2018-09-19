@@ -17,7 +17,7 @@ RUN buffalo version
 
 RUN go get -u github.com/alecthomas/gometalinter
 RUN gometalinter --install
-RUN gometalinter --vendor --deadline=5m ./... --skip=internal
+
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
@@ -30,7 +30,7 @@ RUN go get github.com/gobuffalo/buffalo-pop
 RUN make deps
 RUN make install
 
-RUN cat runtime/version.go
+RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 
 RUN go test -tags "sqlite integration_test" -race  ./...
 RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
