@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180911185405-ca94b2cb30ad
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180916191218-8a6042d8e9a6
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180919154406-0bfc5735cd24
+	github.com/gobuffalo/events v0.0.0-20180919212028-867dc2348bad
 	github.com/gobuffalo/github_flavored_markdown v1.0.0
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
@@ -43,7 +43,7 @@ require (
 	github.com/unrolled/secure v0.0.0-20180918153822-f340ee86eb8b // indirect
 	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20180919161305-1061eb656ba1 // indirect
+	golang.org/x/sys v0.0.0-20180919162611-1561086e645b // indirect
 	golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e
 	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4

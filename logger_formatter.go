@@ -74,7 +74,7 @@ func (f *textFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	bb := b.Bytes()
 
 	kind := "buffalo:log:" + entry.Level.String()
-	payload := map[string]interface{}{
+	payload := events.Payload{
 		"level": entry.Level.String(),
 	}
 	if len(entry.Data) > 0 {
