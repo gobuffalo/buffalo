@@ -1,9 +1,8 @@
 package basicauth
 
 import (
-	"fmt"
-
 	basicauth "github.com/gobuffalo/mw-basicauth"
+	"github.com/markbates/oncer"
 )
 
 var (
@@ -26,5 +25,5 @@ type Authorizer = basicauth.Authorizer
 var Middleware = basicauth.Middleware
 
 func init() {
-	fmt.Printf("github.com/gobuffalo/buffalo/middleware/basicauth is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-basicauth instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/middleware/basicauth", "Use github.com/gobuffalo/mw-basicauth instead.")
 }
