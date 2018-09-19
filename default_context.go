@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
@@ -35,6 +36,7 @@ type DefaultContext struct {
 	contentType string
 	data        map[string]interface{}
 	flash       *Flash
+	moot        *sync.RWMutex
 }
 
 // Response returns the original Response for the request.
@@ -73,6 +75,8 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 // Value that has previously stored on the context.
 func (d *DefaultContext) Value(key interface{}) interface{} {
 	if k, ok := key.(string); ok {
+		d.moot.RLock()
+		defer d.moot.RUnlock()
 		if v, ok := d.data[k]; ok {
 			return v
 		}
@@ -106,7 +110,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		d.LogField("render", time.Since(start))
 	}()
 	if rr != nil {
-		data := d.data
+		data := d.Data()
 		pp := map[string]string{}
 		for k, v := range d.params {
 			pp[k] = v[0]
@@ -213,13 +217,20 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 
 // Data contains all the values set through Get/Set.
 func (d *DefaultContext) Data() map[string]interface{} {
-	return d.data
+	m := map[string]interface{}{}
+	d.moot.RLock()
+	for k, v := range d.data {
+		m[k] = v
+	}
+	d.moot.RUnlock()
+	return m
 }
 
 func (d *DefaultContext) String() string {
-	bb := make([]string, 0, len(d.data))
+	data := d.Data()
+	bb := make([]string, 0, len(data))
 
-	for k, v := range d.data {
+	for k, v := range data {
 		if _, ok := v.(RouteHelperFunc); !ok {
 			bb = append(bb, fmt.Sprintf("%s: %s", k, v))
 		}
@@ -246,9 +257,9 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 }
 
 // MarshalJSON implements json marshaling for the context
-func (d DefaultContext) MarshalJSON() ([]byte, error) {
+func (d *DefaultContext) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{}
-	for k, v := range d.data {
+	for k, v := range d.Data() {
 		if _, err := json.Marshal(v); err == nil {
 			// it can be marshaled, so add it:
 			m[k] = v
