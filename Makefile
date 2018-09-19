@@ -25,10 +25,10 @@ lint:
 
 update:
 	$(GO_BIN) get -u
-	$(GO_BIN) mod tidy
 	packr
 	make test
 	make install
+	$(GO_BIN) mod tidy
 
 release-test:
 	make test
