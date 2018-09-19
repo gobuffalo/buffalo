@@ -27,7 +27,6 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
-	github.com/kr/pty v1.1.3 // indirect
 	github.com/markbates/deplist v1.0.3
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
@@ -44,5 +43,6 @@ require (
 	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
 	golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e
+	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
