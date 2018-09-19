@@ -19,9 +19,12 @@ func Test_Logger_Emits_Events(t *testing.T) {
 
 	wg := &sync.WaitGroup{}
 	var es []string
+	moot := &sync.Mutex{}
 	df, err := events.Listen(func(e events.Event) {
 		if strings.HasPrefix(e.Kind, "buffalo:log") {
+			moot.Lock()
 			es = append(es, e.Kind)
+			moot.Unlock()
 			wg.Done()
 		}
 	})
