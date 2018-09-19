@@ -40,9 +40,8 @@
 package tokenauth
 
 import (
-	"fmt"
-
 	tokenauth "github.com/gobuffalo/mw-tokenauth"
+	"github.com/markbates/oncer"
 )
 
 var (
@@ -87,5 +86,5 @@ var GetKeyRSAPSS = tokenauth.GetKeyRSAPSS
 var GetKeyECDSA = tokenauth.GetKeyECDSA
 
 func init() {
-	fmt.Printf("github.com/gobuffalo/buffalo/middleware/tokenauth is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-tokenauth instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/middleware/tokenauth", "Use github.com/gobuffalo/mw-tokenauth instead.")
 }
