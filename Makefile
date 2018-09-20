@@ -17,7 +17,11 @@ test:
 	packr
 	$(GO_BIN) test -tags ${TAGS} ./...
 
-ci-test: deps
+ci-deps:
+	$(GO_BIN) get github.com/gobuffalo/packr/packr
+	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
+
+ci-test: ci-deps
 	docker build . --no-cache
 
 lint:
