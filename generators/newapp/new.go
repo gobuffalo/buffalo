@@ -13,6 +13,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
 	"github.com/pkg/errors"
@@ -21,6 +22,7 @@ import (
 // Run returns a generator to create a new application
 func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
+	data["version"] = runtime.Version
 
 	if a.AsAPI {
 		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
@@ -221,7 +223,10 @@ func (a Generator) goGet() *exec.Cmd {
 }
 
 func (a Generator) goGetMod() *exec.Cmd {
-	cmd := exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy")
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/gobuffalo/buffalo@"+runtime.Version)
+	if runtime.Version == "development" {
+		cmd = exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy")
+	}
 	if a.Verbose {
 		cmd.Args = append(cmd.Args, "-v")
 	}
@@ -231,31 +236,31 @@ func (a Generator) goGetMod() *exec.Cmd {
 const nTravis = `language: go
 
 go:
-  - 1.8.x
+	- "1.11.x"
 
 env:
-  - GO_ENV=test
+	- GO_ENV=test
 
 {{ if eq .opts.DBType "postgres" -}}
 services:
-  - postgresql
+	- postgresql
 {{- end }}
 
 before_script:
 {{- if eq .opts.DBType "postgres" }}
-  - psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
+	- psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
 {{- end }}
-  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
+	- mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go_import_path: {{.opts.PackagePkg}}
 
 install:
-  - go get github.com/gobuffalo/buffalo/buffalo
+	- go get github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
+	- go get github.com/golang/dep/cmd/dep
+	- dep ensure
 {{- else }}
-  - go get $(go list ./... | grep -v /vendor/)
+	- go get $(go list ./... | grep -v /vendor/)
 {{- end }}
 
 script: buffalo test
@@ -265,90 +270,90 @@ const nGitlabCi = `before_script:
 {{- if eq .opts.DBType "postgres" }}
 	- apt-get update && apt-get install -y postgresql-client
 {{- else if eq .opts.DBType "mysql" }}
-  - apt-get update && apt-get install -y mysql-client
+	- apt-get update && apt-get install -y mysql-client
 {{- end }}
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
+	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+	- cd /go/src/{{.opts.PackagePkg}}
+	- mkdir -p public/assets
+	- go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
+	- go get github.com/golang/dep/cmd/dep
+	- dep ensure
 {{- else }}
-  - go get -t -v ./...
+	- go get -t -v ./...
 {{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
+	- export PATH="$PATH:$GOPATH/bin"
 
 stages:
-  - test
+	- test
 
 .test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
+	variables:
+		GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
-    POSTGRES_DB: "{{.opts.Name.File}}_test"
+		POSTGRES_DB: "{{.opts.Name.File}}_test"
 {{- else if eq .opts.DBType "mysql" }}
-    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
-    MYSQL_ROOT_PASSWORD: "root"
+		MYSQL_DATABASE: "{{.opts.Name.File}}_test"
+		MYSQL_ROOT_PASSWORD: "root"
 {{- end }}
-    TEST_DATABASE_URL: "{{.testDbUrl}}"
+		TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-  image: golang:latest
+	image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-  image: golang:1.8
+	image: golang:1.8
 
 test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  services:
+	# Change to "<<: *use-golang-latest" to use the latest Go version
+	<<: *use-golang-1-8
+	<<: *test-vars
+	stage: test
+	services:
 {{- if eq .opts.DBType "mysql" }}
-    - mysql:5
+		- mysql:5
 {{- else if eq .opts.DBType "postgres" }}
-    - postgres:latest
+		- postgres:latest
 {{- end }}
-  script:
-    - buffalo test
+	script:
+		- buffalo test
 `
 
 const nGitlabCiNoPop = `before_script:
-  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
+	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+	- cd /go/src/{{.opts.PackagePkg}}
+	- mkdir -p public/assets
+	- go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
+	- go get github.com/golang/dep/cmd/dep
+	- dep ensure
 {{- else }}
-  - go get -t -v ./...
+	- go get -t -v ./...
 {{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
+	- export PATH="$PATH:$GOPATH/bin"
 
 stages:
-  - test
+	- test
 
 .test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
+	variables:
+		GO_ENV: "test"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-  image: golang:latest
+	image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-  image: golang:1.8
+	image: golang:1.8
 
 test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  script:
-    - buffalo test
+	# Change to "<<: *use-golang-latest" to use the latest Go version
+	<<: *use-golang-1-8
+	<<: *test-vars
+	stage: test
+	script:
+		- buffalo test
 `
 
 const nVCSIgnore = `vendor/
@@ -369,19 +374,27 @@ public/assets/
 
 // GopkgTomlTmpl is the default dep Gopkg.toml
 const GopkgTomlTmpl = `
+[[constraint]]
+	name = "github.com/gobuffalo/buffalo"
+	{{- if eq .version "development" }}
+	branch = "development"
+	{{- else }}
+	version = "{{.version}}"
+	{{- end}}
+
 {{ if .addPrune }}
 [prune]
-  go-tests = true
-  unused-packages = true
+	go-tests = true
+	unused-packages = true
 {{ end }}
 
-  # DO NOT DELETE
-  [[prune.project]] # buffalo
-    name = "github.com/gobuffalo/buffalo"
-    unused-packages = false
+	# DO NOT DELETE
+	[[prune.project]] # buffalo
+		name = "github.com/gobuffalo/buffalo"
+		unused-packages = false
 
-  # DO NOT DELETE
-  [[prune.project]] # pop
-    name = "github.com/gobuffalo/pop"
-    unused-packages = false
+	# DO NOT DELETE
+	[[prune.project]] # pop
+		name = "github.com/gobuffalo/pop"
+		unused-packages = false
 `
