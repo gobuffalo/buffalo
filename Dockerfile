@@ -15,9 +15,6 @@ ARG TRAVIS_TAG
 
 RUN buffalo version
 
-RUN go get -u github.com/alecthomas/gometalinter
-RUN gometalinter --install
-
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
@@ -26,8 +23,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
-RUN go get github.com/gobuffalo/buffalo-pop
-RUN make deps
+RUN make ci-deps
 RUN make install
 
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
