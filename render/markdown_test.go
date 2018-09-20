@@ -38,7 +38,7 @@ func Test_Markdown(t *testing.T) {
 
 		for _, j := range table {
 			re := j(filepath.Base(tmpFile.Name()))
-			r.Equal("text/html", re.ContentType())
+			r.Equal("text/html; charset=utf-8", re.ContentType())
 			bb := &bytes.Buffer{}
 			err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 			r.NoError(err)
@@ -61,7 +61,7 @@ func Test_Markdown(t *testing.T) {
 			TemplatesBox: packr.NewBox(tmpDir),
 		}).HTML(filepath.Base(tmpFile.Name()))
 
-		r.Equal("text/html", re.ContentType())
+		r.Equal("text/html; charset=utf-8", re.ContentType())
 		bb := &bytes.Buffer{}
 		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
