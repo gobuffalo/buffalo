@@ -35,7 +35,7 @@ func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	err := withHTMLFile("index.html", `<%= partial("foo") %>`, func(e *Engine) {
 		err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
 
-			re := e.Template("text/html", "index.html")
+			re := e.Template("text/html; charset=utf-8", "index.html")
 			bb := &bytes.Buffer{}
 			err := re.Render(bb, Data{"name": "Mark"})
 			r.NoError(err)
