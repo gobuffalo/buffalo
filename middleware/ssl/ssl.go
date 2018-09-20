@@ -1,9 +1,8 @@
 package ssl
 
 import (
-	"fmt"
-
 	forcessl "github.com/gobuffalo/mw-forcessl"
+	"github.com/markbates/oncer"
 )
 
 // ForceSSL uses the github.com/unrolled/secure package to
@@ -15,5 +14,5 @@ import (
 var ForceSSL = forcessl.Middleware
 
 func init() {
-	fmt.Printf("github.com/gobuffalo/buffalo/middleware/ssl is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-forcessl instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/middleware/ssl", "Use github.com/gobuffalo/mw-forcessl instead.")
 }

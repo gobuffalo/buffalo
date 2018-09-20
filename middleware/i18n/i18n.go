@@ -1,9 +1,8 @@
 package i18n
 
 import (
-	"fmt"
-
 	i18nm "github.com/gobuffalo/mw-i18n"
+	"github.com/markbates/oncer"
 )
 
 // LanguageExtractor can be implemented for custom finding of search
@@ -53,5 +52,5 @@ var URLPrefixLanguageExtractor = i18nm.URLPrefixLanguageExtractor
 var New = i18nm.New
 
 func init() {
-	fmt.Printf("github.com/gobuffalo/buffalo/middleware/i18n is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-i18n instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/middleware/i18n", "Use github.com/gobuffalo/mw-i18n instead.")
 }
