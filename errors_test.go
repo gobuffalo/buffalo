@@ -20,7 +20,7 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	res := w.HTML("/").Get()
 	r.Equal(401, res.Code)
 	ct := res.Header().Get("content-type")
-	r.Equal("text/html", ct)
+	r.Equal("text/html; charset=utf-8", ct)
 }
 
 func Test_PanicHandler(t *testing.T) {
