@@ -99,7 +99,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				status = h.Status
 			}
 		}
-		payload := map[string]interface{}{
+		payload := events.Payload{
 			"context": c,
 			"app":     a,
 		}
