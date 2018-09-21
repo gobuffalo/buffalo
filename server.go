@@ -21,7 +21,10 @@ import (
 func (a *App) Serve(srvs ...servers.Server) error {
 	a.Logger.Infof("Starting application at %s", a.Options.Addr)
 
-	if err := events.EmitPayload(events.AppStart, a); err != nil {
+	payload := events.Payload{
+		"app": a,
+	}
+	if err := events.EmitPayload(events.AppStart, payload); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -45,19 +48,19 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		<-ctx.Done()
 		a.Logger.Info("Shutting down application")
 
-		events.EmitError(events.AppStop, ctx.Err(), a)
+		events.EmitError(events.AppStop, ctx.Err(), payload)
 
 		if err := a.Stop(ctx.Err()); err != nil {
-			events.EmitError(events.ErrAppStop, err, a)
+			events.EmitError(events.ErrAppStop, err, payload)
 			a.Logger.Error(err)
 		}
 
 		if !a.WorkerOff {
 			// stop the workers
 			a.Logger.Info("Shutting down worker")
-			events.EmitPayload(events.WorkerStart, a)
+			events.EmitPayload(events.WorkerStart, payload)
 			if err := a.Worker.Stop(); err != nil {
-				events.EmitError(events.ErrWorkerStop, err, a)
+				events.EmitError(events.ErrWorkerStop, err, payload)
 				a.Logger.Error(err)
 			}
 		}
