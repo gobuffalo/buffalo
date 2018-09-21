@@ -97,7 +97,7 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	c := a.newContext(ri, res, req)
 	defer c.Flash().persist(c.Session())
 
-	payload := map[string]interface{}{
+	payload := events.Payload{
 		"route":   ri,
 		"req":     req,
 		"context": c,
