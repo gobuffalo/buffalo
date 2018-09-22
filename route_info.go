@@ -97,22 +97,22 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	c := a.newContext(ri, res, req)
 	defer c.Flash().persist(c.Session())
 
-	payload := map[string]interface{}{
+	payload := events.Payload{
 		"route":   ri,
 		"req":     req,
 		"context": c,
 	}
 
-	events.EmitPayload(events.RouteStarted, payload)
+	events.EmitPayload(EvtRouteStarted, payload)
 
 	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
-		events.EmitError(events.ErrRoute, err, payload)
+		events.EmitError(EvtRouteErr, err, payload)
 		// things have really hit the fan if we're here!!
 		a.Logger.Error(err)
 		c.Response().WriteHeader(500)
 		c.Response().Write([]byte(err.Error()))
 	}
-	events.EmitPayload(events.RouteFinished, payload)
+	events.EmitPayload(EvtRouteFinished, payload)
 }

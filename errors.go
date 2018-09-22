@@ -99,7 +99,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				status = h.Status
 			}
 		}
-		payload := map[string]interface{}{
+		payload := events.Payload{
 			"context": c,
 			"app":     a,
 		}
@@ -133,7 +133,7 @@ func productionErrorResponseFor(status int) []byte {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), "text/html")
+	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
 	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)
