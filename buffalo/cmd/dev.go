@@ -22,8 +22,8 @@ import (
 
 func init() {
 	events.NamedListen("buffalo:dev", func(e events.Event) {
-		if strings.HasPrefix(e.Kind, "refresh:") || strings.HasPrefix(e.Kind, "err:refresh:") {
-			e.Kind = strings.Replace(e.Kind, "refresh:", "buffalo:dev:", 1)
+		if strings.HasPrefix(e.Kind, "refresh:") {
+			e.Kind = "buffalo:" + e.Kind
 			events.Emit(e)
 		}
 	})
