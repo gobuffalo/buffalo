@@ -1,11 +1,12 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180911185405-ca94b2cb30ad
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180921161543-8f255b52504e
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180916191218-8a6042d8e9a6
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/events v0.0.0-20180919212028-867dc2348bad
@@ -30,8 +31,8 @@ require (
 	github.com/markbates/deplist v1.0.3
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
-	github.com/markbates/oncer v0.0.0-20180911185008-7302a2cd9114
-	github.com/markbates/refresh v1.4.6
+	github.com/markbates/oncer v0.0.0-20180921140201-d941c19fb28a
+	github.com/markbates/refresh v1.4.7
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
@@ -43,6 +44,7 @@ require (
 	github.com/unrolled/secure v0.0.0-20180918153822-f340ee86eb8b // indirect
 	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+	golang.org/x/sys v0.0.0-20180921163948-d47a0f339242 // indirect
 	golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e
 	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
