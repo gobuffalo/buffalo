@@ -1,26 +1,43 @@
 package build
 
 import (
+	"runtime"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/meta"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
-const rootPath = "/notabsolutepath"
+const rootPath = "ROOT"
 
 func TestAbsoluteBinaryPath(t *testing.T) {
 	tests := []struct {
-		binaryPath           string
-		expectedAbsolutePath string
+		inBinaryPath                             string
+		expectedNixResult, expectedWindowsResult string
 	}{
-		// relative paths
-		{"binary", rootPath + "/binary"},
-		{"something/else", rootPath + "/something/else"},
+		// relative paths on *nix
+		{"relnixbinary",
+			rootPath + "/relnixbinary", rootPath + "\\relnixbinary"},
+		{"rel/nix/binary",
+			rootPath + "/rel/nix/binary", rootPath + "\\rel\\nix\\binary"},
 
-		// absolute paths
-		{"/binary", "/binary"},
-		{"/tmp/binary", "/tmp/binary"},
+		// relative paths on Windows
+		{"relwinbinary",
+			rootPath + "/relwinbinary", rootPath + "\\relwinbinary"},
+		{"rel\\win\\binary",
+			rootPath + "/rel\\win\\binary", rootPath + "\\rel\\win\\binary"},
+
+		// absolute paths on *nix
+		{"/absnixbinary",
+			"/absnixbinary", rootPath + "\\absnixbinary"},
+		{"/abs/nix/binary",
+			"/abs/nix/binary", rootPath + "\\abs\\nix\\binary"},
+
+		// absolute paths on Windows
+		{"C:\\abswinbinary",
+			rootPath + "/C:\\abswinbinary", "C:\\abswinbinary"},
+		{"C:\\abs\\win\\binary",
+			rootPath + "/C:\\abs\\win\\binary", "C:\\abs\\win\\binary"},
 	}
 
 	for _, test := range tests {
@@ -28,10 +45,16 @@ func TestAbsoluteBinaryPath(t *testing.T) {
 			Options: Options{
 				App: meta.App{
 					Root: rootPath,
-					Bin:  test.binaryPath,
+					Bin:  test.inBinaryPath,
 				},
 			},
 		}
-		require.Equal(t, test.expectedAbsolutePath, b.AbsoluteBinaryPath())
+		if runtime.GOOS == "windows" {
+			assert.Equal(t, test.expectedWindowsResult, b.AbsoluteBinaryPath())
+		} else {
+			assert.Equal(t, test.expectedNixResult, b.AbsoluteBinaryPath())
+
+		}
+
 	}
 }
