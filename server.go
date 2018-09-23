@@ -58,7 +58,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		if !a.WorkerOff {
 			// stop the workers
 			a.Logger.Info("Shutting down worker")
-			events.EmitPayload(EvtWorkerStart, payload)
+			events.EmitPayload(EvtWorkerStop, payload)
 			if err := a.Worker.Stop(); err != nil {
 				events.EmitError(EvtWorkerStopErr, err, payload)
 				a.Logger.Error(err)
@@ -76,6 +76,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
 		go func() {
+			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
 				a.Stop(err)
 			}
