@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/markbates/going/randx"
+	"github.com/gobuffalo/x/randx"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"

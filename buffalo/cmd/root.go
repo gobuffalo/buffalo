@@ -4,11 +4,10 @@ import (
 	"errors"
 	"os"
 
+	"github.com/gobuffalo/events"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
-
-// var cfgFile string
 
 var anywhereCommands = []string{"new", "version", "info", "help"}
 
@@ -18,6 +17,9 @@ var RootCmd = &cobra.Command{
 	Use:           "buffalo",
 	Short:         "Helps you build your Buffalo applications that much easier!",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := events.LoadPlugins(); err != nil {
+			return err
+		}
 		isFreeCommand := false
 		for _, freeCmd := range anywhereCommands {
 			if freeCmd == cmd.Name() {
@@ -57,23 +59,3 @@ func insideBuffaloProject() bool {
 
 	return true
 }
-
-// func init() {
-// cobra.OnInitialize(initConfig)
-// RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.buffalo.yaml)")
-// }
-
-// func initConfig() {
-// 	if cfgFile != "" { // enable ability to specify config file via flag
-// 		viper.SetConfigFile(cfgFile)
-// 	}
-//
-// 	viper.SetConfigName(".buffalo") // name of config file (without extension)
-// 	viper.AddConfigPath("$HOME")    // adding home directory as first search path
-// 	viper.AutomaticEnv()            // read in environment variables that match
-//
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-// 	}
-// }

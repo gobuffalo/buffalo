@@ -33,7 +33,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 	}
 	hr := &templateRenderer{
 		Engine:      e,
-		contentType: "text/html",
+		contentType: "text/html; charset=utf-8",
 		names:       names,
 	}
 	return hr

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,8 +28,8 @@ func Test_App_Use(t *testing.T) {
 		return nil
 	})
 
-	w := willie.New(a)
-	w.Request("/").Get()
+	w := httptest.New(a)
+	w.HTML("/").Get()
 	r.Len(log, 3)
 	r.Equal([]string{"start", "handler", "end"}, log)
 }
@@ -64,8 +64,8 @@ func Test_Middleware_Replace(t *testing.T) {
 		return nil
 	})
 
-	w := willie.New(a)
-	w.Request("/").Get()
+	w := httptest.New(a)
+	w.HTML("/").Get()
 	r.Len(log, 3)
 	r.Equal([]string{"m2 start", "handler", "m2 end"}, log)
 }
@@ -109,14 +109,14 @@ func Test_Middleware_Skip(t *testing.T) {
 
 	a.Middleware.Skip(mw2, h2)
 
-	w := willie.New(a)
+	w := httptest.New(a)
 
-	w.Request("/h2").Get()
+	w.HTML("/h2").Get()
 	r.Len(log, 3)
 	r.Equal([]string{"mw1 start", "h2", "mw1 end"}, log)
 
 	log = []string{}
-	w.Request("/h1").Get()
+	w.HTML("/h1").Get()
 	r.Len(log, 5)
 	r.Equal([]string{"mw1 start", "mw2 start", "h1", "mw2 end", "mw1 end"}, log)
 }
@@ -159,24 +159,24 @@ func Test_Middleware_Skip_Resource(t *testing.T) {
 	// fmt.Println("set up skip")
 	g.Middleware.Skip(mw1, ur.Show)
 
-	w := willie.New(a)
+	w := httptest.New(a)
 
 	// fmt.Println("make autos call")
 	log = []string{}
-	res := w.Request("/autos/1").Get()
+	res := w.HTML("/autos/1").Get()
 	r.Len(log, 2)
 	r.Equal("show", res.Body.String())
 
 	// fmt.Println("make list call")
 	log = []string{}
-	res = w.Request("/cars").Get()
+	res = w.HTML("/cars").Get()
 	r.Len(log, 2)
 	r.Equal([]string{"mw1 start", "mw1 end"}, log)
 	r.Equal("list", res.Body.String())
 
 	// fmt.Println("make show call")
 	log = []string{}
-	res = w.Request("/cars/1").Get()
+	res = w.HTML("/cars/1").Get()
 	r.Len(log, 0)
 	r.Equal("show", res.Body.String())
 

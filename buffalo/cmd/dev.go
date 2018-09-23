@@ -6,17 +6,28 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 )
+
+func init() {
+	events.NamedListen("buffalo:dev", func(e events.Event) {
+		if strings.HasPrefix(e.Kind, "refresh:") {
+			e.Kind = "buffalo:" + e.Kind
+			events.Emit(e)
+		}
+	})
+}
 
 var devOptions = struct {
 	Debug bool
@@ -74,7 +85,7 @@ func startWebpack(ctx context.Context) error {
 	}
 
 	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
-		tool := "yarn"
+		tool := "yarnpkg"
 		if !app.WithYarn {
 			tool = "npm"
 		}

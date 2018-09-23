@@ -35,7 +35,7 @@ func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	err := withHTMLFile("index.html", `<%= partial("foo") %>`, func(e *Engine) {
 		err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
 
-			re := e.Template("text/html", "index.html")
+			re := e.Template("text/html; charset=utf-8", "index.html")
 			bb := &bytes.Buffer{}
 			err := re.Render(bb, Data{"name": "Mark"})
 			r.NoError(err)
@@ -93,4 +93,28 @@ func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T)
 		r.NoError(err)
 	})
 	r.NoError(err)
+}
+
+func Test_Template_Partial_With_Layout(t *testing.T) {
+	r := require.New(t)
+
+	err := withHTMLFile("index.html", `<%= partial("foo.html",{layout:"layout.html"}) %>`, func(e *Engine) {
+		err := withHTMLFile("_layout.html", "Layout > <%= yield %>", func(e *Engine) {
+			err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
+
+				re := e.Template("foo/bar", "index.html")
+				//r.Equal("foo/bar", re.ContentType())
+				bb := &bytes.Buffer{}
+				err := re.Render(bb, Data{"name": "Mark"})
+				r.NoError(err)
+				r.Equal("Layout > Foo > Mark", strings.TrimSpace(bb.String()))
+
+			})
+			r.NoError(err)
+		})
+		r.NoError(err)
+
+	})
+	r.NoError(err)
+
 }

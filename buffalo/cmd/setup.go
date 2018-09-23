@@ -57,6 +57,10 @@ Tests:
 }
 
 func updateGoDepsCheck(app meta.App) error {
+	if app.WithModules {
+		c := exec.Command(envy.Get("GO_BIN", "go"), "get")
+		return run(c)
+	}
 	if app.WithDep {
 		// use github.com/golang/dep
 		args := []string{"ensure"}
@@ -129,12 +133,12 @@ func databaseCheck(app meta.App) error {
 
 func dbCreateCheck(meta.App) error {
 	if setupOptions.dropDatabases {
-		err := run(exec.Command("buffalo", "db", "drop", "-a"))
+		err := run(exec.Command("buffalo", "pop", "drop", "-a"))
 		if err != nil {
 			return errors.Errorf("We encountered an error when trying to drop your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 		}
 	}
-	err := run(exec.Command("buffalo", "db", "create", "-a"))
+	err := run(exec.Command("buffalo", "pop", "create", "-a"))
 	if err != nil {
 		return errors.Errorf("We encountered an error when trying to create your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 	}
@@ -142,7 +146,7 @@ func dbCreateCheck(meta.App) error {
 }
 
 func dbMigrateCheck(meta.App) error {
-	err := run(exec.Command("buffalo", "db", "migrate"))
+	err := run(exec.Command("buffalo", "pop", "migrate"))
 	if err != nil {
 		return errors.Errorf("We encountered the following error when trying to migrate your database:\n%s", err)
 	}
@@ -191,13 +195,13 @@ func yarnCheck(app meta.App) error {
 	if err := nodeCheck(app); err != nil {
 		return errors.WithStack(err)
 	}
-	if _, err := exec.LookPath("yarn"); err != nil {
+	if _, err := exec.LookPath("yarnpkg"); err != nil {
 		err := run(exec.Command("npm", "install", "-g", "yarn"))
 		if err != nil {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
 	}
-	if err := run(exec.Command("yarn", "install", "--no-progress")); err != nil {
+	if err := run(exec.Command("yarnpkg", "install", "--no-progress")); err != nil {
 		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
 	}
 	return nil
