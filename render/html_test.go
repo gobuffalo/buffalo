@@ -35,7 +35,7 @@ func Test_HTML(t *testing.T) {
 		}).HTML
 
 		re := j(filepath.Base(tmpFile.Name()))
-		r.Equal("text/html", re.ContentType())
+		r.Equal("text/html; charset=utf-8", re.ContentType())
 		bb := &bytes.Buffer{}
 		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
 		r.NoError(err)
@@ -61,7 +61,7 @@ func Test_HTML(t *testing.T) {
 			r := require.New(sst)
 			h := re.HTML(filepath.Base(tmpFile.Name()))
 
-			r.Equal("text/html", h.ContentType())
+			r.Equal("text/html; charset=utf-8", h.ContentType())
 			bb := &bytes.Buffer{}
 			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
 			r.NoError(err)
@@ -78,7 +78,7 @@ func Test_HTML(t *testing.T) {
 			r.NoError(err)
 			h := re.HTML(filepath.Base(tmpFile.Name()), filepath.Base(nlayout.Name()))
 
-			r.Equal("text/html", h.ContentType())
+			r.Equal("text/html; charset=utf-8", h.ContentType())
 			bb := &bytes.Buffer{}
 			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
 			r.NoError(err)

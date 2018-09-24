@@ -42,7 +42,7 @@ func New(opts Options) *Engine {
 	}
 
 	if opts.DefaultContentType == "" {
-		opts.DefaultContentType = "text/html"
+		opts.DefaultContentType = "text/html; charset=utf-8"
 	}
 
 	e := &Engine{
