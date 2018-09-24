@@ -38,5 +38,4 @@ release-test:
 	make test
 
 release:
-	$(GO_BIN) get github.com/gobuffalo/release
 	release -y -f runtime/version.go
