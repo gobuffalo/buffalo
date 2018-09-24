@@ -38,8 +38,8 @@ github.com/gobuffalo/envy v1.6.4/go.mod h1:Abh+Jfw475/NWtYMEt+hnJWRiC8INKWibIMyN
 github.com/gobuffalo/events v0.0.0-20180919212028-867dc2348bad/go.mod h1:llrZYJ6ap/G7OwAEIbGJzyKlzWJy/F84lPgilFIBpH4=
 github.com/gobuffalo/events v0.0.0-20180922214205-bcd0f5dd556a/go.mod h1:1y8L9VCEC17GFRd98juWpWqIX7WXvDDJ3W1qNy02iHg=
 github.com/gobuffalo/events v0.0.0-20180924042527-b0372953254d/go.mod h1:rSHVdTfkpJgtv4ZaMihvdxA/3dw6Rzfse75/ewrm08M=
-github.com/gobuffalo/events v1.0.1 h1:jhOOv/8aqrn1+ly1VBZVzFdPcVDFhvDkqtnVhqn8XRU=
-github.com/gobuffalo/events v1.0.1/go.mod h1:Ida1WGS/W4d/BALR72iieJ8LQGKaUHISgUPcBIpYeTM=
+github.com/gobuffalo/events v1.0.2 h1:9sokzhPipEL6mN+KHxs6dNSE+WcPa+vNZSC9qTGnBbc=
+github.com/gobuffalo/events v1.0.2/go.mod h1:i+LaFjejdNAXYYy/wjTf9FD/9I2cnxI+38YxBaSsNX0=
 github.com/gobuffalo/fizz v1.0.7/go.mod h1:fbtmvB0dcsGJUxM/S8biqkQtvykqPQGdkcg94zVu8GA=
 github.com/gobuffalo/fizz v1.0.10 h1:MspJcEEBN2eApqiFd4tuoTpYZF6wM5B6/Ink/rJcqOI=
 github.com/gobuffalo/fizz v1.0.10/go.mod h1:jpD+pJ065MDYCc4nA86aUQ/ovwCjGGNl4zq4xrAxJa0=
@@ -283,8 +283,9 @@ golang.org/x/sys v0.0.0-20180906133057-8cf3aee42992/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180918153733-ee1b12c67af4/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180920110915-d641721ec2de/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
-golang.org/x/sys v0.0.0-20180921163948-d47a0f339242 h1:5DYsa+ZAwcJHjuY0Qet390sUr7qwkpnRsUNjddyc0b8=
 golang.org/x/sys v0.0.0-20180921163948-d47a0f339242/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20180924142050-c01370cb5c9b h1:IttiFPmVSU0Fu6o5f05qydRhwn3mF7V4K9Ft+gHeC08=
+golang.org/x/sys v0.0.0-20180924142050-c01370cb5c9b/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180904205237-0aa4b8830f48/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
