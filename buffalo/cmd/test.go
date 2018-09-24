@@ -198,7 +198,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 	}
 	pkgs := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
 	for _, p := range pkgs {
-		if strings.Contains(string(p), "/vendor/") {
+		if !strings.Contains(string(p), "/vendor/") {
 			args = append(args, string(p))
 		}
 	}

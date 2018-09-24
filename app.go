@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/events"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -15,9 +16,9 @@ import (
 type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware      *MiddlewareStack
-	ErrorHandlers   ErrorHandlers
-	ErrorMiddleware MiddlewareFunc
+	Middleware      *MiddlewareStack `json:"-"`
+	ErrorHandlers   ErrorHandlers    `json:"-"`
+	ErrorMiddleware MiddlewareFunc   `json:"-"`
 	router          *mux.Router
 	moot            *sync.Mutex
 	routes          RouteList
@@ -28,6 +29,7 @@ type App struct {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
+	events.LoadPlugins()
 	envy.Load()
 	opts = optionsWithDefaults(opts)
 

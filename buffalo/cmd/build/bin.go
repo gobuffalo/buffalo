@@ -27,11 +27,11 @@ func (b *Builder) buildBin() error {
 
 	// Add any additional ldflags passed in to the build args
 	if len(b.LDFlags) > 0 {
-		if foundVersion, _ := regexp.MatchString("-X\\s+main.version=", b.LDFlags); foundVersion {
-			return errors.New("the ldflag option '-X main.version=' is reserved for Buffalo use")
+		if foundVersion, _ := regexp.MatchString("-X\\s+main.BuildVersion=", b.LDFlags); foundVersion {
+			return errors.New("the ldflag option '-X main.BuildVersion=' is reserved for Buffalo use")
 		}
-		if foundBuildTime, _ := regexp.MatchString("-X\\s+main.buildTime=", b.LDFlags); foundBuildTime {
-			return errors.New("the ldflag option '-X main.buildTime=' is reserved for Buffalo use")
+		if foundBuildTime, _ := regexp.MatchString("-X\\s+main.BuildTime=", b.LDFlags); foundBuildTime {
+			return errors.New("the ldflag option '-X main.BuildTime=' is reserved for Buffalo use")
 		}
 		flags = append(flags, b.LDFlags)
 	}
