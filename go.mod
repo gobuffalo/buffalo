@@ -5,13 +5,13 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180922213526-48fd94ed4832
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180916191218-8a6042d8e9a6
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924041210-6ea00eeaef92
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180924015429-afa730c68d32
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180922214205-bcd0f5dd556a
+	github.com/gobuffalo/events v1.0.2
 	github.com/gobuffalo/flect v0.0.0-20180907193754-dc14d8acaf9f
-	github.com/gobuffalo/genny v0.0.0-20180922164512-230e627635f7
-	github.com/gobuffalo/github_flavored_markdown v1.0.0
+	github.com/gobuffalo/genny v0.0.0-20180924040918-fce452ea81be
+	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
@@ -21,19 +21,19 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20180917205648-9e0d9b7760c0
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
-	github.com/gobuffalo/packr v1.13.5
+	github.com/gobuffalo/packr v1.13.7
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.3+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
-	github.com/gobuffalo/x v0.0.0-20180816203319-dc54d929c4a2
+	github.com/gobuffalo/x v0.0.0-20180924043718-b9bd64714615
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
 	github.com/markbates/deplist v1.0.3
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
-	github.com/markbates/oncer v0.0.0-20180921140201-d941c19fb28a
-	github.com/markbates/refresh v1.4.7
+	github.com/markbates/oncer v0.0.0-20180924034138-723ad0170a46
+	github.com/markbates/refresh v1.4.8
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
