@@ -1,16 +1,14 @@
 module github.com/gobuffalo/buffalo
 
 require (
-	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180922213526-48fd94ed4832
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924032749-a6d5cbb1889d
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180924015429-afa730c68d32
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180922214205-bcd0f5dd556a
-	github.com/gobuffalo/fizz v1.0.11 // indirect
-	github.com/gobuffalo/github_flavored_markdown v1.0.4
+	github.com/gobuffalo/events v0.0.0-20180924035553-853ebc5300aa
+	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
@@ -28,11 +26,10 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/markbates/deplist v1.0.3
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
-	github.com/markbates/oncer v0.0.0-20180921140201-d941c19fb28a
+	github.com/markbates/oncer v0.0.0-20180924034138-723ad0170a46
 	github.com/markbates/refresh v1.4.7
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba

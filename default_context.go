@@ -260,6 +260,10 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 func (d *DefaultContext) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{}
 	for k, v := range d.Data() {
+		// don't try and marshal ourself
+		if _, ok := v.(*DefaultContext); ok {
+			continue
+		}
 		if _, err := json.Marshal(v); err == nil {
 			// it can be marshaled, so add it:
 			m[k] = v
