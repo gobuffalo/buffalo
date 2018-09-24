@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924041210-6ea00eeaef92
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180924015429-afa730c68d32
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180924042527-b0372953254d
+	github.com/gobuffalo/events v1.0.1
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
@@ -23,7 +23,7 @@ require (
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.3+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
-	github.com/gobuffalo/x v0.0.0-20180924041631-1e37b59023d9
+	github.com/gobuffalo/x v0.0.0-20180924043718-b9bd64714615
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
@@ -31,7 +31,7 @@ require (
 	github.com/markbates/grift v1.0.2
 	github.com/markbates/inflect v1.0.0
 	github.com/markbates/oncer v0.0.0-20180924034138-723ad0170a46
-	github.com/markbates/refresh v1.4.7
+	github.com/markbates/refresh v1.4.8
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
