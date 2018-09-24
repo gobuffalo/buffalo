@@ -1,13 +1,14 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924041210-6ea00eeaef92
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180924015429-afa730c68d32
 	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v0.0.0-20180924041734-c2c3a791a5c5
+	github.com/gobuffalo/events v0.0.0-20180924042527-b0372953254d
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
