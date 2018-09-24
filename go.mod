@@ -14,6 +14,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
+	github.com/gobuffalo/mapi v1.0.0
 	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b

@@ -2,14 +2,14 @@ package actions
 
 import "github.com/gobuffalo/buffalo"
 
-type {{.opts.Name.Resource}}Resource struct{
+type {{.opts.Name.Proper}}Resource struct{
 	buffalo.Resource
 }
 
 {{ range $a := .actions }}
 // {{$a}} default implementation.
-func (v {{$.opts.Name.Resource}}Resource) {{$a}}(c buffalo.Context) error {
-	return c.Render(200, r.String("{{$.opts.Model.Model}}#{{$a}}"))
+func (v {{$.opts.Name.Proper}}Resource) {{$a}}(c buffalo.Context) error {
+	return c.Render(200, r.String("{{$.opts.Model.Proper}}#{{$a}}"))
 }
 
 {{end}}

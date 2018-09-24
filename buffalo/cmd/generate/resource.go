@@ -1,21 +1,23 @@
 package generate
 
 import (
-	"github.com/markbates/inflect"
-	"github.com/pkg/errors"
+	"context"
 
-	"github.com/gobuffalo/buffalo/generators/resource"
-	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/buffalo/genny/resource"
+	"github.com/gobuffalo/flect/name"
+	"github.com/gobuffalo/genny"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
 var resourceOptions = struct {
-	SkipMigration bool
-	SkipModel     bool
-	SkipTemplates bool
-	ModelName     string
-	Name          string
-}{}
+	dryRun bool
+	*resource.Options
+	ModelName string
+	Name      string
+}{
+	Options: &resource.Options{},
+}
 
 // ResourceCmd generates a new actions/resource file and a stub test.
 var ResourceCmd = &cobra.Command{
@@ -24,28 +26,47 @@ var ResourceCmd = &cobra.Command{
 	Aliases: []string{"r"},
 	Short:   "Generates a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		o, err := resource.New(resourceOptions.Name, args...)
+		opts := resourceOptions.Options
+		opts.Args = args
+		opts.Name = name.New(resourceOptions.Name)
+		if len(resourceOptions.ModelName) > 0 {
+			opts.UseModel = true
+			opts.Name = name.New(resourceOptions.ModelName)
+		}
+
+		run := genny.WetRunner(context.Background())
+		if resourceOptions.dryRun {
+			run = genny.DryRunner(context.Background())
+		}
+		gg, err := resource.New(opts)
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		o.SkipModel = resourceOptions.SkipModel
-		o.SkipMigration = resourceOptions.SkipMigration
-		o.SkipTemplates = resourceOptions.SkipTemplates
-		if resourceOptions.ModelName != "" {
-			o.UseModel = true
-			o.Model = inflect.Name(resourceOptions.ModelName)
-		}
-
-		if err := o.Validate(); err != nil {
-			return err
-		}
-
-		return o.Run(".", makr.Data{})
+		run.WithGroup(gg)
+		return run.Run()
+		// o, err := resource.New(resourceOptions.Name, args...)
+		// if err != nil {
+		// 	return errors.WithStack(err)
+		// }
+		// o.SkipModel = resourceOptions.SkipModel
+		// o.SkipMigration = resourceOptions.SkipMigration
+		// o.SkipTemplates = resourceOptions.SkipTemplates
+		// if resourceOptions.ModelName != "" {
+		// 	o.UseModel = true
+		// 	o.Model = inflect.Name(resourceOptions.ModelName)
+		// }
+		//
+		// if err := o.Validate(); err != nil {
+		// 	return err
+		// }
+		//
+		// return o.Run(".", makr.Data{})
 	},
 }
 
 func init() {
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipMigration, "skip-migration", "s", false, "tells resource generator not-to add model migration")
+	ResourceCmd.Flags().BoolVarP(&resourceOptions.dryRun, "dry-run", "d", false, "runs the generator without executing commands")
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipModel, "skip-model", "", false, "tells resource generator not to generate model nor migrations")
 	ResourceCmd.Flags().BoolVarP(&resourceOptions.SkipTemplates, "skip-templates", "", false, "tells resource generator not to generate templates for the resource")
 	ResourceCmd.Flags().StringVarP(&resourceOptions.ModelName, "use-model", "", "", "tells resource generator to reference an existing model in generated code")

@@ -14,33 +14,33 @@ import (
 // edit this file.
 
 // Following naming logic is implemented in Buffalo:
-// Model: Singular ({{.opts.Model.Model}})
+// Model: Singular ({{.opts.Model.Proper}})
 // DB Table: Plural ({{.opts.Model.Table}})
-// Resource: Plural ({{.opts.Name.Resource}})
+// Resource: Plural ({{.opts.Name.Proper}})
 // Path: Plural (/{{.opts.Name.URL}})
 // View Template Folder: Plural (/templates/{{.opts.FilesPath}}/)
 
-// {{.opts.Name.Resource}}Resource is the resource for the {{.opts.Model.Model}} model
-type {{.opts.Name.Resource}}Resource struct{
+// {{.opts.Name.Proper}}Resource is the resource for the {{.opts.Model.Proper}} model
+type {{.opts.Name.Proper}}Resource struct{
   buffalo.Resource
 }
 
-// List gets all {{.opts.Model.ModelPlural}}. This function is mapped to the path
+// List gets all {{.opts.Model.ProperPlural}}. This function is mapped to the path
 // GET /{{.opts.Name.URL}}
-func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) List(c buffalo.Context) error {
   // Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-  {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.ModelPlural}}{}
+  {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.ProperPlural}}{}
 
   // Paginate results. Params "page" and "per_page" control pagination.
   // Default values are "page=1" and "per_page=20".
   q := tx.PaginateFromParams(c.Params())
 
-  // Retrieve all {{.opts.Model.ModelPlural}} from the DB
+  // Retrieve all {{.opts.Model.ProperPlural}} from the DB
   if err := q.All({{.opts.Model.VarCasePlural}}); err != nil {
     return errors.WithStack(err)
   }
@@ -51,19 +51,19 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCasePlural}}))
 }
 
-// Show gets the data for one {{.opts.Model.Model}}. This function is mapped to
+// Show gets the data for one {{.opts.Model.Proper}}. This function is mapped to
 // the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
-func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-  // Allocate an empty {{.opts.Model.Model}}
-  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
+  // Allocate an empty {{.opts.Model.Proper}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Proper}}{}
 
-  // To find the {{.opts.Model.Model}} the parameter {{.opts.Name.ParamID}} is used.
+  // To find the {{.opts.Model.Proper}} the parameter {{.opts.Name.ParamID}} is used.
   if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
@@ -72,15 +72,15 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
 }
 
 // New default implementation. Returns a 404
-func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) New(c buffalo.Context) error {
   return c.Error(404, errors.New("not available"))
 }
 
-// Create adds a {{.opts.Model.Model}} to the DB. This function is mapped to the
+// Create adds a {{.opts.Model.Proper}} to the DB. This function is mapped to the
 // path POST /{{.opts.Name.URL}}
-func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
-  // Allocate an empty {{.opts.Model.Model}}
-  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
+func (v {{.opts.Name.Proper}}Resource) Create(c buffalo.Context) error {
+  // Allocate an empty {{.opts.Model.Proper}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Proper}}{}
 
   // Bind {{.opts.Model.VarCaseSingular}} to the html form elements
   if err := c.Bind({{.opts.Model.VarCaseSingular}}); err != nil {
@@ -108,27 +108,27 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
 }
 
 // Edit default implementation. Returns a 404
-func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) Edit(c buffalo.Context) error {
   return c.Error(404, errors.New("not available"))
 }
 
-// Update changes a {{.opts.Model.Model}} in the DB. This function is mapped to
+// Update changes a {{.opts.Model.Proper}} in the DB. This function is mapped to
 // the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
-func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-  // Allocate an empty {{.opts.Model.Model}}
-  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
+  // Allocate an empty {{.opts.Model.Proper}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Proper}}{}
 
   if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
 
-  // Bind {{.opts.Model.Model}} to the html form elements
+  // Bind {{.opts.Model.Proper}} to the html form elements
   if err := c.Bind({{.opts.Model.VarCaseSingular}}); err != nil {
     return errors.WithStack(err)
   }
@@ -146,19 +146,19 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   return c.Render(200, r.{{.opts.MimeType}}({{.opts.Model.VarCaseSingular}}))
 }
 
-// Destroy deletes a {{.opts.Model.Model}} from the DB. This function is mapped
+// Destroy deletes a {{.opts.Model.Proper}} from the DB. This function is mapped
 // to the path DELETE /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}
-func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
+func (v {{.opts.Name.Proper}}Resource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-  // Allocate an empty {{.opts.Model.Model}}
-  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Model}}{}
+  // Allocate an empty {{.opts.Model.Proper}}
+  {{.opts.Model.VarCaseSingular}} := &models.{{.opts.Model.Proper}}{}
 
-  // To find the {{.opts.Model.Model}} the parameter {{.opts.Name.ParamID}} is used.
+  // To find the {{.opts.Model.Proper}} the parameter {{.opts.Name.ParamID}} is used.
   if err := tx.Find({{.opts.Model.VarCaseSingular}}, c.Param("{{.opts.Name.ParamID}}")); err != nil {
     return c.Error(404, err)
   }
