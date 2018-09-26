@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd"
 	"github.com/gobuffalo/x/randx"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
@@ -18,6 +19,15 @@ func Grifts(app *App) {
 	routesGrift(app)
 	middlewareGrift(app)
 	secretGrift()
+}
+
+func version() {
+	grift.Namespace("buffalo", func() {
+		grift.Desc("version", "Prints out the version of Buffalo used by your application")
+		grift.Add("version", func(c *grift.Context) error {
+			return cmd.VersionCmd.Run(nil, []string{})
+		})
+	})
 }
 
 func secretGrift() {
