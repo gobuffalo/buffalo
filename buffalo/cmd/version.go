@@ -7,11 +7,12 @@ import (
 )
 
 func init() {
-	decorate("version", versionCmd)
-	RootCmd.AddCommand(versionCmd)
+	decorate("version", VersionCmd)
+	RootCmd.AddCommand(VersionCmd)
 }
 
-var versionCmd = &cobra.Command{
+// VersionCmd is the version command
+var VersionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of buffalo",
 	Long:  `All software has versions.  This is buffalo's.`,

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/gobuffalo/buffalo/buffalo/cmd"
 	"github.com/gobuffalo/x/randx"
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
@@ -18,6 +19,23 @@ func Grifts(app *App) {
 	routesGrift(app)
 	middlewareGrift(app)
 	secretGrift()
+	versionGrift()
+}
+
+// version this is here EXPLICITLY to force
+// the cmd and runtime packages to be imported
+// as they're required for building and tools
+// like dep prune those packages because they're
+// not imported. DO NOT REMOVE!!! :)
+// https://github.com/gobuffalo/buffalo/pull/1325
+func versionGrift() {
+	grift.Namespace("buffalo", func() {
+		grift.Desc("version", "Print the version number of buffalo")
+		grift.Add("version", func(c *grift.Context) error {
+			cmd.VersionCmd.Run(nil, []string{})
+			return nil
+		})
+	})
 }
 
 func secretGrift() {
