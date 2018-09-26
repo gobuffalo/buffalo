@@ -42,6 +42,17 @@ type ParamValues interface {
 	Get(string) string
 }
 
+// GetRouteHelpers returns a map of BuildPathHelper() for each route available in the app.
+func (a *App) GetRouteHelpers() map[string]interface{} {
+	routeHelpers := map[string]interface{}{}
+
+	for _, route := range a.Routes() {
+		cRoute := route
+		routeHelpers[cRoute.PathName] = cRoute.BuildPathHelper()
+	}
+	return routeHelpers
+}
+
 func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Request) Context {
 	if ws, ok := res.(*Response); ok {
 		res = ws
@@ -73,9 +84,9 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		"method":        req.Method,
 	}
 
-	for _, route := range a.Routes() {
-		cRoute := route
-		contextData[cRoute.PathName] = cRoute.BuildPathHelper()
+	routeHelpers := a.GetRouteHelpers()
+	for helper, route := range routeHelpers {
+		contextData[helper] = route
 	}
 
 	return &DefaultContext{
