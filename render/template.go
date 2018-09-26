@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type templateRenderer struct {
@@ -131,7 +132,8 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			return "", fmt.Errorf("could not find a template engine for %s", ext)
+			logrus.Errorf("could not find a template engine for %s\n", ext)
+			continue
 		}
 		body, err = te(body, data, helpers)
 		if err != nil {

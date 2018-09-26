@@ -3,6 +3,7 @@ package buffalo
 import (
 	"context"
 	"net/http"
+	"sync"
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
@@ -87,5 +88,6 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		session:     session,
 		flash:       newFlash(session),
 		data:        contextData,
+		moot:        &sync.RWMutex{},
 	}
 }

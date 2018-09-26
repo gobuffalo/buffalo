@@ -90,9 +90,7 @@ func findSchema() io.Reader {
 		}
 
 		if err := fm.Up(); err == nil {
-			if f, err := os.Open(filepath.Join("migrations", "schema.sql")); err == nil {
-				return f
-			}
+			return nil
 		}
 	}
 	return nil
@@ -200,7 +198,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 	}
 	pkgs := bytes.Split(bytes.TrimSpace(out), []byte("\n"))
 	for _, p := range pkgs {
-		if strings.Contains(string(p), "/vendor/") {
+		if !strings.Contains(string(p), "/vendor/") {
 			args = append(args, string(p))
 		}
 	}

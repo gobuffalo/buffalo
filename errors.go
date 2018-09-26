@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/x/defaults"
 	"github.com/gobuffalo/x/httpx"
@@ -67,6 +68,12 @@ func (a *App) PanicHandler(next Handler) Handler {
 					err = errors.New(fmt.Sprint(t))
 				}
 				err = errors.WithStack(err)
+				events.EmitError(events.ErrPanic, err,
+					map[string]interface{}{
+						"context": c,
+						"app":     a,
+					},
+				)
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
@@ -92,9 +99,21 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 				status = h.Status
 			}
 		}
+		payload := events.Payload{
+			"context": c,
+			"app":     a,
+		}
+		events.EmitError(events.ErrGeneral, err, payload)
+
 		eh := a.ErrorHandlers.Get(status)
 		err = eh(status, err, c)
 		if err != nil {
+			events.Emit(events.Event{
+				Kind:    events.ErrGeneral,
+				Message: "unable to handle error and giving up",
+				Error:   err,
+				Payload: payload,
+			})
 			// things have really hit the fan if we're here!!
 			a.Logger.Error(err)
 			c.Response().WriteHeader(500)
@@ -114,7 +133,7 @@ func productionErrorResponseFor(status int) []byte {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), "text/html")
+	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
 	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)

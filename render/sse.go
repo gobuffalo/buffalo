@@ -45,11 +45,17 @@ func (es *EventSource) Flush() {
 	es.fl.Flush()
 }
 
+type closeNotifier interface {
+	CloseNotify() <-chan bool
+}
+
 // CloseNotify return true across the channel when the connection
 // in the browser has been severed.
 func (es *EventSource) CloseNotify() <-chan bool {
-	//lint:ignore SA1019 We will remove this one later
-	return es.w.(http.CloseNotifier).CloseNotify()
+	if cn, ok := es.w.(closeNotifier); ok {
+		return cn.CloseNotify()
+	}
+	return nil
 }
 
 // NewEventSource returns a new EventSource instance while ensuring

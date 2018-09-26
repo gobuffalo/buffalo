@@ -1,9 +1,8 @@
 package csrf
 
 import (
-	"fmt"
-
 	csrf "github.com/gobuffalo/mw-csrf"
+	"github.com/markbates/oncer"
 )
 
 var (
@@ -27,5 +26,5 @@ var (
 var New = csrf.New
 
 func init() {
-	fmt.Printf("github.com/gobuffalo/buffalo/middleware/csrf is deprecated and will be removed in the next version. Please use github.com/gobuffalo/mw-csrf instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/middleware/csrf", "Use github.com/gobuffalo/mw-csrf instead.")
 }

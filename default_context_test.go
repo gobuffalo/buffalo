@@ -5,6 +5,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"sync"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -19,6 +20,7 @@ func basicContext() DefaultContext {
 		logger:  NewLogger("debug"),
 		data:    make(map[string]interface{}),
 		flash:   &Flash{data: make(map[string][]string)},
+		moot:    &sync.RWMutex{},
 	}
 }
 

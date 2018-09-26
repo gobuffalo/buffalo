@@ -1,28 +1,42 @@
 TAGS ?= "sqlite"
-INSTALL ?= install -v -tags ${TAGS} ./...
-
 GO_BIN ?= go
-GO_GET ?= $(GO_BIN) get -tags "sqlite" -v -t github.com/gobuffalo/buffalo/...
 
-ifeq ("$(GO_BIN)","vgo")
-	GO_GET = vgo version
-endif
+install:
+	packr
+	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
 
 deps:
-	$(GO_BIN) install -v github.com/gobuffalo/packr/packr
+	$(GO_BIN) get github.com/gobuffalo/packr/packr
+	$(GO_BIN) get -tags ${TAGS} -t ./...
 
-install: deps
+build:
 	packr
-	$(GO_GET)
-	$(GO_BIN) $(INSTALL)
-	packr clean
+	$(GO_BIN) build -v .
 
 test:
+	packr
 	$(GO_BIN) test -tags ${TAGS} ./...
 
-ci-test:
-	$(GO_BIN) test -tags ${TAGS} -race -v ./...
-	docker build .
+ci-deps:
+	$(GO_BIN) get github.com/gobuffalo/packr/packr
+	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
+
+ci-test: ci-deps
+	docker build . --no-cache
 
 lint:
 	gometalinter --vendor ./... --deadline=1m --skip=internal
+
+update:
+	$(GO_BIN) get -u
+	packr
+	make test
+	make install
+	$(GO_BIN) mod tidy
+
+release-test:
+	make test
+
+release:
+	$(GO_BIN) get github.com/gobuffalo/release
+	release -y -f runtime/version.go

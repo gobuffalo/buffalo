@@ -2,12 +2,13 @@ package destroy
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
@@ -32,9 +33,8 @@ var ResourceCmd = &cobra.Command{
 		fileName := inflect.Pluralize(inflect.Underscore(name))
 
 		removeTemplates(fileName)
-		err := removeActions(fileName)
-		if err != nil {
-			return err
+		if err := removeActions(fileName); err != nil {
+			return errors.WithStack(err)
 		}
 
 		removeLocales(fileName)
