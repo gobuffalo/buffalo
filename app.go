@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/events"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -28,6 +29,7 @@ type App struct {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
+	events.LoadPlugins()
 	envy.Load()
 	opts = optionsWithDefaults(opts)
 

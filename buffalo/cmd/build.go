@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"os"
-	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
 	"github.com/gobuffalo/buffalo/meta"
@@ -56,8 +55,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		bin, _ := filepath.Abs(b.Bin)
-		logrus.Infof("\nYour application was successfully built at %s\n", bin)
+		logrus.Infof("\nYour application was successfully built at %s\n", b.AbsoluteBinaryPath())
 
 		return nil
 	},

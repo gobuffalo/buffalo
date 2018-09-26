@@ -109,7 +109,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		err = eh(status, err, c)
 		if err != nil {
 			events.Emit(events.Event{
-				Kind:    events.ErrGeneral,
+				Kind:    EvtFailureErr,
 				Message: "unable to handle error and giving up",
 				Error:   err,
 				Payload: payload,
