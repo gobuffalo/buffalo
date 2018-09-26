@@ -19,10 +19,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
 
-* [github.com/fatih/color/vendor/github.com/mattn/go-colorable](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-colorable)
-
-* [github.com/fatih/color/vendor/github.com/mattn/go-isatty](https://godoc.org/github.com/fatih/color/vendor/github.com/mattn/go-isatty)
-
 * [github.com/fatih/structs](https://godoc.org/github.com/fatih/structs)
 
 * [github.com/fsnotify/fsnotify](https://godoc.org/github.com/fsnotify/fsnotify)
@@ -31,15 +27,21 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
+* [github.com/gobuffalo/events](https://godoc.org/github.com/gobuffalo/events)
+
 * [github.com/gobuffalo/fizz](https://godoc.org/github.com/gobuffalo/fizz)
 
 * [github.com/gobuffalo/fizz/translators](https://godoc.org/github.com/gobuffalo/fizz/translators)
 
 * [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
 
+* [github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday)
+
 * [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
 
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
+
+* [github.com/gobuffalo/mapi](https://godoc.org/github.com/gobuffalo/mapi)
 
 * [github.com/gobuffalo/mw-contenttype](https://godoc.org/github.com/gobuffalo/mw-contenttype)
 
@@ -171,6 +173,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/inflect](https://godoc.org/github.com/markbates/inflect)
 
+* [github.com/markbates/oncer](https://godoc.org/github.com/markbates/oncer)
+
 * [github.com/markbates/refresh/refresh](https://godoc.org/github.com/markbates/refresh/refresh)
 
 * [github.com/markbates/refresh/refresh/web](https://godoc.org/github.com/markbates/refresh/refresh/web)
@@ -178,6 +182,10 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
 * [github.com/markbates/willie](https://godoc.org/github.com/markbates/willie)
+
+* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
+
+* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
 
 * [github.com/mattn/go-sqlite3](https://godoc.org/github.com/mattn/go-sqlite3)
 
@@ -374,7 +382,5 @@ Thank you to the following **GIANTS**:
 * [golang.org/x/tools/go/ast/astutil](https://godoc.org/golang.org/x/tools/go/ast/astutil)
 
 * [gopkg.in/check.v1](https://godoc.org/gopkg.in/check.v1)
-
-* [gopkg.in/russross/blackfriday.v1](https://godoc.org/gopkg.in/russross/blackfriday.v1)
 
 * [gopkg.in/yaml.v2](https://godoc.org/gopkg.in/yaml.v2)
