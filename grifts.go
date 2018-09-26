@@ -19,13 +19,15 @@ func Grifts(app *App) {
 	routesGrift(app)
 	middlewareGrift(app)
 	secretGrift()
+	version()
 }
 
 func version() {
 	grift.Namespace("buffalo", func() {
 		grift.Desc("version", "Prints out the version of Buffalo used by your application")
 		grift.Add("version", func(c *grift.Context) error {
-			return cmd.VersionCmd.Run(nil, []string{})
+			cmd.VersionCmd.Run(nil, []string{})
+			return nil
 		})
 	})
 }
