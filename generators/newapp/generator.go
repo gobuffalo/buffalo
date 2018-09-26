@@ -48,7 +48,7 @@ func New(name string) (Generator, error) {
 		CIProvider:    "none",
 		AsWeb:         true,
 		Docker:        "multi",
-		DockerCompose: "full",
+		DockerCompose: "deps",
 		Version:       runtime.Version,
 	}
 	g.Name = inflect.Name(name)
