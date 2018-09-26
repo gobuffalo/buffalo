@@ -22,6 +22,12 @@ func Grifts(app *App) {
 	version()
 }
 
+// version this is here EXPLICITLY to force
+// the cmd and runtime packages to be imported
+// as they're required for building and tools
+// like dep prune those packages because they're
+// not imported. DO NOT REMOVE!!! :)
+// https://github.com/gobuffalo/buffalo/pull/1325
 func version() {
 	grift.Namespace("buffalo", func() {
 		grift.Desc("version", "Prints out the version of Buffalo used by your application")

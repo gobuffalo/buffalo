@@ -11,6 +11,7 @@ func init() {
 	RootCmd.AddCommand(VersionCmd)
 }
 
+// VersionCmd is the version command
 var VersionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of buffalo",
