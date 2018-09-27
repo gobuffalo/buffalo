@@ -41,12 +41,9 @@ var xbuildCmd = &cobra.Command{
 
 		go func() {
 			<-ctx.Done()
-			if ctx.Err() == context.Canceled {
-				logrus.Info("~~~ BUILD CANCELLED ~~~")
-				err := b.Cleanup()
-				if err != nil {
-					logrus.Fatal(err)
-				}
+			err := b.Cleanup()
+			if err != nil {
+				logrus.Fatal(err)
 			}
 		}()
 
