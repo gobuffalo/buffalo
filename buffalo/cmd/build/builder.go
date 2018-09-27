@@ -36,6 +36,7 @@ func New(ctx context.Context, opts Options) *Builder {
 		b.buildAInit,
 		b.buildADatabase,
 		b.buildAssets,
+		b.installBuildDeps,
 		b.buildBin,
 	}
 
