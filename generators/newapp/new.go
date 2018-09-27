@@ -88,7 +88,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 		}
 	}
 
-	g.Add(makr.NewCommand(a.goGet()))
+	for _, c := range a.goGet() {
+		g.Add(makr.NewCommand(c))
+	}
 	g.Add(makr.Func{
 		Runner: func(root string, data makr.Data) error {
 			g.Fmt(root)
@@ -130,6 +132,7 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
+	data["version"] = runtime.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
@@ -201,13 +204,13 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 	}
 }
 
-func (a Generator) goGet() *exec.Cmd {
+func (a Generator) goGet() []*exec.Cmd {
 	cd, _ := os.Getwd()
 	defer os.Chdir(cd)
 	os.Chdir(a.Root)
 
 	if a.WithDep {
-		return exec.Command("dep", "ensure", "-v")
+		return []*exec.Cmd{exec.Command("dep", "ensure", "-v")}
 	}
 
 	if a.WithModules {
@@ -219,18 +222,19 @@ func (a Generator) goGet() *exec.Cmd {
 		appArgs = append(appArgs, "-v")
 	}
 	appArgs = append(appArgs, "./...")
-	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
+	return []*exec.Cmd{exec.Command(envy.Get("GO_BIN", "go"), appArgs...)}
 }
 
-func (a Generator) goGetMod() *exec.Cmd {
+func (a Generator) goGetMod() []*exec.Cmd {
+	var cmds []*exec.Cmd
 	cmd := exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/gobuffalo/buffalo@"+runtime.Version)
-	if runtime.Version == "development" {
-		cmd = exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy")
-	}
 	if a.Verbose {
 		cmd.Args = append(cmd.Args, "-v")
 	}
-	return cmd
+	cmds = append(cmds, cmd)
+	cmds = append(cmds, exec.Command(envy.Get("GO_BIN", "go"), "get", "-u", "github.com/gobuffalo/events"))
+	cmds = append(cmds, exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy"))
+	return cmds
 }
 
 const nTravis = `language: go

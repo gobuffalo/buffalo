@@ -27,4 +27,7 @@ const (
 	EvtWorkerStop = "buffalo:worker:stop"
 	// EvtWorkerStopErr is emitted when an error occurs when stopping workers
 	EvtWorkerStopErr = "buffalo:worker:stop:err"
+
+	// EvtFailureErr is emitted when something can't be processed at all. it is a bad thing
+	EvtFailureErr = "buffalo:failure:err"
 )
