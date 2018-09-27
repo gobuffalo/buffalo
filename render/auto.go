@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"path"
 	"reflect"
 	"regexp"
 	"strings"
@@ -150,7 +151,12 @@ func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) e
 	rt := reflect.TypeOf(fi)
 	zero := reflect.Zero(rt)
 	if fi != zero.Interface() {
-		url := fmt.Sprintf("/%s/%v", name.URL(), f.Interface())
+		url := fmt.Sprint(data["current_path"])
+		id := fmt.Sprint(f.Interface())
+		url = strings.TrimSuffix(url, "/")
+		if !strings.HasSuffix(url, id) {
+			url = path.Join(url, id)
+		}
 
 		code := 302
 		if i, ok := data["status"].(int); ok {
