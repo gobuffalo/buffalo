@@ -126,11 +126,9 @@ func startDevServer(ctx context.Context) error {
 
 	app := meta.New(".")
 	bt := app.BuildTags("development")
-	var tf []string
-	for _, b := range bt {
-		tf = append(tf, "-tags", b)
+	if len(bt) > 0 {
+		c.BuildFlags = append(c.BuildFlags, "-tags", bt.String())
 	}
-	c.BuildFlags = append(c.BuildFlags, tf...)
 	r := refresh.NewWithContext(c, ctx)
 	return r.Start()
 }
