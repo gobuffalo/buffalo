@@ -5,11 +5,11 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924041210-6ea00eeaef92
-	github.com/gobuffalo/buffalo-pop v0.0.0-20180924015429-afa730c68d32
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180928194818-6ca7684eb375
+	github.com/gobuffalo/buffalo-pop v0.0.0-20180927180522-49c868b84258
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/events v1.0.2
-	github.com/gobuffalo/genny v0.0.0-20180926172232-22498a7facf1
+	github.com/gobuffalo/genny v0.0.0-20180928194301-41d045c55d80
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
@@ -39,11 +39,11 @@ require (
 	github.com/sirupsen/logrus v1.1.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.2
-	github.com/spf13/viper v1.2.0
+	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
 	github.com/unrolled/secure v0.0.0-20180918153822-f340ee86eb8b // indirect
-	golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b
+	golang.org/x/crypto v0.0.0-20180927165925-5295e8364332
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20180927044812-b14f328a6211
+	golang.org/x/tools v0.0.0-20180928181343-b3c0be4c978b
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
