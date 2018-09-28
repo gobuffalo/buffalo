@@ -63,7 +63,6 @@ func runDepEnsure(r *Runner) error {
 
 	if len(upkg) > 0 {
 		args := []string{"ensure", "-v", "-update"}
-		args = append(args, upkg...)
 		if err := depRunner(args); err != nil {
 			return errors.WithStack(err)
 		}
