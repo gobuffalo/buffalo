@@ -22,6 +22,6 @@ func init() {
 	decorate("fix", RootCmd)
 	decorate("update", RootCmd)
 
-	fixCmd.Flags().BoolVarP(&fix.YesToAll, "y", "", false, "update all without asking for confirmation")
+	fixCmd.Flags().BoolVarP(&fix.YesToAll, "y", "y", false, "update all without asking for confirmation")
 	RootCmd.AddCommand(fixCmd)
 }
