@@ -1,55 +1,35 @@
-# Require at least 3.4 version for support "target" https://docs.docker.com/compose/compose-file/#target
-version: '3.4'
+version: '3'
 services:
   app:
-    build:
-      context: .
-      target: builder
+    build: .
     depends_on:
       - db
     ports:
       - "3000:3000"
     volumes:
       - .:/go/src/{{.opts.App.PackagePkg}}
-    environment:
-{{- if eq .opts.DBType "postgres" }}
-      - TEST_DATABASE_URL=postgres://app:password@db:5432/app_test?sslmode=disable
-      - POSTGRES_HOST=db
-      - POSTGRES_USER=app
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=app_development
-{{- end }}
-{{- if eq .opts.DBType "mysql" }}
-      - TEST_DATABASE_URL=mysql://root:password@(db:3306)/app_test?parseTime=true&multiStatements=true&readTimeout=1s
-      - MYSQL_HOST=db
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=password
-      - MYSQL_DB=app_development
-{{- end }}
-{{- if eq .opts.DBType "cockroach" }}
-      - COCKROACH_HOST=db
-      - COCKROACH_PORT=26257
-{{- end }}
   db:
 {{- if eq .opts.DBType "mysql" }}
-    image: mysql:5.7
-    environment:
-    - MYSQL_ROOT_PASSWORD=password
-    - MYSQL_DATABASE=app_development
+  image: mysql:5.7
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
 {{- end }}
 {{- if eq .opts.DBType "postgres" }}
-    image: postgres:9.6-alpine
-    environment:
-      - POSTGRES_USER=app
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=app_development
+  image: postgres:9.6-alpine
+  ports:
+    - "5432:5432"
+  environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
 {{- end }}
 {{- if eq .opts.DBType "cockroach" }}
-    image: cockroachdb/cockroach:v2.0.4
-    ports:
-      - "26257:26257"
-      - "8080:8080"
-    volumes:
-      - "./cockroach-data/roach1:/cockroach/cockroach-data"
-    command: start --insecure
+  image: cockroachdb/cockroach:v2.0.5
+  ports:
+    - "26257:26257"
+    - "8080:8080"
+  volumes:
+    - "./cockroach-data/roach1:/cockroach/cockroach-data"
+  command: start --insecure
 {{- end }}
