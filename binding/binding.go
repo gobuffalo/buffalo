@@ -10,6 +10,7 @@ import (
 
 	"github.com/gobuffalo/pop/nulls"
 	"github.com/gobuffalo/x/httpx"
+	"github.com/markbates/oncer"
 	"github.com/monoculum/formam"
 	"github.com/pkg/errors"
 )
@@ -54,8 +55,14 @@ func RegisterTimeFormats(layouts ...string) {
 	timeFormats = append(layouts, timeFormats...)
 }
 
-// RegisterCustomDecorder allows to define custom type decoders.
+// RegisterCustomDecorder is deprecated. Use RegisterCustomDecoder instead
 func RegisterCustomDecorder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
+	oncer.Deprecate(0, "binding.RegisterCustomDecorder", "Use binding.RegisterCustomDecoder instead")
+	RegisterCustomDecoder(fn, types, fields)
+}
+
+// RegisterCustomDecoder allows to define custom type decoders.
+func RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
 	rawFunc := (func([]string) (interface{}, error))(fn)
 	decoder.RegisterCustomType(rawFunc, types, fields)
 }
