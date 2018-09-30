@@ -20,7 +20,7 @@ type App struct {
 	ErrorHandlers   ErrorHandlers    `json:"-"`
 	ErrorMiddleware MiddlewareFunc   `json:"-"`
 	router          *mux.Router
-	moot            *sync.Mutex
+	moot            *sync.RWMutex
 	routes          RouteList
 	root            *App
 	children        []*App
@@ -40,7 +40,7 @@ func New(opts Options) *App {
 			500: defaultErrorHandler,
 		},
 		router:   mux.NewRouter(),
-		moot:     &sync.Mutex{},
+		moot:     &sync.RWMutex{},
 		routes:   RouteList{},
 		children: []*App{},
 	}
