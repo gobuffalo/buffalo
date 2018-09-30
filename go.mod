@@ -9,11 +9,11 @@ require (
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180927180522-49c868b84258
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/events v1.0.2
-	github.com/gobuffalo/genny v0.0.0-20180928194301-41d045c55d80
+	github.com/gobuffalo/genny v0.0.0-20180930211938-b47a9a41d9d7
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/mw-basicauth v0.0.0-20180802152105-15d67c4ac152
+	github.com/gobuffalo/mw-basicauth v0.0.0-20180928200421-abc8ee16c5a2
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
 	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
@@ -24,15 +24,15 @@ require (
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.3+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
-	github.com/gobuffalo/x v0.0.0-20180924043718-b9bd64714615
+	github.com/gobuffalo/x v0.0.0-20180930144534-b01151fcafd9
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.2
-	github.com/markbates/deplist v1.0.3
+	github.com/markbates/deplist v1.0.4
 	github.com/markbates/grift v1.0.4
 	github.com/markbates/inflect v1.0.0
 	github.com/markbates/oncer v0.0.0-20180924034138-723ad0170a46
-	github.com/markbates/refresh v1.4.8
+	github.com/markbates/refresh v1.4.9
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
