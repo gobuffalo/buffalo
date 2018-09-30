@@ -1,7 +1,9 @@
 package mail
 
 import (
+	"context"
 	"io"
+	"sync"
 
 	"bytes"
 
@@ -10,29 +12,30 @@ import (
 
 //Message represents an Email message
 type Message struct {
-	From    string
-	To      []string
-	CC      []string
-	Bcc     []string
-	Subject string
-	Headers map[string]string
-
+	Context     context.Context
+	From        string
+	To          []string
+	CC          []string
+	Bcc         []string
+	Subject     string
+	Headers     map[string]string
+	Data        render.Data
 	Bodies      []Body
 	Attachments []Attachment
+	moot        *sync.RWMutex
 }
 
-// Body represents one of the bodies in the Message could be main or alternative
-type Body struct {
-	Content     string
-	ContentType string
-}
-
-// Attachment are files added into a email message
-type Attachment struct {
-	Name        string
-	Reader      io.Reader
-	ContentType string
-	Embedded    bool
+func (m *Message) merge(data render.Data) render.Data {
+	d := render.Data{}
+	m.moot.Lock()
+	for k, v := range m.Data {
+		d[k] = v
+	}
+	m.moot.Unlock()
+	for k, v := range data {
+		d[k] = v
+	}
+	return d
 }
 
 // AddBody the message by receiving a renderer and rendering data, first message will be
@@ -40,7 +43,7 @@ type Attachment struct {
 // email message
 func (m *Message) AddBody(r render.Renderer, data render.Data) error {
 	buf := bytes.NewBuffer([]byte{})
-	err := r.Render(buf, data)
+	err := r.Render(buf, m.merge(data))
 
 	if err != nil {
 		return err
@@ -94,9 +97,4 @@ func (m *Message) AddEmbedded(name string, r io.Reader) error {
 // SetHeader sets the heder field and value for the message
 func (m *Message) SetHeader(field, value string) {
 	m.Headers[field] = value
-}
-
-//NewMessage Builds a new message.
-func NewMessage() Message {
-	return Message{Headers: map[string]string{}}
 }
