@@ -1,11 +1,21 @@
 package binding
 
 import (
+	"net/http"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 )
+
+func Test_Register(t *testing.T) {
+	r := require.New(t)
+	l := len(binders)
+	Register("foo/bar", func(*http.Request, interface{}) error {
+		return nil
+	})
+	r.Len(binders, l+1)
+}
 
 func TestParseTimeErrorParsing(t *testing.T) {
 	r := require.New(t)
