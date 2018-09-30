@@ -5,13 +5,18 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
 	"github.com/pkg/errors"
 )
 
 func (b *Builder) buildBin() error {
-	buildArgs := []string{"build", "-i"}
+	buildArgs := []string{"build"}
 	if b.Debug {
 		buildArgs = append(buildArgs, "-v")
+	}
+
+	if !gomods.On() {
+		buildArgs = append(buildArgs, "-i")
 	}
 
 	tf := b.App.BuildTags(b.Environment, b.Tags...)
