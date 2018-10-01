@@ -103,7 +103,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	}
 
 	switch data["method"] {
-	case "PUT", "POST":
+	case "PUT", "POST", "DELETE":
 		if err := ir.redirect(pname, w, data); err != nil {
 			if er, ok := err.(ErrRedirect); ok && er.Status >= 300 && er.Status < 400 {
 				return err
@@ -114,30 +114,31 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
 		return nil
-	case "DELETE":
-		return ErrRedirect{
-			Status: 302,
-			URL:    "/" + pname.URL(),
-		}
 	}
-	if cp, ok := data["current_path"].(string); ok {
-		if strings.HasSuffix(cp, "/edit/") {
-			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
-		}
-		if strings.HasSuffix(cp, "/new/") {
-			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
-		}
+	cp, ok := data["current_path"].(string)
 
-		x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		if x.MatchString(cp) {
-			return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
-		}
+	defCase := func() error {
+		return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+	}
+	if !ok {
+		return defCase()
 	}
 
-	return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+	if strings.HasSuffix(cp, "/edit/") {
+		return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
+	}
+	if strings.HasSuffix(cp, "/new/") {
+		return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+	}
+
+	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if x.MatchString(cp) {
+		return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
+	}
+	return defCase()
 }
 
 func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
@@ -151,11 +152,20 @@ func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) e
 	rt := reflect.TypeOf(fi)
 	zero := reflect.Zero(rt)
 	if fi != zero.Interface() {
+		m, ok := data["method"].(string)
+		if !ok {
+			m = "GET"
+		}
 		url := fmt.Sprint(data["current_path"])
 		id := fmt.Sprint(f.Interface())
 		url = strings.TrimSuffix(url, "/")
-		if !strings.HasSuffix(url, id) {
-			url = path.Join(url, id)
+		switch m {
+		case "DELETE":
+			url = strings.TrimSuffix(url, id)
+		default:
+			if !strings.HasSuffix(url, id) {
+				url = path.Join(url, id)
+			}
 		}
 
 		code := 302

@@ -241,6 +241,24 @@ func Test_Auto_HTML_Create_Nested_Redirect(t *testing.T) {
 	r.Equal(302, res.Code)
 }
 
+func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
+	r := require.New(t)
+
+	app := buffalo.New(buffalo.Options{})
+	admin := app.Group("/admin")
+	admin.DELETE("/cars", func(c buffalo.Context) error {
+		return c.Render(200, render.Auto(c, Car{
+			ID:   1,
+			Name: "Honda",
+		}))
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/admin/cars").Delete()
+	r.Equal("/admin/cars", res.Location())
+	r.Equal(302, res.Code)
+}
+
 func Test_Auto_HTML_Edit(t *testing.T) {
 	r := require.New(t)
 
@@ -327,7 +345,7 @@ func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
 
 	w := httptest.New(app)
 	res := w.HTML("/cars/1").Delete()
-	r.Equal("/cars", res.Location())
+	r.Equal("/cars/", res.Location())
 	r.Equal(302, res.Code)
 }
 
