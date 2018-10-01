@@ -13,7 +13,7 @@ import (
 var smtp mail.Sender
 var r *render.Engine
 
-func init() {
+func New(a *buffalo.App) {
 
 	// Pulling config from the env.
 	port := envy.Get("SMTP_PORT", "1025")
@@ -28,9 +28,12 @@ func init() {
 		log.Fatal(err)
 	}
 
+	helpers := a.GetRouteHelpers()
+	helpers["Host"] = a.Host
+
 	r = render.New(render.Options{
     HTMLLayout: "layout.html",
 		TemplatesBox: packr.NewBox("../templates/mail"),
-    Helpers: render.Helpers{},
+    Helpers: helpers,
 	})
 }

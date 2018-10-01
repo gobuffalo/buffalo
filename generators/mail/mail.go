@@ -33,6 +33,13 @@ func (d Generator) Run(root string, data makr.Data) error {
 	fn := d.Name.File()
 	g.Add(makr.NewFile(filepath.Join("mailers", fn+".go"), mailerTmpl))
 	g.Add(makr.NewFile(filepath.Join("templates", "mail", fn+".html"), mailTmpl))
+	g.Add(&makr.Func{
+		Should: func(data makr.Data) bool { return true },
+		Runner: func(root string, data makr.Data) error {
+			initMailer := "defer mailers.New(app)"
+			return generators.AddInsideAppBlock(initMailer)
+		},
+	})
 	return g.Run(root, data)
 }
 
