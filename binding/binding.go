@@ -28,7 +28,7 @@ var binders = map[string]Binder{}
 var decoder *formam.Decoder
 var lock = &sync.Mutex{}
 var timeFormats = []string{
-	"2006-01-02T15:04:05Z07:00",
+	time.RFC3339,
 	"01/02/2006",
 	"2006-01-02",
 	"2006-01-02T15:04",
@@ -40,7 +40,6 @@ var timeFormats = []string{
 	time.RFC850,
 	time.RFC1123,
 	time.RFC1123Z,
-	time.RFC3339,
 	time.RFC3339Nano,
 	time.Kitchen,
 	time.Stamp,
