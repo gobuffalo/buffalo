@@ -5,21 +5,22 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v0.0.0-20180928194818-6ca7684eb375
+	github.com/gobuffalo/buffalo-plugins v0.0.0-20180924041210-6ea00eeaef92
 	github.com/gobuffalo/buffalo-pop v0.0.0-20180927180522-49c868b84258
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/events v1.0.2
+	github.com/gobuffalo/fizz v1.0.12 // indirect
 	github.com/gobuffalo/genny v0.0.0-20180928214617-9033ae798a5a
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/mw-basicauth v0.0.0-20180928200421-abc8ee16c5a2
+	github.com/gobuffalo/mw-basicauth v0.0.0-20181001113800-19e5020fa3e5
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
 	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20180917205648-9e0d9b7760c0
-	github.com/gobuffalo/mw-tokenauth v0.0.0-20180802152212-d09751da96e0
+	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packr v1.13.7
 	github.com/gobuffalo/plush v3.7.16+incompatible
 	github.com/gobuffalo/pop v4.7.3+incompatible
@@ -39,11 +40,11 @@ require (
 	github.com/sirupsen/logrus v1.1.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.2
-	github.com/spf13/viper v1.2.1
+	github.com/spf13/viper v1.2.0
 	github.com/stretchr/testify v1.2.2
 	github.com/unrolled/secure v0.0.0-20180918153822-f340ee86eb8b // indirect
 	golang.org/x/crypto v0.0.0-20180927165925-5295e8364332
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20180928181343-b3c0be4c978b
+	golang.org/x/tools v0.0.0-20180926130641-c756801b0141
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

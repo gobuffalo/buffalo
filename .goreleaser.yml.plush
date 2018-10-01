@@ -8,20 +8,20 @@ builds:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
   binary: buffalo-no-sqlite
-  # hooks:
-  #   pre: packr
-  #   post: packr clean
 
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 changelog:
   sort: asc
   filters:
     exclude:
     - '^docs:'
     - '^test:'
+<%= if (brew) { %>
 brew:
   name: buffalo
   github:
@@ -34,3 +34,4 @@ brew:
     mv "#{bin}/buffalo-no-sqlite", "#{bin}/buffalo"
   test: |
     system "#{bin}/buffalo", "version"
+<% } %>
