@@ -81,3 +81,31 @@ func Test_RouteList_Lookup(t *testing.T) {
 	r.Nil(lRoute)
 
 }
+
+func Test_App_RouteHelpers(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+	r.Nil(a.root)
+
+	a.GET("/foo", voidHandler)
+	a.GET("/test/{id}", voidHandler)
+
+	rh := a.RouteHelpers()
+
+	r.Len(rh, 2)
+
+	f, ok := rh["fooPath"]
+	r.True(ok)
+	x, err := f(map[string]interface{}{})
+	r.NoError(err)
+	r.Equal("/foo/", string(x))
+
+	f, ok = rh["testPath"]
+	r.True(ok)
+	x, err = f(map[string]interface{}{
+		"id": 1,
+	})
+	r.NoError(err)
+	r.Equal("/test/1/", string(x))
+}

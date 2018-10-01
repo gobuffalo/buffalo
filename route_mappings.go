@@ -199,6 +199,16 @@ func (a *App) Group(groupPath string) *App {
 	return g
 }
 
+// RouteHelpers returns a map of BuildPathHelper() for each route available in the app.
+func (a *App) RouteHelpers() map[string]RouteHelperFunc {
+	rh := map[string]RouteHelperFunc{}
+	for _, route := range a.Routes() {
+		cRoute := route
+		rh[cRoute.PathName] = cRoute.BuildPathHelper()
+	}
+	return rh
+}
+
 func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
