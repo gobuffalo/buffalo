@@ -12,7 +12,7 @@ require (
 	github.com/gobuffalo/envy v1.6.4
 	github.com/gobuffalo/events v1.0.2
 	github.com/gobuffalo/fizz v1.0.12 // indirect
-	github.com/gobuffalo/genny v0.0.0-20181001150541-be0ff43a97ea
+	github.com/gobuffalo/genny v0.0.0-20181001150720-e845e88e8b67
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.1
 	github.com/gobuffalo/makr v1.1.5
