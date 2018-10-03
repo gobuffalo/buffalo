@@ -638,6 +638,7 @@ func Test_buildRouteName(t *testing.T) {
 	}
 
 	a = New(Options{Prefix: "/test"})
+
 	cases = map[string]string{
 		"/test":       "test",
 		"/test/users": "testUsers",
