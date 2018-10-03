@@ -82,7 +82,6 @@ func startWebpack(ctx context.Context) error {
 			return errors.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
 		}
 		cmd := exec.CommandContext(ctx, tool, "install")
-		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
@@ -91,7 +90,6 @@ func startWebpack(ctx context.Context) error {
 	}
 
 	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
-	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
