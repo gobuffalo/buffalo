@@ -1,4 +1,4 @@
-FROM gobuffalo/buffalo:latest
+FROM gobuffalo/buffalo:development
 
 ARG CODECOV_TOKEN
 ARG CI
@@ -13,8 +13,6 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
-RUN buffalo version
-
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
@@ -28,6 +26,8 @@ RUN make ci-deps
 RUN packr clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 RUN make install
+
+RUN buffalo version
 
 RUN go test -tags "sqlite integration_test" -race  ./...
 RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
