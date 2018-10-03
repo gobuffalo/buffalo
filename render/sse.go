@@ -48,7 +48,7 @@ func (es *EventSource) Flush() {
 // CloseNotify return true across the channel when the connection
 // in the browser has been severed.
 func (es *EventSource) CloseNotify() <-chan bool {
-	return es.w.(http.CloseNotifier).CloseNotify()
+	return es.w.(closeNotifier).CloseNotify()
 }
 
 // NewEventSource returns a new EventSource instance while ensuring

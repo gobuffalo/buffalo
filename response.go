@@ -45,9 +45,13 @@ func (w *Response) Flush() {
 	}
 }
 
+type closeNotifier interface {
+	CloseNotify() <-chan bool
+}
+
 // CloseNotify implements the http.CloseNotifier interface
 func (w *Response) CloseNotify() <-chan bool {
-	if cn, ok := w.ResponseWriter.(http.CloseNotifier); ok {
+	if cn, ok := w.ResponseWriter.(closeNotifier); ok {
 		return cn.CloseNotify()
 	}
 	return nil

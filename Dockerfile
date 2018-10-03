@@ -1,4 +1,4 @@
-FROM gobuffalo/buffalo:development
+FROM gobuffalo/buffalo:latest
 
 ARG CODECOV_TOKEN
 ARG CI
