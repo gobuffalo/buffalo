@@ -1,10 +1,12 @@
 package cmd
 
 import (
-	"errors"
+	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/gobuffalo/events"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -35,6 +37,10 @@ var RootCmd = &cobra.Command{
 			return errors.New("you need to be inside your buffalo project path to run this command")
 		}
 
+		if err := startDockerCompose(); err != nil {
+			return errors.WithStack(err)
+		}
+
 		return nil
 	},
 }
@@ -58,4 +64,28 @@ func insideBuffaloProject() bool {
 	}
 
 	return true
+}
+
+func startDockerCompose() error {
+	if _, err := os.Stat("docker-compose.yml"); err != nil {
+		return nil
+	}
+
+	if _, err := exec.LookPath("docker-compose"); err != nil {
+		if err != nil {
+			return errors.New("This application require docker-compose and we could not find it installed on your system")
+		}
+	}
+
+	fmt.Println("Start docker-compose")
+
+	cmd := exec.Command("docker-compose", "up", "-d")
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	if err := cmd.Run(); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }

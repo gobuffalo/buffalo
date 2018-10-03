@@ -31,18 +31,19 @@ var configError error
 func getAppWithConfig() newapp.Generator {
 	pwd, _ := os.Getwd()
 	app := newapp.Generator{
-		App:         meta.New(pwd),
-		AsAPI:       viper.GetBool("api"),
-		Force:       viper.GetBool("force"),
-		Verbose:     viper.GetBool("verbose"),
-		SkipPop:     viper.GetBool("skip-pop"),
-		SkipWebpack: viper.GetBool("skip-webpack"),
-		SkipYarn:    viper.GetBool("skip-yarn"),
-		DBType:      viper.GetString("db-type"),
-		CIProvider:  viper.GetString("ci-provider"),
-		AsWeb:       true,
-		Docker:      viper.GetString("docker"),
-		Bootstrap:   viper.GetInt("bootstrap"),
+		App:           meta.New(pwd),
+		AsAPI:         viper.GetBool("api"),
+		Force:         viper.GetBool("force"),
+		Verbose:       viper.GetBool("verbose"),
+		SkipPop:       viper.GetBool("skip-pop"),
+		SkipWebpack:   viper.GetBool("skip-webpack"),
+		SkipYarn:      viper.GetBool("skip-yarn"),
+		DBType:        viper.GetString("db-type"),
+		CIProvider:    viper.GetString("ci-provider"),
+		AsWeb:         true,
+		Docker:        viper.GetString("docker"),
+		DockerCompose: viper.GetString("docker-compose"),
+		Bootstrap:     viper.GetInt("bootstrap"),
 	}
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
@@ -160,6 +161,7 @@ func init() {
 	newCmd.Flags().Bool("skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
 	newCmd.Flags().String("db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
 	newCmd.Flags().String("docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
+	newCmd.Flags().String("docker-compose", "deps", "specify the type of Docker file to generate [none, deps, full]")
 	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().Int("bootstrap", 4, "specify version for Bootstrap [3, 4]")

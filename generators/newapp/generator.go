@@ -25,29 +25,31 @@ var ErrNotInGoPath = errors.New("currently not in a $GOPATH")
 // Generator is the representation of a new Buffalo application
 type Generator struct {
 	meta.App
-	Version     string `json:"version"`
-	Force       bool   `json:"force"`
-	Verbose     bool   `json:"verbose"`
-	DBType      string `json:"db_type"`
-	CIProvider  string `json:"ci_provider"`
-	AsWeb       bool   `json:"as_web"`
-	AsAPI       bool   `json:"as_api"`
-	Docker      string `json:"docker"`
-	SkipPop     bool   `json:"skip_pop"`
-	SkipWebpack bool   `json:"skip_webpack"`
-	SkipYarn    bool   `json:"skip_yarn"`
-	Bootstrap   int    `json:"bootstrap"`
+	Version       string `json:"version"`
+	Force         bool   `json:"force"`
+	Verbose       bool   `json:"verbose"`
+	DBType        string `json:"db_type"`
+	CIProvider    string `json:"ci_provider"`
+	AsWeb         bool   `json:"as_web"`
+	AsAPI         bool   `json:"as_api"`
+	Docker        string `json:"docker"`
+	DockerCompose string `json:"docker-compose"`
+	SkipPop       bool   `json:"skip_pop"`
+	SkipWebpack   bool   `json:"skip_webpack"`
+	SkipYarn      bool   `json:"skip_yarn"`
+	Bootstrap     int    `json:"bootstrap"`
 }
 
 // New app generator
 func New(name string) (Generator, error) {
 	g := Generator{
-		App:        meta.New("."),
-		DBType:     "postgres",
-		CIProvider: "none",
-		AsWeb:      true,
-		Docker:     "multi",
-		Version:    runtime.Version,
+		App:           meta.New("."),
+		DBType:        "postgres",
+		CIProvider:    "none",
+		AsWeb:         true,
+		Docker:        "multi",
+		DockerCompose: "deps",
+		Version:       runtime.Version,
 	}
 	g.Name = inflect.Name(name)
 
