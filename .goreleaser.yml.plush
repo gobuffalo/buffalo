@@ -23,6 +23,6 @@ changelog:
 <%= if (brew) { %>
 brew:
   github:
-    owner: markbates
+    owner: gobuffalo
     name: homebrew-tap
 <% } %>
