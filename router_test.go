@@ -617,17 +617,17 @@ func Test_ResourceOnResource(t *testing.T) {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
-		"/":                                          "root",
-		"/users":                                     "users",
-		"/users/new":                                 "newUsers",
-		"/users/{user_id}":                           "user",
-		"/users/{user_id}/children":                  "userChildren",
-		"/users/{user_id}/children/{child_id}":       "userChild",
-		"/users/{user_id}/children/new":              "newUserChildren",
+		"/":                                    "root",
+		"/users":                               "users",
+		"/users/new":                           "newUsers",
+		"/users/{user_id}":                     "user",
+		"/users/{user_id}/children":            "userChildren",
+		"/users/{user_id}/children/{child_id}": "userChild",
+		"/users/{user_id}/children/new":        "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                              "adminPlanes",
-		"/admin/planes/{plane_id}":                   "adminPlane",
-		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
+		"/admin/planes":                 "adminPlanes",
+		"/admin/planes/{plane_id}":      "adminPlane",
+		"/admin/planes/{plane_id}/edit": "editAdminPlane",
 	}
 
 	a := New(Options{})
