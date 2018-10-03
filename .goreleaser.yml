@@ -9,7 +9,7 @@ builds:
     - windows
   env:
     - CGO_ENABLED=0
-  # main: ./buffalo/main.go
+  main: ./buffalo/main.go
 
 checksum:
   name_template: 'checksums.txt'
