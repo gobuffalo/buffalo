@@ -24,3 +24,8 @@ changelog:
       - '^docs:'
       - '^test:'
 
+brew:
+  github:
+    owner: markbates
+    name: homebrew-tap
+
