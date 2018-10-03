@@ -26,6 +26,6 @@ changelog:
 
 brew:
   github:
-    owner: markbates
+    owner: gobuffalo
     name: homebrew-tap
 
