@@ -140,13 +140,16 @@ func onlyRelevantFiles(p string, fi os.FileInfo, err error, fn func(p string) er
 	}
 
 	if fi.IsDir() {
-		return nil
-	}
-
-	for _, n := range []string{"vendor", "node_modules", ".git"} {
-		if strings.HasPrefix(p, n+string(filepath.Separator)) {
-			return nil
+		base := filepath.Base(p)
+		if strings.HasPrefix(base, "_") {
+			return filepath.SkipDir
 		}
+		for _, n := range []string{"vendor", "node_modules", ".git"} {
+			if base == n {
+				return filepath.SkipDir
+			}
+		}
+		return nil
 	}
 
 	ext := filepath.Ext(p)
