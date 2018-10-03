@@ -7,6 +7,7 @@ pkg
 *.pid
 coverage
 coverage.data
+build/*
 *.pbxuser
 *.mode1v3
 .svn
@@ -25,9 +26,4 @@ generated/
 .vendor/
 bin/*
 gin-bin
-*.sqlite*
 .idea/
-.vscode
-vendor
-Gopkg.lock
-.grifter/
