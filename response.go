@@ -49,7 +49,7 @@ type closeNotifier interface {
 	CloseNotify() <-chan bool
 }
 
-// CloseNotify implements the closeNotifier interface
+// CloseNotify implements the http.CloseNotifier interface
 func (w *Response) CloseNotify() <-chan bool {
 	if cn, ok := w.ResponseWriter.(closeNotifier); ok {
 		return cn.CloseNotify()
