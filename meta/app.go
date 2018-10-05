@@ -134,7 +134,7 @@ func resolvePackageName(name inflect.Name, pwd string, modsOn bool) string {
 			result = name.String()
 		}
 
-		//Extract from go.mod
+		//Extract package from go.mod
 		if f, err := os.Open(filepath.Join(pwd, "go.mod")); err == nil {
 			if s, err := ioutil.ReadAll(f); err == nil {
 				re := regexp.MustCompile("module (.*)")
