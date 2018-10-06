@@ -20,15 +20,9 @@ RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
-<<<<<<< HEAD
 
 RUN make ci-deps
 
-=======
-
-RUN make ci-deps
-
->>>>>>> master
 RUN packr clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 RUN make install
