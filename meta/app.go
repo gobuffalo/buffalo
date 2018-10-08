@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -71,16 +72,7 @@ func New(root string) App {
 
 	// Gather meta data
 	name := inflect.Name(filepath.Base(root))
-
-	pp := envy.CurrentPackage()
-	if filepath.Base(pp) != string(name) {
-		pp = path.Join(pp, string(name))
-	}
-	if modsOn {
-		if !strings.HasPrefix(pwd, filepath.Join(envy.GoPath(), "src")) {
-			pp = name.String()
-		}
-	}
+	pp := resolvePackageName(name, pwd, modsOn)
 
 	app := App{
 		Pwd:         pwd,
@@ -128,6 +120,34 @@ func New(root string) App {
 	}
 
 	return app
+}
+
+func resolvePackageName(name inflect.Name, pwd string, modsOn bool) string {
+	result := envy.CurrentPackage()
+
+	if filepath.Base(result) != string(name) {
+		result = path.Join(result, string(name))
+	}
+
+	if modsOn {
+		if !strings.HasPrefix(pwd, filepath.Join(envy.GoPath(), "src")) {
+			result = name.String()
+		}
+
+		//Extract package from go.mod
+		if f, err := os.Open(filepath.Join(pwd, "go.mod")); err == nil {
+			if s, err := ioutil.ReadAll(f); err == nil {
+				re := regexp.MustCompile("module (.*)")
+				res := re.FindAllStringSubmatch(string(s), 1)
+
+				if len(res) == 1 && len(res[0]) == 2 {
+					result = res[0][1]
+				}
+			}
+		}
+	}
+
+	return result
 }
 
 // ResolveSymlinks takes a path and gets the pointed path
