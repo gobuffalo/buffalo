@@ -129,7 +129,6 @@ func resolvePackageName(name inflect.Name, pwd string, modsOn bool) string {
 		result = path.Join(result, string(name))
 	}
 
-	fmt.Println("ModsOn", modsOn)
 	if modsOn {
 		if !strings.HasPrefix(pwd, filepath.Join(envy.GoPath(), "src")) {
 			result = name.String()
