@@ -14,8 +14,23 @@ func Test_ModulesPackageName(t *testing.T) {
 	modsOn = true
 
 	r.NoError(os.Chdir(tmp))
-	r.NoError(ioutil.WriteFile("go.mod", []byte("module github.com/wawandco/zekito"), 0644))
 
-	a := New(tmp)
-	r.Equal("github.com/wawandco/zekito", a.PackagePkg)
+	tcases := []struct {
+		Content     string
+		PackageName string
+	}{
+		{"module github.com/wawandco/zekito", "github.com/wawandco/zekito"},
+		{"module zekito", "zekito"},
+		{"module gopkg.in/some/friday.v2", "gopkg.in/some/friday.v2"},
+	}
+
+	for _, tcase := range tcases {
+		t.Run(tcase.Content, func(st *testing.T) {
+			r := require.New(st)
+			r.NoError(ioutil.WriteFile("go.mod", []byte(tcase.Content), 0644))
+
+			a := New(tmp)
+			r.Equal(tcase.PackageName, a.PackagePkg)
+		})
+	}
 }
