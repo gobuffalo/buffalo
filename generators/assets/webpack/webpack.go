@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/generators/assets"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr"
@@ -15,11 +14,6 @@ import (
 
 // TemplateBox contains all templates needed for the webpack generator
 var TemplateBox = packr.NewBox("../webpack/templates")
-
-var logo = &makr.RemoteFile{
-	File:       makr.NewFile("assets/images/logo.svg", ""),
-	RemotePath: assets.LogoURL,
-}
 
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
@@ -45,8 +39,6 @@ func (w Generator) Run(root string, data makr.Data) error {
 			return errors.WithStack(err)
 		}
 	}
-
-	g.Add(logo)
 
 	files, err := generators.FindByBox(TemplateBox)
 	if err != nil {

@@ -1,6 +1,6 @@
-# github.com/gobuffalo/buffalo Stands on the Shoulders of Giants
+# `github.com/gobuffalo/buffalo` Stands on the Shoulders of Giants
 
-github.com/gobuffalo/buffalo does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them all together in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
+`github.com/gobuffalo/buffalo` does not try to reinvent the wheel! Instead, it uses the already great wheels developed by the Go community and puts them all together in the best way possible. Without these giants this project would not be possible. Please make sure to check them out and thank them for all of their hard work.
 
 Thank you to the following **GIANTS**:
 
@@ -36,6 +36,10 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/fizz](https://godoc.org/github.com/gobuffalo/fizz)
 
 * [github.com/gobuffalo/fizz/translators](https://godoc.org/github.com/gobuffalo/fizz/translators)
+
+* [github.com/gobuffalo/flect](https://godoc.org/github.com/gobuffalo/flect)
+
+* [github.com/gobuffalo/flect/name](https://godoc.org/github.com/gobuffalo/flect/name)
 
 * [github.com/gobuffalo/genny](https://godoc.org/github.com/gobuffalo/genny)
 
@@ -98,6 +102,18 @@ Thank you to the following **GIANTS**:
 * [github.com/gorilla/securecookie](https://godoc.org/github.com/gorilla/securecookie)
 
 * [github.com/gorilla/sessions](https://godoc.org/github.com/gorilla/sessions)
+
+* [github.com/jackc/pgx](https://godoc.org/github.com/jackc/pgx)
+
+* [github.com/jackc/pgx/chunkreader](https://godoc.org/github.com/jackc/pgx/chunkreader)
+
+* [github.com/jackc/pgx/internal/sanitize](https://godoc.org/github.com/jackc/pgx/internal/sanitize)
+
+* [github.com/jackc/pgx/pgio](https://godoc.org/github.com/jackc/pgx/pgio)
+
+* [github.com/jackc/pgx/pgproto3](https://godoc.org/github.com/jackc/pgx/pgproto3)
+
+* [github.com/jackc/pgx/pgtype](https://godoc.org/github.com/jackc/pgx/pgtype)
 
 * [github.com/jmoiron/sqlx](https://godoc.org/github.com/jmoiron/sqlx)
 
