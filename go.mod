@@ -2,12 +2,13 @@ module github.com/gobuffalo/buffalo
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/dustin/go-humanize v0.0.0-20180713052910-9f541cc9db5d
+	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gobuffalo/buffalo-plugins v1.0.4
 	github.com/gobuffalo/buffalo-pop v1.0.5
-	github.com/gobuffalo/envy v1.6.4
-	github.com/gobuffalo/events v1.0.3
+	github.com/gobuffalo/envy v1.6.5
+	github.com/gobuffalo/events v1.0.6
 	github.com/gobuffalo/genny v0.0.0-20181007153042-b8de7d566757
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
@@ -41,8 +42,10 @@ require (
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
 	github.com/unrolled/secure v0.0.0-20181005190816-ff9db2ff917f // indirect
-	golang.org/x/crypto v0.0.0-20181001203147-e3636079e1a4
+	golang.org/x/crypto v0.0.0-20181009213950-7c1a557ab941
+	golang.org/x/net v0.0.0-20181011144130-49bb7cea24b1 // indirect
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181008205924-a2b3f7f249e9
+	golang.org/x/sys v0.0.0-20181011152604-fa43e7bc11ba // indirect
+	golang.org/x/tools v0.0.0-20181011180020-6979e85b73a6
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
