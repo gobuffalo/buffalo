@@ -272,92 +272,92 @@ script: buffalo test
 
 const nGitlabCi = `before_script:
 {{- if eq .opts.DBType "postgres" }}
-	- apt-get update && apt-get install -y postgresql-client
+  - apt-get update && apt-get install -y postgresql-client
 {{- else if eq .opts.DBType "mysql" }}
-	- apt-get update && apt-get install -y mysql-client
+  - apt-get update && apt-get install -y mysql-client
 {{- end }}
-	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-	- cd /go/src/{{.opts.PackagePkg}}
-	- mkdir -p public/assets
-	- go get -u github.com/gobuffalo/buffalo/buffalo
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-	- go get github.com/golang/dep/cmd/dep
-	- dep ensure
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
 {{- else }}
-	- go get -t -v ./...
+  - go get -t -v ./...
 {{- end }}
-	- export PATH="$PATH:$GOPATH/bin"
+  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
-	- test
+  - test
 
 .test-vars: &test-vars
-	variables:
-		GO_ENV: "test"
+  variables:
+    GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
-		POSTGRES_DB: "{{.opts.Name.File}}_test"
+    POSTGRES_DB: "{{.opts.Name.File}}_test"
 {{- else if eq .opts.DBType "mysql" }}
-		MYSQL_DATABASE: "{{.opts.Name.File}}_test"
-		MYSQL_ROOT_PASSWORD: "root"
+    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
+    MYSQL_ROOT_PASSWORD: "root"
 {{- end }}
-		TEST_DATABASE_URL: "{{.testDbUrl}}"
+    TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-	image: golang:latest
+  image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-	image: golang:1.8
+  image: golang:1.8
 
 test:
-	# Change to "<<: *use-golang-latest" to use the latest Go version
-	<<: *use-golang-1-8
-	<<: *test-vars
-	stage: test
-	services:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
+  <<: *use-golang-1-8
+  <<: *test-vars
+  stage: test
+  services:
 {{- if eq .opts.DBType "mysql" }}
-		- mysql:5
+    - mysql:5
 {{- else if eq .opts.DBType "postgres" }}
-		- postgres:latest
+    - postgres:latest
 {{- end }}
-	script:
-		- buffalo test
+  script:
+    - buffalo test
 `
 
 const nGitlabCiNoPop = `before_script:
-	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-	- cd /go/src/{{.opts.PackagePkg}}
-	- mkdir -p public/assets
-	- go get -u github.com/gobuffalo/buffalo/buffalo
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-	- go get github.com/golang/dep/cmd/dep
-	- dep ensure
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
 {{- else }}
-	- go get -t -v ./...
+  - go get -t -v ./...
 {{- end }}
-	- export PATH="$PATH:$GOPATH/bin"
+  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
-	- test
+  - test
 
 .test-vars: &test-vars
-	variables:
-		GO_ENV: "test"
+  variables:
+    GO_ENV: "test"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-	image: golang:latest
+  image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-	image: golang:1.8
+  image: golang:1.8
 
 test:
-	# Change to "<<: *use-golang-latest" to use the latest Go version
-	<<: *use-golang-1-8
-	<<: *test-vars
-	stage: test
-	script:
-		- buffalo test
+  # Change to "<<: *use-golang-latest" to use the latest Go version
+  <<: *use-golang-1-8
+  <<: *test-vars
+  stage: test
+  script:
+    - buffalo test
 `
 
 const nVCSIgnore = `vendor/

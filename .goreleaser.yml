@@ -10,6 +10,7 @@ builds:
   env:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
+  binary: buffalo-no-sqlite
 
 checksum:
   name_template: 'checksums.txt'
@@ -21,11 +22,6 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-
-brew:
-  github:
-    owner: gobuffalo
-    name: homebrew-tap
+    - '^docs:'
+    - '^test:'
 
