@@ -3,7 +3,6 @@ package meta
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -17,12 +16,6 @@ import (
 )
 
 var modsOn = (strings.TrimSpace(envy.Get("GO111MODULE", "off")) == "on")
-
-func init() {
-	if modsOn {
-		fmt.Println("experimental go modules support has been enabled [GO111MODULE=on]")
-	}
-}
 
 // App represents meta data for a Buffalo application on disk
 type App struct {
