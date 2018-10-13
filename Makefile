@@ -3,7 +3,7 @@ GO_BIN ?= go
 
 install:
 	packr
-	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
+	$(GO_BIN) install -gccgoflags="-lpthread" -tags ${TAGS} -v ./buffalo
 
 deps:
 	$(GO_BIN) get github.com/gobuffalo/release
