@@ -62,7 +62,11 @@ func updateGoDepsCheck(app meta.App) error {
 		return run(c)
 	}
 	if app.WithDep {
-		// use github.com/golang/dep
+		if _, err := exec.LookPath("dep"); err != nil {
+			if err := run(exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/golang/dep/cmd/dep")); err != nil {
+				return errors.WithStack(err)
+			}
+		}
 		args := []string{"ensure"}
 		if setupOptions.verbose {
 			args = append(args, "-v")
