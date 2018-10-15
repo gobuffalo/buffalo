@@ -41,7 +41,7 @@ require (
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
 	github.com/unrolled/secure v0.0.0-20181005190816-ff9db2ff917f // indirect
-	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
+	golang.org/x/crypto v0.0.0-20181009213950-7c1a557ab941
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
 	golang.org/x/tools v0.0.0-20181008205924-a2b3f7f249e9
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
