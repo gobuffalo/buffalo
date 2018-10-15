@@ -22,10 +22,6 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+    - '^docs:'
+    - '^test:'
 
-brew:
-  github:
-    owner: gobuffalo
-    name: homebrew-tap
