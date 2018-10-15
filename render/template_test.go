@@ -82,7 +82,7 @@ func Test_AssetPath(t *testing.T) {
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
 		r.NoError(err)
 
-		result := re("text/html", filepath.Base(tmpFile.Name()))
+		result := re("text/html; charset=utf-8", filepath.Base(tmpFile.Name()))
 
 		bb := &bytes.Buffer{}
 		err = result.Render(bb, render.Data{})
@@ -123,7 +123,7 @@ func Test_AssetPathNoManifest(t *testing.T) {
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
 		r.NoError(err)
 
-		result := re("text/html", filepath.Base(tmpFile.Name()))
+		result := re("text/html; charset=utf-8", filepath.Base(tmpFile.Name()))
 
 		bb := &bytes.Buffer{}
 		err = result.Render(bb, render.Data{})
@@ -166,7 +166,7 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 		_, err = tmpFile.Write([]byte("<%= assetPath(\"" + original + "\") %>"))
 		r.NoError(err)
 
-		result := re("text/html", filepath.Base(tmpFile.Name()))
+		result := re("text/html; charset=utf-8", filepath.Base(tmpFile.Name()))
 
 		bb := &bytes.Buffer{}
 		err = result.Render(bb, render.Data{})

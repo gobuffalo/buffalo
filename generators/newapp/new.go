@@ -13,15 +13,16 @@ import (
 	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
+	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
 // Run returns a generator to create a new application
 func (a Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
+	data["version"] = runtime.Version
 
 	if a.AsAPI {
 		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
@@ -32,19 +33,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 		os.RemoveAll(a.Root)
 	}
 
-	if _, err := exec.LookPath("goimports"); err != nil {
-		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports", "-u")))
-	}
-
-	if a.WithDep {
-		data["addPrune"] = true
-		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
-		if _, err := exec.LookPath("dep"); err != nil {
-			g.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep", "-u")))
-		}
-	}
-
-	files, err := generators.FindByBox(packr.NewBox("../newapp/templates"))
+	files, err := generators.FindByBox(Templates)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -73,16 +62,35 @@ func (a Generator) Run(root string, data makr.Data) error {
 		return errors.WithStack(err)
 	}
 
-	if err := a.setupPop(root, data); err != nil {
-		return errors.WithStack(err)
+	if sg := a.setupPop(root, data); sg != nil {
+		g.Add(sg)
 	}
 
 	if err := a.setupDocker(root, data); err != nil {
 		return errors.WithStack(err)
 	}
 
-	g.Add(makr.NewCommand(a.goGet()))
+	if _, err := exec.LookPath("goimports"); err != nil {
+		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
+	}
 
+	if a.WithDep {
+		data["addPrune"] = true
+		g.Add(makr.NewFile("Gopkg.toml", GopkgTomlTmpl))
+		if _, err := exec.LookPath("dep"); err != nil {
+			// This step needs to be in a separate generator, because goGet() exec.Command
+			// checks if the executable exists (so before running the generator).
+			gg := makr.New()
+			gg.Add(makr.NewCommand(makr.GoGet("github.com/golang/dep/cmd/dep")))
+			if err := gg.Run(root, data); err != nil {
+				return errors.WithStack(err)
+			}
+		}
+	}
+
+	for _, c := range a.goGet() {
+		g.Add(makr.NewCommand(c))
+	}
 	g.Add(makr.Func{
 		Runner: func(root string, data makr.Data) error {
 			g.Fmt(root)
@@ -124,6 +132,7 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 
 	o := docker.New()
 	o.App = a.App
+	data["version"] = runtime.Version
 	if err := o.Run(root, data); err != nil {
 		return errors.WithStack(err)
 	}
@@ -131,7 +140,7 @@ func (a Generator) setupDocker(root string, data makr.Data) error {
 	return nil
 }
 
-func (a Generator) setupPop(root string, data makr.Data) error {
+func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
 	if !a.WithPop {
 		return nil
 	}
@@ -139,14 +148,15 @@ func (a Generator) setupPop(root string, data makr.Data) error {
 	sg := soda.New()
 	sg.App = a.App
 	sg.Dialect = a.DBType
-	data["appPath"] = a.Root
-	data["name"] = a.Name.File()
 
-	if err := sg.Run(root, data); err != nil {
-		return errors.WithStack(err)
+	g := makr.New()
+	for k, v := range data {
+		g.Data[k] = v
 	}
-
-	return nil
+	g.Data["appPath"] = a.Root
+	g.Data["name"] = a.Name.File()
+	g.Add(sg)
+	return g
 }
 
 func (a Generator) setupWebpack(root string, data makr.Data) error {
@@ -194,51 +204,67 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 	}
 }
 
-func (a Generator) goGet() *exec.Cmd {
+func (a Generator) goGet() []*exec.Cmd {
 	cd, _ := os.Getwd()
 	defer os.Chdir(cd)
 	os.Chdir(a.Root)
+
 	if a.WithDep {
-		if _, err := exec.LookPath("dep"); err == nil {
-			return exec.Command("dep", "ensure", "-v")
-		}
+		return []*exec.Cmd{exec.Command("dep", "ensure", "-v")}
 	}
+
+	if a.WithModules {
+		return a.goGetMod()
+	}
+
 	appArgs := []string{"get", "-t"}
 	if a.Verbose {
 		appArgs = append(appArgs, "-v")
 	}
 	appArgs = append(appArgs, "./...")
-	return exec.Command(envy.Get("GO_BIN", "go"), appArgs...)
+	return []*exec.Cmd{exec.Command(envy.Get("GO_BIN", "go"), appArgs...)}
+}
+
+func (a Generator) goGetMod() []*exec.Cmd {
+	var cmds []*exec.Cmd
+	cmd := exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/gobuffalo/buffalo@"+runtime.Version)
+	if a.Verbose {
+		cmd.Args = append(cmd.Args, "-v")
+	}
+	cmds = append(cmds, cmd)
+	cmds = append(cmds, exec.Command(envy.Get("GO_BIN", "go"), "get", "-u", "github.com/gobuffalo/events"))
+	cmds = append(cmds, exec.Command(envy.Get("GO_BIN", "go"), "mod", "tidy"))
+	return cmds
 }
 
 const nTravis = `language: go
 
 go:
-  - 1.8.x
+	- "1.11.x"
 
 env:
-  - GO_ENV=test
+	- GO_ENV=test
 
 {{ if eq .opts.DBType "postgres" -}}
 services:
-  - postgresql
+	- postgresql
 {{- end }}
 
 before_script:
 {{- if eq .opts.DBType "postgres" }}
-  - psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
+	- psql -c 'create database {{.opts.Name.File}}_test;' -U postgres
 {{- end }}
-  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
+	- mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go_import_path: {{.opts.PackagePkg}}
 
 install:
-  - go get github.com/gobuffalo/buffalo/buffalo
+	- go get github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
+	- go get github.com/golang/dep/cmd/dep
+	- dep ensure
 {{- else }}
-  - go get $(go list ./... | grep -v /vendor/)
+	- go get $(go list ./... | grep -v /vendor/)
 {{- end }}
 
 script: buffalo test
@@ -246,7 +272,7 @@ script: buffalo test
 
 const nGitlabCi = `before_script:
 {{- if eq .opts.DBType "postgres" }}
-	- apt-get update && apt-get install -y postgresql-client
+  - apt-get update && apt-get install -y postgresql-client
 {{- else if eq .opts.DBType "mysql" }}
   - apt-get update && apt-get install -y mysql-client
 {{- end }}
@@ -352,19 +378,27 @@ public/assets/
 
 // GopkgTomlTmpl is the default dep Gopkg.toml
 const GopkgTomlTmpl = `
+[[constraint]]
+	name = "github.com/gobuffalo/buffalo"
+	{{- if eq .version "development" }}
+	branch = "development"
+	{{- else }}
+	version = "{{.version}}"
+	{{- end}}
+
 {{ if .addPrune }}
 [prune]
-  go-tests = true
-  unused-packages = true
+	go-tests = true
+	unused-packages = true
 {{ end }}
 
-  # DO NOT DELETE
-  [[prune.project]] # buffalo
-    name = "github.com/gobuffalo/buffalo"
-    unused-packages = false
+	# DO NOT DELETE
+	[[prune.project]] # buffalo
+		name = "github.com/gobuffalo/buffalo"
+		unused-packages = false
 
-  # DO NOT DELETE
-  [[prune.project]] # pop
-    name = "github.com/gobuffalo/pop"
-    unused-packages = false
+	# DO NOT DELETE
+	[[prune.project]] # pop
+		name = "github.com/gobuffalo/pop"
+		unused-packages = false
 `

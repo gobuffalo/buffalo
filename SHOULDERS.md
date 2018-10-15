@@ -93,6 +93,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/x/httpx](https://godoc.org/github.com/gobuffalo/x/httpx)
 
+* [github.com/gobuffalo/x/randx](https://godoc.org/github.com/gobuffalo/x/randx)
+
 * [github.com/gorilla/context](https://godoc.org/github.com/gorilla/context)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)

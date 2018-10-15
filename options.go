@@ -6,67 +6,61 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/x/defaults"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/going/defaults"
 )
 
 // Options are used to configure and define how your application should run.
 type Options struct {
-	Name string
+	Name string `json:"name"`
 	// Addr is the bind address provided to http.Server. Default is "127.0.0.1:3000"
 	// Can be set using ENV vars "ADDR" and "PORT".
-	Addr string
+	Addr string `json:"addr"`
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
-	Host string
+	Host string `json:"host"`
 
 	// Env is the "environment" in which the App is running. Default is "development".
-	Env string
+	Env string `json:"env"`
 
 	// LogLevel defaults to "debug".
-	LogLevel string
+	LogLevel string `json:"log_level"`
 	// Logger to be used with the application. A default one is provided.
-	Logger Logger
+	Logger Logger `json:"-"`
 
 	// MethodOverride allows for changing of the request method type. See the default
 	// implementation at buffalo.MethodOverride
-	MethodOverride http.HandlerFunc
+	MethodOverride http.HandlerFunc `json:"-"`
 
 	// SessionStore is the `github.com/gorilla/sessions` store used to back
 	// the session. It defaults to use a cookie store and the ENV variable
 	// `SESSION_SECRET`.
-	SessionStore sessions.Store
+	SessionStore sessions.Store `json:"-"`
 	// SessionName is the name of the session cookie that is set. This defaults
 	// to "_buffalo_session".
-	SessionName string
+	SessionName string `json:"session_name"`
 
 	// Worker implements the Worker interface and can process tasks in the background.
 	// Default is "github.com/gobuffalo/worker.Simple.
-	Worker worker.Worker
+	Worker worker.Worker `json:"-"`
 	// WorkerOff tells App.Start() whether to start the Worker process or not. Default is "false".
-	WorkerOff bool
+	WorkerOff bool `json:"worker_off"`
 
 	// PreHandlers are http.Handlers that are called between the http.Server
 	// and the buffalo Application.
-	PreHandlers []http.Handler
+	PreHandlers []http.Handler `json:"-"`
 	// PreWare takes an http.Handler and returns and http.Handler
 	// and acts as a pseudo-middleware between the http.Server and
 	// a Buffalo application.
-	PreWares []PreWare
+	PreWares []PreWare `json:"-"`
 
-	Context context.Context
-
-	// LooseSlash defines the trailing slash behavior for new routes. The initial value is false.
-	// This is the opposite of http://www.gorillatoolkit.org/pkg/mux#Router.StrictSlash
-	LooseSlash bool
+	Prefix  string          `json:"prefix"`
+	Context context.Context `json:"-"`
 
 	cancel context.CancelFunc
-	Prefix string
 }
 
 // PreWare takes an http.Handler and returns and http.Handler
@@ -135,7 +129,7 @@ func optionsWithDefaults(opts Options) Options {
 			if opts.Env == "development" || opts.Env == "test" {
 				secret = "buffalo-secret"
 			} else {
-				logrus.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+				opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 			}
 		}
 		opts.SessionStore = sessions.NewCookieStore([]byte(secret))

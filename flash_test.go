@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,8 +37,8 @@ func Test_FlashRender(t *testing.T) {
 		return c.Render(201, rr.String(errorsTPL))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 
 	r.Contains(res.Body.String(), "Error AJ set")
 	r.Contains(res.Body.String(), "Error DAL set")
@@ -53,9 +53,9 @@ func Test_FlashRenderEmpty(t *testing.T) {
 		return c.Render(201, rr.String(errorsTPL))
 	})
 
-	w := willie.New(a)
+	w := httptest.New(a)
 
-	res := w.Request("/").Get()
+	res := w.HTML("/").Get()
 	r.NotContains(res.Body.String(), "Flash:")
 }
 
@@ -76,8 +76,8 @@ func Test_FlashRenderEntireFlash(t *testing.T) {
 		return c.Render(201, rr.String(keyTPL))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 	r.Contains(res.Body.String(), "something to say!")
 }
 
@@ -97,8 +97,8 @@ func Test_FlashRenderCustomKey(t *testing.T) {
 		return c.Render(201, rr.String(keyTPL))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 	r.Contains(res.Body.String(), "something to say!")
 }
 
@@ -111,8 +111,8 @@ func Test_FlashRenderCustomKeyNotDefined(t *testing.T) {
 		return c.Render(201, rr.String(customKeyTPL))
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 	r.NotContains(res.Body.String(), "something to say!")
 }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"path"
 	"reflect"
 	"regexp"
 	"strings"
@@ -61,11 +62,11 @@ PUT /users/edit - (redirect to /users/id or render user/edit.html)
 DELETE /users/id - redirect to /users
 */
 func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
-	ct, ok := ctx.Value("contentType").(string)
-	if !ok {
-		ct = "text/html"
+	ct, _ := ctx.Value("contentType").(string)
+	if ct == "" {
+		ct = e.DefaultContentType
 	}
-	ct = strings.ToLower(ct)
+	ct = strings.TrimSpace(strings.ToLower(ct))
 
 	if strings.Contains(ct, "json") {
 		return e.JSON(i)
@@ -102,7 +103,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	}
 
 	switch data["method"] {
-	case "PUT", "POST":
+	case "PUT", "POST", "DELETE":
 		if err := ir.redirect(pname, w, data); err != nil {
 			if er, ok := err.(ErrRedirect); ok && er.Status >= 300 && er.Status < 400 {
 				return err
@@ -113,30 +114,31 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
 		}
 		return nil
-	case "DELETE":
-		return ErrRedirect{
-			Status: 302,
-			URL:    "/" + pname.URL(),
-		}
 	}
-	if cp, ok := data["current_path"].(string); ok {
-		if strings.HasSuffix(cp, "/edit") {
-			return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
-		}
-		if strings.HasSuffix(cp, "/new") {
-			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
-		}
+	cp, ok := data["current_path"].(string)
 
-		x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		if x.MatchString(cp) {
-			return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
-		}
+	defCase := func() error {
+		return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+	}
+	if !ok {
+		return defCase()
 	}
 
-	return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+	if strings.HasSuffix(cp, "/edit/") {
+		return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
+	}
+	if strings.HasSuffix(cp, "/new/") {
+		return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+	}
+
+	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if x.MatchString(cp) {
+		return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
+	}
+	return defCase()
 }
 
 func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
@@ -150,7 +152,21 @@ func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) e
 	rt := reflect.TypeOf(fi)
 	zero := reflect.Zero(rt)
 	if fi != zero.Interface() {
-		url := fmt.Sprintf("/%s/%v", name.URL(), f.Interface())
+		m, ok := data["method"].(string)
+		if !ok {
+			m = "GET"
+		}
+		url := fmt.Sprint(data["current_path"])
+		id := fmt.Sprint(f.Interface())
+		url = strings.TrimSuffix(url, "/")
+		switch m {
+		case "DELETE":
+			url = strings.TrimSuffix(url, id)
+		default:
+			if !strings.HasSuffix(url, id) {
+				url = path.Join(url, id)
+			}
+		}
 
 		code := 302
 		if i, ok := data["status"].(int); ok {

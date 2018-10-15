@@ -1,13 +1,17 @@
 package buffalo
 
 import (
+	"database/sql"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net/http"
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/x/defaults"
 	"github.com/gobuffalo/x/httpx"
 	"github.com/pkg/errors"
 )
@@ -58,17 +62,65 @@ func (a *App) PanicHandler(next Handler) Handler {
 			if r != nil { //catch
 				switch t := r.(type) {
 				case error:
-					err = errors.WithStack(t)
+					err = t
 				case string:
-					err = errors.WithStack(errors.New(t))
+					err = errors.New(t)
 				default:
 					err = errors.New(fmt.Sprint(t))
 				}
+				err = errors.WithStack(err)
+				events.EmitError(events.ErrPanic, err,
+					map[string]interface{}{
+						"context": c,
+						"app":     a,
+					},
+				)
 				eh := a.ErrorHandlers.Get(500)
 				eh(500, err, c)
 			}
 		}()
 		return next(c)
+	}
+}
+
+func (a *App) defaultErrorMiddleware(next Handler) Handler {
+	return func(c Context) error {
+		err := next(c)
+		if err == nil {
+			return nil
+		}
+		status := 500
+		// unpack root cause and check for HTTPError
+		cause := errors.Cause(err)
+		switch cause {
+		case sql.ErrNoRows:
+			status = 404
+		default:
+			if h, ok := cause.(HTTPError); ok {
+				status = h.Status
+			}
+		}
+		payload := events.Payload{
+			"context": c,
+			"app":     a,
+		}
+		events.EmitError(events.ErrGeneral, err, payload)
+
+		eh := a.ErrorHandlers.Get(status)
+		err = eh(status, err, c)
+		if err != nil {
+			events.Emit(events.Event{
+				Kind:    EvtFailureErr,
+				Message: "unable to handle error and giving up",
+				Error:   err,
+				Payload: payload,
+			})
+			// things have really hit the fan if we're here!!
+			a.Logger.Error(err)
+			c.Response().WriteHeader(500)
+			c.Response().Write([]byte(err.Error()))
+		}
+		return nil
 	}
 }
 
@@ -80,8 +132,18 @@ func productionErrorResponseFor(status int) []byte {
 	return []byte(prodErrorTmpl)
 }
 
+// ErrorResponse is a used to display errors as JSON or XML
+type ErrorResponse struct {
+	XMLName xml.Name `json:"-" xml:"response"`
+	Error   string   `json:"error" xml:"error"`
+	Trace   string   `json:"trace" xml:"trace"`
+	Code    int      `json:"code" xml:"code,attr"`
+}
+
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
+	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
+	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
@@ -92,21 +154,29 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return nil
 	}
 
-	msg := fmt.Sprintf("%+v", origErr)
-	ct := httpx.ContentType(c.Request())
+	trace := fmt.Sprintf("%+v", origErr)
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
-		err := json.NewEncoder(c.Response()).Encode(map[string]interface{}{
-			"error": msg,
-			"code":  status,
+		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
+			Error: errors.Cause(origErr).Error(),
+			Trace: trace,
+			Code:  status,
 		})
 		if err != nil {
 			return errors.WithStack(err)
 		}
 	case "application/xml", "text/xml", "xml":
+		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
+			Error: errors.Cause(origErr).Error(),
+			Trace: trace,
+			Code:  status,
+		})
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	default:
 		if err := c.Request().ParseForm(); err != nil {
-			msg = fmt.Sprintf("%s\n%s", err.Error(), msg)
+			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
 		routes := c.Value("routes")
 		if cd, ok := c.(*DefaultContext); ok {
@@ -115,7 +185,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 		data := map[string]interface{}{
 			"routes":      routes,
-			"error":       msg,
+			"error":       trace,
 			"status":      status,
 			"data":        c.Data(),
 			"params":      c.Params(),

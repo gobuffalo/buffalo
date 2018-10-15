@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_nameHasIllegalCharacter(t *testing.T) {
+func Test_IllegalName(t *testing.T) {
 	m := map[string]bool{
 		"coke":                      false,
 		"my-coke":                   false,
@@ -17,9 +17,31 @@ func Test_nameHasIllegalCharacter(t *testing.T) {
 		"123COKE":                   false,
 		"1(3c&ke":                   true,
 		"github.com/markbates/coke": true,
+		"":                          true,
+		"buffalo":                   true,
 	}
 	for k, v := range m {
 		g, _ := New(k)
+		t.Run(k, func(st *testing.T) {
+			r := require.New(st)
+			if v {
+				r.Error(g.Validate())
+			} else {
+				r.NoError(g.Validate())
+			}
+		})
+	}
+}
+
+func Test_WithPop(t *testing.T) {
+	m := map[string]bool{
+		"postgres": false,
+		"unknown":  true,
+	}
+	for k, v := range m {
+		g, _ := New("coke")
+		g.WithPop = true
+		g.DBType = k
 		t.Run(k, func(st *testing.T) {
 			r := require.New(st)
 			if v {

@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"context"
 	"net/http"
-	"net/http/httptest"
 	"net/url"
+	"sync"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/markbates/willie"
+	"github.com/gobuffalo/httptest"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
@@ -20,6 +20,7 @@ func basicContext() DefaultContext {
 		logger:  NewLogger("debug"),
 		data:    make(map[string]interface{}),
 		flash:   &Flash{data: make(map[string][]string)},
+		moot:    &sync.RWMutex{},
 	}
 }
 
@@ -31,8 +32,8 @@ func Test_DefaultContext_Redirect(t *testing.T) {
 		return c.Redirect(302, u)
 	})
 
-	w := willie.New(a)
-	res := w.Request("/").Get()
+	w := httptest.New(a)
+	res := w.HTML("/").Get()
 	r.Equal(u, res.Location())
 }
 
@@ -45,7 +46,7 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 		S int
 	}{
 		{
-			E: "/foo/baz",
+			E: "/foo/baz/",
 			I: map[string]interface{}{"bar": "baz"},
 			S: 302,
 		},
@@ -66,12 +67,12 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 			return c.Redirect(302, "rootPath()")
 		})
 
-		w := willie.New(a)
-		res := w.Request("/").Get()
+		w := httptest.New(a)
+		res := w.HTML("/").Get()
 		r.Equal(tt.S, res.Code)
 		r.Equal(tt.E, res.Location())
 
-		res = w.Request("/nomap").Get()
+		res = w.HTML("/nomap").Get()
 		r.Equal(302, res.Code)
 		r.Equal("/", res.Location())
 	}
@@ -86,6 +87,25 @@ func Test_DefaultContext_Param(t *testing.T) {
 	}
 
 	r.Equal("Mark", c.Param("name"))
+}
+
+func Test_DefaultContext_Param_form(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{})
+	var name string
+	app.POST("/", func(c Context) error {
+		name = c.Param("name")
+		return nil
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/").Post(map[string]string{
+		"name": "Mark",
+	})
+
+	r.Equal(200, res.Code)
+	r.Equal("Mark", name)
 }
 
 func Test_DefaultContext_GetSet(t *testing.T) {
@@ -141,9 +161,9 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 		return c.Render(201, nil)
 	})
 
-	w := willie.New(a)
+	w := httptest.New(a)
 	uv := url.Values{"first_name": []string{"Mark"}}
-	res := w.Request("/").Post(uv)
+	res := w.HTML("/").Post(uv)
 	r.Equal(201, res.Code)
 
 	r.Equal("Mark", user.FirstName)
@@ -224,9 +244,9 @@ func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 		return c.Render(201, nil)
 	})
 
-	w := willie.New(a)
+	w := httptest.New(a)
 	uv := url.Values{"first_name": []string{""}}
-	res := w.Request("/").Post(uv)
+	res := w.HTML("/").Post(uv)
 	r.Equal(201, res.Code)
 
 	r.Equal("", user.FirstName)
@@ -248,7 +268,7 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 		return c.Render(201, nil)
 	})
 
-	w := willie.New(a)
+	w := httptest.New(a)
 	res := w.JSON("/").Post(map[string]string{
 		"first_name": "Mark",
 	})

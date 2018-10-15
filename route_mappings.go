@@ -84,6 +84,7 @@ func (a *App) Mount(p string, h http.Handler) {
 */
 func (a *App) ServeFiles(p string, root http.FileSystem) {
 	path := path.Join(a.Prefix, p)
+	a.filepaths = append(a.filepaths, path)
 	a.router.PathPrefix(path).Handler(http.StripPrefix(path, a.fileServer(root)))
 }
 
@@ -198,11 +199,22 @@ func (a *App) Group(groupPath string) *App {
 	return g
 }
 
+// RouteHelpers returns a map of BuildPathHelper() for each route available in the app.
+func (a *App) RouteHelpers() map[string]RouteHelperFunc {
+	rh := map[string]RouteHelperFunc{}
+	for _, route := range a.Routes() {
+		cRoute := route
+		rh[cRoute.PathName] = cRoute.BuildPathHelper()
+	}
+	return rh
+}
+
 func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	a.moot.Lock()
 	defer a.moot.Unlock()
 
 	url = path.Join(a.Prefix, url)
+	url = a.normalizePath(url)
 	name := a.buildRouteName(url)
 
 	hs := funcKey(h)

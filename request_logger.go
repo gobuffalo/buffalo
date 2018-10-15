@@ -5,8 +5,7 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/going/randx"
-	"github.com/sirupsen/logrus"
+	"github.com/gobuffalo/x/randx"
 )
 
 // RequestLogger can be be overridden to a user specified
@@ -32,13 +31,17 @@ func RequestLoggerFunc(h Handler) Handler {
 
 		start := time.Now()
 		defer func() {
-			ws := c.Response().(*Response)
+			ws, ok := c.Response().(*Response)
+			if !ok {
+				ws = &Response{ResponseWriter: c.Response()}
+				ws.Status = 200
+			}
 			req := c.Request()
 			ct := httpx.ContentType(req)
 			if ct != "" {
 				c.LogField("content_type", ct)
 			}
-			c.LogFields(logrus.Fields{
+			c.LogFields(map[string]interface{}{
 				"method":     req.Method,
 				"path":       req.URL.String(),
 				"duration":   time.Since(start),

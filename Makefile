@@ -1,7 +1,7 @@
 TAGS ?= "sqlite"
 GO_BIN ?= go
 
-install:
+install: deps
 	packr
 	$(GO_BIN) install -gccgoflags="-lpthread" -tags ${TAGS} -v ./buffalo
 
