@@ -50,15 +50,15 @@ Tests:
 		payload := events.Payload{
 			"app": app,
 		}
-		events.EmitPayload("buffalo:setup:started", payload)
+		events.EmitPayload(EvtSetupStarted, payload)
 		for _, check := range []setupCheck{assetCheck, updateGoDepsCheck, databaseCheck, testCheck} {
 			err := check(app)
 			if err != nil {
-				events.EmitError("buffalo:setup:err", err, payload)
+				events.EmitError(EvtSetupErr, err, payload)
 				return errors.WithStack(err)
 			}
 		}
-		events.EmitPayload("buffalo:setup:finished", payload)
+		events.EmitPayload(EvtSetupFinished, payload)
 		return nil
 	},
 }
