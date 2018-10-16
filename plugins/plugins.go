@@ -12,5 +12,5 @@ type List plugins.List
 var Available = plugins.Available
 
 func init() {
-	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/plugins", "Use github.com/gobuffalo/buffalo-plugsin/plugins instead.")
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/plugins", "Use github.com/gobuffalo/buffalo-plugins/plugins instead.")
 }
