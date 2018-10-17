@@ -69,16 +69,19 @@ func printMiddlewareByRoute(a *App) {
 				fmt.Printf("-> %s (see: %v)\n", r.App.Name, pname)
 			}
 		}
+		s := "\n" + mws[r.App.Name]
 		for k := range r.App.Middleware.skips {
 			mw := strings.Split(k, funcKeyDelimeter)[0]
 			h := strings.Split(k, funcKeyDelimeter)[1]
 			if h == r.HandlerName {
-				ahn := strings.Split(r.HandlerName, "/")
-				hn := ahn[len(ahn)-1]
-				fmt.Printf("-> %s %s (by %s)\n", r.Method, r.Path, hn)
-				s := strings.Replace("\n"+mws[r.App.Name], "\n"+mw, "", 1)
-				printMiddlewareStackWithIndent(s)
+				s = strings.Replace(s, "\n"+mw, "", 1)
 			}
+		}
+		if "\n"+mws[r.App.Name] != s {
+			ahn := strings.Split(r.HandlerName, "/")
+			hn := ahn[len(ahn)-1]
+			fmt.Printf("-> %s %s (by %s)\n", r.Method, r.Path, hn)
+			printMiddlewareStackWithIndent(s)
 		}
 	}
 }
