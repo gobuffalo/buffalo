@@ -11,6 +11,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/events"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -46,12 +47,18 @@ Tests:
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		app := meta.New(".")
+		payload := events.Payload{
+			"app": app,
+		}
+		events.EmitPayload(EvtSetupStarted, payload)
 		for _, check := range []setupCheck{assetCheck, updateGoDepsCheck, databaseCheck, testCheck} {
 			err := check(app)
 			if err != nil {
+				events.EmitError(EvtSetupErr, err, payload)
 				return errors.WithStack(err)
 			}
 		}
+		events.EmitPayload(EvtSetupFinished, payload)
 		return nil
 	},
 }
