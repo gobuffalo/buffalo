@@ -66,7 +66,7 @@ func printMiddlewareByRoute(a *App) {
 				fmt.Printf("-> %s\n", r.App.Name)
 				printMiddlewareStackWithIndent(mws[r.App.Name])
 			} else {
-				fmt.Printf("-> %s has same middleware stack as %v\n", r.App.Name, pname)
+				fmt.Printf("-> %s (see: %v)\n", r.App.Name, pname)
 			}
 		}
 		for k := range r.App.Middleware.skips {
@@ -104,8 +104,8 @@ func printMiddlewareStackWithIndent(s string) {
 	if s == "" {
 		s = "[none]"
 	}
-	s = strings.Replace(s, "\n", "\n   ", -1)
-	fmt.Printf("   %v\n", strings.TrimSpace(s))
+	s = strings.Replace(s, "\n", "\n\t", -1)
+	fmt.Printf("\t%v\n", strings.TrimSpace(s))
 }
 
 func routesGrift(a *App) {
