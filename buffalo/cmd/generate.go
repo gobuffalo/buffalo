@@ -14,7 +14,6 @@ var generateCmd = &cobra.Command{
 func init() {
 	generateCmd.AddCommand(generate.ResourceCmd)
 	generateCmd.AddCommand(generate.ActionCmd)
-	generateCmd.AddCommand(generate.DockerCmd)
 	generateCmd.AddCommand(generate.TaskCmd)
 	generateCmd.AddCommand(generate.MailCmd)
 	decorate("generate", generateCmd)

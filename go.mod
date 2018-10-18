@@ -1,19 +1,19 @@
 module github.com/gobuffalo/buffalo
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/cockroachdb/apd v1.1.0 // indirect
 	github.com/cockroachdb/cockroach-go v0.0.0-20181001143604-e0a95dfd547c // indirect
 	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.1.0
+	github.com/gobuffalo/buffalo-docker v1.0.0
+	github.com/gobuffalo/buffalo-plugins v1.4.3
 	github.com/gobuffalo/buffalo-pop v1.0.5
 	github.com/gobuffalo/envy v1.6.5
 	github.com/gobuffalo/events v1.0.7
 	github.com/gobuffalo/fizz v1.0.12 // indirect
-	github.com/gobuffalo/genny v0.0.0-20181012161047-33e5f43d83a6
+	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5
@@ -42,7 +42,6 @@ require (
 	github.com/markbates/refresh v1.4.10
 	github.com/markbates/sigtx v1.0.0
 	github.com/markbates/willie v1.0.9 // indirect
-	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/pkg/errors v0.8.0
@@ -55,7 +54,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181016152912-4fd33079060a
+	golang.org/x/tools v0.0.0-20181017214349-06f26fdaaa28
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
