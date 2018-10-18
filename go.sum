@@ -30,8 +30,8 @@ github.com/go-sql-driver/mysql v1.4.0 h1:7LxgVwFb2hIQtMm87NdgAVfXjnt4OePseqT1tKx
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/gobuffalo/buffalo v0.12.8-0.20181004233540-fac9bb505aa8/go.mod h1:sLyT7/dceRXJUxSsE813JTQtA3Eb1vjxWfo/N//vXIY=
 github.com/gobuffalo/buffalo v0.13.0/go.mod h1:Mjn1Ba9wpIbpbrD+lIDMy99pQ0H0LiddMIIDGse7qT4=
-github.com/gobuffalo/buffalo-docker v1.0.0 h1:+RNNDYys9Zvm3CtUpcqR6I09jwRLDmrKC00xP2LZmo4=
-github.com/gobuffalo/buffalo-docker v1.0.0/go.mod h1:S1fELkdohhgF1JLCQ9nXUqR8+7fbwxUKSkd8OfMRW4s=
+github.com/gobuffalo/buffalo-docker v1.0.1 h1:VkYd+fR8sKQ3d7H+eO8SMN5+xzckZmRYy5AQB9YB/cs=
+github.com/gobuffalo/buffalo-docker v1.0.1/go.mod h1:ZBNhZmEw6nr3PpfhAwQN1JrlvQpqISIUjoCoid3OvBw=
 github.com/gobuffalo/buffalo-plugins v1.0.2/go.mod h1:pOp/uF7X3IShFHyobahTkTLZaeUXwb0GrUTb9ngJWTs=
 github.com/gobuffalo/buffalo-plugins v1.0.4 h1:Q/7Vp93AYJDplMg7nCOI6+XEnTjMabu26WJgS7bU6Ew=
 github.com/gobuffalo/buffalo-plugins v1.0.4/go.mod h1:pWS1vjtQ6uD17MVFWf7i3zfThrEKWlI5+PYLw/NaDB4=

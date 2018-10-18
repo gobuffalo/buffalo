@@ -7,7 +7,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-docker v1.0.0
+	github.com/gobuffalo/buffalo-docker v1.0.1
 	github.com/gobuffalo/buffalo-plugins v1.4.3
 	github.com/gobuffalo/buffalo-pop v1.0.5
 	github.com/gobuffalo/envy v1.6.5
