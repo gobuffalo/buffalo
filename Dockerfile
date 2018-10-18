@@ -23,6 +23,7 @@ ADD . .
 
 # we need to do this to stop the travis make ci-deps error
 RUN git version
+RUN git status
 RUN BRANCH=$(git symbolic-ref --short HEAD) \
   && echo $BRANCH \
   && git branch --set-upstream-to=origin/$BRANCH $BRANCH
