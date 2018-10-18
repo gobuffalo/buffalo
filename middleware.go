@@ -21,6 +21,8 @@ import (
 */
 type MiddlewareFunc func(Handler) Handler
 
+const funcKeyDelimeter = ":"
+
 // Use the specified Middleware for the App.
 // When defined on an `*App` the specified middleware will be
 // inherited by any `Group` calls that are made on that on
@@ -153,7 +155,7 @@ func funcKey(funcs ...interface{}) string {
 		keyMapMutex.Unlock()
 		names = append(names, n)
 	}
-	return strings.Join(names, "/")
+	return strings.Join(names, funcKeyDelimeter)
 }
 
 func ptrName(ptr uintptr) string {
