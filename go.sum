@@ -38,6 +38,8 @@ github.com/gobuffalo/buffalo-plugins v1.0.4/go.mod h1:pWS1vjtQ6uD17MVFWf7i3zfThr
 github.com/gobuffalo/buffalo-plugins v1.4.1/go.mod h1:oQ7tLbpbuH1mPOkcLWfdxBo2jRWvradlx8qgfSATHA4=
 github.com/gobuffalo/buffalo-plugins v1.4.3 h1:EHo0eC6e15QWcCd6yqneo9kKojQ7lm4S7jdfW1r4ruk=
 github.com/gobuffalo/buffalo-plugins v1.4.3/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=
+github.com/gobuffalo/buffalo-plugins v1.4.4 h1:m/M9+yAx/dvT0muuuCuarddMPB2zktbaXXxdwllEem4=
+github.com/gobuffalo/buffalo-plugins v1.4.4/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=
 github.com/gobuffalo/buffalo-pop v1.0.5 h1:8aXdBlo9MEKFGHyl489+28Jw7Ud59Th1U+5Ayu1wNL0=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/envy v1.6.4 h1:kxamN+VYjPMzEdjc2mn4CIKiuYXGxc8VIwXJNixFlNY=
@@ -47,6 +49,8 @@ github.com/gobuffalo/envy v1.6.5/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9k
 github.com/gobuffalo/events v1.0.3/go.mod h1:Txo8WmqScapa7zimEQIwgiJBvMECMe9gJjsKNPN3uZw=
 github.com/gobuffalo/events v1.0.7 h1:WaIpqghQOUUdAE3W4LjmOnBvXvZw3XQjSnF1JGHVbMI=
 github.com/gobuffalo/events v1.0.7/go.mod h1:z8txf6H9jWhQ5Scr7YPLWg/cgXBRj8Q4uYI+rsVCCSQ=
+github.com/gobuffalo/events v1.0.8 h1:VBaxY5Vx0wd3ZztR/5j1kEe+LGGjevuEHGGTLF7utyE=
+github.com/gobuffalo/events v1.0.8/go.mod h1:A5KyqT1sA+3GJiBE4QKZibse9mtOcI9nw8gGrDdqYGs=
 github.com/gobuffalo/fizz v1.0.12 h1:JJOkmlStog5AiBL434UoGMJ896p3MnTnzedFVaZSF3k=
 github.com/gobuffalo/fizz v1.0.12/go.mod h1:C0sltPxpYK8Ftvf64kbsQa2yiCZY4RZviurNxXdAKwc=
 github.com/gobuffalo/flect v0.0.0-20180907193754-dc14d8acaf9f/go.mod h1:rCiQgmAE4axgBNl3jZWzS5rETRYTGOsrixTRaCPzNdA=

@@ -16,6 +16,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
@@ -133,11 +134,14 @@ func (a Generator) genny() (makr.Runnable, error) {
 			GoGet:  "github.com/gobuffalo/buffalo-docker",
 		})
 	}
-
-	gg, err := install.New(&install.Options{
+	opts := &install.Options{
 		App:     app,
 		Plugins: plugs.List(),
-	})
+	}
+	if app.WithSQLite {
+		opts.Tags = meta.BuildTags{"sqlite"}
+	}
+	gg, err := install.New(opts)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

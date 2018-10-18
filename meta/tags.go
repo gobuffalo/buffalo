@@ -1,8 +1,6 @@
 package meta
 
 import (
-	"bytes"
-	"io/ioutil"
 	"strings"
 )
 
@@ -21,10 +19,21 @@ func (t BuildTags) String() string {
 // SQLite3.
 func (a App) BuildTags(env string, tags ...string) BuildTags {
 	tags = append(tags, env)
-	if b, err := ioutil.ReadFile("database.yml"); err == nil {
-		if bytes.Contains(b, []byte("sqlite")) {
-			tags = append(tags, "sqlite")
+	if a.WithSQLite {
+		tags = append(tags, "sqlite")
+	}
+
+	m := map[string]string{}
+	for _, t := range tags {
+		t = strings.TrimSpace(t)
+		if len(t) > 0 {
+			m[t] = t
 		}
 	}
-	return BuildTags(tags)
+	var tt []string
+	for k := range m {
+		tt = append(tt, k)
+	}
+
+	return BuildTags(tt)
 }

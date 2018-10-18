@@ -8,10 +8,10 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.1
-	github.com/gobuffalo/buffalo-plugins v1.4.3
+	github.com/gobuffalo/buffalo-plugins v1.4.4
 	github.com/gobuffalo/buffalo-pop v1.0.5
 	github.com/gobuffalo/envy v1.6.5
-	github.com/gobuffalo/events v1.0.7
+	github.com/gobuffalo/events v1.0.8
 	github.com/gobuffalo/fizz v1.0.12 // indirect
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
