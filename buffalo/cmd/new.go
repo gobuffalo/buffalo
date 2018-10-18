@@ -9,17 +9,17 @@ import (
 	"runtime"
 	"strings"
 
+	fname "github.com/gobuffalo/flect/name"
 	"github.com/spf13/pflag"
 
-	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/newapp"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
@@ -78,12 +78,12 @@ var newCmd = &cobra.Command{
 			return configError
 		}
 		app := getAppWithConfig()
-		app.Name = inflect.Name(args[0])
+		app.Name = fname.New(args[0])
 
-		if app.Name == "." {
-			app.Name = inflect.Name(filepath.Base(app.Root))
+		if app.Name.String() == "." {
+			app.Name = fname.New(filepath.Base(app.Root))
 		} else {
-			app.Root = filepath.Join(app.Root, app.Name.File())
+			app.Root = filepath.Join(app.Root, app.Name.File().String())
 		}
 		aa := meta.New(app.Root)
 		app.ActionsPkg = aa.ActionsPkg

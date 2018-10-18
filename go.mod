@@ -7,16 +7,18 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-docker v1.0.1
-	github.com/gobuffalo/buffalo-plugins v1.4.4
+	github.com/gobuffalo/buffalo-docker v1.0.2
+	github.com/gobuffalo/buffalo-plugins v1.5.1
 	github.com/gobuffalo/buffalo-pop v1.0.5
 	github.com/gobuffalo/envy v1.6.5
 	github.com/gobuffalo/events v1.0.8
 	github.com/gobuffalo/fizz v1.0.12 // indirect
+	github.com/gobuffalo/flect v0.0.0-20181007231023-ae7ed6bfe683
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5
+	github.com/gobuffalo/meta v0.0.0-20181018155829-df62557efcd3
 	github.com/gobuffalo/mw-basicauth v1.0.3
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -29,6 +31,7 @@ require (
 	github.com/gobuffalo/pop v4.8.4+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181007152206-913e47c59ca7
+	github.com/gofrs/uuid v3.1.0+incompatible // indirect
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3

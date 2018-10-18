@@ -225,9 +225,9 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 	case "gitlab-ci":
 		if a.WithPop {
 			if a.DBType == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File().String() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File().String() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
 			} else {
 				data["testDbUrl"] = ""
 			}
