@@ -7,12 +7,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	fname "github.com/gobuffalo/flect/name"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/pop"
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
@@ -49,12 +49,12 @@ func New(name string) (Generator, error) {
 		Docker:     "multi",
 		Version:    runtime.Version,
 	}
-	g.Name = inflect.Name(name)
+	g.Name = fname.New(name)
 
-	if g.Name == "." {
-		g.Name = inflect.Name(filepath.Base(g.Root))
+	if g.Name.String() == "." {
+		g.Name = fname.New(filepath.Base(g.Root))
 	} else {
-		g.Root = filepath.Join(g.Root, g.Name.File())
+		g.Root = filepath.Join(g.Root, g.Name.File().String())
 	}
 
 	return g, g.Validate()
@@ -83,7 +83,7 @@ func (g Generator) Validate() error {
 		msg += "\n" + footer
 		return errors.Wrap(ErrTemplatesNotFound, msg)
 	}
-	if g.Name == "" {
+	if g.Name.String() == "" {
 		return errors.New("you must enter a name for your new application")
 	}
 
@@ -101,12 +101,12 @@ func (g Generator) Validate() error {
 	}
 
 	for _, n := range forbiddenAppNames {
-		if n == g.Name.Lower() {
+		if n == g.Name.ToLower().String() {
 			return fmt.Errorf("name %s is not allowed, try a different application name", g.Name)
 		}
 	}
 
-	if !nameRX.MatchString(string(g.Name)) {
+	if !nameRX.MatchString(g.Name.String()) {
 		return fmt.Errorf("name %s is not allowed, application name can only contain [a-Z0-9-_]", g.Name)
 	}
 

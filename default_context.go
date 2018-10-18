@@ -69,7 +69,9 @@ func (d *DefaultContext) Param(key string) string {
 // Set a value onto the Context. Any value set onto the Context
 // will be automatically available in templates.
 func (d *DefaultContext) Set(key string, value interface{}) {
+	d.moot.Lock()
 	d.data[key] = value
+	d.moot.Unlock()
 }
 
 // Value that has previously stored on the context.
@@ -217,12 +219,12 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 
 // Data contains all the values set through Get/Set.
 func (d *DefaultContext) Data() map[string]interface{} {
+	d.moot.Lock()
 	m := map[string]interface{}{}
-	d.moot.RLock()
 	for k, v := range d.data {
 		m[k] = v
 	}
-	d.moot.RUnlock()
+	d.moot.Unlock()
 	return m
 }
 
@@ -259,7 +261,8 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 // MarshalJSON implements json marshaling for the context
 func (d *DefaultContext) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{}
-	for k, v := range d.Data() {
+	data := d.Data()
+	for k, v := range data {
 		// don't try and marshal ourself
 		if _, ok := v.(*DefaultContext); ok {
 			continue
