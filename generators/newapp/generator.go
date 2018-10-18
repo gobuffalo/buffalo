@@ -30,8 +30,6 @@ type Generator struct {
 	Verbose     bool   `json:"verbose"`
 	DBType      string `json:"db_type"`
 	CIProvider  string `json:"ci_provider"`
-	AsWeb       bool   `json:"as_web"`
-	AsAPI       bool   `json:"as_api"`
 	Docker      string `json:"docker"`
 	SkipPop     bool   `json:"skip_pop"`
 	SkipWebpack bool   `json:"skip_webpack"`
@@ -45,10 +43,10 @@ func New(name string) (Generator, error) {
 		App:        meta.New("."),
 		DBType:     "postgres",
 		CIProvider: "none",
-		AsWeb:      true,
 		Docker:     "multi",
 		Version:    runtime.Version,
 	}
+	g.App.AsWeb = true
 	g.Name = fname.New(name)
 
 	if g.Name.String() == "." {
