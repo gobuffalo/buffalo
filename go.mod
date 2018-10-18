@@ -1,15 +1,15 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/fatih/structs v1.1.0 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.0.4
-	github.com/gobuffalo/buffalo-pop v1.0.5
+	github.com/gobuffalo/buffalo-plugins v1.5.1
+	github.com/gobuffalo/buffalo-pop v1.1.0
 	github.com/gobuffalo/envy v1.6.5
-	github.com/gobuffalo/events v1.0.7
-	github.com/gobuffalo/genny v0.0.0-20181012161047-33e5f43d83a6
+	github.com/gobuffalo/events v1.0.8
+	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5
@@ -34,18 +34,18 @@ require (
 	github.com/markbates/oncer v0.0.0-20181014194634-05fccaae8fc4
 	github.com/markbates/refresh v1.4.10
 	github.com/markbates/sigtx v1.0.0
+	github.com/markbates/willie v1.0.9 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
+	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.1.1
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20181005190816-ff9db2ff917f // indirect
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
-	golang.org/x/net v0.0.0-20181011144130-49bb7cea24b1 // indirect
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20181011152604-fa43e7bc11ba // indirect
-	golang.org/x/tools v0.0.0-20181013182035-5e66757b835f
+	golang.org/x/tools v0.0.0-20181017214349-06f26fdaaa28
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
