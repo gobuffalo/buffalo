@@ -1,6 +1,7 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
@@ -10,12 +11,12 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.1.0
 	github.com/gobuffalo/envy v1.6.5
 	github.com/gobuffalo/events v1.0.8
-	github.com/gobuffalo/flect v0.0.0-20181007231023-ae7ed6bfe683
+	github.com/gobuffalo/flect v0.0.0-20181018182602-fd24a256709f
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181018155829-df62557efcd3
+	github.com/gobuffalo/meta v0.0.0-20181018190814-993f84dd6ef9
 	github.com/gobuffalo/mw-basicauth v1.0.3
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -48,7 +49,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181017214349-06f26fdaaa28
+	golang.org/x/tools v0.0.0-20181018182439-def26773749b
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

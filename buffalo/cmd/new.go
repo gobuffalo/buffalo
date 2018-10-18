@@ -32,7 +32,6 @@ func getAppWithConfig() newapp.Generator {
 	pwd, _ := os.Getwd()
 	app := newapp.Generator{
 		App:         meta.New(pwd),
-		AsAPI:       viper.GetBool("api"),
 		Force:       viper.GetBool("force"),
 		Verbose:     viper.GetBool("verbose"),
 		SkipPop:     viper.GetBool("skip-pop"),
@@ -40,10 +39,11 @@ func getAppWithConfig() newapp.Generator {
 		SkipYarn:    viper.GetBool("skip-yarn"),
 		DBType:      viper.GetString("db-type"),
 		CIProvider:  viper.GetString("ci-provider"),
-		AsWeb:       true,
 		Docker:      viper.GetString("docker"),
 		Bootstrap:   viper.GetInt("bootstrap"),
 	}
+
+	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
 	app.WithPop = !app.SkipPop
@@ -79,6 +79,7 @@ var newCmd = &cobra.Command{
 		}
 		app := getAppWithConfig()
 		app.Name = fname.New(args[0])
+		app.Bin = filepath.Join("bin", app.Name.String())
 
 		if app.Name.String() == "." {
 			app.Name = fname.New(filepath.Base(app.Root))

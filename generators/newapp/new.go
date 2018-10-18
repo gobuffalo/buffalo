@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
@@ -146,6 +147,15 @@ func (a Generator) genny() (makr.Runnable, error) {
 		return nil, errors.WithStack(err)
 	}
 	run.WithGroup(gg)
+
+	run.WithRun(func(r *genny.Runner) error {
+		f := genny.NewFile(filepath.Join(app.Root, "config", "buffalo-app.toml"), nil)
+		if err := toml.NewEncoder(f).Encode(app); err != nil {
+			return errors.WithStack(err)
+		}
+		return r.File(f)
+	})
+
 	fn := makr.Func{
 		Runner: func(root string, data makr.Data) error {
 			return run.Run()
