@@ -37,8 +37,9 @@ github.com/gobuffalo/buffalo-plugins v1.4.3 h1:EHo0eC6e15QWcCd6yqneo9kKojQ7lm4S7
 github.com/gobuffalo/buffalo-plugins v1.4.3/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=
 github.com/gobuffalo/buffalo-plugins v1.5.1 h1:TA7WgMcS1jfWdI5nSoqnCaPAMegOKrMcJjaWq/ZP7tM=
 github.com/gobuffalo/buffalo-plugins v1.5.1/go.mod h1:jbmwSZK5+PiAP9cC09VQOrGMZFCa/P0UMlIS3O12r5w=
-github.com/gobuffalo/buffalo-pop v1.0.5 h1:8aXdBlo9MEKFGHyl489+28Jw7Ud59Th1U+5Ayu1wNL0=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
+github.com/gobuffalo/buffalo-pop v1.1.0 h1:rFMV7SiQnbh4Ysx4lLTq5E4JWMiXgthr1Bj9XrBsRac=
+github.com/gobuffalo/buffalo-pop v1.1.0/go.mod h1:CIcR2iDLL36Sa38FqX2M+8iXNvyGdgL9gZTfbUaMYBw=
 github.com/gobuffalo/envy v1.6.4/go.mod h1:Abh+Jfw475/NWtYMEt+hnJWRiC8INKWibIMyNt1w2Mc=
 github.com/gobuffalo/envy v1.6.5 h1:X3is06x7v0nW2xiy2yFbbIjwHz57CD6z6MkvqULTCm8=
 github.com/gobuffalo/envy v1.6.5/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
