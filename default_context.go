@@ -69,7 +69,9 @@ func (d *DefaultContext) Param(key string) string {
 // Set a value onto the Context. Any value set onto the Context
 // will be automatically available in templates.
 func (d *DefaultContext) Set(key string, value interface{}) {
+	d.moot.Lock()
 	d.data[key] = value
+	d.moot.Unlock()
 }
 
 // Value that has previously stored on the context.
