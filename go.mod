@@ -1,6 +1,7 @@
 module github.com/gobuffalo/buffalo
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
