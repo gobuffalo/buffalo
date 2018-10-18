@@ -32,6 +32,8 @@ github.com/gobuffalo/buffalo v0.12.8-0.20181004233540-fac9bb505aa8/go.mod h1:sLy
 github.com/gobuffalo/buffalo v0.13.0/go.mod h1:Mjn1Ba9wpIbpbrD+lIDMy99pQ0H0LiddMIIDGse7qT4=
 github.com/gobuffalo/buffalo v0.13.1/go.mod h1:K9c22KLfDz7obgxvHv1amvJtCQEZNiox9+q6FDJ1Zcs=
 github.com/gobuffalo/buffalo v0.13.2/go.mod h1:vA8I4Dwcfkx7RAzIRHVDZxfS3QJR7muiOjX4r8P2/GE=
+github.com/gobuffalo/buffalo-docker v1.0.4 h1:qqL5eOgOOwR/SfNgZT1VZjH5XAwgToDauP6PDcCJflU=
+github.com/gobuffalo/buffalo-docker v1.0.4/go.mod h1:DhHSXMloQHsOu/KUTFTiIL+8cwfuTqZnMc2QdOmN6Y8=
 github.com/gobuffalo/buffalo-plugins v1.0.2/go.mod h1:pOp/uF7X3IShFHyobahTkTLZaeUXwb0GrUTb9ngJWTs=
 github.com/gobuffalo/buffalo-plugins v1.0.4/go.mod h1:pWS1vjtQ6uD17MVFWf7i3zfThrEKWlI5+PYLw/NaDB4=
 github.com/gobuffalo/buffalo-plugins v1.4.3/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd/build"
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/sigtx"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"

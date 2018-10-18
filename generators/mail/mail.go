@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"

@@ -9,9 +9,9 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/events"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
