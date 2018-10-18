@@ -26,7 +26,7 @@ ci-deps:
 	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
 
 ci-test:
-	docker build . --no-cache
+	docker build . --no-cache --build-arg TRAVIS_BRANCH=$$(git symbolic-ref --short HEAD)
 
 lint:
 	gometalinter --vendor ./... --deadline=1m --skip=internal

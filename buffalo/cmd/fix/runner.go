@@ -3,8 +3,8 @@ package fix
 import (
 	"fmt"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
 

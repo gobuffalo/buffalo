@@ -9,8 +9,9 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/events"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/deplist"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -46,12 +47,18 @@ Tests:
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		app := meta.New(".")
+		payload := events.Payload{
+			"app": app,
+		}
+		events.EmitPayload(EvtSetupStarted, payload)
 		for _, check := range []setupCheck{assetCheck, updateGoDepsCheck, databaseCheck, testCheck} {
 			err := check(app)
 			if err != nil {
+				events.EmitError(EvtSetupErr, err, payload)
 				return errors.WithStack(err)
 			}
 		}
+		events.EmitPayload(EvtSetupFinished, payload)
 		return nil
 	},
 }
@@ -62,7 +69,11 @@ func updateGoDepsCheck(app meta.App) error {
 		return run(c)
 	}
 	if app.WithDep {
-		// use github.com/golang/dep
+		if _, err := exec.LookPath("dep"); err != nil {
+			if err := run(exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/golang/dep/cmd/dep")); err != nil {
+				return errors.WithStack(err)
+			}
+		}
 		args := []string{"ensure"}
 		if setupOptions.verbose {
 			args = append(args, "-v")
