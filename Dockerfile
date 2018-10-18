@@ -13,6 +13,7 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
+RUN echo $TRAVIS_BRANCH
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
@@ -24,9 +25,7 @@ ADD . .
 # we need to do this to stop the travis make ci-deps error
 RUN git version
 RUN git status
-RUN BRANCH=$(git symbolic-ref --short HEAD) \
-  && echo $BRANCH \
-  && git branch --set-upstream-to=origin/$BRANCH $BRANCH
+RUN git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 RUN make ci-deps
 
 RUN packr clean
