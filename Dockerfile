@@ -19,8 +19,13 @@ RUN rm $(which buffalo)
 RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
-COPY . .
+ADD . .
 
+# we need to do this to stop the travis make ci-deps error
+RUN git version
+RUN BRANCH=$(git symbolic-ref --short HEAD) \
+  && echo $BRANCH \
+  && git branch --set-upstream-to=origin/$BRANCH $BRANCH
 RUN make ci-deps
 
 RUN packr clean
