@@ -20,12 +20,14 @@ RUN rm $(which buffalo)
 RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
-ADD . .
+COPY . .
 
 # we need to do this to stop the travis make ci-deps error
 RUN git version
+RUN git add .
 RUN git status
-RUN git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
+# RUN git remote add origin https://github.com/gobuffalo/buffalo.git
+# RUN git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 RUN make ci-deps
 
 RUN packr clean
