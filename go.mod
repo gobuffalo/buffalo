@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v1.5.1
 	github.com/gobuffalo/buffalo-pop v1.1.0
 	github.com/gobuffalo/envy v1.6.5
-	github.com/gobuffalo/events v1.0.8
+	github.com/gobuffalo/events v1.0.9
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181017214349-06f26fdaaa28
+	golang.org/x/tools v0.0.0-20181019005945-6adeb8aab2de
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
