@@ -5,16 +5,14 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.5.1
-	github.com/gobuffalo/buffalo-pop v1.1.0
+	github.com/gobuffalo/buffalo-plugins v1.6.0
+	github.com/gobuffalo/buffalo-pop v1.1.1
 	github.com/gobuffalo/envy v1.6.5
 	github.com/gobuffalo/events v1.1.1
-	github.com/gobuffalo/flect v0.0.0-20181019110701-3d6f0b585514 // indirect
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181018192820-8c6cef77dab3 // indirect
 	github.com/gobuffalo/mw-basicauth v1.0.3
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -35,7 +33,6 @@ require (
 	github.com/markbates/inflect v1.0.1
 	github.com/markbates/oncer v0.0.0-20181014194634-05fccaae8fc4
 	github.com/markbates/refresh v1.4.10
-	github.com/markbates/safe v1.0.1 // indirect
 	github.com/markbates/sigtx v1.0.0
 	github.com/markbates/willie v1.0.9 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
@@ -48,7 +45,6 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/sys v0.0.0-20181019084534-8f1d3d21f81b // indirect
 	golang.org/x/tools v0.0.0-20181019005945-6adeb8aab2de
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
