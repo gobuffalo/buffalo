@@ -5,11 +5,11 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.6.0
-	github.com/gobuffalo/buffalo-pop v1.1.1
+	github.com/gobuffalo/buffalo-plugins v1.6.1
+	github.com/gobuffalo/buffalo-pop v1.1.2
 	github.com/gobuffalo/envy v1.6.5
 	github.com/gobuffalo/events v1.1.1
-	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
+	github.com/gobuffalo/genny v0.0.0-20181019144442-df0a36fdd146
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/makr v1.1.5

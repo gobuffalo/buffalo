@@ -34,11 +34,11 @@ github.com/gobuffalo/buffalo-plugins v1.0.4/go.mod h1:pWS1vjtQ6uD17MVFWf7i3zfThr
 github.com/gobuffalo/buffalo-plugins v1.4.3/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=
 github.com/gobuffalo/buffalo-plugins v1.5.1 h1:TA7WgMcS1jfWdI5nSoqnCaPAMegOKrMcJjaWq/ZP7tM=
 github.com/gobuffalo/buffalo-plugins v1.5.1/go.mod h1:jbmwSZK5+PiAP9cC09VQOrGMZFCa/P0UMlIS3O12r5w=
-github.com/gobuffalo/buffalo-plugins v1.6.0 h1:Tb/gOcnrBF1mwOuPAIixFEuRuOBNgd4bd6FUWiR2Ysg=
-github.com/gobuffalo/buffalo-plugins v1.6.0/go.mod h1:vakZSXCpMOKE2f4mgF4m/E3IwQ4r65TSjN/Yn0ICQDg=
+github.com/gobuffalo/buffalo-plugins v1.6.1 h1:o5sDfAaAm3oTytazmpWkgu9BTQ3TNmYiSFrlKSuvznU=
+github.com/gobuffalo/buffalo-plugins v1.6.1/go.mod h1:/XZt7UuuDnx5P4v3cStK0+XoYiNOA2f0wDIsm1oLJQA=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
-github.com/gobuffalo/buffalo-pop v1.1.1 h1:LljeCQcNjsXGNktmfvL5GSFHMiNuIRZv0sGAZ8cnkAc=
-github.com/gobuffalo/buffalo-pop v1.1.1/go.mod h1:QyhbU0Qza0bJBT56GuO8zsOogqlMMWkxS7hrUhOTgM8=
+github.com/gobuffalo/buffalo-pop v1.1.2 h1:3q4oN2N/J4H+xWYizPrCYOupdtF7OALNmxEoRGRFTrI=
+github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/envy v1.6.4/go.mod h1:Abh+Jfw475/NWtYMEt+hnJWRiC8INKWibIMyNt1w2Mc=
 github.com/gobuffalo/envy v1.6.5 h1:X3is06x7v0nW2xiy2yFbbIjwHz57CD6z6MkvqULTCm8=
 github.com/gobuffalo/envy v1.6.5/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
@@ -62,6 +62,8 @@ github.com/gobuffalo/genny v0.0.0-20181007153042-b8de7d566757/go.mod h1:+oG5Ljrw
 github.com/gobuffalo/genny v0.0.0-20181012161047-33e5f43d83a6/go.mod h1:+oG5Ljrw04czAHbPXREwaFojJbpUvcIy4DiOnbEJFTA=
 github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246 h1:ap17NHnOCqCKBCeW7deVKkGFZcm7/Lro6uqdlvTXN2k=
 github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246/go.mod h1:+oG5Ljrw04czAHbPXREwaFojJbpUvcIy4DiOnbEJFTA=
+github.com/gobuffalo/genny v0.0.0-20181019144442-df0a36fdd146 h1:4NAxHRgszMndVm7VFsT1+txhpBR3vYrjDxfYQEUsFJI=
+github.com/gobuffalo/genny v0.0.0-20181019144442-df0a36fdd146/go.mod h1:IyRrGrQb/sbHu/0z9i5mbpZroIsdxjCYfj+zFiFiWZQ=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5 h1:YvGVf7yj1akgsb+qc64Q0WX8uhpuZSibChbqOMRSAqE=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
@@ -102,6 +104,8 @@ github.com/gobuffalo/pop v4.8.4+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVD
 github.com/gobuffalo/release v1.0.35/go.mod h1:VtHFAKs61vO3wboCec5xr9JPTjYyWYcvaM3lclkc4x4=
 github.com/gobuffalo/release v1.0.38/go.mod h1:VtHFAKs61vO3wboCec5xr9JPTjYyWYcvaM3lclkc4x4=
 github.com/gobuffalo/release v1.0.42/go.mod h1:RPs7EtafH4oylgetOJpGP0yCZZUiO4vqHfTHJjSdpug=
+github.com/gobuffalo/release v1.0.51 h1:aGv+3ILbNuW1ef+fPELAfsQko56juthKJqOIr94oogM=
+github.com/gobuffalo/release v1.0.51/go.mod h1:RPs7EtafH4oylgetOJpGP0yCZZUiO4vqHfTHJjSdpug=
 github.com/gobuffalo/shoulders v1.0.1 h1:BqVJBUXlBWAf+WLhXijVk3SCpp75LXrVBiIkOCzZbNc=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
 github.com/gobuffalo/tags v2.0.11+incompatible h1:zLkaontB8lWefU+DX38mzPLRKFGTJL8FKb9JnKMt0Z0=
