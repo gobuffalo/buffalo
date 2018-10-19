@@ -28,6 +28,9 @@ var ResourceCmd = &cobra.Command{
 		if err != nil {
 			return errors.WithStack(err)
 		}
+		if o.App.AsAPI {
+			resourceOptions.SkipTemplates = true
+		}
 		o.SkipModel = resourceOptions.SkipModel
 		o.SkipMigration = resourceOptions.SkipMigration
 		o.SkipTemplates = resourceOptions.SkipTemplates
