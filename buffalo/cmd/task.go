@@ -9,7 +9,7 @@ import (
 var taskCommand = &cobra.Command{
 	Use:                "task",
 	Aliases:            []string{"t", "tasks"},
-	Short:              "Runs your grift tasks",
+	Short:              "Run grift tasks",
 	DisableFlagParsing: true,
 	RunE: func(c *cobra.Command, args []string) error {
 		return grifts.Run("buffalo task", args)
