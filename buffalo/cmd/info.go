@@ -7,9 +7,9 @@ import (
 	"os/exec"
 	"reflect"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
