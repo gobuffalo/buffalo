@@ -28,8 +28,8 @@ type setupCheck func(meta.App) error
 
 var setupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "Setups a newly created, or recently checked out application.",
-	Long: `Setup runs through checklist to make sure dependencies are setup correcly.
+	Short: "Setup a newly created, or recently checked out application.",
+	Long: `Setup runs through checklist to make sure dependencies are setup correctly.
 
 Dependencies (if used):
 * Runs "dep ensure" to install required Go dependencies.

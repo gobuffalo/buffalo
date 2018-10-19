@@ -22,7 +22,7 @@ var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Example: resourceExamples,
 	Aliases: []string{"r"},
-	Short:   "Generates a new actions/resource file",
+	Short:   "Generate a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		o, err := resource.New(resourceOptions.Name, args...)
 		if err != nil {

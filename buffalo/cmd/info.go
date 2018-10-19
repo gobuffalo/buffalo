@@ -17,7 +17,7 @@ import (
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Prints off diagnostic information useful for debugging.",
+	Short: "Print diagnostic information (useful for debugging)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		bb := os.Stdout
 
