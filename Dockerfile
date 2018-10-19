@@ -13,6 +13,7 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
+RUN echo $TRAVIS_BRANCH
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 RUN rm $(which buffalo)
@@ -21,6 +22,12 @@ RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
+# we need to do this to stop the travis make ci-deps error
+RUN git version
+RUN git add .
+RUN git status
+# RUN git remote add origin https://github.com/gobuffalo/buffalo.git
+# RUN git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 RUN make ci-deps
 
 RUN packr clean
@@ -64,7 +71,7 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 
-RUN go get -v github.com/gobuffalo/buffalo-goth
+RUN buffalo plugins install github.com/gobuffalo/buffalo-goth
 RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 

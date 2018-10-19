@@ -2,8 +2,8 @@ package generate
 
 import (
 	"github.com/gobuffalo/buffalo/generators/mail"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

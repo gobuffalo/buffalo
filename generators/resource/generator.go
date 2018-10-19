@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/inflect"
 )
 

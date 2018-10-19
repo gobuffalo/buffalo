@@ -3,7 +3,7 @@ package grift
 import (
 	"strings"
 
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )

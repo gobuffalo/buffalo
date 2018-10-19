@@ -1,20 +1,26 @@
 package newapp
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"github.com/BurntSushi/toml"
+	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	"github.com/gobuffalo/buffalo-plugins/genny/install"
+	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	"github.com/gobuffalo/buffalo/generators/docker"
 	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/makr"
 	"github.com/pkg/errors"
 )
@@ -66,10 +72,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 		g.Add(sg)
 	}
 
-	if err := a.setupDocker(root, data); err != nil {
-		return errors.WithStack(err)
-	}
-
 	if _, err := exec.LookPath("goimports"); err != nil {
 		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
 	}
@@ -98,10 +100,68 @@ func (a Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
+	gn, err := a.genny()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	g.Add(gn)
+
 	a.setupVCS(g)
 
 	data["opts"] = a
 	return g.Run(root, data)
+}
+
+func (a Generator) genny() (makr.Runnable, error) {
+	app := a.App
+	run := genny.WetRunner(context.Background())
+
+	plugs, err := plugdeps.List(app)
+	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
+		return nil, errors.WithStack(err)
+	}
+
+	if a.Docker != "none" {
+		err := run.WithNew(docker.New(&docker.Options{
+			App:     app,
+			Version: runtime.Version,
+			Style:   a.Docker,
+		}))
+		if err != nil {
+			return nil, errors.WithStack(err)
+		}
+		plugs.Add(plugdeps.Plugin{
+			Binary: "buffalo-docker",
+			GoGet:  "github.com/gobuffalo/buffalo-docker",
+		})
+	}
+	opts := &install.Options{
+		App:     app,
+		Plugins: plugs.List(),
+	}
+	if app.WithSQLite {
+		opts.Tags = meta.BuildTags{"sqlite"}
+	}
+	gg, err := install.New(opts)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	run.WithGroup(gg)
+
+	run.WithRun(func(r *genny.Runner) error {
+		f := genny.NewFile(filepath.Join(app.Root, "config", "buffalo-app.toml"), nil)
+		if err := toml.NewEncoder(f).Encode(app); err != nil {
+			return errors.WithStack(err)
+		}
+		return r.File(f)
+	})
+
+	fn := makr.Func{
+		Runner: func(root string, data makr.Data) error {
+			return run.Run()
+		},
+	}
+	return fn, nil
 }
 
 func (a Generator) setupVCS(g *makr.Generator) {
@@ -123,21 +183,6 @@ func (a Generator) setupVCS(g *makr.Generator) {
 	}
 	g.Add(makr.NewCommand(exec.Command(a.VCS, args...)))
 	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-q", "-m", "Initial Commit")))
-}
-
-func (a Generator) setupDocker(root string, data makr.Data) error {
-	if a.Docker == "none" {
-		return nil
-	}
-
-	o := docker.New()
-	o.App = a.App
-	data["version"] = runtime.Version
-	if err := o.Run(root, data); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
 }
 
 func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
@@ -190,9 +235,9 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 	case "gitlab-ci":
 		if a.WithPop {
 			if a.DBType == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File().String() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File().String() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
 			} else {
 				data["testDbUrl"] = ""
 			}
