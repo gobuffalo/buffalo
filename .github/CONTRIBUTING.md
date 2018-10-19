@@ -4,11 +4,21 @@ First, thank you so much for wanting to contribute! It means so much that you ca
 
 ## First time committing to a Go Repo?
 
-Contributing to a Go project for the first time can be confusing due to import statements requiring a very specific path on disk.
+Contributing to a Go project for the first time can be confusing due to import statements requiring a very specific path on disk. You can use the following two approaches to contribute.
 
-Please take moment and read this fantastic post on how to easily work with Go repos.
+### 1. Using Go Path
+If you are using your Go Path for development, please take moment and read this fantastic post on how to easily work with Go repos.
 
 [https://splice.com/blog/contributing-open-source-git-repositories-go/](https://splice.com/blog/contributing-open-source-git-repositories-go/)
+
+### 2. Using Go Modules
+Support for Go Modules were introduced in [Release v0.13.0-beta.1](https://github.com/gobuffalo/buffalo/releases/tag/v0.13.0-beta.1), and you can now use them to easily set up a development environment. The steps involve:
+
+1. Fork the repo
+2. Clone the repo to any location in your work station
+3. Add a `GO111MODULE` environment variable with `export GO111MODULE=on`
+4. Run `make deps` to install dependencies
+5. Read the contribution guideline below
 
 ## Contributing to Buffalo
 
