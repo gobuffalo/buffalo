@@ -26,7 +26,7 @@ func init() {
 
 var testCmd = &cobra.Command{
 	Use:                "test",
-	Short:              "Runs the tests for your Buffalo app. Use --force-migrations if you want to skip schema load.",
+	Short:              "Run the tests for the Buffalo app. Use --force-migrations to skip schema load.",
 	DisableFlagParsing: true,
 	RunE: func(c *cobra.Command, args []string) error {
 		os.Setenv("GO_ENV", "test")

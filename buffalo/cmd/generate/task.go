@@ -12,7 +12,7 @@ import (
 var TaskCmd = &cobra.Command{
 	Use:     "task [name]",
 	Aliases: []string{"t", "grift"},
-	Short:   "Generates a grift task",
+	Short:   "Generate a grift task",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		g, err := grift.New(args...)
 		if err != nil {

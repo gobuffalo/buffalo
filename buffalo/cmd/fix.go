@@ -12,7 +12,7 @@ import (
 var fixCmd = &cobra.Command{
 	Use:     "fix",
 	Aliases: []string{"update"},
-	Short:   fmt.Sprintf("will attempt to fix a Buffalo application's API to match version %s", runtime.Version),
+	Short:   fmt.Sprintf("Attempt to fix a Buffalo application's API to match version %s", runtime.Version),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return fix.Run()
 	},
