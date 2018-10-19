@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-plugins v1.5.1
 	github.com/gobuffalo/buffalo-pop v1.1.0
 	github.com/gobuffalo/envy v1.6.5
-	github.com/gobuffalo/events v1.0.9
+	github.com/gobuffalo/events v1.1.0
 	github.com/gobuffalo/genny v0.0.0-20181017160347-90a774534246
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
