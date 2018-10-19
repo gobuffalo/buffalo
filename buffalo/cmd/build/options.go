@@ -3,7 +3,7 @@ package build
 import (
 	"encoding/json"
 
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 )
 
 // Options for a build

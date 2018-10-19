@@ -28,13 +28,13 @@ func New(ctx context.Context, opts Options) *Builder {
 	}
 
 	b.steps = []func() error{
-		b.prepTarget,
-		b.validateTemplates,
-		b.transformMain,
-		b.createBuildMain,
-		b.prepAPackage,
-		b.buildAInit,
-		b.buildADatabase,
+		b.prepTarget,        // no longer needed
+		b.validateTemplates, // completed
+		b.transformMain,     // completed
+		b.createBuildMain,   // completed
+		b.prepAPackage,      // completed
+		b.buildAInit,        // completed
+		b.buildADatabase,    // completed
 		b.buildAssets,
 		b.installBuildDeps,
 		b.buildBin,
