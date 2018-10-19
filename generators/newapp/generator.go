@@ -22,6 +22,8 @@ var Templates = packr.NewBox("../newapp/templates")
 // ErrNotInGoPath can be asserted against
 var ErrNotInGoPath = errors.New("currently not in a $GOPATH")
 
+var errGoModulesWithDep = errors.New("--with-dep cannot be used with Go Modules enabled")
+
 // Generator is the representation of a new Buffalo application
 type Generator struct {
 	meta.App
@@ -118,9 +120,14 @@ func (g Generator) Validate() error {
 }
 
 func (g Generator) validateInGoPath() error {
+	if g.App.WithModules && g.App.WithDep {
+		return errGoModulesWithDep
+	}
+
 	if g.App.WithModules {
 		return nil
 	}
+
 	gpMultiple := envy.GoPaths()
 
 	larp := strings.ToLower(meta.ResolveSymlinks(filepath.Dir(g.Root)))
