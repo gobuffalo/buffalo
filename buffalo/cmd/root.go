@@ -15,7 +15,7 @@ var anywhereCommands = []string{"new", "version", "info", "help"}
 var RootCmd = &cobra.Command{
 	SilenceErrors: true,
 	Use:           "buffalo",
-	Short:         "Helps you build your Buffalo applications that much easier!",
+	Short:         "Build Buffalo applications with ease",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := events.LoadPlugins(); err != nil {
 			return err

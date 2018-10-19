@@ -12,7 +12,7 @@ func init() {
 
 var routesCmd = &cobra.Command{
 	Use:   "routes",
-	Short: "Print out all defined routes",
+	Short: "Print all defined routes",
 	RunE: func(c *cobra.Command, args []string) error {
 		return grifts.Run("buffalo task", []string{"routes"})
 	},

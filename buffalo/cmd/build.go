@@ -23,7 +23,7 @@ var buildOptions = struct {
 var xbuildCmd = &cobra.Command{
 	Use:     "build",
 	Aliases: []string{"b", "bill"},
-	Short:   "Builds a Buffalo binary, including bundling of assets (packr & webpack)",
+	Short:   "Build the application binary, including bundling of assets (packr & webpack)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
@@ -52,7 +52,7 @@ var xbuildCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
-		logrus.Infof("\nYour application was successfully built at %s\n", b.AbsoluteBinaryPath())
+		logrus.Infof("\nThe application was successfully built at %s\n", b.AbsoluteBinaryPath())
 
 		return nil
 	},

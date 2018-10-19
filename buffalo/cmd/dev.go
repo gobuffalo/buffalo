@@ -36,10 +36,10 @@ var devOptions = struct {
 // devCmd represents the dev command
 var devCmd = &cobra.Command{
 	Use:   "dev",
-	Short: "Runs your Buffalo app in 'development' mode",
-	Long: `Runs your Buffalo app in 'development' mode.
-This includes rebuilding your application when files change.
-This behavior can be changed in your .buffalo.dev.yml file.`,
+	Short: "Run the Buffalo app in 'development' mode",
+	Long: `Run the Buffalo app in 'development' mode.
+This includes rebuilding the application when files change.
+This behavior can be changed in .buffalo.dev.yml file.`,
 	RunE: func(c *cobra.Command, args []string) error {
 		if runtime.GOOS == "windows" {
 			color.NoColor = true
