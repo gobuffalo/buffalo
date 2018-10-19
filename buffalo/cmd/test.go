@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
