@@ -12,8 +12,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TemplateValidator is given a file and returns an
+// effort if there is a template validation error
+// with the template
 type TemplateValidator func(f genny.File) error
 
+// ValidateTemplates returns a genny.RunFn that will walk the
+// given box and run each of the files found through each of the
+// template validators
 func ValidateTemplates(box packr.Box, tvs []TemplateValidator) genny.RunFn {
 	if len(tvs) == 0 {
 		return func(r *genny.Runner) error {
@@ -52,14 +58,19 @@ func ValidateTemplates(box packr.Box, tvs []TemplateValidator) genny.RunFn {
 	}
 }
 
+// PlushValidator validates the file is a valid
+// Plush file if the extension is .md, .html, or .plush
 func PlushValidator(f genny.File) error {
-	if !genny.HasExt(f, ".md") && !genny.HasExt(f, ".html") {
+	if !genny.HasExt(f, ".html", ".md", ".plush") {
 		return nil
 	}
 	_, err := plush.Parse(f.String())
 	return err
 }
 
+// GoTemplateValidator validates the file is a
+// valid Go text/template file if the extenion
+// is .tmpl
 func GoTemplateValidator(f genny.File) error {
 	if !genny.HasExt(f, ".tmpl") {
 		return nil

@@ -2,12 +2,10 @@ package build
 
 import (
 	"os/exec"
-	"regexp"
 	"strings"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
-	"github.com/pkg/errors"
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {
@@ -34,12 +32,6 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 
 	// Add any additional ldflags passed in to the build args
 	if len(opts.LDFlags) > 0 {
-		if foundVersion, _ := regexp.MatchString("-X\\s+main.BuildVersion=", opts.LDFlags); foundVersion {
-			return nil, errors.New("the ldflag option '-X main.BuildVersion=' is reserved for Buffalo use")
-		}
-		if foundBuildTime, _ := regexp.MatchString("-X\\s+main.BuildTime=", opts.LDFlags); foundBuildTime {
-			return nil, errors.New("the ldflag option '-X main.BuildTime=' is reserved for Buffalo use")
-		}
 		flags = append(flags, opts.LDFlags)
 	}
 	if len(flags) > 0 {

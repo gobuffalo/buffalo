@@ -11,6 +11,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New generator for building a Buffalo application
+// This powers the `buffalo build` command and can be
+// used to programatically build/compile Buffalo
+// applications.
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 

@@ -31,11 +31,7 @@ test:
 
 ci-deps:
 	$(GO_BIN) get github.com/gobuffalo/packr/packr
-<<<<<<< HEAD
 	$(GO_BIN) get -tags ${TAGS} -t -v ./...
-=======
-	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
->>>>>>> more work on genny/build
 	make tidy
 
 ci-test:

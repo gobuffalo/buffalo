@@ -46,10 +46,12 @@ func Test_buildCmd(t *testing.T) {
 	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X foo.Bar=baz", strings.Join(c.Args, " "))
 
 	opts.LDFlags = "-X main.BuildTime=asdf"
-	_, err = buildCmd(opts)
-	r.Error(err)
+	c, err = buildCmd(opts)
+	r.NoError(err)
+	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildTime=asdf", strings.Join(c.Args, " "))
 
 	opts.LDFlags = "-X main.BuildVersion=asdf"
-	_, err = buildCmd(opts)
-	r.Error(err)
+	c, err = buildCmd(opts)
+	r.NoError(err)
+	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildVersion=asdf", strings.Join(c.Args, " "))
 }
