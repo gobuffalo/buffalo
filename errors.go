@@ -136,14 +136,7 @@ func productionErrorResponseFor(status int) []byte {
 type ErrorResponse struct {
 	XMLName xml.Name `json:"-" xml:"response"`
 	Error   string   `json:"error" xml:"error"`
-	Trace   string   `json:"trace" xml:"trace"`
-	Code    int      `json:"code" xml:"code,attr"`
-}
-
-// ErrorResponseProduction is a used to display errors as JSON or XML in production
-type ErrorResponseProduction struct {
-	XMLName xml.Name `json:"-" xml:"response"`
-	Error   string   `json:"error" xml:"error"`
+	Trace   string   `json:"trace,omitempty" xml:"trace,omitempty"`
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
@@ -158,7 +151,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	if env != nil && env.(string) == "production" {
 		switch strings.ToLower(ct) {
 		case "application/json", "text/json", "json":
-			err := json.NewEncoder(c.Response()).Encode(&ErrorResponseProduction{
+			err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 				Error: errors.Cause(origErr).Error(),
 				Code:  status,
 			})
@@ -166,7 +159,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 				return errors.WithStack(err)
 			}
 		case "application/xml", "text/xml", "xml":
-			err := xml.NewEncoder(c.Response()).Encode(&ErrorResponseProduction{
+			err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 				Error: errors.Cause(origErr).Error(),
 				Code:  status,
 			})
