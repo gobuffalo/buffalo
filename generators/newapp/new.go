@@ -35,6 +35,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
 		defer os.RemoveAll(filepath.Join(a.Root, "public"))
 	}
+	if !a.App.WithModules {
+		defer os.Remove(filepath.Join(a.Root, "go.mod"))
+	}
 	if a.Force {
 		os.RemoveAll(a.Root)
 	}
