@@ -69,7 +69,7 @@ func PlushValidator(f genny.File) error {
 }
 
 // GoTemplateValidator validates the file is a
-// valid Go text/template file if the extenion
+// valid Go text/template file if the extension
 // is .tmpl
 func GoTemplateValidator(f genny.File) error {
 	if !genny.HasExt(f, ".tmpl") {
