@@ -1,8 +1,12 @@
 package cmd
 
 import (
+	"bytes"
 	"context"
 	"os"
+	"os/exec"
+	"strings"
+	"time"
 
 	"github.com/gobuffalo/buffalo/genny/build"
 	"github.com/gobuffalo/genny"
@@ -21,7 +25,9 @@ var buildOptions = struct {
 	DryRun                 bool
 	Verbose                bool
 }{
-	Options: &build.Options{},
+	Options: &build.Options{
+		BuildTime: time.Now(),
+	},
 }
 
 var xbuildCmd = &cobra.Command{
@@ -47,6 +53,7 @@ var xbuildCmd = &cobra.Command{
 		}
 
 		opts := buildOptions.Options
+		opts.BuildVersion = buildVersion(opts.BuildTime.Format(time.RFC3339))
 
 		if buildOptions.Tags != "" {
 			opts.Tags = append(opts.Tags, buildOptions.Tags)
@@ -78,4 +85,51 @@ func init() {
 	xbuildCmd.Flags().BoolVarP(&buildOptions.DryRun, "dry-run", "d", false, "runs the build 'dry'")
 	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating plush templates")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
+}
+
+func buildVersion(version string) string {
+	vcs := buildOptions.VCS
+
+	if len(vcs) == 0 {
+		return version
+	}
+
+	ctx := context.Background()
+	run := genny.WetRunner(ctx)
+	if buildOptions.DryRun {
+		run = genny.DryRunner(ctx)
+	}
+
+	_, err := exec.LookPath(vcs)
+	if err != nil {
+		run.Logger.Warnf("could not find %s; defaulting to version %s", vcs, version)
+		return vcs
+	}
+	var cmd *exec.Cmd
+	switch vcs {
+	case "git":
+		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
+	case "bzr":
+		cmd = exec.Command("bzr", "revno")
+	default:
+		run.Logger.Warnf("could not find %s; defaulting to version %s", vcs, version)
+		return vcs
+	}
+
+	out := &bytes.Buffer{}
+	cmd.Stdout = out
+	run.WithRun(func(r *genny.Runner) error {
+		return r.Exec(cmd)
+	})
+
+	if err := run.Run(); err != nil {
+		run.Logger.Error(err)
+		return version
+	}
+
+	if out.String() != "" {
+		return strings.TrimSpace(out.String())
+	}
+
+	return version
 }
