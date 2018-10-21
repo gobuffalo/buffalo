@@ -31,7 +31,7 @@ test:
 
 ci-deps:
 	$(GO_BIN) get github.com/gobuffalo/packr/packr
-	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
+	$(GO_BIN) get -tags ${TAGS} -t -v ./...
 	make tidy
 
 ci-test:
