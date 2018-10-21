@@ -140,6 +140,13 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
+// ErrorResponseProduction is a used to display errors as JSON or XML in production
+type ErrorResponseProduction struct {
+	XMLName xml.Name `json:"-" xml:"response"`
+	Error   string   `json:"error" xml:"error"`
+	Code    int      `json:"code" xml:"code,attr"`
+}
+
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
@@ -149,8 +156,27 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
-		responseBody := productionErrorResponseFor(status)
-		c.Response().Write(responseBody)
+		switch strings.ToLower(ct) {
+		case "application/json", "text/json", "json":
+			err := json.NewEncoder(c.Response()).Encode(&ErrorResponseProduction{
+				Error: errors.Cause(origErr).Error(),
+				Code:  status,
+			})
+			if err != nil {
+				return errors.WithStack(err)
+			}
+		case "application/xml", "text/xml", "xml":
+			err := xml.NewEncoder(c.Response()).Encode(&ErrorResponseProduction{
+				Error: errors.Cause(origErr).Error(),
+				Code:  status,
+			})
+			if err != nil {
+				return errors.WithStack(err)
+			}
+		default:
+			responseBody := productionErrorResponseFor(status)
+			c.Response().Write(responseBody)
+		}
 		return nil
 	}
 
