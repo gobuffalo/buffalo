@@ -1,0 +1,13 @@
+development:
+  dialect: postgres
+  database: coke_development
+  user: postgres
+  password: postgres
+  host: 127.0.0.1
+  pool: 5
+
+test:
+  url: {{envOr "TEST_DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/coke_test?sslmode=disable"}}
+
+production:
+  url: {{envOr "DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/coke_production?sslmode=disable"}}

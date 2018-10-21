@@ -11,7 +11,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TODO: once `buffalo new` is converted to use genny
+// create an integration test that first generates a new application
+// and then tries to build using genny/build.
 var coke = packr.NewBox("../build/_fixtures/coke")
+
+var cokeRunner = func() *genny.Runner {
+	run := gentest.NewRunner()
+	run.Disk.AddBox(coke)
+	run.Root = coke.Path
+	return run
+}
 
 func Test_New(t *testing.T) {
 	r := require.New(t)

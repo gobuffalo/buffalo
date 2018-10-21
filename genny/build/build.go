@@ -2,7 +2,6 @@ package build
 
 import (
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/gobuffalo/genny"
@@ -27,42 +26,24 @@ func New(opts *Options) (*genny.Generator, error) {
 	// rename main() to originalMain()
 	g.RunFn(transformMain(opts))
 
+	// add any necessary templates for the build
 	box := packr.NewBox("../build/templates")
 	if err := g.Box(box); err != nil {
 		return g, errors.WithStack(err)
 	}
+
+	// configure plush
 	ctx := plush.NewContext()
 	ctx.Set("opts", opts)
 	ctx.Set("buildTime", opts.BuildTime.Format(time.RFC3339))
 	ctx.Set("buildVersion", opts.BuildVersion)
+	g.Transformer(plushgen.Transformer(ctx))
 
 	// create the ./a pkg
 	g.RunFn(apkg(opts))
-	g.Transformer(plushgen.Transformer(ctx))
 
 	// clean up everything!
-	g.RunFn(func(r *genny.Runner) error {
-		var err error
-		opts.rollback.Range(func(k, v interface{}) bool {
-			f := genny.NewFile(k.(string), strings.NewReader(v.(string)))
-			r.Logger.Debug("rolling back modified file", f.Name())
-			if err = r.File(f); err != nil {
-				return false
-			}
-			r.Disk.Remove(f.Name())
-			return true
-		})
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		for _, f := range r.Disk.Files() {
-			r.Logger.Debug("cleaning up generated file", f.Name())
-			if err := r.Disk.Delete(f.Name()); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		return nil
-	})
+	g.RunFn(cleanup(opts))
 
 	return g, nil
 }

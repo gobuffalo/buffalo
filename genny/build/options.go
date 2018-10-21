@@ -16,7 +16,6 @@ type Options struct {
 	LDFlags            string
 	Tags               meta.BuildTags
 	Static             bool
-	Compress           bool
 	Environment        string
 	TemplateValidators []TemplateValidator
 	rollback           *sync.Map
