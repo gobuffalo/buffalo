@@ -9,23 +9,23 @@ import (
 	"github.com/pkg/errors"
 )
 
-func apkg(opts *Options) genny.RunFn {
-	rns := []genny.RunFn{
-		copyInflections,
-		copyDatabase,
+func apkg(opts *Options) (*genny.Generator, error) {
+	g := genny.New()
+
+	if err := opts.Validate(); err != nil {
+		return g, errors.WithStack(err)
 	}
 
-	return func(r *genny.Runner) error {
-		for _, rn := range rns {
-			if err := rn(r); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		return nil
-	}
+	g.RunFn(copyInflections)
+	g.RunFn(copyDatabase)
+
+	return g, nil
 }
 
 func copyDatabase(r *genny.Runner) error {
+	defer func() {
+		r.Disk.Remove("database.yml")
+	}()
 	f, err := r.FindFile("database.yml")
 	if err != nil {
 		// it's ok to not have this file

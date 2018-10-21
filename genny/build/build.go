@@ -40,7 +40,34 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.Transformer(plushgen.Transformer(ctx))
 
 	// create the ./a pkg
-	g.RunFn(apkg(opts))
+	ag, err := apkg(opts)
+	if err != nil {
+		return g, errors.WithStack(err)
+	}
+	g.Merge(ag)
+
+	if opts.WithAssets {
+		// mount the assets generator
+		ag, err := assets(opts)
+		if err != nil {
+			return g, errors.WithStack(err)
+		}
+		g.Merge(ag)
+	}
+
+	// mount the build time dependency generator
+	dg, err := buildDeps(opts)
+	if err != nil {
+		return g, errors.WithStack(err)
+	}
+	g.Merge(dg)
+
+	// create the final go build command
+	c, err := buildCmd(opts)
+	if err != nil {
+		return g, errors.WithStack(err)
+	}
+	g.Command(c)
 
 	// clean up everything!
 	g.RunFn(cleanup(opts))

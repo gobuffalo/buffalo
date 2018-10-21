@@ -15,6 +15,7 @@ type Options struct {
 	WithAssets         bool
 	LDFlags            string
 	Tags               meta.BuildTags
+	BuildFlags         []string
 	Static             bool
 	Environment        string
 	TemplateValidators []TemplateValidator

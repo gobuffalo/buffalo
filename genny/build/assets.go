@@ -2,6 +2,7 @@ package build
 
 import (
 	"context"
+	"io/ioutil"
 	"os/exec"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
@@ -24,7 +25,9 @@ func assets(opts *Options) (*genny.Generator, error) {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
-		g.Command(exec.Command(webpack.BinPath))
+		c := exec.Command(webpack.BinPath)
+		c.Stdout = ioutil.Discard
+		g.Command(c)
 	}
 
 	p := pack.New(context.Background(), opts.App.Root)
@@ -38,6 +41,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 
 	if opts.ExtractAssets && opts.WithAssets {
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
+		// mount the archived assets generator
 		aa, err := archivedAssets(opts)
 		if err != nil {
 			return g, errors.WithStack(err)

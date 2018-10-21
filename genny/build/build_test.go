@@ -1,12 +1,12 @@
 package build
 
 import (
-	"bytes"
-	"io"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr"
 	"github.com/stretchr/testify/require"
 )
@@ -26,23 +26,27 @@ var cokeRunner = func() *genny.Runner {
 func Test_New(t *testing.T) {
 	r := require.New(t)
 
-	g, err := New(&Options{})
-	r.NoError(err)
+	run := cokeRunner()
 
-	run := gentest.NewRunner()
-	coke.Walk(func(path string, file packr.File) error {
-		bb := &bytes.Buffer{}
-		io.Copy(bb, file)
-		f := genny.NewFile(path, bb)
-		run.Disk.Add(f)
-		return nil
-	})
-	run.With(g)
+	opts := &Options{
+		WithAssets:  true,
+		Environment: "bar",
+		App:         meta.New("."),
+	}
+	opts.App.Bin = "bin/foo"
+	r.NoError(run.WithNew(New(opts)))
+	run.Root = opts.App.Root
 
 	r.NoError(run.Run())
 
 	res := run.Results()
 
-	r.Len(res.Commands, 0)
+	// we should never leave any files modified or dropped
 	r.Len(res.Files, 0)
+
+	cmds := []string{"go get ./...", "go build -tags bar -o bin/foo"}
+	r.Len(res.Commands, len(cmds))
+	for i, c := range res.Commands {
+		r.Equal(cmds[i], strings.Join(c.Args, " "))
+	}
 }
