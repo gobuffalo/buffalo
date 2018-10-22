@@ -5,12 +5,14 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_buildCmd(t *testing.T) {
 	envy.Set("GO_BIN", "go")
+	gomods.Force(true)
 	r := require.New(t)
 
 	opts := &Options{
