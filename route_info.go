@@ -99,7 +99,7 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	payload := events.Payload{
 		"route":   ri,
-		"req":     req,
+		"app":     a,
 		"context": c,
 	}
 

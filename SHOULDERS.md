@@ -5,6 +5,8 @@ github.com/gobuffalo/buffalo does not try to reinvent the wheel! Instead, it use
 Thank you to the following **GIANTS**:
 
 
+* [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
+
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
 
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
@@ -20,6 +22,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/buffalo](https://godoc.org/github.com/gobuffalo/buffalo)
 
 * [github.com/gobuffalo/buffalo-plugins/plugins](https://godoc.org/github.com/gobuffalo/buffalo-plugins/plugins)
+
+* [github.com/gobuffalo/buffalo-plugins/plugins/plugdeps](https://godoc.org/github.com/gobuffalo/buffalo-plugins/plugins/plugdeps)
 
 * [github.com/gobuffalo/buffalo/binding](https://godoc.org/github.com/gobuffalo/buffalo/binding)
 
@@ -37,6 +41,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/fizz/translators](https://godoc.org/github.com/gobuffalo/fizz/translators)
 
+* [github.com/gobuffalo/flect](https://godoc.org/github.com/gobuffalo/flect)
+
+* [github.com/gobuffalo/flect/name](https://godoc.org/github.com/gobuffalo/flect/name)
+
 * [github.com/gobuffalo/genny](https://godoc.org/github.com/gobuffalo/genny)
 
 * [github.com/gobuffalo/genny/movinglater/gotools/gomods](https://godoc.org/github.com/gobuffalo/genny/movinglater/gotools/gomods)
@@ -48,6 +56,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
 * [github.com/gobuffalo/mapi](https://godoc.org/github.com/gobuffalo/mapi)
+
+* [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
 * [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
 
@@ -91,6 +101,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/x/randx](https://godoc.org/github.com/gobuffalo/x/randx)
 
+* [github.com/gofrs/uuid](https://godoc.org/github.com/gofrs/uuid)
+
 * [github.com/gorilla/context](https://godoc.org/github.com/gorilla/context)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)
@@ -99,11 +111,25 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gorilla/sessions](https://godoc.org/github.com/gorilla/sessions)
 
+* [github.com/jackc/pgx](https://godoc.org/github.com/jackc/pgx)
+
+* [github.com/jackc/pgx/chunkreader](https://godoc.org/github.com/jackc/pgx/chunkreader)
+
+* [github.com/jackc/pgx/internal/sanitize](https://godoc.org/github.com/jackc/pgx/internal/sanitize)
+
+* [github.com/jackc/pgx/pgio](https://godoc.org/github.com/jackc/pgx/pgio)
+
+* [github.com/jackc/pgx/pgproto3](https://godoc.org/github.com/jackc/pgx/pgproto3)
+
+* [github.com/jackc/pgx/pgtype](https://godoc.org/github.com/jackc/pgx/pgtype)
+
 * [github.com/jmoiron/sqlx](https://godoc.org/github.com/jmoiron/sqlx)
 
 * [github.com/jmoiron/sqlx/reflectx](https://godoc.org/github.com/jmoiron/sqlx/reflectx)
 
 * [github.com/joho/godotenv](https://godoc.org/github.com/joho/godotenv)
+
+* [github.com/karrick/godirwalk](https://godoc.org/github.com/karrick/godirwalk)
 
 * [github.com/kballard/go-shellquote](https://godoc.org/github.com/kballard/go-shellquote)
 
@@ -124,6 +150,8 @@ Thank you to the following **GIANTS**:
 * [github.com/markbates/refresh/refresh](https://godoc.org/github.com/markbates/refresh/refresh)
 
 * [github.com/markbates/refresh/refresh/web](https://godoc.org/github.com/markbates/refresh/refresh/web)
+
+* [github.com/markbates/safe](https://godoc.org/github.com/markbates/safe)
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
@@ -156,6 +184,10 @@ Thank you to the following **GIANTS**:
 * [github.com/sourcegraph/annotate](https://godoc.org/github.com/sourcegraph/annotate)
 
 * [github.com/sourcegraph/syntaxhighlight](https://godoc.org/github.com/sourcegraph/syntaxhighlight)
+
+* [github.com/spf13/cobra](https://godoc.org/github.com/spf13/cobra)
+
+* [github.com/spf13/pflag](https://godoc.org/github.com/spf13/pflag)
 
 * [golang.org/x/crypto/bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt)
 

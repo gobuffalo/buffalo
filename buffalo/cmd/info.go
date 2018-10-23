@@ -7,9 +7,9 @@ import (
 	"os/exec"
 	"reflect"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ import (
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Prints off diagnostic information useful for debugging.",
+	Short: "Print diagnostic information (useful for debugging)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		bb := os.Stdout
 

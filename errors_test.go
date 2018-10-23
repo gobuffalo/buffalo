@@ -23,6 +23,44 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	r.Equal("text/html; charset=utf-8", ct)
 }
 
+func Test_defaultErrorHandler_JSON(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.GET("/", func(c Context) error {
+		return c.Error(401, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.JSON("/").Get()
+	r.Equal(401, res.Code)
+	ct := res.Header().Get("content-type")
+	r.Equal("application/json", ct)
+	b := res.Body.String()
+	r.Contains(b, `"code":401`)
+	r.Contains(b, `"error":"boom"`)
+	r.Contains(b, `"trace":"`)
+}
+
+func Test_defaultErrorHandler_XML(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.GET("/", func(c Context) error {
+		return c.Error(401, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.XML("/").Get()
+	r.Equal(401, res.Code)
+	ct := res.Header().Get("content-type")
+	r.Equal("application/xml", ct)
+	b := res.Body.String()
+	r.Contains(b, `<response code="401">`)
+	r.Contains(b, `<error>boom</error>`)
+	r.Contains(b, `<trace>`)
+	r.Contains(b, `</trace>`)
+	r.Contains(b, `</response>`)
+}
+
 func Test_PanicHandler(t *testing.T) {
 	app := New(Options{})
 	app.GET("/string", func(c Context) error {

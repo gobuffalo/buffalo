@@ -1,6 +1,6 @@
 package soda
 
-import "github.com/gobuffalo/buffalo/meta"
+import "github.com/gobuffalo/meta"
 
 // Generator for setting soda in a Buffalo app
 type Generator struct {

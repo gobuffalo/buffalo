@@ -1,0 +1,27 @@
+[{
+    "path": "actions/admin_users.go",
+    "contains": [
+      "type AdminUsersResource struct",
+      "func (v AdminUsersResource)"
+    ]
+  },
+  {
+    "path": "actions/admin_users_test.go",
+    "contains": [
+      "package actions",
+      "Test_AdminUsersResource_List"
+    ]
+  },
+  {
+    "path": "locales/admin/users.en-us.yaml",
+    "contains": [
+      "translation: \"AdminUser was successfully created.\""
+    ]
+  },
+  {
+    "path": "models/admin_user.go",
+    "contains": [
+      "type AdminUser struct"
+    ]
+  }
+]

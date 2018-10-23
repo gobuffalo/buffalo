@@ -15,6 +15,8 @@ RUN service postgresql start && \
 
 RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/gobuffalo/pop \
+&& go get -v -u github.com/gobuffalo/buffalo-pop \
+&& go get -v -u github.com/gobuffalo/packr/packr \
 && go get -v -u github.com/markbates/filetest \
 && go get -v -u github.com/markbates/grift \
 && go get -v -u github.com/markbates/refresh \

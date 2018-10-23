@@ -2,8 +2,8 @@ package generate
 
 import (
 	"github.com/gobuffalo/buffalo/generators/mail"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -14,7 +14,7 @@ var mailer = mail.Generator{}
 // MailCmd for generating mailers
 var MailCmd = &cobra.Command{
 	Use:   "mailer [name]",
-	Short: "Generates a new mailer for Buffalo",
+	Short: "Generate a new mailer for Buffalo",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return errors.New("you must supply a name for your mailer")

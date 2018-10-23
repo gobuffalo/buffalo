@@ -27,6 +27,12 @@ type App struct {
 	filepaths       []string
 }
 
+// Muxer returns the underlying mux router to allow
+// for advance configurations
+func (a *App) Muxer() *mux.Router {
+	return a.router
+}
+
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
 	events.LoadPlugins()

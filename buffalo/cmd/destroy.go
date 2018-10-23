@@ -8,7 +8,7 @@ import (
 // DestroyCmd destroys generated code
 var DestroyCmd = &cobra.Command{
 	Use:     "destroy",
-	Short:   "destroys generated code",
+	Short:   "Destroy generated components",
 	Aliases: []string{"d"},
 }
 
