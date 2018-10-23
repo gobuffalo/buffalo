@@ -140,7 +140,7 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
-const defErrorCT = "text/html; charset-utf-8"
+const defErrorCT = "text/html; charset=utf-8"
 
 type stackTracer interface {
 	StackTrace() errors.StackTrace
