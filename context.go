@@ -7,7 +7,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/x/httpx"
+	"github.com/golang/gddo/httputil"
 	"github.com/gorilla/mux"
 )
 
@@ -62,7 +62,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 	session := a.getSession(req, res)
 
-	ct := httpx.ContentType(req)
+	ct := httputil.NegotiateContentType(req, binding.RegisteredTypes(), "")
 	contextData := map[string]interface{}{
 		"app":           a,
 		"env":           a.Env,

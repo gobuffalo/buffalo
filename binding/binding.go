@@ -75,6 +75,19 @@ func Register(contentType string, fn Binder) {
 	binders[strings.ToLower(contentType)] = fn
 }
 
+// RegisteredTypes gets a list of the Content-Types that have been registered
+// with Binders and can be used in negotiating a response Content-Type.
+func RegisteredTypes() []string {
+	lock.Lock()
+	defer lock.Unlock()
+
+	types := []string{}
+	for name, _ := range binders {
+		types = append(types, name)
+	}
+	return types
+}
+
 // Exec will bind the interface to the request.Body. The type of binding
 // is dependent on the "Content-Type" for the request. If the type
 // is "application/json" it will use "json.NewDecoder". If the type
