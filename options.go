@@ -79,7 +79,6 @@ func NewOptions() Options {
 
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
-	opts.LogLevel = defaults.String(opts.LogLevel, envy.Get("LOG_LEVEL", "debug"))
 	opts.Name = defaults.String(opts.Name, "/")
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
@@ -108,12 +107,17 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Context, opts.cancel = context.WithCancel(opts.Context)
 
 	if opts.Logger == nil {
-		if opts.LogLvl == logger.Level(0) {
+
+		if len(opts.LogLevel) > 0 {
 			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
 			opts.Logger = logger.NewLogger(opts.LogLevel)
 		} else {
-			opts.Logger = logger.New(opts.LogLvl)
+			if opts.LogLvl == 0 {
+				opts.LogLvl = logger.DebugLevel
+			}
 		}
+
+		opts.Logger = logger.New(opts.LogLvl)
 	}
 
 	pop.Log = func(s string, args ...interface{}) {
