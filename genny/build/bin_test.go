@@ -1,6 +1,8 @@
 package build
 
 import (
+	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -15,45 +17,53 @@ func Test_buildCmd(t *testing.T) {
 	gomods.Force(true)
 	r := require.New(t)
 
+	eq := func(s string, c *exec.Cmd) {
+		if runtime.GOOS == "windows" {
+			s = strings.Replace(s, "bin/build", `bin\\build.exe`, 1)
+			s = strings.Replace(s, "bin/foo", `bin\\foo.exe`, 1)
+		}
+		r.Equal(s, strings.Join(c.Args, " "))
+	}
+
 	opts := &Options{
 		App: meta.New("."),
 	}
 	c, err := buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -o bin/build", strings.Join(c.Args, " "))
+	eq("go build -o bin/build", c)
 
 	opts.Environment = "bar"
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar -o bin/build", strings.Join(c.Args, " "))
+	eq("go build -tags bar -o bin/build", c)
 
 	opts.App.Bin = "bin/foo"
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar -o bin/foo", strings.Join(c.Args, " "))
+	eq("go build -tags bar -o bin/foo", c)
 
 	opts.WithSQLite = true
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar sqlite -o bin/foo", strings.Join(c.Args, " "))
+	eq("go build -tags bar sqlite -o bin/foo", c)
 
 	opts.LDFlags = "-X foo.Bar=baz"
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -X foo.Bar=baz", strings.Join(c.Args, " "))
+	eq("go build -tags bar sqlite -o bin/foo -ldflags -X foo.Bar=baz", c)
 
 	opts.Static = true
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X foo.Bar=baz", strings.Join(c.Args, " "))
+	eq("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X foo.Bar=baz", c)
 
 	opts.LDFlags = "-X main.BuildTime=asdf"
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildTime=asdf", strings.Join(c.Args, " "))
+	eq("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildTime=asdf", c)
 
 	opts.LDFlags = "-X main.BuildVersion=asdf"
 	c, err = buildCmd(opts)
 	r.NoError(err)
-	r.Equal("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildVersion=asdf", strings.Join(c.Args, " "))
+	eq("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildVersion=asdf", c)
 }
