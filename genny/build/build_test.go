@@ -1,10 +1,10 @@
 package build
 
 import (
+	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
-	"runtime"
-	"os/exec"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"

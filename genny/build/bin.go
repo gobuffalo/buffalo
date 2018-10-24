@@ -2,8 +2,8 @@ package build
 
 import (
 	"os/exec"
-	"strings"
 	"runtime"
+	"strings"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
