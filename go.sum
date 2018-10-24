@@ -54,6 +54,8 @@ github.com/gobuffalo/events v1.1.3 h1:TQop86GldHCxlW8Pdyyyzw7KqXROT0V8bkuWrnhta6
 github.com/gobuffalo/events v1.1.3/go.mod h1:9yPGWYv11GENtzrIRApwQRMYSbUgCsZ1w6R503fCfrk=
 github.com/gobuffalo/fizz v1.0.12 h1:JJOkmlStog5AiBL434UoGMJ896p3MnTnzedFVaZSF3k=
 github.com/gobuffalo/fizz v1.0.12/go.mod h1:C0sltPxpYK8Ftvf64kbsQa2yiCZY4RZviurNxXdAKwc=
+github.com/gobuffalo/fizz v1.0.13 h1:26P6k7Qlf6DJMB8D/0L1GLOgG2JVBItm8cP8cNNm71w=
+github.com/gobuffalo/fizz v1.0.13/go.mod h1:v83LCLNuzL7GCwS5bbN6tZhQa+aKtfz8T+OoJewHaLw=
 github.com/gobuffalo/flect v0.0.0-20180907193754-dc14d8acaf9f/go.mod h1:rCiQgmAE4axgBNl3jZWzS5rETRYTGOsrixTRaCPzNdA=
 github.com/gobuffalo/flect v0.0.0-20181002182613-4571df4b1daf/go.mod h1:rCiQgmAE4axgBNl3jZWzS5rETRYTGOsrixTRaCPzNdA=
 github.com/gobuffalo/flect v0.0.0-20181007231023-ae7ed6bfe683/go.mod h1:rCiQgmAE4axgBNl3jZWzS5rETRYTGOsrixTRaCPzNdA=
