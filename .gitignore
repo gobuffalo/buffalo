@@ -26,3 +26,4 @@ generated/
 bin/*
 gin-bin
 .idea/
+.vscode/settings.json

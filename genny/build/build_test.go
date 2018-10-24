@@ -3,6 +3,8 @@ package build
 import (
 	"strings"
 	"testing"
+	"runtime"
+	"os/exec"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
@@ -44,9 +46,17 @@ func Test_New(t *testing.T) {
 	// we should never leave any files modified or dropped
 	r.Len(res.Files, 0)
 
+	eq := func(s string, c *exec.Cmd) {
+		if runtime.GOOS == "windows" {
+			s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
+			s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
+		}
+		r.Equal(s, strings.Join(c.Args, " "))
+	}
+
 	cmds := []string{"go get ./...", "go build -tags bar -o bin/foo"}
 	r.Len(res.Commands, len(cmds))
 	for i, c := range res.Commands {
-		r.Equal(cmds[i], strings.Join(c.Args, " "))
+		eq(cmds[i], c)
 	}
 }

@@ -3,6 +3,7 @@ package build
 import (
 	"os/exec"
 	"strings"
+	"runtime"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
@@ -22,7 +23,14 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 		buildArgs = append(buildArgs, "-tags", tf.String())
 	}
 
-	buildArgs = append(buildArgs, "-o", opts.Bin)
+	bin := opts.App.Bin
+	if runtime.GOOS == "windows" {
+		if !strings.HasSuffix(bin, ".exe") {
+			bin += ".exe"
+		}
+		bin = strings.Replace(bin, "/", "\\", -1)
+	}
+	buildArgs = append(buildArgs, "-o", bin)
 
 	flags := []string{}
 

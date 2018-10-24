@@ -19,8 +19,8 @@ func Test_buildCmd(t *testing.T) {
 
 	eq := func(s string, c *exec.Cmd) {
 		if runtime.GOOS == "windows" {
-			s = strings.Replace(s, "bin/build", `bin\\build.exe`, 1)
-			s = strings.Replace(s, "bin/foo", `bin\\foo.exe`, 1)
+			s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
+			s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
 		}
 		r.Equal(s, strings.Join(c.Args, " "))
 	}
