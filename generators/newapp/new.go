@@ -118,6 +118,7 @@ func (a Generator) Run(root string, data makr.Data) error {
 func (a Generator) genny() (makr.Runnable, error) {
 	app := a.App
 	run := genny.WetRunner(context.Background())
+	run.Root = app.Root
 
 	plugs, err := plugdeps.List(app)
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
