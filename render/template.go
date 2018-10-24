@@ -17,7 +17,6 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
-	data        Data
 }
 
 func (s templateRenderer) ContentType() string {
@@ -25,7 +24,6 @@ func (s templateRenderer) ContentType() string {
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
-	s.data = data
 	var body template.HTML
 	var err error
 	for _, name := range s.names {
@@ -42,30 +40,22 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
 	d, f := filepath.Split(name)
 	name = filepath.Join(d, "_"+f)
-	m := Data{}
-	for k, v := range s.data {
-		m[k] = v
-	}
-	for k, v := range dd {
-		m[k] = v
-	}
 
-	if _, ok := m["layout"]; ok {
+	if _, ok := dd["layout"]; ok {
 
 		var body template.HTML
 		var err error
 
-		body, err = s.exec(name, m)
+		body, err = s.exec(name, dd)
 		if err != nil {
 			return body, err
 		}
-		m["yield"] = body
-		d, f := filepath.Split(fmt.Sprintf("%v", m["layout"]))
+		dd["yield"] = body
+		d, f := filepath.Split(fmt.Sprintf("%v", dd["layout"]))
 		name = filepath.Join(d, "_"+f)
 
 	}
-
-	return s.exec(name, m)
+	return s.exec(name, dd)
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
@@ -119,7 +109,18 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	helpers := map[string]interface{}{
-		"partial": s.partial,
+		"partial": func(name string, dd Data) (template.HTML, error) {
+			// call the partial copying the current context data,
+			// and any new args, before calling the partial helper
+			m := Data{}
+			for k, v := range data {
+				m[k] = v
+			}
+			for k, v := range dd {
+				m[k] = v
+			}
+			return s.partial(name, m)
+		},
 	}
 
 	helpers = s.addAssetsHelpers(helpers)
