@@ -58,6 +58,8 @@ github.com/gobuffalo/events v1.1.1/go.mod h1:Ia9OgHMco9pEhJaPrPQJ4u4+IZlkxYVco2V
 github.com/gobuffalo/events v1.1.3/go.mod h1:9yPGWYv11GENtzrIRApwQRMYSbUgCsZ1w6R503fCfrk=
 github.com/gobuffalo/events v1.1.4 h1:j4HNCHqcaTbYZx2EM1iltteoyQ8vwZ4VrnfvtXfdJas=
 github.com/gobuffalo/events v1.1.4/go.mod h1:09/YRRgZHEOts5Isov+g9X2xajxdvOAcUuAHIX/O//A=
+github.com/gobuffalo/events v1.1.5 h1:bqxUVNdEmVDbR0TzF/np02/44TB6HGwdO5gwd+Z2pBo=
+github.com/gobuffalo/events v1.1.5/go.mod h1:3YUSzgHfYctSjEjLCWbkXP6djH2M+MLaVRzb4ymbAK0=
 github.com/gobuffalo/fizz v1.0.12 h1:JJOkmlStog5AiBL434UoGMJ896p3MnTnzedFVaZSF3k=
 github.com/gobuffalo/fizz v1.0.12/go.mod h1:C0sltPxpYK8Ftvf64kbsQa2yiCZY4RZviurNxXdAKwc=
 github.com/gobuffalo/fizz v1.0.14/go.mod h1:uL5/Y6iTF6EOVT4RoR23yAAgU/PW6Qph3Er8lQgWot4=
