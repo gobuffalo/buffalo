@@ -5,20 +5,20 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-docker v1.0.3
-	github.com/gobuffalo/buffalo-plugins v1.6.3
-	github.com/gobuffalo/buffalo-pop v1.1.3
+	github.com/gobuffalo/buffalo-docker v1.0.4
+	github.com/gobuffalo/buffalo-plugins v1.6.6
+	github.com/gobuffalo/buffalo-pop v1.1.6
 	github.com/gobuffalo/envy v1.6.5
-	github.com/gobuffalo/events v1.1.3
-	github.com/gobuffalo/fizz v1.0.13 // indirect
+	github.com/gobuffalo/events v1.1.5
+	github.com/gobuffalo/fizz v1.0.15 // indirect
 	github.com/gobuffalo/flect v0.0.0-20181024204909-8f6be1a8c6c2
-	github.com/gobuffalo/genny v0.0.0-20181024195656-51392254bf53
+	github.com/gobuffalo/genny v0.0.0-20181025145300-af3f81d526b8
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181018192820-8c6cef77dab3
-	github.com/gobuffalo/mw-basicauth v1.0.3
+	github.com/gobuffalo/meta v0.0.0-20181025145500-3a985a084b0a
+	github.com/gobuffalo/mw-basicauth v1.0.7
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
 	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
@@ -29,7 +29,7 @@ require (
 	github.com/gobuffalo/plush v3.7.21+incompatible
 	github.com/gobuffalo/pop v4.8.5+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
-	github.com/gobuffalo/x v0.0.0-20181007152206-913e47c59ca7
+	github.com/gobuffalo/x v0.0.0-20181025192250-1ef645d63fe8
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
@@ -37,7 +37,7 @@ require (
 	github.com/markbates/grift v1.0.4
 	github.com/markbates/inflect v1.0.4
 	github.com/markbates/oncer v0.0.0-20181014194634-05fccaae8fc4
-	github.com/markbates/refresh v1.4.10
+	github.com/markbates/refresh v1.4.11
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
@@ -46,8 +46,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
-	golang.org/x/crypto v0.0.0-20181024171144-74cb1d3d52f4
+	golang.org/x/crypto v0.0.0-20181025113841-85e1b3f9139a
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
 	golang.org/x/tools v0.0.0-20181024171208-a2dc47679d30
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
