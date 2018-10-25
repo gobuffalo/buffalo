@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/assert"
 )
 
