@@ -5,11 +5,9 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/generators/assets/standard"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 // TemplateBox contains all templates needed for the webpack generator
@@ -22,11 +20,10 @@ var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 func (w Generator) Run(root string, data makr.Data) error {
 	g := makr.New()
 
-	// if there's no npm, return!
-	if _, err := exec.LookPath("npm"); err != nil {
-		logrus.Info("Could not find npm. Skipping webpack generation.")
+	// if there's no node, return!
 
-		return standard.Run(root, data)
+	if _, err := exec.LookPath("node"); err != nil {
+		return errors.New("could not find node installed. either install node or run with the --skip-webpack flag")
 	}
 
 	command := "yarnpkg"
@@ -38,6 +35,11 @@ func (w Generator) Run(root string, data makr.Data) error {
 		if err != nil {
 			return errors.WithStack(err)
 		}
+	}
+
+	// if there's no npm, return!
+	if _, err := exec.LookPath("npm"); err != nil {
+		return errors.New("could not find npm installed. either install node or run with the --skip-webpack flag")
 	}
 
 	files, err := generators.FindByBox(TemplateBox)
