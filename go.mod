@@ -12,7 +12,7 @@ require (
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/fizz v1.0.15 // indirect
 	github.com/gobuffalo/flect v0.0.0-20181024204909-8f6be1a8c6c2
-	github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc
+	github.com/gobuffalo/genny v0.0.0-20181027195209-3887b7171c4f
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46
