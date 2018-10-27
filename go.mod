@@ -22,11 +22,11 @@ require (
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
 	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
-	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
+	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packd v0.0.0-20181027194105-7ae579e6d213
-	github.com/gobuffalo/packr v1.15.0
+	github.com/gobuffalo/packr v1.15.1
 	github.com/gobuffalo/plush v3.7.21+incompatible
 	github.com/gobuffalo/pop v4.8.6+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible

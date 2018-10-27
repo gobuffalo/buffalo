@@ -129,20 +129,19 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
-	body := string(source)
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
 			logrus.Errorf("could not find a template engine for %s\n", ext)
 			continue
 		}
-		body, err = te(body, data, helpers)
+		source, err = te(source, data, helpers)
 		if err != nil {
 			return "", errors.Wrap(err, name)
 		}
 	}
 
-	return template.HTML(body), nil
+	return template.HTML(source), nil
 }
 
 func (s templateRenderer) exts(name string) []string {

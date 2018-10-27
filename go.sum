@@ -128,6 +128,8 @@ github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130 h1:v94+IGhlB
 github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130/go.mod h1:JvNHRj7bYNAMUr/5XMkZaDcw3jZhUZpsmzhd//FFWmQ=
 github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6 h1:pZhsgF8RXEngHdibuRNOXNk1pL0K9rFa5HOcvURNTQ4=
 github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6/go.mod h1:91AQfukc52A6hdfIfkxzyr+kpVYDodgAeT5cjX1UIj4=
+github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3 h1:ACN4mEXAmv7u1H8niLxZOzuKymMj5rvBmZqShrXOVf0=
+github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3/go.mod h1:1PpGPgqP8VsfUppgBA9FrTOXjI6X9gjqhh/8dmg48lg=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e h1:TsmUXyHjj5ReuN1AJjEVukf72J6AfRTF2CfTEaqVLT8=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e/go.mod h1:6OJr6VwSzgJMqWMj7TYmRUqzNe2LXu/W1rRW4MAz/ME=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189 h1:nhPzONHNGlXZIMFfKm6cWpRSq5oTanRK1qBtfCPBFyE=
@@ -141,6 +143,8 @@ github.com/gobuffalo/packr v1.13.7 h1:2uZgLd6b/W4yRBZV/ScaORxZLNGMHO0VCvqQNkKukN
 github.com/gobuffalo/packr v1.13.7/go.mod h1:KkinLIn/n6+3tVXMwg6KkNvWwVsrRAz4ph+jgpk3Z24=
 github.com/gobuffalo/packr v1.15.0 h1:vGC4QlaqKPhdbaI4RTno510fmb5/5PKKSfFFGwnXu2o=
 github.com/gobuffalo/packr v1.15.0/go.mod h1:t5gXzEhIviQwVlNx/+3SfS07GS+cZ2hn76WLzPp6MGI=
+github.com/gobuffalo/packr v1.15.1 h1:aMdHztLZ108kXSobbhAZ5qVd0tiTyx+J0AgZpBVkplY=
+github.com/gobuffalo/packr v1.15.1/go.mod h1:IeqicJ7jm8182yrVmNbM6PR4g79SjN9tZLH8KduZZwE=
 github.com/gobuffalo/plush v3.7.16+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
 github.com/gobuffalo/plush v3.7.20+incompatible h1:FgLKw/zwd8IY8lAqfSuVNuHopR7jKVSs6yjJKeBajzU=
 github.com/gobuffalo/plush v3.7.20+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
