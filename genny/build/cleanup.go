@@ -1,12 +1,17 @@
 package build
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/gobuffalo/genny"
 	"github.com/pkg/errors"
 )
 
 func cleanup(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
+		defer os.RemoveAll(filepath.Join(opts.Root, "a"))
+
 		var err error
 		opts.rollback.Range(func(k, v interface{}) bool {
 			f := genny.NewFileS(k.(string), v.(string))

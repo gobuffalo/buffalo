@@ -10,9 +10,9 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/build"
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/markbates/sigtx"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -40,15 +40,16 @@ var xbuildCmd = &cobra.Command{
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
 
+		// genny.DefaultLogLvl = logger.ErrorLevel
+
 		run := genny.WetRunner(ctx)
+		run.Logger = logger.New(logger.ErrorLevel)
 		if buildOptions.DryRun {
 			run = genny.DryRunner(ctx)
 		}
 
-		if buildOptions.Verbose {
-			l := logrus.New()
-			l.SetLevel(logrus.DebugLevel)
-			run.Logger = l
+		if buildOptions.Verbose || buildOptions.Debug {
+			run.Logger = logger.New(logger.DebugLevel)
 			buildOptions.BuildFlags = append(buildOptions.BuildFlags, "-v")
 		}
 
@@ -82,7 +83,7 @@ func init() {
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
 	xbuildCmd.Flags().StringVar(&buildOptions.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Verbose, "verbose", "v", false, "print debugging information")
-	xbuildCmd.Flags().BoolVarP(&buildOptions.Verbose, "deprecated-verbose", "d", false, "[deprecated] use -v instead")
+	xbuildCmd.Flags().BoolVarP(&buildOptions.Debug, "deprecated-verbose", "d", false, "[deprecated] use -v instead")
 	xbuildCmd.Flags().BoolVar(&buildOptions.DryRun, "dry-run", false, "runs the build 'dry'")
 	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating plush templates")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
@@ -100,6 +101,7 @@ func buildVersion(version string) string {
 	if buildOptions.DryRun {
 		run = genny.DryRunner(ctx)
 	}
+	run.Logger = logger.New(logger.ErrorLevel)
 
 	_, err := exec.LookPath(vcs)
 	if err != nil {
