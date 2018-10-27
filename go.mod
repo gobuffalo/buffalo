@@ -38,6 +38,7 @@ require (
 	github.com/markbates/inflect v1.0.4
 	github.com/markbates/oncer v0.0.0-20181014194634-05fccaae8fc4
 	github.com/markbates/refresh v1.4.11
+	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
@@ -46,8 +47,9 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
-	golang.org/x/crypto v0.0.0-20181025113841-85e1b3f9139a
+	golang.org/x/crypto v0.0.0-20181025213731-e84da0312774
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
+	golang.org/x/sys v0.0.0-20181026064943-731415f00dce // indirect
 	golang.org/x/tools v0.0.0-20181024171208-a2dc47679d30
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

@@ -41,6 +41,9 @@ func copyDatabase(r *genny.Runner) error {
 }
 
 func copyInflections(r *genny.Runner) error {
+	defer func() {
+		r.Disk.Remove("inflections.json")
+	}()
 	f, err := r.FindFile("inflections.json")
 	if err != nil {
 		// it's ok to not have this file

@@ -10,7 +10,7 @@ func cleanup(opts *Options) genny.RunFn {
 		var err error
 		opts.rollback.Range(func(k, v interface{}) bool {
 			f := genny.NewFileS(k.(string), v.(string))
-			r.Logger.Debug("rolling back modified file", f.Name())
+			r.Logger.Debugf("Rollback: %s", f.Name())
 			if err = r.File(f); err != nil {
 				return false
 			}
@@ -21,7 +21,6 @@ func cleanup(opts *Options) genny.RunFn {
 			return errors.WithStack(err)
 		}
 		for _, f := range r.Disk.Files() {
-			r.Logger.Debug("cleaning up generated file", f.Name())
 			if err := r.Disk.Delete(f.Name()); err != nil {
 				return errors.WithStack(err)
 			}
