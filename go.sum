@@ -124,8 +124,12 @@ github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e h1:TsmUXy
 github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e/go.mod h1:6OJr6VwSzgJMqWMj7TYmRUqzNe2LXu/W1rRW4MAz/ME=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189 h1:nhPzONHNGlXZIMFfKm6cWpRSq5oTanRK1qBtfCPBFyE=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189/go.mod h1:UqBF00IfKvd39ni5+yI5MLMjAf4gX7cDKN/26zDOD6c=
+github.com/gobuffalo/packd v0.0.0-20181027124811-abbea089df6f h1:xj+OMgxXnIWrjS0LpfLZFgMeY+uq+SwdrvJNvFRQpEc=
+github.com/gobuffalo/packd v0.0.0-20181027124811-abbea089df6f/go.mod h1:LpEu7OkoplvlhztyAEePkS6JwcGgANdgGL5pB4Knxaw=
 github.com/gobuffalo/packr v1.13.7 h1:2uZgLd6b/W4yRBZV/ScaORxZLNGMHO0VCvqQNkKukNA=
 github.com/gobuffalo/packr v1.13.7/go.mod h1:KkinLIn/n6+3tVXMwg6KkNvWwVsrRAz4ph+jgpk3Z24=
+github.com/gobuffalo/packr v1.14.0 h1:7hEN5iHdFl7rsEW2YyuHPJRc2UJ8A2MNvfos3yQ+Wy0=
+github.com/gobuffalo/packr v1.14.0/go.mod h1:X0k/cpWgq4w4eYmPyfZXfmrY2r8qbhp9GGHw/HWheI4=
 github.com/gobuffalo/plush v3.7.16+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
 github.com/gobuffalo/plush v3.7.20+incompatible h1:FgLKw/zwd8IY8lAqfSuVNuHopR7jKVSs6yjJKeBajzU=
 github.com/gobuffalo/plush v3.7.20+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
