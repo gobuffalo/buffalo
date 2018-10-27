@@ -46,7 +46,7 @@ RUN buffalo new --skip-webpack coke --db-type=sqlite3
 WORKDIR $GOPATH/src/github.com/markbates/coke
 RUN buffalo db create -a -d
 RUN buffalo g resource widget name
-RUN buffalo b -d
+RUN buffalo b
 # works fine:
 RUN ./bin/coke migrate
 RUN rm -rfv $GOPATH/src/github.com/markbates/coke

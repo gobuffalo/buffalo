@@ -1,0 +1,1 @@
+B Hello <%= name %>
