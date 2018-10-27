@@ -8,11 +8,11 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.4
 	github.com/gobuffalo/buffalo-plugins v1.6.6
 	github.com/gobuffalo/buffalo-pop v1.1.6
-	github.com/gobuffalo/envy v1.6.6
+	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/fizz v1.0.15 // indirect
 	github.com/gobuffalo/flect v0.0.0-20181024204909-8f6be1a8c6c2
-	github.com/gobuffalo/genny v0.0.0-20181027145025-6427725165f4
+	github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
 	github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969
@@ -25,9 +25,9 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packr v1.14.0
+	github.com/gobuffalo/packr v1.15.0
 	github.com/gobuffalo/plush v3.7.21+incompatible
-	github.com/gobuffalo/pop v4.8.5+incompatible
+	github.com/gobuffalo/pop v4.8.6+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181025192250-1ef645d63fe8
 	github.com/gorilla/context v1.1.1
