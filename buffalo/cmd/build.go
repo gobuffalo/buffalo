@@ -40,10 +40,7 @@ var xbuildCmd = &cobra.Command{
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
 
-		// genny.DefaultLogLvl = logger.ErrorLevel
-
 		run := genny.WetRunner(ctx)
-		run.Logger = logger.New(logger.ErrorLevel)
 		if buildOptions.DryRun {
 			run = genny.DryRunner(ctx)
 		}
@@ -101,7 +98,6 @@ func buildVersion(version string) string {
 	if buildOptions.DryRun {
 		run = genny.DryRunner(ctx)
 	}
-	run.Logger = logger.New(logger.ErrorLevel)
 
 	_, err := exec.LookPath(vcs)
 	if err != nil {
