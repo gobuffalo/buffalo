@@ -103,7 +103,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		data["current_template"] = templateName
 	}
 
-	source, err := s.TemplatesBox.MustBytes(templateName)
+	source, err := s.TemplatesBox.FindString(templateName)
 	if err != nil {
 		return "", err
 	}
@@ -165,10 +165,10 @@ func (s templateRenderer) exts(name string) []string {
 func (s templateRenderer) assetPath(file string) (string, error) {
 
 	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
-		manifest, err := s.AssetsBox.MustString("manifest.json")
+		manifest, err := s.AssetsBox.FindString("manifest.json")
 
 		if err != nil {
-			manifest, err = s.AssetsBox.MustString("assets/manifest.json")
+			manifest, err = s.AssetsBox.FindString("assets/manifest.json")
 			if err != nil {
 				return assetPathFor(file), nil
 			}

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/plush"
 	"github.com/markbates/safe"
 	"github.com/pkg/errors"
@@ -20,7 +20,7 @@ type TemplateValidator func(f genny.File) error
 // ValidateTemplates returns a genny.RunFn that will walk the
 // given box and run each of the files found through each of the
 // template validators
-func ValidateTemplates(box packr.Box, tvs []TemplateValidator) genny.RunFn {
+func ValidateTemplates(box packd.Walkable, tvs []TemplateValidator) genny.RunFn {
 	if len(tvs) == 0 {
 		return func(r *genny.Runner) error {
 			return nil
@@ -28,7 +28,7 @@ func ValidateTemplates(box packr.Box, tvs []TemplateValidator) genny.RunFn {
 	}
 	return func(r *genny.Runner) error {
 		var errs []string
-		box.Walk(func(path string, file packr.File) error {
+		box.Walk(func(path string, file packd.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
 				return errors.WithStack(err)

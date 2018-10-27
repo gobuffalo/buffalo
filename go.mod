@@ -6,8 +6,8 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.4
-	github.com/gobuffalo/buffalo-plugins v1.6.6
-	github.com/gobuffalo/buffalo-pop v1.1.6
+	github.com/gobuffalo/buffalo-plugins v1.6.7
+	github.com/gobuffalo/buffalo-pop v1.1.7
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/fizz v1.0.15 // indirect
@@ -15,7 +15,7 @@ require (
 	github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc
 	github.com/gobuffalo/github_flavored_markdown v1.0.5
 	github.com/gobuffalo/httptest v1.0.2
-	github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969
+	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181025145500-3a985a084b0a
 	github.com/gobuffalo/mw-basicauth v1.0.7
@@ -25,6 +25,7 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
+	github.com/gobuffalo/packd v0.0.0-20181027194105-7ae579e6d213
 	github.com/gobuffalo/packr v1.15.0
 	github.com/gobuffalo/plush v3.7.21+incompatible
 	github.com/gobuffalo/pop v4.8.6+incompatible
@@ -40,11 +41,9 @@ require (
 	github.com/markbates/refresh v1.4.11
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/mattn/go-sqlite3 v1.10.0 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.1.1
-	github.com/spf13/cast v1.3.0 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
