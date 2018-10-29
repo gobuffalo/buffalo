@@ -1,6 +1,8 @@
 package render
 
-import "github.com/gobuffalo/packr"
+import (
+	"github.com/gobuffalo/packd"
+)
 
 // Helpers to be included in all templates
 type Helpers map[string]interface{}
@@ -14,10 +16,10 @@ type Options struct {
 	JavaScriptLayout string
 
 	// TemplatesBox is the location of the templates directory on disk.
-	TemplatesBox packr.Box
+	TemplatesBox packd.Box
 
 	// AssetsBox is the location of the public assets the app will serve.
-	AssetsBox packr.Box
+	AssetsBox packd.Box
 
 	// Helpers to be rendered with the templates
 	Helpers Helpers

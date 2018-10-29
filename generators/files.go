@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packd"
 )
 
 // File represents the file to be templated
@@ -19,9 +19,9 @@ type File struct {
 type Files []File
 
 // FindByBox all the .tmpl files inside the packr.Box
-func FindByBox(box packr.Box) (Files, error) {
+func FindByBox(box packd.Walkable) (Files, error) {
 	files := Files{}
-	err := box.Walk(func(p string, file packr.File) error {
+	err := box.Walk(func(p string, file packd.File) error {
 		if filepath.Ext(p) == ".tmpl" {
 			p = strings.TrimPrefix(p, "/")
 			f := File{ReadPath: p}
