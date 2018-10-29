@@ -26,13 +26,13 @@ func copyDatabase(r *genny.Runner) error {
 	defer func() {
 		r.Disk.Remove("database.yml")
 	}()
-	f, err := r.FindFile("database.yml")
-	if err != nil {
-		// it's ok to not have this file
-		return nil
-	}
+
 	bb := &bytes.Buffer{}
-	io.Copy(bb, f)
+
+	f, err := r.FindFile("database.yml")
+	if err == nil {
+		io.Copy(bb, f)
+	}
 
 	dgo := &bytes.Buffer{}
 	dgo.WriteString("package a\n")
