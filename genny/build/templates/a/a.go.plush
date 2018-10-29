@@ -17,6 +17,7 @@ func init() {
       log.Fatal(err)
   }
   <% } %>
+
   dropDatabaseYml()
 
   box := packr.NewBox("./")
