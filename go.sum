@@ -91,8 +91,8 @@ github.com/gobuffalo/genny v0.0.0-20181025145300-af3f81d526b8 h1:M7uY9cCZdF3M/I7
 github.com/gobuffalo/genny v0.0.0-20181025145300-af3f81d526b8/go.mod h1:uZ1fFYvdcP8mu0B/Ynarf6dsGvp7QFIpk/QACUuFUVI=
 github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc h1:x3rqyxKR5nYVioAjvnLSI3RoLkQ7WAiG4/NKC0zHVG4=
 github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc/go.mod h1:x7SkrQQBx204Y+O9EwRXeszLJDTaWN0GnEasxgLrQTA=
-github.com/gobuffalo/genny v0.0.0-20181028165311-82acaec20f14 h1:xtKSVspzQIc7xGYF6yjDxQP8Z5kPieKDWyTimALBd0Q=
-github.com/gobuffalo/genny v0.0.0-20181028165311-82acaec20f14/go.mod h1:qMAx3oZEEiiR5oZxYYRZzLNheyRejhYLEYR7uFBo5lI=
+github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec h1:YCBMw2NhpfDyPgji/ApilErSUvvlnGuwG87Qw3pyh+4=
+github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec/go.mod h1:3Xm9z7/2oRxlB7PSPLxvadZ60/0UIek1YWmcC7QSaVs=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5 h1:YvGVf7yj1akgsb+qc64Q0WX8uhpuZSibChbqOMRSAqE=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
@@ -164,6 +164,8 @@ github.com/gobuffalo/pop v4.8.5+incompatible h1:Kh4ayqg2UkZ7RUApd8Bk0BYT7YwbOPa2
 github.com/gobuffalo/pop v4.8.5+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
 github.com/gobuffalo/pop v4.8.6+incompatible h1:BspvX5mStyNfTcuzeLwo9JayfUlFGYNpCZiWu3Z+yRM=
 github.com/gobuffalo/pop v4.8.6+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
+github.com/gobuffalo/pop v4.8.7+incompatible h1:7bz+04Din1PbJtFRyEy8bogvEeUa6t273H6xgr+D1bQ=
+github.com/gobuffalo/pop v4.8.7+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
 github.com/gobuffalo/release v1.0.35/go.mod h1:VtHFAKs61vO3wboCec5xr9JPTjYyWYcvaM3lclkc4x4=
 github.com/gobuffalo/release v1.0.38/go.mod h1:VtHFAKs61vO3wboCec5xr9JPTjYyWYcvaM3lclkc4x4=
 github.com/gobuffalo/release v1.0.42/go.mod h1:RPs7EtafH4oylgetOJpGP0yCZZUiO4vqHfTHJjSdpug=
@@ -365,8 +367,8 @@ golang.org/x/crypto v0.0.0-20181025113841-85e1b3f9139a h1:Pg1/+l4/QV6z7N506eGnLi
 golang.org/x/crypto v0.0.0-20181025113841-85e1b3f9139a/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181025213731-e84da0312774 h1:a4tQYYYuK9QdeO/+kEvNYyuR21S+7ve5EANok6hABhI=
 golang.org/x/crypto v0.0.0-20181025213731-e84da0312774/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
-golang.org/x/crypto v0.0.0-20181029103014-dab2b1051b5d h1:5JyY8HlzxzYI+qHOOciM8s2lJbIEaefMUdtYt7dRDrg=
-golang.org/x/crypto v0.0.0-20181029103014-dab2b1051b5d/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 h1:y6ce7gCWtnH+m3dCjzQ1PCuwl28DDIc3VNnvY29DlIA=
+golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180816102801-aaf60122140d/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
@@ -400,6 +402,8 @@ golang.org/x/sys v0.0.0-20181025063200-d989b31c8746/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20181026064943-731415f00dce/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181026203630-95b1ffbd15a5 h1:x6r4Jo0KNzOOzYd8lbcRsqjuqEASK6ob3auvWYM4/8U=
 golang.org/x/sys v0.0.0-20181026203630-95b1ffbd15a5/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20181030150119-7e31e0c00fa0 h1:biUuj9O+0+XckRUCDzjoOGm6yFV5c0IHbm1ODP3e4Zw=
+golang.org/x/sys v0.0.0-20181030150119-7e31e0c00fa0/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
@@ -414,6 +418,8 @@ golang.org/x/tools v0.0.0-20181024171208-a2dc47679d30 h1:iZIABIEHjQFp5zqGZgQiaXi
 golang.org/x/tools v0.0.0-20181024171208-a2dc47679d30/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181026183834-f60e5f99f081 h1:QJP9sxq2/KbTxFnGduVryxJOt6r/UVGyom3tLaqu7tc=
 golang.org/x/tools v0.0.0-20181026183834-f60e5f99f081/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20181030151751-bb28844c46df h1:4+Wruypv9iYfX2bCPjBhtI9LGtloGYdPA9n9iLjaS7I=
+golang.org/x/tools v0.0.0-20181030151751-bb28844c46df/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0 h1:S0iUepdCWODXRvtE+gcRDd15L+k+k1AiHlMiMjefH24=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 gopkg.in/airbrake/gobrake.v2 v2.0.9/go.mod h1:/h5ZAUhDkGaJfjzjKLSjv6zCL6O0LLBxU4K+aSYdM/U=
