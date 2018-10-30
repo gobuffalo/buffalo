@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/genny"
@@ -100,6 +101,12 @@ func (d dirWalker) WalkPrefix(pre string, fn packd.WalkFunc) error {
 func (d dirWalker) Walk(fn packd.WalkFunc) error {
 	callback := func(path string, de *godirwalk.Dirent) error {
 		if de != nil && de.IsDir() {
+			base := filepath.Base(path)
+			for _, pre := range []string{"vendor", ".", "_"} {
+				if strings.HasPrefix(base, pre) {
+					return nil
+				}
+			}
 			return nil
 		}
 		b, err := ioutil.ReadFile(path)
