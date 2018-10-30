@@ -104,7 +104,7 @@ func (d dirWalker) Walk(fn packd.WalkFunc) error {
 			base := filepath.Base(path)
 			for _, pre := range []string{"vendor", ".", "_"} {
 				if strings.HasPrefix(base, pre) {
-					return nil
+					return filepath.SkipDir
 				}
 			}
 			return nil
