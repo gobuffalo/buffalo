@@ -11,30 +11,30 @@ import (
 type Options struct {
 	meta.App
 	// the "timestamp" of the build. defaults to time.Now()
-	BuildTime time.Time
+	BuildTime time.Time `json:"build_time,omitempty"`
 	// the "version" of the build. defaults to
 	// a) git sha of last commit or
 	// b) to time.RFC3339 of BuildTime
-	BuildVersion string
-	WithAssets   bool
+	BuildVersion string `json:"build_version,omitempty"`
+	WithAssets   bool   `json:"with_assets,omitempty"`
 	// places ./public/assets into ./bin/assets.zip.
 	// requires WithAssets = true
-	ExtractAssets bool
+	ExtractAssets bool `json:"extract_assets,omitempty"`
 	// LDFlags to be passed to the final `go build` command
-	LDFlags string
+	LDFlags string `json:"ld_flags,omitempty"`
 	// Tags to be passed to the final `go build` command
-	Tags meta.BuildTags
+	Tags meta.BuildTags `json:"tags,omitempty"`
 	// BuildFlags to be passed to the final `go build` command
-	BuildFlags []string
+	BuildFlags []string `json:"build_flags,omitempty"`
 	// Static sets the following flags for the final `go build` command:
 	// -linkmode external
 	// -extldflags "-static"
-	Static bool
+	Static bool `json:"static,omitempty"`
 	// Environment the binary is meant for. defaults to "development"
-	Environment string
+	Environment string `json:"environment,omitempty"`
 	// TemplateValidators can be used to validate the applications templates.
 	// Empty by default
-	TemplateValidators []TemplateValidator
+	TemplateValidators []TemplateValidator `json:"-"`
 	rollback           *sync.Map
 }
 

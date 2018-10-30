@@ -34,6 +34,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
+	github.com/karrick/godirwalk v1.7.5
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
