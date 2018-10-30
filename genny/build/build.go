@@ -1,9 +1,9 @@
 package build
 
 import (
-	"path/filepath"
 	"time"
 
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/plushgen"
 	"github.com/gobuffalo/packr"
@@ -21,11 +21,16 @@ func New(opts *Options) (*genny.Generator, error) {
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
+	g.ErrorFn = func(err error) {
+		events.EmitError(EvtBuildStopErr, err, events.Payload{"opts": opts})
+	}
+
+	g.Event(EvtBuildStart, events.Payload{"opts": opts})
+
 	g.Transformer(genny.Dot())
 
 	// validate templates
-	tb := packr.NewBox(filepath.Join(opts.App.Root, "templates"))
-	g.RunFn(ValidateTemplates(tb, opts.TemplateValidators))
+	g.RunFn(ValidateTemplates(templateWalker(opts.App), opts.TemplateValidators))
 
 	// rename main() to originalMain()
 	g.RunFn(transformMain(opts))
@@ -76,5 +81,6 @@ func New(opts *Options) (*genny.Generator, error) {
 	// clean up everything!
 	g.RunFn(cleanup(opts))
 
+	g.Event(EvtBuildStop, events.Payload{"opts": opts})
 	return g, nil
 }
