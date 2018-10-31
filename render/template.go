@@ -1,7 +1,6 @@
 package render
 
 import (
-	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -17,7 +16,6 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
-	data        Data
 }
 
 func (s templateRenderer) ContentType() string {
@@ -25,7 +23,6 @@ func (s templateRenderer) ContentType() string {
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
-	s.data = data
 	var body template.HTML
 	var err error
 	for _, name := range s.names {
@@ -39,39 +36,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	return nil
 }
 
-func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
-	d, f := filepath.Split(name)
-	name = filepath.Join(d, "_"+f)
-	m := Data{}
-	for k, v := range s.data {
-		m[k] = v
-	}
-	for k, v := range dd {
-		m[k] = v
-	}
-
-	if _, ok := m["layout"]; ok {
-
-		var body template.HTML
-		var err error
-
-		body, err = s.exec(name, m)
-		if err != nil {
-			return body, err
-		}
-		m["yield"] = body
-		d, f := filepath.Split(fmt.Sprintf("%v", m["layout"]))
-		name = filepath.Join(d, "_"+f)
-
-	}
-
-	return s.exec(name, m)
-}
-
-func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
-	ct := strings.ToLower(s.contentType)
-	data["contentType"] = ct
-
+func fixExtension(name string, ct string) string {
 	if filepath.Ext(name) == "" {
 		switch {
 		case strings.Contains(ct, "html"):
@@ -82,6 +47,27 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 			name += ".md"
 		}
 	}
+	return name
+}
+
+// partialFeeder returns template string for the name from `TemplateBox`.
+// It should be registered as helper named `partialFeeder` so plush can
+// find it with the name.
+func (s templateRenderer) partialFeeder(name string) (string, error) {
+	ct := strings.ToLower(s.contentType)
+
+	d, f := filepath.Split(name)
+	name = filepath.Join(d, "_"+f)
+	name = fixExtension(name, ct)
+
+	return s.TemplatesBox.FindString(name)
+}
+
+func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
+	ct := strings.ToLower(s.contentType)
+	data["contentType"] = ct
+
+	name = fixExtension(name, ct)
 
 	// Try to use localized version
 	templateName := name
@@ -119,7 +105,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	helpers := map[string]interface{}{
-		"partial": s.partial,
+		"partialFeeder": s.partialFeeder,
 	}
 
 	helpers = s.addAssetsHelpers(helpers)
