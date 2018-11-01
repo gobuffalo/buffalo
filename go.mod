@@ -9,7 +9,7 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.1.8
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
-	github.com/gobuffalo/fizz v1.0.15 // indirect
+	github.com/gobuffalo/fizz v1.0.16 // indirect
 	github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.2
@@ -21,7 +21,8 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packr v1.16.0
+	github.com/gobuffalo/packd v0.0.0-20181031195726-c82734870264
+	github.com/gobuffalo/packr v1.17.0
 	github.com/gobuffalo/plush v3.7.22+incompatible
 	github.com/gobuffalo/pop v4.8.7+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
@@ -37,13 +38,14 @@ require (
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
-	github.com/sirupsen/logrus v1.1.1
+	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181030221726-6c7e314b6563
+	golang.org/x/sys v0.0.0-20181031143558-9b800f95dbbc // indirect
+	golang.org/x/tools v0.0.0-20181101071927-45ff765b4815
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

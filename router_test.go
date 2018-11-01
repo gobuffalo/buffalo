@@ -5,12 +5,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
@@ -321,21 +321,16 @@ func Test_Router_Redirect(t *testing.T) {
 func Test_Router_ServeFiles(t *testing.T) {
 	r := require.New(t)
 
-	tmpFile, err := ioutil.TempFile("", "assets")
-	r.NoError(err)
-
-	af := []byte("hi")
-	_, err = tmpFile.Write(af)
-	r.NoError(err)
-
+	box := packd.NewMemoryBox()
+	box.AddString("foo.png", "foo")
 	a := New(Options{})
-	a.ServeFiles("/assets", http.Dir(filepath.Dir(tmpFile.Name())))
+	a.ServeFiles("/assets", box)
 
 	w := httptest.New(a)
-	res := w.HTML("/assets/%s", filepath.Base(tmpFile.Name())).Get()
+	res := w.HTML("/assets/foo.png").Get()
 
 	r.Equal(200, res.Code)
-	r.Equal(af, res.Body.Bytes())
+	r.Equal("foo", res.Body.String())
 }
 
 func Test_App_NamedRoutes(t *testing.T) {
@@ -619,17 +614,17 @@ func Test_ResourceOnResource(t *testing.T) {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
-		"/":                                    "root",
-		"/users":                               "users",
-		"/users/new":                           "newUsers",
-		"/users/{user_id}":                     "user",
-		"/users/{user_id}/children":            "userChildren",
-		"/users/{user_id}/children/{child_id}": "userChild",
-		"/users/{user_id}/children/new":        "newUserChildren",
+		"/":                                          "root",
+		"/users":                                     "users",
+		"/users/new":                                 "newUsers",
+		"/users/{user_id}":                           "user",
+		"/users/{user_id}/children":                  "userChildren",
+		"/users/{user_id}/children/{child_id}":       "userChild",
+		"/users/{user_id}/children/new":              "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                 "adminPlanes",
-		"/admin/planes/{plane_id}":      "adminPlane",
-		"/admin/planes/{plane_id}/edit": "editAdminPlane",
+		"/admin/planes":                              "adminPlanes",
+		"/admin/planes/{plane_id}":                   "adminPlane",
+		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
 	a := New(Options{})
@@ -677,8 +672,9 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 		{"/foo", "/foo/", "/foo/"},
 		{"/foo/", "/foo", "/foo/"},
 		{"/foo/", "/foo/", "/foo/"},
-		{"/index.html", "/index.html", "/index.html"},
-		{"/foo.gif", "/foo.gif", "/foo.gif"},
+		{"/index.html", "/index.html", "/index.html/"},
+		{"/foo.gif", "/foo.gif", "/foo.gif/"},
+		{"/{img}", "/foo.png", "/foo.png/"},
 	}
 
 	for _, tt := range table {
