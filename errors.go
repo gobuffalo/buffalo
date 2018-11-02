@@ -191,6 +191,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	default:
+		c.Response().Header().Set("content-type", defErrorCT)
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
