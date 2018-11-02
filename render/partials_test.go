@@ -75,6 +75,60 @@ func Test_Template_Partial_Form(t *testing.T) {
 
 }
 
+func Test_Template_Partial_With_For(t *testing.T) {
+	r := require.New(t)
+
+	const forHTML = `<%= for(user) in users { %><%= partial("row") %><% } %>`
+	const rowHTML = `Hi <%= user.Name %>, `
+	const result = `Hi Mark, Hi Yonghwan,`
+
+	users := []struct {
+		Name string
+	}{{Name: "Mark"}, {Name: "Yonghwan"}}
+
+	err := withHTMLFile("for.html", forHTML, func(e *Engine) {
+		err := withHTMLFile("_row.html", rowHTML, func(e *Engine) {
+
+			re := e.Template("text/html; charset=utf-8", "for.html")
+			bb := &bytes.Buffer{}
+			err := re.Render(bb, Data{"users": users})
+			r.NoError(err)
+			r.Equal(result, strings.TrimSpace(bb.String()))
+
+		})
+		r.NoError(err)
+	})
+	r.NoError(err)
+
+}
+
+func Test_Template_Partial_With_For_And_Local(t *testing.T) {
+	r := require.New(t)
+
+	const forHTML = `<%= for(user) in users { %><%= partial("row", {say:"Hi"}) %><% } %>`
+	const rowHTML = `<%= say %> <%= user.Name %>, `
+	const result = `Hi Mark, Hi Yonghwan,`
+
+	users := []struct {
+		Name string
+	}{{Name: "Mark"}, {Name: "Yonghwan"}}
+
+	err := withHTMLFile("for.html", forHTML, func(e *Engine) {
+		err := withHTMLFile("_row.html", rowHTML, func(e *Engine) {
+
+			re := e.Template("text/html; charset=utf-8", "for.html")
+			bb := &bytes.Buffer{}
+			err := re.Render(bb, Data{"users": users})
+			r.NoError(err)
+			r.Equal(result, strings.TrimSpace(bb.String()))
+
+		})
+		r.NoError(err)
+	})
+	r.NoError(err)
+
+}
+
 func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T) {
 	r := require.New(t)
 

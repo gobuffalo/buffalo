@@ -7,6 +7,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
 
+* [github.com/blang/semver](https://godoc.org/github.com/blang/semver)
+
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
 
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
@@ -53,6 +55,14 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday)
 
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name)
+
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
@@ -60,6 +70,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/mapi](https://godoc.org/github.com/gobuffalo/mapi)
 
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
+
+* [github.com/gobuffalo/packd](https://godoc.org/github.com/gobuffalo/packd)
 
 * [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
 
@@ -172,14 +184,6 @@ Thank you to the following **GIANTS**:
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
-
-* [github.com/shurcooL/highlight_diff](https://godoc.org/github.com/shurcooL/highlight_diff)
-
-* [github.com/shurcooL/highlight_go](https://godoc.org/github.com/shurcooL/highlight_go)
-
-* [github.com/shurcooL/octicon](https://godoc.org/github.com/shurcooL/octicon)
-
-* [github.com/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/shurcooL/sanitized_anchor_name)
 
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
 
