@@ -1,7 +1,6 @@
 package render
 
 import (
-	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -37,31 +36,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	return nil
 }
 
-func (s templateRenderer) partial(name string, dd Data) (template.HTML, error) {
-	d, f := filepath.Split(name)
-	name = filepath.Join(d, "_"+f)
-
-	if _, ok := dd["layout"]; ok {
-
-		var body template.HTML
-		var err error
-
-		body, err = s.exec(name, dd)
-		if err != nil {
-			return body, err
-		}
-		dd["yield"] = body
-		d, f := filepath.Split(fmt.Sprintf("%v", dd["layout"]))
-		name = filepath.Join(d, "_"+f)
-
-	}
-	return s.exec(name, dd)
-}
-
-func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
-	ct := strings.ToLower(s.contentType)
-	data["contentType"] = ct
-
+func fixExtension(name string, ct string) string {
 	if filepath.Ext(name) == "" {
 		switch {
 		case strings.Contains(ct, "html"):
@@ -72,6 +47,27 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 			name += ".md"
 		}
 	}
+	return name
+}
+
+// partialFeeder returns template string for the name from `TemplateBox`.
+// It should be registered as helper named `partialFeeder` so plush can
+// find it with the name.
+func (s templateRenderer) partialFeeder(name string) (string, error) {
+	ct := strings.ToLower(s.contentType)
+
+	d, f := filepath.Split(name)
+	name = filepath.Join(d, "_"+f)
+	name = fixExtension(name, ct)
+
+	return s.TemplatesBox.FindString(name)
+}
+
+func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
+	ct := strings.ToLower(s.contentType)
+	data["contentType"] = ct
+
+	name = fixExtension(name, ct)
 
 	// Try to use localized version
 	templateName := name
@@ -103,24 +99,13 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		data["current_template"] = templateName
 	}
 
-	source, err := s.TemplatesBox.FindString(templateName)
+	source, err := s.TemplatesBox.Find(templateName)
 	if err != nil {
 		return "", err
 	}
 
 	helpers := map[string]interface{}{
-		"partial": func(name string, dd Data) (template.HTML, error) {
-			// call the partial copying the current context data,
-			// and any new args, before calling the partial helper
-			m := Data{}
-			for k, v := range data {
-				m[k] = v
-			}
-			for k, v := range dd {
-				m[k] = v
-			}
-			return s.partial(name, m)
-		},
+		"partialFeeder": s.partialFeeder,
 	}
 
 	helpers = s.addAssetsHelpers(helpers)
@@ -129,19 +114,20 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 
+	body := string(source)
 	for _, ext := range s.exts(name) {
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
 			logrus.Errorf("could not find a template engine for %s\n", ext)
 			continue
 		}
-		source, err = te(source, data, helpers)
+		body, err = te(body, data, helpers)
 		if err != nil {
 			return "", errors.Wrap(err, name)
 		}
 	}
 
-	return template.HTML(source), nil
+	return template.HTML(body), nil
 }
 
 func (s templateRenderer) exts(name string) []string {
