@@ -8,6 +8,8 @@ import (
 	"go/token"
 	"io/ioutil"
 	"strings"
+
+	"github.com/markbates/oncer"
 )
 
 // AddRoute adds a new route inside the `action/app.go` file.
@@ -81,8 +83,10 @@ func findClosingRouteBlockEnd(f *ast.File, fset *token.FileSet, fileLines []stri
 	return end
 }
 
-// AddImport adds n number of import statements into the path provided
+// AddImport adds n number of import statements into the path provided.
+// Deprecated: use github.com/gobuffalo/genny/movinglater/gotools.AddImport instead.
 func AddImport(path string, imports ...string) error {
+	oncer.Deprecate(0, "github.com/gobuffalo/buffalo/generators.AddImport", "Use github.com/gobuffalo/genny/movinglater/gotools.AddImport instead.")
 	src, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
