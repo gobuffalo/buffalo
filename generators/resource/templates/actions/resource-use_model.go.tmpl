@@ -110,7 +110,7 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   }
 
   // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was created successfully")
+  c.Flash().Add("success", T.Translate(c, "{{.opts.Model.VarCaseSingular}}.created.success"))
 
   // and redirect to the {{.opts.Name.URL}} index page
   return c.Render(201, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
@@ -171,7 +171,7 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   }
 
   // If there are no errors set a success message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was updated successfully")
+  c.Flash().Add("success", T.Translate(c, "{{.opts.Model.VarCaseSingular}}.updated.success"))
 
   // and redirect to the {{.opts.Name.URL}} index page
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
@@ -199,7 +199,7 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   }
 
   // If there are no errors set a flash message
-  c.Flash().Add("success", "{{.opts.Model.Model}} was destroyed successfully")
+  c.Flash().Add("success", T.Translate(c, "{{.opts.Model.VarCaseSingular}}.destroyed.success"))
 
   // Redirect to the {{.opts.Name.URL}} index page
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingular}}))
