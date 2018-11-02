@@ -42,6 +42,15 @@ func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn
 				return nil
 			}
 
+			base := filepath.Dir(path)
+			if base != "." {
+				for _, pre := range []string{"_", ".", "node_modules", "vendor"} {
+					if strings.HasPrefix(base, pre) {
+						return nil
+					}
+				}
+			}
+
 			f := genny.NewFile(path, file)
 			for _, tv := range tvs {
 				err := safe.Run(func() {
