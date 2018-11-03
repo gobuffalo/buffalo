@@ -1,21 +1,26 @@
 package newapp
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"github.com/BurntSushi/toml"
+	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	"github.com/gobuffalo/buffalo-plugins/genny/install"
+	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/generators/assets/standard"
-	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	"github.com/gobuffalo/buffalo/generators/docker"
-	"github.com/gobuffalo/buffalo/generators/refresh"
 	"github.com/gobuffalo/buffalo/generators/soda"
+	"github.com/gobuffalo/buffalo/genny/assets/standard"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
 
@@ -28,6 +33,9 @@ func (a Generator) Run(root string, data makr.Data) error {
 		defer os.RemoveAll(filepath.Join(a.Root, "templates"))
 		defer os.RemoveAll(filepath.Join(a.Root, "locales"))
 		defer os.RemoveAll(filepath.Join(a.Root, "public"))
+	}
+	if !a.App.WithModules {
+		defer os.Remove(filepath.Join(a.Root, "go.mod"))
 	}
 	if a.Force {
 		os.RemoveAll(a.Root)
@@ -52,9 +60,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 	}
 
 	data["name"] = a.Name
-	if err := refresh.Run(root, data); err != nil {
-		return errors.WithStack(err)
-	}
 
 	a.setupCI(g, data)
 
@@ -64,10 +69,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 
 	if sg := a.setupPop(root, data); sg != nil {
 		g.Add(sg)
-	}
-
-	if err := a.setupDocker(root, data); err != nil {
-		return errors.WithStack(err)
 	}
 
 	if _, err := exec.LookPath("goimports"); err != nil {
@@ -98,10 +99,88 @@ func (a Generator) Run(root string, data makr.Data) error {
 		},
 	})
 
+	gn, err := a.genny()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	g.Add(gn)
+
 	a.setupVCS(g)
 
 	data["opts"] = a
 	return g.Run(root, data)
+}
+
+func (a Generator) genny() (makr.Runnable, error) {
+	app := a.App
+	run := genny.WetRunner(context.Background())
+	run.Root = app.Root
+
+	plugs, err := plugdeps.List(app)
+	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
+		return nil, errors.WithStack(err)
+	}
+
+	if a.Docker != "none" {
+		err := run.WithNew(docker.New(&docker.Options{
+			App:     app,
+			Version: runtime.Version,
+			Style:   a.Docker,
+		}))
+		if err != nil {
+			return nil, errors.WithStack(err)
+		}
+		plugs.Add(plugdeps.Plugin{
+			Binary: "buffalo-docker",
+			GoGet:  "github.com/gobuffalo/buffalo-docker",
+		})
+	}
+	opts := &install.Options{
+		App:     app,
+		Plugins: plugs.List(),
+	}
+	if app.WithSQLite {
+		opts.Tags = meta.BuildTags{"sqlite"}
+	}
+	gg, err := install.New(opts)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	run.WithGroup(gg)
+
+	run.WithRun(func(r *genny.Runner) error {
+		f := genny.NewFile(filepath.Join(app.Root, "config", "buffalo-app.toml"), nil)
+		if err := toml.NewEncoder(f).Encode(app); err != nil {
+			return errors.WithStack(err)
+		}
+		return r.File(f)
+	})
+
+	if !app.AsAPI {
+		var err error
+		if app.WithWebpack {
+			err = run.WithNew(webpack.New(&webpack.Options{
+				App:       app,
+				Bootstrap: a.Bootstrap,
+			}))
+		} else {
+			err = run.WithNew(standard.New(&standard.Options{}))
+		}
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if err := run.WithNew(refresh.New(&refresh.Optioons{App: app})); err != nil {
+		return errors.WithStack(err)
+	}
+
+	fn := makr.Func{
+		Runner: func(root string, data makr.Data) error {
+			return run.Run()
+		},
+	}
+	return fn, nil
 }
 
 func (a Generator) setupVCS(g *makr.Generator) {
@@ -125,20 +204,6 @@ func (a Generator) setupVCS(g *makr.Generator) {
 	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-q", "-m", "Initial Commit")))
 }
 
-func (a Generator) setupDocker(root string, data makr.Data) error {
-	if a.Docker == "none" {
-		return nil
-	}
-
-	o := docker.New()
-	o.App = a.App
-	if err := o.Run(root, data); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
-}
-
 func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
 	if !a.WithPop {
 		return nil
@@ -158,29 +223,6 @@ func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
 	return g
 }
 
-func (a Generator) setupWebpack(root string, data makr.Data) error {
-	if a.AsAPI {
-		return nil
-	}
-
-	if a.WithWebpack {
-		w := webpack.New()
-		w.App = a.App
-		w.Bootstrap = a.Bootstrap
-		if err := w.Run(root, data); err != nil {
-			return errors.WithStack(err)
-		}
-
-		return nil
-	}
-
-	if err := standard.Run(root, data); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
-}
-
 func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 
 	switch a.CIProvider {
@@ -189,9 +231,9 @@ func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
 	case "gitlab-ci":
 		if a.WithPop {
 			if a.DBType == "postgres" {
-				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File() + "_test?sslmode=disable"
+				data["testDbUrl"] = "postgres://postgres:postgres@postgres:5432/" + a.Name.File().String() + "_test?sslmode=disable"
 			} else if a.DBType == "mysql" {
-				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
+				data["testDbUrl"] = "mysql://root:root@(mysql:3306)/" + a.Name.File().String() + "_test?parseTime=true&multiStatements=true&readTimeout=1s"
 			} else {
 				data["testDbUrl"] = ""
 			}
@@ -271,92 +313,92 @@ script: buffalo test
 
 const nGitlabCi = `before_script:
 {{- if eq .opts.DBType "postgres" }}
-	- apt-get update && apt-get install -y postgresql-client
+  - apt-get update && apt-get install -y postgresql-client
 {{- else if eq .opts.DBType "mysql" }}
-	- apt-get update && apt-get install -y mysql-client
+  - apt-get update && apt-get install -y mysql-client
 {{- end }}
-	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-	- cd /go/src/{{.opts.PackagePkg}}
-	- mkdir -p public/assets
-	- go get -u github.com/gobuffalo/buffalo/buffalo
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-	- go get github.com/golang/dep/cmd/dep
-	- dep ensure
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
 {{- else }}
-	- go get -t -v ./...
+  - go get -t -v ./...
 {{- end }}
-	- export PATH="$PATH:$GOPATH/bin"
+  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
-	- test
+  - test
 
 .test-vars: &test-vars
-	variables:
-		GO_ENV: "test"
+  variables:
+    GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
-		POSTGRES_DB: "{{.opts.Name.File}}_test"
+    POSTGRES_DB: "{{.opts.Name.File}}_test"
 {{- else if eq .opts.DBType "mysql" }}
-		MYSQL_DATABASE: "{{.opts.Name.File}}_test"
-		MYSQL_ROOT_PASSWORD: "root"
+    MYSQL_DATABASE: "{{.opts.Name.File}}_test"
+    MYSQL_ROOT_PASSWORD: "root"
 {{- end }}
-		TEST_DATABASE_URL: "{{.testDbUrl}}"
+    TEST_DATABASE_URL: "{{.testDbUrl}}"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-	image: golang:latest
+  image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-	image: golang:1.8
+  image: golang:1.8
 
 test:
-	# Change to "<<: *use-golang-latest" to use the latest Go version
-	<<: *use-golang-1-8
-	<<: *test-vars
-	stage: test
-	services:
+  # Change to "<<: *use-golang-latest" to use the latest Go version
+  <<: *use-golang-1-8
+  <<: *test-vars
+  stage: test
+  services:
 {{- if eq .opts.DBType "mysql" }}
-		- mysql:5
+    - mysql:5
 {{- else if eq .opts.DBType "postgres" }}
-		- postgres:latest
+    - postgres:latest
 {{- end }}
-	script:
-		- buffalo test
+  script:
+    - buffalo test
 `
 
 const nGitlabCiNoPop = `before_script:
-	- ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
-	- cd /go/src/{{.opts.PackagePkg}}
-	- mkdir -p public/assets
-	- go get -u github.com/gobuffalo/buffalo/buffalo
+  - ln -s /builds /go/src/$(echo "{{.opts.PackagePkg}}" | cut -d "/" -f1)
+  - cd /go/src/{{.opts.PackagePkg}}
+  - mkdir -p public/assets
+  - go get -u github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.WithDep }}
-	- go get github.com/golang/dep/cmd/dep
-	- dep ensure
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
 {{- else }}
-	- go get -t -v ./...
+  - go get -t -v ./...
 {{- end }}
-	- export PATH="$PATH:$GOPATH/bin"
+  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
-	- test
+  - test
 
 .test-vars: &test-vars
-	variables:
-		GO_ENV: "test"
+  variables:
+    GO_ENV: "test"
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
-	image: golang:latest
+  image: golang:latest
 
 .use-golang-image: &use-golang-1-8
-	image: golang:1.8
+  image: golang:1.8
 
 test:
-	# Change to "<<: *use-golang-latest" to use the latest Go version
-	<<: *use-golang-1-8
-	<<: *test-vars
-	stage: test
-	script:
-		- buffalo test
+  # Change to "<<: *use-golang-latest" to use the latest Go version
+  <<: *use-golang-1-8
+  <<: *test-vars
+  stage: test
+  script:
+    - buffalo test
 `
 
 const nVCSIgnore = `vendor/

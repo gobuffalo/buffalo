@@ -50,6 +50,7 @@ var checks = []Check{
 	WebpackCheck,
 	PackageJSONCheck,
 	DepEnsure,
+	installTools,
 	DeprecrationsCheck,
 }
 

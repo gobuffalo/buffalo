@@ -22,7 +22,7 @@ var mailOptions = struct {
 // MailCmd for generating mailers
 var MailCmd = &cobra.Command{
 	Use:   "mailer [name]",
-	Short: "Generates a new mailer for Buffalo",
+	Short: "Generate a new mailer for Buffalo",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		mailOptions.App = meta.New(".")
 		mailOptions.Name = inflect.Name(args[0])

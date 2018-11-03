@@ -10,8 +10,8 @@ import (
 
 	"html/template"
 
-	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/newapp"
+	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
 
@@ -31,9 +31,9 @@ func PackageJSONCheck(r *Runner) error {
 		Bootstrap: 4,
 	}
 
-	box := webpack.TemplateBox
+	box := packr.NewBox("../../../genny/assets/webpack/templates")
 
-	f, err := box.MustString("package.json.tmpl")
+	f, err := box.FindString("package.json.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}

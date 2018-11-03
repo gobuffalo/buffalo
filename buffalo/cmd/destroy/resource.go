@@ -23,7 +23,7 @@ var ResourceCmd = &cobra.Command{
 	Use: "resource [name]",
 	//Example: "resource cars",
 	Aliases: []string{"r"},
-	Short:   "Destroys resource files.",
+	Short:   "Destroy resource files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return errors.New("you need to provide a valid resource name in order to destroy it")

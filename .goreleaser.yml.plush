@@ -1,0 +1,37 @@
+builds:
+-
+  goos:
+    - darwin
+    - linux
+    - windows
+  env:
+    - CGO_ENABLED=0
+  main: ./buffalo/main.go
+  binary: buffalo-no-sqlite
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+<%= if (brew) { %>
+brew:
+  name: buffalo
+  github:
+    owner: gobuffalo
+    name: homebrew-tap
+  homepage: https://gobuffalo.io
+  description: A Go web development eco-system, designed to make your life easier.
+  install: |
+    bin.install "buffalo-no-sqlite"
+    mv "#{bin}/buffalo-no-sqlite", "#{bin}/buffalo"
+  test: |
+    system "#{bin}/buffalo", "version"
+<% } %>

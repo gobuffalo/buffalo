@@ -1,7 +1,7 @@
 package webpack
 
 import (
-	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
 
@@ -20,7 +20,7 @@ func (opts *Options) Validate() error {
 	if bs < 3 && bs > 4 {
 		return errors.Errorf("unknown bootstrap version %d", bs)
 	}
-	if (opts.App == meta.App{}) {
+	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
 	return nil

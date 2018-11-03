@@ -23,7 +23,7 @@ var taskOptions = struct {
 var TaskCmd = &cobra.Command{
 	Use:     "task [name]",
 	Aliases: []string{"t", "grift"},
-	Short:   "Generates a grift task",
+	Short:   "Generate a grift task",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		run := genny.WetRunner(context.Background())
 		if taskOptions.dryRun {

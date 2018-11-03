@@ -7,13 +7,9 @@ Thank you to the following **GIANTS**:
 
 * [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
 
-* [github.com/ajg/form](https://godoc.org/github.com/ajg/form)
+* [github.com/blang/semver](https://godoc.org/github.com/blang/semver)
 
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
-
-* [github.com/cockroachdb/cockroach-go/testserver](https://godoc.org/github.com/cockroachdb/cockroach-go/testserver)
-
-* [github.com/dgrijalva/jwt-go](https://godoc.org/github.com/dgrijalva/jwt-go)
 
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
 
@@ -25,6 +21,20 @@ Thank you to the following **GIANTS**:
 
 * [github.com/go-sql-driver/mysql](https://godoc.org/github.com/go-sql-driver/mysql)
 
+* [github.com/gobuffalo/buffalo](https://godoc.org/github.com/gobuffalo/buffalo)
+
+* [github.com/gobuffalo/buffalo-plugins/plugins](https://godoc.org/github.com/gobuffalo/buffalo-plugins/plugins)
+
+* [github.com/gobuffalo/buffalo-plugins/plugins/plugdeps](https://godoc.org/github.com/gobuffalo/buffalo-plugins/plugins/plugdeps)
+
+* [github.com/gobuffalo/buffalo/binding](https://godoc.org/github.com/gobuffalo/buffalo/binding)
+
+* [github.com/gobuffalo/buffalo/render](https://godoc.org/github.com/gobuffalo/buffalo/render)
+
+* [github.com/gobuffalo/buffalo/servers](https://godoc.org/github.com/gobuffalo/buffalo/servers)
+
+* [github.com/gobuffalo/buffalo/worker](https://godoc.org/github.com/gobuffalo/buffalo/worker)
+
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
 * [github.com/gobuffalo/events](https://godoc.org/github.com/gobuffalo/events)
@@ -33,27 +43,35 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/fizz/translators](https://godoc.org/github.com/gobuffalo/fizz/translators)
 
+* [github.com/gobuffalo/flect](https://godoc.org/github.com/gobuffalo/flect)
+
+* [github.com/gobuffalo/flect/name](https://godoc.org/github.com/gobuffalo/flect/name)
+
+* [github.com/gobuffalo/genny](https://godoc.org/github.com/gobuffalo/genny)
+
+* [github.com/gobuffalo/genny/movinglater/gotools/gomods](https://godoc.org/github.com/gobuffalo/genny/movinglater/gotools/gomods)
+
 * [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
 
 * [github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday)
 
-* [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name)
+
+* [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
 * [github.com/gobuffalo/mapi](https://godoc.org/github.com/gobuffalo/mapi)
 
-* [github.com/gobuffalo/mw-contenttype](https://godoc.org/github.com/gobuffalo/mw-contenttype)
+* [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
-* [github.com/gobuffalo/mw-i18n](https://godoc.org/github.com/gobuffalo/mw-i18n)
-
-* [github.com/gobuffalo/mw-paramlogger](https://godoc.org/github.com/gobuffalo/mw-paramlogger)
-
-* [github.com/gobuffalo/mw-tokenauth](https://godoc.org/github.com/gobuffalo/mw-tokenauth)
-
-* [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
-
-* [github.com/gobuffalo/packr/builder](https://godoc.org/github.com/gobuffalo/packr/builder)
+* [github.com/gobuffalo/packd](https://godoc.org/github.com/gobuffalo/packd)
 
 * [github.com/gobuffalo/plush](https://godoc.org/github.com/gobuffalo/plush)
 
@@ -77,10 +95,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
 
-* [github.com/gobuffalo/pop/slices](https://godoc.org/github.com/gobuffalo/pop/slices)
-
-* [github.com/gobuffalo/pop/soda/cmd/generate](https://godoc.org/github.com/gobuffalo/pop/soda/cmd/generate)
-
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
 * [github.com/gobuffalo/tags/form](https://godoc.org/github.com/gobuffalo/tags/form)
@@ -99,47 +113,27 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/x/randx](https://godoc.org/github.com/gobuffalo/x/randx)
 
+* [github.com/gofrs/uuid](https://godoc.org/github.com/gofrs/uuid)
+
 * [github.com/gorilla/context](https://godoc.org/github.com/gorilla/context)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)
-
-* [github.com/gorilla/pat](https://godoc.org/github.com/gorilla/pat)
 
 * [github.com/gorilla/securecookie](https://godoc.org/github.com/gorilla/securecookie)
 
 * [github.com/gorilla/sessions](https://godoc.org/github.com/gorilla/sessions)
 
-* [github.com/hashicorp/hcl](https://godoc.org/github.com/hashicorp/hcl)
+* [github.com/jackc/pgx](https://godoc.org/github.com/jackc/pgx)
 
-* [github.com/hashicorp/hcl/hcl/ast](https://godoc.org/github.com/hashicorp/hcl/hcl/ast)
+* [github.com/jackc/pgx/chunkreader](https://godoc.org/github.com/jackc/pgx/chunkreader)
 
-* [github.com/hashicorp/hcl/hcl/parser](https://godoc.org/github.com/hashicorp/hcl/hcl/parser)
+* [github.com/jackc/pgx/internal/sanitize](https://godoc.org/github.com/jackc/pgx/internal/sanitize)
 
-* [github.com/hashicorp/hcl/hcl/printer](https://godoc.org/github.com/hashicorp/hcl/hcl/printer)
+* [github.com/jackc/pgx/pgio](https://godoc.org/github.com/jackc/pgx/pgio)
 
-* [github.com/hashicorp/hcl/hcl/scanner](https://godoc.org/github.com/hashicorp/hcl/hcl/scanner)
+* [github.com/jackc/pgx/pgproto3](https://godoc.org/github.com/jackc/pgx/pgproto3)
 
-* [github.com/hashicorp/hcl/hcl/strconv](https://godoc.org/github.com/hashicorp/hcl/hcl/strconv)
-
-* [github.com/hashicorp/hcl/hcl/token](https://godoc.org/github.com/hashicorp/hcl/hcl/token)
-
-* [github.com/hashicorp/hcl/json/parser](https://godoc.org/github.com/hashicorp/hcl/json/parser)
-
-* [github.com/hashicorp/hcl/json/scanner](https://godoc.org/github.com/hashicorp/hcl/json/scanner)
-
-* [github.com/hashicorp/hcl/json/token](https://godoc.org/github.com/hashicorp/hcl/json/token)
-
-* [github.com/hpcloud/tail](https://godoc.org/github.com/hpcloud/tail)
-
-* [github.com/hpcloud/tail/ratelimiter](https://godoc.org/github.com/hpcloud/tail/ratelimiter)
-
-* [github.com/hpcloud/tail/util](https://godoc.org/github.com/hpcloud/tail/util)
-
-* [github.com/hpcloud/tail/vendor/gopkg.in/fsnotify/fsnotify.v1](https://godoc.org/github.com/hpcloud/tail/vendor/gopkg.in/fsnotify/fsnotify.v1)
-
-* [github.com/hpcloud/tail/vendor/gopkg.in/tomb.v1](https://godoc.org/github.com/hpcloud/tail/vendor/gopkg.in/tomb.v1)
-
-* [github.com/hpcloud/tail/watch](https://godoc.org/github.com/hpcloud/tail/watch)
+* [github.com/jackc/pgx/pgtype](https://godoc.org/github.com/jackc/pgx/pgtype)
 
 * [github.com/jmoiron/sqlx](https://godoc.org/github.com/jmoiron/sqlx)
 
@@ -147,29 +141,19 @@ Thank you to the following **GIANTS**:
 
 * [github.com/joho/godotenv](https://godoc.org/github.com/joho/godotenv)
 
-* [github.com/kr/pretty](https://godoc.org/github.com/kr/pretty)
+* [github.com/karrick/godirwalk](https://godoc.org/github.com/karrick/godirwalk)
 
-* [github.com/kr/text](https://godoc.org/github.com/kr/text)
+* [github.com/kballard/go-shellquote](https://godoc.org/github.com/kballard/go-shellquote)
 
 * [github.com/lib/pq](https://godoc.org/github.com/lib/pq)
 
 * [github.com/lib/pq/oid](https://godoc.org/github.com/lib/pq/oid)
 
-* [github.com/magiconair/properties](https://godoc.org/github.com/magiconair/properties)
-
-* [github.com/magiconair/properties/assert](https://godoc.org/github.com/magiconair/properties/assert)
-
-* [github.com/markbates/deplist](https://godoc.org/github.com/markbates/deplist)
-
 * [github.com/markbates/going/defaults](https://godoc.org/github.com/markbates/going/defaults)
 
 * [github.com/markbates/going/randx](https://godoc.org/github.com/markbates/going/randx)
 
-* [github.com/markbates/grift/cmd](https://godoc.org/github.com/markbates/grift/cmd)
-
 * [github.com/markbates/grift/grift](https://godoc.org/github.com/markbates/grift/grift)
-
-* [github.com/markbates/hmax](https://godoc.org/github.com/markbates/hmax)
 
 * [github.com/markbates/inflect](https://godoc.org/github.com/markbates/inflect)
 
@@ -179,91 +163,19 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/refresh/refresh/web](https://godoc.org/github.com/markbates/refresh/refresh/web)
 
-* [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
+* [github.com/markbates/safe](https://godoc.org/github.com/markbates/safe)
 
-* [github.com/markbates/willie](https://godoc.org/github.com/markbates/willie)
+* [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
 * [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
 
 * [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
 
-* [github.com/mattn/go-sqlite3](https://godoc.org/github.com/mattn/go-sqlite3)
-
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
 
-* [github.com/mitchellh/mapstructure](https://godoc.org/github.com/mitchellh/mapstructure)
-
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
-
-* [github.com/nicksnyder/go-i18n/i18n](https://godoc.org/github.com/nicksnyder/go-i18n/i18n)
-
-* [github.com/nicksnyder/go-i18n/i18n/bundle](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/bundle)
-
-* [github.com/nicksnyder/go-i18n/i18n/language](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/language)
-
-* [github.com/nicksnyder/go-i18n/i18n/translation](https://godoc.org/github.com/nicksnyder/go-i18n/i18n/translation)
-
-* [github.com/onsi/ginkgo](https://godoc.org/github.com/onsi/ginkgo)
-
-* [github.com/onsi/ginkgo/config](https://godoc.org/github.com/onsi/ginkgo/config)
-
-* [github.com/onsi/ginkgo/internal/codelocation](https://godoc.org/github.com/onsi/ginkgo/internal/codelocation)
-
-* [github.com/onsi/ginkgo/internal/containernode](https://godoc.org/github.com/onsi/ginkgo/internal/containernode)
-
-* [github.com/onsi/ginkgo/internal/failer](https://godoc.org/github.com/onsi/ginkgo/internal/failer)
-
-* [github.com/onsi/ginkgo/internal/leafnodes](https://godoc.org/github.com/onsi/ginkgo/internal/leafnodes)
-
-* [github.com/onsi/ginkgo/internal/remote](https://godoc.org/github.com/onsi/ginkgo/internal/remote)
-
-* [github.com/onsi/ginkgo/internal/spec](https://godoc.org/github.com/onsi/ginkgo/internal/spec)
-
-* [github.com/onsi/ginkgo/internal/spec_iterator](https://godoc.org/github.com/onsi/ginkgo/internal/spec_iterator)
-
-* [github.com/onsi/ginkgo/internal/specrunner](https://godoc.org/github.com/onsi/ginkgo/internal/specrunner)
-
-* [github.com/onsi/ginkgo/internal/suite](https://godoc.org/github.com/onsi/ginkgo/internal/suite)
-
-* [github.com/onsi/ginkgo/internal/testingtproxy](https://godoc.org/github.com/onsi/ginkgo/internal/testingtproxy)
-
-* [github.com/onsi/ginkgo/internal/writer](https://godoc.org/github.com/onsi/ginkgo/internal/writer)
-
-* [github.com/onsi/ginkgo/reporters](https://godoc.org/github.com/onsi/ginkgo/reporters)
-
-* [github.com/onsi/ginkgo/reporters/stenographer](https://godoc.org/github.com/onsi/ginkgo/reporters/stenographer)
-
-* [github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable](https://godoc.org/github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable)
-
-* [github.com/onsi/ginkgo/types](https://godoc.org/github.com/onsi/ginkgo/types)
-
-* [github.com/onsi/gomega](https://godoc.org/github.com/onsi/gomega)
-
-* [github.com/onsi/gomega/format](https://godoc.org/github.com/onsi/gomega/format)
-
-* [github.com/onsi/gomega/internal/assertion](https://godoc.org/github.com/onsi/gomega/internal/assertion)
-
-* [github.com/onsi/gomega/internal/asyncassertion](https://godoc.org/github.com/onsi/gomega/internal/asyncassertion)
-
-* [github.com/onsi/gomega/internal/oraclematcher](https://godoc.org/github.com/onsi/gomega/internal/oraclematcher)
-
-* [github.com/onsi/gomega/internal/testingtsupport](https://godoc.org/github.com/onsi/gomega/internal/testingtsupport)
-
-* [github.com/onsi/gomega/matchers](https://godoc.org/github.com/onsi/gomega/matchers)
-
-* [github.com/onsi/gomega/matchers/support/goraph/bipartitegraph](https://godoc.org/github.com/onsi/gomega/matchers/support/goraph/bipartitegraph)
-
-* [github.com/onsi/gomega/matchers/support/goraph/edge](https://godoc.org/github.com/onsi/gomega/matchers/support/goraph/edge)
-
-* [github.com/onsi/gomega/matchers/support/goraph/node](https://godoc.org/github.com/onsi/gomega/matchers/support/goraph/node)
-
-* [github.com/onsi/gomega/matchers/support/goraph/util](https://godoc.org/github.com/onsi/gomega/matchers/support/goraph/util)
-
-* [github.com/onsi/gomega/types](https://godoc.org/github.com/onsi/gomega/types)
-
-* [github.com/pelletier/go-toml](https://godoc.org/github.com/pelletier/go-toml)
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
@@ -271,43 +183,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
 
-* [github.com/shurcooL/highlight_diff](https://godoc.org/github.com/shurcooL/highlight_diff)
-
-* [github.com/shurcooL/highlight_go](https://godoc.org/github.com/shurcooL/highlight_go)
-
-* [github.com/shurcooL/octicon](https://godoc.org/github.com/shurcooL/octicon)
-
-* [github.com/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/shurcooL/sanitized_anchor_name)
-
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
 
 * [github.com/sourcegraph/annotate](https://godoc.org/github.com/sourcegraph/annotate)
 
 * [github.com/sourcegraph/syntaxhighlight](https://godoc.org/github.com/sourcegraph/syntaxhighlight)
 
-* [github.com/spf13/afero](https://godoc.org/github.com/spf13/afero)
-
-* [github.com/spf13/afero/mem](https://godoc.org/github.com/spf13/afero/mem)
-
-* [github.com/spf13/cast](https://godoc.org/github.com/spf13/cast)
-
 * [github.com/spf13/cobra](https://godoc.org/github.com/spf13/cobra)
 
-* [github.com/spf13/jwalterweatherman](https://godoc.org/github.com/spf13/jwalterweatherman)
-
 * [github.com/spf13/pflag](https://godoc.org/github.com/spf13/pflag)
-
-* [github.com/spf13/viper](https://godoc.org/github.com/spf13/viper)
-
-* [github.com/stretchr/testify/assert](https://godoc.org/github.com/stretchr/testify/assert)
-
-* [github.com/stretchr/testify/require](https://godoc.org/github.com/stretchr/testify/require)
-
-* [github.com/stretchr/testify/suite](https://godoc.org/github.com/stretchr/testify/suite)
-
-* [github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew](https://godoc.org/github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew)
-
-* [github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib](https://godoc.org/github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib)
 
 * [golang.org/x/crypto/bcrypt](https://godoc.org/golang.org/x/crypto/bcrypt)
 
@@ -321,66 +205,8 @@ Thank you to the following **GIANTS**:
 
 * [golang.org/x/net/html/atom](https://godoc.org/golang.org/x/net/html/atom)
 
-* [golang.org/x/net/html/charset](https://godoc.org/golang.org/x/net/html/charset)
-
 * [golang.org/x/sync/errgroup](https://godoc.org/golang.org/x/sync/errgroup)
 
 * [golang.org/x/sys/unix](https://godoc.org/golang.org/x/sys/unix)
-
-* [golang.org/x/text/cases](https://godoc.org/golang.org/x/text/cases)
-
-* [golang.org/x/text/encoding](https://godoc.org/golang.org/x/text/encoding)
-
-* [golang.org/x/text/encoding/charmap](https://godoc.org/golang.org/x/text/encoding/charmap)
-
-* [golang.org/x/text/encoding/htmlindex](https://godoc.org/golang.org/x/text/encoding/htmlindex)
-
-* [golang.org/x/text/encoding/internal](https://godoc.org/golang.org/x/text/encoding/internal)
-
-* [golang.org/x/text/encoding/internal/enctest](https://godoc.org/golang.org/x/text/encoding/internal/enctest)
-
-* [golang.org/x/text/encoding/internal/identifier](https://godoc.org/golang.org/x/text/encoding/internal/identifier)
-
-* [golang.org/x/text/encoding/japanese](https://godoc.org/golang.org/x/text/encoding/japanese)
-
-* [golang.org/x/text/encoding/korean](https://godoc.org/golang.org/x/text/encoding/korean)
-
-* [golang.org/x/text/encoding/simplifiedchinese](https://godoc.org/golang.org/x/text/encoding/simplifiedchinese)
-
-* [golang.org/x/text/encoding/traditionalchinese](https://godoc.org/golang.org/x/text/encoding/traditionalchinese)
-
-* [golang.org/x/text/encoding/unicode](https://godoc.org/golang.org/x/text/encoding/unicode)
-
-* [golang.org/x/text/internal](https://godoc.org/golang.org/x/text/internal)
-
-* [golang.org/x/text/internal/gen](https://godoc.org/golang.org/x/text/internal/gen)
-
-* [golang.org/x/text/internal/language](https://godoc.org/golang.org/x/text/internal/language)
-
-* [golang.org/x/text/internal/language/compact](https://godoc.org/golang.org/x/text/internal/language/compact)
-
-* [golang.org/x/text/internal/tag](https://godoc.org/golang.org/x/text/internal/tag)
-
-* [golang.org/x/text/internal/testtext](https://godoc.org/golang.org/x/text/internal/testtext)
-
-* [golang.org/x/text/internal/ucd](https://godoc.org/golang.org/x/text/internal/ucd)
-
-* [golang.org/x/text/internal/utf8internal](https://godoc.org/golang.org/x/text/internal/utf8internal)
-
-* [golang.org/x/text/language](https://godoc.org/golang.org/x/text/language)
-
-* [golang.org/x/text/runes](https://godoc.org/golang.org/x/text/runes)
-
-* [golang.org/x/text/transform](https://godoc.org/golang.org/x/text/transform)
-
-* [golang.org/x/text/unicode/cldr](https://godoc.org/golang.org/x/text/unicode/cldr)
-
-* [golang.org/x/text/unicode/norm](https://godoc.org/golang.org/x/text/unicode/norm)
-
-* [golang.org/x/text/unicode/rangetable](https://godoc.org/golang.org/x/text/unicode/rangetable)
-
-* [golang.org/x/tools/go/ast/astutil](https://godoc.org/golang.org/x/tools/go/ast/astutil)
-
-* [gopkg.in/check.v1](https://godoc.org/gopkg.in/check.v1)
 
 * [gopkg.in/yaml.v2](https://godoc.org/gopkg.in/yaml.v2)

@@ -3,6 +3,7 @@ package buffalo
 import (
 	"database/sql"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net/http"
 	"sort"
@@ -131,9 +132,26 @@ func productionErrorResponseFor(status int) []byte {
 	return []byte(prodErrorTmpl)
 }
 
+// ErrorResponse is a used to display errors as JSON or XML
+type ErrorResponse struct {
+	XMLName xml.Name `json:"-" xml:"response"`
+	Error   string   `json:"error" xml:"error"`
+	Trace   string   `json:"trace" xml:"trace"`
+	Code    int      `json:"code" xml:"code,attr"`
+}
+
+const defErrorCT = "text/html; charset=utf-8"
+
+type stackTracer interface {
+	StackTrace() errors.StackTrace
+}
+
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
+	ct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
+	if strings.Contains(ct, "form") {
+		ct = defErrorCT
+	}
 	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)
@@ -145,20 +163,37 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return nil
 	}
 
-	msg := fmt.Sprintf("%+v", origErr)
+	trace := fmt.Sprintf("%s\n\n%+v", origErr, origErr)
+	if st, ok := origErr.(stackTracer); ok {
+		var log []string
+		for _, t := range st.StackTrace() {
+			log = append(log, fmt.Sprintf("%+v", t))
+		}
+		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
+	}
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
-		err := json.NewEncoder(c.Response()).Encode(map[string]interface{}{
-			"error": msg,
-			"code":  status,
+		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
+			Error: errors.Cause(origErr).Error(),
+			Trace: trace,
+			Code:  status,
 		})
 		if err != nil {
 			return errors.WithStack(err)
 		}
 	case "application/xml", "text/xml", "xml":
+		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
+			Error: errors.Cause(origErr).Error(),
+			Trace: trace,
+			Code:  status,
+		})
+		if err != nil {
+			return errors.WithStack(err)
+		}
 	default:
+		c.Response().Header().Set("content-type", "text/html; charset=utf-8")
 		if err := c.Request().ParseForm(); err != nil {
-			msg = fmt.Sprintf("%s\n%s", err.Error(), msg)
+			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
 		routes := c.Value("routes")
 		if cd, ok := c.(*DefaultContext); ok {
@@ -167,7 +202,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 		data := map[string]interface{}{
 			"routes":      routes,
-			"error":       msg,
+			"error":       trace,
 			"status":      status,
 			"data":        c.Data(),
 			"params":      c.Params(),

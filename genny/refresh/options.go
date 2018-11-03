@@ -1,6 +1,6 @@
 package refresh
 
-import "github.com/gobuffalo/buffalo/meta"
+import "github.com/gobuffalo/meta"
 
 // Options for creating a new refresh config
 type Options struct {
@@ -9,7 +9,7 @@ type Options struct {
 
 // Validate options
 func (opts *Options) Validate() error {
-	if (opts.App == meta.App{}) {
+	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
 	return nil

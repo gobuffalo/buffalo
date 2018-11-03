@@ -46,7 +46,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 ### Models/ORM (Optional)
 
-[github.com/gobuffalo/pop](https://github.com/gobuffalo/pop) - Accessing databases is nothing new in web applications. Pop, and its command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop and Soda share the same core philosphies as Buffalo so they were a natural choice.
+[github.com/gobuffalo/pop](https://github.com/gobuffalo/pop) - Accessing databases is nothing new in web applications. Pop, and its command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to built your app. Pop and Soda share the same core philosophies as Buffalo so they were a natural choice.
 
 ### Sessions, Cookies, Websockets, and more...
 
@@ -60,4 +60,4 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 
 First, thank you so much for wanting to contribute! It means so much that you care enough to want to contribute. We appreciate every PR from the smallest of typos to the be biggest of features.
 
-To contribute, please read the contribution guidelines: [CONTRIBUTING](CONTRIBUTING.md)
+To contribute, please read the contribution guidelines: [CONTRIBUTING](.github/CONTRIBUTING.md)

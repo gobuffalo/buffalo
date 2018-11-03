@@ -9,17 +9,17 @@ import (
 	"runtime"
 	"strings"
 
+	fname "github.com/gobuffalo/flect/name"
 	"github.com/spf13/pflag"
 
-	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/newapp"
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
@@ -32,7 +32,6 @@ func getAppWithConfig() newapp.Generator {
 	pwd, _ := os.Getwd()
 	app := newapp.Generator{
 		App:         meta.New(pwd),
-		AsAPI:       viper.GetBool("api"),
 		Force:       viper.GetBool("force"),
 		Verbose:     viper.GetBool("verbose"),
 		SkipPop:     viper.GetBool("skip-pop"),
@@ -40,16 +39,20 @@ func getAppWithConfig() newapp.Generator {
 		SkipYarn:    viper.GetBool("skip-yarn"),
 		DBType:      viper.GetString("db-type"),
 		CIProvider:  viper.GetString("ci-provider"),
-		AsWeb:       true,
 		Docker:      viper.GetString("docker"),
 		Bootstrap:   viper.GetInt("bootstrap"),
 	}
+
+	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
 	app.WithPop = !app.SkipPop
 	app.WithWebpack = !app.SkipWebpack
 	app.WithYarn = !app.SkipYarn
 	app.AsWeb = !app.AsAPI
+	if app.DBType == "sqlite3" {
+		app.WithSQLite = true
+	}
 	if app.AsAPI {
 		app.WithWebpack = false
 	}
@@ -75,12 +78,13 @@ var newCmd = &cobra.Command{
 			return configError
 		}
 		app := getAppWithConfig()
-		app.Name = inflect.Name(args[0])
+		app.Name = fname.New(args[0])
+		app.Bin = filepath.Join("bin", app.Name.String())
 
-		if app.Name == "." {
-			app.Name = inflect.Name(filepath.Base(app.Root))
+		if app.Name.String() == "." {
+			app.Name = fname.New(filepath.Base(app.Root))
 		} else {
-			app.Root = filepath.Join(app.Root, app.Name.File())
+			app.Root = filepath.Join(app.Root, app.Name.File().String())
 		}
 		aa := meta.New(app.Root)
 		app.ActionsPkg = aa.ActionsPkg
