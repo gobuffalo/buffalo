@@ -1,4 +1,4 @@
-package render_test
+package render
 
 import (
 	"bytes"
@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr"
 	"github.com/stretchr/testify/require"
 )
@@ -30,7 +29,7 @@ func Test_JavaScript(t *testing.T) {
 	t.Run("without a layout", func(st *testing.T) {
 		r := require.New(st)
 
-		j := render.New(render.Options{
+		j := New(Options{
 			TemplatesBox: packr.NewBox(tmpDir),
 		}).JavaScript
 
@@ -51,7 +50,7 @@ func Test_JavaScript(t *testing.T) {
 		_, err = layout.Write([]byte("<body><%= yield %></body>"))
 		r.NoError(err)
 
-		re := render.New(render.Options{
+		re := New(Options{
 			JavaScriptLayout: filepath.Base(layout.Name()),
 			TemplatesBox:     packr.NewBox(tmpDir),
 		})
@@ -94,7 +93,7 @@ func Test_JavaScript_JS_Partial(t *testing.T) {
 	r.NoError(err)
 	defer os.RemoveAll(dir)
 
-	re := render.New(render.Options{
+	re := New(Options{
 		TemplatesBox: packr.NewBox(dir),
 	})
 
@@ -115,6 +114,26 @@ func Test_JavaScript_JS_Partial(t *testing.T) {
 	r.Equal("let a = 1;\nalert('hi!');", bb.String())
 }
 
+func Test_JavaScript_JS_Partial_Without_Extension(t *testing.T) {
+	r := require.New(t)
+
+	const testJS = "let a = 1;\n<%= partial(\"part\") %>"
+	const partJS = "alert('Hi <%= name %>!');"
+
+	err := withHTMLFile("test.js", testJS, func(e *Engine) {
+		err := withHTMLFile("_part.js", partJS, func(e *Engine) {
+			bb := &bytes.Buffer{}
+			renderer := e.JavaScript("test.js")
+			r.Equal("application/javascript", renderer.ContentType())
+			err := renderer.Render(bb, Data{"name": "Yonghwan"})
+			r.NoError(err)
+			r.Equal("let a = 1;\nalert('Hi Yonghwan!');", bb.String())
+		})
+		r.NoError(err)
+	})
+	r.NoError(err)
+}
+
 func Test_JavaScript_HTML_Partial(t *testing.T) {
 	r := require.New(t)
 
@@ -122,7 +141,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	r.NoError(err)
 	defer os.RemoveAll(dir)
 
-	re := render.New(render.Options{
+	re := New(Options{
 		TemplatesBox: packr.NewBox(dir),
 	})
 
