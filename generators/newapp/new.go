@@ -12,8 +12,8 @@ import (
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
+	"github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/generators"
-	"github.com/gobuffalo/buffalo/generators/soda"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/refresh"
@@ -63,10 +63,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 	data["name"] = a.Name
 
 	a.setupCI(g, data)
-
-	if sg := a.setupPop(root, data); sg != nil {
-		g.Add(sg)
-	}
 
 	if _, err := exec.LookPath("goimports"); err != nil {
 		g.Add(makr.NewCommand(makr.GoGet("golang.org/x/tools/cmd/goimports")))
@@ -172,6 +168,19 @@ func (a Generator) genny() (makr.Runnable, error) {
 		return a, errors.WithStack(err)
 	}
 
+	if app.WithPop {
+		popts := &newapp.Options{
+			App:     app,
+			Dialect: a.DBType,
+			Prefix:  a.Name.File().String(),
+		}
+		gg, err := newapp.New(popts)
+		if err != nil {
+			return a, errors.WithStack(err)
+		}
+		run.WithGroup(gg)
+	}
+
 	fn := makr.Func{
 		Runner: func(root string, data makr.Data) error {
 			return run.Run()
@@ -199,25 +208,6 @@ func (a Generator) setupVCS(g *makr.Generator) {
 	}
 	g.Add(makr.NewCommand(exec.Command(a.VCS, args...)))
 	g.Add(makr.NewCommand(exec.Command(a.VCS, "commit", "-q", "-m", "Initial Commit")))
-}
-
-func (a Generator) setupPop(root string, data makr.Data) *makr.Generator {
-	if !a.WithPop {
-		return nil
-	}
-
-	sg := soda.New()
-	sg.App = a.App
-	sg.Dialect = a.DBType
-
-	g := makr.New()
-	for k, v := range data {
-		g.Data[k] = v
-	}
-	g.Data["appPath"] = a.Root
-	g.Data["name"] = a.Name.File()
-	g.Add(sg)
-	return g
 }
 
 func (a Generator) setupCI(g *makr.Generator, data makr.Data) {
