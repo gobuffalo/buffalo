@@ -16,8 +16,8 @@ type Options struct {
 }
 
 // Last checks if the name is the last of the parts
-func (g Options) Last(n inflect.Name) bool {
-	return g.Parts[len(g.Parts)-1] == n
+func (opts Options) Last(n inflect.Name) bool {
+	return opts.Parts[len(opts.Parts)-1] == n
 }
 
 // Validate options
