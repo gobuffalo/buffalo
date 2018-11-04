@@ -25,7 +25,7 @@ type TemplateValidator func(f genny.File) error
 // ValidateTemplates returns a genny.RunFn that will walk the
 // given box and run each of the files found through each of the
 // template validators
-func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn {
+func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 	if len(tvs) == 0 {
 		return func(r *genny.Runner) error {
 			return nil
@@ -33,22 +33,14 @@ func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn
 	}
 	return func(r *genny.Runner) error {
 		var errs []string
-		walk.Walk(func(path string, file packd.File) error {
+
+		packd.SkipWalker(walk, packd.CommonSkipPrefixes, func(path string, file packd.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
 				return errors.WithStack(err)
 			}
 			if info.IsDir() {
 				return nil
-			}
-
-			base := filepath.Dir(path)
-			if base != "." {
-				for _, pre := range []string{"_", ".", "node_modules", "vendor"} {
-					if strings.HasPrefix(base, pre) {
-						return filepath.SkipDir
-					}
-				}
 			}
 
 			f := genny.NewFile(path, file)
