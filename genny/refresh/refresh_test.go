@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/meta"
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/markbates/inflect"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,7 +14,7 @@ func Test_New(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.New(".")
-	app.Name = inflect.Name("foo")
+	app.Name = name.New("foo")
 	g, err := New(&Options{app})
 	r.NoError(err)
 

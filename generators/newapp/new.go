@@ -16,6 +16,7 @@ import (
 	"github.com/gobuffalo/buffalo/generators/soda"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
+	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
@@ -62,10 +63,6 @@ func (a Generator) Run(root string, data makr.Data) error {
 	data["name"] = a.Name
 
 	a.setupCI(g, data)
-
-	if err := a.setupWebpack(root, data); err != nil {
-		return errors.WithStack(err)
-	}
 
 	if sg := a.setupPop(root, data); sg != nil {
 		g.Add(sg)
@@ -167,12 +164,12 @@ func (a Generator) genny() (makr.Runnable, error) {
 			err = run.WithNew(standard.New(&standard.Options{}))
 		}
 		if err != nil {
-			return errors.WithStack(err)
+			return a, errors.WithStack(err)
 		}
 	}
 
-	if err := run.WithNew(refresh.New(&refresh.Optioons{App: app})); err != nil {
-		return errors.WithStack(err)
+	if err := run.WithNew(refresh.New(&refresh.Options{App: app})); err != nil {
+		return a, errors.WithStack(err)
 	}
 
 	fn := makr.Func{
