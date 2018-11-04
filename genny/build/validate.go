@@ -46,7 +46,7 @@ func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn
 			if base != "." {
 				for _, pre := range []string{"_", ".", "node_modules", "vendor"} {
 					if strings.HasPrefix(base, pre) {
-						return nil
+						return filepath.SkipDir
 					}
 				}
 			}
