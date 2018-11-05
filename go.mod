@@ -14,7 +14,7 @@ require (
 	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
 	github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
-	github.com/gobuffalo/httptest v1.0.2
+	github.com/gobuffalo/httptest v1.0.3
 	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181025145500-3a985a084b0a
@@ -25,7 +25,7 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181104210012-e3e2d4531ccf
+	github.com/gobuffalo/packd v0.0.0-20181104210303-d376b15f8e96
 	github.com/gobuffalo/packr v1.19.0
 	github.com/gobuffalo/plush v3.7.22+incompatible
 	github.com/gobuffalo/pop v4.8.8+incompatible
