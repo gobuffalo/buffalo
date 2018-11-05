@@ -32,8 +32,9 @@ github.com/gobuffalo/buffalo v0.12.8-0.20181004233540-fac9bb505aa8/go.mod h1:sLy
 github.com/gobuffalo/buffalo v0.13.0/go.mod h1:Mjn1Ba9wpIbpbrD+lIDMy99pQ0H0LiddMIIDGse7qT4=
 github.com/gobuffalo/buffalo v0.13.1/go.mod h1:K9c22KLfDz7obgxvHv1amvJtCQEZNiox9+q6FDJ1Zcs=
 github.com/gobuffalo/buffalo v0.13.2/go.mod h1:vA8I4Dwcfkx7RAzIRHVDZxfS3QJR7muiOjX4r8P2/GE=
-github.com/gobuffalo/buffalo-docker v1.0.4 h1:qqL5eOgOOwR/SfNgZT1VZjH5XAwgToDauP6PDcCJflU=
-github.com/gobuffalo/buffalo-docker v1.0.4/go.mod h1:DhHSXMloQHsOu/KUTFTiIL+8cwfuTqZnMc2QdOmN6Y8=
+github.com/gobuffalo/buffalo v0.13.4/go.mod h1:y2jbKkO0k49OrNIOAkbWQiPBqxAFpHn5OKnkc7BDh+I=
+github.com/gobuffalo/buffalo-docker v1.0.5 h1:wsHKuTQ5iEpV6cV+BKyjmnOB2p3QfJGkRbNbHn8oxW0=
+github.com/gobuffalo/buffalo-docker v1.0.5/go.mod h1:NZ3+21WIdqOUlOlM2onCt7cwojYp4Qwlsngoolw8zlE=
 github.com/gobuffalo/buffalo-plugins v1.0.2/go.mod h1:pOp/uF7X3IShFHyobahTkTLZaeUXwb0GrUTb9ngJWTs=
 github.com/gobuffalo/buffalo-plugins v1.0.4/go.mod h1:pWS1vjtQ6uD17MVFWf7i3zfThrEKWlI5+PYLw/NaDB4=
 github.com/gobuffalo/buffalo-plugins v1.4.3/go.mod h1:uCzTY0woez4nDMdQjkcOYKanngeUVRO2HZi7ezmAjWY=
@@ -47,8 +48,9 @@ github.com/gobuffalo/buffalo-plugins v1.6.7/go.mod h1:ZGZRkzz2PiKWHs0z7QsPBOTo2E
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=
-github.com/gobuffalo/buffalo-pop v1.1.8 h1:HVx6kuZG8C+5KcFG1lU2GOV8JEb6SQ+uzMEB0NYhV2o=
 github.com/gobuffalo/buffalo-pop v1.1.8/go.mod h1:1uaxOFzzVud/zR5f1OEBr21tMVLQS3OZpQ1A5cr0svE=
+github.com/gobuffalo/buffalo-pop v1.1.11 h1:90KuQikNnu4pL9yi1g/p5dTrjExqHR8WwbCu1obJLYs=
+github.com/gobuffalo/buffalo-pop v1.1.11/go.mod h1:ghA3grb7NAklOzusNoooTQxV2laiIbK2by0eDS6yPbk=
 github.com/gobuffalo/envy v1.6.4/go.mod h1:Abh+Jfw475/NWtYMEt+hnJWRiC8INKWibIMyNt1w2Mc=
 github.com/gobuffalo/envy v1.6.5/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
 github.com/gobuffalo/envy v1.6.6/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
@@ -131,6 +133,7 @@ github.com/gobuffalo/packd v0.0.0-20181027194105-7ae579e6d213/go.mod h1:SmdBdhj6
 github.com/gobuffalo/packd v0.0.0-20181028162033-6d52e0eabf41/go.mod h1:Yf2toFaISlyQrr5TfO3h6DB9pl9mZRmyvBGQb/aQ/pI=
 github.com/gobuffalo/packd v0.0.0-20181029140631-cf76bd87a5a6/go.mod h1:Yf2toFaISlyQrr5TfO3h6DB9pl9mZRmyvBGQb/aQ/pI=
 github.com/gobuffalo/packd v0.0.0-20181031195726-c82734870264/go.mod h1:Yf2toFaISlyQrr5TfO3h6DB9pl9mZRmyvBGQb/aQ/pI=
+github.com/gobuffalo/packd v0.0.0-20181103221656-16c4ed88b296/go.mod h1:Yf2toFaISlyQrr5TfO3h6DB9pl9mZRmyvBGQb/aQ/pI=
 github.com/gobuffalo/packd v0.0.0-20181104210303-d376b15f8e96 h1:jLKkCFr6UoU0bCX4HKUQ2FKNjfzr654r76GGNUrAcQ0=
 github.com/gobuffalo/packd v0.0.0-20181104210303-d376b15f8e96/go.mod h1:Yf2toFaISlyQrr5TfO3h6DB9pl9mZRmyvBGQb/aQ/pI=
 github.com/gobuffalo/packr v1.13.7/go.mod h1:KkinLIn/n6+3tVXMwg6KkNvWwVsrRAz4ph+jgpk3Z24=
@@ -377,8 +380,9 @@ golang.org/x/tools v0.0.0-20181019005945-6adeb8aab2de/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181024171208-a2dc47679d30/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181026183834-f60e5f99f081/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181030151751-bb28844c46df/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
-golang.org/x/tools v0.0.0-20181102223251-96e9e165b75e h1:mWs/o39kL0UjStxJimqI7o6rKvqDZcAQxqnwG6lmxfc=
 golang.org/x/tools v0.0.0-20181102223251-96e9e165b75e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20181105213840-e504f914a84b h1:tMmal9ZzeRWqWBgbwCDPBuFlWWRjzF5yD5acalTV70M=
+golang.org/x/tools v0.0.0-20181105213840-e504f914a84b/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0 h1:S0iUepdCWODXRvtE+gcRDd15L+k+k1AiHlMiMjefH24=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 gopkg.in/airbrake/gobrake.v2 v2.0.9/go.mod h1:/h5ZAUhDkGaJfjzjKLSjv6zCL6O0LLBxU4K+aSYdM/U=

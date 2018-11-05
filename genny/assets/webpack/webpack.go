@@ -55,7 +55,24 @@ func installPkgs(r *genny.Runner, opts *Options) error {
 		}
 	}
 	args := []string{"install", "--no-progress", "--save"}
-	return r.Exec(exec.Command(command, args...))
+
+	c := exec.Command(command, args...)
+	c.Stdout = yarnWriter{
+		fn: r.Logger.Debug,
+	}
+	c.Stderr = yarnWriter{
+		fn: r.Logger.Debug,
+	}
+	return r.Exec(c)
+}
+
+type yarnWriter struct {
+	fn func(...interface{})
+}
+
+func (y yarnWriter) Write(p []byte) (int, error) {
+	y.fn(string(p))
+	return len(p), nil
 }
 
 func installYarn(r *genny.Runner) error {

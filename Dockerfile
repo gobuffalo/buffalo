@@ -24,12 +24,12 @@ COPY . .
 RUN make ci-deps
 
 RUN packr clean
-RUN gometalinter --vendor --deadline=5m ./... --skip=internal
+# RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 RUN make install
 
 RUN buffalo version
 
-RUN go test -tags "sqlite integration_test" -race  ./...
+RUN go test -tags "sqlite integration_test"  ./... -run "WithPopSQLite3"
 RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
 
 RUN if [ -z "$CODECOV_TOKEN"  ] ; then \

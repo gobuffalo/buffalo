@@ -1,23 +1,15 @@
 package actions
 
 import (
-  {{ if .opts.AsWeb -}}
   "github.com/gobuffalo/packr"
-  {{ end -}}
   "github.com/gobuffalo/buffalo/render"
 )
 
 var r *render.Engine
-{{ if .opts.AsWeb -}}
 var assetsBox = packr.NewBox("../public")
-{{ end -}}
 
 func init() {
   r = render.New(render.Options{
-    {{ if .opts.AsAPI -}}
-      DefaultContentType: "application/json",
-    {{ end -}}
-    {{ if .opts.AsWeb -}}
       // HTML layout to be used for all HTML requests:
       HTMLLayout:     "application.html",
 
@@ -31,6 +23,5 @@ func init() {
       // "form":     plush.FormHelper,
       // "form_for": plush.FormForHelper,
       },
-    {{ end -}}
   })
 }
