@@ -75,6 +75,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	if opts.Webpack != nil {
+		// add the webpack generator
 		g, err = webpack.New(opts.Webpack)
 		if err != nil {
 			return gg, errors.WithStack(err)
@@ -83,6 +84,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	if opts.Standard != nil {
+		// add the standard generator
 		g, err = standard.New(opts.Standard)
 		if err != nil {
 			return gg, errors.WithStack(err)

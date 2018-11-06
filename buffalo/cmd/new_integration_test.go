@@ -22,6 +22,7 @@ func Test_NewCmd_NoName(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-f",
 	})
 	err := c.Execute()
 	r.EqualError(err, "you must enter a name for your new application")
@@ -32,6 +33,7 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-f",
 		"coke",
 		"--db-type",
 		"a",
@@ -45,6 +47,7 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-f",
 		"buffalo",
 	})
 	err := c.Execute()
@@ -72,6 +75,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 
 	c.SetArgs([]string{
 		"new",
+		"-f",
 		"hello_world",
 		"--skip-pop",
 		"--skip-webpack",
@@ -104,6 +108,7 @@ func Test_NewCmd_API(t *testing.T) {
 
 	c.SetArgs([]string{
 		"new",
+		"-f",
 		"hello_world",
 		"--skip-pop",
 		"--api",
@@ -138,6 +143,7 @@ func Test_NewCmd_WithDep(t *testing.T) {
 
 		c.SetArgs([]string{
 			"new",
+			"-f",
 			"hello_world",
 			"--skip-pop",
 			"--skip-webpack",
@@ -192,6 +198,7 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 
 	c.SetArgs([]string{
 		"new",
+		"-f",
 		"hello_world",
 		"--db-type=sqlite3",
 		"--skip-webpack",
