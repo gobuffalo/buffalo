@@ -7,7 +7,7 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.6.8
-	github.com/gobuffalo/buffalo-pop v1.1.11
+	github.com/gobuffalo/buffalo-pop v1.1.12
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
@@ -51,6 +51,6 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181105230042-78dc5bac0cac
+	golang.org/x/tools v0.0.0-20181106213628-e21233ffa6c3
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

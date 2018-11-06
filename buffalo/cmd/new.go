@@ -124,6 +124,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 			Prefix:  app.Name.File().String(),
 			Dialect: d,
 		}
+		fmt.Println("### opts.Pop ->", opts.Pop)
 	}
 
 	if app.WithWebpack {
