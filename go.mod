@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
-	github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec
+	github.com/gobuffalo/genny v0.0.0-20181106193839-7dcb0924caf1
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.3
 	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46

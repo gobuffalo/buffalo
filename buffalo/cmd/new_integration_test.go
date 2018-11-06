@@ -3,16 +3,17 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/movinglater/dep"
 	"github.com/gobuffalo/pop"
 	"github.com/stretchr/testify/require"
 )
@@ -39,7 +40,7 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 		"a",
 	})
 	err := c.Execute()
-	r.EqualError(err, fmt.Sprintf("Unknown db-type a expecting one of %s", strings.Join(pop.AvailableDialects, ", ")))
+	r.EqualError(err, fmt.Sprintf("unknown dialect a expecting one of %s", strings.Join(pop.AvailableDialects, ", ")))
 }
 
 func Test_NewCmd_ForbiddenAppName(t *testing.T) {
@@ -55,9 +56,6 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 }
 
 func Test_NewCmd_Nominal(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
@@ -88,9 +86,6 @@ func Test_NewCmd_Nominal(t *testing.T) {
 }
 
 func Test_NewCmd_API(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
@@ -121,9 +116,7 @@ func Test_NewCmd_API(t *testing.T) {
 }
 
 func Test_NewCmd_WithDep(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
+	envy.Set(envy.GO111MODULE, "off")
 	c := RootCmd
 
 	r := require.New(t)
@@ -149,6 +142,7 @@ func Test_NewCmd_WithDep(t *testing.T) {
 			"--skip-webpack",
 			"--with-dep",
 			"--vcs=none",
+			"-v",
 		})
 		err = c.Execute()
 		rr.NoError(err)
@@ -159,27 +153,15 @@ func Test_NewCmd_WithDep(t *testing.T) {
 		rr.DirExists(filepath.Join(tdir, "hello_world", "vendor"))
 	}
 
-	t.Run("without dep in PATH", func(tt *testing.T) {
-		if runtime.GOOS == "windows" {
-			tt.Skip("Skipping on Windows")
-		}
-		rr := require.New(tt)
-		if dep, err := exec.LookPath("dep"); err == nil {
-			rr.NoError(os.Remove(dep))
-		}
-		newApp(rr)
-	})
+	// make sure dep installed
+	run := genny.WetRunner(context.Background())
+	run.WithRun(dep.InstallDep())
+	r.NoError(run.Run())
 
-	t.Run("with dep in PATH", func(tt *testing.T) {
-		rr := require.New(tt)
-		newApp(rr)
-	})
+	newApp(r)
 }
 
 func Test_NewCmd_WithPopSQLite3(t *testing.T) {
-	if envy.Get("GO111MODULE", "off") == "on" {
-		t.Skip("CURRENTLY NOT SUPPORTED")
-	}
 	r := require.New(t)
 	c := RootCmd
 
@@ -203,6 +185,7 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 		"--db-type=sqlite3",
 		"--skip-webpack",
 		"--vcs=none",
+		"-v",
 	})
 	err = c.Execute()
 	r.NoError(err)

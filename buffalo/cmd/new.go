@@ -79,6 +79,10 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
+	if app.WithDep {
+		app.WithModules = false
+		envy.MustSet("GO111MODULE", "off")
+	}
 	app.WithPop = !viper.GetBool("skip-pop")
 	app.WithWebpack = !viper.GetBool("skip-webpack")
 	app.WithYarn = !viper.GetBool("skip-yarn")
