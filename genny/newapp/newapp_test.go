@@ -44,7 +44,76 @@ func Test_New(t *testing.T) {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
 
-	r.Len(res.Files, 21)
+	expected := append(commonExpected, webExpected...)
+	for _, e := range expected {
+		_, err = res.Find(e)
+		r.NoError(err)
+	}
+
+	f, err := res.Find("actions/render.go")
+	r.NoError(err)
+
+	body := f.String()
+	r.Contains(body, `TemplatesBox: packr.NewBox("../templates"),`)
+	r.NotContains(body, `DefaultContentType: "application/json",`)
+	unexpected := []string{
+		"Dockerfile",
+		"database.yml",
+		"models/models.go",
+		"go.mod",
+		".buffalo.dev.yml",
+		"assets/css/application.scss.css",
+		"public/assets/application.js",
+	}
+
+	for _, u := range unexpected {
+		_, err = res.Find(u)
+		r.Error(err)
+	}
+}
+
+func Test_New_API(t *testing.T) {
+	r := require.New(t)
+
+	app := meta.New(".")
+	app.WithModules = false
+	app.AsAPI = true
+	app.AsWeb = false
+
+	gg, err := New(&Options{
+		App: app,
+	})
+	r.NoError(err)
+
+	run := gentest.NewRunner()
+	run.WithGroup(gg)
+
+	r.NoError(run.Run())
+
+	res := run.Results()
+
+	cmds := []string{"go get github.com/gobuffalo/buffalo-plugins",
+		"go get -t ./...",
+	}
+	r.Len(res.Commands, len(cmds))
+
+	for i, c := range res.Commands {
+		r.Equal(cmds[i], strings.Join(c.Args, " "))
+	}
+
+	expected := commonExpected
+	for _, e := range expected {
+		_, err = res.Find(e)
+		r.NoError(err)
+	}
+
+	f, err := res.Find("actions/render.go")
+	r.NoError(err)
+	r.Contains(f.String(), `DefaultContentType: "application/json",`)
+
+	f, err = res.Find("actions/home.go")
+	r.NoError(err)
+	r.Contains(f.String(), `return c.Render(200, r.JSON(map[string]string{"message": "Welcome to Buffalo!"}))`)
 
 	unexpected := []string{
 		"Dockerfile",
@@ -55,15 +124,11 @@ func Test_New(t *testing.T) {
 		"assets/css/application.scss.css",
 		"public/assets/application.js",
 	}
+
+	unexpected = append(unexpected, webExpected...)
 	for _, u := range unexpected {
 		_, err = res.Find(u)
 		r.Error(err)
-	}
-
-	expected := append(commonExpected, webExpected...)
-	for _, e := range expected {
-		_, err = res.Find(e)
-		r.NoError(err)
 	}
 }
 
@@ -96,7 +161,12 @@ func Test_New_Mods(t *testing.T) {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
 
-	r.Len(res.Files, 22)
+	expected := append(commonExpected, "go.mod")
+	expected = append(expected, webExpected...)
+	for _, e := range expected {
+		_, err = res.Find(e)
+		r.NoError(err)
+	}
 
 	unexpected := []string{
 		"Dockerfile",
@@ -111,16 +181,13 @@ func Test_New_Mods(t *testing.T) {
 		r.Error(err)
 	}
 
-	expected := append(commonExpected, "go.mod")
-	for _, e := range expected {
-		_, err = res.Find(e)
-		r.NoError(err)
-	}
-
 }
 
 func Test_New_Docker(t *testing.T) {
 	r := require.New(t)
+
+	app := meta.New(".")
+	app.WithModules = false
 
 	gg, err := New(&Options{
 		Docker: &docker.Options{},
@@ -134,8 +201,12 @@ func Test_New_Docker(t *testing.T) {
 
 	res := run.Results()
 
-	_, err = res.Find("Dockerfile")
-	r.NoError(err)
+	expected := append(commonExpected, "Dockerfile")
+	expected = append(expected, webExpected...)
+	for _, e := range expected {
+		_, err := res.Find(e)
+		r.NoError(err)
+	}
 }
 
 var commonExpected = []string{
