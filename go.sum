@@ -43,8 +43,9 @@ github.com/gobuffalo/buffalo-plugins v1.6.1/go.mod h1:/XZt7UuuDnx5P4v3cStK0+XoYi
 github.com/gobuffalo/buffalo-plugins v1.6.4/go.mod h1:/+N1aophkA2jZ1ifB2O3Y9yGwu6gKOVMtUmJnbg+OZI=
 github.com/gobuffalo/buffalo-plugins v1.6.5/go.mod h1:0HVkbgrVs/MnPZ/FOseDMVanCTm2RNcdM0PuXcL1NNI=
 github.com/gobuffalo/buffalo-plugins v1.6.6/go.mod h1:hSWAEkJyL9RENJlmanMivgnNkrQ9RC4xJARz8dQryi0=
-github.com/gobuffalo/buffalo-plugins v1.6.7 h1:tJYklFrGg/+8uz8eZ/DbOBzgsdJMT/aBOx2oACO0ylQ=
 github.com/gobuffalo/buffalo-plugins v1.6.7/go.mod h1:ZGZRkzz2PiKWHs0z7QsPBOTo2EpcGRArMEym6ghKYgk=
+github.com/gobuffalo/buffalo-plugins v1.6.8 h1:L/eU5PmhmU6IH8NypIS+4gqbe3Bu/Z8ZA+uTkiLoZ1w=
+github.com/gobuffalo/buffalo-plugins v1.6.8/go.mod h1:fioa15R2yKrKJ/mLc2akmGD0/C4KgcZ/L1iLPqZNxYw=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=
@@ -86,6 +87,8 @@ github.com/gobuffalo/genny v0.0.0-20181019144442-df0a36fdd146/go.mod h1:IyRrGrQb
 github.com/gobuffalo/genny v0.0.0-20181024195656-51392254bf53/go.mod h1:o9GEH5gn5sCKLVB5rHFC4tq40rQ3VRUzmx6WwmaqISE=
 github.com/gobuffalo/genny v0.0.0-20181025145300-af3f81d526b8/go.mod h1:uZ1fFYvdcP8mu0B/Ynarf6dsGvp7QFIpk/QACUuFUVI=
 github.com/gobuffalo/genny v0.0.0-20181027191429-94d6cfb5c7fc/go.mod h1:x7SkrQQBx204Y+O9EwRXeszLJDTaWN0GnEasxgLrQTA=
+github.com/gobuffalo/genny v0.0.0-20181027195209-3887b7171c4f/go.mod h1:JbKx8HSWICu5zyqWOa0dVV1pbbXOHusrSzQUprW6g+w=
+github.com/gobuffalo/genny v0.0.0-20181028165311-82acaec20f14/go.mod h1:qMAx3oZEEiiR5oZxYYRZzLNheyRejhYLEYR7uFBo5lI=
 github.com/gobuffalo/genny v0.0.0-20181030163439-ed103521b8ec/go.mod h1:3Xm9z7/2oRxlB7PSPLxvadZ60/0UIek1YWmcC7QSaVs=
 github.com/gobuffalo/genny v0.0.0-20181106193839-7dcb0924caf1 h1:ucc4RKfzVeT2vw9EgXizMN/DvoM4/BVCLELuCQGUjRM=
 github.com/gobuffalo/genny v0.0.0-20181106193839-7dcb0924caf1/go.mod h1:x61yHxvbDCgQ/7cOAbJCacZQuHgB0KMSzoYcw5debjU=
@@ -98,6 +101,7 @@ github.com/gobuffalo/httptest v1.0.3 h1:BKssItUAhTWVHeh/0zI1SqC/nbcN/GNXxwlBwuG5
 github.com/gobuffalo/httptest v1.0.3/go.mod h1:7T1IbSrg60ankme0aDLVnEY0h056g9M1/ZvpVThtB7E=
 github.com/gobuffalo/licenser v0.0.0-20180924033006-eae28e638a42/go.mod h1:Ubo90Np8gpsSZqNScZZkVXXAo5DGhTb+WYFIjlnog8w=
 github.com/gobuffalo/licenser v0.0.0-20181025145548-437d89de4f75/go.mod h1:x3lEpYxkRG/XtGCUNkio+6RZ/dlOvLzTI9M1auIwFcw=
+github.com/gobuffalo/licenser v0.0.0-20181027200154-58051a75da95/go.mod h1:BzhaaxGd1tq1+OLKObzgdCV9kqVhbTulxOpYbvMQWS0=
 github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27/go.mod h1:8sQkgyhWipz1mIctHF4jTxmJh1Vxhp7mP8IqbljgJZo=
 github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
 github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46 h1:HDEkWXBE0WLewULQsZtjTx5GQTCa414QJWTm2+96kdA=
@@ -162,6 +166,7 @@ github.com/gobuffalo/release v1.0.51/go.mod h1:RPs7EtafH4oylgetOJpGP0yCZZUiO4vqH
 github.com/gobuffalo/release v1.0.52/go.mod h1:RPs7EtafH4oylgetOJpGP0yCZZUiO4vqHfTHJjSdpug=
 github.com/gobuffalo/release v1.0.53/go.mod h1:FdF257nd8rqhNaqtDWFGhxdJ/Ig4J7VcS3KL7n/a+aA=
 github.com/gobuffalo/release v1.0.54/go.mod h1:Pe5/RxRa/BE8whDpGfRqSI7D1a0evGK1T4JDm339tJc=
+github.com/gobuffalo/release v1.0.60/go.mod h1:wcPd8W+bjTSrTH6xStqh8G34rCGzIdVqtPcRKYEsWrA=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
 github.com/gobuffalo/tags v2.0.11+incompatible h1:zLkaontB8lWefU+DX38mzPLRKFGTJL8FKb9JnKMt0Z0=
 github.com/gobuffalo/tags v2.0.11+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
@@ -337,6 +342,7 @@ golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e/go.mod h1:6SG95UA2DQfeDnf
 golang.org/x/crypto v0.0.0-20181024171144-74cb1d3d52f4/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181025113841-85e1b3f9139a/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181025213731-e84da0312774/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+golang.org/x/crypto v0.0.0-20181029103014-dab2b1051b5d/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd h1:VtIkGDhk0ph3t+THbvXHfMZ8QHgsBO39Nh52+74pq7w=
 golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=

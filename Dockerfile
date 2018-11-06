@@ -42,7 +42,7 @@ WORKDIR $GOPATH/src/
 # START: tests bins are built with tags properly
 RUN mkdir -p $GOPATH/src/github.com/markbates
 WORKDIR $GOPATH/src/github.com/markbates
-RUN buffalo new --skip-webpack coke --db-type=sqlite3
+RUN buffalo new --skip-webpack coke --db-type=sqlite3 -f
 WORKDIR $GOPATH/src/github.com/markbates/coke
 RUN buffalo db create -a -d
 RUN buffalo g resource widget name
@@ -54,7 +54,7 @@ RUN rm -rfv $GOPATH/src/github.com/markbates/coke
 
 WORKDIR $GOPATH/src/
 
-RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
+RUN buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis -f
 WORKDIR ./hello_world
 
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
@@ -128,7 +128,7 @@ RUN buffalo g actions users update --skip-template --method POST
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_with_method.json
 
 WORKDIR $GOPATH/src
-RUN buffalo new  --api apiapp
+RUN buffalo new --api apiapp -f
 WORKDIR ./apiapp
 RUN buffalo build
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json

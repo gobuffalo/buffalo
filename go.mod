@@ -6,7 +6,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.6.7
+	github.com/gobuffalo/buffalo-plugins v1.6.8
 	github.com/gobuffalo/buffalo-pop v1.1.11
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
