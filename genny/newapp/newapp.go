@@ -1,6 +1,7 @@
 package newapp
 
 import (
+	"fmt"
 	"go/build"
 	"html/template"
 	"os/exec"
@@ -15,11 +16,11 @@ import (
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
+	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/dep"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
@@ -40,6 +41,7 @@ func New(opts *Options) (*genny.Group, error) {
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
 		return nil, errors.WithStack(err)
 	}
+	fmt.Println("### plugs ->", plugs)
 
 	if opts.Docker != nil {
 		// add the docker generator
@@ -144,12 +146,6 @@ func New(opts *Options) (*genny.Group, error) {
 		g.Command(exec.Command(genny.GoBin(), "get", "-t", "./..."))
 		gg.Add(g)
 	}
-
-	g, err = gotools.GoFmt(app.Root)
-	if err != nil {
-		return gg, errors.WithStack(err)
-	}
-	gg.Add(g)
 
 	// setup VCS last
 	if opts.VCS != nil {

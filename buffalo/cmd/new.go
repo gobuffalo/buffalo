@@ -12,6 +12,7 @@ import (
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/logger"
 	"github.com/spf13/pflag"
 
@@ -178,6 +179,10 @@ var newCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 		run.WithGroup(gg)
+
+		if err := run.WithNew(gotools.GoFmt(app.Root)); err != nil {
+			return errors.WithStack(err)
+		}
 
 		if err := run.Run(); err != nil {
 			return errors.WithStack(err)
