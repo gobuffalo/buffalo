@@ -1,7 +1,6 @@
 package newapp
 
 import (
-	"fmt"
 	"go/build"
 	"html/template"
 	"os/exec"
@@ -41,7 +40,6 @@ func New(opts *Options) (*genny.Group, error) {
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
 		return nil, errors.WithStack(err)
 	}
-	fmt.Println("### plugs ->", plugs)
 
 	if opts.Docker != nil {
 		// add the docker generator
@@ -50,12 +48,6 @@ func New(opts *Options) (*genny.Group, error) {
 			return gg, errors.WithStack(err)
 		}
 		gg.Add(g)
-
-		// add the plugin
-		plugs.Add(plugdeps.Plugin{
-			Binary: "buffalo-docker",
-			GoGet:  "github.com/gobuffalo/buffalo-docker",
-		})
 	}
 
 	if opts.Pop != nil {

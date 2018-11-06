@@ -26,7 +26,6 @@ type Options struct {
 	Webpack        *webpack.Options
 	Standard       *standard.Options
 	Refresh        *refresh.Options
-	Bootstrap      int
 	Version        string
 	ForbiddenNames []string
 }
@@ -41,9 +40,6 @@ func (opts *Options) Validate() error {
 		opts.Version = runtime.Version
 	}
 
-	if opts.Bootstrap == 0 {
-		opts.Bootstrap = 4
-	}
 	if opts.Docker != nil {
 		if opts.Docker.App.IsZero() {
 			opts.Docker.App = opts.App
