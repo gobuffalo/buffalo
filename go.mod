@@ -51,6 +51,6 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181106213628-e21233ffa6c3
+	golang.org/x/tools v0.0.0-20181105230042-78dc5bac0cac
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
