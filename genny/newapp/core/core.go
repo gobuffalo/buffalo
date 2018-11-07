@@ -10,8 +10,6 @@ import (
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
-	"github.com/gobuffalo/buffalo/genny/assets/standard"
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
@@ -68,24 +66,6 @@ func New(opts *Options) (*genny.Group, error) {
 	if opts.CI != nil {
 		// add the CI generator
 		g, err = ci.New(opts.CI)
-		if err != nil {
-			return gg, errors.WithStack(err)
-		}
-		gg.Add(g)
-	}
-
-	if opts.Webpack != nil {
-		// add the webpack generator
-		g, err = webpack.New(opts.Webpack)
-		if err != nil {
-			return gg, errors.WithStack(err)
-		}
-		gg.Add(g)
-	}
-
-	if opts.Standard != nil {
-		// add the standard generator
-		g, err = standard.New(opts.Standard)
 		if err != nil {
 			return gg, errors.WithStack(err)
 		}

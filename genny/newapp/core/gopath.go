@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func validateInGoPath(srcDirs []string) genny.RunFn {
+	fmt.Println("### srcDirs ->", srcDirs)
 	return func(r *genny.Runner) error {
 		pwd, err := os.Getwd()
 		if err != nil {

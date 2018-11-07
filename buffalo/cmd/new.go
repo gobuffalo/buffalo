@@ -128,12 +128,6 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		}
 	}
 
-	if app.WithWebpack {
-		opts.Webpack = &webpack.Options{}
-	} else if !app.AsAPI {
-		opts.Standard = &standard.Options{}
-	}
-
 	opts.Refresh = &refresh.Options{}
 
 	opts.App = app
@@ -184,9 +178,15 @@ var newCmd = &cobra.Command{
 				Options: opts,
 			})
 		} else {
-			gg, err = web.New(&web.Options{
+			wo := &web.Options{
 				Options: opts,
-			})
+			}
+			if app.WithWebpack {
+				wo.Webpack = &webpack.Options{}
+			} else if !app.AsAPI {
+				wo.Standard = &standard.Options{}
+			}
+			gg, err = web.New(wo)
 		}
 		if err != nil {
 			if errors.Cause(err) == core.ErrNotInGoPath {

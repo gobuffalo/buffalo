@@ -3,6 +3,8 @@ package web
 import (
 	"html/template"
 
+	"github.com/gobuffalo/buffalo/genny/assets/standard"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
@@ -21,6 +23,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	g := genny.New()
+	g.Transformer(genny.Dot())
 	data := map[string]interface{}{
 		"opts": opts,
 	}
@@ -32,6 +35,24 @@ func New(opts *Options) (*genny.Group, error) {
 	g.Box(packr.NewBox("../web/templates"))
 
 	gg.Add(g)
+
+	if opts.Webpack != nil {
+		// add the webpack generator
+		g, err = webpack.New(opts.Webpack)
+		if err != nil {
+			return gg, errors.WithStack(err)
+		}
+		gg.Add(g)
+	}
+
+	if opts.Standard != nil {
+		// add the standard generator
+		g, err = standard.New(opts.Standard)
+		if err != nil {
+			return gg, errors.WithStack(err)
+		}
+		gg.Add(g)
+	}
 
 	return gg, nil
 }
