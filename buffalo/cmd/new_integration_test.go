@@ -37,10 +37,10 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 		"-f",
 		"coke",
 		"--db-type",
-		"a",
+		"x",
 	})
 	err := c.Execute()
-	r.EqualError(err, fmt.Sprintf("unknown dialect a expecting one of %s", strings.Join(pop.AvailableDialects, ", ")))
+	r.EqualError(err, fmt.Sprintf("unknown dialect \"x\" expecting one of %s", strings.Join(pop.AvailableDialects, ", ")))
 }
 
 func Test_NewCmd_ForbiddenAppName(t *testing.T) {
