@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New generator for creating a Buffalo Web application
 func New(opts *Options) (*genny.Group, error) {
 	if err := opts.Validate(); err != nil {
 		return nil, errors.WithStack(err)

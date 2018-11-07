@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New generator for adding VCS to an application
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 

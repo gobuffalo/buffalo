@@ -2,7 +2,6 @@ package mail
 
 import (
 	"path/filepath"
-	"strings"
 	"text/template"
 
 	"github.com/gobuffalo/genny"
@@ -14,8 +13,9 @@ import (
 // New mailer generator. It will init the mailers directory if it doesn't already exist
 func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
-	if len(opts.Name.String()) == 0 {
-		return gg, errors.New("you must supply a name for your mailer")
+
+	if err := opts.Validate(); err != nil {
+		return gg, errors.WithStack(err)
 	}
 
 	if !opts.SkipInit {
@@ -35,8 +35,8 @@ func New(opts *Options) (*genny.Group, error) {
 	g.Transformer(t)
 
 	fn := opts.Name.File()
-	g.File(genny.NewFile(filepath.Join("mailers", fn+".go.tmpl"), strings.NewReader(mailerTmpl)))
-	g.File(genny.NewFile(filepath.Join("templates", "mail", fn+".html.tmpl"), strings.NewReader(mailTmpl)))
+	g.File(genny.NewFileS("mailers/"+fn+".go.tmpl", mailerTmpl))
+	g.File(genny.NewFileS("templates/mail/"+fn+".html.tmpl", mailTmpl))
 	gg.Add(g)
 
 	return gg, nil

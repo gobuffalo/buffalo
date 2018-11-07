@@ -1,12 +1,10 @@
 package mail
 
 import (
-	"context"
-	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/gentest"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +13,7 @@ func Test_New_NoMailers(t *testing.T) {
 	gg, err := New(&Options{Name: "foo"})
 	r.NoError(err)
 
-	run := genny.DryRunner(context.Background())
+	run := gentest.NewRunner()
 	gg.With(run)
 	r.NoError(run.Run())
 
@@ -24,27 +22,27 @@ func Test_New_NoMailers(t *testing.T) {
 	r.Len(res.Files, 4)
 
 	f := res.Files[0]
-	r.Equal(filepath.Join("mailers", "foo.go"), f.Name())
+	r.Equal("mailers/foo.go", f.Name())
 	body := f.String()
 	r.Contains(body, `err := m.AddBody(r.HTML("foo.html"), render.Data{})`)
 
 	f = res.Files[1]
-	r.Equal(filepath.Join("mailers", "mailers.go"), f.Name())
+	r.Equal("mailers/mailers.go", f.Name())
 
 	f = res.Files[2]
-	r.Equal(filepath.Join("templates", "mail", "foo.html"), f.Name())
+	r.Equal("templates/mail/foo.html", f.Name())
 	body = f.String()
 	r.Contains(body, `<h3>../templates/mail/foo.html</h3>`)
 
 	f = res.Files[3]
-	r.Equal(filepath.Join("templates", "mail", "layout.html"), f.Name())
+	r.Equal("templates/mail/layout.html", f.Name())
 }
 
 func Test_New_WithMailers(t *testing.T) {
 	r := require.New(t)
 
-	run := genny.DryRunner(context.Background())
-	run.Disk.Add(genny.NewFile(filepath.Join("mailers", "mailers.go"), strings.NewReader("")))
+	run := gentest.NewRunner()
+	run.Disk.Add(genny.NewFileS("mailers/mailers.go", ""))
 
 	gg, err := New(&Options{Name: "foo"})
 	r.NoError(err)
@@ -56,12 +54,12 @@ func Test_New_WithMailers(t *testing.T) {
 	r.Len(res.Files, 3)
 
 	f := res.Files[0]
-	r.Equal(filepath.Join("mailers", "foo.go"), f.Name())
+	r.Equal("mailers/foo.go", f.Name())
 	body := f.String()
 	r.Contains(body, `err := m.AddBody(r.HTML("foo.html"), render.Data{})`)
 
 	f = res.Files[2]
-	r.Equal(filepath.Join("templates", "mail", "foo.html"), f.Name())
+	r.Equal("templates/mail/foo.html", f.Name())
 	body = f.String()
 	r.Contains(body, `<h3>../templates/mail/foo.html</h3>`)
 }

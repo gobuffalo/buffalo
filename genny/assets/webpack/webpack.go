@@ -16,7 +16,7 @@ import (
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
-// New generator for create webpack asset files
+// New generator for creating webpack asset files
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 

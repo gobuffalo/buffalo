@@ -6,17 +6,17 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.6.8
+	github.com/gobuffalo/buffalo-plugins v1.6.9
 	github.com/gobuffalo/buffalo-pop v1.1.12
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
-	github.com/gobuffalo/genny v0.0.0-20181106193839-7dcb0924caf1
+	github.com/gobuffalo/genny v0.0.0-20181107163714-bd5cfa2382d4
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.3
 	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181025145500-3a985a084b0a
+	github.com/gobuffalo/meta v0.0.0-20181107220014-d98ed08f9a2a
 	github.com/gobuffalo/mw-basicauth v1.0.7
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -51,6 +51,6 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181105230042-78dc5bac0cac
+	golang.org/x/tools v0.0.0-20181107215632-34b416bd17b3
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )

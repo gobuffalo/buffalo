@@ -1,6 +1,7 @@
 package core
 
 import (
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -20,7 +21,7 @@ func init() {
 func Test_New(t *testing.T) {
 	r := require.New(t)
 
-	app := meta.New(".")
+	app := meta.Named("coke", filepath.Join(envy.GoPath(), "src"))
 	app.WithModules = false
 
 	gg, err := New(&Options{
@@ -74,8 +75,7 @@ func Test_New(t *testing.T) {
 func Test_New_Mods(t *testing.T) {
 	r := require.New(t)
 
-	app := meta.New(".")
-	app.PackagePkg = "foo/bar"
+	app := meta.Named("coke", ".")
 	app.WithModules = true
 
 	gg, err := New(&Options{
@@ -91,7 +91,7 @@ func Test_New_Mods(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go mod init foo/bar",
+		"go mod init github.com/gobuffalo/buffalo/genny/newapp/core/coke",
 		"go get github.com/gobuffalo/buffalo-plugins",
 		"go get github.com/gobuffalo/buffalo@" + runtime.Version,
 		"go get",

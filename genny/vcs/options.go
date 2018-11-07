@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/meta"
 )
 
+// Available VCS implementations
 var Available = []string{"git", "bzr", "none"}
 
 type Options struct {
@@ -28,7 +29,7 @@ func (opts *Options) Validate() error {
 		}
 	}
 	if !found {
-		return fmt.Errorf("unknown provider %s expecting one of %s", opts.Provider, strings.Join(Available, ", "))
+		return fmt.Errorf("unknown provider %q expecting one of %s", opts.Provider, strings.Join(Available, ", "))
 	}
 	return nil
 }

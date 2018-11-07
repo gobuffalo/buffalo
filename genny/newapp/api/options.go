@@ -4,6 +4,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 )
 
+// Options for API applications
 type Options struct {
 	*core.Options
 }

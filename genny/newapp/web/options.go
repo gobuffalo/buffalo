@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Options for a web app
 type Options struct {
 	*core.Options
 	Webpack  *webpack.Options

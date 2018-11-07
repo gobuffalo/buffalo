@@ -15,6 +15,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Options for a new Buffalo application
 type Options struct {
 	App            meta.App
 	Docker         *docker.Options

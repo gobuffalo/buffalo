@@ -11,8 +11,10 @@ import (
 	"github.com/gobuffalo/pop"
 )
 
+// Available CI implementations
 var Available = []string{"travis", "gitlab"}
 
+// Options for CI
 type Options struct {
 	App      meta.App
 	DBType   string
