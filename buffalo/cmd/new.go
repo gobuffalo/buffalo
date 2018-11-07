@@ -24,7 +24,9 @@ import (
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/ci"
-	"github.com/gobuffalo/buffalo/genny/newapp"
+	"github.com/gobuffalo/buffalo/genny/newapp/api"
+	"github.com/gobuffalo/buffalo/genny/newapp/core"
+	"github.com/gobuffalo/buffalo/genny/newapp/web"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/envy"
@@ -35,7 +37,7 @@ import (
 )
 
 type newAppOptions struct {
-	Options *newapp.Options
+	Options *core.Options
 	Force   bool
 	Verbose bool
 	DryRun  bool
@@ -92,7 +94,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		app.WithWebpack = false
 	}
 
-	opts := &newapp.Options{}
+	opts := &core.Options{}
 
 	x := viper.GetString("docker")
 	if len(x) > 0 && x != "none" {
@@ -124,7 +126,6 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 			Prefix:  app.Name.File().String(),
 			Dialect: d,
 		}
-		fmt.Println("### opts.Pop ->", opts.Pop)
 	}
 
 	if app.WithWebpack {
@@ -176,9 +177,19 @@ var newCmd = &cobra.Command{
 
 		run.WithRun(genny.Force(app.Root, nopts.Force))
 
-		gg, err := newapp.New(opts)
+		var gg *genny.Group
+
+		if app.AsAPI {
+			gg, err = api.New(&api.Options{
+				Options: opts,
+			})
+		} else {
+			gg, err = web.New(&web.Options{
+				Options: opts,
+			})
+		}
 		if err != nil {
-			if errors.Cause(err) == newapp.ErrNotInGoPath {
+			if errors.Cause(err) == core.ErrNotInGoPath {
 				return notInGoPath(app)
 			}
 			return errors.WithStack(err)
