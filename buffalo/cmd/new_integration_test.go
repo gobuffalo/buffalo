@@ -62,7 +62,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
+	tdir, err := ioutil.TempDir(cpath, "nominal")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
 
@@ -92,7 +92,7 @@ func Test_NewCmd_API(t *testing.T) {
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
+	tdir, err := ioutil.TempDir(cpath, "apiapp")
 	r.NoError(err)
 	defer os.RemoveAll(tdir)
 
@@ -125,7 +125,7 @@ func Test_NewCmd_WithDep(t *testing.T) {
 
 	newApp := func(rr *require.Assertions) {
 		cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-		tdir, err := ioutil.TempDir(cpath, "testapp")
+		tdir, err := ioutil.TempDir(cpath, "depapp")
 		rr.NoError(err)
 		defer os.RemoveAll(tdir)
 
@@ -168,7 +168,7 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
+	tdir, err := ioutil.TempDir(cpath, "sqliteapp")
 	r.NoError(err)
 	r.NoError(os.MkdirAll(tdir, 0755))
 	defer os.RemoveAll(tdir)

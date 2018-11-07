@@ -107,6 +107,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	if len(x) > 0 && x != "none" {
 		opts.CI = &ci.Options{
 			Provider: x,
+			DBType:   viper.GetString("db-type"),
 		}
 	}
 

@@ -59,7 +59,7 @@ func (opts *Options) Validate() error {
 		}
 	}
 	if !found {
-		return fmt.Errorf("unknown dialect %s expecting one of %s", opts.DBType, strings.Join(pop.AvailableDialects, ", "))
+		return fmt.Errorf("unknown dialect %q expecting one of %s", opts.DBType, strings.Join(pop.AvailableDialects, ", "))
 	}
 	return nil
 }
