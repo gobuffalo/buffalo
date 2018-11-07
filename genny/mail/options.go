@@ -13,6 +13,7 @@ type Options struct {
 	SkipInit bool         `json:"skip_init"`
 }
 
+// Validate options are useful
 func (opts *Options) Validate() error {
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")

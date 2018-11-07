@@ -1,7 +1,6 @@
 package grift
 
 import (
-	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -32,7 +31,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 func genFile(r *genny.Runner, opts *Options) error {
 	header := tmplHeader
-	path := filepath.Join("grifts", opts.Name.File()+".go.tmpl")
+	path := "grifts/" + opts.Name.File() + ".go.tmpl"
 	if f, err := r.FindFile(path); err == nil {
 		header = f.String()
 	}

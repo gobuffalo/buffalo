@@ -20,14 +20,15 @@ func Test_New(t *testing.T) {
 
 	res := run.Results()
 	r.Len(res.Commands, 0)
-	r.Len(res.Files, 3)
 
-	f := res.Files[0]
-	r.Equal("public/assets/application.css", f.Name())
-
-	f = res.Files[1]
-	r.Equal("public/assets/application.js", f.Name())
-
-	f = res.Files[2]
-	r.Equal("public/assets/images/favicon.ico", f.Name())
+	files := []string{
+		"public/assets/application.css",
+		"public/assets/application.js",
+		"public/assets/buffalo.css",
+		"public/assets/images/favicon.ico",
+	}
+	r.Len(res.Files, len(files))
+	for i, f := range res.Files {
+		r.Equal(files[i], f.Name())
+	}
 }

@@ -28,39 +28,32 @@ func Test_Webpack_New(t *testing.T) {
 	r.NoError(run.Run())
 
 	res := run.Results()
-	r.Len(res.Commands, 1)
-	r.Len(res.Files, 9)
 
+	r.Len(res.Commands, 1)
 	c := res.Commands[0]
 	r.Equal("npm install --no-progress --save", strings.Join(c.Args, " "))
 
-	f := res.Files[0]
-	r.Equal(".babelrc", f.Name())
+	files := []string{
+		".babelrc",
+		"assets/css/_buffalo.scss",
+		"assets/css/application.scss",
+		"assets/images/favicon.ico",
+		"assets/images/logo.svg",
+		"assets/js/application.js",
+		"package.json",
+		"public/assets/.keep",
+		"templates/application.html",
+		"webpack.config.js",
+	}
+	r.Len(res.Files, len(files))
+	for i, f := range res.Files {
+		r.Equal(files[i], f.Name())
+	}
 
-	f = res.Files[1]
-	r.Equal("assets/css/application.scss", f.Name())
+	f, err := res.Find("package.json")
+	r.NoError(err)
+	r.Contains(f.String(), `"bootstrap": "4.`)
 
-	f = res.Files[2]
-	r.Equal("assets/images/favicon.ico", f.Name())
-
-	f = res.Files[3]
-	r.Equal("assets/images/logo.svg", f.Name())
-
-	f = res.Files[4]
-	r.Equal("assets/js/application.js", f.Name())
-
-	f = res.Files[5]
-	r.Equal("package.json", f.Name())
-	r.Contains(f.String(), `"bootstrap": "4.1.1",`)
-
-	f = res.Files[6]
-	r.Equal("public/assets/.keep", f.Name())
-
-	f = res.Files[7]
-	r.Equal("templates/application.html", f.Name())
-
-	f = res.Files[8]
-	r.Equal("webpack.config.js", f.Name())
 }
 
 func Test_Webpack_New_WithYarn(t *testing.T) {
@@ -77,7 +70,7 @@ func Test_Webpack_New_WithYarn(t *testing.T) {
 
 	res := run.Results()
 	r.Len(res.Commands, 1)
-	r.Len(res.Files, 9)
+	r.Len(res.Files, 10)
 
 	c := res.Commands[0]
 	r.Equal("yarnpkg install --no-progress --save", strings.Join(c.Args, " "))

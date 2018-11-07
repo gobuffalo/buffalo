@@ -10,6 +10,7 @@ import (
 // Available VCS implementations
 var Available = []string{"git", "bzr", "none"}
 
+// Options for VCS generator
 type Options struct {
 	App      meta.App
 	Provider string
