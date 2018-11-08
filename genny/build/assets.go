@@ -4,6 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 	"os/exec"
+	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/envy"
@@ -14,12 +15,15 @@ import (
 )
 
 func assets(opts *Options) (*genny.Generator, error) {
+
 	g := genny.New()
+
+	// Quick way to ensure this directory exists so static content is created.
+	g.File(genny.NewFile("../public/assets/dummy", strings.NewReader("placeholder for static builds")))
 
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
-
 	if opts.App.WithWebpack {
 		g.RunFn(func(r *genny.Runner) error {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
@@ -48,7 +52,6 @@ func assets(opts *Options) (*genny.Generator, error) {
 		}
 		g.Merge(aa)
 	}
-
 	g.RunFn(func(r *genny.Runner) error {
 		return p.Run()
 	})
