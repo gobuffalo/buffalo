@@ -1,7 +1,6 @@
 package mail
 
 import (
-	"path/filepath"
 	"text/template"
 
 	"github.com/gobuffalo/genny"
@@ -54,8 +53,7 @@ func initGenerator(opts *Options) (*genny.Generator, error) {
 	g.Transformer(t)
 
 	g.Should = func(r *genny.Runner) bool {
-		path := filepath.Join("mailers", "mailers.go")
-		_, err := r.FindFile(path)
+		_, err := r.FindFile("mailers/mailers.go")
 		return err != nil
 	}
 	return g, nil

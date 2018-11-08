@@ -1,24 +1,20 @@
 package grift
 
 import (
-	"context"
-	"path/filepath"
 	"testing"
 
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/gentest"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_New(t *testing.T) {
 	r := require.New(t)
 
-	g, err := New(&Options{
+	run := gentest.NewRunner()
+	err := run.WithNew(New(&Options{
 		Args: []string{"foo"},
-	})
+	}))
 	r.NoError(err)
-
-	run := genny.DryRunner(context.Background())
-	run.With(g)
 	r.NoError(run.Run())
 
 	res := run.Results()
@@ -26,7 +22,7 @@ func Test_New(t *testing.T) {
 	r.Len(res.Files, 1)
 
 	f := res.Files[0]
-	r.Equal(filepath.Join("grifts", "foo.go"), f.Name())
+	r.Equal("grifts/foo.go", f.Name())
 	body := f.String()
 	r.Contains(body, `var _ = Add("foo", func(c *Context) error`)
 }
@@ -34,13 +30,11 @@ func Test_New(t *testing.T) {
 func Test_New_Namespaced(t *testing.T) {
 	r := require.New(t)
 
-	g, err := New(&Options{
+	run := gentest.NewRunner()
+	err := run.WithNew(New(&Options{
 		Args: []string{"foo:bar"},
-	})
+	}))
 	r.NoError(err)
-
-	run := genny.DryRunner(context.Background())
-	run.With(g)
 	r.NoError(run.Run())
 
 	res := run.Results()
@@ -48,7 +42,7 @@ func Test_New_Namespaced(t *testing.T) {
 	r.Len(res.Files, 1)
 
 	f := res.Files[0]
-	r.Equal(filepath.Join("grifts", "bar.go"), f.Name())
+	r.Equal("grifts/bar.go", f.Name())
 	body := f.String()
 	r.Contains(body, `Add("bar", func(c *Context) error`)
 }

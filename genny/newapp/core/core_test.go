@@ -91,7 +91,7 @@ func Test_New_Mods(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go mod init github.com/gobuffalo/buffalo/genny/newapp/core/coke",
+		"go mod init coke",
 		"go get github.com/gobuffalo/buffalo-plugins",
 		"go get github.com/gobuffalo/buffalo@" + runtime.Version,
 		"go get",
