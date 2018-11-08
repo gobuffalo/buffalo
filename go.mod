@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/envy v1.6.7
 	github.com/gobuffalo/events v1.1.5
 	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
-	github.com/gobuffalo/genny v0.0.0-20181107163714-bd5cfa2382d4
+	github.com/gobuffalo/genny v0.0.0-20181107223128-f18346459dbe
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.3
 	github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46
@@ -50,7 +50,9 @@ require (
 	github.com/stretchr/testify v1.2.2
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
-	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
-	golang.org/x/tools v0.0.0-20181107215632-34b416bd17b3
+	golang.org/x/net v0.0.0-20181108082009-03003ca0c849 // indirect
+	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
+	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
+	golang.org/x/tools v0.0.0-20181107225058-a28dfb48e06b
 	gopkg.in/mail.v2 v2.0.0-20180731213649-a0242b2233b4
 )
