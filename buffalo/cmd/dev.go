@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -67,7 +69,7 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 		})
 
 		wg.Go(func() error {
-			return startWebpack(ctx)
+			return runDevScript(ctx)
 		})
 
 		err := wg.Wait()
@@ -76,6 +78,41 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 		}
 		return nil
 	},
+}
+
+type packageJSON struct {
+	Scripts map[string]interface{} `json:"scripts"`
+}
+
+func runDevScript(ctx context.Context) error {
+	app := meta.New(".")
+	if _, err := os.Stat(filepath.Join(app.Root, "package.json")); err != nil {
+		// No package.json, so no webpack either
+		return nil
+	}
+	b, err := ioutil.ReadFile(filepath.Join(app.Root, "package.json"))
+	if err != nil {
+		return errors.WithMessage(err, "unable to read package.json")
+	}
+	p := packageJSON{}
+	if err := json.Unmarshal(b, &p); err != nil {
+		return errors.WithMessage(err, "unable to parse package.json")
+	}
+	if _, ok := p.Scripts["dev"]; ok {
+		tool := "yarnpkg"
+		if !app.WithYarn {
+			tool = "npm"
+		}
+		if _, err := exec.LookPath(tool); err != nil {
+			return errors.Errorf("couldn't find %s tool", tool)
+		}
+		cmd := exec.CommandContext(ctx, tool, "run", "dev")
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		return cmd.Run()
+	}
+	// Fallback on legacy startWebpack
+	return startWebpack(ctx)
 }
 
 func startWebpack(ctx context.Context) error {
