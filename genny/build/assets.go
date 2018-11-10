@@ -19,7 +19,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	// Quick way to ensure this directory exists so static content is created.
-	g.File(genny.NewFile("../public/assets/dummy", strings.NewReader("placeholder for static builds")))
+	g.File(genny.NewFile("public/assets/.dummy", strings.NewReader("placeholder for static builds")))
 
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
@@ -38,6 +38,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 	p.Compress = true
 
 	if !opts.WithAssets {
+		// TODO: note the difference between ../public/assets and public/assets
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
 	} else {
 		p.IgnoredFolders = p.IgnoredFolders[1:]

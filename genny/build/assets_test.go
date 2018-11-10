@@ -1,7 +1,6 @@
 package build
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -39,9 +38,9 @@ func Test_assets(t *testing.T) {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
 
-	s, err := res.Find("../public/assets/dummy")
+	s, err := res.Find("public/assets/.dummy")
 	if err != nil || s.String() != "placeholder for static builds" {
-		panic(fmt.Sprintf("%v", s.String()))
+		t.Fail()
 	}
 }
 
