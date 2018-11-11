@@ -4,12 +4,12 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.6.9
+	github.com/gobuffalo/buffalo-plugins v1.6.10
 	github.com/gobuffalo/buffalo-pop v1.1.13
 	github.com/gobuffalo/envy v1.6.8
-	github.com/gobuffalo/events v1.1.6
-	github.com/gobuffalo/fizz v1.1.1 // indirect
-	github.com/gobuffalo/genny v0.0.0-20181110202416-7b7d8756a9e2
+	github.com/gobuffalo/events v1.1.7
+	github.com/gobuffalo/fizz v1.1.2 // indirect
+	github.com/gobuffalo/genny v0.0.0-20181111200257-599b33630ab4
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.4
 	github.com/gobuffalo/makr v1.1.5
@@ -20,7 +20,7 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181104210303-d376b15f8e96
+	github.com/gobuffalo/packd v0.0.0-20181111195323-b2e760a5f0ff
 	github.com/gobuffalo/packr v1.19.0
 	github.com/gobuffalo/plush v3.7.22+incompatible
 	github.com/gobuffalo/pop v4.9.0+incompatible
@@ -39,7 +39,6 @@ require (
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.2.0
-	github.com/spf13/cast v1.3.0 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
@@ -47,6 +46,7 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181109202920-92d8274bd7b8
+	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
+	golang.org/x/tools v0.0.0-20181111003725-6d71ab8aade0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
