@@ -31,7 +31,10 @@ func copyDatabase(r *genny.Runner) error {
 
 	f, err := r.FindFile("database.yml")
 	if err == nil {
-		io.Copy(bb, f)
+		_, err = io.Copy(bb, f)
+		if err != nil {
+			return err
+		}
 	}
 
 	dgo := &bytes.Buffer{}

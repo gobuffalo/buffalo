@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"os"
+	"strings"
 
 	"github.com/gobuffalo/events"
 	"github.com/sirupsen/logrus"
@@ -43,10 +44,29 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
+		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
+			logrus.Errorf(popInstallInstructions)
+			os.Exit(-1)
+		}
 		logrus.Errorf("Error: %s\n\n", err)
 		os.Exit(-1)
 	}
 }
+
+const dbNotFound = `unknown command "db"`
+const popNotFound = `unknown command "pop"`
+const popInstallInstructions = `Pop support has been moved to the https://github.com/gobuffalo/buffalo-pop plugin.
+
+Go Get Installation:
+
+	$ go get github.com/gobuffalo/buffalo-pop
+
+Buffalo Plugins Installation*:
+
+	$ buffalo plugins install github.com/gobuffalo/buffalo-pop
+
+* Requires https://github.com/gobuffalo/buffalo-plugins installed.
+`
 
 func init() {
 	decorate("root", RootCmd)

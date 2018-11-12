@@ -33,7 +33,7 @@ func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn
 	}
 	return func(r *genny.Runner) error {
 		var errs []string
-		walk.Walk(func(path string, file packd.File) error {
+		err := walk.Walk(func(path string, file packd.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
 				return errors.WithStack(err)
@@ -65,6 +65,9 @@ func ValidateTemplates(walk packd.Walkable, tvs []TemplateValidator) genny.RunFn
 
 			return nil
 		})
+		if err != nil {
+			return err
+		}
 		if len(errs) == 0 {
 			return nil
 		}
@@ -129,11 +132,10 @@ func (d dirWalker) Walk(fn packd.WalkFunc) error {
 		return fn(path, f)
 	}
 
-	godirwalk.Walk(d.dir, &godirwalk.Options{
+	return godirwalk.Walk(d.dir, &godirwalk.Options{
 		FollowSymbolicLinks: true,
 		Callback:            callback,
 	})
-	return nil
 }
 
 func templateWalker(app meta.App) packd.Walkable {
