@@ -40,7 +40,7 @@ func Test_assets(t *testing.T) {
 
 	f, err := res.Find("public/assets/.dummy")
 	r.NoError(err)
-		t.Fail()
+		r.Equal("placeholder for static builds", f.String())
 	}
 }
 
