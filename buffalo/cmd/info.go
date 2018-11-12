@@ -28,9 +28,13 @@ var infoCmd = &cobra.Command{
 		rv := reflect.ValueOf(app)
 		rt := rv.Type()
 
+		var err error
 		for i := 0; i < rt.NumField(); i++ {
 			f := rt.Field(i)
-			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+			_, err = bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+			if err != nil {
+				return err
+			}
 		}
 
 		if err := runInfoCmds(); err != nil {
@@ -59,9 +63,9 @@ func infoGoMod() error {
 
 	bb := os.Stdout
 	bb.WriteString("\n### go.mod\n")
-	io.Copy(bb, f)
+	_, err = io.Copy(bb, f)
 
-	return nil
+	return err
 }
 
 func runInfoCmds() error {
