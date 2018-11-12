@@ -24,13 +24,7 @@
     "TemplatesBox",
     "Helpers"
   ]
-}, {
-  "path": "templates",
-  "absent": true
-}, {
-  "path": "assets",
-  "absent": true
-}, {
-  "path": "public",
+},{
+  "path": "public/assets/.dummy",
   "absent": false
 }]
