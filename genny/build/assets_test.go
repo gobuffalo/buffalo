@@ -39,7 +39,7 @@ func Test_assets(t *testing.T) {
 	}
 
 	s, err := res.Find("public/assets/.dummy")
-	if err != nil || s.String() != "placeholder for static builds" {
+	r.NoError(err)
 		t.Fail()
 	}
 }
