@@ -38,7 +38,7 @@ func Test_assets(t *testing.T) {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
 
-	s, err := res.Find("public/assets/.dummy")
+	f, err := res.Find("public/assets/.dummy")
 	r.NoError(err)
 		t.Fail()
 	}
