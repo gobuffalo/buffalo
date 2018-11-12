@@ -38,10 +38,8 @@ func Test_assets(t *testing.T) {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
 
-	f, err := res.Find("public/assets/.dummy")
+	_, err := res.Find("public/assets/.dummy")
 	r.NoError(err)
-		r.Equal("placeholder for static builds", f.String())
-	}
 }
 
 func Test_assets_Archived(t *testing.T) {
