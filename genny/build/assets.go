@@ -19,7 +19,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	// Quick way to ensure this directory exists so static content is created.
-	g.File(genny.NewFile("public/assets/.dummy", strings.NewReader("placeholder for static builds")))
+	g.File(genny.NewDir("public/assets"))
 
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
