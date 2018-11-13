@@ -44,7 +44,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 		p.IgnoredFolders = p.IgnoredFolders[1:]
 	}
 
-	if opts.ExtractAssets && opts.WithAssets {
+	if opts.ExtractAssets && opts.WithAssets && !opts.AsAPI {
 		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
 		// mount the archived assets generator
 		aa, err := archivedAssets(opts)
@@ -56,6 +56,5 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g.RunFn(func(r *genny.Runner) error {
 		return p.Run()
 	})
-
 	return g, nil
 }
