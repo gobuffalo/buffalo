@@ -26,5 +26,5 @@
   ]
 },{
   "path": "public/assets/.dummy",
-  "absent": false
+  "absent": true
 }]
