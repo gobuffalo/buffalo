@@ -1,11 +1,8 @@
 package render
 
 import (
-	"html/template"
-	"strings"
-
 	"github.com/gobuffalo/plush"
-	"github.com/pkg/errors"
+	"github.com/markbates/oncer"
 )
 
 // JavaScript renders the named files using the 'application/javascript'
@@ -41,28 +38,8 @@ func (e *Engine) JavaScript(names ...string) Renderer {
 }
 
 // JSTemplateEngine renders files with a `.js` extension through Plush.
-// It also implements a new `partial` helper that will run non-JS partials
-// through `JSEscapeString` before injecting.
+// Deprecated: use github.com/gobuffalo/plush.BuffaloRenderer instead.
 func JSTemplateEngine(input string, data map[string]interface{}, helpers map[string]interface{}) (string, error) {
-	var pf partFunc
-	var ok bool
-	if pf, ok = helpers["partial"].(func(string, Data) (template.HTML, error)); !ok {
-		return "", errors.New("could not find a partial function")
-	}
-
-	helpers["partial"] = func(name string, dd Data) (template.HTML, error) {
-		if strings.Contains(name, ".js") {
-			return pf(name, dd)
-		}
-		h, err := pf(name, dd)
-		if err != nil {
-			return "", errors.WithStack(err)
-		}
-		he := template.JSEscapeString(string(h))
-		return template.HTML(he), nil
-	}
-
+	oncer.Deprecate(0, "render.JSTemplateEngine", "Use github.com/gobuffalo/plush.BuffaloRenderer instead.")
 	return plush.BuffaloRenderer(input, data, helpers)
 }
-
-type partFunc func(string, Data) (template.HTML, error)

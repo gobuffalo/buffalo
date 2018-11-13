@@ -140,9 +140,18 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
+const defErrorCT = "text/html; charset=utf-8"
+
+type stackTracer interface {
+	StackTrace() errors.StackTrace
+}
+
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
+	ct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
+	if strings.Contains(ct, "form") {
+		ct = defErrorCT
+	}
 	c.Response().Header().Set("content-type", ct)
 
 	c.Logger().Error(origErr)
@@ -173,7 +182,14 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return nil
 	}
 
-	trace := fmt.Sprintf("%+v", origErr)
+	trace := fmt.Sprintf("%s\n\n%+v", origErr, origErr)
+	if st, ok := origErr.(stackTracer); ok {
+		var log []string
+		for _, t := range st.StackTrace() {
+			log = append(log, fmt.Sprintf("%+v", t))
+		}
+		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
+	}
 	switch strings.ToLower(ct) {
 	case "application/json", "text/json", "json":
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
@@ -194,6 +210,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	default:
+		c.Response().Header().Set("content-type", "text/html; charset=utf-8")
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
