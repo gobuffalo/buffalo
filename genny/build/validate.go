@@ -28,8 +28,7 @@ func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 	}
 	return func(r *genny.Runner) error {
 		var errs []string
-
-		packd.SkipWalker(walk, packd.CommonSkipPrefixes, func(path string, file packd.File) error {
+    err := packd.SkipWalker(walk, packd.CommonSkipPrefixes, func(path string, file packd.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
 				return errors.WithStack(err)
@@ -52,6 +51,9 @@ func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 
 			return nil
 		})
+		if err != nil {
+			return err
+		}
 		if len(errs) == 0 {
 			return nil
 		}
