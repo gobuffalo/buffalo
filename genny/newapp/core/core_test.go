@@ -76,6 +76,7 @@ func Test_New_Mods(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.Named("coke", ".")
+	(&app).PackageRoot("coke")
 	app.WithModules = true
 
 	gg, err := New(&Options{
