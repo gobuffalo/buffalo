@@ -48,6 +48,10 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
 
+  {{ if ne .opts.Model.Tableize.String .opts.Name.URL.String -}}
+  // hint for Auto renderer to search proper template location
+  c.Set("template_prefix", "{{.opts.Name.URL}}")
+  {{ end -}}
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCasePlural}}))
 }
 
@@ -68,12 +72,20 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
+  {{ if ne .opts.Model.Tableize.String .opts.Name.URL.String -}}
+  // hint for Auto renderer to search proper template location
+  c.Set("template_prefix", "{{.opts.Name.URL}}")
+  {{ end -}}
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingle}}))
 }
 
 // New renders the form for creating a new {{.opts.Model.Proper}}.
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
+  {{ if ne .opts.Model.Tableize.String .opts.Name.URL.String -}}
+  // hint for Auto renderer to search proper template location
+  c.Set("template_prefix", "{{.opts.Name.URL}}")
+  {{ end -}}
   return c.Render(200, r.Auto(c, &models.{{.opts.Model.Proper}}{}))
 }
 
@@ -134,6 +146,10 @@ func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
     return c.Error(404, err)
   }
 
+  {{ if ne .opts.Model.Tableize.String .opts.Name.URL.String -}}
+  // hint for Auto renderer to search proper template location
+  c.Set("template_prefix", "{{.opts.Name.URL}}")
+  {{ end -}}
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingle}}))
 }
 
