@@ -71,7 +71,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 func (res Generator) modelCommand() makr.Command {
 	args := res.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", res.Model.UnderSingular()}, args...)
+	args = append([]string{"db", "g", "model", res.Model.Singularize().Underscore().String()}, args...)
 
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")
