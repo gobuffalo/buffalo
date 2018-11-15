@@ -1,10 +1,10 @@
 package generate
 
 import (
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
@@ -36,7 +36,7 @@ var ResourceCmd = &cobra.Command{
 		o.SkipTemplates = resourceOptions.SkipTemplates
 		if resourceOptions.ModelName != "" {
 			o.UseModel = true
-			o.Model = inflect.Name(resourceOptions.ModelName)
+			o.Model = name.New(resourceOptions.ModelName)
 		}
 
 		if err := o.Validate(); err != nil {
