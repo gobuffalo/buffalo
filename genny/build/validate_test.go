@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/genny/gentest"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_TemplateValidator_Good(t *testing.T) {
 	r := require.New(t)
 
-	box := packr.NewBox("../build/_fixtures/template_validator/good")
+	box := packr.New("../build/_fixtures/template_validator/good", "../build/_fixtures/template_validator/good")
 	tvs := []TemplateValidator{PlushValidator}
 
 	run := gentest.NewRunner()
@@ -23,7 +23,7 @@ func Test_TemplateValidator_Good(t *testing.T) {
 func Test_TemplateValidator_Bad(t *testing.T) {
 	r := require.New(t)
 
-	box := packr.NewBox("../build/_fixtures/template_validator/bad")
+	box := packr.New("../build/_fixtures/template_validator/bad", "../build/_fixtures/template_validator/bad")
 	tvs := []TemplateValidator{PlushValidator}
 
 	run := gentest.NewRunner()

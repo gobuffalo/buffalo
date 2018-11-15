@@ -1,10 +1,9 @@
 package render
 
 import (
+	"github.com/gobuffalo/packr/v2"
 	"os"
 	"path/filepath"
-
-	"github.com/gobuffalo/packr"
 )
 
 func withHTMLFile(name string, contents string, fn func(*Engine)) error {
@@ -27,7 +26,7 @@ func withHTMLFile(name string, contents string, fn func(*Engine)) error {
 	}
 
 	e := New(Options{
-		TemplatesBox: packr.NewBox(os.TempDir()),
+		TemplatesBox: packr.New(os.TempDir(), os.TempDir()),
 	})
 
 	fn(e)

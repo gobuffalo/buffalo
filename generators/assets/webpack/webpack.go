@@ -6,12 +6,12 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
 // TemplateBox contains all templates needed for the webpack generator
-var TemplateBox = packr.NewBox("../webpack/templates")
+var TemplateBox = packr.New("buffalo:generators:assets:webpack", "../webpack/templates")
 
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")

@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +31,7 @@ func Test_Template(t *testing.T) {
 
 	table := []ji{
 		render.New(render.Options{
-			TemplatesBox: packr.NewBox(tPath),
+			TemplatesBox: packr.New(tPath, tPath),
 		}).Template,
 	}
 
@@ -66,8 +66,8 @@ func Test_AssetPath(t *testing.T) {
 	}
 
 	re := render.New(render.Options{
-		TemplatesBox: packr.NewBox(tDir),
-		AssetsBox:    packr.NewBox(aDir),
+		TemplatesBox: packr.New(tDir, tDir),
+		AssetsBox:    packr.New(aDir, aDir),
 	}).Template
 
 	ioutil.WriteFile(filepath.Join(aDir, "manifest.json"), []byte(`{
@@ -111,8 +111,8 @@ func Test_AssetPathNoManifest(t *testing.T) {
 	}
 
 	re := render.New(render.Options{
-		TemplatesBox: packr.NewBox(tDir),
-		AssetsBox:    packr.NewBox(aDir),
+		TemplatesBox: packr.New(tDir, tDir),
+		AssetsBox:    packr.New(aDir, aDir),
 	}).Template
 
 	for original, expected := range cases {
@@ -154,8 +154,8 @@ func Test_AssetPathManifestCorrupt(t *testing.T) {
 	ioutil.WriteFile(filepath.Join(aDir, "manifest.json"), []byte(`//shdnn Corrupt!`), 0644)
 
 	re := render.New(render.Options{
-		TemplatesBox: packr.NewBox(tDir),
-		AssetsBox:    packr.NewBox(aDir),
+		TemplatesBox: packr.New(tDir, tDir),
+		AssetsBox:    packr.New(aDir, aDir),
 	}).Template
 
 	for original, expected := range cases {

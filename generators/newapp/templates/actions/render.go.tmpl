@@ -9,7 +9,7 @@ import (
 
 var r *render.Engine
 {{ if .opts.AsWeb -}}
-var assetsBox = packr.NewBox("../public")
+var assetsBox = packr.New("app:assets", "../public")
 {{ end -}}
 
 func init() {
@@ -22,7 +22,7 @@ func init() {
       HTMLLayout:     "application.html",
 
       // Box containing all of the templates:
-      TemplatesBox: packr.NewBox("../templates"),
+      TemplatesBox: packr.New("app:templates","../templates"),
       AssetsBox:    assetsBox,
 
       // Add template helpers here:

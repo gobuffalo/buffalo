@@ -10,7 +10,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 )
 
 // Run generates a new actions/resource file and a stub test.
@@ -27,7 +27,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 		tmplName = "resource-name"
 	}
 
-	files, err := generators.FindByBox(packr.NewBox("../resource/templates"))
+	files, err := generators.FindByBox(packr.New("buffalo:generators:resource", "../resource/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

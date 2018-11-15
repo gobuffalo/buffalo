@@ -12,7 +12,7 @@ import (
   _ "<%= opts.PackagePkg %>/a"
   _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
-  "github.com/gobuffalo/packr"
+  "github.com/gobuffalo/packr/v2"
   "github.com/gobuffalo/pop"
   "<%= opts.ModelsPkg %>"
   <% } %>
@@ -81,7 +81,7 @@ func printVersion() {
 
 <%= if (opts.WithPop) { %>
 func migrate() {
-  box, err := pop.NewMigrationBox(packr.NewBox("./migrations"), models.DB)
+  box, err := pop.NewMigrationBox(packr.New("app:migrations", "./migrations"), models.DB)
   if err != nil {
     log.Fatalf("Failed to unpack migrations: %s", err)
   }

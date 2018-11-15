@@ -20,7 +20,7 @@ func init() {
 
   dropDatabaseYml()
 
-  box := packr.NewBox("./")
+  box := packr.New("buffalo:a:init", "./")
   if box.Has("inflections.json") {
     r := strings.NewReader(box.String("inflections.json"))
     err := inflect.LoadReader(r)

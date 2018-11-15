@@ -11,13 +11,13 @@ import (
 	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/pop"
 	"github.com/pkg/errors"
 )
 
 // Templates are the templates needed by this generator
-var Templates = packr.NewBox("../newapp/templates")
+var Templates = packr.New("buffalo:generators:newapp", "../newapp/templates")
 
 // ErrNotInGoPath can be asserted against
 var ErrNotInGoPath = errors.New("currently not in a $GOPATH")
