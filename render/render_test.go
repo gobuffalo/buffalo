@@ -1,9 +1,10 @@
 package render
 
 import (
-	"github.com/gobuffalo/packr/v2"
 	"os"
 	"path/filepath"
+
+	"github.com/gobuffalo/packr/v2"
 )
 
 func withHTMLFile(name string, contents string, fn func(*Engine)) error {
