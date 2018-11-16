@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr"
 )
 
@@ -18,8 +19,8 @@ type File struct {
 // Files is a slice of File
 type Files []File
 
-// FindByBox all the .tmpl files inside the packr.Box
-func FindByBox(box packr.Box) (Files, error) {
+// FindByBox all the .tmpl files inside the packd.Box
+func FindByBox(box packd.Box) (Files, error) {
 	files := Files{}
 	err := box.Walk(func(p string, file packr.File) error {
 		if filepath.Ext(p) == ".tmpl" {
