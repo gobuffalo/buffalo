@@ -9,7 +9,7 @@ type {{.opts.Name.Resource}}Resource struct{
 {{ range $a := .actions }}
 // {{$a}} default implementation.
 func (v {{$.opts.Name.Resource}}Resource) {{$a}}(c buffalo.Context) error {
-	return c.Render(200, r.String("{{$.opts.Model.Model}}#{{$a}}"))
+	return c.Render(200, r.String("{{$.opts.Model.Proper}}#{{$a}}"))
 }
 
 {{end}}
