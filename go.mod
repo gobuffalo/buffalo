@@ -10,13 +10,14 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.1.14
 	github.com/gobuffalo/envy v1.6.9
 	github.com/gobuffalo/events v1.1.7
+	github.com/gobuffalo/fizz v1.1.3 // indirect
 	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
 	github.com/gobuffalo/genny v0.0.0-20181114215459-0a4decd77f5d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.4
 	github.com/gobuffalo/logger v0.0.0-20181109185836-3feeab578c17
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7
+	github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5
 	github.com/gobuffalo/mw-basicauth v1.0.7
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
@@ -26,7 +27,7 @@ require (
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packd v0.0.0-20181114190715-f25c5d2471d7
 	github.com/gobuffalo/packr v1.21.0
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.2
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.3
 	github.com/gobuffalo/plush v3.7.22+incompatible
 	github.com/gobuffalo/pop v4.9.0+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
@@ -51,7 +52,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181115162256-f62bfb541538
+	golang.org/x/tools v0.0.0-20181116193547-e77c06808af6
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
