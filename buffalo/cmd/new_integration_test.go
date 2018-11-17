@@ -36,9 +36,9 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-v",
 		"coke",
 		"--db-type",
-		"-v",
 		"x",
 	})
 	err := c.Execute()
@@ -64,11 +64,11 @@ func Test_NewCmd_Nominal(t *testing.T) {
 	err := withDir(func(dir string) {
 		c.SetArgs([]string{
 			"new",
-			"hello_world",
 			"--skip-pop",
 			"--skip-webpack",
 			"--vcs=none",
 			"-v",
+			"hello_world",
 		})
 		err := c.Execute()
 		r.NoError(err)
@@ -85,11 +85,11 @@ func Test_NewCmd_API(t *testing.T) {
 	err := withDir(func(dir string) {
 		c.SetArgs([]string{
 			"new",
-			"hello_world",
 			"--skip-pop",
 			"--api",
 			"--vcs=none",
 			"-v",
+			"hello_world",
 		})
 		err := c.Execute()
 		r.NoError(err)
@@ -110,12 +110,12 @@ func Test_NewCmd_WithDep(t *testing.T) {
 		err := withDir(func(dir string) {
 			c.SetArgs([]string{
 				"new",
-				"hello_world",
 				"--skip-pop",
 				"--skip-webpack",
 				"--with-dep",
 				"--vcs=none",
 				"-v",
+				"hello_world",
 			})
 			err := c.Execute()
 			rr.NoError(err)
@@ -144,11 +144,11 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 
 		c.SetArgs([]string{
 			"new",
-			"hello_world",
 			"--db-type=sqlite3",
 			"--skip-webpack",
 			"--vcs=none",
 			"-v",
+			"hello_world",
 		})
 		err := c.Execute()
 		r.NoError(err)
