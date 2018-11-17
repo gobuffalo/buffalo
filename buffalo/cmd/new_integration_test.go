@@ -78,29 +78,21 @@ func Test_NewCmd_API(t *testing.T) {
 	r := require.New(t)
 	c := RootCmd
 
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "apiapp")
-	r.NoError(err)
-	defer os.RemoveAll(tdir)
+	err := withDir(func(dir string) {
+		c.SetArgs([]string{
+			"new",
+			"hello_world",
+			"--skip-pop",
+			"--api",
+			"--vcs=none",
+		})
+		err := c.Execute()
+		r.NoError(err)
 
-	pwd, err := os.Getwd()
-	r.NoError(err)
-	os.Chdir(tdir)
-	defer os.Chdir(pwd)
-
-	c.SetArgs([]string{
-		"new",
-		"hello_world",
-		"--skip-pop",
-		"--api",
-		"--vcs=none",
+		r.DirExists(filepath.Join(dir, "hello_world"))
 	})
-	err = c.Execute()
-	r.NoError(err)
 
-	r.DirExists(filepath.Join(tdir, "hello_world"))
+	r.NoError(err)
 }
 
 func Test_NewCmd_WithDep(t *testing.T) {
@@ -108,36 +100,27 @@ func Test_NewCmd_WithDep(t *testing.T) {
 	c := RootCmd
 
 	r := require.New(t)
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
 
 	newApp := func(rr *require.Assertions) {
-		cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-		tdir, err := ioutil.TempDir(cpath, "depapp")
-		rr.NoError(err)
-		defer os.RemoveAll(tdir)
+		err := withDir(func(dir string) {
+			c.SetArgs([]string{
+				"new",
+				"hello_world",
+				"--skip-pop",
+				"--skip-webpack",
+				"--with-dep",
+				"--vcs=none",
+				"-v",
+			})
+			err := c.Execute()
+			rr.NoError(err)
 
-		pwd, err := os.Getwd()
-		rr.NoError(err)
-		os.Chdir(tdir)
-		defer os.Chdir(pwd)
-
-		c.SetArgs([]string{
-			"new",
-			"hello_world",
-			"--skip-pop",
-			"--skip-webpack",
-			"--with-dep",
-			"--vcs=none",
-			"-v",
+			rr.DirExists(filepath.Join(dir, "hello_world"))
+			rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.toml"))
+			rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.lock"))
+			rr.DirExists(filepath.Join(dir, "hello_world", "vendor"))
 		})
-		err = c.Execute()
 		rr.NoError(err)
-
-		rr.DirExists(filepath.Join(tdir, "hello_world"))
-		rr.FileExists(filepath.Join(tdir, "hello_world", "Gopkg.toml"))
-		rr.FileExists(filepath.Join(tdir, "hello_world", "Gopkg.lock"))
-		rr.DirExists(filepath.Join(tdir, "hello_world", "vendor"))
 	}
 
 	// make sure dep installed
@@ -152,32 +135,23 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 	r := require.New(t)
 	c := RootCmd
 
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "sqliteapp")
-	r.NoError(err)
-	r.NoError(os.MkdirAll(tdir, 0755))
-	defer os.RemoveAll(tdir)
+	err := withDir(func(dir string) {
 
-	pwd, err := os.Getwd()
-	r.NoError(err)
-	os.Chdir(tdir)
-	defer os.Chdir(pwd)
+		c.SetArgs([]string{
+			"new",
+			"hello_world",
+			"--db-type=sqlite3",
+			"--skip-webpack",
+			"--vcs=none",
+			"-v",
+		})
+		err := c.Execute()
+		r.NoError(err)
 
-	c.SetArgs([]string{
-		"new",
-		"hello_world",
-		"--db-type=sqlite3",
-		"--skip-webpack",
-		"--vcs=none",
-		"-v",
+		r.DirExists(filepath.Join(dir, "hello_world"))
+		r.FileExists(filepath.Join(dir, "hello_world", "database.yml"))
 	})
-	err = c.Execute()
 	r.NoError(err)
-
-	r.DirExists(filepath.Join(tdir, "hello_world"))
-	r.FileExists(filepath.Join(tdir, "hello_world", "database.yml"))
 }
 
 func init() {

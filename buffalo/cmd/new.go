@@ -169,8 +169,9 @@ var newCmd = &cobra.Command{
 			run = genny.DryRunner(ctx)
 		}
 		run.Root = app.Root
-
-		run.WithRun(genny.Force(app.Root, nopts.Force))
+		if nopts.Force {
+			os.RemoveAll(app.Root)
+		}
 
 		var gg *genny.Group
 
