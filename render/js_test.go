@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,7 +30,7 @@ func Test_JavaScript(t *testing.T) {
 		r := require.New(st)
 
 		j := New(Options{
-			TemplatesBox: packr.NewBox(tmpDir),
+			TemplatesBox: packr.New(tmpDir, tmpDir),
 		}).JavaScript
 
 		re := j(filepath.Base(tmpFile.Name()))
@@ -52,7 +52,7 @@ func Test_JavaScript(t *testing.T) {
 
 		re := New(Options{
 			JavaScriptLayout: filepath.Base(layout.Name()),
-			TemplatesBox:     packr.NewBox(tmpDir),
+			TemplatesBox:     packr.New(tmpDir, tmpDir),
 		})
 
 		st.Run("using just the JavaScriptLayout", func(sst *testing.T) {
@@ -94,7 +94,7 @@ func Test_JavaScript_JS_Partial(t *testing.T) {
 	defer os.RemoveAll(dir)
 
 	re := New(Options{
-		TemplatesBox: packr.NewBox(dir),
+		TemplatesBox: packr.New(dir, dir),
 	})
 
 	pf, err := os.Create(filepath.Join(dir, "_part.js"))
@@ -142,7 +142,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	defer os.RemoveAll(dir)
 
 	re := New(Options{
-		TemplatesBox: packr.NewBox(dir),
+		TemplatesBox: packr.New(dir, dir),
 	})
 
 	pf, err := os.Create(filepath.Join(dir, "_part.html"))

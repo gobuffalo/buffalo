@@ -18,7 +18,7 @@ type File struct {
 // Files is a slice of File
 type Files []File
 
-// FindByBox all the .tmpl files inside the packr.Box
+// FindByBox all the .tmpl files inside the packd.Box
 func FindByBox(box packd.Walkable) (Files, error) {
 	files := Files{}
 	err := box.Walk(func(p string, file packd.File) error {

@@ -54,7 +54,7 @@ func Test_New(t *testing.T) {
 	r.NoError(err)
 
 	body := f.String()
-	r.Contains(body, `TemplatesBox: packr.NewBox("../templates"),`)
+	r.Contains(body, `TemplatesBox: packr.New("app:templates", "../templates"),`)
 	r.NotContains(body, `DefaultContentType: "application/json",`)
 	unexpected := []string{
 		"Dockerfile",

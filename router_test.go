@@ -11,7 +11,7 @@ import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
 )
@@ -352,7 +352,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.html",
-		TemplatesBox: packr.NewBox("../templates"),
+		TemplatesBox: packr.New("../templates", "../templates"),
 		Helpers:      map[string]interface{}{},
 	})
 
@@ -405,7 +405,7 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.html",
-		TemplatesBox: packr.NewBox("../templates"),
+		TemplatesBox: packr.New("../templates", "../templates"),
 		Helpers:      map[string]interface{}{},
 	})
 

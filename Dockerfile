@@ -23,7 +23,7 @@ COPY . .
 
 RUN make ci-deps
 
-RUN packr clean
+RUN packr2 clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 RUN make install
 
@@ -63,6 +63,7 @@ RUN go vet ./...
 RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
+RUN cat config/buffalo-plugins.toml
 
 RUN buffalo plugins install github.com/gobuffalo/buffalo-goth
 RUN buffalo g goth facebook twitter linkedin github

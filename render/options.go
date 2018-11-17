@@ -1,8 +1,6 @@
 package render
 
-import (
-	"github.com/gobuffalo/packd"
-)
+import "github.com/gobuffalo/packd"
 
 // Helpers to be included in all templates
 type Helpers map[string]interface{}
