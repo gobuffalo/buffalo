@@ -9,12 +9,12 @@ require (
 	github.com/gobuffalo/buffalo-plugins v1.6.11
 	github.com/gobuffalo/buffalo-pop v1.1.15
 	github.com/gobuffalo/envy v1.6.9
-	github.com/gobuffalo/events v1.1.7
+	github.com/gobuffalo/events v1.1.8
 	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
 	github.com/gobuffalo/genny v0.0.0-20181114215459-0a4decd77f5d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.4
-	github.com/gobuffalo/logger v0.0.0-20181109185836-3feeab578c17
+	github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7
 	github.com/gobuffalo/mw-basicauth v1.0.7

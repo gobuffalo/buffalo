@@ -3,7 +3,6 @@ package core
 import (
 	"go/build"
 	"html/template"
-	"os/exec"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/genny"
@@ -27,11 +26,11 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 
-	if opts.App.WithModules {
-		// add go.mod templates
-		g.Command(exec.Command(genny.GoBin(), "mod", "init", opts.App.PackagePkg))
-	}
-
+	// if opts.App.WithModules {
+	// 	// add go.mod templates
+	// 	g.Command(exec.Command(genny.GoBin(), "mod", "init", opts.App.PackagePkg))
+	// }
+	//
 	data := map[string]interface{}{
 		"opts": opts,
 	}

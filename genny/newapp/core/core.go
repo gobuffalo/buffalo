@@ -1,8 +1,6 @@
 package core
 
 import (
-	"os/exec"
-
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
@@ -13,6 +11,8 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/dep"
+	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
@@ -29,6 +29,17 @@ func New(opts *Options) (*genny.Group, error) {
 	gg.Add(g)
 
 	app := opts.App
+
+	if app.WithModules {
+		g, err := gomods.Init(app.PackagePkg, app.Root)
+		if err != nil {
+			return gg, errors.WithStack(err)
+		}
+		g.RunFn(gotools.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
+		g.RunFn(gotools.Get("./..."))
+
+		gg.Add(g)
+	}
 
 	plugs, err := plugdeps.List(app)
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
@@ -103,17 +114,17 @@ func New(opts *Options) (*genny.Group, error) {
 		gg.Add(di)
 	}
 
-	if app.WithModules {
+	if !app.WithDep && !app.WithModules {
 		g := genny.New()
-		g.Command(exec.Command(genny.GoBin(), "get", "github.com/gobuffalo/buffalo@"+runtime.Version))
-		g.Command(exec.Command(genny.GoBin(), "get"))
-		g.Command(exec.Command(genny.GoBin(), "mod", "tidy"))
+		g.RunFn(gotools.Get("./...", "-t"))
 		gg.Add(g)
 	}
 
-	if !app.WithDep && !app.WithModules {
-		g := genny.New()
-		g.Command(exec.Command(genny.GoBin(), "get", "-t", "./..."))
+	if app.WithModules {
+		g, err := gomods.Tidy(app.Root, false)
+		if err != nil {
+			return gg, errors.WithStack(err)
+		}
 		gg.Add(g)
 	}
 

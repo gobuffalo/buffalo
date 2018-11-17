@@ -93,16 +93,16 @@ func Test_New_Mods(t *testing.T) {
 
 	cmds := []string{
 		"go mod init coke",
-		"go get github.com/gobuffalo/buffalo-plugins",
 		"go get github.com/gobuffalo/buffalo@" + runtime.Version,
-		"go get",
+		"go get ./...",
+		"go get github.com/gobuffalo/buffalo-plugins",
 		"go mod tidy",
 	}
-	r.Len(res.Commands, len(cmds))
 
 	for i, c := range res.Commands {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))
 	}
+	r.Len(res.Commands, len(cmds))
 
 	expected := commonExpected
 	for _, e := range expected {
