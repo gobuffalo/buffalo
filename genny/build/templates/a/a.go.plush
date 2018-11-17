@@ -5,7 +5,7 @@ import (
   "strings"
   "github.com/gobuffalo/pop"
   "github.com/markbates/inflect"
-  "github.com/gobuffalo/packr"
+  "github.com/gobuffalo/packr/v2"
   <%= if (opts.Environment != "development") { %>
   "github.com/gobuffalo/envy"
   <% } %>
