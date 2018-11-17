@@ -25,6 +25,7 @@ func Test_NewCmd_NoName(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-v",
 	})
 	err := c.Execute()
 	r.EqualError(err, "you must enter a name for your new application")
@@ -37,6 +38,7 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 		"new",
 		"coke",
 		"--db-type",
+		"-v",
 		"x",
 	})
 	err := c.Execute()
@@ -48,6 +50,7 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 	c := RootCmd
 	c.SetArgs([]string{
 		"new",
+		"-v",
 		"buffalo",
 	})
 	err := c.Execute()
@@ -65,6 +68,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 			"--skip-pop",
 			"--skip-webpack",
 			"--vcs=none",
+			"-v",
 		})
 		err := c.Execute()
 		r.NoError(err)
@@ -85,6 +89,7 @@ func Test_NewCmd_API(t *testing.T) {
 			"--skip-pop",
 			"--api",
 			"--vcs=none",
+			"-v",
 		})
 		err := c.Execute()
 		r.NoError(err)
