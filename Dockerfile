@@ -23,7 +23,7 @@ COPY . .
 
 RUN make ci-deps
 
-RUN packr clean
+RUN packr2 clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
 RUN make install
 
