@@ -5,6 +5,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.6.11
 	github.com/gobuffalo/buffalo-pop v1.1.14
@@ -17,7 +18,7 @@ require (
 	github.com/gobuffalo/httptest v1.0.4
 	github.com/gobuffalo/logger v0.0.0-20181109185836-3feeab578c17
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5
+	github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7
 	github.com/gobuffalo/mw-basicauth v1.0.7
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
 	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b

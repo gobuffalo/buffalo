@@ -15,7 +15,7 @@ import (
   {{ if .opts.AsWeb -}}
   csrf "github.com/gobuffalo/mw-csrf"
   i18n "github.com/gobuffalo/mw-i18n"
-  "github.com/gobuffalo/packr"
+  "github.com/gobuffalo/packr/v2"
   {{ end -}}
 
   {{ if .opts.AsAPI -}}
