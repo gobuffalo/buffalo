@@ -5,6 +5,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gobuffalo/buffalo-plugins v1.6.11
 	github.com/gobuffalo/buffalo-pop v1.1.14
 	github.com/gobuffalo/envy v1.6.9
@@ -45,7 +46,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181116193547-e77c06808af6
+	golang.org/x/tools v0.0.0-20181114190951-94339b83286c
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
