@@ -16,6 +16,7 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/dep"
+	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
 	"github.com/gobuffalo/pop"
 	"github.com/stretchr/testify/require"
 )
@@ -101,39 +102,38 @@ func Test_NewCmd_API(t *testing.T) {
 }
 
 func Test_NewCmd_WithDep(t *testing.T) {
-	envy.Set(envy.GO111MODULE, "off")
-	c := RootCmd
-
 	r := require.New(t)
+	err := gomods.Disable(func() error {
+		c := RootCmd
+		newApp := func(rr *require.Assertions) error {
+			return withDir(func(dir string) {
+				c.SetArgs([]string{
+					"new",
+					"--skip-pop",
+					"--skip-webpack",
+					"--with-dep",
+					"--vcs=none",
+					"-v",
+					"hello_world",
+				})
+				err := c.Execute()
+				rr.NoError(err)
 
-	newApp := func(rr *require.Assertions) {
-		err := withDir(func(dir string) {
-			c.SetArgs([]string{
-				"new",
-				"--skip-pop",
-				"--skip-webpack",
-				"--with-dep",
-				"--vcs=none",
-				"-v",
-				"hello_world",
+				rr.DirExists(filepath.Join(dir, "hello_world"))
+				rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.toml"))
+				rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.lock"))
+				rr.DirExists(filepath.Join(dir, "hello_world", "vendor"))
 			})
-			err := c.Execute()
-			rr.NoError(err)
+		}
 
-			rr.DirExists(filepath.Join(dir, "hello_world"))
-			rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.toml"))
-			rr.FileExists(filepath.Join(dir, "hello_world", "Gopkg.lock"))
-			rr.DirExists(filepath.Join(dir, "hello_world", "vendor"))
-		})
-		rr.NoError(err)
-	}
+		// make sure dep installed
+		run := genny.WetRunner(context.Background())
+		run.WithRun(dep.InstallDep())
+		r.NoError(run.Run())
 
-	// make sure dep installed
-	run := genny.WetRunner(context.Background())
-	run.WithRun(dep.InstallDep())
-	r.NoError(run.Run())
-
-	newApp(r)
+		return newApp(r)
+	})
+	r.NoError(err)
 }
 
 func Test_NewCmd_WithPopSQLite3(t *testing.T) {
