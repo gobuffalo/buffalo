@@ -3,6 +3,7 @@ package docker
 import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 )
@@ -16,7 +17,7 @@ func (d Generator) Run(root string, data makr.Data) error {
 			return d.Style != "none"
 		},
 		Runner: func(root string, data makr.Data) error {
-			var box packr.Box
+			var box packd.Box
 			switch d.Style {
 			case "standard":
 				box = packr.NewBox("./standard/templates")

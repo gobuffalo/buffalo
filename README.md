@@ -60,4 +60,4 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 
 First, thank you so much for wanting to contribute! It means so much that you care enough to want to contribute. We appreciate every PR from the smallest of typos to the be biggest of features.
 
-To contribute, please read the contribution guidelines: [CONTRIBUTING](CONTRIBUTING.md)
+To contribute, please read the contribution guidelines: [CONTRIBUTING](.github/CONTRIBUTING.md)

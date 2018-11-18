@@ -44,7 +44,7 @@ var HeaderLanguageExtractor = i18nm.HeaderLanguageExtractor
 // Deprecated: use github.com/gobuffalo/mw-i18n#URLPrefixLanguageExtractor instead.
 var URLPrefixLanguageExtractor = i18nm.URLPrefixLanguageExtractor
 
-// New Translator. Requires a packr.Box that points to the location
+// New Translator. Requires a packd.Box that points to the location
 // of the translation files, as well as a default language. This will
 // also call t.Load() and load the translations from disk.
 //
