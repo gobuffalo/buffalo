@@ -35,13 +35,11 @@ jobs:
       go: "1.9.x"
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: windows
       go: "1.10.x"
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: windows
       go: "1.11.x"
@@ -49,7 +47,6 @@ jobs:
         - GO111MODULE=off
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: windows
       go: "1.11.x"
@@ -57,19 +54,16 @@ jobs:
         - GO111MODULE=on
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: linux
       go: "1.9.x"
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: linux
       go: "1.10.x"
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: linux
       go: "1.11.x"
@@ -77,7 +71,6 @@ jobs:
         - GO111MODULE=off
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
     - os: linux
       go: "1.11.x"
@@ -85,5 +78,4 @@ jobs:
         - GO111MODULE=on
       script:
         - go get -t -v -tags "sqlite integration_test" ./....
-        - go build -v github.com/gobuffalo/buffalo/buffalo
         - go test -v -tags "sqlite integration_test" -race ./...
