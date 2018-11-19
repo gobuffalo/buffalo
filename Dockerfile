@@ -158,8 +158,8 @@ RUN rm -rf bin
 RUN buffalo build -k -e
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
 
-RUN go get github.com/gobuffalo/oldapp/0_12_6/...
-WORKDIR $GOPATH/src/github.com/gobuffalo/oldapp/0_12_6
+RUN go get github.com/gobuffalo/oldapp/0_13_6/...
+WORKDIR $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
 RUN buffalo fix --y
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 RUN buffalo build -static
