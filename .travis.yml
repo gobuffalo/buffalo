@@ -1,6 +1,3 @@
-dist: trusty
-sudo: required
-
 # we don't use it, but we also do not want default (ruby) image
 language: go
 
@@ -29,3 +26,72 @@ script:
 addons:
   code_climate:
     repo_token: b3b137f48bcd4e7fc58959706e292888be90f06c51822f6105fe50c0e1502191
+
+jobs:
+  include:
+    - dist: trusty
+      name: Trusty
+    - os: windows
+      go: "1.9.x"
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: windows
+      go: "1.10.x"
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: windows
+      go: "1.11.x"
+      env:
+        - GO111MODULE=off
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: windows
+      go: "1.11.x"
+      env:
+        - GO111MODULE=on
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: linux
+      go: "1.9.x"
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: linux
+      go: "1.10.x"
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: linux
+      go: "1.11.x"
+      env:
+        - GO111MODULE=off
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...
+    - os: linux
+      go: "1.11.x"
+      env:
+        - GO111MODULE=on
+      before_script:
+        - go get -t -v -tags "sqlite integration_test" ./....
+      script:
+        - go build -v github.com/gobuffalo/buffalo/buffalo
+        - go test -tags "sqlite integration_test" -race ./...

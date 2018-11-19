@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/envy v1.6.9
 	github.com/gobuffalo/events v1.1.8
 	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
-	github.com/gobuffalo/genny v0.0.0-20181117204516-3d4f1ae84c6e
+	github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.4
 	github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264
@@ -26,7 +26,7 @@ require (
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packd v0.0.0-20181114190715-f25c5d2471d7
 	github.com/gobuffalo/packr v1.21.0
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.4
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.5
 	github.com/gobuffalo/plush v3.7.22+incompatible
 	github.com/gobuffalo/pop v4.9.1+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
@@ -52,6 +52,6 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181117154741-2ddaf7f79a09
+	golang.org/x/tools v0.0.0-20181119130350-139d099f6620
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

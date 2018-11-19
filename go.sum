@@ -114,8 +114,8 @@ github.com/gobuffalo/genny v0.0.0-20181110202416-7b7d8756a9e2/go.mod h1:118bnhJR
 github.com/gobuffalo/genny v0.0.0-20181111200257-599b33630ab4/go.mod h1:w+iD/cdtIpPDFax6LlUFuCdXFD0DLRUXsfp3IeT/Doc=
 github.com/gobuffalo/genny v0.0.0-20181114215459-0a4decd77f5d h1:mznfLmbY1+EhkTIWhk19fZHuxoOLqZ/wzFUcKr5OGY8=
 github.com/gobuffalo/genny v0.0.0-20181114215459-0a4decd77f5d/go.mod h1:kN2KZ8VgXF9VIIOj/GM0Eo7YK+un4Q3tTreKOf0q1ng=
-github.com/gobuffalo/genny v0.0.0-20181117204516-3d4f1ae84c6e h1:KAtibkWw3l7F1dvmq+/VIQxQVYRc+X6RLjlZ2n22C7Y=
-github.com/gobuffalo/genny v0.0.0-20181117204516-3d4f1ae84c6e/go.mod h1:AbFC3usf4o9tNMkqcoaweOFv7kWNk69VWSJwU1cNNJk=
+github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb h1:RC+rmtL7i+1RXTg0451HLcei1aNs88k8BsbfS9gC3+M=
+github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb/go.mod h1:BA9htSe4bZwBDJLe8CUkoqkypq3hn3+CkoHqVOW718E=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
 github.com/gobuffalo/github_flavored_markdown v1.0.7 h1:Vjvz4wqOnviiLEfTh5bh270b3lhpJiwwQEWOWmHMwY8=
@@ -133,7 +133,6 @@ github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27/go.mod h1:8sQkgyh
 github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
 github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
 github.com/gobuffalo/logger v0.0.0-20181109185836-3feeab578c17/go.mod h1:oNErH0xLe+utO+OW8ptXMSA5DkiSEDW1u3zGIt8F9Ew=
-github.com/gobuffalo/logger v0.0.0-20181117204448-92bd15a0c323/go.mod h1:5etB91IE0uBlw9k756fVKZJdS+7M7ejVhmpXXiSFj0I=
 github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264 h1:GJQc7561c65qW78dYsOqqM91cdy7Ca3DAUtIWW7ceIE=
 github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264/go.mod h1:5etB91IE0uBlw9k756fVKZJdS+7M7ejVhmpXXiSFj0I=
 github.com/gobuffalo/makr v1.1.5 h1:lOlpv2iz0dNa4qse0ZYQgbtT+ybwVxWEAcOZbcPmeYc=
@@ -183,8 +182,8 @@ github.com/gobuffalo/packr v1.19.0/go.mod h1:MstrNkfCQhd5o+Ct4IJ0skWlxN8emOq8Dso
 github.com/gobuffalo/packr v1.20.0/go.mod h1:JDytk1t2gP+my1ig7iI4NcVaXr886+N0ecUga6884zw=
 github.com/gobuffalo/packr v1.21.0 h1:p2ujcDJQp2QTiYWcI0ByHbr/gMoCouok6M0vXs/yTYQ=
 github.com/gobuffalo/packr v1.21.0/go.mod h1:H00jGfj1qFKxscFJSw8wcL4hpQtPe1PfU2wa6sg/SR0=
-github.com/gobuffalo/packr/v2 v2.0.0-rc.4 h1:xScP/5myEFBX4z0gwVgyUiOPocYDrh/dl/9r6JmBRk4=
-github.com/gobuffalo/packr/v2 v2.0.0-rc.4/go.mod h1:pjGUZWSa9dVyhki7lUEUNJm2zfN9ZhqTuTXjPTf7c8k=
+github.com/gobuffalo/packr/v2 v2.0.0-rc.5 h1:85uvtUSjaZTsQ0o48kIi8hm8dQyt+BL9kxqNQ8Kp//w=
+github.com/gobuffalo/packr/v2 v2.0.0-rc.5/go.mod h1:e6gmOfhf3KmT4zl2X/NDRSfBXk2oV4TXZ+NNOM0xwt8=
 github.com/gobuffalo/plush v3.7.16+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
 github.com/gobuffalo/plush v3.7.20+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
 github.com/gobuffalo/plush v3.7.21+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5scsPfLKfT0+TGMChgduDvI=
@@ -447,8 +446,8 @@ golang.org/x/tools v0.0.0-20181109202920-92d8274bd7b8/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181111003725-6d71ab8aade0/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181114190951-94339b83286c h1:QZLE57XoVOJ9ZpZeXZye1XqMIJffHCo5nQP/cBwQDOY=
 golang.org/x/tools v0.0.0-20181114190951-94339b83286c/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
-golang.org/x/tools v0.0.0-20181117154741-2ddaf7f79a09 h1:QJFxMApN9XdBRwtqXfOidB2azUCA4ziuiMTrQ1uBGxw=
-golang.org/x/tools v0.0.0-20181117154741-2ddaf7f79a09/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20181119130350-139d099f6620 h1:fPY2GH0iMDQKNr1ijDOu6fg5CHujOlyfMNWEG4X9gNA=
+golang.org/x/tools v0.0.0-20181119130350-139d099f6620/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0 h1:S0iUepdCWODXRvtE+gcRDd15L+k+k1AiHlMiMjefH24=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.3.0 h1:FBSsiFRMz3LBeXIomRnVzrQwSDj4ibvcRexLG0LZGQk=
