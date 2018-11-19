@@ -21,6 +21,9 @@ RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
+ENV B=$(git symbolic-ref --short HEAD)
+ENV git branch --set-upstream-to=origin/$B $B
+
 RUN make ci-deps
 
 RUN packr clean
