@@ -29,13 +29,15 @@ addons:
 
 jobs:
   include:
-    - dist: trusty
-      name: Trusty
-    - dist: xenial
-      name: Xenial
+    - name: Test on Docker image
+    - name: Test with `go test`
+      script:
+        - go test
     - os: windows
       go: "1.9.x"
       script:
         - go test
       addons:
       services:
+  allow_failures:
+    - os: windows
