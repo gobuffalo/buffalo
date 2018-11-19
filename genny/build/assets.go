@@ -3,8 +3,8 @@ package build
 import (
 	"context"
 	"io/ioutil"
+	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/envy"
@@ -19,8 +19,9 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	// Quick way to ensure this directory exists so static content is created.
-	g.File(genny.NewDir("public/assets"))
-
+	if !opts.AsAPI {
+		g.File(genny.NewDir("public/assets", os.FileMode(int(0777))))
+	}
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
