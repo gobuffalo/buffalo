@@ -30,7 +30,9 @@ addons:
 jobs:
   include:
     - dist: trusty
+      name: Trusty
     - dist: xenial
+      name: Xenial
     - os: windows
       go: "1.9.x"
       script:
