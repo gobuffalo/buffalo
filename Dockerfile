@@ -21,8 +21,7 @@ RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
-ENV B=$(git symbolic-ref --short HEAD)
-ENV git branch --set-upstream-to=origin/$B $B
+ENV git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 
 RUN make ci-deps
 
