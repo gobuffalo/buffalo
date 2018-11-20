@@ -24,7 +24,7 @@ COPY . .
 ENV git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 
 RUN make ci-deps
-RUN go get -u github.com/gobuffalo/buffalo-pop
+RUN go get github.com/gobuffalo/buffalo-pop
 
 RUN packr clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
@@ -61,7 +61,7 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 
-RUN go get -u github.com/gobuffalo/buffalo-goth
+RUN buffalo plugins install github.com/gobuffalo/buffalo-goth
 RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 
