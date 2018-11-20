@@ -58,10 +58,6 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 
-RUN go get -v github.com/gobuffalo/buffalo-goth
-RUN buffalo g goth facebook twitter linkedin github
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
-
 RUN buffalo g resource admins --skip-model
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_skip_model.json
 RUN rm actions/admins_test.go
