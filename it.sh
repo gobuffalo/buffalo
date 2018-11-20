@@ -2,7 +2,7 @@
 
 set -ex
 
-git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
+# git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 make ci-deps
