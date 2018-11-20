@@ -132,8 +132,6 @@ rm -rf bin
 buffalo build -k -e
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
 
-cd $GOPATH
-rm -rfv $GOPATH/src/
 go get github.com/gobuffalo/oldapp/0_13_6/...
 cd $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
 cat actions/app.go
