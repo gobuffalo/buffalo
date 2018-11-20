@@ -13,18 +13,15 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
-RUN rm $(which buffalo)
-RUN rm -rf $GOPATH/src
-
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+
+RUN rm $(which buffalo)
+RUN rm -rf $BP
 RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
-ENV git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
-
 RUN make ci-deps
-RUN go get github.com/gobuffalo/buffalo-pop
 
 RUN packr clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
@@ -43,7 +40,7 @@ RUN buffalo new --skip-webpack coke --db-type=sqlite3
 WORKDIR $GOPATH/src/github.com/markbates/coke
 RUN buffalo db create -a -d
 RUN buffalo g resource widget name
-RUN buffalo b
+RUN buffalo b -d
 # works fine:
 RUN ./bin/coke migrate
 RUN rm -rfv $GOPATH/src/github.com/markbates/coke
@@ -61,7 +58,7 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 
-RUN buffalo plugins install github.com/gobuffalo/buffalo-goth --vendor
+RUN go get -v github.com/gobuffalo/buffalo-goth
 RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 
@@ -112,12 +109,6 @@ RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/g
 RUN buffalo g resource cars
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_plural.json
 
-RUN buffalo g resource admin/planes
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_web.json
-
-RUN buffalo g resource admin/users --name=AdminUser
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name_web.json
-
 RUN buffalo g actions users create --skip-template
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_skip_template.json
 
@@ -137,10 +128,10 @@ RUN buffalo g task nested:task:now
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_nested_task.json
 
 RUN buffalo g resource admin/planes
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_api.json
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested.json
 
 RUN buffalo g resource admin/users --name=AdminUser
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name_api.json
+RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name.json
 
 RUN buffalo g resource person
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_irregular.json
