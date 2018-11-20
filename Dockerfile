@@ -32,12 +32,6 @@ RUN make install
 RUN buffalo version
 
 RUN go test -tags "sqlite integration_test" -race  ./...
-RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
-
-RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
-    echo codecov not enabled ; \
-    else curl -s https://codecov.io/bash -o codecov && \
-    bash codecov -f cover.out -X fix; fi
 
 WORKDIR $GOPATH/src/
 
