@@ -24,6 +24,7 @@ COPY . .
 ENV git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 
 RUN make ci-deps
+RUN go get -u github.com/gobuffalo/buffalo-pop
 
 RUN packr clean
 RUN gometalinter --vendor --deadline=5m ./... --skip=internal
