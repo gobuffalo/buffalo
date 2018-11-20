@@ -134,8 +134,6 @@ filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_as
 
 go get github.com/gobuffalo/oldapp/0_13_6/...
 cd $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
-cat actions/app.go
 buffalo fix --y
-cat actions/app.go
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 buffalo build -static
