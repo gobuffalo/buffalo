@@ -61,7 +61,7 @@ RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
 
-RUN buffalo plugins install github.com/gobuffalo/buffalo-goth
+RUN buffalo plugins install github.com/gobuffalo/buffalo-goth --vendor
 RUN buffalo g goth facebook twitter linkedin github
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 
