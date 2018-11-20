@@ -13,10 +13,11 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
-RUN rm $(which buffalo)
-RUN rm -rf $GOPATH/src
-
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+
+RUN rm $(which buffalo)
+RUN rm -rf $BP
+
 RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
