@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
@@ -84,61 +83,36 @@ type packageJSON struct {
 	Scripts map[string]interface{} `json:"scripts"`
 }
 
-func runDevScript(ctx context.Context) error {
-	app := meta.New(".")
-	if _, err := os.Stat(filepath.Join(app.Root, "package.json")); err != nil {
-		// No package.json, so no webpack either
-		return nil
+func hasNodeJsScript(app meta.App, s string) bool {
+	if !app.WithNodeJs {
+		return false
 	}
 	b, err := ioutil.ReadFile(filepath.Join(app.Root, "package.json"))
 	if err != nil {
-		return errors.WithMessage(err, "unable to read package.json")
+		return false
 	}
 	p := packageJSON{}
 	if err := json.Unmarshal(b, &p); err != nil {
-		return errors.WithMessage(err, "unable to parse package.json")
+		return false
 	}
-	if _, ok := p.Scripts["dev"]; ok {
-		tool := "yarnpkg"
-		if !app.WithYarn {
-			tool = "npm"
-		}
-		if _, err := exec.LookPath(tool); err != nil {
-			return errors.Errorf("couldn't find %s tool", tool)
-		}
-		cmd := exec.CommandContext(ctx, tool, "run", "dev")
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		return cmd.Run()
-	}
-	// Fallback on legacy startWebpack
-	return startWebpack(ctx)
+	_, ok := p.Scripts[s]
+	return ok
 }
 
-func startWebpack(ctx context.Context) error {
+func runDevScript(ctx context.Context) error {
 	app := meta.New(".")
-	if !app.WithWebpack {
-		// there's no webpack, so don't do anything
+	if !hasNodeJsScript(app, "dev") {
+		// there's no dev script, so don't do anything
 		return nil
 	}
-
-	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
-		tool := "yarnpkg"
-		if !app.WithYarn {
-			tool = "npm"
-		}
-		if _, err := exec.LookPath(tool); err != nil {
-			return errors.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
-		}
-		cmd := exec.CommandContext(ctx, tool, "install")
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		if err := cmd.Run(); err != nil {
-			return errors.WithStack(err)
-		}
+	tool := "yarnpkg"
+	if !app.WithYarn {
+		tool = "npm"
 	}
-
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	if _, err := exec.LookPath(tool); err != nil {
+		return errors.Errorf("couldn't find %s tool", tool)
+	}
+	cmd := exec.CommandContext(ctx, tool, "run", "dev")
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
