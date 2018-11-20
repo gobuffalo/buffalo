@@ -22,8 +22,6 @@ RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
 
-ENV git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
-
 RUN make ci-deps
 
 RUN packr clean
@@ -151,9 +149,8 @@ RUN rm -rf bin
 RUN buffalo build -k -e
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
 
-RUN go get github.com/gobuffalo/oldapp/...
+RUN go get github.com/gobuffalo/oldapp/0_13_6/...
 WORKDIR $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
-RUN git init
 RUN buffalo fix --y
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 RUN buffalo build -static
