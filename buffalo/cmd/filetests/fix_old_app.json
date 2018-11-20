@@ -1,15 +1,5 @@
 [{
   "path": "actions/app.go",
-  "!contains": [
-    "middleware.PopTransaction",
-    "ssl.ForceSSL",
-    "middleware.ParameterLogger",
-    "github.com/gobuffalo/buffalo/middleware",
-    "github.com/gobuffalo/buffalo/middleware",
-    "github.com/gobuffalo/buffalo/middleware/ssl",
-    "github.com/gobuffalo/buffalo/middleware/csrf",
-    "github.com/gobuffalo/buffalo/middleware/i18n"
-  ],
   "contains": [
     "github.com/gobuffalo/mw-csrf",
     "github.com/gobuffalo/mw-forcessl",
