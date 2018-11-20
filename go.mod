@@ -18,9 +18,9 @@ require (
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5
 	github.com/gobuffalo/packd v0.0.0-20181114190715-f25c5d2471d7
-	github.com/gobuffalo/packr v1.21.2
+	github.com/gobuffalo/packr v1.21.3
 	github.com/gobuffalo/plush v3.7.22+incompatible
-	github.com/gobuffalo/pop v4.9.1+incompatible
+	github.com/gobuffalo/pop v4.9.2+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
@@ -45,6 +45,6 @@ require (
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
 	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
-	golang.org/x/tools v0.0.0-20181119182614-89e258047f9b
+	golang.org/x/tools v0.0.0-20181120173833-b6bf29589316
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

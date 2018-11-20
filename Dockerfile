@@ -13,10 +13,11 @@ ARG TRAVIS_PULL_REQUEST_SHA
 ARG TRAVIS_REPO_SLUG
 ARG TRAVIS_TAG
 
-RUN rm $(which buffalo)
-RUN rm -rf $GOPATH/src
-
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+
+RUN rm $(which buffalo)
+RUN rm -rf $BP
+
 RUN mkdir -p $BP
 WORKDIR $BP
 COPY . .
@@ -32,12 +33,6 @@ RUN make install
 RUN buffalo version
 
 RUN go test -tags "sqlite integration_test" -race  ./...
-RUN go test -tags "sqlite integration_test" -coverprofile cover.out -covermode count ./...
-
-RUN if [ -z "$CODECOV_TOKEN"  ] ; then \
-    echo codecov not enabled ; \
-    else curl -s https://codecov.io/bash -o codecov && \
-    bash codecov -f cover.out -X fix; fi
 
 WORKDIR $GOPATH/src/
 
@@ -65,10 +60,6 @@ RUN go vet ./...
 RUN buffalo db create -a
 RUN buffalo db migrate -e test
 RUN buffalo test -race
-
-RUN buffalo plugins install github.com/gobuffalo/buffalo-goth
-RUN buffalo g goth facebook twitter linkedin github
-RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 
 RUN buffalo g resource admins --skip-model
 RUN filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_skip_model.json
