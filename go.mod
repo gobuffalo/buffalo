@@ -1,19 +1,16 @@
 module github.com/gobuffalo/buffalo
 
 require (
-	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/go-sql-driver/mysql v1.4.1 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.6.11
-	github.com/gobuffalo/buffalo-pop v1.1.14
+	github.com/gobuffalo/buffalo-plugins v1.7.2
+	github.com/gobuffalo/buffalo-pop v1.1.15
 	github.com/gobuffalo/envy v1.6.9
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/fizz v1.1.3 // indirect
 	github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
-	github.com/gobuffalo/httptest v1.0.4
+	github.com/gobuffalo/httptest v1.0.5
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/mw-basicauth v1.0.7
 	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
@@ -25,12 +22,13 @@ require (
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
 	github.com/gobuffalo/packr v1.21.5
 	github.com/gobuffalo/plush v3.7.22+incompatible
-	github.com/gobuffalo/pop v4.9.0+incompatible
+	github.com/gobuffalo/pop v4.9.2+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
+	github.com/jmoiron/sqlx v1.2.0 // indirect
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
@@ -44,9 +42,10 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
+	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
+	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181119130350-139d099f6620
-	google.golang.org/appengine v1.3.0 // indirect
+	golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
