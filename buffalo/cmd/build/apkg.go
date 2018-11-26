@@ -58,7 +58,7 @@ func (b *Builder) buildAInit() error {
 	ctx := plush.NewContext()
 	ctx.Set("opts", b.Options)
 
-	t, err := templates.MustString("a.go.tmpl")
+	t, err := templates.FindString("a.go.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}

@@ -68,7 +68,7 @@ func (b *Builder) createBuildMain() error {
 	ctx.Set("buildTime", bt)
 	ctx.Set("buildVersion", b.buildVersion(bt))
 
-	t, err := templates.MustString("main.go.tmpl")
+	t, err := templates.FindString("main.go.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}
