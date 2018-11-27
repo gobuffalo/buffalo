@@ -6,12 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
-
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/pkg/errors"
 )
 
 // Run generates a new actions/resource file and a stub test.

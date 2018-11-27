@@ -32,7 +32,7 @@ rm -rfv $GOPATH/src/github.com/markbates/coke
 
 cd $GOPATH/src/
 
-buffalo new  --db-type=sqlite3 hello_world --ci-provider=travis
+buffalo new --db-type=sqlite3 hello_world --ci-provider=travis
 cd ./hello_world
 
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
@@ -102,7 +102,7 @@ buffalo g actions users update --skip-template --method POST
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_with_method.json
 
 cd $GOPATH/src
-buffalo new  --api apiapp
+buffalo new --api apiapp
 cd ./apiapp
 buffalo build
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json
