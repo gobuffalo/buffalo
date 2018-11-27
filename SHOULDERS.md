@@ -95,6 +95,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
 
+* [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
+
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
 * [github.com/gobuffalo/tags/form](https://godoc.org/github.com/gobuffalo/tags/form)
@@ -167,10 +169,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
-* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
-
-* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
-
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
@@ -198,8 +196,6 @@ Thank you to the following **GIANTS**:
 * [golang.org/x/crypto/blowfish](https://godoc.org/golang.org/x/crypto/blowfish)
 
 * [golang.org/x/crypto/ssh/terminal](https://godoc.org/golang.org/x/crypto/ssh/terminal)
-
-* [golang.org/x/net/context](https://godoc.org/golang.org/x/net/context)
 
 * [golang.org/x/net/html](https://godoc.org/golang.org/x/net/html)
 
