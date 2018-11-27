@@ -10,7 +10,7 @@ import (
 )
 
 var _ = func() error {
-	const gk = "__packr_global__"
+	const gk = "9812440ca496609b1d288710a85f00f1"
 	g := packr.New(gk, "")
 	hgr, err := resolver.NewHexGzip(map[string]string{
 		"02032e2d22335addf1b12faea05a636b": "1f8b08000000000000ff8a8e2ec8294dcfcc8b8de5525048cacc4b2caa54b055504a2a4d4b4bccc9d74dc94fce4e2d52e2525048cf8f4f4f2d01c9a56796649426e925e7e7eaa7e74315eaa36be022603044b2980493e13a081a9d5f408ab120d580000000ffff5c9507c206010000",
@@ -140,15 +140,6 @@ var _ = func() error {
 		panic(err)
 	}
 	g.DefaultResolver = hgr
-
-	func() {
-		b := packr.New("../new/templates", "../new/templates")
-		b.SetResolver("-name-/-name-.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "bb890f3a8aa56c497012afb45b9738ad"})
-		b.SetResolver("-name-/-name-_test.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "be63988dd6aff95c2a1ff130f81faee9"})
-		b.SetResolver("-name-/options.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "56a843f683c28af8d3acb35582da637c"})
-		b.SetResolver("-name-/options_test.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "91ab460f060e204b86863ca1392680ef"})
-		b.SetResolver("-name-/templates/example.txt.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "67c2b59c8741c3fe3f9db52e4e4a72ed"})
-	}()
 
 	func() {
 		b := packr.New("buffalo:build:assets", "")
@@ -312,6 +303,15 @@ var _ = func() error {
 	func() {
 		b := packr.New("buffalo:genny:vcs", "../vcs/templates")
 		b.SetResolver("ignore.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "3dc49c126d9ae937cfa7f3b28cd6695d"})
+	}()
+
+	func() {
+		b := packr.New("genny:new", "../new/templates")
+		b.SetResolver("-name-/-name-.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "bb890f3a8aa56c497012afb45b9738ad"})
+		b.SetResolver("-name-/-name-_test.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "be63988dd6aff95c2a1ff130f81faee9"})
+		b.SetResolver("-name-/options.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "56a843f683c28af8d3acb35582da637c"})
+		b.SetResolver("-name-/options_test.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "91ab460f060e204b86863ca1392680ef"})
+		b.SetResolver("-name-/templates/example.txt.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "67c2b59c8741c3fe3f9db52e4e4a72ed"})
 	}()
 
 	func() {

@@ -14,6 +14,7 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/spf13/pflag"
 
 	"github.com/sirupsen/logrus"
@@ -162,7 +163,9 @@ var newCmd = &cobra.Command{
 
 		run := genny.WetRunner(ctx)
 		if nopts.Verbose {
-			run.Logger = logger.New(logger.DebugLevel)
+			lg := logger.New(logger.DebugLevel)
+			run.Logger = lg
+			plog.Logger = lg
 		}
 
 		if nopts.DryRun {

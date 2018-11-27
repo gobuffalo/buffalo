@@ -30,8 +30,8 @@ test:
 	make tidy
 
 ci-deps:
-	$(GO_BIN) get github.com/gobuffalo/packr/v2/packr2
-	$(GO_BIN) get github.com/gobuffalo/buffalo-pop
+	$(GO_BIN) get -u github.com/gobuffalo/packr/v2/packr2
+	$(GO_BIN) get -u github.com/gobuffalo/buffalo-pop
 	$(GO_BIN) get -tags ${TAGS} -t -v ./...
 	make tidy
 
