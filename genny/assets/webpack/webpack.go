@@ -16,6 +16,10 @@ import (
 // BinPath is the path to the local install of webpack
 var BinPath = filepath.Join("node_modules", ".bin", "webpack")
 
+// Templates used for generating webpack
+// (exported mostly for the "fix" command)
+var Templates = packr.New("buffalo:genny:assets:webpack", "../webpack/templates")
+
 // New generator for creating webpack asset files
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
@@ -29,7 +33,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 
-	g.Box(packr.New("buffalo:genny:assets:webpack", "../webpack/templates"))
+	g.Box(Templates)
 
 	data := map[string]interface{}{
 		"opts": opts,

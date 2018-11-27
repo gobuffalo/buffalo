@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -25,7 +24,7 @@ func PackageJSONCheck(r *Runner) error {
 		return nil
 	}
 
-	box := packr.New("buffalo:genny:assets:webpack", "../../../genny/assets/webpack/templates")
+	box := webpack.Templates
 
 	f, err := box.FindString("package.json.tmpl")
 	if err != nil {
