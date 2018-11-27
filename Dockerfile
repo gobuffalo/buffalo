@@ -19,8 +19,4 @@ RUN mkdir -p $BP
 WORKDIR $BP
 
 COPY . .
-<<<<<<< HEAD
 RUN bash ./it.sh
-=======
-RUN bash ./it.sh
->>>>>>> master
