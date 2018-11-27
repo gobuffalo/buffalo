@@ -45,10 +45,6 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
-			logrus.Errorf(popInstallInstructions)
-			os.Exit(-1)
-		}
 		logrus.Errorf("Error: %s\n\n", err)
 		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
 			fmt.Println(popInstallInstructions)
