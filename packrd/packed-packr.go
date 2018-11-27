@@ -226,7 +226,7 @@ var _ = func() error {
 	}()
 
 	func() {
-		b := packr.New("buffalo:genny:assets:webpack", "../../../genny/assets/webpack/templates")
+		b := packr.New("buffalo:genny:assets:webpack", "../webpack/templates")
 		b.SetResolver("-dot-babelrc.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "c8f891e9a5df1b77140ba5dad298cc3e"})
 		b.SetResolver("assets/css/_buffalo.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ec8652e62d2eb70a8198fe338e649eb2"})
 		b.SetResolver("assets/css/application.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ecdf6a3b8924ecbd21b3179af40db25a"})
