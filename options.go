@@ -107,14 +107,23 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Context, opts.cancel = context.WithCancel(opts.Context)
 
 	if opts.Logger == nil {
-
-		if len(opts.LogLevel) > 0 {
-			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
-			opts.Logger = logger.NewLogger(opts.LogLevel)
-		} else {
-			if opts.LogLvl == 0 {
+		if lvl, err := envy.MustGet("LOG_LEVEL"); err == nil {
+			opts.LogLvl, err = logger.ParseLevel(lvl)
+			if err != nil {
 				opts.LogLvl = logger.DebugLevel
 			}
+		}
+
+		if len(opts.LogLevel) > 0 {
+			var err error
+			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
+			opts.LogLvl, err = logger.ParseLevel(opts.LogLevel)
+			if err != nil {
+				opts.LogLvl = logger.DebugLevel
+			}
+		}
+		if opts.LogLvl == 0 {
+			opts.LogLvl = logger.DebugLevel
 		}
 
 		opts.Logger = logger.New(opts.LogLvl)

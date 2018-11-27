@@ -14,7 +14,7 @@ require (
 	github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.5
-	github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264
+	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
