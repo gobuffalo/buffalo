@@ -35,7 +35,7 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 		"a",
 	})
 	err := c.Execute()
-	r.EqualError(err, fmt.Sprintf(`Unknown db-type "a" expecting one of %s`, strings.Join(pop.AvailableDialects, ", ")))
+	r.EqualError(err, fmt.Sprintf(`unknown db-type "a" expecting one of %s`, strings.Join(pop.AvailableDialects, ", ")))
 }
 
 func Test_NewCmd_ForbiddenAppName(t *testing.T) {
