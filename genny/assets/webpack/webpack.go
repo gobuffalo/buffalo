@@ -8,7 +8,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -29,7 +29,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 
-	g.Box(packr.NewBox("../webpack/templates"))
+	g.Box(packr.New("buffalo:genny:assets:webpack", "../webpack/templates"))
 
 	data := map[string]interface{}{
 		"opts": opts,

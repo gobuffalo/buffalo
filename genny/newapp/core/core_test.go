@@ -9,7 +9,9 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,7 +22,7 @@ func init() {
 
 func Test_New(t *testing.T) {
 	r := require.New(t)
-
+	plog.Logger = logger.New(logger.DebugLevel)
 	app := meta.Named("coke", filepath.Join(envy.GoPath(), "src"))
 	app.WithModules = false
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -20,7 +20,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.Transformer(genny.Replace("-no-pop", ""))
 	g.Transformer(genny.Dot())
 
-	box := packr.NewBox("../ci/templates")
+	box := packr.New("buffalo:genny:ci", "../ci/templates")
 
 	var fname string
 	switch opts.Provider {

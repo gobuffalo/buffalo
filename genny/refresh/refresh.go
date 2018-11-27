@@ -3,7 +3,7 @@ package refresh
 import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/plushgen"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
 	"github.com/pkg/errors"
 )
@@ -14,7 +14,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
-	g.Box(packr.NewBox("../refresh/templates"))
+	g.Box(packr.New("buffalo:genny:refresh", "../refresh/templates"))
 
 	ctx := plush.NewContext()
 	ctx.Set("app", opts.App)

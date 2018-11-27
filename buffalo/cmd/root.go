@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -46,7 +47,7 @@ func Execute() {
 	if err := RootCmd.Execute(); err != nil {
 		logrus.Errorf("Error: %s\n\n", err)
 		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
-			logrus.Errorf(popInstallInstructions)
+			fmt.Println(popInstallInstructions)
 			os.Exit(-1)
 		}
 		os.Exit(-1)

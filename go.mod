@@ -2,11 +2,10 @@ module github.com/gobuffalo/buffalo
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.6.11
+	github.com/gobuffalo/buffalo-plugins v1.7.0
 	github.com/gobuffalo/buffalo-pop v1.1.15
 	github.com/gobuffalo/envy v1.6.9
 	github.com/gobuffalo/events v1.1.8
@@ -16,19 +15,12 @@ require (
 	github.com/gobuffalo/httptest v1.0.4
 	github.com/gobuffalo/logger v0.0.0-20181117211126-8e9b89b7c264
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7
-	github.com/gobuffalo/mw-basicauth v1.0.7
-	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
-	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
-	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
-	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
-	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
-	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181114190715-f25c5d2471d7
-	github.com/gobuffalo/packr v1.21.0
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.5
+	github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5
+	github.com/gobuffalo/packd v0.0.0-20181120223505-a1fb7d1c9873
+	github.com/gobuffalo/packr v1.21.3
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.6
 	github.com/gobuffalo/plush v3.7.22+incompatible
-	github.com/gobuffalo/pop v4.9.1+incompatible
+	github.com/gobuffalo/pop v4.9.2+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
@@ -49,9 +41,12 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
+	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181119130350-139d099f6620
+	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
+	golang.org/x/tools v0.0.0-20181120224509-d5eafb537d9c
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
+
+replace github.com/gobuffalo/packr/v2 => ../packr/v2

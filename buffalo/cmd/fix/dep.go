@@ -85,7 +85,7 @@ func modGetUpdate(r *Runner) error {
 		if x == "github.com/gobuffalo/buffalo" {
 			continue
 		}
-		run.WithRun(gotools.Get(x, "-u"))
+		run.WithRun(gotools.Get(x))
 	}
 
 	for _, x := range []string{"beta", "rc"} {

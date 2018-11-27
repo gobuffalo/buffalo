@@ -7,7 +7,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -22,7 +22,7 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 	g.Transformer(genny.Dot())
 
 	// add common templates
-	if err := g.Box(packr.NewBox("../core/templates")); err != nil {
+	if err := g.Box(packr.New("buffalo:genny:newapp:core", "../core/templates")); err != nil {
 		return g, errors.WithStack(err)
 	}
 

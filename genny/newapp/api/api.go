@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -30,7 +30,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	t := gotools.TemplateTransformer(data, helpers)
 	g.Transformer(t)
-	g.Box(packr.NewBox("../api/templates"))
+	g.Box(packr.New("buffalo:genny:newapp:api", "../api/templates"))
 
 	gg.Add(g)
 

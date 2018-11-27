@@ -5,7 +5,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -21,7 +21,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		return g, nil
 	}
 
-	box := packr.NewBox("../vcs/templates")
+	box := packr.New("buffalo:genny:vcs", "../vcs/templates")
 	s, err := box.FindString("ignore.tmpl")
 	if err != nil {
 		return g, errors.WithStack(err)
