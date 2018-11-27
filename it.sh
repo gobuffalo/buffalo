@@ -9,6 +9,7 @@ make ci-deps
 
 packr clean
 gometalinter --vendor --deadline=5m ./... --skip=internal
+go get -u -v github.com/gobuffalo/logger
 make install
 
 buffalo version
