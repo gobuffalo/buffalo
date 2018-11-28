@@ -95,7 +95,7 @@ func (y yarnWriter) Write(p []byte) (int, error) {
 
 func installYarn(r *genny.Runner) error {
 	// if there's no yarn, install it!
-	if _, err := exec.LookPath("yarnpkg"); err == nil {
+	if _, err := r.LookPath("yarnpkg"); err == nil {
 		return nil
 	}
 	yargs := []string{"install", "-g", "yarn"}
