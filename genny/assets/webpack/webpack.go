@@ -5,12 +5,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 // BinPath is the path to the local install of webpack
@@ -24,14 +22,16 @@ var Templates = packr.New("buffalo:genny:assets:webpack", "../webpack/templates"
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
-	if _, err := exec.LookPath("npm"); err != nil {
-		logrus.Info("Could not find npm. Skipping webpack generation.")
-		return standard.New(&standard.Options{})
-	}
-
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
+
+	g.RunFn(func(r *genny.Runner) error {
+		if _, err := r.LookPath("npm"); err != nil {
+			return errors.New("could not find npm executable")
+		}
+		return nil
+	})
 
 	g.Box(Templates)
 

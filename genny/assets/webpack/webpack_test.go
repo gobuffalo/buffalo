@@ -14,6 +14,9 @@ import (
 func runner() *genny.Runner {
 	run := gentest.NewRunner()
 	run.Disk.Add(genny.NewFileS("templates/application.html", layout))
+	run.LookPathFn = func(s string) (string, error) {
+		return s, nil
+	}
 	return run
 }
 
@@ -24,6 +27,7 @@ func Test_Webpack_New(t *testing.T) {
 	r.NoError(err)
 
 	run := runner()
+
 	run.With(g)
 	r.NoError(run.Run())
 
