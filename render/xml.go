@@ -10,7 +10,7 @@ type xmlRenderer struct {
 }
 
 func (s xmlRenderer) ContentType() string {
-	return "application/xml"
+	return "application/xml; charset=utf-8"
 }
 
 func (s xmlRenderer) Render(w io.Writer, data Data) error {
