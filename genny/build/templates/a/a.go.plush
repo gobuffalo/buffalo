@@ -5,7 +5,7 @@ import (
   "strings"
   "github.com/gobuffalo/pop"
   "github.com/markbates/inflect"
-  "github.com/gobuffalo/packr"
+  "github.com/gobuffalo/packr/v2"
   <%= if (opts.Environment != "development") { %>
   "github.com/gobuffalo/envy"
   <% } %>
@@ -20,7 +20,7 @@ func init() {
 
   dropDatabaseYml()
 
-  box := packr.NewBox("./")
+  box := packr.New("buffalo:a:init", "./")
   if box.Has("inflections.json") {
     r := strings.NewReader(box.String("inflections.json"))
     err := inflect.LoadReader(r)

@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -30,7 +30,8 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 		archive := zip.NewWriter(bb)
 		defer archive.Close()
 
-		box := packr.NewBox(source)
+		box := packr.New("buffalo:build:assets", "")
+		box.ResolutionDir = source
 		err := box.Walk(func(path string, file packr.File) error {
 			info, err := file.FileInfo()
 			if err != nil {

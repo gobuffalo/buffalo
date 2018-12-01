@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"testing"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/tags"
 	"github.com/stretchr/testify/require"
 )
@@ -12,7 +12,7 @@ import (
 func Test_javascriptTag(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
@@ -25,7 +25,7 @@ func Test_javascriptTag(t *testing.T) {
 func Test_javascriptTag_Options(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
@@ -38,7 +38,7 @@ func Test_javascriptTag_Options(t *testing.T) {
 func Test_stylesheetTag(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
@@ -51,7 +51,7 @@ func Test_stylesheetTag(t *testing.T) {
 func Test_stylesheetTag_Options(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
@@ -63,7 +63,7 @@ func Test_stylesheetTag_Options(t *testing.T) {
 func Test_imgTag(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})
@@ -76,7 +76,7 @@ func Test_imgTag(t *testing.T) {
 func Test_imgTag_Options(t *testing.T) {
 	r := require.New(t)
 	re := New(Options{
-		AssetsBox: packr.NewBox(""),
+		AssetsBox: packr.New("", ""),
 	})
 	tr := re.Template("").(*templateRenderer)
 	h := tr.addAssetsHelpers(Helpers{})

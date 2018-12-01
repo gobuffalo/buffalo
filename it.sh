@@ -8,7 +8,6 @@ BP=$GOPATH/src/github.com/gobuffalo/buffalo
 go get -u -v github.com/gobuffalo/logger
 make ci-deps
 
-packr clean
 gometalinter --vendor --deadline=5m ./... --skip=internal
 make install
 

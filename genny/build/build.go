@@ -5,9 +5,9 @@ import (
 
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/plushgen"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plushgen"
 	"github.com/pkg/errors"
 )
 
@@ -36,7 +36,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.RunFn(transformMain(opts))
 
 	// add any necessary templates for the build
-	box := packr.NewBox("../build/templates")
+	box := packr.New("buffalo:genny:build", "../build/templates")
 	if err := g.Box(box); err != nil {
 		return g, errors.WithStack(err)
 	}
