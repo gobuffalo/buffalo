@@ -3,12 +3,11 @@ package fix
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	"html/template"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/newapp"
@@ -33,7 +32,7 @@ func PackageJSONCheck(r *Runner) error {
 
 	box := webpack.TemplateBox
 
-	f, err := box.MustString("package.json.tmpl")
+	f, err := box.FindString("package.json.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}

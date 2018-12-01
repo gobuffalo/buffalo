@@ -7,6 +7,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
 
+* [github.com/blang/semver](https://godoc.org/github.com/blang/semver)
+
 * [github.com/cockroachdb/cockroach-go/crdb](https://godoc.org/github.com/cockroachdb/cockroach-go/crdb)
 
 * [github.com/dustin/go-humanize](https://godoc.org/github.com/dustin/go-humanize)
@@ -53,13 +55,23 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/russross/blackfriday)
 
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_diff)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/highlight_go)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/octicon)
+
+* [github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/gobuffalo/github_flavored_markdown/internal/shurcooL/sanitized_anchor_name)
+
+* [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
+
 * [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
 * [github.com/gobuffalo/mapi](https://godoc.org/github.com/gobuffalo/mapi)
 
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
-* [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
+* [github.com/gobuffalo/packd](https://godoc.org/github.com/gobuffalo/packd)
 
 * [github.com/gobuffalo/plush](https://godoc.org/github.com/gobuffalo/plush)
 
@@ -82,6 +94,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/pop/logging](https://godoc.org/github.com/gobuffalo/pop/logging)
 
 * [github.com/gobuffalo/pop/nulls](https://godoc.org/github.com/gobuffalo/pop/nulls)
+
+* [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
 
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
@@ -155,10 +169,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
-* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
-
-* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
-
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
@@ -170,14 +180,6 @@ Thank you to the following **GIANTS**:
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
-
-* [github.com/shurcooL/highlight_diff](https://godoc.org/github.com/shurcooL/highlight_diff)
-
-* [github.com/shurcooL/highlight_go](https://godoc.org/github.com/shurcooL/highlight_go)
-
-* [github.com/shurcooL/octicon](https://godoc.org/github.com/shurcooL/octicon)
-
-* [github.com/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/shurcooL/sanitized_anchor_name)
 
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
 
@@ -194,8 +196,6 @@ Thank you to the following **GIANTS**:
 * [golang.org/x/crypto/blowfish](https://godoc.org/golang.org/x/crypto/blowfish)
 
 * [golang.org/x/crypto/ssh/terminal](https://godoc.org/golang.org/x/crypto/ssh/terminal)
-
-* [golang.org/x/net/context](https://godoc.org/golang.org/x/net/context)
 
 * [golang.org/x/net/html](https://godoc.org/golang.org/x/net/html)
 

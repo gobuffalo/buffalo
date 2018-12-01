@@ -18,7 +18,7 @@ stack: go 1.11
 
 install:
 - cmd: >-
-    choco install mingw
+    choco install mingw --version 5.3.0
 
     set PATH=%GOPATH%\bin;%GOBIN%\bin;c:\tools\mingw64\bin;%PATH%
 

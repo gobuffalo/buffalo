@@ -1,8 +1,8 @@
 <div class="page-header">
-  <h1>{{.opts.Model.ModelPlural}}</h1>
+  <h1>{{.opts.Model.Group}}</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= new{{.opts.Name.Resource}}Path() %>" class="btn btn-primary">Create New {{.opts.Model.Model}}</a></li>
+  <li><a href="<%= new{{.opts.Name.Resource}}Path() %>" class="btn btn-primary">Create New {{.opts.Model.Proper}}</a></li>
 </ul>
 
 <table class="table table-striped">
@@ -15,18 +15,18 @@
     <th>&nbsp;</th>
   </thead>
   <tbody>
-    <%= for ({{.opts.Model.VarCaseSingular}}) in {{.opts.Model.VarCasePlural}} { %>
+    <%= for ({{.opts.Model.VarCaseSingle}}) in {{.opts.Model.VarCasePlural}} { %>
       <tr>
       {{ range $mp := .opts.Props -}}
         {{ if ne $mp.Type "text" -}}
-        <td><%= {{$.opts.Model.VarCaseSingular}}.{{$mp.Name}} %></td>
+        <td><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name}} %></td>
         {{ end -}}
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingular}}.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= edit{{.opts.Name.Model}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingular}}.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingular}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= edit{{.opts.Name.Proper}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>

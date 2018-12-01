@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
-
 	"github.com/gobuffalo/buffalo/generators"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/makr"
 	"github.com/gobuffalo/packr"
+	"github.com/pkg/errors"
 )
 
 // Run generates a new actions/resource file and a stub test.
@@ -62,6 +62,10 @@ func (res Generator) Run(root string, data makr.Data) error {
 	})
 
 	if !res.SkipModel && !res.UseModel {
+		if _, err := exec.LookPath("buffalo-pop"); err != nil {
+			g.Add(makr.NewCommand(exec.Command(genny.GoBin(), "get", "github.com/gobuffalo/buffalo-pop")))
+		}
+
 		g.Add(res.modelCommand())
 	}
 
@@ -71,11 +75,11 @@ func (res Generator) Run(root string, data makr.Data) error {
 func (res Generator) modelCommand() makr.Command {
 	args := res.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"db", "g", "model", res.Model.UnderSingular()}, args...)
+	args = append([]string{"pop", "g", "model", res.Model.Singularize().Underscore().String()}, args...)
 
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")
 	}
 
-	return makr.NewCommand(exec.Command("buffalo", args...))
+	return makr.NewCommand(exec.Command("buffalo-pop", args...))
 }
