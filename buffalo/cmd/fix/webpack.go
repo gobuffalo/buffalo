@@ -3,10 +3,9 @@ package fix
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
-
-	"html/template"
 
 	"github.com/gobuffalo/buffalo/generators/assets/webpack"
 	"github.com/gobuffalo/buffalo/generators/newapp"
@@ -31,7 +30,7 @@ func WebpackCheck(r *Runner) error {
 
 	box := webpack.TemplateBox
 
-	f, err := box.MustString("webpack.config.js.tmpl")
+	f, err := box.FindString("webpack.config.js.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}
