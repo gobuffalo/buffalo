@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -369,7 +369,7 @@ func withHTMLFile(name string, contents string, fn func(*render.Engine)) error {
 	}
 
 	e := render.New(render.Options{
-		TemplatesBox: packr.NewBox(os.TempDir()),
+		TemplatesBox: packr.New(os.TempDir(), os.TempDir()),
 	})
 
 	fn(e)

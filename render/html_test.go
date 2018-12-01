@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +31,7 @@ func Test_HTML(t *testing.T) {
 		r := require.New(st)
 
 		j := render.New(render.Options{
-			TemplatesBox: packr.NewBox(tmpDir),
+			TemplatesBox: packr.New(tmpDir, tmpDir),
 		}).HTML
 
 		re := j(filepath.Base(tmpFile.Name()))
@@ -53,7 +53,7 @@ func Test_HTML(t *testing.T) {
 		r.NoError(err)
 
 		re := render.New(render.Options{
-			TemplatesBox: packr.NewBox(tmpDir),
+			TemplatesBox: packr.New(tmpDir, tmpDir),
 			HTMLLayout:   filepath.Base(layout.Name()),
 		})
 

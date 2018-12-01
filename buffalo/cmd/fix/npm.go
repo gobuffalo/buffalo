@@ -3,15 +3,13 @@ package fix
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 
-	"html/template"
-
-	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	"github.com/gobuffalo/buffalo/generators/newapp"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/pkg/errors"
 )
 
@@ -26,14 +24,9 @@ func PackageJSONCheck(r *Runner) error {
 		return nil
 	}
 
-	g := newapp.Generator{
-		App:       r.App,
-		Bootstrap: 4,
-	}
+	box := webpack.Templates
 
-	box := webpack.TemplateBox
-
-	f, err := box.MustString("package.json.tmpl")
+	f, err := box.FindString("package.json.tmpl")
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -45,7 +38,9 @@ func PackageJSONCheck(r *Runner) error {
 
 	bb := &bytes.Buffer{}
 	err = tmpl.Execute(bb, map[string]interface{}{
-		"opts": g,
+		"opts": &webpack.Options{
+			App: r.App,
+		},
 	})
 	if err != nil {
 		return errors.WithStack(err)

@@ -25,7 +25,7 @@ func Test_XML(t *testing.T) {
 
 	for _, j := range table {
 		re := j(user{Name: "mark"})
-		r.Equal("application/xml", re.ContentType())
+		r.Equal("application/xml; charset=utf-8", re.ContentType())
 		bb := &bytes.Buffer{}
 		err := re.Render(bb, nil)
 		r.NoError(err)

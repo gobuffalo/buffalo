@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,7 +28,7 @@ func Test_Plain(t *testing.T) {
 	r.NoError(err)
 
 	j := render.New(render.Options{
-		TemplatesBox: packr.NewBox(tDir),
+		TemplatesBox: packr.New(tDir, tDir),
 	}).Plain
 
 	re := j(filepath.Base(tmpFile.Name()))

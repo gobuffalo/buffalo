@@ -2,33 +2,26 @@ module github.com/gobuffalo/buffalo
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.6.10
-	github.com/gobuffalo/buffalo-pop v1.1.13
-	github.com/gobuffalo/envy v1.6.8
-	github.com/gobuffalo/events v1.1.7
-	github.com/gobuffalo/fizz v1.1.2 // indirect
-	github.com/gobuffalo/flect v0.0.0-20181109221320-179d36177b5b
-	github.com/gobuffalo/genny v0.0.0-20181111200257-599b33630ab4
+	github.com/gobuffalo/buffalo-plugins v1.7.2
+	github.com/gobuffalo/buffalo-pop v1.2.0
+	github.com/gobuffalo/envy v1.6.9
+	github.com/gobuffalo/events v1.1.8
+	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
+	github.com/gobuffalo/genny v0.0.0-20181127225641-2d959acc795b
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
-	github.com/gobuffalo/httptest v1.0.4
-	github.com/gobuffalo/logger v0.0.0-20181109185836-3feeab578c17
+	github.com/gobuffalo/httptest v1.0.5
+	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
 	github.com/gobuffalo/makr v1.1.5
-	github.com/gobuffalo/meta v0.0.0-20181109154556-f76929ccd5fa
-	github.com/gobuffalo/mw-basicauth v1.0.7
-	github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56
-	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
-	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
-	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
-	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
-	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181111195323-b2e760a5f0ff
-	github.com/gobuffalo/packr v1.19.0
-	github.com/gobuffalo/plush v3.7.22+incompatible
-	github.com/gobuffalo/pop v4.9.0+incompatible
+	github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5
+	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
+	github.com/gobuffalo/packr v1.21.5
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.8
+	github.com/gobuffalo/plush v3.7.23+incompatible
+	github.com/gobuffalo/plushgen v0.0.0-20181128164830-d29dcb966cb2
+	github.com/gobuffalo/pop v4.9.2+incompatible
 	github.com/gobuffalo/tags v2.0.11+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
@@ -49,10 +42,8 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
-	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
-	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
+	golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 // indirect
-	golang.org/x/tools v0.0.0-20181112162442-680468b7556f
+	golang.org/x/tools v0.0.0-20181127232545-e782529d0ddd
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

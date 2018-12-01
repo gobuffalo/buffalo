@@ -9,9 +9,10 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gobuffalo/buffalo/generators/assets/webpack"
-	rg "github.com/gobuffalo/buffalo/generators/refresh"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
+	rg "github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/events"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/meta"
 	"github.com/markbates/refresh/refresh"
 	"github.com/pkg/errors"
@@ -107,13 +108,18 @@ func startWebpack(ctx context.Context) error {
 }
 
 func startDevServer(ctx context.Context) error {
+	app := meta.New(".")
+
 	cfgFile := "./.buffalo.dev.yml"
 	if _, err := os.Stat(cfgFile); err != nil {
-		err = rg.Run("./", map[string]interface{}{
-			"name": "buffalo",
-		})
+		run := genny.WetRunner(ctx)
+		err = run.WithNew(rg.New(&rg.Options{App: app}))
 		if err != nil {
-			return err
+			return errors.WithStack(err)
+		}
+
+		if err := run.Run(); err != nil {
+			return errors.WithStack(err)
 		}
 	}
 	c := &refresh.Configuration{}
@@ -122,7 +128,6 @@ func startDevServer(ctx context.Context) error {
 	}
 	c.Debug = devOptions.Debug
 
-	app := meta.New(".")
 	bt := app.BuildTags("development")
 	if len(bt) > 0 {
 		c.BuildFlags = append(c.BuildFlags, "-tags", bt.String())
