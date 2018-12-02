@@ -5,12 +5,10 @@ import (
 	"io/ioutil"
 	"os/exec"
 
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
-
 	pack "github.com/gobuffalo/packr/builder"
+	"github.com/pkg/errors"
 )
 
 func assets(opts *Options) (*genny.Generator, error) {
@@ -20,14 +18,24 @@ func assets(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 
-	if opts.App.WithWebpack {
+	if opts.App.WithNodeJs {
+		if _, err := opts.App.NodeScript("build"); err != nil {
+			return nil, err
+		}
 		g.RunFn(func(r *genny.Runner) error {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
-		c := exec.Command(webpack.BinPath)
-		c.Stdout = ioutil.Discard
-		g.Command(c)
+		tool := "yarnpkg"
+		if !opts.App.WithYarn {
+			tool = "npm"
+		}
+		if _, err := exec.LookPath(tool); err != nil {
+			return nil, errors.Errorf("couldn't find %s tool", tool)
+		}
+		cmd := exec.Command(tool, "run", "build")
+		cmd.Stdout = ioutil.Discard
+		g.Command(cmd)
 	}
 
 	p := pack.New(context.Background(), opts.App.Root)

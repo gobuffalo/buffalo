@@ -53,6 +53,8 @@ github.com/gobuffalo/buffalo-plugins v1.6.11 h1:odC6PspRooQxDoBy1QvusRGLshbK/2uR
 github.com/gobuffalo/buffalo-plugins v1.6.11/go.mod h1:eAA6xJIL8OuynJZ8amXjRmHND6YiusVAaJdHDN1Lu8Q=
 github.com/gobuffalo/buffalo-plugins v1.7.2 h1:W3YUz71m+P+nw/9Y9x2fbpChNKgd6D2lxgEKdyefQ4s=
 github.com/gobuffalo/buffalo-plugins v1.7.2/go.mod h1:vEbx30cLFeeZ48gBA/rkhbqC2M/2JpsKs5CoESWhkPw=
+github.com/gobuffalo/buffalo-plugins v1.8.1 h1:dmvKnMYMyaWbeJw+Nfm6+qWghFTxgZfYvevxA6fsRGg=
+github.com/gobuffalo/buffalo-plugins v1.8.1/go.mod h1:vu71J3fD4b7KKywJQ1tyaJGtahG837Cj6kgbxX0e4UI=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=
@@ -69,6 +71,8 @@ github.com/gobuffalo/envy v1.6.7/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9k
 github.com/gobuffalo/envy v1.6.8/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
 github.com/gobuffalo/envy v1.6.9 h1:ShEJ/fUg/wr5qIYmTTOnUQ0sy1yGo+4uYQJNgg753S8=
 github.com/gobuffalo/envy v1.6.9/go.mod h1:N+GkhhZ/93bGZc6ZKhJLP6+m+tCNPKwgSpH9kaifseQ=
+github.com/gobuffalo/envy v1.6.10 h1:zvJZDJ3Aj42EDL5cjBcH9q4mWJHkoGyFzfmVP+weYxo=
+github.com/gobuffalo/envy v1.6.10/go.mod h1:X0CFllQjTV5ogsnUrg+Oks2yTI+PU2dGYBJOEI2D1Uo=
 github.com/gobuffalo/events v1.0.3/go.mod h1:Txo8WmqScapa7zimEQIwgiJBvMECMe9gJjsKNPN3uZw=
 github.com/gobuffalo/events v1.0.7/go.mod h1:z8txf6H9jWhQ5Scr7YPLWg/cgXBRj8Q4uYI+rsVCCSQ=
 github.com/gobuffalo/events v1.0.8/go.mod h1:A5KyqT1sA+3GJiBE4QKZibse9mtOcI9nw8gGrDdqYGs=
@@ -119,6 +123,8 @@ github.com/gobuffalo/genny v0.0.0-20181114215459-0a4decd77f5d/go.mod h1:kN2KZ8Vg
 github.com/gobuffalo/genny v0.0.0-20181119162812-e8ff4adce8bb/go.mod h1:BA9htSe4bZwBDJLe8CUkoqkypq3hn3+CkoHqVOW718E=
 github.com/gobuffalo/genny v0.0.0-20181127225641-2d959acc795b h1:Ncvhe72MgVeMKvlHTuoG6hKRwb2k12kcgTcWwW3uj94=
 github.com/gobuffalo/genny v0.0.0-20181127225641-2d959acc795b/go.mod h1:l54xLXNkteX/PdZ+HlgPk1qtcrgeOr3XUBBPDbH+7CQ=
+github.com/gobuffalo/genny v0.0.0-20181128191930-77e34f71ba2a h1:8r5ZmyuxRGeiTpPjmTAiLUQ9mp1kjBL/sZ/j4xjJhZA=
+github.com/gobuffalo/genny v0.0.0-20181128191930-77e34f71ba2a/go.mod h1:FW/D9p7cEEOqxYA71/hnrkOWm62JZ5ZNxcNIVJEaWBU=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
 github.com/gobuffalo/github_flavored_markdown v1.0.7 h1:Vjvz4wqOnviiLEfTh5bh270b3lhpJiwwQEWOWmHMwY8=
@@ -134,6 +140,10 @@ github.com/gobuffalo/licenser v0.0.0-20181027200154-58051a75da95/go.mod h1:Bzhaa
 github.com/gobuffalo/licenser v0.0.0-20181109171355-91a2a7aac9a7 h1:/iWW53J3dNmrjkG5C7IFHhy4SFbhikdAvGtFwvMnh/U=
 github.com/gobuffalo/licenser v0.0.0-20181109171355-91a2a7aac9a7/go.mod h1:m+Ygox92pi9bdg+gVaycvqE8RVSjZp7mWw75+K5NPHk=
 github.com/gobuffalo/licenser v0.0.0-20181116224424-1b7fd3f9cbb4/go.mod h1:icHYfF2FVDi6CpI8BK9Sy1ChkSijz/0GNN7Qzzdk6JE=
+github.com/gobuffalo/licenser v0.0.0-20181128165715-cc7305f8abed h1:hl47NdGWtwgU8K7lbs0zDe7wdip+tFFR6VBygQtRAyY=
+github.com/gobuffalo/licenser v0.0.0-20181128165715-cc7305f8abed/go.mod h1:oU9F9UCE+AzI/MueCKZamsezGOOHfSirltllOVeRTAE=
+github.com/gobuffalo/licenser v0.0.0-20181128170751-82cc989582b9 h1:P1//51CzbqFkD8brD15O6RnIgiewkKzgBiuEY4fBvFE=
+github.com/gobuffalo/licenser v0.0.0-20181128170751-82cc989582b9/go.mod h1:oU9F9UCE+AzI/MueCKZamsezGOOHfSirltllOVeRTAE=
 github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27/go.mod h1:8sQkgyhWipz1mIctHF4jTxmJh1Vxhp7mP8IqbljgJZo=
 github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
 github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
@@ -154,6 +164,8 @@ github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7 h1:E3y9POfXjqW9KuXW
 github.com/gobuffalo/meta v0.0.0-20181114191255-b130ebedd2f7/go.mod h1:K6cRZ29ozr4Btvsqkjvg5nDFTLOgTqf03KA70Ks0ypE=
 github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5 h1:qnZhkaiC9drkU6CGWKnzEOGt1QX07+yU+9ZnCdqEhR0=
 github.com/gobuffalo/meta v0.0.0-20181116202903-8850e47774f5/go.mod h1:K6cRZ29ozr4Btvsqkjvg5nDFTLOgTqf03KA70Ks0ypE=
+github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b h1:TP4reYa74tCqKmeisA9aULXzcb1fHIM3bi7PdoDxpuQ=
+github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b/go.mod h1:RLO7tMvE0IAKAM8wny1aN12pvEKn7EtkBLkUZR00Qf8=
 github.com/gobuffalo/mw-basicauth v1.0.3/go.mod h1:dg7+ilMZOKnQFHDefUzUHufNyTswVUviCBgF244C1+0=
 github.com/gobuffalo/mw-basicauth v1.0.6/go.mod h1:RFyeGeDLZlVgp/eBflqu2eavFqyv0j0fVVP87WPYFwY=
 github.com/gobuffalo/mw-basicauth v1.0.7/go.mod h1:xJ9/OSiOWl+kZkjaSun62srODr3Cx8OB4AKr+G4FlS4=
@@ -219,6 +231,8 @@ github.com/gobuffalo/release v1.0.61/go.mod h1:mfIO38ujUNVDlBziIYqXquYfBF+8FDHUj
 github.com/gobuffalo/release v1.0.63/go.mod h1:/7hQAikt0l8Iu/tAX7slC1qiOhD6Nb+3KMmn/htiUfc=
 github.com/gobuffalo/release v1.0.72/go.mod h1:NP5NXgg/IX3M5XmHmWR99D687/3Dt9qZtTK/Lbwc1hU=
 github.com/gobuffalo/release v1.0.74/go.mod h1:NP5NXgg/IX3M5XmHmWR99D687/3Dt9qZtTK/Lbwc1hU=
+github.com/gobuffalo/release v1.1.1 h1:tFW2RLMxLLuUzc/JMX46jcSdfRZ+5r8SQg9xYgmMKiI=
+github.com/gobuffalo/release v1.1.1/go.mod h1:Sluak1Xd6kcp6snkluR1jeXAogdJZpFFRzTYRs/2uwg=
 github.com/gobuffalo/shoulders v1.0.1 h1:BqVJBUXlBWAf+WLhXijVk3SCpp75LXrVBiIkOCzZbNc=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
 github.com/gobuffalo/syncx v0.0.0-20181120191700-98333ab04150 h1:cX75hZPHmtccTiWm+hMyd8jlEjpOrZI9ocmbKLvpx/o=
@@ -421,6 +435,8 @@ golang.org/x/net v0.0.0-20181106065722-10aee1819953/go.mod h1:mL1N/T3taQHkDXs73r
 golang.org/x/net v0.0.0-20181108082009-03003ca0c849/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20181114220301-adae6a3d119a h1:gOpx8G595UYyvj8UK4+OFyY4rx037g3fmfhe5SasG3U=
 golang.org/x/net v0.0.0-20181114220301-adae6a3d119a/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/net v0.0.0-20181201002055-351d144fa1fc h1:a3CU5tJYVj92DY2LaA1kUkrsqD5/3mLDhx2NcNqyW+0=
+golang.org/x/net v0.0.0-20181201002055-351d144fa1fc/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20181108010431-42b317875d0f h1:Bl/8QSvNqXvPGPGXa2z5xUTmV7VDcZyvRZ+QQXkXTZQ=
 golang.org/x/sync v0.0.0-20181108010431-42b317875d0f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
@@ -444,6 +460,8 @@ golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8 h1:YoY1wS6JYVRpIfFngRf2HHo9R
 golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181122145206-62eef0e2fa9b h1:MQE+LT/ABUuuvEZ+YQAMSXindAdUh7slEmAkup74op4=
 golang.org/x/sys v0.0.0-20181122145206-62eef0e2fa9b/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 h1:YAFjXN64LMvktoUZH9zgY4lGc/msGN7HQfoSuKCgaDU=
+golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
@@ -470,6 +488,8 @@ golang.org/x/tools v0.0.0-20181122213734-04b5d21e00f1/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181127195227-b4e97c0ed882/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181127232545-e782529d0ddd h1:lpAYSh4h+rmI2UtC34xD0/D/54kDXIWdjVz+MwxvvjA=
 golang.org/x/tools v0.0.0-20181127232545-e782529d0ddd/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724 h1:eV9myT/I6o1p8salzgZ0f1pz54PEgUf2NkCxEf6t+xs=
+golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0 h1:S0iUepdCWODXRvtE+gcRDd15L+k+k1AiHlMiMjefH24=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.3.0 h1:FBSsiFRMz3LBeXIomRnVzrQwSDj4ibvcRexLG0LZGQk=
@@ -490,3 +510,5 @@ gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 h1:uRGJdciOHaEIrze2W8Q3AKkep
 gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7/go.mod h1:dt/ZhP58zS4L8KSrWDmTeBkI65Dw0HsyUHuEVlX15mw=
 gopkg.in/yaml.v2 v2.2.1 h1:mUhvW9EsL+naU5Q3cakzfE91YhliOondGd6ZrsDBHQE=
 gopkg.in/yaml.v2 v2.2.1/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+gopkg.in/yaml.v2 v2.2.2 h1:ZCJp+EgiOT7lHqUV2J862kp8Qj64Jo6az82+3Td9dZw=
+gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=

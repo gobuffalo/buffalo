@@ -2,11 +2,8 @@ package cmd
 
 import (
 	"context"
-	"encoding/json"
-	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -79,29 +76,9 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 	},
 }
 
-type packageJSON struct {
-	Scripts map[string]interface{} `json:"scripts"`
-}
-
-func hasNodeJsScript(app meta.App, s string) bool {
-	if !app.WithNodeJs {
-		return false
-	}
-	b, err := ioutil.ReadFile(filepath.Join(app.Root, "package.json"))
-	if err != nil {
-		return false
-	}
-	p := packageJSON{}
-	if err := json.Unmarshal(b, &p); err != nil {
-		return false
-	}
-	_, ok := p.Scripts[s]
-	return ok
-}
-
 func runDevScript(ctx context.Context) error {
 	app := meta.New(".")
-	if !hasNodeJsScript(app, "dev") {
+	if _, err := app.NodeScript("dev"); err != nil {
 		// there's no dev script, so don't do anything
 		return nil
 	}
