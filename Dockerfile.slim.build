@@ -36,12 +36,6 @@ WORKDIR $BP
 COPY . .
 RUN make deps && make install
 
-# cache yarn packages to an offline mirror so they're faster to load. hopefully.
-RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json \
-&& yarn install --no-progress
-
 RUN buffalo version
 
 WORKDIR $GOPATH/src
-
-RUN ls -la /npm-packages-offline-cache
