@@ -6,12 +6,19 @@ import (
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
+
+	"github.com/gobuffalo/buffalo-pop/pop/popmw"
+	csrf "github.com/gobuffalo/mw-csrf"
+	i18n "github.com/gobuffalo/mw-i18n"
+	"github.com/gobuffalo/packr/v2"
+	"github.com/markbates/coke/models"
 )
 
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
 var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
+var T *i18n.Translator
 
 // App is where all routes and middleware for buffalo
 // should be defined. This is the nerve center of your
@@ -39,11 +46,37 @@ func App() *buffalo.App {
 		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
 
+		// Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+		// Remove to disable this.
+		app.Use(csrf.New)
+
+		// Wraps each request in a transaction.
+		//  c.Value("tx").(*pop.Connection)
+		// Remove to disable this.
+		app.Use(popmw.Transaction(models.DB))
+
+		// Setup and use translations:
+		app.Use(translations())
+
 		app.GET("/", HomeHandler)
+
 		app.Resource("/admin/widgets", AdminWidgetsResource{})
+		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
 	return app
+}
+
+// translations will load locale files, set up the translator `actions.T`,
+// and will return a middleware to use to load the correct locale for each
+// request.
+// for more information: https://gobuffalo.io/en/docs/localization
+func translations() buffalo.MiddlewareFunc {
+	var err error
+	if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
+		app.Stop(err)
+	}
+	return T.Middleware()
 }
 
 // forceSSL will return a middleware that will redirect an incoming request
