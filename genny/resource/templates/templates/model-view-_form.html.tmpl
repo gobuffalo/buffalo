@@ -1,0 +1,13 @@
+{{ range $p := .opts.Props -}}
+{{ if eq $p.Type "text" -}}
+<%= f.TextAreaTag("{{$p.Name}}", {rows: 10}) %>
+{{ else -}}
+{{ if eq $p.Type "bool" -}}
+<%= f.CheckboxTag("{{$p.Name}}", {unchecked: false}) %>
+{{ else -}}
+<%= f.InputTag("{{$p.Name}}") %>
+{{ end -}}
+{{ end -}}
+{{ end -}}
+
+<button class="btn btn-success" role="submit">Save</button>
