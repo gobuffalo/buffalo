@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"fmt"
 	"os/exec"
 	"text/template"
 
@@ -23,20 +24,24 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
+
+	fmt.Println("### core.List() ->", core.List())
 	if err := g.Box(core); err != nil {
 		return g, errors.WithStack(err)
 	}
 
 	var abox packd.Box
-	if opts.UseModel {
-		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/use_model", "../resource/templates/use_model")
-	} else {
+	if opts.SkipModel {
 		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/standard", "../resource/templates/standard")
+	} else {
+		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/use_model", "../resource/templates/use_model")
 	}
 
+	fmt.Println("### abox.List() ->", abox.List())
 	if err := g.Box(abox); err != nil {
 		return g, errors.WithStack(err)
 	}
+
 	pres := presenter{
 		App:   opts.App,
 		Name:  name.New(opts.Name),
@@ -52,13 +57,13 @@ func New(opts *Options) (*genny.Generator, error) {
 		},
 	}
 
-	x := pres.Name.File().String()
+	x := pres.Name.Resource().File().String()
 	g.Transformer(gotools.TemplateTransformer(data, helpers))
 	g.Transformer(genny.Replace("resource-name", x))
 	g.Transformer(genny.Replace("resource-use_model", x))
 
 	g.RunFn(func(r *genny.Runner) error {
-		if !opts.SkipModel && !opts.UseModel {
+		if !opts.SkipModel {
 			if _, err := r.LookPath("buffalo-pop"); err != nil {
 				if err := gotools.Get("github.com/gobuffalo/buffalo-pop")(r); err != nil {
 					return errors.WithStack(err)
@@ -69,6 +74,19 @@ func New(opts *Options) (*genny.Generator, error) {
 		}
 
 		return nil
+	})
+
+	g.RunFn(func(r *genny.Runner) error {
+		f, err := r.FindFile("actions/app.go")
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		stmt := fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", pres.Name.URL(), pres.Name.Resource())
+		f, err = gotools.AddInsideBlock(f, "if app == nil {", stmt)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return r.File(f)
 	})
 	return g, nil
 }

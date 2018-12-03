@@ -16,6 +16,10 @@ require (
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b
+	github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b
+	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
+	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
+	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
 	github.com/gobuffalo/packr v1.21.5
 	github.com/gobuffalo/packr/v2 v2.0.0-rc.8
@@ -46,6 +50,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
+	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
 	golang.org/x/tools v0.0.0-20181203201058-99b2a93e1f84

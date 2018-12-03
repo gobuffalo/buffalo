@@ -6,13 +6,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/genny/movinglater/attrs"
 	packr "github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
-
-var coke = packr.New("coke", "./_fixtures")
 
 type pass struct {
 	Name    string
@@ -40,7 +39,11 @@ func Test_New(t *testing.T) {
 			r.NoError(err)
 
 			run := gentest.NewRunner()
-			run.Root = filepath.Join("_fixtures", "core")
+			run.Disk.AddBox(packr.New("./_fixtures/coke", "./_fixtures/coke"))
+			g.Transformer(genny.NewTransformer(".", func(f genny.File) (genny.File, error) {
+				s := strings.Replace(f.String(), "\t", "  ", -1)
+				return genny.NewFileS(f.Name(), s), nil
+			}))
 			run.With(g)
 
 			r.NoError(run.Run())
@@ -52,18 +55,19 @@ func Test_New(t *testing.T) {
 			c := res.Commands[0]
 			r.Equal("buffalo-pop pop g model widget desc:nulls.Text", strings.Join(c.Args, " "))
 
-			box := packr.New(tt.Name, filepath.Join("_fixtures", tt.Name))
-
 			for _, f := range res.Files {
 				fmt.Println(f.Name())
 			}
 
-			r.Len(res.Files, len(box.List()))
+			exp := packr.New(tt.Name, filepath.Join("_fixtures", tt.Name))
+			r.Len(res.Files, len(exp.List()))
 
-			for _, n := range box.List() {
-				f, err := res.Find(n)
+			for _, n := range exp.List() {
+				f, err := res.Find(strings.TrimSuffix(n, ".tmpl"))
 				r.NoError(err)
-				fmt.Println("### f.Name() ->", f.Name())
+				s, err := exp.FindString(n)
+				r.NoError(err)
+				r.Equal(strings.TrimSpace(s), strings.TrimSpace(f.String()))
 			}
 
 		})

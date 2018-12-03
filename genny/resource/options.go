@@ -14,7 +14,6 @@ type Options struct {
 	SkipMigration bool     `json:"skip_migration"`
 	SkipModel     bool     `json:"skip_model"`
 	SkipTemplates bool     `json:"skip_templates"`
-	UseModel      bool     `json:"use_model"`
 	// FilesPath     string     `json:"files_path"`
 	// ActionsPath   string     `json:"actions_path"`
 	Attrs attrs.Attrs `json:"props"`
