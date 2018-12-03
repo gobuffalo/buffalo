@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Widget</h1>
+</div>
+
+<%= form_for(widget, {action: deepAdminWidgetPath({ deep_admin_widget_id: widget.ID }), method: "PUT"}) { %>
+  <%= partial("deep/admin/widgets/form.html") %>
+  <a href="<%= deepAdminWidgetPath({ deep_admin_widget_id: widget.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

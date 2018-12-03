@@ -1,0 +1,6 @@
+- id: "gadget.created.success"
+  translation: "Gadget was successfully created."
+- id: "gadget.updated.success"
+  translation: "Gadget was successfully updated."
+- id: "gadget.destroyed.success"
+  translation: "Gadget was successfully destroyed."
