@@ -7,8 +7,8 @@
 
 <table class="table table-striped">
   <thead>
-  {{ range $p := .opts.Props -}}
-    {{ if ne $p.Type "text" -}}
+  {{ range $p := .opts.Attrs -}}
+    {{ if ne $p.CommonType "text" -}}
     <th>{{ $p.Name }}</th>
     {{ end -}}
   {{ end -}}
@@ -17,8 +17,8 @@
   <tbody>
     <%= for ({{.opts.Model.VarCaseSingle}}) in {{.opts.Model.VarCasePlural}} { %>
       <tr>
-      {{ range $mp := .opts.Props -}}
-        {{ if ne $mp.Type "text" -}}
+      {{ range $mp := .opts.Attrs -}}
+        {{ if ne $mp.CommonType "text" -}}
         <td><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name}} %></td>
         {{ end -}}
       {{ end -}}

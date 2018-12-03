@@ -1,8 +1,8 @@
-{{ range $p := .opts.Props -}}
-{{ if eq $p.Type "text" -}}
+{{ range $p := .opts.Attrs -}}
+{{ if eq $p.CommonType "text" -}}
 <%= f.TextAreaTag("{{$p.Name}}", {rows: 10}) %>
 {{ else -}}
-{{ if eq $p.Type "bool" -}}
+{{ if eq $p.CommonType "bool" -}}
 <%= f.CheckboxTag("{{$p.Name}}", {unchecked: false}) %>
 {{ else -}}
 <%= f.InputTag("{{$p.Name}}") %>

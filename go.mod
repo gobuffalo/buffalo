@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/envy v1.6.10
 	github.com/gobuffalo/events v1.1.8
 	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
-	github.com/gobuffalo/genny v0.0.0-20181203165245-fda8bcce96b1
+	github.com/gobuffalo/genny v0.0.0-20181203201232-849d2c9534ea
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
@@ -41,13 +41,14 @@ require (
 	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.2.0
+	github.com/spf13/cast v1.3.0 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724
+	golang.org/x/tools v0.0.0-20181203201058-99b2a93e1f84
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
 

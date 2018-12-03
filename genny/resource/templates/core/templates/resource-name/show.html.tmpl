@@ -8,7 +8,7 @@
   <li class="list-inline-item"><a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
 </ul>
 
-{{ range $p := .opts.Props -}}
+{{ range $p := .opts.Attrs -}}
 <p>
   <strong>{{ $p.Name }}</strong>: <%= {{$.opts.Model.VarCaseSingle}}.{{$p.Name}} %>
 </p>
