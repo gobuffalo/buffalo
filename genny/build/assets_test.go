@@ -48,6 +48,7 @@ func Test_assets_Archived(t *testing.T) {
 	opts := &Options{
 		WithAssets:    true,
 		ExtractAssets: true,
+		AsAPI: false,
 	}
 	r.NoError(opts.Validate())
 
