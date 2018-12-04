@@ -14,6 +14,7 @@ func Test_assets(t *testing.T) {
 
 	opts := &Options{
 		WithAssets: true,
+		AsApi: false,
 	}
 	r.NoError(opts.Validate())
 	opts.App.WithWebpack = true
