@@ -5,12 +5,11 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.8.1
+	github.com/gobuffalo/buffalo-plugins v1.8.2
 	github.com/gobuffalo/buffalo-pop v1.2.1
 	github.com/gobuffalo/envy v1.6.10
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/fizz v1.2.0 // indirect
-	github.com/gobuffalo/genny v0.0.0-20181128191930-77e34f71ba2a
+	github.com/gobuffalo/genny v0.0.0-20181203201232-849d2c9534ea
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/makr v1.1.5
@@ -50,6 +49,6 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724
+	golang.org/x/tools v0.0.0-20181205014116-22934f0fdb62
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
