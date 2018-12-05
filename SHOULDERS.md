@@ -169,6 +169,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/markbates/sigtx](https://godoc.org/github.com/markbates/sigtx)
 
+* [github.com/mattn/go-colorable](https://godoc.org/github.com/mattn/go-colorable)
+
+* [github.com/mattn/go-isatty](https://godoc.org/github.com/mattn/go-isatty)
+
 * [github.com/microcosm-cc/bluemonday](https://godoc.org/github.com/microcosm-cc/bluemonday)
 
 * [github.com/mitchellh/go-homedir](https://godoc.org/github.com/mitchellh/go-homedir)
@@ -176,6 +180,12 @@ Thank you to the following **GIANTS**:
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
+
+* [github.com/rogpeppe/go-internal/modfile](https://godoc.org/github.com/rogpeppe/go-internal/modfile)
+
+* [github.com/rogpeppe/go-internal/module](https://godoc.org/github.com/rogpeppe/go-internal/module)
+
+* [github.com/rogpeppe/go-internal/semver](https://godoc.org/github.com/rogpeppe/go-internal/semver)
 
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 

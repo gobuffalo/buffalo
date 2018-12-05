@@ -22,6 +22,7 @@ require (
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
 	github.com/gobuffalo/packr v1.21.5
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.8
 	github.com/gobuffalo/plush v3.7.31+incompatible
 	github.com/gobuffalo/pop v4.9.3+incompatible
 	github.com/gobuffalo/tags v2.0.14+incompatible
