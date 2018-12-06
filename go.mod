@@ -21,8 +21,7 @@ require (
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
-	github.com/gobuffalo/packr v1.21.5
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.9 // indirect
+	github.com/gobuffalo/packr v1.21.7
 	github.com/gobuffalo/plush v3.7.31+incompatible
 	github.com/gobuffalo/pop v4.9.3+incompatible
 	github.com/gobuffalo/tags v2.0.14+incompatible
@@ -48,6 +47,6 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181205014116-22934f0fdb62
+	golang.org/x/tools v0.0.0-20181205224935-3576414c54a4
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
