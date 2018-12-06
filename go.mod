@@ -17,8 +17,8 @@ require (
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b
 	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
-	github.com/gobuffalo/packr v1.21.5
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.9
+	github.com/gobuffalo/packr v1.21.7
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.10
 	github.com/gobuffalo/plush v3.7.31+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20181203163832-9fc4964505c2
 	github.com/gobuffalo/pop v4.9.3+incompatible
@@ -27,7 +27,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
-	github.com/karrick/godirwalk v1.7.5
+	github.com/karrick/godirwalk v1.7.7
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
@@ -42,10 +42,10 @@ require (
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
-	github.com/spf13/viper v1.2.1
+	github.com/spf13/viper v1.3.0
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181205014116-22934f0fdb62
+	golang.org/x/tools v0.0.0-20181205224935-3576414c54a4
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
