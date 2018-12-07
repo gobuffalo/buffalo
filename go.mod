@@ -1,15 +1,15 @@
 module github.com/gobuffalo/buffalo
 
 require (
-	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-plugins v1.8.2
-	github.com/gobuffalo/buffalo-pop v1.2.1
-	github.com/gobuffalo/envy v1.6.10
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
+	github.com/gobuffalo/buffalo-plugins v1.8.3
+	github.com/gobuffalo/buffalo-pop v1.3.0
+	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/genny v0.0.0-20181203201232-849d2c9534ea
+	github.com/gobuffalo/genny v0.0.0-20181207164119-84844398a37d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/makr v1.1.5
@@ -20,10 +20,10 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181124090624-311c6248e5fb
+	github.com/gobuffalo/packd v0.0.0-20181207120301-c49825f8f6f4
 	github.com/gobuffalo/packr v1.21.7
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.10
-	github.com/gobuffalo/plush v3.7.31+incompatible
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.12
+	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/pop v4.9.3+incompatible
 	github.com/gobuffalo/tags v2.0.14+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
@@ -36,18 +36,17 @@ require (
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
 	github.com/markbates/refresh v1.4.11
 	github.com/markbates/sigtx v1.0.0
-	github.com/mattn/go-sqlite3 v1.10.0 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
-	github.com/onsi/ginkgo v1.7.0 // indirect
-	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
-	github.com/spf13/viper v1.3.0
+	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.2.2
+	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181205224935-3576414c54a4
+	golang.org/x/tools v0.0.0-20181206194817-bcd4e47d0288
+	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
