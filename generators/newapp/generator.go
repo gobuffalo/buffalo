@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/pop"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"

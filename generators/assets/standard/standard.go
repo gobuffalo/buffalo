@@ -3,13 +3,13 @@ package standard
 import (
 	"github.com/gobuffalo/buffalo/generators"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
 // Run standard assets generator for those wishing to not use webpack
 func Run(root string, data makr.Data) error {
-	files, err := generators.FindByBox(packr.NewBox("../standard/templates"))
+	files, err := generators.FindByBox(packr.New("../standard/templates", "../standard/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}

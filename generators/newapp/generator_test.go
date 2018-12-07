@@ -3,7 +3,7 @@ package newapp
 import (
 	"testing"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
@@ -24,7 +24,7 @@ func Test_Validate_TemplatesMissing(t *testing.T) {
 	defer func() {
 		Templates = obox
 	}()
-	Templates = packr.NewBox(".")
+	Templates = packr.New(".", ".")
 
 	g := Generator{}
 	err := g.Validate()
