@@ -13,10 +13,8 @@ func Test_Options_Validate(t *testing.T) {
 	err := opts.Validate()
 	r.Error(err)
 
-  // TODO: make it valid. :)
+	opts.Name = "coke"
 
 	err = opts.Validate()
-  r.NoError(err)
-
-  // TODO: add some more assertions here.
+	r.NoError(err)
 }

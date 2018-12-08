@@ -10,7 +10,7 @@
 
 {{ range $p := .opts.Attrs -}}
 <p>
-  <strong>{{ $p.Name }}</strong>: <%= {{$.opts.Model.VarCaseSingle}}.{{$p.Name}} %>
+  <strong>{{ $p.Name.Pascalize }}</strong>: <%= {{$.opts.Model.VarCaseSingle}}.{{$p.Name.Pascalize}} %>
 </p>
 {{ end -}}
 

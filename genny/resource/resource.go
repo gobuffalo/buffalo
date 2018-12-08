@@ -16,6 +16,16 @@ import (
 	"github.com/pkg/errors"
 )
 
+var actions = []name.Ident{
+	name.New("list"),
+	name.New("show"),
+	name.New("new"),
+	name.New("create"),
+	name.New("edit"),
+	name.New("update"),
+	name.New("destroy"),
+}
+
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
@@ -25,7 +35,6 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
 
-	fmt.Println("### core.List() ->", core.List())
 	if err := g.Box(core); err != nil {
 		return g, errors.WithStack(err)
 	}
@@ -37,7 +46,6 @@ func New(opts *Options) (*genny.Generator, error) {
 		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/use_model", "../resource/templates/use_model")
 	}
 
-	fmt.Println("### abox.List() ->", abox.List())
 	if err := g.Box(abox); err != nil {
 		return g, errors.WithStack(err)
 	}
@@ -49,7 +57,8 @@ func New(opts *Options) (*genny.Generator, error) {
 		Attrs: opts.Attrs,
 	}
 	data := map[string]interface{}{
-		"opts": pres,
+		"opts":    pres,
+		"actions": actions,
 	}
 	helpers := template.FuncMap{
 		"camelize": func(s string) string {

@@ -9,7 +9,7 @@
   <thead>
   {{ range $p := .opts.Attrs -}}
     {{ if ne $p.CommonType "text" -}}
-    <th>{{ $p.Name }}</th>
+    <th>{{ $p.Name.Pascalize }}</th>
     {{ end -}}
   {{ end -}}
     <th>&nbsp;</th>
@@ -19,7 +19,7 @@
       <tr>
       {{ range $mp := .opts.Attrs -}}
         {{ if ne $mp.CommonType "text" -}}
-        <td><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name}} %></td>
+        <td><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name.Pascalize}} %></td>
         {{ end -}}
       {{ end -}}
         <td>

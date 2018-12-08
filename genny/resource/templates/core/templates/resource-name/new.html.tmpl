@@ -3,6 +3,6 @@
 </div>
 
 <%= form_for({{.opts.Model.VarCaseSingle}}, {action: {{.opts.Name.VarCasePlural}}Path(), method: "POST"}) { %>
-  <%= partial("{{.opts.Model.File}}/form.html") %>
+  <%= partial("{{.opts.Model.Resource.File}}/form.html") %>
   <a href="<%= {{.opts.Name.VarCasePlural}}Path() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

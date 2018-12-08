@@ -1,11 +1,11 @@
 {{ range $p := .opts.Attrs -}}
 {{ if eq $p.CommonType "text" -}}
-<%= f.TextAreaTag("{{$p.Name}}", {rows: 10}) %>
+<%= f.TextAreaTag("{{$p.Name.Pascalize}}", {rows: 10}) %>
 {{ else -}}
 {{ if eq $p.CommonType "bool" -}}
-<%= f.CheckboxTag("{{$p.Name}}", {unchecked: false}) %>
+<%= f.CheckboxTag("{{$p.Name.Pascalize}}", {unchecked: false}) %>
 {{ else -}}
-<%= f.InputTag("{{$p.Name}}") %>
+<%= f.InputTag("{{$p.Name.Pascalize}}") %>
 {{ end -}}
 {{ end -}}
 {{ end -}}

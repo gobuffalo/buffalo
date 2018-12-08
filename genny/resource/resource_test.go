@@ -9,6 +9,7 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/genny/movinglater/attrs"
+	"github.com/gobuffalo/meta"
 	packr "github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
@@ -32,8 +33,11 @@ func Test_New(t *testing.T) {
 		// {"use_model", Options{Name: "widget", Attrs: ats, UseModel: true, Model: "gadget"}},
 	}
 
+	app := meta.New(".")
+	app.PackageRoot("github.com/markbates/coke")
 	for _, tt := range table {
 		t.Run(tt.Name, func(st *testing.T) {
+			tt.Options.App = app
 			r := require.New(st)
 			g, err := New(&tt.Options)
 			r.NoError(err)
@@ -67,7 +71,15 @@ func Test_New(t *testing.T) {
 				r.NoError(err)
 				s, err := exp.FindString(n)
 				r.NoError(err)
-				r.Equal(strings.TrimSpace(s), strings.TrimSpace(f.String()))
+
+				clean := func(s string) string {
+					// fmt.Println(s)
+					s = strings.TrimSpace(s)
+					// s = strings.Replace(s, "\n", "", -1)
+					// s = strings.Replace(s, "\t", "", -1)
+					return s
+				}
+				r.Equal(clean(s), clean(f.String()))
 			}
 
 		})
