@@ -56,20 +56,23 @@ func New(opts *Options) (*genny.Generator, error) {
 		Model: name.New(opts.Model),
 		Attrs: opts.Attrs,
 	}
+	x := pres.Name.Resource().File().String()
+	folder := pres.Name.File().Pluralize().String()
+	g.Transformer(genny.Replace("resource-name", x))
+	g.Transformer(genny.Replace("resource-use_model", x))
+	g.Transformer(genny.Replace("folder-name", folder))
+
 	data := map[string]interface{}{
 		"opts":    pres,
 		"actions": actions,
+		"folder":  folder,
 	}
 	helpers := template.FuncMap{
 		"camelize": func(s string) string {
 			return flect.Camelize(s)
 		},
 	}
-
-	x := pres.Name.Resource().File().String()
 	g.Transformer(gotools.TemplateTransformer(data, helpers))
-	g.Transformer(genny.Replace("resource-name", x))
-	g.Transformer(genny.Replace("resource-use_model", x))
 
 	g.RunFn(func(r *genny.Runner) error {
 		if !opts.SkipModel {
@@ -103,7 +106,9 @@ func New(opts *Options) (*genny.Generator, error) {
 func modelCommand(model name.Ident, opts *Options) *exec.Cmd {
 	args := opts.Attrs.Slice()
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"pop", "g", "model", model.Singularize().Underscore().String()}, args...)
+
+	mn := model.Singularize().Underscore().String()
+	args = append([]string{"pop", "g", "model", mn}, args...)
 
 	if opts.SkipMigration {
 		args = append(args, "--skip-migration")

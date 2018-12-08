@@ -3,6 +3,6 @@
 </div>
 
 <%= form_for({{.opts.Model.VarCaseSingle}}, {action: {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), method: "PUT"}) { %>
-  <%= partial("{{.opts.Model.Resource.File}}/form.html") %>
+  <%= partial("{{.folder}}/form.html") %>
   <a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/meta"
@@ -30,5 +31,11 @@ func (opts *Options) Validate() error {
 	if len(opts.Model) == 0 {
 		opts.Model = opts.Name
 	}
+
+	if strings.Contains(opts.Model, "/") {
+		parts := strings.Split(opts.Model, "/")
+		opts.Model = parts[len(parts)-1]
+	}
+
 	return nil
 }

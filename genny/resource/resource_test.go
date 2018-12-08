@@ -19,6 +19,17 @@ type pass struct {
 	Options Options
 }
 
+func runner() *genny.Runner {
+	run := gentest.NewRunner()
+	box := packr.New("./_fixtures/coke", "./_fixtures/coke")
+	box.Walk(func(path string, file packr.File) error {
+		path = strings.TrimSuffix(path, ".tmpl")
+		run.Disk.Add(genny.NewFile(path, file))
+		return nil
+	})
+	return run
+}
+
 func Test_New(t *testing.T) {
 	ats, err := attrs.ParseArgs("name", "desc:nulls.Text")
 	if err != nil {
@@ -26,7 +37,7 @@ func Test_New(t *testing.T) {
 	}
 	table := []pass{
 		{"default", Options{Name: "widget", Attrs: ats}},
-		// {"nested", Options{Name: "admin/widget", Attrs: ats}},
+		{"nested", Options{Name: "admin/widget", Attrs: ats}},
 		// {"deep_nested", Options{Name: "depp/admin/widget", Attrs: ats}},
 		// {"skip_migration", Options{Name: "widget", Attrs: ats, SkipMigration: true}},
 		// {"skip_model", Options{Name: "widget", Attrs: ats, SkipModel: true}},
@@ -42,14 +53,8 @@ func Test_New(t *testing.T) {
 			g, err := New(&tt.Options)
 			r.NoError(err)
 
-			run := gentest.NewRunner()
-			run.Disk.AddBox(packr.New("./_fixtures/coke", "./_fixtures/coke"))
-			g.Transformer(genny.NewTransformer(".", func(f genny.File) (genny.File, error) {
-				s := strings.Replace(f.String(), "\t", "  ", -1)
-				return genny.NewFileS(f.Name(), s), nil
-			}))
+			run := runner()
 			run.With(g)
-
 			r.NoError(run.Run())
 
 			res := run.Results()
@@ -64,7 +69,7 @@ func Test_New(t *testing.T) {
 			}
 
 			exp := packr.New(tt.Name, filepath.Join("_fixtures", tt.Name))
-			r.Len(res.Files, len(exp.List()))
+			gentest.CompareFiles(exp.List(), res.Files)
 
 			for _, n := range exp.List() {
 				f, err := res.Find(strings.TrimSuffix(n, ".tmpl"))
