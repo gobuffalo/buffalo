@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/events"
@@ -33,7 +34,7 @@ var RootCmd = &cobra.Command{
 			return nil
 		}
 
-		if !insideBuffaloProject() {
+		if !SwitchToBuffaloProjectDir() {
 			return errors.New("you need to be inside your buffalo project path to run this command")
 		}
 
@@ -83,4 +84,21 @@ func insideBuffaloProject() bool {
 	}
 
 	return true
+}
+
+// SwitchToBuffaloProjectDir switches to buffalo project's root directory,
+// returns true on success and false on failure
+func SwitchToBuffaloProjectDir() bool {
+	rootPath, _ := filepath.Abs(string(os.PathSeparator))
+	for {
+		cwd, _ := os.Getwd()
+		if !insideBuffaloProject() {
+			if cwd == rootPath {
+				return false
+			}
+			os.Chdir(filepath.Dir(cwd))
+		} else {
+			return true
+		}
+	}
 }
