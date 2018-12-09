@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
@@ -32,7 +32,7 @@ func Test_Markdown(t *testing.T) {
 
 		table := []ji{
 			render.New(render.Options{
-				TemplatesBox: packr.NewBox(tmpDir),
+				TemplatesBox: packr.New(tmpDir, tmpDir),
 			}).HTML,
 		}
 
@@ -58,7 +58,7 @@ func Test_Markdown(t *testing.T) {
 
 		re := render.New(render.Options{
 			HTMLLayout:   filepath.Base(layout.Name()),
-			TemplatesBox: packr.NewBox(tmpDir),
+			TemplatesBox: packr.New(tmpDir, tmpDir),
 		}).HTML(filepath.Base(tmpFile.Name()))
 
 		r.Equal("text/html; charset=utf-8", re.ContentType())

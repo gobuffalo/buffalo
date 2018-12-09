@@ -1,10 +1,10 @@
 package generate
 
 import (
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/buffalo/generators/resource"
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/makr"
 	"github.com/spf13/cobra"
 )
@@ -22,18 +22,21 @@ var ResourceCmd = &cobra.Command{
 	Use:     "resource [name]",
 	Example: resourceExamples,
 	Aliases: []string{"r"},
-	Short:   "Generates a new actions/resource file",
+	Short:   "Generate a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		o, err := resource.New(resourceOptions.Name, args...)
 		if err != nil {
 			return errors.WithStack(err)
+		}
+		if o.App.AsAPI {
+			resourceOptions.SkipTemplates = true
 		}
 		o.SkipModel = resourceOptions.SkipModel
 		o.SkipMigration = resourceOptions.SkipMigration
 		o.SkipTemplates = resourceOptions.SkipTemplates
 		if resourceOptions.ModelName != "" {
 			o.UseModel = true
-			o.Model = inflect.Name(resourceOptions.ModelName)
+			o.Model = name.New(resourceOptions.ModelName)
 		}
 
 		if err := o.Validate(); err != nil {

@@ -5,10 +5,9 @@ set -ex
 # git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
-go get -u -v github.com/gobuffalo/plush
+go get -u -v github.com/gobuffalo/logger
 make ci-deps
 
-packr clean
 gometalinter --vendor --deadline=5m ./... --skip=internal
 make install
 
@@ -21,7 +20,7 @@ cd $GOPATH/src/
 # START: tests bins are built with tags properly
 mkdir -p $GOPATH/src/github.com/markbates
 cd $GOPATH/src/github.com/markbates
-buffalo new --skip-webpack coke --db-type=sqlite3 -f
+buffalo new --skip-webpack coke --db-type=sqlite3
 cd $GOPATH/src/github.com/markbates/coke
 buffalo db create -a -d
 buffalo g resource widget name
@@ -33,7 +32,7 @@ rm -rfv $GOPATH/src/github.com/markbates/coke
 
 cd $GOPATH/src/
 
-buffalo new --db-type=sqlite3 hello_world --ci-provider=travis -f
+buffalo new --db-type=sqlite3 hello_world --ci-provider=travis
 cd ./hello_world
 
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/new_travis.json
@@ -42,10 +41,6 @@ go vet ./...
 buffalo db create -a
 buffalo db migrate -e test
 buffalo test -race
-
-go get -v github.com/gobuffalo/buffalo-goth
-buffalo g goth facebook twitter linkedin github
-filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/goth.json
 
 buffalo g resource admins --skip-model
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/resource_skip_model.json
@@ -94,6 +89,12 @@ filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/gener
 buffalo g resource cars
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_plural.json
 
+buffalo g resource admin/planes
+filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_web.json
+
+buffalo g resource admin/users --name=AdminUser
+filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name_web.json
+
 buffalo g actions users create --skip-template
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_skip_template.json
 
@@ -101,7 +102,7 @@ buffalo g actions users update --skip-template --method POST
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_with_method.json
 
 cd $GOPATH/src
-buffalo new --api apiapp -f
+buffalo new --api apiapp
 cd ./apiapp
 buffalo build
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/apiapp.json
@@ -113,10 +114,10 @@ buffalo g task nested:task:now
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_nested_task.json
 
 buffalo g resource admin/planes
-filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested.json
+filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_api.json
 
 buffalo g resource admin/users --name=AdminUser
-filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name.json
+filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_model_name_api.json
 
 buffalo g resource person
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_irregular.json
@@ -131,8 +132,8 @@ rm -rf bin
 buffalo build -k -e
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
 
-go get github.com/gobuffalo/oldapp/0_12_6/...
-cd $GOPATH/src/github.com/gobuffalo/oldapp/0_12_6
+go get github.com/gobuffalo/oldapp/0_13_6/...
+cd $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
 buffalo fix --y
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 buffalo build -static

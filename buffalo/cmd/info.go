@@ -7,9 +7,9 @@ import (
 	"os/exec"
 	"reflect"
 
-	"github.com/gobuffalo/buffalo/meta"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ import (
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Prints off diagnostic information useful for debugging.",
+	Short: "Print diagnostic information (useful for debugging)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		bb := os.Stdout
 
@@ -28,9 +28,13 @@ var infoCmd = &cobra.Command{
 		rv := reflect.ValueOf(app)
 		rt := rv.Type()
 
+		var err error
 		for i := 0; i < rt.NumField(); i++ {
 			f := rt.Field(i)
-			bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+			_, err = bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+			if err != nil {
+				return err
+			}
 		}
 
 		if err := runInfoCmds(); err != nil {
@@ -59,9 +63,9 @@ func infoGoMod() error {
 
 	bb := os.Stdout
 	bb.WriteString("\n### go.mod\n")
-	io.Copy(bb, f)
+	_, err = io.Copy(bb, f)
 
-	return nil
+	return err
 }
 
 func runInfoCmds() error {

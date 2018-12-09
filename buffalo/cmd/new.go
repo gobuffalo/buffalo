@@ -1,61 +1,143 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"os/user"
 	"path/filepath"
-	"runtime"
 	"strings"
 
+	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	fname "github.com/gobuffalo/flect/name"
+	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/spf13/pflag"
 
-	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 
-	"github.com/gobuffalo/buffalo/generators/newapp"
-	"github.com/gobuffalo/buffalo/meta"
+	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
+	"github.com/gobuffalo/buffalo/genny/assets/standard"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
+	"github.com/gobuffalo/buffalo/genny/ci"
+	"github.com/gobuffalo/buffalo/genny/newapp/api"
+	"github.com/gobuffalo/buffalo/genny/newapp/core"
+	"github.com/gobuffalo/buffalo/genny/newapp/web"
+	"github.com/gobuffalo/buffalo/genny/refresh"
+	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/pop"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var configError error
+type newAppOptions struct {
+	Options *core.Options
+	Force   bool
+	Verbose bool
+	DryRun  bool
+}
 
-func getAppWithConfig() newapp.Generator {
-	pwd, _ := os.Getwd()
-	app := newapp.Generator{
-		App:         meta.New(pwd),
-		AsAPI:       viper.GetBool("api"),
-		Force:       viper.GetBool("force"),
-		Verbose:     viper.GetBool("verbose"),
-		SkipPop:     viper.GetBool("skip-pop"),
-		SkipWebpack: viper.GetBool("skip-webpack"),
-		SkipYarn:    viper.GetBool("skip-yarn"),
-		DBType:      viper.GetString("db-type"),
-		CIProvider:  viper.GetString("ci-provider"),
-		AsWeb:       true,
-		Docker:      viper.GetString("docker"),
-		Bootstrap:   viper.GetInt("bootstrap"),
+func parseNewOptions(args []string) (newAppOptions, error) {
+	nopts := newAppOptions{
+		Force:   viper.GetBool("force"),
+		Verbose: viper.GetBool("verbose"),
+		DryRun:  viper.GetBool("dry-run"),
 	}
+
+	if len(args) == 0 {
+		return nopts, errors.New("you must enter a name for your new application")
+	}
+	if configError != nil {
+		return nopts, configError
+	}
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		return nopts, errors.WithStack(err)
+	}
+	app := meta.New(pwd)
+
+	app.Name = fname.New(args[0])
+	app.Bin = filepath.Join("bin", app.Name.String())
+
+	if app.Name.String() == "." {
+		app.Name = fname.New(filepath.Base(app.Root))
+	} else {
+		app.Root = filepath.Join(app.Root, app.Name.File().String())
+	}
+
+	aa := meta.New(app.Root)
+
+	app.ActionsPkg = aa.ActionsPkg
+	app.GriftsPkg = aa.GriftsPkg
+	app.ModelsPkg = aa.ModelsPkg
+	app.PackagePkg = aa.PackagePkg
+	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
-	app.WithPop = !app.SkipPop
-	app.WithWebpack = !app.SkipWebpack
-	app.WithYarn = !app.SkipYarn
+	if app.WithDep {
+		app.WithModules = false
+		envy.MustSet("GO111MODULE", "off")
+	}
+	app.WithPop = !viper.GetBool("skip-pop")
+	app.WithWebpack = !viper.GetBool("skip-webpack")
+	app.WithYarn = !viper.GetBool("skip-yarn")
 	app.AsWeb = !app.AsAPI
+
 	if app.AsAPI {
 		app.WithWebpack = false
 	}
 
-	return app
+	opts := &core.Options{}
+
+	x := viper.GetString("docker")
+	if len(x) > 0 && x != "none" {
+		opts.Docker = &docker.Options{
+			Style: x,
+		}
+	}
+
+	x = viper.GetString("ci-provider")
+	if len(x) > 0 && x != "none" {
+		opts.CI = &ci.Options{
+			Provider: x,
+			DBType:   viper.GetString("db-type"),
+		}
+	}
+
+	if len(app.VCS) > 0 && app.VCS != "none" {
+		opts.VCS = &vcs.Options{
+			Provider: app.VCS,
+		}
+	}
+
+	if app.WithPop {
+		d := viper.GetString("db-type")
+		if d == "sqlite3" {
+			app.WithSQLite = true
+		}
+
+		opts.Pop = &pop.Options{
+			Prefix:  app.Name.File().String(),
+			Dialect: d,
+		}
+	}
+
+	opts.Refresh = &refresh.Options{}
+
+	opts.App = app
+	nopts.Options = opts
+	return nopts, nil
 }
+
+var configError error
 
 var newCmd = &cobra.Command{
 	Use:   "new [name]",
@@ -68,45 +150,68 @@ var newCmd = &cobra.Command{
 			})
 			viper.BindPFlags(cmd.Flags())
 		}()
-		if len(args) == 0 {
-			return errors.New("you must enter a name for your new application")
-		}
-		if configError != nil {
-			return configError
-		}
-		app := getAppWithConfig()
-		app.Name = inflect.Name(args[0])
 
-		if app.Name == "." {
-			app.Name = inflect.Name(filepath.Base(app.Root))
+		nopts, err := parseNewOptions(args)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+
+		opts := nopts.Options
+		app := opts.App
+
+		ctx := context.Background()
+
+		run := genny.WetRunner(ctx)
+		if nopts.Verbose {
+			lg := logger.New(logger.DebugLevel)
+			run.Logger = lg
+			plog.Logger = lg
+		}
+
+		if nopts.DryRun {
+			run = genny.DryRunner(ctx)
+		}
+		run.Root = app.Root
+		if nopts.Force {
+			os.RemoveAll(app.Root)
+		}
+
+		var gg *genny.Group
+
+		if app.AsAPI {
+			gg, err = api.New(&api.Options{
+				Options: opts,
+			})
 		} else {
-			app.Root = filepath.Join(app.Root, app.Name.File())
+			wo := &web.Options{
+				Options: opts,
+			}
+			if app.WithWebpack {
+				wo.Webpack = &webpack.Options{}
+			} else if !app.AsAPI {
+				wo.Standard = &standard.Options{}
+			}
+			gg, err = web.New(wo)
 		}
-		aa := meta.New(app.Root)
-		app.ActionsPkg = aa.ActionsPkg
-		app.GriftsPkg = aa.GriftsPkg
-		app.ModelsPkg = aa.ModelsPkg
-		app.PackagePkg = aa.PackagePkg
-
-		if err := app.Validate(); err != nil {
-			if errors.Cause(err) == newapp.ErrNotInGoPath {
+		if err != nil {
+			if errors.Cause(err) == core.ErrNotInGoPath {
 				return notInGoPath(app)
 			}
 			return errors.WithStack(err)
 		}
+		run.WithGroup(gg)
 
-		data := makr.Data{
-			"version": runtime.Version,
-			"db-type": viper.GetString("db-type"),
-		}
-		if err := app.Run(app.Root, data); err != nil {
+		if err := run.WithNew(gotools.GoFmt(app.Root)); err != nil {
 			return errors.WithStack(err)
 		}
 
-		logrus.Infof("Congratulations! Your application, %s, has been successfully built!\n\n", app.Name)
-		logrus.Infof("You can find your new application at:\n%v", app.Root)
-		logrus.Info("\nPlease read the README.md file in your new application for next steps on running your application.")
+		if err := run.Run(); err != nil {
+			return errors.WithStack(err)
+		}
 
+		run.Logger.Infof("Congratulations! Your application, %s, has been successfully built!", app.Name)
+		run.Logger.Infof("You can find your new application at: %v", app.Root)
+		run.Logger.Info("Please read the README.md file in your new application for next steps on running your application.")
 		return nil
 	},
 }
@@ -128,14 +233,14 @@ func currentUser() (string, error) {
 	return username, nil
 }
 
-func notInGoPath(ag newapp.Generator) error {
+func notInGoPath(app meta.App) error {
 	username, err := currentUser()
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
-		"name":     ag.Name,
+		"name":     app.Name,
 		"gopath":   envy.GoPath(),
 		"current":  pwd,
 		"username": username,
@@ -153,6 +258,7 @@ func init() {
 	RootCmd.AddCommand(newCmd)
 	newCmd.Flags().Bool("api", false, "skip all front-end code and configure for an API server")
 	newCmd.Flags().BoolP("force", "f", false, "delete and remake if the app already exists")
+	newCmd.Flags().BoolP("dry-run", "d", false, "dry run")
 	newCmd.Flags().BoolP("verbose", "v", false, "verbosely print out the go get commands")
 	newCmd.Flags().Bool("skip-pop", false, "skips adding pop/soda to your app")
 	newCmd.Flags().Bool("with-dep", false, "adds github.com/golang/dep to your app")

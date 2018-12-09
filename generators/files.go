@@ -19,7 +19,7 @@ type File struct {
 type Files []File
 
 // FindByBox all the .tmpl files inside the packd.Box
-func FindByBox(box packd.Box) (Files, error) {
+func FindByBox(box packd.Walkable) (Files, error) {
 	files := Files{}
 	err := box.Walk(func(p string, file packd.File) error {
 		if filepath.Ext(p) == ".tmpl" {

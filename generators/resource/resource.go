@@ -7,8 +7,9 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/generators"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/makr"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -26,7 +27,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 		tmplName = "resource-name"
 	}
 
-	files, err := generators.FindByBox(packr.NewBox("../resource/templates"))
+	files, err := generators.FindByBox(packr.New("buffalo:generators:resource", "../resource/templates"))
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -61,6 +62,10 @@ func (res Generator) Run(root string, data makr.Data) error {
 	})
 
 	if !res.SkipModel && !res.UseModel {
+		if _, err := exec.LookPath("buffalo-pop"); err != nil {
+			g.Add(makr.NewCommand(exec.Command(genny.GoBin(), "get", "github.com/gobuffalo/buffalo-pop")))
+		}
+
 		g.Add(res.modelCommand())
 	}
 
@@ -70,7 +75,7 @@ func (res Generator) Run(root string, data makr.Data) error {
 func (res Generator) modelCommand() makr.Command {
 	args := res.Args
 	args = append(args[:0], args[0+1:]...)
-	args = append([]string{"pop", "g", "model", res.Model.UnderSingular()}, args...)
+	args = append([]string{"pop", "g", "model", res.Model.Singularize().Underscore().String()}, args...)
 
 	if res.SkipMigration {
 		args = append(args, "--skip-migration")

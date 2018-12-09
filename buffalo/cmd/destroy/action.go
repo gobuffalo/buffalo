@@ -12,7 +12,7 @@ var ActionCmd = &cobra.Command{
 	Use: "action [name]",
 	//Example: "resource cars",
 	Aliases: []string{"a"},
-	Short:   "Destroys action files.",
+	Short:   "Destroy action files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return errors.New("you need to provide a valid action file name in order to destroy it")
