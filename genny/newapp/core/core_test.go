@@ -2,7 +2,6 @@ package core
 
 import (
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
@@ -38,14 +37,11 @@ func Test_New(t *testing.T) {
 
 	res := run.Results()
 
-	cmds := []string{"go get github.com/gobuffalo/buffalo-plugins",
+	cmds := []string{
+		"go get github.com/gobuffalo/buffalo-plugins",
 		"go get -t ./...",
 	}
-	r.Len(res.Commands, len(cmds))
-
-	for i, c := range res.Commands {
-		r.Equal(cmds[i], strings.Join(c.Args, " "))
-	}
+	r.NoError(gentest.CompareCommands(cmds, res.Commands))
 
 	expected := commonExpected
 	for _, e := range expected {
@@ -102,11 +98,7 @@ func Test_New_Mods(t *testing.T) {
 			"go get github.com/gobuffalo/buffalo-plugins",
 			"go mod tidy",
 		}
-
-		for i, c := range res.Commands {
-			r.Equal(cmds[i], strings.Join(c.Args, " "))
-		}
-		r.Len(res.Commands, len(cmds))
+		r.NoError(gentest.CompareCommands(cmds, res.Commands))
 
 		expected := commonExpected
 		for _, e := range expected {

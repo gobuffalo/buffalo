@@ -39,6 +39,7 @@ import (
 
 type newAppOptions struct {
 	Options *core.Options
+	Module  string
 	Force   bool
 	Verbose bool
 	DryRun  bool
@@ -49,6 +50,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		Force:   viper.GetBool("force"),
 		Verbose: viper.GetBool("verbose"),
 		DryRun:  viper.GetBool("dry-run"),
+		Module:  viper.GetString("module"),
 	}
 
 	if len(args) == 0 {
@@ -73,12 +75,13 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		app.Root = filepath.Join(app.Root, app.Name.File().String())
 	}
 
-	aa := meta.New(app.Root)
+	if len(nopts.Module) == 0 {
+		aa := meta.New(app.Root)
+		app.PackageRoot(aa.PackagePkg)
+	} else {
+		app.PackageRoot(nopts.Module)
+	}
 
-	app.ActionsPkg = aa.ActionsPkg
-	app.GriftsPkg = aa.GriftsPkg
-	app.ModelsPkg = aa.ModelsPkg
-	app.PackagePkg = aa.PackagePkg
 	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
 	app.WithDep = viper.GetBool("with-dep")
@@ -205,6 +208,14 @@ var newCmd = &cobra.Command{
 			return errors.WithStack(err)
 		}
 
+		// setup VCS last
+		if opts.VCS != nil {
+			// add the VCS generator
+			if err := run.WithNew(vcs.New(opts.VCS)); err != nil {
+				return errors.WithStack(err)
+			}
+		}
+
 		if err := run.Run(); err != nil {
 			return errors.WithStack(err)
 		}
@@ -268,6 +279,7 @@ func init() {
 	newCmd.Flags().String("docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
 	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
+	newCmd.Flags().String("module", "", "specify the root module (package) name. [defaults to 'automatic']")
 	newCmd.Flags().Int("bootstrap", 4, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
 	cfgFile := newCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.buffalo.yaml)")

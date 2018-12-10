@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
+	github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316
 	github.com/gobuffalo/genny v0.0.0-20181207193730-587570ab2cf7
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181207195948-8634b1ecd393
+	golang.org/x/tools v0.0.0-20181210150541-e00c0697c2f1
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

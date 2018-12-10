@@ -7,7 +7,6 @@ import (
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/refresh"
-	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/dep"
@@ -122,16 +121,6 @@ func New(opts *Options) (*genny.Group, error) {
 
 	if app.WithModules {
 		g, err := gomods.Tidy(app.Root, false)
-		if err != nil {
-			return gg, errors.WithStack(err)
-		}
-		gg.Add(g)
-	}
-
-	// setup VCS last
-	if opts.VCS != nil {
-		// add the VCS generator
-		g, err = vcs.New(opts.VCS)
 		if err != nil {
 			return gg, errors.WithStack(err)
 		}
