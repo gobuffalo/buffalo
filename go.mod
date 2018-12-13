@@ -5,10 +5,11 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.9.2
+	github.com/gobuffalo/buffalo-plugins v1.9.3
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
+	github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316 // indirect
 	github.com/gobuffalo/genny v0.0.0-20181211165820-e26c8466f14d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
@@ -24,11 +25,12 @@ require (
 	github.com/gobuffalo/packr v1.21.9
 	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/pop v4.9.3+incompatible
-	github.com/gobuffalo/tags v2.0.14+incompatible
+	github.com/gobuffalo/tags v2.0.15+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
+	github.com/jackc/pgx v3.3.0+incompatible // indirect
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
@@ -45,7 +47,8 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181213151202-c779628d65d9
+	golang.org/x/sys v0.0.0-20181213150753-586ba8c9bb14 // indirect
+	golang.org/x/tools v0.0.0-20181213190329-bbccd8cae4a9
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
