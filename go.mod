@@ -6,20 +6,20 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.8.3
+	github.com/gobuffalo/buffalo-plugins v1.9.0
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
 	github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316
-	github.com/gobuffalo/genny v0.0.0-20181207193730-587570ab2cf7
+	github.com/gobuffalo/genny v0.0.0-20181211165820-e26c8466f14d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
 	github.com/gobuffalo/makr v1.1.5
 	github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b
-	github.com/gobuffalo/packd v0.0.0-20181207120301-c49825f8f6f4
-	github.com/gobuffalo/packr v1.21.8
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.12
+	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
+	github.com/gobuffalo/packr v1.21.9
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.13
 	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20181207152837-eedb135bd51b
 	github.com/gobuffalo/pop v4.9.3+incompatible
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181210150541-e00c0697c2f1
+	golang.org/x/tools v0.0.0-20181213131058-7529026f5b7c
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

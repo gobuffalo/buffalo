@@ -177,6 +177,12 @@ Thank you to the following **GIANTS**:
 
 * [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
+* [github.com/rogpeppe/go-internal/modfile](https://godoc.org/github.com/rogpeppe/go-internal/modfile)
+
+* [github.com/rogpeppe/go-internal/module](https://godoc.org/github.com/rogpeppe/go-internal/module)
+
+* [github.com/rogpeppe/go-internal/semver](https://godoc.org/github.com/rogpeppe/go-internal/semver)
+
 * [github.com/serenize/snaker](https://godoc.org/github.com/serenize/snaker)
 
 * [github.com/sergi/go-diff/diffmatchpatch](https://godoc.org/github.com/sergi/go-diff/diffmatchpatch)
