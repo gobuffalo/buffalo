@@ -5,11 +5,11 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.8.3
+	github.com/gobuffalo/buffalo-plugins v1.9.0
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/genny v0.0.0-20181207183327-0a63325ed5db
+	github.com/gobuffalo/genny v0.0.0-20181211165820-e26c8466f14d
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/makr v1.1.5
@@ -20,8 +20,8 @@ require (
 	github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189
-	github.com/gobuffalo/packd v0.0.0-20181207120301-c49825f8f6f4
-	github.com/gobuffalo/packr v1.21.8
+	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
+	github.com/gobuffalo/packr v1.21.9
 	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/pop v4.9.3+incompatible
 	github.com/gobuffalo/tags v2.0.14+incompatible
@@ -45,7 +45,7 @@ require (
 	github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606 // indirect
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
-	golang.org/x/tools v0.0.0-20181206194817-bcd4e47d0288
+	golang.org/x/tools v0.0.0-20181212200058-49db546f375e
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
