@@ -58,8 +58,8 @@ github.com/gobuffalo/buffalo-plugins v1.7.2/go.mod h1:vEbx30cLFeeZ48gBA/rkhbqC2M
 github.com/gobuffalo/buffalo-plugins v1.8.1/go.mod h1:vu71J3fD4b7KKywJQ1tyaJGtahG837Cj6kgbxX0e4UI=
 github.com/gobuffalo/buffalo-plugins v1.8.2/go.mod h1:9te6/VjEQ7pKp7lXlDIMqzxgGpjlKoAcAANdCgoR960=
 github.com/gobuffalo/buffalo-plugins v1.8.3/go.mod h1:IAWq6vjZJVXebIq2qGTLOdlXzmpyTZ5iJG5b59fza5U=
-github.com/gobuffalo/buffalo-plugins v1.9.1 h1:6zmV3PknUWCSds/iyGLWK+V4qnMYDrraIEiiwy8GrYw=
-github.com/gobuffalo/buffalo-plugins v1.9.1/go.mod h1:1g50kH39gtbIGNsu9R8uY9MifToPvzj0Fmp+nJXIreE=
+github.com/gobuffalo/buffalo-plugins v1.9.2 h1:I6Uc+ejh/EnwLsqQkvg6ggN7TsUHYpco3OqyTvf7Yhg=
+github.com/gobuffalo/buffalo-plugins v1.9.2/go.mod h1:1g50kH39gtbIGNsu9R8uY9MifToPvzj0Fmp+nJXIreE=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=

@@ -5,7 +5,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.9.1
+	github.com/gobuffalo/buffalo-plugins v1.9.2
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
