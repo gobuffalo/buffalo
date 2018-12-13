@@ -6,7 +6,7 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gobuffalo/buffalo-docker v1.0.5
-	github.com/gobuffalo/buffalo-plugins v1.9.1
+	github.com/gobuffalo/buffalo-plugins v1.9.2
 	github.com/gobuffalo/buffalo-pop v1.3.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
@@ -28,6 +28,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
+	github.com/jackc/pgx v3.3.0+incompatible // indirect
 	github.com/karrick/godirwalk v1.7.7
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
@@ -45,6 +46,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
+	golang.org/x/sys v0.0.0-20181213150753-586ba8c9bb14 // indirect
 	golang.org/x/tools v0.0.0-20181213151202-c779628d65d9
 	google.golang.org/appengine v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
