@@ -12,6 +12,7 @@ import (
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/markbates/inflect"
+	"github.com/pkg/errors"
 )
 
 // RouteInfo provides information about the underlying route that
@@ -79,7 +80,7 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return "", fmt.Errorf("missing parameters for %v", cRoute.Path)
+			return "", errors.Wrapf(err, "missing parameters for %v", cRoute.Path)
 		}
 
 		result := url.Path
