@@ -82,7 +82,7 @@ func RegisteredTypes() []string {
 	defer lock.Unlock()
 
 	types := []string{}
-	for name, _ := range binders {
+	for name := range binders {
 		types = append(types, name)
 	}
 	return types
