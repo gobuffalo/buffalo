@@ -33,10 +33,12 @@ func New(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 
-	core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
+	if !opts.SkipTemplates {
+		core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
 
-	if err := g.Box(core); err != nil {
-		return g, errors.WithStack(err)
+		if err := g.Box(core); err != nil {
+			return g, errors.WithStack(err)
+		}
 	}
 
 	var abox packd.Box
