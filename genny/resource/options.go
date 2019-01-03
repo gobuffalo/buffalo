@@ -2,7 +2,6 @@ package resource
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/gobuffalo/genny/movinglater/attrs"
@@ -23,7 +22,6 @@ type Options struct {
 
 // Validate that options are usuable
 func (opts *Options) Validate() error {
-	fmt.Println("### opts ->", opts)
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
