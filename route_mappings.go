@@ -10,8 +10,13 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
+)
+
+const (
+	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -102,8 +107,9 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		}
 
 		stat, _ := f.Stat()
+		maxAge := envy.Get(AssetsAgeVarName, "31536000")
 		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
-		w.Header().Add("Cache-Control", "max-age=31536000")
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
 }

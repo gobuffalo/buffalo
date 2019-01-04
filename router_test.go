@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
@@ -345,6 +346,16 @@ func Test_Router_ServeFiles(t *testing.T) {
 
 	r.NotEqual(res.Header().Get("ETag"), "")
 	r.Equal(res.Header().Get("Cache-Control"), "max-age=31536000")
+
+	envy.Set(AssetsAgeVarName, "3600")
+	w = httptest.New(a)
+	res = w.HTML("/assets/foo.png").Get()
+
+	r.Equal(200, res.Code)
+	r.Equal("foo", res.Body.String())
+
+	r.NotEqual(res.Header().Get("ETag"), "")
+	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
 }
 
 func Test_App_NamedRoutes(t *testing.T) {
