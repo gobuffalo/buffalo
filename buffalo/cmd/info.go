@@ -31,6 +31,9 @@ var infoCmd = &cobra.Command{
 		var err error
 		for i := 0; i < rt.NumField(); i++ {
 			f := rt.Field(i)
+			if !rv.FieldByName(f.Name).CanInterface() {
+				continue
+			}
 			_, err = bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
 			if err != nil {
 				return err
