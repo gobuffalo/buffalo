@@ -84,6 +84,9 @@ func Test_New(t *testing.T) {
 
 				clean := func(s string) string {
 					s = strings.TrimSpace(s)
+					s = strings.Replace(s, "\n", "", -1)
+					s = strings.Replace(s, "\t", "", -1)
+					s = strings.Replace(s, "\r", "", -1)
 					return s
 				}
 				r.Equal(clean(s), clean(f.String()))

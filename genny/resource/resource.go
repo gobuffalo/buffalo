@@ -1,8 +1,6 @@
 package resource
 
 import (
-	"fmt"
-	"os/exec"
 	"text/template"
 
 	"github.com/gobuffalo/flect"
@@ -13,16 +11,6 @@ import (
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
-
-var actions = []name.Ident{
-	name.New("list"),
-	name.New("show"),
-	name.New("new"),
-	name.New("create"),
-	name.New("edit"),
-	name.New("update"),
-	name.New("destroy"),
-}
 
 // New resource generator
 func New(opts *Options) (*genny.Generator, error) {
@@ -75,45 +63,8 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 	g.Transformer(gotools.TemplateTransformer(data, helpers))
 
-	g.RunFn(func(r *genny.Runner) error {
-		if !opts.SkipModel {
-			if _, err := r.LookPath("buffalo-pop"); err != nil {
-				if err := gotools.Get("github.com/gobuffalo/buffalo-pop")(r); err != nil {
-					return errors.WithStack(err)
-				}
-			}
+	g.RunFn(installPop(opts))
 
-			return r.Exec(modelCommand(pres.Model, opts))
-		}
-
-		return nil
-	})
-
-	g.RunFn(func(r *genny.Runner) error {
-		f, err := r.FindFile("actions/app.go")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		stmt := fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", pres.Name.URL(), pres.Name.Resource())
-		f, err = gotools.AddInsideBlock(f, "if app == nil {", stmt)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		return r.File(f)
-	})
+	g.RunFn(addResource(pres))
 	return g, nil
-}
-
-func modelCommand(model name.Ident, opts *Options) *exec.Cmd {
-	args := opts.Attrs.Slice()
-	args = append(args[:0], args[0+1:]...)
-
-	mn := model.Singularize().Underscore().String()
-	args = append([]string{"pop", "g", "model", mn}, args...)
-
-	if opts.SkipMigration {
-		args = append(args, "--skip-migration")
-	}
-
-	return exec.Command("buffalo-pop", args...)
 }
