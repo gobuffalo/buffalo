@@ -61,7 +61,18 @@ func otherTestApp() *App {
 
 func Test_MethodNotFoundError(t *testing.T) {
 	r := require.New(t)
-	w := httptest.New(testApp())
+
+	a := New(Options{})
+	a.GET("/bar", func(c Context) error {
+		return c.Render(200, render.String("bar"))
+	})
+	a.ErrorHandlers[405] = func(status int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(status)
+		res.Write([]byte("my custom 405"))
+		return nil
+	}
+	w := httptest.New(a)
 	res := w.HTML("/bar").Post(nil)
 	r.Equal(405, res.Code)
 	r.Contains(res.Body.String(), "my custom 405")

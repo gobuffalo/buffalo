@@ -34,7 +34,18 @@ t, err := time.Parse(time.RFC3339, "<%= buildTime %>")
 
 func main() {
   args := os.Args
+  var originalArgs []string
+  for i, arg := range args {
+    if arg == "--" {
+      originalArgs = append([]string{args[0]}, args[i+1:]...)
+      args = args[:i]
+      break
+    }
+  }
   if len(args) == 1 {
+    if len(originalArgs) != 0 {
+      os.Args = originalArgs
+    }
     originalMain()
     return
   }
