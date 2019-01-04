@@ -1,6 +1,0 @@
-- id: "widget.created.success"
-  translation: "Widget was successfully created."
-- id: "widget.updated.success"
-  translation: "Widget was successfully updated."
-- id: "widget.destroyed.success"
-  translation: "Widget was successfully destroyed."

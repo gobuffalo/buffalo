@@ -25,9 +25,11 @@ func (opts *Options) Validate() error {
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
+
 	if len(opts.Name) == 0 {
 		return errors.New("you must provide a name")
 	}
+
 	if len(opts.Model) == 0 {
 		opts.Model = opts.Name
 	}
@@ -35,6 +37,10 @@ func (opts *Options) Validate() error {
 	if strings.Contains(opts.Model, "/") {
 		parts := strings.Split(opts.Model, "/")
 		opts.Model = parts[len(parts)-1]
+	}
+
+	if opts.App.AsAPI {
+		opts.SkipTemplates = true
 	}
 
 	return nil

@@ -1,8 +1,0 @@
-<div class="page-header">
-  <h1>New Widget</h1>
-</div>
-
-<%= form_for(widget, {action: deepAdminWidgetsPath(), method: "POST"}) { %>
-  <%= partial("deep/admin/widgets/form.html") %>
-  <a href="<%= deepAdminWidgetsPath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
-<% } %>
