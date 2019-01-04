@@ -94,12 +94,16 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, err := fs.Open(path.Clean(r.URL.Path))
+		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
 			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
+		stat, _ := f.Stat()
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("Cache-Control", "max-age=31536000")
 		fsh.ServeHTTP(w, r)
 	})
 }

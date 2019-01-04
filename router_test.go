@@ -342,6 +342,9 @@ func Test_Router_ServeFiles(t *testing.T) {
 
 	r.Equal(200, res.Code)
 	r.Equal("foo", res.Body.String())
+
+	r.NotEqual(res.Header().Get("ETag"), "")
+	r.Equal(res.Header().Get("Cache-Control"), "max-age=31536000")
 }
 
 func Test_App_NamedRoutes(t *testing.T) {
