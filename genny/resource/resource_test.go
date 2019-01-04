@@ -76,6 +76,7 @@ func Test_New(t *testing.T) {
 			gentest.CompareFiles(exp.List(), res.Files)
 
 			for _, n := range exp.List() {
+				n = strings.Replace(n, "\\", "/", -1)
 				f, err := res.Find(strings.TrimSuffix(n, ".tmpl"))
 				r.NoError(err)
 				s, err := exp.FindString(n)

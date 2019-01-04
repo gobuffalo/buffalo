@@ -8,9 +8,7 @@ import (
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
@@ -26,6 +24,7 @@ var actions = []name.Ident{
 	name.New("destroy"),
 }
 
+// New resource generator
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
@@ -117,16 +116,4 @@ func modelCommand(model name.Ident, opts *Options) *exec.Cmd {
 	}
 
 	return exec.Command("buffalo-pop", args...)
-}
-
-type presenter struct {
-	App   meta.App
-	Name  name.Ident
-	Model name.Ident
-	Attrs attrs.Attrs
-	// SkipMigration bool
-	// SkipModel     bool
-	// SkipTemplates bool
-	// UseModel      bool
-	// Args          []string
 }

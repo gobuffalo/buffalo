@@ -8,16 +8,15 @@ import (
 	"github.com/gobuffalo/meta"
 )
 
+// Options for generating a new resource
 type Options struct {
-	App           meta.App `json:"app"`
-	Name          string   `json:"name"`
-	Model         string   `json:"model"`
-	SkipMigration bool     `json:"skip_migration"`
-	SkipModel     bool     `json:"skip_model"`
-	SkipTemplates bool     `json:"skip_templates"`
-	// FilesPath     string     `json:"files_path"`
-	// ActionsPath   string     `json:"actions_path"`
-	Attrs attrs.Attrs `json:"props"`
+	App           meta.App    `json:"app"`
+	Name          string      `json:"name"`
+	Model         string      `json:"model"`
+	SkipMigration bool        `json:"skip_migration"`
+	SkipModel     bool        `json:"skip_model"`
+	SkipTemplates bool        `json:"skip_templates"`
+	Attrs         attrs.Attrs `json:"props"`
 }
 
 // Validate that options are usuable
