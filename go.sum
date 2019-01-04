@@ -97,6 +97,8 @@ github.com/gobuffalo/flect v0.0.0-20181108195648-8fe1b44cfe32/go.mod h1:rCiQgmAE
 github.com/gobuffalo/flect v0.0.0-20181109221320-179d36177b5b/go.mod h1:0HvNbHdfh+WOvDSIASqJOSxTOWSxCCUF++k/Y53v9rI=
 github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328/go.mod h1:0HvNbHdfh+WOvDSIASqJOSxTOWSxCCUF++k/Y53v9rI=
 github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316/go.mod h1:en58vff74S9b99Eg42Dr+/9yPu437QjlNsO/hBYPuOk=
+github.com/gobuffalo/flect v0.0.0-20190104192022-4af577e09bf2 h1:51NF9n6h4nGMooU5ALB+uJCM0UOmcWjAegIZb/ePtoE=
+github.com/gobuffalo/flect v0.0.0-20190104192022-4af577e09bf2/go.mod h1:en58vff74S9b99Eg42Dr+/9yPu437QjlNsO/hBYPuOk=
 github.com/gobuffalo/genny v0.0.0-20180924032338-7af3a40f2252/go.mod h1:tUTQOogrr7tAQnhajMSH6rv1BVev34H2sa1xNHMy94g=
 github.com/gobuffalo/genny v0.0.0-20181003150629-3786a0744c5d/go.mod h1:WAd8HmjMVrnkAZbmfgH5dLBUchsZfqzp/WS5sQz+uTM=
 github.com/gobuffalo/genny v0.0.0-20181005145118-318a41a134cc/go.mod h1:WAd8HmjMVrnkAZbmfgH5dLBUchsZfqzp/WS5sQz+uTM=
@@ -451,8 +453,8 @@ golang.org/x/tools v0.0.0-20181212172921-837e80568c09/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181213190329-bbccd8cae4a9/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181221235234-d00ac6d27372/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20190102213336-ca9055ed7d04/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
-golang.org/x/tools v0.0.0-20190103205943-8a6051197512 h1:cPzUDKmykdmMxTKZILiVfXIbNBgLkSVoG2KcpNQWhu4=
-golang.org/x/tools v0.0.0-20190103205943-8a6051197512/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20190104182027-498d95493402 h1:OWOoOXVO7TiAe7djxWtdLAfVGJsPygFlLYlo+MyngLU=
+golang.org/x/tools v0.0.0-20190104182027-498d95493402/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.3.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.4.0 h1:/wp5JvzpHIxhs/dumFmF7BXTf3Z+dd4uXta4kVyO508=
