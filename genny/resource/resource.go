@@ -46,7 +46,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		Attrs: opts.Attrs,
 	}
 	x := pres.Name.Resource().File().String()
-	folder := pres.Name.File().Pluralize().String()
+	folder := pres.Name.Folder().Pluralize().String()
 	g.Transformer(genny.Replace("resource-name", x))
 	g.Transformer(genny.Replace("resource-use_model", x))
 	g.Transformer(genny.Replace("folder-name", folder))

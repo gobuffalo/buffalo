@@ -9,7 +9,7 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.4.0
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
-	github.com/gobuffalo/flect v0.0.0-20190104192022-4af577e09bf2
+	github.com/gobuffalo/flect v0.0.0-20190104225346-d687a3953028
 	github.com/gobuffalo/genny v0.0.0-20190104222617-a71664fc38e7
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6

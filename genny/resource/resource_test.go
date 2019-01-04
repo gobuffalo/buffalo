@@ -125,9 +125,8 @@ func Test_New_SkipTemplates(t *testing.T) {
 
 			r.Len(res.Commands, 1)
 
-			nn := name.New(tt.Options.Name).Pluralize().String()
 			for _, s := range []string{"_form", "edit", "index", "new", "show"} {
-				p := path.Join("templates", nn, s+".html")
+				p := path.Join("templates", tt.Name, s+".html")
 				_, err = res.Find(p)
 				r.Error(err)
 			}
