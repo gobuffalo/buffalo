@@ -6,7 +6,7 @@ set -ex
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 go get -u -v github.com/gobuffalo/logger
-go get -u -v ./...
+make ci-deps
 
 gometalinter --vendor --deadline=5m ./... --skip=internal
 make install
