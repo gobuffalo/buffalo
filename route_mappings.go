@@ -16,6 +16,7 @@ import (
 )
 
 const (
+	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
 	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
