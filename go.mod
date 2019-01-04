@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/envy v1.6.11
 	github.com/gobuffalo/events v1.1.8
 	github.com/gobuffalo/flect v0.0.0-20190104192022-4af577e09bf2
-	github.com/gobuffalo/genny v0.0.0-20181211165820-e26c8466f14d
+	github.com/gobuffalo/genny v0.0.0-20190104222617-a71664fc38e7
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
@@ -20,7 +20,7 @@ require (
 	github.com/gobuffalo/packr v1.21.9
 	github.com/gobuffalo/packr/v2 v2.0.0-rc.13
 	github.com/gobuffalo/plush v3.7.32+incompatible
-	github.com/gobuffalo/plushgen v0.0.0-20181207152837-eedb135bd51b
+	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
 	github.com/gobuffalo/pop v4.9.4+incompatible
 	github.com/gobuffalo/tags v2.0.15+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9

@@ -13,7 +13,7 @@
     ]
   },
   {
-    "path": "locales/admin/users.en-us.yaml",
+    "path": "locales/admin_users.en-us.yaml",
     "contains": [
       "translation: \"AdminUser was successfully created.\""
     ]
