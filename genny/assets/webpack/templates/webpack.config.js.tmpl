@@ -38,10 +38,13 @@ const configurator = {
 
   plugins() {
     var plugins = [
-      new CleanObsoleteChunks(),
+      new CleanUp(),
       new Webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
       new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
-      new CopyWebpackPlugin([{from: "./assets", to: "[path][name].[hash].[ext]"}], {copyUnmodified: true,ignore: ["css/**", "js/**", "src/**"] }),
+      new CopyWebpackPlugin([
+        {from: "./assets", to: ""},
+        {from: "./assets", to: "[path][name].[hash].[ext]"}
+      ],{copyUnmodified: true,ignore: ["css/**", "js/**", "src/**"] }),
       new Webpack.LoaderOptionsPlugin({minimize: true,debug: false}),
       new ManifestPlugin({
         fileName: "manifest.json",
