@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
@@ -61,7 +62,18 @@ func otherTestApp() *App {
 
 func Test_MethodNotFoundError(t *testing.T) {
 	r := require.New(t)
-	w := httptest.New(testApp())
+
+	a := New(Options{})
+	a.GET("/bar", func(c Context) error {
+		return c.Render(200, render.String("bar"))
+	})
+	a.ErrorHandlers[405] = func(status int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(status)
+		res.Write([]byte("my custom 405"))
+		return nil
+	}
+	w := httptest.New(a)
 	res := w.HTML("/bar").Post(nil)
 	r.Equal(405, res.Code)
 	r.Contains(res.Body.String(), "my custom 405")
@@ -331,6 +343,19 @@ func Test_Router_ServeFiles(t *testing.T) {
 
 	r.Equal(200, res.Code)
 	r.Equal("foo", res.Body.String())
+
+	r.NotEqual(res.Header().Get("ETag"), "")
+	r.Equal(res.Header().Get("Cache-Control"), "max-age=31536000")
+
+	envy.Set(AssetsAgeVarName, "3600")
+	w = httptest.New(a)
+	res = w.HTML("/assets/foo.png").Get()
+
+	r.Equal(200, res.Code)
+	r.Equal("foo", res.Body.String())
+
+	r.NotEqual(res.Header().Get("ETag"), "")
+	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
 }
 
 func Test_App_NamedRoutes(t *testing.T) {

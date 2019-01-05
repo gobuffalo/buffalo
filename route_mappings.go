@@ -10,8 +10,14 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/envy"
 	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
+)
+
+const (
+	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
+	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -94,12 +100,17 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, err := fs.Open(path.Clean(r.URL.Path))
+		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
 			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
+		stat, _ := f.Stat()
+		maxAge := envy.Get(AssetsAgeVarName, "31536000")
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
 }
