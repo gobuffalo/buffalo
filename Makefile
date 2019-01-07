@@ -55,5 +55,5 @@ release-test:
 
 release:
 	make tidy
-	release -y -f ./runtime/version.go
+	release -y -f ./runtime/version.go --skip-packr
 	make tidy
