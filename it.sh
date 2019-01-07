@@ -5,7 +5,7 @@ set -ex
 # git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
-go get -u -v github.com/gobuffalo/logger
+go get -u -v github.com/gobuffalo/flect
 make ci-deps
 
 gometalinter --vendor --deadline=5m ./... --skip=internal

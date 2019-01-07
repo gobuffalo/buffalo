@@ -27,7 +27,7 @@ require (
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/sessions v1.1.3
-	github.com/karrick/godirwalk v1.7.7
+	github.com/karrick/godirwalk v1.7.8
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
@@ -36,14 +36,14 @@ require (
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
-	github.com/pkg/errors v0.8.0
-	github.com/sirupsen/logrus v1.2.0
+	github.com/pkg/errors v0.8.1
+	github.com/sirupsen/logrus v1.3.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1
-	github.com/stretchr/testify v1.2.2
+	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190104182027-498d95493402
+	golang.org/x/tools v0.0.0-20190107030206-d345f29b0d7b
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
