@@ -5,15 +5,9 @@ set -ex
 # git branch --set-upstream-to=origin/$TRAVIS_BRANCH $TRAVIS_BRANCH
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
-go get -u -v github.com/gobuffalo/flect
-go get -u -v github.com/gobuffalo/plush
-make ci-deps
-
-gometalinter --vendor --deadline=5m ./... --skip=internal
+export GO111MODULE=on
 make install
-
 buffalo version
-
 go test -tags "sqlite integration_test" -race  ./...
 
 cd $GOPATH/src/
@@ -135,7 +129,6 @@ filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_as
 
 go get github.com/gobuffalo/oldapp/0_13_6/...
 cd $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
-GO111MODULE=on
 buffalo fix --y
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 buffalo build -static
