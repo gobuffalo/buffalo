@@ -108,7 +108,7 @@ filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/gener
 buffalo g task nested:task:now
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_nested_task.json
 
-buffalo g resource -v admin/planes
+buffalo g resource admin/planes
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_nested_api.json
 
 buffalo g resource admin/users --name=AdminUser
