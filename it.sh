@@ -127,8 +127,9 @@ rm -rf bin
 buffalo build -k -e
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/no_assets_build.json
 
+cd $GOPATH/src
 git clone https://github.com/gobuffalo/oldapp.git
-cd $GOPATH/src/github.com/gobuffalo/oldapp/0_13_6
+cd oldapp/0_13_6
 buffalo fix --y
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/fix_old_app.json
 buffalo build -static
