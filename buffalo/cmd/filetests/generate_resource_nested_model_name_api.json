@@ -14,9 +14,7 @@
   },
   {
     "path": "locales/admin/users.en-us.yaml",
-    "contains": [
-      "translation: \"AdminUser was successfully created.\""
-    ]
+    "absent": true
   },
   {
     "path": "models/admin_user.go",
