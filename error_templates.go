@@ -115,7 +115,7 @@ var prodNotFoundTmpl = `
 	<div class="card">
 		<h1>Not Found</h1>
 		<hr>
-		<p>The page you’re looking for does not exist, you may have mistyped the address or the page may have been moved.</p>
+		<p>The page you're looking for does not exist, you may have mistyped the address or the page may have been moved.</p>
 	</div>
 
 	<p class="powered">powered by <a href="https://gobuffalo.io">gobuffalo.io</a></p>
