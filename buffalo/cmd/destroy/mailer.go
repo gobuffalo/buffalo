@@ -16,7 +16,7 @@ var MailerCmd = &cobra.Command{
 	Use: "mailer [name]",
 	//Example: "mailer cars",
 	Aliases: []string{"l"},
-	Short:   "Destroys mailer files.",
+	Short:   "Destroy mailer files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return errors.New("you need to provide a valid mailer name in order to destroy it")

@@ -17,7 +17,7 @@ var actionOptions = struct {
 var ActionCmd = &cobra.Command{
 	Use:     "action [name] [handler name...]",
 	Aliases: []string{"a", "actions"},
-	Short:   "Generates new action(s)",
+	Short:   "Generate new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a, err := action.New(args...)
 		if err != nil {

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -16,7 +17,7 @@ var anywhereCommands = []string{"new", "version", "info", "help"}
 var RootCmd = &cobra.Command{
 	SilenceErrors: true,
 	Use:           "buffalo",
-	Short:         "Helps you build your Buffalo applications that much easier!",
+	Short:         "Build Buffalo applications with ease",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		if err := events.LoadPlugins(); err != nil {
 			return err
@@ -49,6 +50,10 @@ func Execute() {
 			os.Exit(-1)
 		}
 		logrus.Errorf("Error: %s\n\n", err)
+		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
+			fmt.Println(popInstallInstructions)
+			os.Exit(-1)
+		}
 		os.Exit(-1)
 	}
 }

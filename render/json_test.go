@@ -21,7 +21,7 @@ func Test_JSON(t *testing.T) {
 
 	for _, j := range table {
 		re := j(map[string]string{"hello": "world"})
-		r.Equal("application/json", re.ContentType())
+		r.Equal("application/json; charset=utf-8", re.ContentType())
 		bb := &bytes.Buffer{}
 		err := re.Render(bb, nil)
 		r.NoError(err)

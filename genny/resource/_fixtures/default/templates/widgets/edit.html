@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Widget</h1>
+</div>
+
+<%= form_for(widget, {action: widgetPath({ widget_id: widget.ID }), method: "PUT"}) { %>
+  <%= partial("widgets/form.html") %>
+  <a href="<%= widgetPath({ widget_id: widget.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>
