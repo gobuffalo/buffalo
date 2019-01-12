@@ -48,8 +48,9 @@ github.com/gobuffalo/buffalo-plugins v1.8.1/go.mod h1:vu71J3fD4b7KKywJQ1tyaJGtah
 github.com/gobuffalo/buffalo-plugins v1.8.2/go.mod h1:9te6/VjEQ7pKp7lXlDIMqzxgGpjlKoAcAANdCgoR960=
 github.com/gobuffalo/buffalo-plugins v1.8.3/go.mod h1:IAWq6vjZJVXebIq2qGTLOdlXzmpyTZ5iJG5b59fza5U=
 github.com/gobuffalo/buffalo-plugins v1.9.3/go.mod h1:BNRunDThMZKjqx6R+n14Rk3sRSOWgbMuzCKXLqbd7m0=
-github.com/gobuffalo/buffalo-plugins v1.9.4 h1:GKnzCE9cwAVvuOBNDqc4pwQ6khViz5MYNsp5NKA7p7Q=
 github.com/gobuffalo/buffalo-plugins v1.9.4/go.mod h1:grCV6DGsQlVzQwk6XdgcL3ZPgLm9BVxlBmXPMF8oBHI=
+github.com/gobuffalo/buffalo-plugins v1.10.0 h1:oF+BJ20zenp31xJnjkFcXAMUqlrMMTicsD/UwQWCW/s=
+github.com/gobuffalo/buffalo-plugins v1.10.0/go.mod h1:4osg8d9s60txLuGwXnqH+RCjPHj9K466cDFRl3PErHI=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=
@@ -79,6 +80,8 @@ github.com/gobuffalo/events v1.1.5/go.mod h1:3YUSzgHfYctSjEjLCWbkXP6djH2M+MLaVRz
 github.com/gobuffalo/events v1.1.6/go.mod h1:H/3ZB9BA+WorMb/0F79UvU6u0Cyo2hU97WA51bG2ONY=
 github.com/gobuffalo/events v1.1.7/go.mod h1:6fGqxH2ing5XMb3EYRq9LEkVlyPGs4oO/eLzh+S8CxY=
 github.com/gobuffalo/events v1.1.8/go.mod h1:UFy+W6X6VbCWS8k2iT81HYX65dMtiuVycMy04cplt/8=
+github.com/gobuffalo/events v1.1.9 h1:ukq5ys/h0TuiX7eLJyZBD1dJOy0r19JTEYmgXKG9j+Y=
+github.com/gobuffalo/events v1.1.9/go.mod h1:/0nf8lMtP5TkgNbzYxR6Bl4GzBy5s5TebgNTdRfRbPM=
 github.com/gobuffalo/fizz v1.0.12/go.mod h1:C0sltPxpYK8Ftvf64kbsQa2yiCZY4RZviurNxXdAKwc=
 github.com/gobuffalo/fizz v1.0.15/go.mod h1:EI3mEpjImuji6Bwu++N2uXhljQwOhwtimZQJ89zwyF4=
 github.com/gobuffalo/fizz v1.0.16/go.mod h1:EI3mEpjImuji6Bwu++N2uXhljQwOhwtimZQJ89zwyF4=
@@ -126,8 +129,9 @@ github.com/gobuffalo/genny v0.0.0-20181203201232-849d2c9534ea/go.mod h1:wpNSANu9
 github.com/gobuffalo/genny v0.0.0-20181206121324-d6fb8a0dbe36/go.mod h1:wpNSANu9UErftfiaAlz1pDZclrYzLtO5lALifODyjuM=
 github.com/gobuffalo/genny v0.0.0-20181207164119-84844398a37d/go.mod h1:y0ysCHGGQf2T3vOhCrGHheYN54Y/REj0ayd0Suf4C/8=
 github.com/gobuffalo/genny v0.0.0-20181211165820-e26c8466f14d/go.mod h1:sHnK+ZSU4e2feXP3PA29ouij6PUEiN+RCwECjCTB3yM=
-github.com/gobuffalo/genny v0.0.0-20190104222617-a71664fc38e7 h1:RPiJ0Orw/4i4JWGuvcZFYiW16+Ql1C9TyrYRznbkKjg=
 github.com/gobuffalo/genny v0.0.0-20190104222617-a71664fc38e7/go.mod h1:QPsQ1FnhEsiU8f+O0qKWXz2RE4TiDqLVChWkBuh1WaY=
+github.com/gobuffalo/genny v0.0.0-20190112155932-f31a84fcacf5 h1:boQS3dA9PxhyufJEWIILrG6pJQbDnpwP2rFyvWacdoY=
+github.com/gobuffalo/genny v0.0.0-20190112155932-f31a84fcacf5/go.mod h1:CIaHCrSIuJ4il6ka3Hub4DR4adDrGoXGEEt2FbBxoIo=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
 github.com/gobuffalo/github_flavored_markdown v1.0.7/go.mod h1:w93Pd9Lz6LvyQXEG6DktTPHkOtCbr+arAD5mkwMzXLI=
@@ -468,8 +472,8 @@ golang.org/x/tools v0.0.0-20181213190329-bbccd8cae4a9/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181221235234-d00ac6d27372/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20190102213336-ca9055ed7d04/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20190104182027-498d95493402/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
-golang.org/x/tools v0.0.0-20190107030206-d345f29b0d7b h1:g+oc4bux24c2ylvQJB6b4Vr2oam0JT1dzQVlOKP0bxI=
-golang.org/x/tools v0.0.0-20190107030206-d345f29b0d7b/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20190111214448-fc1d57b08d7b h1:Z5QW7z0ycYrOVRYv3z4FeSZbRNvVwUfXHKQSZKb5A6w=
+golang.org/x/tools v0.0.0-20190111214448-fc1d57b08d7b/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 google.golang.org/appengine v1.2.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.3.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.4.0 h1:/wp5JvzpHIxhs/dumFmF7BXTf3Z+dd4uXta4kVyO508=
