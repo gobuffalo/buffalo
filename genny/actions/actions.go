@@ -71,7 +71,7 @@ func updateApp(pres *presenter) genny.RunFn {
 		var lines []string
 		body := f.String()
 		for _, a := range pres.Actions {
-			e := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", pres.Name.Underscore(), a.Underscore(), pres.Name.Pascalize(), a.Pascalize())
+			e := fmt.Sprintf("app.%s(\"/%s/%s\", %s%s)", strings.ToUpper(pres.Options.Method), pres.Name.Underscore(), a.Underscore(), pres.Name.Pascalize(), a.Pascalize())
 			if !strings.Contains(body, e) {
 				lines = append(lines, e)
 			}
