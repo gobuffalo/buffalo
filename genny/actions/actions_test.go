@@ -20,7 +20,7 @@ func compare(a, b string) bool {
 
 func runner() *genny.Runner {
 	run := gentest.NewRunner()
-	run.Disk.AddBox(packr.New("actions/start/test", "../actions/_fixtures/start"))
+	run.Disk.AddBox(packr.New("actions/start/test", "../actions/_fixtures/inputs/clean"))
 	return run
 }
 
@@ -43,7 +43,7 @@ func Test_New(t *testing.T) {
 	r.Len(res.Commands, 0)
 	// r.Len(res.Files, 4)
 
-	box := packr.New("actions/normal/test", "../actions/_fixtures/normal")
+	box := packr.New("actions/normal/test", "../actions/_fixtures/outputs/clean")
 	appGo, err := box.FindString("actions/app.go")
 	r.NoError(err)
 
