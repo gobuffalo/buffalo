@@ -19,13 +19,14 @@ type presenter struct {
 	Data    data
 }
 
+var box = packr.New("github.com/gobuffalo/buffalo/genny/actions/templates", "../actions/templates")
+
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
 		return g, errors.WithStack(err)
 	}
-	box := packr.New("github.com/gobuffalo/buffalo/genny/actions/templates", "../actions/templates")
 
 	pres := presenter{
 		Name:    name.New(opts.Name),
@@ -36,19 +37,62 @@ func New(opts *Options) (*genny.Generator, error) {
 		pres.Actions = append(pres.Actions, name.New(a))
 	}
 
-	h, err := box.FindString("actions_header.go.tmpl")
+	f, err := buildActions(pres)
 	if err != nil {
 		return g, errors.WithStack(err)
 	}
-	a, err := box.FindString("actions.go.tmpl")
-	if err != nil {
-		return g, errors.WithStack(err)
-	}
-
-	f := genny.NewFileS("actions/"+pres.Name.File().String()+".go.tmpl", h+a)
 	g.File(f)
 
-	g.RunFn(func(r *genny.Runner) error {
+	g.RunFn(updateApp(pres))
+
+	g.RunFn(buildTemplates(pres))
+
+	tf, err := buildTests(pres)
+	if err != nil {
+		return g, errors.WithStack(err)
+	}
+	g.File(tf)
+
+	pres.Data["actions"] = pres.Actions
+	pres.Data["name"] = pres.Name
+	tmpl := gotools.TemplateTransformer(pres.Data, pres.Helpers)
+	g.Transformer(tmpl)
+	return g, nil
+}
+
+func buildTemplates(pres presenter) genny.RunFn {
+	return func(r *genny.Runner) error {
+		f, err := box.FindString("view.html.tmpl")
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		for _, a := range pres.Actions {
+			pres.Data["action"] = a
+			fn := fmt.Sprintf("templates/%s/%s.html.tmpl", pres.Name.Folder(), a.File())
+			xf := genny.NewFileS(fn, f)
+			if err := r.File(xf); err != nil {
+				return errors.WithStack(err)
+			}
+		}
+		return nil
+	}
+}
+
+func buildTests(pres presenter) (genny.File, error) {
+	h, err := box.FindString("tests_header.go.tmpl")
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	a, err := box.FindString("test.go.tmpl")
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return genny.NewFileS("actions/"+pres.Name.File().String()+"_test.go.tmpl", h+a), nil
+}
+
+func updateApp(pres presenter) genny.RunFn {
+	return func(r *genny.Runner) error {
 		f, err := r.FindFile("actions/app.go")
 		if err != nil {
 			return errors.WithStack(err)
@@ -64,39 +108,19 @@ func New(opts *Options) (*genny.Generator, error) {
 			}
 		}
 		return nil
-	})
-
-	g.RunFn(func(r *genny.Runner) error {
-		f, err := box.FindString("view.html.tmpl")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		for _, a := range pres.Actions {
-			pres.Data["action"] = a
-			fn := fmt.Sprintf("templates/%s/%s.html.tmpl", pres.Name.Folder(), a.File())
-			xf := genny.NewFileS(fn, f)
-			if err := r.File(xf); err != nil {
-				return errors.WithStack(err)
-			}
-		}
-		return nil
-	})
-
-	h, err = box.FindString("tests_header.go.tmpl")
-	if err != nil {
-		return g, errors.WithStack(err)
 	}
-	a, err = box.FindString("test.go.tmpl")
+}
+
+func buildActions(pres presenter) (genny.File, error) {
+	h, err := box.FindString("actions_header.go.tmpl")
 	if err != nil {
-		return g, errors.WithStack(err)
+		return nil, errors.WithStack(err)
+	}
+	a, err := box.FindString("actions.go.tmpl")
+	if err != nil {
+		return nil, errors.WithStack(err)
 	}
 
-	f = genny.NewFileS("actions/"+pres.Name.File().String()+"_test.go.tmpl", h+a)
-	g.File(f)
-
-	pres.Data["actions"] = pres.Actions
-	pres.Data["name"] = pres.Name
-	tmpl := gotools.TemplateTransformer(pres.Data, pres.Helpers)
-	g.Transformer(tmpl)
-	return g, nil
+	f := genny.NewFileS("actions/"+pres.Name.File().String()+".go.tmpl", h+a)
+	return f, nil
 }
