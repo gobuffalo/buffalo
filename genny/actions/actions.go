@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
@@ -52,7 +53,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		return g, errors.WithStack(err)
 	}
 	g.File(tf)
-
+	fmt.Println("### pres.Actions ->", pres.Actions)
 	pres.Data["actions"] = pres.Actions
 	pres.Data["name"] = pres.Name
 	tmpl := gotools.TemplateTransformer(pres.Data, pres.Helpers)
@@ -97,17 +98,16 @@ func updateApp(pres presenter) genny.RunFn {
 		if err != nil {
 			return errors.WithStack(err)
 		}
+		var lines []string
 		for _, a := range pres.Actions {
 			e := fmt.Sprintf("app.GET(\"/%s/%s\", %s%s)", pres.Name.Underscore(), a.Underscore(), pres.Name.Pascalize(), a.Pascalize())
-			f, err := gotools.AddInsideBlock(f, "app == nil", e)
-			if err != nil {
-				return errors.WithStack(err)
-			}
-			if err := r.File(f); err != nil {
-				return errors.WithStack(err)
-			}
+			lines = append(lines, e)
 		}
-		return nil
+		f, err = gotools.AddInsideBlock(f, "app == nil", strings.Join(lines, "\n\t\t"))
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		return r.File(f)
 	}
 }
 
