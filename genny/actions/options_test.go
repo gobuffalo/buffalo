@@ -13,10 +13,12 @@ func Test_Options_Validate(t *testing.T) {
 	err := opts.Validate()
 	r.Error(err)
 
-  // TODO: make it valid. :)
+	opts.Name = "user"
 
 	err = opts.Validate()
-  r.NoError(err)
+	r.Error(err)
 
-  // TODO: add some more assertions here.
+	opts.Actions = []string{"index", "show"}
+	err = opts.Validate()
+	r.NoError(err)
 }
