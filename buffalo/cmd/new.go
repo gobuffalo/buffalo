@@ -165,9 +165,9 @@ var newCmd = &cobra.Command{
 		ctx := context.Background()
 
 		run := genny.WetRunner(ctx)
+		lg := logger.New(logger.DebugLevel)
+		run.Logger = lg
 		if nopts.Verbose {
-			lg := logger.New(logger.DebugLevel)
-			run.Logger = lg
 			plog.Logger = lg
 		}
 
