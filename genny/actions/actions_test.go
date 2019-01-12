@@ -10,6 +10,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func compare(a, b string) bool {
+	a = strings.TrimSpace(a)
+	a = strings.Replace(a, "\r", "", -1)
+	b = strings.TrimSpace(b)
+	b = strings.Replace(b, "\r", "", -1)
+	return a == b
+}
+
 func runner() *genny.Runner {
 	run := gentest.NewRunner()
 	run.Disk.AddBox(packr.New("actions/start/test", "../actions/_fixtures/start"))
@@ -43,22 +51,22 @@ func Test_New(t *testing.T) {
 	r.NoError(err)
 	f, err := res.Find("actions/user.go")
 	r.NoError(err)
-	r.Equal(strings.TrimSpace(userGo), strings.TrimSpace(f.String()))
+	r.True(compare(userGo, f.String()))
 
 	f, err = res.Find("actions/app.go")
 	r.NoError(err)
-	r.Equal(strings.TrimSpace(appGo), strings.TrimSpace(f.String()))
+	r.True(compare(appGo, f.String()))
 
 	ind, err := box.FindString("templates/user/index.html")
 	r.NoError(err)
 	f, err = res.Find("templates/user/index.html")
 	r.NoError(err)
-	r.Equal(strings.TrimSpace(ind), strings.TrimSpace(f.String()))
+	r.True(compare(ind, f.String()))
 
 	tst, err := box.FindString("actions/user_test.go.tmpl")
 	r.NoError(err)
 
 	f, err = res.Find("actions/user_test.go")
 	r.NoError(err)
-	r.Equal(strings.TrimSpace(tst), strings.TrimSpace(f.String()))
+	r.True(compare(tst, f.String()))
 }
