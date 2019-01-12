@@ -126,3 +126,30 @@ func Test_New_Multi_Existing(t *testing.T) {
 		r.True(compare(x, f.String()))
 	}
 }
+
+func Test_New_SkipTemplates(t *testing.T) {
+	r := require.New(t)
+
+	g, err := New(&Options{
+		Name:          "user",
+		Actions:       []string{"index"},
+		SkipTemplates: true,
+	})
+	r.NoError(err)
+
+	run := runner()
+	run.With(g)
+
+	r.NoError(run.Run())
+
+	res := run.Results()
+
+	r.Len(res.Commands, 0)
+
+	files := []string{"templates/user/index.html"}
+
+	for _, s := range files {
+		_, err := res.Find(s)
+		r.Error(err)
+	}
+}

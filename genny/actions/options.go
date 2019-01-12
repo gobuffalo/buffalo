@@ -6,11 +6,11 @@ import (
 )
 
 type Options struct {
-	App          meta.App
-	Name         string
-	Method       string
-	SkipTemplate bool
-	Actions      []string
+	App           meta.App
+	Name          string
+	Actions       []string
+	Method        string
+	SkipTemplates bool
 }
 
 // Validate that options are usuable
