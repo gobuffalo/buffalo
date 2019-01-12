@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Options for the actions generator
 type Options struct {
 	App           meta.App
 	Name          string

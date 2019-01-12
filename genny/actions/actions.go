@@ -13,6 +13,7 @@ import (
 
 var box = packr.New("github.com/gobuffalo/buffalo/genny/actions/templates", "../actions/templates")
 
+// New returns a new generator for build actions on a Buffalo app
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
