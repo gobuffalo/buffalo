@@ -15,8 +15,6 @@
   },
   {
     "path": "locales/admin/planes.en-us.yaml",
-    "contains": [
-      "translation: \"Plane was successfully created.\""
-    ]
+    "absent": true
   }
 ]
