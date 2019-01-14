@@ -5,12 +5,16 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/pkg/errors"
 )
 
 func cleanup(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
 		defer os.RemoveAll(filepath.Join(opts.Root, "a"))
+		if err := jam.Clean(); err != nil {
+			return errors.WithStack(err)
+		}
 
 		var err error
 		opts.rollback.Range(func(k, v interface{}) bool {
