@@ -17,7 +17,7 @@ require (
 	github.com/gobuffalo/meta v0.0.0-20181127070345-0d7e59dd540b
 	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
 	github.com/gobuffalo/packr v1.21.9
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.13
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.14
 	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
 	github.com/gobuffalo/pop v4.9.4+incompatible
@@ -37,13 +37,12 @@ require (
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.3.0
-	github.com/spf13/afero v1.2.0 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190111214448-fc1d57b08d7b
+	golang.org/x/tools v0.0.0-20190114164648-36f37f8f5c81
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

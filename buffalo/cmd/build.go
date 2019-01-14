@@ -12,6 +12,7 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/markbates/sigtx"
 	"github.com/spf13/cobra"
 )
@@ -46,7 +47,9 @@ var xbuildCmd = &cobra.Command{
 		}
 
 		if buildOptions.Verbose || buildOptions.Debug {
-			run.Logger = logger.New(logger.DebugLevel)
+			lg := logger.New(logger.DebugLevel)
+			run.Logger = lg
+			plog.Logger = lg
 			buildOptions.BuildFlags = append(buildOptions.BuildFlags, "-v")
 		}
 
