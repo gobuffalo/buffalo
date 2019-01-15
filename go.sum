@@ -49,8 +49,9 @@ github.com/gobuffalo/buffalo-plugins v1.8.2/go.mod h1:9te6/VjEQ7pKp7lXlDIMqzxgGp
 github.com/gobuffalo/buffalo-plugins v1.8.3/go.mod h1:IAWq6vjZJVXebIq2qGTLOdlXzmpyTZ5iJG5b59fza5U=
 github.com/gobuffalo/buffalo-plugins v1.9.3/go.mod h1:BNRunDThMZKjqx6R+n14Rk3sRSOWgbMuzCKXLqbd7m0=
 github.com/gobuffalo/buffalo-plugins v1.9.4/go.mod h1:grCV6DGsQlVzQwk6XdgcL3ZPgLm9BVxlBmXPMF8oBHI=
-github.com/gobuffalo/buffalo-plugins v1.10.0 h1:oF+BJ20zenp31xJnjkFcXAMUqlrMMTicsD/UwQWCW/s=
 github.com/gobuffalo/buffalo-plugins v1.10.0/go.mod h1:4osg8d9s60txLuGwXnqH+RCjPHj9K466cDFRl3PErHI=
+github.com/gobuffalo/buffalo-plugins v1.11.0 h1:yZ6USaSdAKpogRS8DZJgeG7/CTPGmyhplwifphmmegw=
+github.com/gobuffalo/buffalo-plugins v1.11.0/go.mod h1:rtIvAYRjYibgmWhnjKmo7OadtnxuMG5ZQLr25ozAzjg=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
 github.com/gobuffalo/buffalo-pop v1.1.5/go.mod h1:H01JIg42XwOHS4gRMhSeDZqBovNVlfBUsVXckU617s4=
@@ -263,6 +264,8 @@ github.com/gobuffalo/x v0.0.0-20181025192250-1ef645d63fe8/go.mod h1:AIlnMGlYXOCs
 github.com/gobuffalo/x v0.0.0-20181109195216-5b3131238124/go.mod h1:GpdLUY6/Ztf/3FfxfwsLkDqAGZ0brhlh7LzIibHyZp0=
 github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9/go.mod h1:ig5vdn4+5IPtxgESlZWo1SSDyHKKef8EjVVKhY9kkIQ=
 github.com/gofrs/uuid v3.1.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
+github.com/gofrs/uuid v3.2.0+incompatible h1:y12jRkkFxsd7GpqdSZ+/KCs/fJbqpEXSGd4+jfEaewE=
+github.com/gofrs/uuid v3.2.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
 github.com/golang/protobuf v1.1.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
