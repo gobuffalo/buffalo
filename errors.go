@@ -148,12 +148,9 @@ type stackTracer interface {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
-	if strings.Contains(ct, "form") {
-		ct = defErrorCT
-	}
-	c.Response().Header().Set("content-type", ct)
+	rct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
 
+	c.Response().Header().Set("content-type", defErrorCT)
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
@@ -171,8 +168,9 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
 	}
-	switch strings.ToLower(ct) {
+	switch strings.ToLower(rct) {
 	case "application/json", "text/json", "json":
+		c.Response().Header().Set("content-type", rct)
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -182,6 +180,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	case "application/xml", "text/xml", "xml":
+		c.Response().Header().Set("content-type", rct)
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -191,7 +190,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	default:
-		c.Response().Header().Set("content-type", "text/html; charset=utf-8")
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
