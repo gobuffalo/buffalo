@@ -140,7 +140,7 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
-const defErrorCT = "text/html; charset=utf-8"
+const defaultErrorCT = "text/html; charset=utf-8"
 
 type stackTracer interface {
 	StackTrace() errors.StackTrace
@@ -148,9 +148,9 @@ type stackTracer interface {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	rct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
+	rct := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
-	c.Response().Header().Set("content-type", defErrorCT)
+	c.Response().Header().Set("content-type", defaultErrorCT)
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
