@@ -102,8 +102,8 @@ github.com/gobuffalo/flect v0.0.0-20181109221320-179d36177b5b/go.mod h1:0HvNbHdf
 github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328/go.mod h1:0HvNbHdfh+WOvDSIASqJOSxTOWSxCCUF++k/Y53v9rI=
 github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316/go.mod h1:en58vff74S9b99Eg42Dr+/9yPu437QjlNsO/hBYPuOk=
 github.com/gobuffalo/flect v0.0.0-20190104192022-4af577e09bf2/go.mod h1:en58vff74S9b99Eg42Dr+/9yPu437QjlNsO/hBYPuOk=
-github.com/gobuffalo/flect v0.0.0-20190117163847-fa1a19c5ad34 h1:Vmj1t7o6FztL7UOD1Y2sg+dRwxMiiC6WHHN8R0hBv44=
-github.com/gobuffalo/flect v0.0.0-20190117163847-fa1a19c5ad34/go.mod h1:397QT6v05LkZkn07oJXXT6y9FCfwC8Pug0WA2/2mE9k=
+github.com/gobuffalo/flect v0.0.0-20190117183517-bea7f920a9f1 h1:Pown/22YMSdtIY0icCZf82dhd3Lauv5zEOf8OqhoRro=
+github.com/gobuffalo/flect v0.0.0-20190117183517-bea7f920a9f1/go.mod h1:397QT6v05LkZkn07oJXXT6y9FCfwC8Pug0WA2/2mE9k=
 github.com/gobuffalo/genny v0.0.0-20180924032338-7af3a40f2252/go.mod h1:tUTQOogrr7tAQnhajMSH6rv1BVev34H2sa1xNHMy94g=
 github.com/gobuffalo/genny v0.0.0-20181003150629-3786a0744c5d/go.mod h1:WAd8HmjMVrnkAZbmfgH5dLBUchsZfqzp/WS5sQz+uTM=
 github.com/gobuffalo/genny v0.0.0-20181005145118-318a41a134cc/go.mod h1:WAd8HmjMVrnkAZbmfgH5dLBUchsZfqzp/WS5sQz+uTM=
