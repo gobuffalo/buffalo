@@ -2,7 +2,6 @@ package integration
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -15,7 +14,14 @@ import (
 func call(args []string, fn func(dir string)) error {
 	jam.Clean()
 	defer jam.Clean()
-	gp, err := envy.MustGet("GOPATH")
+	ogp, err := envy.MustGet("GOPATH")
+	defer envy.MustSet("GOPATH", ogp)
+	gp := os.TempDir()
+	err = envy.MustSet("GOPATH", gp)
+	if err != nil {
+		return err
+	}
+
 	if err != nil {
 		return err
 	}
@@ -24,8 +30,8 @@ func call(args []string, fn func(dir string)) error {
 			return err
 		}
 	}
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
+	tdir := filepath.Join(gp, "src", "github.com", "gobuffalo", "testapp")
+	defer os.RemoveAll(tdir)
 	fmt.Println("### tdir ->", tdir)
 	if err != nil {
 		return err
@@ -36,14 +42,15 @@ func call(args []string, fn func(dir string)) error {
 	if err := os.MkdirAll(tdir, 0755); err != nil {
 		return err
 	}
-	defer os.RemoveAll(tdir)
 
 	pwd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 	os.Chdir(tdir)
+	os.Setenv("PWD", tdir)
 	defer os.Chdir(pwd)
+	defer os.Setenv("PWD", pwd)
 
 	if err := exec(args); err != nil {
 		return err

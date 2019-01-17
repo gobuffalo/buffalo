@@ -1,6 +1,7 @@
 package build
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -43,6 +44,7 @@ func (opts *Options) Validate() error {
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
+	fmt.Println("### opts.App ->", opts.App)
 	if len(opts.Environment) == 0 {
 		opts.Environment = "development"
 	}

@@ -46,3 +46,5 @@ require (
 	golang.org/x/tools v0.0.0-20190114164648-36f37f8f5c81
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
+
+replace github.com/gobuffalo/meta => ../meta

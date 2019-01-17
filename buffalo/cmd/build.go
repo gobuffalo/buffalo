@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -73,6 +74,7 @@ func init() {
 	RootCmd.AddCommand(xbuildCmd)
 
 	pwd, _ := os.Getwd()
+	fmt.Println("### $$$pwd ->", pwd)
 
 	buildOptions.App = meta.New(pwd)
 
