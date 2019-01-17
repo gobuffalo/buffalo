@@ -31,7 +31,6 @@ brew:
   description: A Go web development eco-system, designed to make your life easier.
   install: |
     bin.install "buffalo"
-    mv "#{bin}/buffalo", "#{bin}/buffalo"
   test: |
     system "#{bin}/buffalo", "version"
 <% } %>
