@@ -1,7 +1,6 @@
 package integration
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -32,7 +31,6 @@ func call(args []string, fn func(dir string)) error {
 	}
 	tdir := filepath.Join(gp, "src", "github.com", "gobuffalo", "testapp")
 	defer os.RemoveAll(tdir)
-	fmt.Println("### tdir ->", tdir)
 	if err != nil {
 		return err
 	}
