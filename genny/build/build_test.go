@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/meta"
@@ -26,37 +27,40 @@ var cokeRunner = func() *genny.Runner {
 }
 
 func Test_New(t *testing.T) {
-	r := require.New(t)
+	envy.Temp(func() {
+		envy.Set(envy.GO111MODULE, "off")
+		r := require.New(t)
 
-	run := cokeRunner()
+		run := cokeRunner()
 
-	opts := &Options{
-		WithAssets:  true,
-		Environment: "bar",
-		App:         meta.New("."),
-	}
-	opts.App.Bin = "bin/foo"
-	r.NoError(run.WithNew(New(opts)))
-	run.Root = opts.App.Root
-
-	r.NoError(run.Run())
-
-	res := run.Results()
-
-	// we should never leave any files modified or dropped
-	r.Len(res.Files, 0)
-
-	eq := func(s string, c *exec.Cmd) {
-		if runtime.GOOS == "windows" {
-			s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
-			s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
+		opts := &Options{
+			WithAssets:  true,
+			Environment: "bar",
+			App:         meta.New("."),
 		}
-		r.Equal(s, strings.Join(c.Args, " "))
-	}
+		opts.App.Bin = "bin/foo"
+		r.NoError(run.WithNew(New(opts)))
+		run.Root = opts.App.Root
 
-	cmds := []string{"go get ./...", "go build -tags bar -o bin/foo"}
-	r.Len(res.Commands, len(cmds))
-	for i, c := range res.Commands {
-		eq(cmds[i], c)
-	}
+		r.NoError(run.Run())
+
+		res := run.Results()
+
+		// we should never leave any files modified or dropped
+		r.Len(res.Files, 0)
+
+		eq := func(s string, c *exec.Cmd) {
+			if runtime.GOOS == "windows" {
+				s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
+				s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
+			}
+			r.Equal(s, strings.Join(c.Args, " "))
+		}
+
+		cmds := []string{"go get ./...", "go build -i -tags bar -o bin/foo"}
+		r.Len(res.Commands, len(cmds))
+		for i, c := range res.Commands {
+			eq(cmds[i], c)
+		}
+	})
 }

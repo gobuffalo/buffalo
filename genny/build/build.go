@@ -6,6 +6,7 @@ import (
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/plushgen"
 	"github.com/pkg/errors"
@@ -31,6 +32,10 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	// validate templates
 	g.RunFn(ValidateTemplates(templateWalker(opts.App), opts.TemplateValidators))
+
+	g.RunFn(func(r *genny.Runner) error {
+		return jam.Pack(jam.PackOptions{})
+	})
 
 	// rename main() to originalMain()
 	g.RunFn(transformMain(opts))

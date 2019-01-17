@@ -7,7 +7,7 @@ builds:
   env:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
-  binary: buffalo-no-sqlite
+  binary: buffalo
 
 checksum:
   name_template: 'checksums.txt'
@@ -30,8 +30,7 @@ brew:
   homepage: https://gobuffalo.io
   description: A Go web development eco-system, designed to make your life easier.
   install: |
-    bin.install "buffalo-no-sqlite"
-    mv "#{bin}/buffalo-no-sqlite", "#{bin}/buffalo"
+    bin.install "buffalo"
   test: |
     system "#{bin}/buffalo", "version"
 <% } %>
