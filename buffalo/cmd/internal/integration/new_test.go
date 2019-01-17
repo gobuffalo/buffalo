@@ -1,6 +1,6 @@
 // +build integration_test
 
-package cmd
+package integration
 
 import (
 	"fmt"
@@ -16,36 +16,33 @@ import (
 )
 
 func Test_NewCmd_NoName(t *testing.T) {
+	err := call([]string{"new"}, nil)
 	r := require.New(t)
-	c := RootCmd
-	c.SetArgs([]string{
-		"new",
-	})
-	err := c.Execute()
+	r.Error(err)
 	r.EqualError(err, "you must enter a name for your new application")
 }
 
 func Test_NewCmd_InvalidDBType(t *testing.T) {
-	r := require.New(t)
-	c := RootCmd
-	c.SetArgs([]string{
+	args := []string{
 		"new",
 		"coke",
 		"--db-type",
 		"a",
-	})
-	err := c.Execute()
+	}
+	err := call(args, nil)
+	r := require.New(t)
+	r.NoError(err)
 	r.EqualError(err, fmt.Sprintf(`unknown dialect "a" expecting one of %s`, strings.Join(pop.AvailableDialects, ", ")))
 }
 
 func Test_NewCmd_ForbiddenAppName(t *testing.T) {
-	r := require.New(t)
-	c := RootCmd
-	c.SetArgs([]string{
+	args := []string{
 		"new",
 		"buffalo",
-	})
-	err := c.Execute()
+	}
+	err := call(args, nil)
+	r := require.New(t)
+	r.NoError(err)
 	r.EqualError(err, "name buffalo is not allowed, try a different application name")
 }
 
