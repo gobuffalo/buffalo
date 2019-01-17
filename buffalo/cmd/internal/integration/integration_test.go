@@ -10,7 +10,7 @@ import (
 	"github.com/markbates/safe"
 )
 
-func call(args []string, fn func() error) error {
+func call(args []string, fn func(dir string)) error {
 	gp, err := envy.MustGet("GOPATH")
 	if err != nil {
 		return err
@@ -37,7 +37,9 @@ func call(args []string, fn func() error) error {
 	if err := exec(args); err != nil {
 		return err
 	}
-	return safe.RunE(fn)
+	return safe.Run(func() {
+		fn(tdir)
+	})
 }
 
 func exec(args []string) error {

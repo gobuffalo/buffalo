@@ -4,8 +4,6 @@ package integration
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -31,7 +29,7 @@ func Test_NewCmd_InvalidDBType(t *testing.T) {
 	}
 	err := call(args, nil)
 	r := require.New(t)
-	r.NoError(err)
+	r.Error(err)
 	r.EqualError(err, fmt.Sprintf(`unknown dialect "a" expecting one of %s`, strings.Join(pop.AvailableDialects, ", ")))
 }
 
@@ -42,7 +40,7 @@ func Test_NewCmd_ForbiddenAppName(t *testing.T) {
 	}
 	err := call(args, nil)
 	r := require.New(t)
-	r.NoError(err)
+	r.Error(err)
 	r.EqualError(err, "name buffalo is not allowed, try a different application name")
 }
 
@@ -51,63 +49,37 @@ func Test_NewCmd_Nominal(t *testing.T) {
 		t.Skip("CURRENTLY NOT SUPPORTED")
 	}
 	r := require.New(t)
-	c := RootCmd
-
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
-	r.NoError(err)
-	defer os.RemoveAll(tdir)
-
-	pwd, err := os.Getwd()
-	r.NoError(err)
-	os.Chdir(tdir)
-	defer os.Chdir(pwd)
-
-	c.SetArgs([]string{
+	args := []string{
 		"new",
 		"hello_world",
 		"--skip-pop",
 		"--skip-webpack",
 		"--vcs=none",
+	}
+	err := call(args, func(tdir string) {
+		r.DirExists(filepath.Join(tdir, "hello_world"))
 	})
-	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(filepath.Join(tdir, "hello_world"))
 }
 
 func Test_NewCmd_API(t *testing.T) {
 	if envy.Get("GO111MODULE", "off") == "on" {
 		t.Skip("CURRENTLY NOT SUPPORTED")
 	}
-	r := require.New(t)
-	c := RootCmd
-
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
-	r.NoError(err)
-	defer os.RemoveAll(tdir)
-
-	pwd, err := os.Getwd()
-	r.NoError(err)
-	os.Chdir(tdir)
-	defer os.Chdir(pwd)
-
-	c.SetArgs([]string{
+	args := []string{
 		"new",
 		"hello_world",
 		"--skip-pop",
 		"--api",
 		"--vcs=none",
+	}
+	r := require.New(t)
+	err := call(args, func(tdir string) {
+		r.DirExists(filepath.Join(tdir, "hello_world"))
 	})
-	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(filepath.Join(tdir, "hello_world"))
 }
 
 // func Test_NewCmd_WithDep(t *testing.T) {
@@ -170,31 +142,19 @@ func Test_NewCmd_WithPopSQLite3(t *testing.T) {
 		t.Skip("CURRENTLY NOT SUPPORTED")
 	}
 	r := require.New(t)
-	c := RootCmd
 
-	gp, err := envy.MustGet("GOPATH")
-	r.NoError(err)
-	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
-	tdir, err := ioutil.TempDir(cpath, "testapp")
-	r.NoError(err)
-	r.NoError(os.MkdirAll(tdir, 0755))
-	defer os.RemoveAll(tdir)
-
-	pwd, err := os.Getwd()
-	r.NoError(err)
-	os.Chdir(tdir)
-	defer os.Chdir(pwd)
-
-	c.SetArgs([]string{
+	args := []string{
 		"new",
 		"hello_world",
 		"--db-type=sqlite3",
 		"--skip-webpack",
 		"--vcs=none",
+	}
+
+	err := call(args, func(tdir string) {
+		r.DirExists(filepath.Join(tdir, "hello_world"))
+		r.FileExists(filepath.Join(tdir, "hello_world", "database.yml"))
 	})
-	err = c.Execute()
 	r.NoError(err)
 
-	r.DirExists(filepath.Join(tdir, "hello_world"))
-	r.FileExists(filepath.Join(tdir, "hello_world", "database.yml"))
 }
