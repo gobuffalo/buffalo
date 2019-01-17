@@ -2,6 +2,6 @@
 
 // You can use the "packr clean" command to clean up this,
 // and any other packr generated files.
-package core
+package webpack
 
 import _ "github.com/gobuffalo/testapp205711356/build_nominal/packrd"

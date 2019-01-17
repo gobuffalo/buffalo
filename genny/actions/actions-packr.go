@@ -4,4 +4,4 @@
 // and any other packr generated files.
 package actions
 
-import _ "github.com/gobuffalo/buffalo/packrd"
+import _ "github.com/gobuffalo/testapp205711356/build_nominal/packrd"

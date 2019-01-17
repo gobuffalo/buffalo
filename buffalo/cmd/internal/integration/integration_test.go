@@ -1,16 +1,20 @@
 package integration
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/markbates/safe"
 )
 
 func call(args []string, fn func(dir string)) error {
+	jam.Clean()
+	defer jam.Clean()
 	gp, err := envy.MustGet("GOPATH")
 	if err != nil {
 		return err
@@ -22,7 +26,14 @@ func call(args []string, fn func(dir string)) error {
 	}
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
 	tdir, err := ioutil.TempDir(cpath, "testapp")
+	fmt.Println("### tdir ->", tdir)
 	if err != nil {
+		return err
+	}
+	if err := os.RemoveAll(tdir); err != nil {
+		return err
+	}
+	if err := os.MkdirAll(tdir, 0755); err != nil {
 		return err
 	}
 	defer os.RemoveAll(tdir)
