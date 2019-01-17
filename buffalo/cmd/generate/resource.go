@@ -43,7 +43,7 @@ var ResourceCmd = &cobra.Command{
 		if len(resourceOptions.Name) == 0 {
 			resourceOptions.Name = args[0]
 		}
-		ats, err := attrs.ParseArgs(args[0:]...)
+		ats, err := attrs.ParseArgs(args[1:]...)
 		if err != nil {
 			return errors.WithStack(err)
 		}
