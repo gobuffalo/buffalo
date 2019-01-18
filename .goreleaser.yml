@@ -10,7 +10,7 @@ builds:
   env:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
-  binary: buffalo-no-sqlite
+  binary: buffalo
 
 checksum:
   name_template: 'checksums.txt'

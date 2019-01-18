@@ -2,6 +2,6 @@
 
 // You can use the "packr clean" command to clean up this,
 // and any other packr generated files.
-package build
+package actions
 
 import _ "github.com/gobuffalo/buffalo/packrd"
