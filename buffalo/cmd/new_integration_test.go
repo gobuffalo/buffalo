@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/gobuffalo/pop"
 	"github.com/stretchr/testify/require"
 )
@@ -55,7 +56,6 @@ func Test_NewCmd_Nominal(t *testing.T) {
 	}
 	r := require.New(t)
 	c := RootCmd
-
 	gp, err := envy.MustGet("GOPATH")
 	r.NoError(err)
 	cpath := filepath.Join(gp, "src", "github.com", "gobuffalo")
@@ -68,6 +68,7 @@ func Test_NewCmd_Nominal(t *testing.T) {
 	os.Chdir(tdir)
 	defer os.Chdir(pwd)
 
+	jam.Clean(pwd, tdir)
 	c.SetArgs([]string{
 		"new",
 		"hello_world",
