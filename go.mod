@@ -14,10 +14,10 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
-	github.com/gobuffalo/meta v0.0.0-20190120163247-50bbb1fa260d
+	github.com/gobuffalo/meta v0.0.0-20190121163014-ecaa953cbfb3
 	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
 	github.com/gobuffalo/packr v1.21.9
-	github.com/gobuffalo/packr/v2 v2.0.0-rc.14
+	github.com/gobuffalo/packr/v2 v2.0.0-rc.15
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
 	github.com/gobuffalo/pop v4.9.4+incompatible
@@ -43,6 +43,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190118193359-16909d206f00
+	golang.org/x/tools v0.0.0-20190121143147-24cd39ecf745
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
