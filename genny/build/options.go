@@ -1,6 +1,7 @@
 package build
 
 import (
+	"os"
 	"sync"
 	"time"
 
@@ -40,8 +41,9 @@ type Options struct {
 
 // Validate that options are usuable
 func (opts *Options) Validate() error {
+	pwd, _ := os.Getwd()
 	if opts.App.IsZero() {
-		opts.App = meta.New(".")
+		opts.App = meta.New(pwd)
 	}
 	if len(opts.Environment) == 0 {
 		opts.Environment = "development"
