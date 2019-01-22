@@ -16,7 +16,7 @@ func validateInGoPath(srcDirs []string) genny.RunFn {
 		}
 		var found bool
 		for _, src := range srcDirs {
-			if strings.HasPrefix(pwd, src) {
+			if strings.Contains(pwd, src) {
 				found = true
 				break
 			}
