@@ -39,6 +39,10 @@ var xbuildCmd = &cobra.Command{
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
 
+		pwd, _ := os.Getwd()
+
+		buildOptions.App = meta.New(pwd)
+
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
 
 		run := genny.WetRunner(ctx)
@@ -71,10 +75,6 @@ var xbuildCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(xbuildCmd)
-
-	pwd, _ := os.Getwd()
-
-	buildOptions.App = meta.New(pwd)
 
 	xbuildCmd.Flags().StringVarP(&buildOptions.Bin, "output", "o", buildOptions.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
