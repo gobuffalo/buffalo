@@ -53,7 +53,7 @@ jobs:
       env:
         - GO111MODULE=on
       script:
-        - go test -timeout=5m -tags "sqlite integration_test" -race ./...
+        - go test -timeout=5m -tags "sqlite integration_test" -v -race ./...
     - os: linux
       go: "1.9.x"
       script:

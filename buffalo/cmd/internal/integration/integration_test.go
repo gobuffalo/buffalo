@@ -63,6 +63,8 @@ func call(args []string, fn func(dir string)) error {
 }
 
 func exec(args []string) error {
+	fmt.Println("exec ### args ->", args)
+	defer fmt.Println("exec finish ### args ->", args)
 	c := cmd.RootCmd
 	c.SetArgs(args)
 	return c.Execute()
