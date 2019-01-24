@@ -22,7 +22,6 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 	if len(tf) > 0 {
 		buildArgs = append(buildArgs, "-tags", tf.String())
 	}
-
 	bin := opts.App.Bin
 	if runtime.GOOS == "windows" {
 		if !strings.HasSuffix(bin, ".exe") {
