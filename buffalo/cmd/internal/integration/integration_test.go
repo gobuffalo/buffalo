@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -11,6 +12,9 @@ import (
 )
 
 func call(args []string, fn func(dir string)) error {
+	fmt.Println("### start args ->", args)
+	defer fmt.Println("### end args ->", args)
+
 	jam.Clean()
 	defer jam.Clean()
 	ogp, err := envy.MustGet("GOPATH")
