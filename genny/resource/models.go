@@ -11,8 +11,6 @@ import (
 
 func modelCommand(model name.Ident, opts *Options) *exec.Cmd {
 	args := opts.Attrs.Slice()
-	args = append(args[:0], args[0+1:]...)
-
 	mn := model.Singularize().Underscore().String()
 	args = append([]string{"pop", "g", "model", mn}, args...)
 
