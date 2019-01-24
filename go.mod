@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/envy v1.6.12
 	github.com/gobuffalo/events v1.1.9
 	github.com/gobuffalo/flect v0.0.0-20190117212819-a62e61d96794
-	github.com/gobuffalo/genny v0.0.0-20190112155932-f31a84fcacf5
+	github.com/gobuffalo/genny v0.0.0-20190124191459-3310289fa4b4
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.0.6
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
@@ -31,7 +31,7 @@ require (
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/inflect v1.0.4
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
-	github.com/markbates/refresh v1.4.11
+	github.com/markbates/refresh v1.5.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
