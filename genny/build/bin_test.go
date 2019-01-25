@@ -67,3 +67,48 @@ func Test_buildCmd(t *testing.T) {
 	r.NoError(err)
 	eq("go build -tags bar sqlite -o bin/foo -ldflags -linkmode external -extldflags \"-static\" -X main.BuildVersion=asdf", c)
 }
+
+func Test_buildCmd_Unix_RemovesExe(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		return
+	}
+	envy.Set("GO_BIN", "go")
+	gomods.Force(true)
+	r := require.New(t)
+
+	eq := func(s string, c *exec.Cmd) {
+		r.Equal(s, strings.Join(c.Args, " "))
+	}
+	app := meta.New(".")
+	app.Bin = "bin/build.exe"
+	opts := &Options{
+		App: app,
+	}
+	c, err := buildCmd(opts)
+	r.NoError(err)
+	eq("go build -o bin/build", c)
+}
+
+func Test_buildCmd_Windows_AddsExe(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		return
+	}
+	envy.Set("GO_BIN", "go")
+	gomods.Force(true)
+	r := require.New(t)
+
+	eq := func(s string, c *exec.Cmd) {
+		r.Equal(s, strings.Join(c.Args, " "))
+	}
+
+	app := meta.New(".")
+	for _, x := range []string{"bin\\build", "bin\\build.exe"} {
+		app.Bin = x
+		opts := &Options{
+			App: app,
+		}
+		c, err := buildCmd(opts)
+		r.NoError(err)
+		eq("go build -o bin\\build.exe", c)
+	}
+}
