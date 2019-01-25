@@ -61,7 +61,7 @@ func Test_New(t *testing.T) {
 			r.Len(res.Commands, 1)
 
 			c := res.Commands[0]
-			r.Equal("buffalo-pop pop g model widget desc:nulls.Text", strings.Join(c.Args, " "))
+			r.Equal("buffalo-pop pop g model widget name desc:nulls.Text", strings.Join(c.Args, " "))
 
 			r.Len(res.Files, 9)
 
@@ -204,7 +204,7 @@ func Test_New_UseModel(t *testing.T) {
 	r.Len(res.Commands, 1)
 
 	c := res.Commands[0]
-	r.Equal("buffalo-pop pop g model user desc:nulls.Text", strings.Join(c.Args, " "))
+	r.Equal("buffalo-pop pop g model user name desc:nulls.Text", strings.Join(c.Args, " "))
 
 	r.Len(res.Files, 9)
 
