@@ -25,6 +25,7 @@ var buildOptions = struct {
 	SkipTemplateValidation bool
 	DryRun                 bool
 	Verbose                bool
+	bin                    string
 }{
 	Options: &build.Options{
 		BuildTime: time.Now(),
@@ -42,6 +43,9 @@ var xbuildCmd = &cobra.Command{
 		pwd, _ := os.Getwd()
 
 		buildOptions.App = meta.New(pwd)
+		if len(buildOptions.bin) > 0 {
+			buildOptions.App.Bin = buildOptions.bin
+		}
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
 
@@ -76,7 +80,7 @@ var xbuildCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(xbuildCmd)
 
-	xbuildCmd.Flags().StringVarP(&buildOptions.Bin, "output", "o", buildOptions.Bin, "set the name of the binary")
+	xbuildCmd.Flags().StringVarP(&buildOptions.bin, "output", "o", buildOptions.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.SkipAssets, "skip-assets", "k", false, "skip running webpack and building assets")
