@@ -28,6 +28,8 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 			bin += ".exe"
 		}
 		bin = strings.Replace(bin, "/", "\\", -1)
+	} else {
+		bin = strings.TrimSuffix(bin, ".exe")
 	}
 	buildArgs = append(buildArgs, "-o", bin)
 
