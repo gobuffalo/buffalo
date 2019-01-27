@@ -5,6 +5,7 @@ import (
 	"html/template"
 
 	"github.com/BurntSushi/toml"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/packr/v2"
@@ -37,7 +38,9 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 
 	if !opts.App.WithModules {
 		c := build.Default
-		g.RunFn(validateInGoPath(c.SrcDirs()))
+		dirs := c.SrcDirs()
+		dirs = append(dirs, envy.GoPaths()...)
+		g.RunFn(validateInGoPath(dirs))
 	}
 
 	g.RunFn(func(r *genny.Runner) error {

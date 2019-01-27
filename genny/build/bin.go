@@ -22,13 +22,14 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 	if len(tf) > 0 {
 		buildArgs = append(buildArgs, "-tags", tf.String())
 	}
-
 	bin := opts.App.Bin
 	if runtime.GOOS == "windows" {
 		if !strings.HasSuffix(bin, ".exe") {
 			bin += ".exe"
 		}
 		bin = strings.Replace(bin, "/", "\\", -1)
+	} else {
+		bin = strings.TrimSuffix(bin, ".exe")
 	}
 	buildArgs = append(buildArgs, "-o", bin)
 
