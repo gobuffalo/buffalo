@@ -140,7 +140,7 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
-const defErrorCT = "text/html; charset=utf-8"
+const defaultErrorCT = "text/html; charset=utf-8"
 
 type stackTracer interface {
 	StackTrace() errors.StackTrace
@@ -148,16 +148,13 @@ type stackTracer interface {
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), defErrorCT)
-	if strings.Contains(ct, "form") {
-		ct = defErrorCT
-	}
-	c.Response().Header().Set("content-type", ct)
+	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
+		c.Response().Header().Set("content-type", defaultErrorCT)
 		responseBody := productionErrorResponseFor(status)
 		c.Response().Write(responseBody)
 		return nil
@@ -171,8 +168,9 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
 	}
-	switch strings.ToLower(ct) {
+	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
+		c.Response().Header().Set("content-type", "application/json")
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -182,6 +180,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	case "application/xml", "text/xml", "xml":
+		c.Response().Header().Set("content-type", "text/xml")
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -191,7 +190,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	default:
-		c.Response().Header().Set("content-type", "text/html; charset=utf-8")
+		c.Response().Header().Set("content-type", defaultErrorCT)
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
