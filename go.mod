@@ -21,7 +21,7 @@ require (
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20190129202837-395da1998525
 	github.com/gobuffalo/mw-tokenauth v0.0.0-20190129201951-95847f29c5c8
 	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
-	github.com/gobuffalo/packr v1.21.9
+	github.com/gobuffalo/packr v1.22.0
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/pop v4.9.6+incompatible
 	github.com/gobuffalo/tags v2.0.15+incompatible
