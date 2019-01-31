@@ -1,8 +1,10 @@
 package integration
 
 import (
+	"context"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gobuffalo/buffalo/buffalo/cmd"
 	"github.com/gobuffalo/envy"
@@ -59,7 +61,22 @@ func call(args []string, fn func(dir string)) error {
 }
 
 func exec(args []string) error {
-	c := cmd.RootCmd
-	c.SetArgs(args)
-	return c.Execute()
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	var err error
+	go func() {
+		defer cancel()
+		c := cmd.RootCmd
+		c.SetArgs(args)
+		err = c.Execute()
+	}()
+	<-ctx.Done()
+	if err != nil {
+		return err
+	}
+	err = ctx.Err()
+	if err != nil && err != context.Canceled {
+		return err
+	}
+	return nil
 }
