@@ -61,7 +61,7 @@ func call(args []string, fn func(dir string)) error {
 }
 
 func exec(args []string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*60*time.Second)
 	defer cancel()
 	var err error
 	go func() {
