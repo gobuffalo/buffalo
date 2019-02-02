@@ -229,7 +229,7 @@ func nodeCheck(meta.App) error {
 }
 
 func run(cmd *exec.Cmd) error {
-	logrus.Infof("--> %s\n", strings.Join(cmd.Args, " "))
+	logrus.Infof("--> %s", strings.Join(cmd.Args, " "))
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
