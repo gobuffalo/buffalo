@@ -126,15 +126,11 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 func Test_SetErrorMiddleware(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
-	app.ErrorHandlers[422] = func(code int, err error, c Context) error {
-		c.Response().WriteHeader(code)
-		c.Response().Write([]byte(err.Error()))
+	app.ErrorHandlers.Default(func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(418)
+		res.Write([]byte("i'm a teapot"))
 		return nil
-	}
-	app.UseErrorMiddleware(func(next Handler) Handler {
-		return func(c Context) error {
-			return c.Error(418, errors.New("i'm a teapot"))
-		}
 	})
 	app.GET("/", func(c Context) error {
 		return c.Error(422, errors.New("boom"))

@@ -73,9 +73,3 @@ func New(opts Options) *App {
 
 	return a
 }
-
-// UseErrorMiddleware will set the error middleware.
-// This will OVERRIDE the use of the ErrorHandlers.
-func (a *App) UseErrorMiddleware(e MiddlewareFunc) {
-	a.Middleware.Replace(a.defaultErrorMiddleware, e)
-}

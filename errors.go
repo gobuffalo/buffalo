@@ -49,7 +49,17 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 	if eh, ok := e[status]; ok {
 		return eh
 	}
+	if eh, ok := e[0]; ok {
+		return eh
+	}
 	return defaultErrorHandler
+}
+
+// Set a default error handler should a status
+// code not already be mapped. This will replace
+// the original default error handler
+func (e ErrorHandlers) Default(eh ErrorHandler) {
+	e[0] = eh
 }
 
 // PanicHandler recovers from panics gracefully and calls
