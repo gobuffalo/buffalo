@@ -55,9 +55,10 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 	return defaultErrorHandler
 }
 
-// Set a default error handler should a status
+// Default sets an error handler should a status
 // code not already be mapped. This will replace
-// the original default error handler
+// the original default error handler.
+// This is a *catch-all* handler.
 func (e ErrorHandlers) Default(eh ErrorHandler) {
 	e[0] = eh
 }
