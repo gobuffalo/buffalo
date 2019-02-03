@@ -122,3 +122,26 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	r.True(ok)
 	r.Equal("t", x)
 }
+
+func Test_SetErrorMiddleware(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.ErrorHandlers[422] = func(code int, err error, c Context) error {
+		c.Response().WriteHeader(code)
+		c.Response().Write([]byte(err.Error()))
+		return nil
+	}
+	app.UseErrorMiddleware(func(next Handler) Handler {
+		return func(c Context) error {
+			return c.Error(418, errors.New("i'm a teapot"))
+		}
+	})
+	app.GET("/", func(c Context) error {
+		return c.Error(422, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(418, res.Code)
+	r.Equal("i'm a teapot", res.Body.String())
+}
