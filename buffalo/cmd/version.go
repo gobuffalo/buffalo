@@ -15,7 +15,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version information",
 	Run: func(c *cobra.Command, args []string) {
-		logrus.Infof("Buffalo version is: %s\n", runtime.Version)
+		logrus.Infof("Buffalo version is: %s", runtime.Version)
 	},
 	// needed to override the root level pre-run func
 	PersistentPreRunE: func(c *cobra.Command, args []string) error {
