@@ -109,10 +109,14 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
+		status := 500
+		if he, ok := err.(HTTPError); ok {
+			status = he.Status
+		}
 		events.EmitError(EvtRouteErr, err, payload)
 		// things have really hit the fan if we're here!!
 		a.Logger.Error(err)
-		c.Response().WriteHeader(500)
+		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(err.Error()))
 	}
 	events.EmitPayload(EvtRouteFinished, payload)
