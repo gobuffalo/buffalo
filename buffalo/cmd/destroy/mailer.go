@@ -37,7 +37,7 @@ func removeMailer(name string) {
 		os.Remove(filepath.Join("mailers", fmt.Sprintf("%v.go", mailerFileName)))
 		os.Remove(filepath.Join("templates/mail", fmt.Sprintf("%v.html", mailerFileName)))
 
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("mailers/%v.go", mailerFileName))
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("templates/mail/%v.html", mailerFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("mailers/%v.go", mailerFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("templates/mail/%v.html", mailerFileName))
 	}
 }

@@ -56,17 +56,17 @@ func confirm(msg string) bool {
 func removeTemplates(fileName string) {
 	if YesToAll || confirm("Want to remove templates? (y/N)") {
 		templatesFolder := filepath.Join("templates", fileName)
-		logrus.Infof("- Deleted %v folder\n", templatesFolder)
+		logrus.Infof("- Deleted %v folder", templatesFolder)
 		os.RemoveAll(templatesFolder)
 	}
 }
 
 func removeActions(fileName string) error {
 	if YesToAll || confirm("Want to remove actions? (y/N)") {
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("actions/%v.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v.go", fileName)))
 
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v_test.go", fileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("actions/%v_test.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v_test.go", fileName)))
 
 		content, err := ioutil.ReadFile(filepath.Join("actions", "app.go"))
@@ -84,7 +84,7 @@ func removeActions(fileName string) error {
 			return err
 		}
 
-		logrus.Infof("- Deleted References for %v in actions/app.go\n", fileName)
+		logrus.Infof("- Deleted References for %v in actions/app.go", fileName)
 	}
 
 	return nil
@@ -103,8 +103,8 @@ func removeModel(name string) {
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))
 
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("models/%v.go", modelFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("models/%v_test.go", modelFileName))
 	}
 }
 
@@ -123,7 +123,7 @@ func removeMatch(folder, pattern string) {
 			if !f.IsDir() && matches {
 				path := filepath.Join(folder, f.Name())
 				os.Remove(path)
-				logrus.Infof("- Deleted %v\n", path)
+				logrus.Infof("- Deleted %v", path)
 			}
 		}
 	}

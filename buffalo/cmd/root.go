@@ -49,7 +49,7 @@ func Execute() {
 			logrus.Errorf(popInstallInstructions)
 			os.Exit(-1)
 		}
-		logrus.Errorf("Error: %s\n\n", err)
+		logrus.Errorf("Error: %s", err)
 		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
 			fmt.Println(popInstallInstructions)
 			os.Exit(-1)
