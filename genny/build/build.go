@@ -3,6 +3,8 @@ package build
 import (
 	"time"
 
+	"github.com/gobuffalo/buffalo/runtime"
+
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packr/v2"
@@ -51,6 +53,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	ctx.Set("opts", opts)
 	ctx.Set("buildTime", opts.BuildTime.Format(time.RFC3339))
 	ctx.Set("buildVersion", opts.BuildVersion)
+	ctx.Set("buffaloVersion", runtime.Version)
 	g.Transformer(plushgen.Transformer(ctx))
 
 	// create the ./a pkg

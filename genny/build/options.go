@@ -36,7 +36,9 @@ type Options struct {
 	// TemplateValidators can be used to validate the applications templates.
 	// Empty by default
 	TemplateValidators []TemplateValidator `json:"-"`
-	rollback           *sync.Map
+	// Mod is the -mod flag
+	Mod      string
+	rollback *sync.Map
 }
 
 // Validate that options are usuable

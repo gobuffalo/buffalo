@@ -91,6 +91,7 @@ func init() {
 	xbuildCmd.Flags().BoolVar(&buildOptions.DryRun, "dry-run", false, "runs the build 'dry'")
 	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating templates")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
+	xbuildCmd.Flags().StringVar(&buildOptions.Mod, "mod", "", "-mod flag for go build")
 }
 
 func buildVersion(version string) string {
