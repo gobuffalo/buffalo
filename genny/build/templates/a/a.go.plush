@@ -22,8 +22,12 @@ func init() {
 
   box := packr.New("buffalo:a:init", "./")
   if box.Has("inflections.json") {
-    r := strings.NewReader(box.String("inflections.json"))
-    err := inflect.LoadReader(r)
+    s, err := box.FindString("inflections.json")
+    if err != nil {
+      log.Fatal(err)
+    }
+    r := strings.NewReader(s)
+    err = inflect.LoadReader(r)
     if err != nil {
       log.Fatal(err)
     }

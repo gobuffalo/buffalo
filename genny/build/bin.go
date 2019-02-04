@@ -16,6 +16,10 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 		buildArgs = append(buildArgs, "-i")
 	}
 
+	if len(opts.Mod) != 0 {
+		buildArgs = append(buildArgs, "-mod", opts.Mod)
+	}
+
 	buildArgs = append(buildArgs, opts.BuildFlags...)
 
 	tf := opts.App.BuildTags(opts.Environment, opts.Tags...)
