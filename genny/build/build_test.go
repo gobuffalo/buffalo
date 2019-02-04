@@ -17,7 +17,7 @@ import (
 // TODO: once `buffalo new` is converted to use genny
 // create an integration test that first generates a new application
 // and then tries to build using genny/build.
-var coke = packr.NewBox("../build/_fixtures/coke")
+var coke = packr.New("github.com/gobuffalo/buffalo/genny/build/build_test", "../build/_fixtures/coke")
 
 var cokeRunner = func() *genny.Runner {
 	run := gentest.NewRunner()
