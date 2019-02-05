@@ -30,7 +30,10 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 		archive := zip.NewWriter(bb)
 		defer archive.Close()
 
-		box := packr.New("buffalo:build:assets", "")
+		// set the initial resolution of the box to a folder
+		// that doesn't exist, then set the resolution to the
+		// source. don't change! MB
+		box := packr.New("buffalo:build:assets", "./undefined")
 		box.ResolutionDir = source
 		err := box.Walk(func(path string, file packr.File) error {
 			info, err := file.FileInfo()
