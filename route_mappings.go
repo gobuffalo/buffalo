@@ -11,7 +11,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/markbates/inflect"
+	"github.com/gobuffalo/flect"
+	"github.com/gobuffalo/flect/name"
 	"github.com/pkg/errors"
 )
 
@@ -146,8 +147,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.TrimSuffix(rt.Name(), "Resource")
-	paramName := inflect.Name(name).ParamID()
+	n := strings.TrimSuffix(rt.Name(), "Resource")
+	paramName := name.New(n).ParamID().String()
 
 	type paramKeyable interface {
 		ParamKey() string
@@ -274,7 +275,7 @@ func (a *App) buildRouteName(p string) string {
 
 		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
 		if shouldSingularize {
-			part = inflect.Singularize(part)
+			part = flect.Singularize(part)
 		}
 
 		if parts[index] == "new" || parts[index] == "edit" {
@@ -295,7 +296,7 @@ func (a *App) buildRouteName(p string) string {
 	}
 
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return inflect.CamelizeDownFirst(underscore)
+	return name.VarCase(underscore)
 }
 
 func stripAsset(path string, h http.Handler) http.Handler {
