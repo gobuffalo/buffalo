@@ -10,17 +10,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
-	fname "github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/logger"
-	"github.com/gobuffalo/packr/v2/plog"
-	"github.com/spf13/pflag"
-
-	"github.com/sirupsen/logrus"
-
-	"github.com/pkg/errors"
-
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
@@ -31,9 +20,17 @@ import (
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/envy"
+	fname "github.com/gobuffalo/flect/name"
+	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/gobuffalo/plush"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -92,7 +89,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	app.WithPop = !viper.GetBool("skip-pop")
 	app.WithWebpack = !viper.GetBool("skip-webpack")
 	app.WithYarn = !viper.GetBool("skip-yarn")
-	app.WithNodeJs = app.WithYarn
+	app.WithNodeJs = app.WithYarn || app.WithWebpack
 	app.AsWeb = !app.AsAPI
 
 	if app.AsAPI {
