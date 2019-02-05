@@ -92,6 +92,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	app.WithPop = !viper.GetBool("skip-pop")
 	app.WithWebpack = !viper.GetBool("skip-webpack")
 	app.WithYarn = !viper.GetBool("skip-yarn")
+	app.WithNodeJs = app.WithYarn
 	app.AsWeb = !app.AsAPI
 
 	if app.AsAPI {
