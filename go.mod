@@ -7,17 +7,17 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.13.0
 	github.com/gobuffalo/buffalo-pop v1.6.0
-	github.com/gobuffalo/envy v1.6.12
+	github.com/gobuffalo/envy v1.6.13
 	github.com/gobuffalo/events v1.2.0
-	github.com/gobuffalo/flect v0.0.0-20190117212819-a62e61d96794
+	github.com/gobuffalo/flect v0.0.0-20190205211104-b2cb381e56e0
 	github.com/gobuffalo/genny v0.0.0-20190131190646-008a76242145
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
-	github.com/gobuffalo/meta v0.0.0-20190126124307-c8fb6f4eb5a9
+	github.com/gobuffalo/meta v0.0.0-20190206164351-c82e8cdad23c
 	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
 	github.com/gobuffalo/packr v1.22.0
-	github.com/gobuffalo/packr/v2 v2.0.0
+	github.com/gobuffalo/packr/v2 v2.0.1
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
 	github.com/gobuffalo/pop v4.9.6+incompatible
@@ -42,6 +42,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190131182504-b8fe1690c613
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190205050122-7f7074d5bcfd
+	golang.org/x/tools v0.0.0-20190206221403-44bcb96178d3
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
