@@ -45,11 +45,11 @@ func Test_App_Override_NotFound(t *testing.T) {
 	r := require.New(t)
 
 	a := New(Options{})
-	a.ErrorHandlers[404] = func(status int, err error, c Context) error {
+	a.ErrorHandlers.Set(404, func(status int, err error, c Context) error {
 		c.Response().WriteHeader(404)
 		c.Response().Write([]byte("oops!!!"))
 		return nil
-	}
+	})
 	a.GET("/foo", func(c Context) error { return nil })
 
 	w := httptest.New(a)

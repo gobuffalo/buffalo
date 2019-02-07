@@ -17,7 +17,7 @@ type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
 	Middleware    *MiddlewareStack `json:"-"`
-	ErrorHandlers ErrorHandlers    `json:"-"`
+	ErrorHandlers *ErrorHandlersST `json:"-"`
 	router        *mux.Router
 	moot          *sync.RWMutex
 	routes        RouteList
@@ -39,16 +39,17 @@ func New(opts Options) *App {
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
-		Options: opts,
-		ErrorHandlers: ErrorHandlers{
-			404: defaultErrorHandler,
-			500: defaultErrorHandler,
-		},
-		router:   mux.NewRouter(),
-		moot:     &sync.RWMutex{},
-		routes:   RouteList{},
-		children: []*App{},
+		Options:       opts,
+		ErrorHandlers: &ErrorHandlersST{},
+		router:        mux.NewRouter(),
+		moot:          &sync.RWMutex{},
+		routes:        RouteList{},
+		children:      []*App{},
 	}
+	a.ErrorHandlers.SetMulti(ErrorHandlers{
+		404: DefaultErrorHandler,
+		500: DefaultErrorHandler,
+	})
 
 	dem := a.defaultErrorMiddleware
 	a.Middleware = newMiddlewareStack(dem)

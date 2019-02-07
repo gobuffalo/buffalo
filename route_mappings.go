@@ -204,7 +204,7 @@ func (a *App) Group(groupPath string) *App {
 
 	g.router = a.router
 	g.Middleware = a.Middleware.clone()
-	g.ErrorHandlers = a.ErrorHandlers
+	g.ErrorHandlers = a.ErrorHandlers.Clone()
 	g.root = a
 	if a.root != nil {
 		g.root = a.root

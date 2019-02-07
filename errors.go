@@ -33,34 +33,77 @@ type ErrorHandler func(int, error, Context) error
 // ErrorHandlers is used to hold a list of ErrorHandler
 // types that can be used to handle specific status codes.
 /*
-	a.ErrorHandlers[500] = func(status int, err error, c buffalo.Context) error {
+	a.ErrorHandlers.Set(500, func(status int, err error, c buffalo.Context) error {
 		res := c.Response()
 		res.WriteHeader(status)
 		res.Write([]byte(err.Error()))
 		return nil
-	}
+	})
 */
 type ErrorHandlers map[int]ErrorHandler
+
+type ErrorHandlersST struct {
+	hlds ErrorHandlers
+}
 
 // Get a registered ErrorHandler for this status code. If
 // no ErrorHandler has been registered, a default one will
 // be returned.
-func (e ErrorHandlers) Get(status int) ErrorHandler {
-	if eh, ok := e[status]; ok {
+func (e *ErrorHandlersST) Get(status int) ErrorHandler {
+	if eh, ok := e.hlds[status]; ok {
 		return eh
 	}
-	if eh, ok := e[0]; ok {
+	if eh, ok := e.hlds[0]; ok && eh != nil {
 		return eh
 	}
-	return defaultErrorHandler
+	return DefaultErrorHandler
+}
+
+// Clear wipes out the current registered Error Handlers
+func (e *ErrorHandlersST) Clear() {
+	e.hlds = make(ErrorHandlers)
+}
+
+// Clone duplicates an Error Handler structure
+func (e *ErrorHandlersST) Clone() *ErrorHandlersST {
+	n := &ErrorHandlersST{
+		hlds: make(ErrorHandlers),
+	}
+	for k, v := range e.hlds {
+		n.hlds[k] = v
+	}
+	return n
+}
+
+// Set register an ErrorHandler for this status code. Set
+// ErrorHandler to nil to unregister handler associated to a specific status.
+func (e *ErrorHandlersST) Set(status int, eh ErrorHandler) {
+	if eh == nil {
+		delete(e.hlds, status)
+	} else {
+		if len(e.hlds) == 0 {
+			e.hlds = make(ErrorHandlers)
+		}
+		e.hlds[status] = eh
+	}
+}
+
+// SetMulti register multiple ErrorHandlers.
+func (e *ErrorHandlersST) SetMulti(ehs ErrorHandlers) {
+	if ehs == nil {
+		return
+	}
+	for k, v := range ehs {
+		e.Set(k, v)
+	}
 }
 
 // Default sets an error handler should a status
 // code not already be mapped. This will replace
 // the original default error handler.
 // This is a *catch-all* handler.
-func (e ErrorHandlers) Default(eh ErrorHandler) {
-	e[0] = eh
+func (e *ErrorHandlersST) Default(eh ErrorHandler) {
+	e.Set(0, eh)
 }
 
 // PanicHandler recovers from panics gracefully and calls
@@ -157,7 +200,8 @@ type stackTracer interface {
 	StackTrace() errors.StackTrace
 }
 
-func defaultErrorHandler(status int, origErr error, c Context) error {
+// DefaultErrorHandler is a default error handler
+func DefaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 

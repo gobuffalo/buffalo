@@ -100,12 +100,12 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	app := New(Options{})
 	var x string
 	var ok bool
-	app.ErrorHandlers[422] = func(code int, err error, c Context) error {
+	app.ErrorHandlers.Set(422, func(code int, err error, c Context) error {
 		x, ok = c.Value("T").(string)
 		c.Response().WriteHeader(code)
 		c.Response().Write([]byte(err.Error()))
 		return nil
-	}
+	})
 	app.Use(func(next Handler) Handler {
 		return func(c Context) error {
 			c.Set("T", "t")
@@ -140,4 +140,78 @@ func Test_SetErrorMiddleware(t *testing.T) {
 	res := w.HTML("/").Get()
 	r.Equal(418, res.Code)
 	r.Equal("i'm a teapot", res.Body.String())
+}
+func Test_ClearErrorHandler(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+
+	app.ErrorHandlers.Set(418, func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(419)
+		res.Write([]byte("i'm a teapot"))
+		return nil
+	})
+
+	app.GET("/", func(c Context) error {
+		return c.Error(418, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(419, res.Code)
+	r.Equal("i'm a teapot", res.Body.String())
+
+	app.ErrorHandlers.Clear()
+
+	res = w.HTML("/").Get()
+	r.Equal(418, res.Code)
+
+	// Assume that DefaultErrorHandler is called
+	r.Contains(res.Body.String(), "418 - ERROR!")
+	r.Contains(res.Body.String(), "Powered by")
+}
+
+func Test_SetMultipleErrorHandler(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+
+	handlerA := func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(code)
+		res.Write([]byte("i'm handler A"))
+		return nil
+	}
+	handlerB := func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(code)
+		res.Write([]byte("i'm handler B"))
+		return nil
+	}
+
+	app.ErrorHandlers.SetMulti(ErrorHandlers{
+		418: handlerA,
+		419: handlerB,
+	})
+
+	app.ErrorHandlers.Default(func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(500)
+		res.Write([]byte("i'm default handler"))
+		return nil
+	})
+
+	app.GET("/a", func(c Context) error {
+		return c.Error(418, errors.New("boom"))
+	})
+	app.GET("/b", func(c Context) error {
+		return c.Error(419, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/a").Get()
+	r.Equal(418, res.Code)
+	r.Equal("i'm handler A", res.Body.String())
+	res = w.HTML("/b").Get()
+	r.Equal(419, res.Code)
+	r.Equal("i'm handler B", res.Body.String())
 }
