@@ -2,12 +2,11 @@ package generate
 
 import (
 	"context"
-
 	"github.com/gobuffalo/buffalo/genny/mail"
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/meta"
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -25,7 +24,7 @@ var MailCmd = &cobra.Command{
 	Short: "Generate a new mailer for Buffalo",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		mailOptions.App = meta.New(".")
-		mailOptions.Name = inflect.Name(args[0])
+		mailOptions.Name = name.New(args[0])
 		gg, err := mail.New(mailOptions.Options)
 		if err != nil {
 			return errors.WithStack(err)

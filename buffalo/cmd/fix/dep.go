@@ -24,7 +24,6 @@ var upkg = []string{
 	"github.com/gobuffalo/events",
 	"github.com/gobuffalo/suite",
 	"github.com/gobuffalo/flect",
-	"github.com/markbates/inflect",
 }
 
 // DepEnsure runs `dep ensure -v` or `go get -u` depending on app tooling

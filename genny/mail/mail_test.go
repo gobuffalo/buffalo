@@ -3,6 +3,7 @@ package mail
 import (
 	"testing"
 
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/stretchr/testify/require"
@@ -10,7 +11,7 @@ import (
 
 func Test_New_NoMailers(t *testing.T) {
 	r := require.New(t)
-	gg, err := New(&Options{Name: "foo"})
+	gg, err := New(&Options{Name: name.New("foo")})
 	r.NoError(err)
 
 	run := gentest.NewRunner()
@@ -44,7 +45,7 @@ func Test_New_WithMailers(t *testing.T) {
 	run := gentest.NewRunner()
 	run.Disk.Add(genny.NewFileS("mailers/mailers.go", ""))
 
-	gg, err := New(&Options{Name: "foo"})
+	gg, err := New(&Options{Name: name.New("foo")})
 	r.NoError(err)
 	gg.With(run)
 	r.NoError(run.Run())
