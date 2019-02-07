@@ -3,6 +3,7 @@ package destroy
 import (
 	"bufio"
 	"fmt"
+	"github.com/gobuffalo/flect"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -10,18 +11,17 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-//YesToAll means not to ask when destroying but simply confirm all beforehand.
+// YesToAll means not to ask when destroying but simply confirm all beforehand.
 var YesToAll = false
 
-//ResourceCmd destroys a passed resource
+// ResourceCmd destroys a passed resource
 var ResourceCmd = &cobra.Command{
 	Use: "resource [name]",
-	//Example: "resource cars",
+	// Example: "resource cars",
 	Aliases: []string{"r"},
 	Short:   "Destroy resource files",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -30,7 +30,7 @@ var ResourceCmd = &cobra.Command{
 		}
 
 		name := args[0]
-		fileName := inflect.Pluralize(inflect.Underscore(name))
+		fileName := flect.Pluralize(flect.Underscore(name))
 
 		removeTemplates(fileName)
 		if err := removeActions(fileName); err != nil {
@@ -75,7 +75,7 @@ func removeActions(fileName string) error {
 			return err
 		}
 
-		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, inflect.Camelize(fileName))
+		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, flect.Pascalize(fileName))
 		newContents := strings.Replace(string(content), resourceExpression, "", -1)
 
 		err = ioutil.WriteFile(filepath.Join("actions", "app.go"), []byte(newContents), 0)
@@ -98,7 +98,7 @@ func removeLocales(fileName string) {
 
 func removeModel(name string) {
 	if YesToAll || confirm("Want to remove model? (y/N)") {
-		modelFileName := inflect.Singularize(inflect.Underscore(name))
+		modelFileName := flect.Singularize(flect.Underscore(name))
 
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))

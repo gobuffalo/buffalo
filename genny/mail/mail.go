@@ -33,7 +33,7 @@ func New(opts *Options) (*genny.Group, error) {
 	t := gotools.TemplateTransformer(data, h)
 	g.Transformer(t)
 
-	fn := opts.Name.File()
+	fn := opts.Name.File().String()
 	g.File(genny.NewFileS("mailers/"+fn+".go.tmpl", mailerTmpl))
 	g.File(genny.NewFileS("templates/mail/"+fn+".html.tmpl", mailTmpl))
 	gg.Add(g)
@@ -56,6 +56,7 @@ func initGenerator(opts *Options) (*genny.Generator, error) {
 		_, err := r.FindFile("mailers/mailers.go")
 		return err != nil
 	}
+	opts.Name.Titleize()
 	return g, nil
 }
 
@@ -67,11 +68,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-func Send{{.opts.Name.Model}}() error {
+func Send{{.opts.Name.Resource}}() error {
 	m := mail.NewMessage()
 
 	// fill in with your stuff:
-	m.Subject = "{{.opts.Name.Title}}"
+	m.Subject = "{{.opts.Name.Titleize}}"
 	m.From = ""
 	m.To = []string{}
 	err := m.AddBody(r.HTML("{{.opts.Name.File}}.html"), render.Data{})
@@ -82,6 +83,6 @@ func Send{{.opts.Name.Model}}() error {
 }
 `
 
-const mailTmpl = `<h2>{{.opts.Name.Title}}</h2>
+const mailTmpl = `<h2>{{.opts.Name.Titleize}}</h2>
 
 <h3>../templates/mail/{{.opts.Name.File}}.html</h3>`
