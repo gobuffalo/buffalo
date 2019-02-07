@@ -47,7 +47,6 @@ func New(opts *Options) (*genny.Generator, error) {
 	if err := g.Box(box); err != nil {
 		return g, errors.WithStack(err)
 	}
-
 	// configure plush
 	ctx := plush.NewContext()
 	ctx.Set("opts", opts)
