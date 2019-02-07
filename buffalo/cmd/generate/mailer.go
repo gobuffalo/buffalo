@@ -2,12 +2,12 @@ package generate
 
 import (
 	"context"
+	"github.com/markbates/inflect"
 
 	"github.com/gobuffalo/buffalo/genny/mail"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/gobuffalo/meta"
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )

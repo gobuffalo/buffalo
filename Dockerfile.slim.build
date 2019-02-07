@@ -8,6 +8,7 @@ RUN go version && go get -v -u github.com/markbates/deplist/deplist
 
 
 RUN go get -u github.com/golang/dep/cmd/dep \
+&& go get -v -u github.com/gobuffalo/flect \
 && go get -v -u github.com/gobuffalo/makr \
 && go get -v -u github.com/gobuffalo/packr \
 && go get -v -u github.com/gobuffalo/packr/v2 \
@@ -17,7 +18,6 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/mattn/go-sqlite3 \
 && go get -v -u github.com/markbates/filetest \
 && go get -v -u github.com/markbates/grift \
-&& go get -v -u github.com/markbates/inflect \
 && go get -v -u github.com/markbates/refresh \
 && go get -v -u github.com/gobuffalo/httptest \
 && go get -v -u github.com/gorilla/sessions \

@@ -2,8 +2,8 @@ package destroy
 
 import (
 	"errors"
+	"github.com/gobuffalo/flect"
 
-	"github.com/markbates/inflect"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +21,7 @@ var ActionCmd = &cobra.Command{
 		name := args[0]
 
 		//Generated actions keep the same name (not plural).
-		fileName := inflect.Underscore(name)
+		fileName := flect.Underscore(name)
 
 		removeActions(fileName)
 		return nil

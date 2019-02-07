@@ -3,18 +3,18 @@ package destroy
 import (
 	"errors"
 	"fmt"
+	"github.com/gobuffalo/flect"
 	"os"
 	"path/filepath"
 
-	"github.com/markbates/inflect"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-//MailerCmd destroys a passed mailer
+// MailerCmd destroys a passed mailer
 var MailerCmd = &cobra.Command{
 	Use: "mailer [name]",
-	//Example: "mailer cars",
+	// Example: "mailer cars",
 	Aliases: []string{"l"},
 	Short:   "Destroy mailer files",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -32,7 +32,7 @@ var MailerCmd = &cobra.Command{
 
 func removeMailer(name string) {
 	if YesToAll || confirm("Want to remove mailer? (y/N)") {
-		mailerFileName := inflect.Singularize(inflect.Underscore(name))
+		mailerFileName := flect.Singularize(flect.Underscore(name))
 
 		os.Remove(filepath.Join("mailers", fmt.Sprintf("%v.go", mailerFileName)))
 		os.Remove(filepath.Join("templates/mail", fmt.Sprintf("%v.html", mailerFileName)))
