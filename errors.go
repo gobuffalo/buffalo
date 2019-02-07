@@ -60,7 +60,9 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 // the original default error handler.
 // This is a *catch-all* handler.
 func (e ErrorHandlers) Default(eh ErrorHandler) {
-	e[0] = eh
+	if eh != nil {
+		e[0] = eh
+	}
 }
 
 // PanicHandler recovers from panics gracefully and calls
