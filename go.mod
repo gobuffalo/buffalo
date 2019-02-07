@@ -29,7 +29,6 @@ require (
 	github.com/karrick/godirwalk v1.7.8
 	github.com/markbates/deplist v1.0.5
 	github.com/markbates/grift v1.0.5
-	github.com/markbates/inflect v1.0.4
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
 	github.com/markbates/refresh v1.6.0
 	github.com/markbates/safe v1.0.1
