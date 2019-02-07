@@ -14,7 +14,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
-	github.com/gobuffalo/meta v0.0.0-20190206164351-c82e8cdad23c
+	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf
 	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
 	github.com/gobuffalo/packr v1.22.0
 	github.com/gobuffalo/packr/v2 v2.0.1

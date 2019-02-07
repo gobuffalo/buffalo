@@ -6,7 +6,6 @@ import (
   "github.com/gobuffalo/flect"
   "github.com/gobuffalo/pop"
   "github.com/gobuffalo/packr/v2"
-  "github.com/gobuffalo/packr/v2/file/resolver"
   <%= if (opts.Environment != "development") { %>
   "github.com/gobuffalo/envy"
   <% } %>
@@ -36,13 +35,14 @@ func init() {
 }
 
 func dropDatabaseYml() {
+  box := packr.New("buffalo:a:init", "./")
   if box.Has("database.yml") {
     s, err := box.FindString("database.yml")
     if err != nil {
       log.Fatal(err)
     }
     r := strings.NewReader(s)
-    err := pop.LoadFrom(r)
+    err = pop.LoadFrom(r)
     if err != nil {
       log.Fatal(err)
     }
