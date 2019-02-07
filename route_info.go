@@ -3,6 +3,7 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gobuffalo/flect"
 	"html/template"
 	"net/http"
 	"reflect"
@@ -11,7 +12,7 @@ import (
 	"github.com/gobuffalo/events"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"github.com/markbates/inflect"
+	"github.com/pkg/errors"
 )
 
 // RouteInfo provides information about the underlying route that
@@ -53,7 +54,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 		}
 	}
 
-	name = inflect.CamelizeDownFirst(name)
+	name = flect.Camelize(name)
 
 	if !strings.HasSuffix(name, "Path") {
 		name = name + "Path"
@@ -67,7 +68,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 	return ri
 }
 
-//BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
+// BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
 func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	cRoute := ri
 	return func(opts map[string]interface{}) (template.HTML, error) {
@@ -79,7 +80,7 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return "", fmt.Errorf("missing parameters for %v", cRoute.Path)
+			return "", errors.Wrapf(err, "missing parameters for %v", cRoute.Path)
 		}
 
 		result := url.Path
@@ -108,10 +109,14 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
+		status := 500
+		if he, ok := err.(HTTPError); ok {
+			status = he.Status
+		}
 		events.EmitError(EvtRouteErr, err, payload)
 		// things have really hit the fan if we're here!!
 		a.Logger.Error(err)
-		c.Response().WriteHeader(500)
+		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(err.Error()))
 	}
 	events.EmitPayload(EvtRouteFinished, payload)

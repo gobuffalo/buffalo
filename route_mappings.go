@@ -2,6 +2,8 @@ package buffalo
 
 import (
 	"fmt"
+	"github.com/gobuffalo/flect"
+	"github.com/gobuffalo/flect/name"
 	"net/http"
 	"net/url"
 	"os"
@@ -10,8 +12,13 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/markbates/inflect"
+	"github.com/gobuffalo/envy"
 	"github.com/pkg/errors"
+)
+
+const (
+	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
+	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -58,20 +65,20 @@ func (a *App) Redirect(status int, from, to string) *RouteInfo {
 
 // Mount mounts a http.Handler (or Buffalo app) and passes through all requests to it.
 //
-//	func muxer() http.Handler {
-//		f := func(res http.ResponseWriter, req *http.Request) {
-//			fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
-//		}
-//		mux := mux.NewRouter()
-//		mux.HandleFunc("/foo", f).Methods("GET")
-//		mux.HandleFunc("/bar", f).Methods("POST")
-//		mux.HandleFunc("/baz/baz", f).Methods("DELETE")
-//		return mux
-//	}
+// 	func muxer() http.Handler {
+// 		f := func(res http.ResponseWriter, req *http.Request) {
+// 			fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
+// 		}
+// 		mux := mux.NewRouter()
+// 		mux.HandleFunc("/foo", f).Methods("GET")
+// 		mux.HandleFunc("/bar", f).Methods("POST")
+// 		mux.HandleFunc("/baz/baz", f).Methods("DELETE")
+// 		return mux
+// 	}
 //
-//	a.Mount("/admin", muxer())
+// 	a.Mount("/admin", muxer())
 //
-//	$ curl -X DELETE http://localhost:3000/admin/baz/baz
+// 	$ curl -X DELETE http://localhost:3000/admin/baz/baz
 func (a *App) Mount(p string, h http.Handler) {
 	prefix := path.Join(a.Prefix, p)
 	path := path.Join(p, "{path:.+}")
@@ -94,12 +101,17 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, err := fs.Open(path.Clean(r.URL.Path))
+		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
 			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
+		stat, _ := f.Stat()
+		maxAge := envy.Get(AssetsAgeVarName, "31536000")
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
 }
@@ -135,8 +147,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.TrimSuffix(rt.Name(), "Resource")
-	paramName := inflect.Name(name).ParamID()
+	n := strings.TrimSuffix(rt.Name(), "Resource")
+	paramName := name.New(n).ParamID().String()
 
 	type paramKeyable interface {
 		ParamKey() string
@@ -184,7 +196,7 @@ func (a *App) ANY(p string, h Handler) {
 	g := a.Group("/api/v1")
 	g.Use(AuthorizeAPIMiddleware)
 	g.GET("/users, APIUsersHandler)
-	g.GET("/users/:user_id, APIUserShowHandler)
+	g.GET("/users/{user_id}, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
 	g := New(a.Options)
@@ -246,7 +258,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	return r
 }
 
-//buildRouteName builds a route based on the path passed.
+// buildRouteName builds a route based on the path passed.
 func (a *App) buildRouteName(p string) string {
 	if p == "/" || p == "" {
 		return "root"
@@ -263,7 +275,7 @@ func (a *App) buildRouteName(p string) string {
 
 		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
 		if shouldSingularize {
-			part = inflect.Singularize(part)
+			part = flect.Singularize(part)
 		}
 
 		if parts[index] == "new" || parts[index] == "edit" {
@@ -284,7 +296,7 @@ func (a *App) buildRouteName(p string) string {
 	}
 
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return inflect.CamelizeDownFirst(underscore)
+	return flect.Camelize(underscore)
 }
 
 func stripAsset(path string, h http.Handler) http.Handler {

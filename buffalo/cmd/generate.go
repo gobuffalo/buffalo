@@ -7,14 +7,13 @@ import (
 
 var generateCmd = &cobra.Command{
 	Use:     "generate",
-	Short:   "A collection of generators to make life easier",
+	Short:   "Generate application components",
 	Aliases: []string{"g"},
 }
 
 func init() {
 	generateCmd.AddCommand(generate.ResourceCmd)
 	generateCmd.AddCommand(generate.ActionCmd)
-	generateCmd.AddCommand(generate.DockerCmd)
 	generateCmd.AddCommand(generate.TaskCmd)
 	generateCmd.AddCommand(generate.MailCmd)
 	decorate("generate", generateCmd)

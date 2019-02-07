@@ -78,7 +78,7 @@ func (mw MiddlewareTransformer) addMissingRootMiddlewareImports(fset *token.File
 	}
 
 	if strings.Contains(content, "popmw.Transaction") {
-		astutil.AddNamedImport(fset, f, "popmw", "github.com/gobuffalo/buffalo-pop/pop/popmw")
+		astutil.AddImport(fset, f, "github.com/gobuffalo/buffalo-pop/pop/popmw")
 	}
 
 	if strings.Contains(content, "contenttype.Add") || strings.Contains(content, "contenttype.Set") {

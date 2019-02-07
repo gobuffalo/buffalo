@@ -1,8 +1,0 @@
-<div class="page-header">
-  <h1>Edit {{.opts.Model.Model}}</h1>
-</div>
-
-<%= form_for({{.opts.Model.VarCaseSingular}}, {action: {{.opts.Name.VarCaseSingular}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingular}}.ID }), method: "PUT"}) { %>
-  <%= partial("{{.opts.FilesPath}}/form.html") %>
-  <a href="<%= {{.opts.Name.VarCaseSingular}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingular}}.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
-<% } %>

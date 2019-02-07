@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/markbates/inflect"
+	"github.com/gobuffalo/flect/name"
 	"github.com/pkg/errors"
 )
 
@@ -92,14 +92,18 @@ func (htmlAutoRenderer) ContentType() string {
 }
 
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
-	name := inflect.Name(inflect.Underscore(ir.typeName()))
-	name = inflect.Name(name.Singular())
-	pname := inflect.Name(name.Plural())
+	n := name.New(ir.typeName())
+	pname := name.New(n.Pluralize().String())
 
 	if ir.isPlural() {
-		data[pname.VarCasePlural()] = ir.model
+		data[pname.VarCasePlural().String()] = ir.model
 	} else {
-		data[name.VarCaseSingular()] = ir.model
+		data[n.VarCaseSingle().String()] = ir.model
+	}
+
+	templatePrefix := pname.File()
+	if pf, ok := data["template_prefix"].(string); ok {
+		templatePrefix = name.New(pf)
 	}
 
 	switch data["method"] {
@@ -109,26 +113,26 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 				return err
 			}
 			if data["method"] == "PUT" {
-				return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
+				return ir.HTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
 			}
-			return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+			return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 		}
 		return nil
 	}
 	cp, ok := data["current_path"].(string)
 
 	defCase := func() error {
-		return ir.HTML(fmt.Sprintf("%s/%s.html", pname.File(), "index")).Render(w, data)
+		return ir.HTML(fmt.Sprintf("%s/%s.html", templatePrefix, "index")).Render(w, data)
 	}
 	if !ok {
 		return defCase()
 	}
 
 	if strings.HasSuffix(cp, "/edit/") {
-		return ir.HTML(fmt.Sprintf("%s/edit.html", pname.File())).Render(w, data)
+		return ir.HTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
 	}
 	if strings.HasSuffix(cp, "/new/") {
-		return ir.HTML(fmt.Sprintf("%s/new.html", pname.File())).Render(w, data)
+		return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 	}
 
 	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
@@ -136,12 +140,12 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		return errors.WithStack(err)
 	}
 	if x.MatchString(cp) {
-		return ir.HTML(fmt.Sprintf("%s/show.html", pname.File())).Render(w, data)
+		return ir.HTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)
 	}
 	return defCase()
 }
 
-func (ir htmlAutoRenderer) redirect(name inflect.Name, w io.Writer, data Data) error {
+func (ir htmlAutoRenderer) redirect(name name.Ident, w io.Writer, data Data) error {
 	rv := reflect.Indirect(reflect.ValueOf(ir.model))
 	f := rv.FieldByName("ID")
 	if !f.IsValid() {

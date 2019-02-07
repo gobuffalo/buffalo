@@ -1,23 +1,54 @@
 package generate
 
 import (
+	"context"
+	"os"
+
 	"github.com/pkg/errors"
 
-	"github.com/gobuffalo/buffalo/generators/grift"
-	"github.com/gobuffalo/makr"
+	"github.com/gobuffalo/buffalo/genny/grift"
+	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/movinglater/gotools"
 	"github.com/spf13/cobra"
 )
+
+var taskOptions = struct {
+	dryRun bool
+	*grift.Options
+}{
+	Options: &grift.Options{},
+}
 
 //TaskCmd is the command called with the generate grift cli.
 var TaskCmd = &cobra.Command{
 	Use:     "task [name]",
 	Aliases: []string{"t", "grift"},
-	Short:   "Generates a grift task",
+	Short:   "Generate a grift task",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		g, err := grift.New(args...)
+		run := genny.WetRunner(context.Background())
+		if taskOptions.dryRun {
+			run = genny.DryRunner(context.Background())
+		}
+
+		opts := taskOptions.Options
+		opts.Args = args
+		g, err := grift.New(opts)
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		return g.Run(".", makr.Data{})
+		run.With(g)
+
+		pwd, _ := os.Getwd()
+		g, err = gotools.GoFmt(pwd)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		run.With(g)
+
+		return run.Run()
 	},
+}
+
+func init() {
+	TaskCmd.Flags().BoolVarP(&taskOptions.dryRun, "dry-run", "d", false, "dry run of the generator")
 }
