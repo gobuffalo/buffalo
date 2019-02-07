@@ -31,7 +31,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 func genFile(r *genny.Runner, opts *Options) error {
 	header := tmplHeader
-	path := "grifts/" + opts.Name.File() + ".go.tmpl"
+	path := "grifts/" + opts.Name.File(".go.tmpl").String()
 	if f, err := r.FindFile(path); err == nil {
 		header = f.String()
 	}

@@ -3,6 +3,7 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gobuffalo/flect"
 	"html/template"
 	"net/http"
 	"reflect"
@@ -11,7 +12,6 @@ import (
 	"github.com/gobuffalo/events"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"github.com/markbates/inflect"
 	"github.com/pkg/errors"
 )
 
@@ -54,7 +54,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 		}
 	}
 
-	name = inflect.CamelizeDownFirst(name)
+	name = flect.Camelize(name)
 
 	if !strings.HasSuffix(name, "Path") {
 		name = name + "Path"
@@ -68,7 +68,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 	return ri
 }
 
-//BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
+// BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
 func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	cRoute := ri
 	return func(opts map[string]interface{}) (template.HTML, error) {

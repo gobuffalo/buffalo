@@ -3,8 +3,8 @@ package a
 import (
   "log"
   "strings"
+  "github.com/gobuffalo/flect"
   "github.com/gobuffalo/pop"
-  "github.com/markbates/inflect"
   "github.com/gobuffalo/packr/v2"
   <%= if (opts.Environment != "development") { %>
   "github.com/gobuffalo/envy"
@@ -27,7 +27,7 @@ func init() {
       log.Fatal(err)
     }
     r := strings.NewReader(s)
-    err = inflect.LoadReader(r)
+    err = flect.LoadInflections(r)
     if err != nil {
       log.Fatal(err)
     }
