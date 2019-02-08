@@ -31,7 +31,8 @@ test:
 
 ci-deps:
 	$(GO_BIN) get github.com/gobuffalo/packr/packr
-	$(GO_BIN) get -tags ${TAGS} -t -u -v ./...
+	$(GO_BIN) get github.com/gobuffalo/buffalo-pop
+	$(GO_BIN) get -tags ${TAGS} -t -v ./...
 	make tidy
 
 ci-test:
@@ -54,5 +55,5 @@ release-test:
 
 release:
 	make tidy
-	release -y -f ./runtime/version.go
+	release -y -f ./runtime/version.go --skip-packr
 	make tidy
