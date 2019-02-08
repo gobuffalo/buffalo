@@ -53,7 +53,7 @@ jobs:
       env:
         - GO111MODULE=on
       script:
-        - go test -tags "sqlite integration_test" -race ./...
+        - go test -tags "sqlite" -race ./...
     - os: linux
       go: "1.9.x"
       script:
