@@ -35,9 +35,14 @@ func init() {
 }
 
 func dropDatabaseYml() {
-  if DB_CONFIG != "" {
-    r := strings.NewReader(DB_CONFIG)
-    err := pop.LoadFrom(r)
+  box := packr.New("buffalo:a:init", "./")
+  if box.Has("database.yml") {
+    s, err := box.FindString("database.yml")
+    if err != nil {
+      log.Fatal(err)
+    }
+    r := strings.NewReader(s)
+    err = pop.LoadFrom(r)
     if err != nil {
       log.Fatal(err)
     }
