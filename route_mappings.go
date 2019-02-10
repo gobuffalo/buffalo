@@ -2,8 +2,6 @@ package buffalo
 
 import (
 	"fmt"
-	"github.com/gobuffalo/flect"
-	"github.com/gobuffalo/flect/name"
 	"net/http"
 	"net/url"
 	"os"
@@ -13,6 +11,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/flect"
+	"github.com/gobuffalo/flect/name"
 	"github.com/pkg/errors"
 )
 
@@ -65,20 +65,20 @@ func (a *App) Redirect(status int, from, to string) *RouteInfo {
 
 // Mount mounts a http.Handler (or Buffalo app) and passes through all requests to it.
 //
-// 	func muxer() http.Handler {
-// 		f := func(res http.ResponseWriter, req *http.Request) {
-// 			fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
-// 		}
-// 		mux := mux.NewRouter()
-// 		mux.HandleFunc("/foo", f).Methods("GET")
-// 		mux.HandleFunc("/bar", f).Methods("POST")
-// 		mux.HandleFunc("/baz/baz", f).Methods("DELETE")
-// 		return mux
-// 	}
+//	func muxer() http.Handler {
+//		f := func(res http.ResponseWriter, req *http.Request) {
+//			fmt.Fprintf(res, "%s - %s", req.Method, req.URL.String())
+//		}
+//		mux := mux.NewRouter()
+//		mux.HandleFunc("/foo", f).Methods("GET")
+//		mux.HandleFunc("/bar", f).Methods("POST")
+//		mux.HandleFunc("/baz/baz", f).Methods("DELETE")
+//		return mux
+//	}
 //
-// 	a.Mount("/admin", muxer())
+//	a.Mount("/admin", muxer())
 //
-// 	$ curl -X DELETE http://localhost:3000/admin/baz/baz
+//	$ curl -X DELETE http://localhost:3000/admin/baz/baz
 func (a *App) Mount(p string, h http.Handler) {
 	prefix := path.Join(a.Prefix, p)
 	path := path.Join(p, "{path:.+}")
@@ -196,7 +196,7 @@ func (a *App) ANY(p string, h Handler) {
 	g := a.Group("/api/v1")
 	g.Use(AuthorizeAPIMiddleware)
 	g.GET("/users, APIUsersHandler)
-	g.GET("/users/{user_id}, APIUserShowHandler)
+	g.GET("/users/:user_id, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
 	g := New(a.Options)
@@ -258,7 +258,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	return r
 }
 
-// buildRouteName builds a route based on the path passed.
+//buildRouteName builds a route based on the path passed.
 func (a *App) buildRouteName(p string) string {
 	if p == "/" || p == "" {
 		return "root"
@@ -296,7 +296,7 @@ func (a *App) buildRouteName(p string) string {
 	}
 
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return flect.Camelize(underscore)
+	return name.VarCase(underscore)
 }
 
 func stripAsset(path string, h http.Handler) http.Handler {

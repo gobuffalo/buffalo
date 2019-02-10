@@ -7,7 +7,7 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.13.0
 	github.com/gobuffalo/buffalo-pop v1.6.0
-	github.com/gobuffalo/envy v1.6.13
+	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.2.0
 	github.com/gobuffalo/flect v0.0.0-20190205211104-b2cb381e56e0
 	github.com/gobuffalo/genny v0.0.0-20190131190646-008a76242145
@@ -40,7 +40,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/crypto v0.0.0-20190131182504-b8fe1690c613
+	golang.org/x/crypto v0.0.0-20190208162236-193df9c0f06f
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
 	golang.org/x/tools v0.0.0-20190206221403-44bcb96178d3
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
