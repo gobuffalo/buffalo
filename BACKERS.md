@@ -1,10 +1,10 @@
 # Financial Backers of the Buffalo Project
 
-Buffalo is a community driven project that is run by individuals who believe that Buffalo is the way to quickly, and easily, build high quality, scalable applications in Go.
+Buffalo is a community-driven project that is run by individuals who believe that Buffalo is the way to quickly, and easily, build high quality, scalable applications in Go.
 
 Financial contributions to the Buffalo go towards ongoing development costs, servers, swag, conferences, etc...
 
-If you, or your company, uses Buffalo, please consider supporting this effort to make rapid web development in Go, simple, easy, and fun!
+If you, or your company, use Buffalo, please consider supporting this effort to make rapid web development in Go, simple, easy, and fun!
 
 [http://patreon.com/buffalo](http://patreon.com/buffalo)
 
