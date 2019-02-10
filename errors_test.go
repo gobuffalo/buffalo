@@ -52,7 +52,7 @@ func Test_defaultErrorHandler_XML(t *testing.T) {
 	res := w.XML("/").Get()
 	r.Equal(401, res.Code)
 	ct := res.Header().Get("content-type")
-	r.Equal("application/xml", ct)
+	r.Equal("text/xml", ct)
 	b := res.Body.String()
 	r.Contains(b, `<response code="401">`)
 	r.Contains(b, `<error>boom</error>`)
@@ -121,4 +121,23 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	r.Equal(422, res.Code)
 	r.True(ok)
 	r.Equal("t", x)
+}
+
+func Test_SetErrorMiddleware(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.ErrorHandlers.Default(func(code int, err error, c Context) error {
+		res := c.Response()
+		res.WriteHeader(418)
+		res.Write([]byte("i'm a teapot"))
+		return nil
+	})
+	app.GET("/", func(c Context) error {
+		return c.Error(422, errors.New("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(418, res.Code)
+	r.Equal("i'm a teapot", res.Body.String())
 }

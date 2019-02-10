@@ -17,28 +17,34 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/gobuffalo/pop \
 && go get -v -u github.com/gobuffalo/buffalo-pop \
 && go get -v -u github.com/gobuffalo/packr/packr \
+&& go get -v -u github.com/gobuffalo/packr/v2/packr2 \
 && go get -v -u github.com/markbates/filetest \
 && go get -v -u github.com/markbates/grift \
 && go get -v -u github.com/markbates/refresh \
 && go get -u github.com/alecthomas/gometalinter \
 && gometalinter --install
 
+# clear out the src so that we can fill it with new versions
+RUN rm -rfv $GOPATH/src && mkdir -p $BP
+WORKDIR $BP
+
+ADD go.mod .
+ADD go.sum .
+
+# preps the module cache for those using modules in their images
+ENV GO111MODULE=on
+RUN go mod download
+ENV GO111MODULE=off
+
+
 RUN npm install -g --no-progress yarn \
 && yarn config set yarn-offline-mirror /npm-packages-offline-cache \
 && yarn config set yarn-offline-mirror-pruning true
 
-
-RUN rm -rfv $BP && mkdir -p $BP
-WORKDIR $BP
 COPY . .
-RUN make ci-deps && make install
 
-# cache yarn packages to an offline mirror so they're faster to load. hopefully.
-RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json \
-&& yarn install --no-progress
+RUN make ci-deps && make install
 
 RUN buffalo version
 
 WORKDIR $GOPATH/src
-
-RUN ls -la /npm-packages-offline-cache

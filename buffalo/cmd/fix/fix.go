@@ -4,7 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/BurntSushi/toml"
 )
 
 //YesToAll will be used by the command to skip the questions
@@ -32,14 +35,13 @@ var mr = MiddlewareTransformer{
 	},
 
 	Aliases: map[string]string{
-		"github.com/gobuffalo/mw-basicauth":          "basicauth",
-		"github.com/gobuffalo/mw-csrf":               "csrf",
-		"github.com/gobuffalo/mw-i18n":               "i18n",
-		"github.com/gobuffalo/mw-forcessl":           "forcessl",
-		"github.com/gobuffalo/mw-tokenauth":          "tokenauth",
-		"github.com/gobuffalo/mw-paramlogger":        "paramlogger",
-		"github.com/gobuffalo/mw-contenttype":        "contenttype",
-		"github.com/gobuffalo/buffalo-pop/pop/popmw": "popmw",
+		"github.com/gobuffalo/mw-basicauth":   "basicauth",
+		"github.com/gobuffalo/mw-csrf":        "csrf",
+		"github.com/gobuffalo/mw-i18n":        "i18n",
+		"github.com/gobuffalo/mw-forcessl":    "forcessl",
+		"github.com/gobuffalo/mw-tokenauth":   "tokenauth",
+		"github.com/gobuffalo/mw-paramlogger": "paramlogger",
+		"github.com/gobuffalo/mw-contenttype": "contenttype",
 	},
 }
 
@@ -52,6 +54,23 @@ var checks = []Check{
 	DepEnsure,
 	installTools,
 	DeprecrationsCheck,
+	encodeApp,
+}
+
+func encodeApp(r *Runner) error {
+	p := filepath.Join("config", "buffalo-app.toml")
+	if _, err := os.Stat(p); err == nil {
+		return nil
+	}
+	os.MkdirAll(filepath.Dir(p), 0755)
+	f, err := os.Create(p)
+	if err != nil {
+		return err
+	}
+	if err := toml.NewEncoder(f).Encode(r.App); err != nil {
+		return err
+	}
+	return nil
 }
 
 func ask(q string) bool {

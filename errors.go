@@ -49,7 +49,20 @@ func (e ErrorHandlers) Get(status int) ErrorHandler {
 	if eh, ok := e[status]; ok {
 		return eh
 	}
+	if eh, ok := e[0]; ok {
+		return eh
+	}
 	return defaultErrorHandler
+}
+
+// Default sets an error handler should a status
+// code not already be mapped. This will replace
+// the original default error handler.
+// This is a *catch-all* handler.
+func (e ErrorHandlers) Default(eh ErrorHandler) {
+	if eh != nil {
+		e[0] = eh
+	}
 }
 
 // PanicHandler recovers from panics gracefully and calls
@@ -140,23 +153,37 @@ type ErrorResponse struct {
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
+const defaultErrorCT = "text/html; charset=utf-8"
+
+type stackTracer interface {
+	StackTrace() errors.StackTrace
+}
+
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	ct := defaults.String(httpx.ContentType(c.Request()), "text/html; charset=utf-8")
-	c.Response().Header().Set("content-type", ct)
+	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
+		c.Response().Header().Set("content-type", defaultErrorCT)
 		responseBody := productionErrorResponseFor(status)
 		c.Response().Write(responseBody)
 		return nil
 	}
 
-	trace := fmt.Sprintf("%+v", origErr)
-	switch strings.ToLower(ct) {
+	trace := fmt.Sprintf("%s\n\n%+v", origErr, origErr)
+	if st, ok := origErr.(stackTracer); ok {
+		var log []string
+		for _, t := range st.StackTrace() {
+			log = append(log, fmt.Sprintf("%+v", t))
+		}
+		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
+	}
+	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
+		c.Response().Header().Set("content-type", "application/json")
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -166,6 +193,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	case "application/xml", "text/xml", "xml":
+		c.Response().Header().Set("content-type", "text/xml")
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errors.Cause(origErr).Error(),
 			Trace: trace,
@@ -175,7 +203,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return errors.WithStack(err)
 		}
 	default:
-		c.Response().Header().Set("content-type", "text/html; charset=utf-8")
+		c.Response().Header().Set("content-type", defaultErrorCT)
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}

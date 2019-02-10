@@ -10,8 +10,15 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/markbates/inflect"
+	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/flect"
+	"github.com/gobuffalo/flect/name"
 	"github.com/pkg/errors"
+)
+
+const (
+	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
+	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
@@ -94,12 +101,17 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, err := fs.Open(path.Clean(r.URL.Path))
+		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
 			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
+		stat, _ := f.Stat()
+		maxAge := envy.Get(AssetsAgeVarName, "31536000")
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
 }
@@ -135,8 +147,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.TrimSuffix(rt.Name(), "Resource")
-	paramName := inflect.Name(name).ParamID()
+	n := strings.TrimSuffix(rt.Name(), "Resource")
+	paramName := name.New(n).ParamID().String()
 
 	type paramKeyable interface {
 		ParamKey() string
@@ -263,7 +275,7 @@ func (a *App) buildRouteName(p string) string {
 
 		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
 		if shouldSingularize {
-			part = inflect.Singularize(part)
+			part = flect.Singularize(part)
 		}
 
 		if parts[index] == "new" || parts[index] == "edit" {
@@ -284,7 +296,7 @@ func (a *App) buildRouteName(p string) string {
 	}
 
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return inflect.CamelizeDownFirst(underscore)
+	return name.VarCase(underscore)
 }
 
 func stripAsset(path string, h http.Handler) http.Handler {

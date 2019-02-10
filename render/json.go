@@ -10,7 +10,7 @@ type jsonRenderer struct {
 }
 
 func (s jsonRenderer) ContentType() string {
-	return "application/json"
+	return "application/json; charset=utf-8"
 }
 
 func (s jsonRenderer) Render(w io.Writer, data Data) error {

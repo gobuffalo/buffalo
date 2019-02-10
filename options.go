@@ -9,9 +9,11 @@ import (
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/x/defaults"
 	"github.com/gorilla/sessions"
+	"github.com/markbates/oncer"
 )
 
 // Options are used to configure and define how your application should run.
@@ -26,8 +28,10 @@ type Options struct {
 	// Env is the "environment" in which the App is running. Default is "development".
 	Env string `json:"env"`
 
-	// LogLevel defaults to "debug".
+	// LogLevel defaults to "debug". Deprecated use LogLvl instead
 	LogLevel string `json:"log_level"`
+	// LogLevl defaults to logger.DebugLvl.
+	LogLvl logger.Level `json:"log_lvl"`
 	// Logger to be used with the application. A default one is provided.
 	Logger Logger `json:"-"`
 
@@ -75,7 +79,6 @@ func NewOptions() Options {
 
 func optionsWithDefaults(opts Options) Options {
 	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
-	opts.LogLevel = defaults.String(opts.LogLevel, envy.Get("LOG_LEVEL", "debug"))
 	opts.Name = defaults.String(opts.Name, "/")
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
@@ -104,7 +107,26 @@ func optionsWithDefaults(opts Options) Options {
 	opts.Context, opts.cancel = context.WithCancel(opts.Context)
 
 	if opts.Logger == nil {
-		opts.Logger = NewLogger(opts.LogLevel)
+		if lvl, err := envy.MustGet("LOG_LEVEL"); err == nil {
+			opts.LogLvl, err = logger.ParseLevel(lvl)
+			if err != nil {
+				opts.LogLvl = logger.DebugLevel
+			}
+		}
+
+		if len(opts.LogLevel) > 0 {
+			var err error
+			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
+			opts.LogLvl, err = logger.ParseLevel(opts.LogLevel)
+			if err != nil {
+				opts.LogLvl = logger.DebugLevel
+			}
+		}
+		if opts.LogLvl == 0 {
+			opts.LogLvl = logger.DebugLevel
+		}
+
+		opts.Logger = logger.New(opts.LogLvl)
 	}
 
 	pop.Log = func(s string, args ...interface{}) {

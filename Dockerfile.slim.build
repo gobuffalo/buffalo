@@ -8,15 +8,16 @@ RUN go version && go get -v -u github.com/markbates/deplist/deplist
 
 
 RUN go get -u github.com/golang/dep/cmd/dep \
+&& go get -v -u github.com/gobuffalo/flect \
 && go get -v -u github.com/gobuffalo/makr \
 && go get -v -u github.com/gobuffalo/packr \
+&& go get -v -u github.com/gobuffalo/packr/v2 \
 && go get -v -u github.com/gobuffalo/tags \
 && go get -v -u github.com/gobuffalo/pop \
 && go get -v -u github.com/gobuffalo/x/... \
 && go get -v -u github.com/mattn/go-sqlite3 \
 && go get -v -u github.com/markbates/filetest \
 && go get -v -u github.com/markbates/grift \
-&& go get -v -u github.com/markbates/inflect \
 && go get -v -u github.com/markbates/refresh \
 && go get -v -u github.com/gobuffalo/httptest \
 && go get -v -u github.com/gorilla/sessions \
@@ -35,12 +36,6 @@ WORKDIR $BP
 COPY . .
 RUN make deps && make install
 
-# cache yarn packages to an offline mirror so they're faster to load. hopefully.
-RUN grep -v '{{' ./generators/assets/webpack/templates/package.json.tmpl > package.json \
-&& yarn install --no-progress
-
 RUN buffalo version
 
 WORKDIR $GOPATH/src
-
-RUN ls -la /npm-packages-offline-cache
