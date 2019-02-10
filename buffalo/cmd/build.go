@@ -72,6 +72,8 @@ var xbuildCmd = &cobra.Command{
 			opts.TemplateValidators = append(opts.TemplateValidators, build.PlushValidator, build.GoTemplateValidator)
 		}
 
+		clean := build.Cleanup(opts)
+		defer clean(run)
 		run.WithNew(build.New(opts))
 		return run.Run()
 	},
@@ -90,6 +92,7 @@ func init() {
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Debug, "deprecated-verbose", "d", false, "[deprecated] use -v instead")
 	xbuildCmd.Flags().BoolVar(&buildOptions.DryRun, "dry-run", false, "runs the build 'dry'")
 	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating templates")
+	xbuildCmd.Flags().BoolVar(&buildOptions.CleanAssets, "clean-assets", false, "will delete public/assets before calling webpack")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
 	xbuildCmd.Flags().StringVar(&buildOptions.Mod, "mod", "", "-mod flag for go build")
 }
