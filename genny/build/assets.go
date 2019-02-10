@@ -4,6 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
@@ -21,6 +22,12 @@ func assets(opts *Options) (*genny.Generator, error) {
 	}
 
 	if opts.App.WithWebpack {
+		if opts.CleanAssets {
+			g.RunFn(func(r *genny.Runner) error {
+				r.Delete(filepath.Join(opts.App.Root, "public", "assets"))
+				return nil
+			})
+		}
 		g.RunFn(func(r *genny.Runner) error {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
 			return envy.MustSet("NODE_ENV", opts.Environment)

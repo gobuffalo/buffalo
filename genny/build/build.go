@@ -35,10 +35,6 @@ func New(opts *Options) (*genny.Generator, error) {
 	// validate templates
 	g.RunFn(ValidateTemplates(templateWalker(opts.App), opts.TemplateValidators))
 
-	g.RunFn(func(r *genny.Runner) error {
-		return jam.Pack(jam.PackOptions{})
-	})
-
 	// rename main() to originalMain()
 	g.RunFn(transformMain(opts))
 
@@ -79,6 +75,10 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 	g.Merge(dg)
 
+	g.RunFn(func(r *genny.Runner) error {
+		return jam.Pack(jam.PackOptions{})
+	})
+
 	// create the final go build command
 	c, err := buildCmd(opts)
 	if err != nil {
@@ -86,8 +86,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 	g.Command(c)
 
-	// clean up everything!
-	g.RunFn(cleanup(opts))
+	g.RunFn(Cleanup(opts))
 
 	g.Event(EvtBuildStop, events.Payload{"opts": opts})
 	return g, nil

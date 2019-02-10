@@ -3,6 +3,7 @@ package webpack
 import (
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/gobuffalo/genny"
@@ -12,7 +13,13 @@ import (
 )
 
 // BinPath is the path to the local install of webpack
-var BinPath = filepath.Join("node_modules", ".bin", "webpack")
+var BinPath = func() string {
+	s := filepath.Join("node_modules", ".bin", "webpack")
+	if runtime.GOOS == "windows" {
+		s += ".cmd"
+	}
+	return s
+}()
 
 // Templates used for generating webpack
 // (exported mostly for the "fix" command)

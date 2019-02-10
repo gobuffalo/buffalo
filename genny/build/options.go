@@ -17,7 +17,9 @@ type Options struct {
 	// a) git sha of last commit or
 	// b) to time.RFC3339 of BuildTime
 	BuildVersion string `json:"build_version,omitempty"`
-	WithAssets   bool   `json:"with_assets,omitempty"`
+	// CleanAssets will remove the public/assets folder build compiling
+	CleanAssets bool `json:"clean_assets"`
+	WithAssets  bool `json:"with_assets,omitempty"`
 	// places ./public/assets into ./bin/assets.zip.
 	// requires WithAssets = true
 	ExtractAssets bool `json:"extract_assets,omitempty"`
@@ -37,8 +39,8 @@ type Options struct {
 	// Empty by default
 	TemplateValidators []TemplateValidator `json:"-"`
 	// Mod is the -mod flag
-	Mod      string
-	rollback *sync.Map
+	Mod      string    `json:"mod"`
+	rollback *sync.Map `json:"rollback"`
 }
 
 // Validate that options are usuable
