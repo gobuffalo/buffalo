@@ -17,7 +17,7 @@ deps:
 	$(GO_BIN) get github.com/gobuffalo/release
 	$(GO_BIN) get github.com/gobuffalo/packr/v2/packr2
 	packr2 clean
-	$(GO_BIN) get -tags ${TAGS} -t ./...
+	$(GO_BIN) get -tags ${TAGS} -u -t ./...
 	make tidy
 
 build:
