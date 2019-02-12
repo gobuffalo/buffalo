@@ -2,11 +2,12 @@ TAGS ?= "sqlite"
 GO_BIN ?= go
 
 install: deps
-	packr2
+	make tidy
 	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
 	make tidy
 
 tidy:
+	packr2
 ifeq ($(GO111MODULE),on)
 	$(GO_BIN) mod tidy
 else
