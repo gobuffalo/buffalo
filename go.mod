@@ -33,20 +33,15 @@ require (
 	github.com/markbates/refresh v1.6.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/mattn/go-colorable v0.1.0 // indirect
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.1
-	github.com/rogpeppe/go-internal v1.2.1 // indirect
 	github.com/sirupsen/logrus v1.3.0
-	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190211182817-74369b46fc67
-	golang.org/x/net v0.0.0-20190206173232-65e2d4e15006 // indirect
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/sys v0.0.0-20190209173611-3b5209105503 // indirect
-	golang.org/x/tools v0.0.0-20190212195815-340a1cdb5070
+	golang.org/x/tools v0.0.0-20190214043641-508f945e1a9b
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
