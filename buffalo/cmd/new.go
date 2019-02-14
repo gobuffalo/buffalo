@@ -62,7 +62,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		return nopts, errors.WithStack(err)
 	}
 	app := meta.New(pwd)
-
+	app.WithGrifts = true
 	app.Name = fname.New(args[0])
 	app.Bin = filepath.Join("bin", app.Name.String())
 
@@ -94,6 +94,8 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 
 	if app.AsAPI {
 		app.WithWebpack = false
+		app.WithYarn = false
+		app.WithNodeJs = false
 	}
 
 	opts := &core.Options{}
@@ -103,6 +105,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		opts.Docker = &docker.Options{
 			Style: x,
 		}
+		app.WithDocker = true
 	}
 
 	x = viper.GetString("ci-provider")
