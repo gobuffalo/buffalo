@@ -39,8 +39,8 @@ type Options struct {
 	// Empty by default
 	TemplateValidators []TemplateValidator `json:"-"`
 	// Mod is the -mod flag
-	Mod      string    `json:"mod"`
-	rollback *sync.Map `json:"rollback"`
+	Mod      string `json:"mod"`
+	rollback *sync.Map
 }
 
 // Validate that options are usuable

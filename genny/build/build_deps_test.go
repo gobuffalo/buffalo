@@ -12,7 +12,9 @@ import (
 func Test_buildDeps(t *testing.T) {
 	r := require.New(t)
 
-	opts := &Options{}
+	opts := &Options{
+		Tags: meta.BuildTags{"foo"},
+	}
 
 	run := gentest.NewRunner()
 	run.WithNew(buildDeps(opts))
@@ -23,7 +25,7 @@ func Test_buildDeps(t *testing.T) {
 	r.Len(res.Commands, 1)
 
 	c := res.Commands[0]
-	r.Equal("go get ./...", strings.Join(c.Args, " "))
+	r.Equal("go get -tags development foo ./...", strings.Join(c.Args, " "))
 }
 
 func Test_buildDeps_WithDep(t *testing.T) {
