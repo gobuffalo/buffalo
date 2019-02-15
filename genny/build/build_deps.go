@@ -23,7 +23,11 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 		g.Merge(dg)
 	} else {
 		// mount the go get runner
-		g.RunFn(gotools.Get("./..."))
+		tf := opts.App.BuildTags(opts.Environment, opts.Tags...)
+		if len(tf) > 0 {
+			tf = append([]string{"-tags"}, tf.String())
+		}
+		g.RunFn(gotools.Get("./...", tf...))
 	}
 	return g, nil
 }

@@ -20,14 +20,14 @@ require (
 	github.com/gobuffalo/packr/v2 v2.0.1
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
-	github.com/gobuffalo/pop v4.9.6+incompatible
+	github.com/gobuffalo/pop v4.9.7+incompatible
 	github.com/gobuffalo/tags v2.0.15+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.0
 	github.com/gorilla/sessions v1.1.3
 	github.com/karrick/godirwalk v1.7.8
-	github.com/markbates/deplist v1.0.5
+	github.com/markbates/deplist v1.1.3
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
 	github.com/markbates/refresh v1.6.0
@@ -42,6 +42,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190211182817-74369b46fc67
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190214185518-4ea155ddbdde
+	golang.org/x/tools v0.0.0-20190214204934-8dcb7bc8c7fe
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

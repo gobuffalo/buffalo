@@ -57,7 +57,7 @@ func Test_New(t *testing.T) {
 			r.Equal(s, strings.Join(c.Args, " "))
 		}
 
-		cmds := []string{"go get ./...", "go build -i -tags bar -o bin/foo"}
+		cmds := []string{"go get -tags bar ./...", "go build -i -tags bar -o bin/foo"}
 		r.Len(res.Commands, len(cmds))
 		for i, c := range res.Commands {
 			eq(cmds[i], c)
