@@ -1,10 +1,5 @@
 package render
 
-import (
-	"github.com/gobuffalo/plush"
-	"github.com/markbates/oncer"
-)
-
 // JavaScript renders the named files using the 'application/javascript'
 // content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
@@ -35,11 +30,4 @@ func (e *Engine) JavaScript(names ...string) Renderer {
 		names:       names,
 	}
 	return hr
-}
-
-// JSTemplateEngine renders files with a `.js` extension through Plush.
-// Deprecated: use github.com/gobuffalo/plush.BuffaloRenderer instead.
-func JSTemplateEngine(input string, data map[string]interface{}, helpers map[string]interface{}) (string, error) {
-	oncer.Deprecate(0, "render.JSTemplateEngine", "Use github.com/gobuffalo/plush.BuffaloRenderer instead.")
-	return plush.BuffaloRenderer(input, data, helpers)
 }

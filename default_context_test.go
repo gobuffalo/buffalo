@@ -10,6 +10,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
+	"github.com/gobuffalo/logger"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
@@ -17,7 +18,7 @@ import (
 func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
-		logger:  NewLogger("debug"),
+		logger:  logger.New(logger.DebugLevel),
 		data:    make(map[string]interface{}),
 		flash:   &Flash{data: make(map[string][]string)},
 		moot:    &sync.RWMutex{},
