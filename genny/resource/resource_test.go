@@ -66,7 +66,8 @@ func Test_New(t *testing.T) {
 			r.Len(res.Files, 9)
 
 			nn := name.New(tt.Options.Name).Pluralize().String()
-			for _, s := range []string{"_form", "edit", "index", "new", "show"} {
+			actions := []string{"_form", "index", "show", "new", "edit"}
+			for _, s := range actions {
 				p := path.Join("templates", nn, s+".html")
 				_, err = res.Find(p)
 				r.NoError(err)

@@ -53,7 +53,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	data := map[string]interface{}{
 		"opts":    pres,
-		"actions": actions,
+		"actions": actions(opts),
 		"folder":  folder,
 	}
 	helpers := template.FuncMap{

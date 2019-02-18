@@ -6,9 +6,10 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.13.0
-	github.com/gobuffalo/buffalo-pop v1.6.0
+	github.com/gobuffalo/buffalo-pop v1.7.0
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.2.0
+	github.com/gobuffalo/fizz v1.5.0 // indirect
 	github.com/gobuffalo/flect v0.1.0
 	github.com/gobuffalo/genny v0.0.0-20190131190646-008a76242145
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
@@ -20,7 +21,7 @@ require (
 	github.com/gobuffalo/packr/v2 v2.0.1
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
-	github.com/gobuffalo/pop v4.9.7+incompatible
+	github.com/gobuffalo/pop v4.9.8+incompatible
 	github.com/gobuffalo/tags v2.0.15+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
@@ -36,6 +37,7 @@ require (
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.3.0
+	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1

@@ -9,16 +9,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-var actions = []name.Ident{
-	name.New("list"),
-	name.New("show"),
-	name.New("new"),
-	name.New("create"),
-	name.New("edit"),
-	name.New("update"),
-	name.New("destroy"),
-}
-
 func addResource(pres presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		f, err := r.FindFile("actions/app.go")
@@ -32,4 +22,20 @@ func addResource(pres presenter) genny.RunFn {
 		}
 		return r.File(f)
 	}
+}
+
+func actions(opts *Options) []name.Ident {
+	actions := []name.Ident{
+		name.New("list"),
+		name.New("show"),
+		name.New("create"),
+		name.New("update"),
+		name.New("destroy"),
+	}
+
+	if opts.App.AsWeb {
+		actions = append(actions, name.New("new"), name.New("edit"))
+	}
+
+	return actions
 }
