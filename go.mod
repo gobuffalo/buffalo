@@ -37,12 +37,14 @@ require (
 	github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.3.0
+	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190211182817-74369b46fc67
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190214204934-8dcb7bc8c7fe
+	golang.org/x/sys v0.0.0-20190219092855-153ac476189d // indirect
+	golang.org/x/tools v0.0.0-20190219135230-f000d56b39dc
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
