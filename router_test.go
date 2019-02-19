@@ -14,6 +14,7 @@ import (
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -358,14 +359,28 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
 }
 
+type WebResource struct {
+	BaseResource
+}
+
+// Edit default implementation. Returns a 404
+func (v WebResource) Edit(c Context) error {
+	return c.Error(404, errors.New("resource not implemented"))
+}
+
+// New default implementation. Returns a 404
+func (v WebResource) New(c Context) error {
+	return c.Error(404, errors.New("resource not implemented"))
+}
+
 func Test_App_NamedRoutes(t *testing.T) {
 
 	type CarsResource struct {
-		*BaseResource
+		WebResource
 	}
 
 	type ResourcesResource struct {
-		*BaseResource
+		WebResource
 	}
 
 	r := require.New(t)
@@ -520,7 +535,7 @@ func Test_Resource(t *testing.T) {
 }
 
 type paramKeyResource struct {
-	Resource
+	*userResource
 }
 
 func (paramKeyResource) ParamKey() string {
@@ -529,7 +544,7 @@ func (paramKeyResource) ParamKey() string {
 
 func Test_Resource_ParamKey(t *testing.T) {
 	r := require.New(t)
-	fr := &paramKeyResource{&BaseResource{}}
+	fr := &paramKeyResource{&userResource{}}
 	a := New(Options{})
 	a.Resource("/foo", fr)
 	rt := a.Routes()
@@ -639,17 +654,17 @@ func Test_ResourceOnResource(t *testing.T) {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
-		"/":                                    "root",
-		"/users":                               "users",
-		"/users/new":                           "newUsers",
-		"/users/{user_id}":                     "user",
-		"/users/{user_id}/children":            "userChildren",
-		"/users/{user_id}/children/{child_id}": "userChild",
-		"/users/{user_id}/children/new":        "newUserChildren",
+		"/":                                          "root",
+		"/users":                                     "users",
+		"/users/new":                                 "newUsers",
+		"/users/{user_id}":                           "user",
+		"/users/{user_id}/children":                  "userChildren",
+		"/users/{user_id}/children/{child_id}":       "userChild",
+		"/users/{user_id}/children/new":              "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                 "adminPlanes",
-		"/admin/planes/{plane_id}":      "adminPlane",
-		"/admin/planes/{plane_id}/edit": "editAdminPlane",
+		"/admin/planes":                              "adminPlanes",
+		"/admin/planes/{plane_id}":                   "adminPlane",
+		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
 	}
 
 	a := New(Options{})

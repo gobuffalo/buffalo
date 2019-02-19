@@ -25,9 +25,7 @@ import "errors"
 type Resource interface {
 	List(Context) error
 	Show(Context) error
-	New(Context) error
 	Create(Context) error
-	Edit(Context) error
 	Update(Context) error
 	Destroy(Context) error
 }
@@ -59,18 +57,8 @@ func (v BaseResource) Show(c Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
-// New default implementation. Returns a 404
-func (v BaseResource) New(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
 // Create default implementation. Returns a 404
 func (v BaseResource) Create(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
-}
-
-// Edit default implementation. Returns a 404
-func (v BaseResource) Edit(c Context) error {
 	return c.Error(404, errors.New("resource not implemented"))
 }
 
