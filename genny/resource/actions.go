@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/pkg/errors"
 )
 
@@ -16,7 +16,7 @@ func addResource(pres presenter) genny.RunFn {
 			return errors.WithStack(err)
 		}
 		stmt := fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", pres.Name.URL(), pres.Name.Resource())
-		f, err = gotools.AddInsideBlock(f, "if app == nil {", stmt)
+		f, err = gogen.AddInsideBlock(f, "if app == nil {", stmt)
 		if err != nil {
 			return errors.WithStack(err)
 		}
