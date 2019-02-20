@@ -8,10 +8,10 @@ import (
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/runtime"
+	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/dep"
-	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
+	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/gogen/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
@@ -34,8 +34,8 @@ func New(opts *Options) (*genny.Group, error) {
 		if err != nil {
 			return gg, errors.WithStack(err)
 		}
-		g.RunFn(gotools.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
-		g.RunFn(gotools.Get("./..."))
+		g.Command(gogen.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
+		g.Command(gogen.Get("./..."))
 
 		gg.Add(g)
 	}
@@ -106,7 +106,7 @@ func New(opts *Options) (*genny.Group, error) {
 	// DEP/MODS/go get should be last
 	if app.WithDep {
 		// init dep
-		di, err := dep.Init("", false)
+		di, err := depgen.Init("", false)
 		if err != nil {
 			return gg, errors.WithStack(err)
 		}
@@ -115,7 +115,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	if !app.WithDep && !app.WithModules {
 		g := genny.New()
-		g.RunFn(gotools.Get("./...", "-t"))
+		g.Command(gogen.Get("./...", "-t"))
 		gg.Add(g)
 	}
 

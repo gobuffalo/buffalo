@@ -4,15 +4,18 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
+	github.com/gobuffalo/attrs v0.0.0-20190219185331-f338c9388485
 	github.com/gobuffalo/buffalo-docker v1.0.5
 	github.com/gobuffalo/buffalo-plugins v1.13.0
 	github.com/gobuffalo/buffalo-pop v1.7.0
+	github.com/gobuffalo/depgen v0.0.0-20190219190223-ba8c93fa0c2c
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.2.0
 	github.com/gobuffalo/fizz v1.5.0 // indirect
 	github.com/gobuffalo/flect v0.1.0
 	github.com/gobuffalo/genny v0.0.0-20190219203444-c95082806342
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
+	github.com/gobuffalo/gogen v0.0.0-20190219194924-d32a17ad9761
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
 	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf

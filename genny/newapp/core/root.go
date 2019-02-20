@@ -7,7 +7,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
@@ -33,7 +33,7 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 
 	helpers := template.FuncMap{}
 
-	t := gotools.TemplateTransformer(data, helpers)
+	t := gogen.TemplateTransformer(data, helpers)
 	g.Transformer(t)
 
 	if !opts.App.WithModules {
