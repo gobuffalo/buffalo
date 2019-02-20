@@ -10,7 +10,7 @@ import (
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {
-	buildArgs := []string{"build"}
+	buildArgs := []string{opts.GoCommand}
 
 	if !gomods.On() {
 		buildArgs = append(buildArgs, "-i")
@@ -26,16 +26,19 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 	if len(tf) > 0 {
 		buildArgs = append(buildArgs, "-tags", tf.String())
 	}
-	bin := opts.App.Bin
-	if runtime.GOOS == "windows" {
-		if !strings.HasSuffix(bin, ".exe") {
-			bin += ".exe"
+
+	if opts.GoCommand == "build" {
+		bin := opts.App.Bin
+		if runtime.GOOS == "windows" {
+			if !strings.HasSuffix(bin, ".exe") {
+				bin += ".exe"
+			}
+			bin = strings.Replace(bin, "/", "\\", -1)
+		} else {
+			bin = strings.TrimSuffix(bin, ".exe")
 		}
-		bin = strings.Replace(bin, "/", "\\", -1)
-	} else {
-		bin = strings.TrimSuffix(bin, ".exe")
+		buildArgs = append(buildArgs, "-o", bin)
 	}
-	buildArgs = append(buildArgs, "-o", bin)
 
 	flags := []string{}
 

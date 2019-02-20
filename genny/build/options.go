@@ -39,8 +39,10 @@ type Options struct {
 	// Empty by default
 	TemplateValidators []TemplateValidator `json:"-"`
 	// Mod is the -mod flag
-	Mod      string `json:"mod"`
-	rollback *sync.Map
+	Mod string `json:"mod"`
+	// GoCommand is the `go X` command to be used. Default is "build".
+	GoCommand string `json:"go_command"`
+	rollback  *sync.Map
 }
 
 // Validate that options are usuable
@@ -60,6 +62,9 @@ func (opts *Options) Validate() error {
 	}
 	if opts.rollback == nil {
 		opts.rollback = &sync.Map{}
+	}
+	if len(opts.GoCommand) == 0 {
+		opts.GoCommand = "build"
 	}
 	return nil
 }
