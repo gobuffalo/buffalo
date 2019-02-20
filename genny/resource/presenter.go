@@ -1,8 +1,8 @@
 package resource
 
 import (
+	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/meta"
 )
 

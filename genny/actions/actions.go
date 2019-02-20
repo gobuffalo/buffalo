@@ -6,7 +6,7 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
@@ -58,7 +58,7 @@ func construct(opts *Options) genny.RunFn {
 func transform(pres *presenter, f genny.File) (genny.File, error) {
 	pres.Data["actions"] = pres.Actions
 	pres.Data["name"] = pres.Name
-	t := gotools.TemplateTransformer(pres.Data, pres.Helpers)
+	t := gogen.TemplateTransformer(pres.Data, pres.Helpers)
 	return t.Transform(f)
 }
 
@@ -76,7 +76,7 @@ func updateApp(pres *presenter) genny.RunFn {
 				lines = append(lines, e)
 			}
 		}
-		f, err = gotools.AddInsideBlock(f, "app == nil", strings.Join(lines, "\n\t\t"))
+		f, err = gogen.AddInsideBlock(f, "app == nil", strings.Join(lines, "\n\t\t"))
 		if err != nil {
 			return errors.WithStack(err)
 		}

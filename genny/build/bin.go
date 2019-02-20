@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools/gomods"
+	"github.com/gobuffalo/gogen/gomods"
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {

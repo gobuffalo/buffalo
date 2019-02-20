@@ -22,7 +22,7 @@ import (
 	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr/v2/plog"
@@ -205,7 +205,7 @@ var newCmd = &cobra.Command{
 		}
 		run.WithGroup(gg)
 
-		if err := run.WithNew(gotools.GoFmt(app.Root)); err != nil {
+		if err := run.WithNew(gogen.Fmt(app.Root)); err != nil {
 			return errors.WithStack(err)
 		}
 

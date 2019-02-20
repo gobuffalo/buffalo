@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gobuffalo/genny/movinglater/attrs"
+	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/meta"
 )
 

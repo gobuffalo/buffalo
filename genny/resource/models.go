@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/pkg/errors"
 )
 
@@ -27,7 +27,8 @@ func installPop(opts *Options) genny.RunFn {
 			return nil
 		}
 		if _, err := r.LookPath("buffalo-pop"); err != nil {
-			if err := gotools.Get("github.com/gobuffalo/buffalo-pop")(r); err != nil {
+			c := gogen.Get("github.com/gobuffalo/buffalo-pop")
+			if err := r.Exec(c); err != nil {
 				return errors.WithStack(err)
 			}
 		}
