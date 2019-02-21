@@ -10,6 +10,9 @@ import (
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {
+	if len(opts.GoCommand) == 0 {
+		opts.GoCommand = "build"
+	}
 	buildArgs := []string{opts.GoCommand}
 
 	if !gomods.On() {
