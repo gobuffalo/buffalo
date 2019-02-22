@@ -6,9 +6,18 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-16.04'
+    mac:
+      imageName: 'macos-10.13'
+    windows:
+      imageName: 'vs2017-win2016'
 
+pool:
+  vmImage: $(imageName)
+  
 variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   GOROOT: '/usr/local/go1.11' # Go installation path
