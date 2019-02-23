@@ -6,16 +6,14 @@ steps:
     inputs:
       targetType: inline
       script: |
-        mkdir -p '$(GOBIN)'
-        mkdir -p '$(GOPATH)/pkg'
-        mkdir -p '$(modulePath)'
+        mkdir -p "$(GOBIN)"
+        mkdir -p "$(GOPATH)/pkg"
+        mkdir -p "$(modulePath)"
         shopt -s extglob
-        mv !(gopath) '$(modulePath)'
-        echo '##vso[task.prependpath]$(GOBIN)'
-        echo '##vso[task.prependpath]$(GOROOT)/bin'
+        mv !(gopath) "$(modulePath)"
     displayName: "Setup Go Workspace"
   - script: |
       go get -tags "sqlite integration_test" -t -v ./...
       go test -tags "sqlite integration_test" -race ./...
-    workingDirectory: '$(modulePath)'
+    workingDirectory: "$(modulePath)"
     displayName: "Tests"
