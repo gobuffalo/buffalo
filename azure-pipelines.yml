@@ -8,7 +8,8 @@ jobs:
   pool:
     vmImage: 'ubuntu-16.04'
   steps:
-    - script: docker build .  
+    - script: docker build .
+      displayName: "Integration Tests"
 
 - job: Windows
   pool:
@@ -26,7 +27,7 @@ jobs:
         go_version: '1.11'
         GO111MODULE: "off"
   steps:
-    - template: 'ci.yml'
+    - template: 'azure-tests.yml'
 
 - job: macOS
   pool:
@@ -44,7 +45,7 @@ jobs:
         go_version: '1.11'
         GO111MODULE: "off"
   steps:
-    - template: ci.yml
+    - template: azure-tests.yml
 
 - job: Linux
   pool:
@@ -62,4 +63,4 @@ jobs:
         go_version: '1.11'
         GO111MODULE: "off"
   steps:
-    - template: ci.yml
+    - template: azure-tests.yml
