@@ -34,7 +34,7 @@ var buildOptions = struct {
 
 var xbuildCmd = &cobra.Command{
 	Use:     "build",
-	Aliases: []string{"b", "bill"},
+	Aliases: []string{"b", "bill", "install"},
 	Short:   "Build the application binary, including bundling of assets (packr & webpack)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
