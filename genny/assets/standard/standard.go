@@ -4,7 +4,7 @@ import (
 	"text/template"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -15,7 +15,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	data := map[string]interface{}{}
 	h := template.FuncMap{}
-	t := gotools.TemplateTransformer(data, h)
+	t := gogen.TemplateTransformer(data, h)
 	g.Transformer(t)
 
 	return g, nil

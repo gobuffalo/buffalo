@@ -2,10 +2,11 @@ package generate
 
 import (
 	"context"
+
 	"github.com/gobuffalo/buffalo/genny/mail"
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -35,7 +36,7 @@ var MailCmd = &cobra.Command{
 			run = genny.DryRunner(context.Background())
 		}
 
-		g, err := gotools.GoFmt(mailOptions.App.Root)
+		g, err := gogen.Fmt(mailOptions.App.Root)
 		if err != nil {
 			return errors.WithStack(err)
 		}

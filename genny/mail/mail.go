@@ -4,7 +4,7 @@ import (
 	"text/template"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
@@ -30,7 +30,7 @@ func New(opts *Options) (*genny.Group, error) {
 	data := map[string]interface{}{
 		"opts": opts,
 	}
-	t := gotools.TemplateTransformer(data, h)
+	t := gogen.TemplateTransformer(data, h)
 	g.Transformer(t)
 
 	fn := opts.Name.File().String()
@@ -49,7 +49,7 @@ func initGenerator(opts *Options) (*genny.Generator, error) {
 	data := map[string]interface{}{
 		"opts": opts,
 	}
-	t := gotools.TemplateTransformer(data, h)
+	t := gogen.TemplateTransformer(data, h)
 	g.Transformer(t)
 
 	g.Should = func(r *genny.Runner) bool {
