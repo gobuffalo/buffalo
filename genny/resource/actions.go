@@ -5,19 +5,9 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/pkg/errors"
 )
-
-var actions = []name.Ident{
-	name.New("list"),
-	name.New("show"),
-	name.New("new"),
-	name.New("create"),
-	name.New("edit"),
-	name.New("update"),
-	name.New("destroy"),
-}
 
 func addResource(pres presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
@@ -26,10 +16,26 @@ func addResource(pres presenter) genny.RunFn {
 			return errors.WithStack(err)
 		}
 		stmt := fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", pres.Name.URL(), pres.Name.Resource())
-		f, err = gotools.AddInsideBlock(f, "if app == nil {", stmt)
+		f, err = gogen.AddInsideBlock(f, "if app == nil {", stmt)
 		if err != nil {
 			return errors.WithStack(err)
 		}
 		return r.File(f)
 	}
+}
+
+func actions(opts *Options) []name.Ident {
+	actions := []name.Ident{
+		name.New("list"),
+		name.New("show"),
+		name.New("create"),
+		name.New("update"),
+		name.New("destroy"),
+	}
+
+	if opts.App.AsWeb {
+		actions = append(actions, name.New("new"), name.New("edit"))
+	}
+
+	return actions
 }

@@ -116,6 +116,14 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	})
 }
 
+type newable interface {
+	New(Context) error
+}
+
+type editable interface {
+	Edit(Context) error
+}
+
 // Resource maps an implementation of the Resource interface
 // to the appropriate RESTful mappings. Resource returns the *App
 // associated with this group of mappings so you can set middleware, etc...
@@ -136,6 +144,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
+
 	g := a.Group(p)
 	p = "/"
 
@@ -161,12 +170,20 @@ func (a *App) Resource(p string, r Resource) *App {
 	spath := path.Join(p, "{"+paramName+"}")
 	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
 	g.GET(p, r.List)
-	setFuncKey(r.New, fmt.Sprintf(rname, "New"))
-	g.GET(path.Join(p, "new"), r.New)
+
+	if n, ok := r.(newable); ok {
+		setFuncKey(n.New, fmt.Sprintf(rname, "New"))
+		g.GET(path.Join(p, "new"), n.New)
+	}
+
 	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
-	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
-	g.GET(path.Join(spath, "edit"), r.Edit)
+
+	if n, ok := r.(editable); ok {
+		setFuncKey(n.Edit, fmt.Sprintf(rname, "Edit"))
+		g.GET(path.Join(spath, "edit"), n.Edit)
+	}
+
 	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
 	g.POST(p, r.Create)
 	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))

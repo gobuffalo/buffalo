@@ -9,7 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/pkg/errors"
 )
 
@@ -80,18 +80,20 @@ func depRunner(args []string) error {
 
 func modGetUpdate(r *Runner) error {
 	run := genny.WetRunner(context.Background())
+	g := genny.New()
 	for _, x := range upkg {
 		if x == "github.com/gobuffalo/buffalo" {
 			continue
 		}
-		run.WithRun(gotools.Get(x))
+		g.Command(gogen.Get(x))
 	}
 
 	for _, x := range []string{"beta", "rc"} {
 		if !strings.Contains(runtime.Version, x) {
 			continue
 		}
-		run.WithRun(gotools.Get("github.com/gobuffalo/buffalo@"+runtime.Version, "-u"))
+		g.Command(gogen.Get("github.com/gobuffalo/buffalo@"+runtime.Version, "-u"))
 	}
+	run.With(g)
 	return run.Run()
 }

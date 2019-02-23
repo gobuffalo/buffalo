@@ -1,9 +1,9 @@
 package build
 
 import (
+	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/dep"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/pkg/errors"
 )
 
@@ -16,7 +16,7 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 
 	if opts.App.WithDep {
 		// mount the dep generator
-		dg, err := dep.Ensure(false)
+		dg, err := depgen.Ensure(false)
 		if err != nil {
 			return g, errors.WithStack(err)
 		}
@@ -27,7 +27,7 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 		if len(tf) > 0 {
 			tf = append([]string{"-tags"}, tf.String())
 		}
-		g.RunFn(gotools.Get("./...", tf...))
+		g.Command(gogen.Get("./...", tf...))
 	}
 	return g, nil
 }

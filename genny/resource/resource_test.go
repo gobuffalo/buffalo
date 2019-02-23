@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
-	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/meta"
 	packr "github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
@@ -66,7 +66,8 @@ func Test_New(t *testing.T) {
 			r.Len(res.Files, 9)
 
 			nn := name.New(tt.Options.Name).Pluralize().String()
-			for _, s := range []string{"_form", "edit", "index", "new", "show"} {
+			actions := []string{"_form", "index", "show", "new", "edit"}
+			for _, s := range actions {
 				p := path.Join("templates", nn, s+".html")
 				_, err = res.Find(p)
 				r.NoError(err)

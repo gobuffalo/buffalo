@@ -79,6 +79,7 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingle}}))
 }
 
+{{ if .opts.App.AsWeb -}}
 // New renders the form for creating a new {{.opts.Model.Proper}}.
 // This function is mapped to the path GET /{{.opts.Name.URL}}/new
 func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
@@ -88,6 +89,7 @@ func (v {{.opts.Name.Resource}}Resource) New(c buffalo.Context) error {
   {{ end -}}
   return c.Render(200, r.Auto(c, &models.{{.opts.Model.Proper}}{}))
 }
+{{ end -}}
 
 // Create adds a {{.opts.Model.Proper}} to the DB. This function is mapped to the
 // path POST /{{.opts.Name.URL}}
@@ -130,6 +132,7 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   return c.Render(201, r.Auto(c, {{.opts.Model.VarCaseSingle}}))
 }
 
+{{ if .opts.App.AsWeb -}}
 // Edit renders a edit form for a {{.opts.Model.Proper}}. This function is
 // mapped to the path GET /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}/edit
 func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
@@ -152,6 +155,7 @@ func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
   {{ end -}}
   return c.Render(200, r.Auto(c, {{.opts.Model.VarCaseSingle}}))
 }
+{{ end -}}
 
 // Update changes a {{.opts.Model.Proper}} in the DB. This function is mapped to
 // the path PUT /{{.opts.Name.URL}}/{{"{"}}{{.opts.Name.ParamID}}}

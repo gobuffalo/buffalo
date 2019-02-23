@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 )
 
 var rTools = []string{}
@@ -14,17 +14,19 @@ var rTools = []string{}
 func installTools(r *Runner) error {
 	fmt.Println("~~~ Installing required tools ~~~")
 	run := genny.WetRunner(context.Background())
+	g := genny.New()
 	app := r.App
 	if app.WithDep {
 		if _, err := exec.LookPath("dep"); err != nil {
-			run.WithRun(gotools.Install("github.com/golang/dep/cmd/dep"))
+			g.RunFn(gogen.Install("github.com/golang/dep/cmd/dep"))
 		}
 	}
 	if app.WithPop {
 		rTools = append(rTools, "github.com/gobuffalo/buffalo-pop")
 	}
 	for _, t := range rTools {
-		run.WithRun(gotools.Get(t))
+		g.Command(gogen.Get(t))
 	}
+	run.With(g)
 	return run.Run()
 }

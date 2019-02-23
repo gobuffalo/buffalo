@@ -3,9 +3,9 @@ package generate
 import (
 	"context"
 
+	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/buffalo/genny/resource"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/logger"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
