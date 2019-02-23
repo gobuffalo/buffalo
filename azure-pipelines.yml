@@ -4,6 +4,12 @@ variables:
   modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 jobs:
+- job: Integration Tests
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+    - script: docker build .  
+
 - job: Windows
   pool:
     vmImage: 'vs2017-win2016'
@@ -39,6 +45,7 @@ jobs:
         GO111MODULE: "off"
   steps:
     - template: ci.yml
+
 - job: Linux
   pool:
     vmImage: 'ubuntu-16.04'
