@@ -110,7 +110,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 
 		stat, _ := f.Stat()
 		maxAge := envy.Get(AssetsAgeVarName, "31536000")
-		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime().UnixNano()))
 		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
