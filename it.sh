@@ -6,7 +6,14 @@ set -ex
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 export GO111MODULE=on
-make install
+
+go get github.com/gobuffalo/release
+go get github.com/gobuffalo/packr/v2/packr2
+packr2 clean
+go get -tags "sqlite integration_test" -t ./...
+go install -tags "sqlite integration_test" -v ./buffalo
+make tidy
+
 buffalo version
 go test -tags "sqlite integration_test" -race  ./...
 
