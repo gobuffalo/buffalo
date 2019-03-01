@@ -18,7 +18,11 @@ deps:
 	$(GO_BIN) get github.com/gobuffalo/release
 	$(GO_BIN) get github.com/gobuffalo/packr/v2/packr2
 	packr2 clean
+ifeq ($(GO111MODULE),on)
+	$(GO_BIN) get -tags ${TAGS} -t ./...
+else
 	$(GO_BIN) get -tags ${TAGS} -u -t ./...
+endif
 	make tidy
 
 build:

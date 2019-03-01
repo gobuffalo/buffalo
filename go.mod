@@ -15,22 +15,22 @@ require (
 	github.com/gobuffalo/flect v0.1.0
 	github.com/gobuffalo/genny v0.0.0-20190219203444-c95082806342
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
-	github.com/gobuffalo/gogen v0.0.0-20190219194924-d32a17ad9761
+	github.com/gobuffalo/gogen v0.0.0-20190224213239-1c6076128bbc
 	github.com/gobuffalo/httptest v1.1.0
-	github.com/gobuffalo/logger v0.0.0-20181127160119-5b956e21995c
+	github.com/gobuffalo/logger v0.0.0-20190224201004-be78ebfea0fa
 	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf
-	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
+	github.com/gobuffalo/packd v0.0.0-20190224160250-d04dd98aca5b
 	github.com/gobuffalo/packr v1.22.0
-	github.com/gobuffalo/packr/v2 v2.0.1
+	github.com/gobuffalo/packr/v2 v2.0.3
 	github.com/gobuffalo/plush v3.7.33+incompatible
-	github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3
+	github.com/gobuffalo/plushgen v0.0.0-20190224160205-347ea233336e
 	github.com/gobuffalo/pop v4.9.8+incompatible
 	github.com/gobuffalo/tags v2.0.15+incompatible
 	github.com/gobuffalo/x v0.0.0-20181110221217-14085ca3e1a9
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.0
 	github.com/gorilla/sessions v1.1.3
-	github.com/karrick/godirwalk v1.7.8
+	github.com/karrick/godirwalk v1.8.0
 	github.com/markbates/deplist v1.1.3
 	github.com/markbates/grift v1.0.5
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
@@ -45,7 +45,7 @@ require (
 	github.com/spf13/viper v1.3.1
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190219172222-a4c6cb3142f2
-	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4
-	golang.org/x/tools v0.0.0-20190219185102-9394956cfdc5
+	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
+	golang.org/x/tools v0.0.0-20190227180812-8dcc6e70cdef
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
