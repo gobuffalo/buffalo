@@ -74,6 +74,10 @@ func Register(contentType string, fn Binder) {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "https://github.com/monoculum/formam".
 func Exec(req *http.Request, value interface{}) error {
+	if ba, ok := value.(Bindable); ok {
+		return ba.Bind(req)
+	}
+
 	ct := httpx.ContentType(req)
 	if ct == "" {
 		return errors.New("blank content type")
