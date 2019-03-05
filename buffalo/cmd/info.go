@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"reflect"
 
+	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
@@ -38,6 +39,15 @@ var infoCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+		}
+
+		list, err := plugdeps.List(app)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		bb.WriteString("\n### Plugins\n")
+		if err := list.Encode(bb); err != nil {
+			return err
 		}
 
 		if err := runInfoCmds(); err != nil {
