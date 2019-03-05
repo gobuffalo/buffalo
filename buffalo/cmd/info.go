@@ -58,7 +58,7 @@ func configs(app meta.App) error {
 	bb := os.Stdout
 	root := filepath.Join(app.Root, "config")
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if filepath.Ext(path) != ".toml" {
+		if info == nil || info.IsDir() {
 			return nil
 		}
 		f, err := os.Open(path)
