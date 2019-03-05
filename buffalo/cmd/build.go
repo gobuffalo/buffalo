@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/markbates/sigtx"
 	"github.com/spf13/cobra"
 )
@@ -57,7 +56,7 @@ var xbuildCmd = &cobra.Command{
 		if buildOptions.Verbose || buildOptions.Debug {
 			lg := logger.New(logger.DebugLevel)
 			run.Logger = lg
-			plog.Logger = lg
+			// plog.Logger = lg
 			buildOptions.BuildFlags = append(buildOptions.BuildFlags, "-v")
 		}
 
@@ -72,6 +71,9 @@ var xbuildCmd = &cobra.Command{
 			opts.TemplateValidators = append(opts.TemplateValidators, build.PlushValidator, build.GoTemplateValidator)
 		}
 
+		if cmd.CalledAs() == "install" {
+			opts.GoCommand = "install"
+		}
 		clean := build.Cleanup(opts)
 		defer clean(run)
 		run.WithNew(build.New(opts))
