@@ -5,7 +5,9 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
+	"strings"
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
@@ -43,8 +45,35 @@ var infoCmd = &cobra.Command{
 		if err := runInfoCmds(); err != nil {
 			return errors.WithStack(err)
 		}
+
+		if err := configs(app); err != nil {
+			return errors.WithStack(err)
+		}
+
 		return infoGoMod()
 	},
+}
+
+func configs(app meta.App) error {
+	bb := os.Stdout
+	root := filepath.Join(app.Root, "config")
+	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if info == nil || info.IsDir() {
+			return nil
+		}
+		f, err := os.Open(path)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		defer f.Close()
+		p := strings.TrimPrefix(path, app.Root)
+		p = strings.TrimPrefix(p, string(filepath.Separator))
+		bb.WriteString(fmt.Sprintf("\n### %s\n", p))
+		if _, err := io.Copy(bb, f); err != nil {
+			return errors.WithStack(err)
+		}
+		return nil
+	})
 }
 
 type infoCommand struct {
