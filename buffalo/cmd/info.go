@@ -5,9 +5,10 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
+	"strings"
 
-	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
@@ -41,20 +42,38 @@ var infoCmd = &cobra.Command{
 			}
 		}
 
-		list, err := plugdeps.List(app)
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		bb.WriteString("\n### Plugins\n")
-		if err := list.Encode(bb); err != nil {
-			return err
-		}
-
 		if err := runInfoCmds(); err != nil {
 			return errors.WithStack(err)
 		}
+
+		if err := configs(app); err != nil {
+			return errors.WithStack(err)
+		}
+
 		return infoGoMod()
 	},
+}
+
+func configs(app meta.App) error {
+	bb := os.Stdout
+	root := filepath.Join(app.Root, "config")
+	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if filepath.Ext(path) != ".toml" {
+			return nil
+		}
+		f, err := os.Open(path)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+		defer f.Close()
+		p := strings.TrimPrefix(path, app.Root)
+		p = strings.TrimPrefix(p, string(filepath.Separator))
+		bb.WriteString(fmt.Sprintf("\n### %s\n", p))
+		if _, err := io.Copy(bb, f); err != nil {
+			return errors.WithStack(err)
+		}
+		return nil
+	})
 }
 
 type infoCommand struct {
