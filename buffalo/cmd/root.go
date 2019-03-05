@@ -62,9 +62,7 @@ const dbNotFound = `unknown command "db"`
 const popNotFound = `unknown command "pop"`
 const popInstallInstructions = `Pop support has been moved to the https://github.com/gobuffalo/buffalo-pop plugin.
 
-Go Get Installation:
-
-	$ go get github.com/gobuffalo/buffalo-pop
+!! PLEASE READ PLUGIN DOCUMENTATION - https://gobuffalo.io/en/docs/plugins
 
 Buffalo Plugins Installation*:
 
