@@ -16,7 +16,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/pop"
 	"github.com/pkg/errors"
 )
 
@@ -101,6 +100,10 @@ func (d *DefaultContext) Flash() *Flash {
 	return d.flash
 }
 
+type paginable interface {
+	Paginate() string
+}
+
 // Render a status code and render.Renderer to the associated Response.
 // The request parameters will be made available to the render.Renderer
 // "{{.params}}". Any values set onto the Context will also automatically
@@ -138,8 +141,8 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 
 		d.Response().Header().Set("Content-Type", rr.ContentType())
-		if p, ok := data["pagination"].(*pop.Paginator); ok {
-			d.Response().Header().Set("X-Pagination", p.String())
+		if p, ok := data["pagination"].(paginable); ok {
+			d.Response().Header().Set("X-Pagination", p.Paginate())
 		}
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
