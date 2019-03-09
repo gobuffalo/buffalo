@@ -19,7 +19,7 @@ require (
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20190224201004-be78ebfea0fa
 	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf
-	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87 // indirect
+	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
 	github.com/gobuffalo/packd v0.0.0-20190224160250-d04dd98aca5b
 	github.com/gobuffalo/packr v1.22.0
 	github.com/gobuffalo/packr/v2 v2.0.3
