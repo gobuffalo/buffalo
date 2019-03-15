@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/events"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
@@ -34,7 +33,7 @@ func (a *App) Muxer() *mux.Router {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
-	events.LoadPlugins()
+	LoadPlugins()
 	envy.Load()
 	opts = optionsWithDefaults(opts)
 
