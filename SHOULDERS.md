@@ -11,11 +11,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/fatih/color](https://godoc.org/github.com/fatih/color)
 
+* [github.com/gobuffalo/attrs](https://godoc.org/github.com/gobuffalo/attrs)
+
 * [github.com/gobuffalo/buffalo-docker](https://godoc.org/github.com/gobuffalo/buffalo-docker)
 
 * [github.com/gobuffalo/buffalo-plugins](https://godoc.org/github.com/gobuffalo/buffalo-plugins)
 
 * [github.com/gobuffalo/buffalo-pop](https://godoc.org/github.com/gobuffalo/buffalo-pop)
+
+* [github.com/gobuffalo/depgen](https://godoc.org/github.com/gobuffalo/depgen)
 
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
@@ -29,11 +33,15 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
 
+* [github.com/gobuffalo/gogen](https://godoc.org/github.com/gobuffalo/gogen)
+
 * [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
 
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
+
+* [github.com/gobuffalo/nulls](https://godoc.org/github.com/gobuffalo/nulls)
 
 * [github.com/gobuffalo/packd](https://godoc.org/github.com/gobuffalo/packd)
 
