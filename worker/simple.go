@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/markbates/safe"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -82,7 +83,10 @@ func (w Simple) Perform(job Job) error {
 	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
 		go func() {
-			err := h(job.Args)
+			err := safe.RunE(func() error {
+				return h(job.Args)
+			})
+
 			if err != nil {
 				w.Logger.Error(err)
 			}

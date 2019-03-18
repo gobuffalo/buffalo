@@ -46,6 +46,31 @@ func Test_Simple_PerformAt(t *testing.T) {
 	r.True(hit)
 }
 
+func Test_Simple_PerformBroken(t *testing.T) {
+	r := require.New(t)
+
+	var hit bool
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+
+	w := NewSimple()
+	w.Register("x", func(Args) error {
+		hit = true
+		wg.Done()
+
+		//Index out of bounds on purpose
+		println([]string{}[0])
+
+		return nil
+	})
+
+	w.Perform(Job{
+		Handler: "x",
+	})
+	wg.Wait()
+	r.True(hit)
+}
+
 func Test_Simple_PerformIn(t *testing.T) {
 	r := require.New(t)
 
