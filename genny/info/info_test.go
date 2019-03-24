@@ -21,8 +21,5 @@ func Test_New(t *testing.T) {
 	res := run.Results()
 
 	r.Len(res.Commands, 0)
-	r.Len(res.Files, 1)
-
-	f := res.Files[0]
-	r.Equal("example.txt", f.Name())
+	r.Len(res.Files, 0)
 }

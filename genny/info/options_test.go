@@ -11,12 +11,5 @@ func Test_Options_Validate(t *testing.T) {
 
 	opts := &Options{}
 	err := opts.Validate()
-	r.Error(err)
-
-  // TODO: make it valid. :)
-
-	err = opts.Validate()
-  r.NoError(err)
-
-  // TODO: add some more assertions here.
+	r.NoError(err)
 }
