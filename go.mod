@@ -8,6 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.13.1
 	github.com/gobuffalo/buffalo-pop v1.9.0
+	github.com/gobuffalo/clara v0.2.1
 	github.com/gobuffalo/depgen v0.0.0-20190315124901-e02f65b90669
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.2.0
@@ -18,15 +19,16 @@ require (
 	github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
-	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf
+	github.com/gobuffalo/meta v0.0.0-20190320152240-a5320142224a
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
 	github.com/gobuffalo/packd v0.0.0-20190315124812-a385830c7fc0
 	github.com/gobuffalo/packr v1.24.0
-	github.com/gobuffalo/packr/v2 v2.0.6
+	github.com/gobuffalo/packr/v2 v2.0.8
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190224160205-347ea233336e
 	github.com/gobuffalo/pop v4.10.0+incompatible
-	github.com/gobuffalo/tags v2.0.15+incompatible
+	github.com/gobuffalo/release v1.3.1 // indirect
+	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.0
@@ -47,6 +49,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
-	golang.org/x/tools v0.0.0-20190315044204-8b67d361bba2
+	golang.org/x/tools v0.0.0-20190322162807-cc8e56e55e70
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

@@ -1,56 +1,83 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"
 	"strings"
+	"time"
 
-	"github.com/gobuffalo/buffalo/runtime"
+	"github.com/gobuffalo/buffalo/genny/info"
+	"github.com/gobuffalo/clara/genny/rx"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
+
+var infoOptions = struct {
+	Clara *rx.Options
+	Info  *info.Options
+}{
+	Clara: &rx.Options{},
+	Info:  &info.Options{},
+}
 
 // infoCmd represents the info command
 var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Print diagnostic information (useful for debugging)",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		bb := os.Stdout
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
 
-		bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", runtime.Version))
+		run := genny.WetRunner(ctx)
 
-		bb.WriteString("\n### App Information\n")
-		app := meta.New(".")
-		rv := reflect.ValueOf(app)
-		rt := rv.Type()
-
-		var err error
-		for i := 0; i < rt.NumField(); i++ {
-			f := rt.Field(i)
-			if !rv.FieldByName(f.Name).CanInterface() {
-				continue
-			}
-			_, err = bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
-			if err != nil {
-				return err
-			}
+		copts := infoOptions.Clara
+		if err := run.WithNew(rx.New(copts)); err != nil {
+			return err
 		}
 
-		if err := runInfoCmds(); err != nil {
-			return errors.WithStack(err)
+		iopts := infoOptions.Info
+		if err := run.WithNew(info.New(iopts)); err != nil {
+			return err
 		}
 
-		if err := configs(app); err != nil {
-			return errors.WithStack(err)
-		}
-
-		return infoGoMod()
+		return run.Run()
+		// bb := os.Stdout
+		//
+		// bb.WriteString(fmt.Sprintf("### Buffalo Version\n%s\n", runtime.Version))
+		//
+		// bb.WriteString("\n### App Information\n")
+		// app := meta.New(".")
+		// rv := reflect.ValueOf(app)
+		// rt := rv.Type()
+		//
+		// var err error
+		// for i := 0; i < rt.NumField(); i++ {
+		// 	f := rt.Field(i)
+		// 	if !rv.FieldByName(f.Name).CanInterface() {
+		// 		continue
+		// 	}
+		// 	_, err = bb.WriteString(fmt.Sprintf("%s=%v\n", f.Name, rv.FieldByName(f.Name).Interface()))
+		// 	if err != nil {
+		// 		return err
+		// 	}
+		// }
+		//
+		// if err := runInfoCmds(); err != nil {
+		// 	return errors.WithStack(err)
+		// }
+		//
+		// if err := configs(app); err != nil {
+		// 	return errors.WithStack(err)
+		// }
+		//
+		// return infoGoMod()
 	},
 }
 
@@ -149,6 +176,10 @@ func execIfExists(infoCmd infoCommand) error {
 }
 
 func init() {
+	app := meta.New(".")
+	infoOptions.Clara.App = app
+	infoOptions.Info.App = app
+
 	decorate("info", RootCmd)
 	RootCmd.AddCommand(infoCmd)
 }
