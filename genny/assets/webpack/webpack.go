@@ -70,7 +70,7 @@ func New(opts *Options) (*genny.Generator, error) {
 }
 
 func installPkgs(r *genny.Runner, opts *Options) error {
-	command := "yarnpkg"
+	command := "yarn"
 
 	if !opts.App.WithYarn {
 		command = "npm"
@@ -102,7 +102,7 @@ func (y yarnWriter) Write(p []byte) (int, error) {
 
 func installYarn(r *genny.Runner) error {
 	// if there's no yarn, install it!
-	if _, err := r.LookPath("yarnpkg"); err == nil {
+	if _, err := r.LookPath("yarn"); err == nil {
 		return nil
 	}
 	yargs := []string{"install", "-g", "yarn"}

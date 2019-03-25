@@ -107,7 +107,7 @@ func runInfoCmds() error {
 		{"Go", envy.Get("GO_BIN", "go"), exec.Command(envy.Get("GO_BIN", "go"), "env"), "\n### Go Env\n"},
 		{"Node", "node", exec.Command("node", "--version"), "\n### Node Version\n"},
 		{"NPM", "npm", exec.Command("npm", "--version"), "\n### NPM Version\n"},
-		{"Yarn", "yarnpkg", exec.Command("yarn", "--version"), "\n### Yarn Version\n"},
+		{"Yarn", "yarn", exec.Command("yarn", "--version"), "\n### Yarn Version\n"},
 		{"PostgreSQL", "pg_ctl", exec.Command("pg_ctl", "--version"), "\n### PostgreSQL Version\n"},
 		{"MySQL", "mysql", exec.Command("mysql", "--version"), "\n### MySQL Version\n"},
 		{"SQLite", "sqlite3", exec.Command("sqlite3", "--version"), "\n### SQLite Version\n"},

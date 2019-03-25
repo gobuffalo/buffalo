@@ -77,7 +77,7 @@ func Test_Webpack_New_WithYarn(t *testing.T) {
 	r.Len(res.Files, 10)
 
 	c := res.Commands[0]
-	r.Equal("yarnpkg install --no-progress --save", strings.Join(c.Args, " "))
+	r.Equal("yarn install --no-progress --save", strings.Join(c.Args, " "))
 }
 
 func Test_Webpack_Updates_Layout(t *testing.T) {

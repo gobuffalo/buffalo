@@ -76,7 +76,7 @@ func PackageJSONCheck(r *Runner) error {
 	os.RemoveAll(filepath.Join(r.App.Root, "node_modules"))
 	var cmd *exec.Cmd
 	if r.App.WithYarn {
-		cmd = exec.Command("yarnpkg", "install")
+		cmd = exec.Command("yarn", "install")
 	} else {
 		cmd = exec.Command("npm", "install")
 	}

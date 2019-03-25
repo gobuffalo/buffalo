@@ -206,13 +206,13 @@ func yarnCheck(app meta.App) error {
 	if err := nodeCheck(app); err != nil {
 		return errors.WithStack(err)
 	}
-	if _, err := exec.LookPath("yarnpkg"); err != nil {
+	if _, err := exec.LookPath("yarn"); err != nil {
 		err := run(exec.Command("npm", "install", "-g", "yarn"))
 		if err != nil {
 			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
 	}
-	if err := run(exec.Command("yarnpkg", "install", "--no-progress")); err != nil {
+	if err := run(exec.Command("yarn", "install", "--no-progress")); err != nil {
 		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
 	}
 	return nil
