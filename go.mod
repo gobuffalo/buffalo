@@ -8,7 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.13.1
 	github.com/gobuffalo/buffalo-pop v1.9.0
-	github.com/gobuffalo/clara v0.2.1
+	github.com/gobuffalo/clara v0.3.1
 	github.com/gobuffalo/depgen v0.0.0-20190315124901-e02f65b90669
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.2.0
@@ -27,7 +27,6 @@ require (
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190224160205-347ea233336e
 	github.com/gobuffalo/pop v4.10.0+incompatible
-	github.com/gobuffalo/release v1.3.1 // indirect
 	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
@@ -49,6 +48,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
-	golang.org/x/tools v0.0.0-20190322162807-cc8e56e55e70
+	golang.org/x/tools v0.0.0-20190328030505-8f05a32dce9f
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
