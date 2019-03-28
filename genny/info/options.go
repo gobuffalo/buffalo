@@ -1,15 +1,15 @@
 package info
 
 import (
-	"io"
 	"os"
 
+	"github.com/gobuffalo/clara/genny/rx"
 	"github.com/gobuffalo/meta"
 )
 
 type Options struct {
 	App meta.App
-	Out io.Writer
+	Out rx.Writer
 	// add your stuff here
 }
 
@@ -18,8 +18,8 @@ func (opts *Options) Validate() error {
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")
 	}
-	if opts.Out == nil {
-		opts.Out = os.Stdout
+	if opts.Out.Writer == nil {
+		opts.Out = rx.NewWriter(os.Stdout)
 	}
 	return nil
 }
