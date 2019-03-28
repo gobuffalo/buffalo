@@ -30,5 +30,5 @@ func Test_appDetails(t *testing.T) {
 
 	r.NoError(run.Run())
 
-	r.Contains(bb.String(), "Bin paris elephant chevrolet")
+	r.Contains(bb.String(), "paris elephant chevrolet")
 }
