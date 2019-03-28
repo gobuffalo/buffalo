@@ -25,7 +25,6 @@ func appDetails(opts *Options) genny.RunFn {
 
 			lines = append(lines, line)
 		}
-		fmt.Println("### lines ->", lines)
 		return opts.Out.Tabs(lines)
 	}
 }

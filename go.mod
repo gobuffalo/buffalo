@@ -27,6 +27,7 @@ require (
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190224160205-347ea233336e
 	github.com/gobuffalo/pop v4.10.0+incompatible
+	github.com/gobuffalo/release v1.3.1 // indirect
 	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
