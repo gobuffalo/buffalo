@@ -13,12 +13,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	g.RunFn(appDetails(opts))
+	g.RunFn(configs(opts))
 
-	// if err := g.Box(packr.New("github.com/gobuffalo/buffalo/genny/info/templates", "../info/templates")); err != nil {
-	//   return g, errors.WithStack(err)
-	// }
-	// ctx := plush.NewContext()
-	// ctx.Set("opts", opts)
-	// g.Transformer(plushgen.Transformer(ctx))
 	return g, nil
 }
