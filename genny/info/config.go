@@ -6,12 +6,21 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 )
 
-func configs(opts *Options) genny.RunFn {
+type ListWalker interface {
+	packd.Lister
+	packd.Walkable
+}
+
+func configs(opts *Options, box ListWalker) genny.RunFn {
 	return func(r *genny.Runner) error {
-		box := packr.Folder(filepath.Join(opts.App.Root, "config"))
+		if len(box.List()) == 0 {
+			return nil
+		}
+		opts.Out.Header("Buffalo: Config Files")
 		return box.Walk(func(path string, f packr.File) error {
 			p := strings.TrimPrefix(path, opts.App.Root)
 			p = strings.TrimPrefix(p, string(filepath.Separator))

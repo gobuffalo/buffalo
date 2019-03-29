@@ -25,6 +25,10 @@ func appDetails(opts *Options) genny.RunFn {
 
 			lines = append(lines, line)
 		}
-		return opts.Out.Tabs(lines)
+		err := opts.Out.Tabs(lines)
+		if err != nil {
+			return err
+		}
+		return opts.Out.WriteString("\n")
 	}
 }

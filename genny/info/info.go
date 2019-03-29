@@ -1,7 +1,10 @@
 package info
 
 import (
+	"path/filepath"
+
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/pkg/errors"
 )
 
@@ -13,7 +16,8 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	g.RunFn(appDetails(opts))
-	g.RunFn(configs(opts))
+	box := packr.Folder(filepath.Join(opts.App.Root, "config"))
+	g.RunFn(configs(opts, box))
 
 	return g, nil
 }
