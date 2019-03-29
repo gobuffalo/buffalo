@@ -325,11 +325,14 @@ func stripAsset(path string, h http.Handler, a *App) http.Handler {
 		up := r.URL.Path
 		up = strings.TrimPrefix(up, path)
 		up = strings.TrimSuffix(up, "/")
+
 		u, err := url.Parse(up)
 		if err != nil {
-			a.ErrorHandlers.Get(400)(400, err, a.newContext(RouteInfo{}, w, r))
+			eh := a.ErrorHandlers.Get(400)
+			eh(400, err, a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
 		r.URL = u
 		h.ServeHTTP(w, r)
 	})
