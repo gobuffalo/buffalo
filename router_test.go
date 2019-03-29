@@ -374,7 +374,7 @@ func Test_Router_InvalidURL(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	w.ServeHTTP(response, request)
-	r.Equal(400, response.Code, "OK response is expected")
+	r.Equal(http.StatusBadRequest, response.Code, "(400) BadRequest response is expected")
 }
 
 type WebResource struct {
