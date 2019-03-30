@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
+// ListWalker allows for a box that supports listing and walking
 type ListWalker interface {
 	packd.Lister
 	packd.Walkable

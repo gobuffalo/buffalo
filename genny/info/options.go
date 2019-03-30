@@ -7,10 +7,10 @@ import (
 	"github.com/gobuffalo/meta"
 )
 
+// Options for the info generator
 type Options struct {
 	App meta.App
 	Out rx.Writer
-	// add your stuff here
 }
 
 // Validate that options are usuable
