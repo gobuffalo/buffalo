@@ -8,10 +8,10 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.14.0
 	github.com/gobuffalo/buffalo-pop v1.9.0
-	github.com/gobuffalo/clara v0.3.4
+	github.com/gobuffalo/clara v0.4.0
 	github.com/gobuffalo/depgen v0.0.0-20190329151759-d478694a28d3
 	github.com/gobuffalo/envy v1.6.15
-	github.com/gobuffalo/events v1.3.0
+	github.com/gobuffalo/events v1.3.1
 	github.com/gobuffalo/fizz v1.6.1 // indirect
 	github.com/gobuffalo/flect v0.1.1
 	github.com/gobuffalo/genny v0.0.0-20190329153409-7be1b23270eb
@@ -48,6 +48,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
-	golang.org/x/tools v0.0.0-20190329151228-23e29df326fe
+	golang.org/x/tools v0.0.0-20190330180304-aef51cc3777c
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

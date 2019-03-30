@@ -103,8 +103,8 @@ github.com/gobuffalo/buffalo-pop v1.6.0/go.mod h1:vrEVNOBKe042HjSNMj72J4FgER/VG6
 github.com/gobuffalo/buffalo-pop v1.7.0/go.mod h1:UB5HHeFucJG7esTPUPjinBaJTEpVoREJHfSJJELnyeI=
 github.com/gobuffalo/buffalo-pop v1.9.0 h1:l8ZABYOlVlRaC13cOQQrbscx3G1fXOEJE0ar9bS+bFg=
 github.com/gobuffalo/buffalo-pop v1.9.0/go.mod h1:MfrkBg0iN9+RdlxdHHAqqGFAC/iyCfTiKqH7Jvt+vhE=
-github.com/gobuffalo/clara v0.3.4 h1:TZ9082SygzjoYADn0JESXa8N/5j5HNqETFt4vo9O9+Y=
-github.com/gobuffalo/clara v0.3.4/go.mod h1:KsxzbeGew5FMIu8I4pRWpngElD/AkMA2KRBtJ7wyXtk=
+github.com/gobuffalo/clara v0.4.0 h1:buYhLDIb9WP62X04++4SolUB7hnhxdymc6gTIrrncuM=
+github.com/gobuffalo/clara v0.4.0/go.mod h1:KsxzbeGew5FMIu8I4pRWpngElD/AkMA2KRBtJ7wyXtk=
 github.com/gobuffalo/depgen v0.0.0-20190219190223-ba8c93fa0c2c/go.mod h1:CE/HUV4vDCXtJayRf6WoMWgezb1yH4QHg8GNK8FL0JI=
 github.com/gobuffalo/depgen v0.0.0-20190315122043-8442b3fa16db/go.mod h1:3STtPUQYuzV0gBVOY3vy6CfMm/ljR4pABfrTeHNLHUY=
 github.com/gobuffalo/depgen v0.0.0-20190329151759-d478694a28d3 h1:gNYazDeRoc7sfDVM5CyNZOTvdDG1dHDNJbGXMnn3Fp4=
@@ -133,8 +133,8 @@ github.com/gobuffalo/events v1.1.7/go.mod h1:6fGqxH2ing5XMb3EYRq9LEkVlyPGs4oO/eL
 github.com/gobuffalo/events v1.1.8/go.mod h1:UFy+W6X6VbCWS8k2iT81HYX65dMtiuVycMy04cplt/8=
 github.com/gobuffalo/events v1.1.9/go.mod h1:/0nf8lMtP5TkgNbzYxR6Bl4GzBy5s5TebgNTdRfRbPM=
 github.com/gobuffalo/events v1.2.0/go.mod h1:pxvpvsKXKZNPtHuIxUV3K+g+KP5o4forzaeFj++bh68=
-github.com/gobuffalo/events v1.3.0 h1:im5XOrKhk9DcaCq8wehG8XA4tXF+oQ8nwUcery5MK3k=
-github.com/gobuffalo/events v1.3.0/go.mod h1:9JOkQVoyRtailYVE/JJ2ZQ/6i4gTjM5t2HsZK4C1cSA=
+github.com/gobuffalo/events v1.3.1 h1:DiyepPJWOx+6LPQj7gxWpaMRlS4/DnbDgUdmlwVYqjg=
+github.com/gobuffalo/events v1.3.1/go.mod h1:9JOkQVoyRtailYVE/JJ2ZQ/6i4gTjM5t2HsZK4C1cSA=
 github.com/gobuffalo/fizz v1.0.12/go.mod h1:C0sltPxpYK8Ftvf64kbsQa2yiCZY4RZviurNxXdAKwc=
 github.com/gobuffalo/fizz v1.0.15/go.mod h1:EI3mEpjImuji6Bwu++N2uXhljQwOhwtimZQJ89zwyF4=
 github.com/gobuffalo/fizz v1.0.16/go.mod h1:EI3mEpjImuji6Bwu++N2uXhljQwOhwtimZQJ89zwyF4=
@@ -766,8 +766,9 @@ golang.org/x/tools v0.0.0-20190219185102-9394956cfdc5/go.mod h1:E6PF97AdD6v0s+fP
 golang.org/x/tools v0.0.0-20190221204921-83362c3779f5/go.mod h1:9Yl7xja0Znq3iFh3HoIrodX9oNMXvdceNzlUR8zjMvY=
 golang.org/x/tools v0.0.0-20190315044204-8b67d361bba2/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
 golang.org/x/tools v0.0.0-20190318200714-bb1270c20edf/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
-golang.org/x/tools v0.0.0-20190329151228-23e29df326fe h1:tilCFoChsm7TcjFUH5YtBjno7wDleRO+6jICJg0WDS0=
 golang.org/x/tools v0.0.0-20190329151228-23e29df326fe/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
+golang.org/x/tools v0.0.0-20190330180304-aef51cc3777c h1:hbqcUGBwEHdDbhy8EluQIkbwTIbOvaYedVBif4f2mFQ=
+golang.org/x/tools v0.0.0-20190330180304-aef51cc3777c/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
 google.golang.org/api v0.0.0-20180910000450-7ca32eb868bf/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
 google.golang.org/api v0.0.0-20181030000543-1d582fd0359e/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
 google.golang.org/api v0.1.0/go.mod h1:UGEZY7KEX120AnNLIHFMKIo4obdJhkp2tPbaPlQx13Y=

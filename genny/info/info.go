@@ -8,6 +8,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New returns a generator that performs buffalo
+// related rx checks
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
@@ -16,8 +18,12 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	g.RunFn(appDetails(opts))
-	box := packr.Folder(filepath.Join(opts.App.Root, "config"))
-	g.RunFn(configs(opts, box))
+
+	cBox := packr.Folder(filepath.Join(opts.App.Root, "config"))
+	g.RunFn(configs(opts, cBox))
+
+	aBox := packr.Folder(opts.App.Root)
+	g.RunFn(pkgChecks(opts, aBox))
 
 	return g, nil
 }
