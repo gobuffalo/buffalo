@@ -359,6 +359,24 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
 }
 
+func Test_Router_InvalidURL(t *testing.T) {
+	r := require.New(t)
+
+	box := packd.NewMemoryBox()
+	box.AddString("foo.png", "foo")
+	a := New(Options{})
+	a.ServeFiles("/", box)
+
+	w := httptest.New(a)
+	s := "/%25%7dn2zq0%3cscript%3ealert(1)%3c\\/script%3evea7f"
+
+	request, _ := http.NewRequest("GET", s, nil)
+	response := httptest.NewRecorder()
+
+	w.ServeHTTP(response, request)
+	r.Equal(http.StatusBadRequest, response.Code, "(400) BadRequest response is expected")
+}
+
 type WebResource struct {
 	BaseResource
 }
@@ -654,17 +672,17 @@ func Test_ResourceOnResource(t *testing.T) {
 func Test_buildRouteName(t *testing.T) {
 	r := require.New(t)
 	cases := map[string]string{
-		"/":                                          "root",
-		"/users":                                     "users",
-		"/users/new":                                 "newUsers",
-		"/users/{user_id}":                           "user",
-		"/users/{user_id}/children":                  "userChildren",
-		"/users/{user_id}/children/{child_id}":       "userChild",
-		"/users/{user_id}/children/new":              "newUserChildren",
+		"/":                                    "root",
+		"/users":                               "users",
+		"/users/new":                           "newUsers",
+		"/users/{user_id}":                     "user",
+		"/users/{user_id}/children":            "userChildren",
+		"/users/{user_id}/children/{child_id}": "userChild",
+		"/users/{user_id}/children/new":        "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                              "adminPlanes",
-		"/admin/planes/{plane_id}":                   "adminPlane",
-		"/admin/planes/{plane_id}/edit":              "editAdminPlane",
+		"/admin/planes":                 "adminPlanes",
+		"/admin/planes/{plane_id}":      "adminPlane",
+		"/admin/planes/{plane_id}/edit": "editAdminPlane",
 	}
 
 	a := New(Options{})
