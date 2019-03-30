@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gobuffalo/events"
+	"github.com/gobuffalo/buffalo"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +19,7 @@ var RootCmd = &cobra.Command{
 	Use:           "buffalo",
 	Short:         "Build Buffalo applications with ease",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		if err := events.LoadPlugins(); err != nil {
+		if err := buffalo.LoadPlugins(); err != nil {
 			return err
 		}
 		isFreeCommand := false
