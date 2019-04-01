@@ -4,7 +4,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
@@ -51,19 +50,6 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	g.RunFn(func(r *genny.Runner) error {
 		return installPkgs(r, opts)
-	})
-
-	g.RunFn(func(r *genny.Runner) error {
-		f, err := r.FindFile("templates/application.html")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		css := bs4
-		if opts.Bootstrap == 3 {
-			css = bs3
-		}
-		s := strings.Replace(f.String(), "</title>", "</title>\n"+css, 1)
-		return r.File(genny.NewFileS(f.Name(), s))
 	})
 
 	return g, nil
