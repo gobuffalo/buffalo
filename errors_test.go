@@ -3,9 +3,10 @@ package buffalo
 import (
 	"testing"
 
+	"errors"
+
 	"github.com/gobuffalo/httptest"
 
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 

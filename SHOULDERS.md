@@ -81,7 +81,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
-* [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
+* [errors](https://godoc.org/errors)
 
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
 

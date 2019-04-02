@@ -6,7 +6,6 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 // buildActions is the top level action builder
@@ -37,18 +36,18 @@ func buildNewActions(fn string, pres *presenter) genny.RunFn {
 
 		h, err := box.FindString("actions_header.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		a, err := box.FindString("actions.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		f := genny.NewFileS(fn+".tmpl", h+a)
 
 		f, err = transform(pres, f)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}
@@ -70,14 +69,14 @@ func appendActions(f genny.File, pres *presenter) genny.RunFn {
 
 		a, err := box.FindString("actions.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		f = genny.NewFileS(f.Name()+".tmpl", f.String()+a)
 
 		f, err = transform(pres, f)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}

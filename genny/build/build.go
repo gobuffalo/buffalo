@@ -11,7 +11,6 @@ import (
 	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/plushgen"
-	"github.com/pkg/errors"
 )
 
 // New generator for building a Buffalo application
@@ -22,7 +21,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 	g.ErrorFn = func(err error) {
 		events.EmitError(EvtBuildStopErr, err, events.Payload{"opts": opts})
@@ -41,7 +40,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	// add any necessary templates for the build
 	box := packr.New("github.com/gobuffalo/buffalo/genny/build", "../build/templates")
 	if err := g.Box(box); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	// configure plush
@@ -55,7 +54,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	// create the ./a pkg
 	ag, err := apkg(opts)
 	if err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 	g.Merge(ag)
 
@@ -63,7 +62,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		// mount the assets generator
 		ag, err := assets(opts)
 		if err != nil {
-			return g, errors.WithStack(err)
+			return g, err
 		}
 		g.Merge(ag)
 	}
@@ -71,7 +70,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	// mount the build time dependency generator
 	dg, err := buildDeps(opts)
 	if err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 	g.Merge(dg)
 
@@ -82,7 +81,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	// create the final go build command
 	c, err := buildCmd(opts)
 	if err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 	g.Command(c)
 

@@ -6,7 +6,6 @@ import (
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
 )
 
 func modelCommand(model name.Ident, opts *Options) *exec.Cmd {
@@ -29,7 +28,7 @@ func installPop(opts *Options) genny.RunFn {
 		if _, err := r.LookPath("buffalo-pop"); err != nil {
 			c := gogen.Get("github.com/gobuffalo/buffalo-pop")
 			if err := r.Exec(c); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		return r.Exec(modelCommand(name.New(opts.Model), opts))

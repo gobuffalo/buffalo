@@ -1,6 +1,6 @@
 package core
 
-import "github.com/pkg/errors"
+import "errors"
 
 // ErrGoModulesWithDep is thrown when trying to use both dep and go modules
 var ErrGoModulesWithDep = errors.New("dep and modules can not be used at the same time")

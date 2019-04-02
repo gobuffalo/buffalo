@@ -8,13 +8,14 @@ import (
 	"strings"
 	"testing"
 
+	"errors"
+
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 

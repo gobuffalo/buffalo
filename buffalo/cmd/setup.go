@@ -3,17 +3,19 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
 
 	"golang.org/x/sync/errgroup"
 
+	"errors"
+
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/meta"
 	"github.com/markbates/deplist"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -55,7 +57,7 @@ Tests:
 			err := check(app)
 			if err != nil {
 				events.EmitError(EvtSetupErr, err, payload)
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		events.EmitPayload(EvtSetupFinished, payload)
@@ -71,7 +73,7 @@ func updateGoDepsCheck(app meta.App) error {
 	if app.WithDep {
 		if _, err := exec.LookPath("dep"); err != nil {
 			if err := run(exec.Command(envy.Get("GO_BIN", "go"), "get", "github.com/golang/dep/cmd/dep")); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		args := []string{"ensure"}
@@ -83,7 +85,7 @@ func updateGoDepsCheck(app meta.App) error {
 		}
 		err := run(exec.Command("dep", args...))
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	}
@@ -94,7 +96,7 @@ func updateGoDepsCheck(app meta.App) error {
 	wg, _ := errgroup.WithContext(ctx)
 	deps, err := deplist.List()
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	deps["github.com/gobuffalo/suite"] = "github.com/gobuffalo/suite"
@@ -116,7 +118,7 @@ func updateGoDepsCheck(app meta.App) error {
 	}
 	err = wg.Wait()
 	if err != nil {
-		return errors.Errorf("We encountered the following error trying to install and update the dependencies for this application:\n%s", err)
+		return fmt.Errorf("We encountered the following error trying to install and update the dependencies for this application:\n%s", err)
 	}
 	return nil
 }
@@ -124,7 +126,7 @@ func updateGoDepsCheck(app meta.App) error {
 func testCheck(meta.App) error {
 	err := run(exec.Command("buffalo", "test"))
 	if err != nil {
-		return errors.Errorf("We encountered the following error when trying to run your applications tests:\n%s", err)
+		return fmt.Errorf("We encountered the following error when trying to run your applications tests:\n%s", err)
 	}
 	return nil
 }
@@ -146,12 +148,12 @@ func dbCreateCheck(meta.App) error {
 	if setupOptions.dropDatabases {
 		err := run(exec.Command("buffalo", "pop", "drop", "-a"))
 		if err != nil {
-			return errors.Errorf("We encountered an error when trying to drop your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
+			return fmt.Errorf("We encountered an error when trying to drop your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 		}
 	}
 	err := run(exec.Command("buffalo", "pop", "create", "-a"))
 	if err != nil {
-		return errors.Errorf("We encountered an error when trying to create your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
+		return fmt.Errorf("We encountered an error when trying to create your application's databases. Please check to make sure that your database server is running and that the username and passwords found in the database.yml are properly configured and set up on your database server.\n %s", err)
 	}
 	return nil
 }
@@ -159,7 +161,7 @@ func dbCreateCheck(meta.App) error {
 func dbMigrateCheck(meta.App) error {
 	err := run(exec.Command("buffalo", "pop", "migrate"))
 	if err != nil {
-		return errors.Errorf("We encountered the following error when trying to migrate your database:\n%s", err)
+		return fmt.Errorf("We encountered the following error when trying to migrate your database:\n%s", err)
 	}
 	return nil
 }
@@ -174,7 +176,7 @@ func dbSeedCheck(meta.App) error {
 	if bytes.Contains(out, []byte("db:seed")) {
 		err := run(exec.Command("buffalo", "task", "db:seed"))
 		if err != nil {
-			return errors.Errorf("We encountered the following error when trying to seed your database:\n%s", err)
+			return fmt.Errorf("We encountered the following error when trying to seed your database:\n%s", err)
 		}
 	}
 	return nil
@@ -193,27 +195,27 @@ func assetCheck(app meta.App) error {
 func npmCheck(app meta.App) error {
 	err := nodeCheck(app)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	err = run(exec.Command("npm", "install", "--no-progress"))
 	if err != nil {
-		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using npm:\n%s", err)
+		return fmt.Errorf("We encountered the following error when trying to install your asset dependencies using npm:\n%s", err)
 	}
 	return nil
 }
 
 func yarnCheck(app meta.App) error {
 	if err := nodeCheck(app); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	if _, err := exec.LookPath("yarnpkg"); err != nil {
 		err := run(exec.Command("npm", "install", "-g", "yarn"))
 		if err != nil {
-			return errors.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
+			return fmt.Errorf("This application require yarn, and we could not find it installed on your system. We tried to install it for you, but ran into the following error:\n%s", err)
 		}
 	}
 	if err := run(exec.Command("yarnpkg", "install", "--no-progress")); err != nil {
-		return errors.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
+		return fmt.Errorf("We encountered the following error when trying to install your asset dependencies using yarn:\n%s", err)
 	}
 	return nil
 }

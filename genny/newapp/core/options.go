@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Options for a new Buffalo application
@@ -42,7 +41,7 @@ func (opts *Options) Validate() error {
 			opts.Pop.App = opts.App
 		}
 		if err := opts.Pop.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -51,7 +50,7 @@ func (opts *Options) Validate() error {
 			opts.CI.App = opts.App
 		}
 		if err := opts.CI.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -60,7 +59,7 @@ func (opts *Options) Validate() error {
 			opts.Refresh.App = opts.App
 		}
 		if err := opts.Refresh.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -69,7 +68,7 @@ func (opts *Options) Validate() error {
 			opts.VCS.App = opts.App
 		}
 		if err := opts.VCS.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -82,7 +81,7 @@ func (opts *Options) Validate() error {
 	for _, n := range fb {
 		rx, err := regexp.Compile(n)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		if rx.MatchString(name) {
 			return fmt.Errorf("name %s is not allowed, try a different application name", opts.App.Name)

@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -43,11 +42,11 @@ var infoCmd = &cobra.Command{
 		}
 
 		if err := runInfoCmds(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		if err := configs(app); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		return infoGoMod()
@@ -63,14 +62,14 @@ func configs(app meta.App) error {
 		}
 		f, err := os.Open(path)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		defer f.Close()
 		p := strings.TrimPrefix(path, app.Root)
 		p = strings.TrimPrefix(p, string(filepath.Separator))
 		bb.WriteString(fmt.Sprintf("\n### %s\n", p))
 		if _, err := io.Copy(bb, f); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	})
@@ -89,7 +88,7 @@ func infoGoMod() error {
 	}
 	f, err := os.Open("go.mod")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	defer f.Close()
 
@@ -118,7 +117,7 @@ func runInfoCmds() error {
 	for _, cmd := range commands {
 		err := execIfExists(cmd)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 

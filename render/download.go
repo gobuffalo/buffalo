@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 type downloadRenderer struct {

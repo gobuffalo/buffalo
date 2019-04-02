@@ -4,8 +4,9 @@ import (
 	"io"
 	"strconv"
 
+	"errors"
+
 	gomail "github.com/gobuffalo/buffalo/mail/internal/mail"
-	"github.com/pkg/errors"
 )
 
 //SMTPSender allows to send Emails by connecting to a SMTP server.
@@ -33,7 +34,7 @@ func (sm SMTPSender) Send(message Message) error {
 	err := sm.Dialer.DialAndSend(gm)
 
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	return nil

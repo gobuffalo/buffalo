@@ -23,7 +23,7 @@ func New(opts *Options) (*genny.Group, error) {
 	// add the root generator
 	g, err := rootGenerator(opts)
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	gg.Add(g)
 
@@ -32,7 +32,7 @@ func New(opts *Options) (*genny.Group, error) {
 	if app.WithModules {
 		g, err := gomods.Init(app.PackagePkg, app.Root)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		g.Command(gogen.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
 		g.Command(gogen.Get("./..."))
@@ -42,14 +42,14 @@ func New(opts *Options) (*genny.Group, error) {
 
 	plugs, err := plugdeps.List(app)
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 
 	if opts.Docker != nil {
 		// add the docker generator
 		g, err = docker.New(opts.Docker)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(g)
 	}
@@ -58,7 +58,7 @@ func New(opts *Options) (*genny.Group, error) {
 		// add the pop generator
 		gg2, err := pop.New(opts.Pop)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Merge(gg2)
 
@@ -73,7 +73,7 @@ func New(opts *Options) (*genny.Group, error) {
 		// add the CI generator
 		g, err = ci.New(opts.CI)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(g)
 	}
@@ -81,7 +81,7 @@ func New(opts *Options) (*genny.Group, error) {
 	if opts.Refresh != nil {
 		g, err = refresh.New(opts.Refresh)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(g)
 	}
@@ -99,7 +99,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	ig, err := install.New(iopts)
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	gg.Merge(ig)
 
@@ -108,7 +108,7 @@ func New(opts *Options) (*genny.Group, error) {
 		// init dep
 		di, err := depgen.Init("", false)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(di)
 	}
@@ -122,7 +122,7 @@ func New(opts *Options) (*genny.Group, error) {
 	if app.WithModules {
 		g, err := gomods.Tidy(app.Root, false)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(g)
 	}

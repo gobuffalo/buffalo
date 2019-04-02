@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
-	"github.com/pkg/errors"
 )
 
 // PackageJSONCheck will compare the current default Buffalo
@@ -28,12 +27,12 @@ func PackageJSONCheck(r *Runner) error {
 
 	f, err := box.FindString("package.json.tmpl")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	tmpl, err := template.New("package.json").Parse(f)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	bb := &bytes.Buffer{}
@@ -43,12 +42,12 @@ func PackageJSONCheck(r *Runner) error {
 		},
 	})
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	b, err := ioutil.ReadFile("package.json")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if string(b) == bb.String() {
@@ -62,15 +61,15 @@ func PackageJSONCheck(r *Runner) error {
 
 	pf, err := os.Create("package.json")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	_, err = pf.Write(bb.Bytes())
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	err = pf.Close()
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	os.RemoveAll(filepath.Join(r.App.Root, "node_modules"))
