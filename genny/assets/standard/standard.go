@@ -25,6 +25,7 @@ func New(opts *Options) (*genny.Generator, error) {
 		if err != nil {
 			return errors.WithStack(err)
 		}
+
 		css := bs4
 		if opts.Bootstrap == 3 {
 			css = bs3

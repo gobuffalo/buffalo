@@ -8,22 +8,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func runner() *genny.Runner {
+func Test_New(t *testing.T) {
+	r := require.New(t)
+
+	g, err := New(&Options{})
+	r.NoError(err)
+
 	run := gentest.NewRunner()
 	run.Disk.Add(genny.NewFileS("templates/application.html", layout))
 	run.LookPathFn = func(s string) (string, error) {
 		return s, nil
 	}
-	return run
-}
 
-func Test_New(t *testing.T) {
-	r := require.New(t)
-
-	g, err := New(nil)
-	r.NoError(err)
-
-	run := runner()
 	run.With(g)
 
 	r.NoError(run.Run())
@@ -36,11 +32,18 @@ func Test_New(t *testing.T) {
 		"public/assets/application.js",
 		"public/assets/buffalo.css",
 		"public/assets/images/favicon.ico",
+		"templates/application.html",
 	}
+
 	r.Len(res.Files, len(files))
 	for i, f := range res.Files {
 		r.Equal(files[i], f.Name())
 	}
+
+	layout, ferr := res.Find("templates/application.html")
+	r.NoError(ferr)
+
+	r.Contains(layout.String(), "<link rel=\"stylesheet\"")
 }
 
 const layout = `<!DOCTYPE html>
