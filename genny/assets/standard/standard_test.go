@@ -1,12 +1,21 @@
 package standard
 
 import (
-	"context"
 	"testing"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/gentest"
 	"github.com/stretchr/testify/require"
 )
+
+func runner() *genny.Runner {
+	run := gentest.NewRunner()
+	run.Disk.Add(genny.NewFileS("templates/application.html", layout))
+	run.LookPathFn = func(s string) (string, error) {
+		return s, nil
+	}
+	return run
+}
 
 func Test_New(t *testing.T) {
 	r := require.New(t)
@@ -14,8 +23,9 @@ func Test_New(t *testing.T) {
 	g, err := New(nil)
 	r.NoError(err)
 
-	run := genny.DryRunner(context.Background())
+	run := runner()
 	run.With(g)
+
 	r.NoError(run.Run())
 
 	res := run.Results()
