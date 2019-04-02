@@ -42,3 +42,15 @@ func Test_New(t *testing.T) {
 		r.Equal(files[i], f.Name())
 	}
 }
+
+const layout = `<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buffalo - Foo</title>
+    <%= stylesheetTag("buffalo.css") %>
+    <%= stylesheetTag("application.css") %>
+  </head>
+  <body>
+  </body>
+</html>
+`
