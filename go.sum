@@ -8,7 +8,6 @@ dmitri.shuralyov.com/state v0.0.0-20180228185332-28bcc343414c/go.mod h1:0PRwlb0D
 git.apache.org/thrift.git v0.0.0-20180902110319-2566ecd5d999/go.mod h1:fPE2ZNJGynbRyZ4dJvy6G277gSllfV2HJqblrnkyeyg=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Masterminds/semver v1.4.2 h1:WBLTQ37jOCzSLtXNdoo8bNM8876KhNqOKvrlGITgsTc=
 github.com/Masterminds/semver v1.4.2/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
 github.com/ajg/form v0.0.0-20160822230020-523a5da1a92f h1:zvClvFQwU++UpIUBGC8YmDlfhUrweEy1R1Fj1gu5iIM=
 github.com/ajg/form v0.0.0-20160822230020-523a5da1a92f/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
@@ -197,7 +196,6 @@ github.com/gobuffalo/genny v0.0.0-20190329151137-27723ad26ef9/go.mod h1:rWs4Z12d
 github.com/gobuffalo/genny v0.0.0-20190329153409-7be1b23270eb h1:IUtUgwYRIQOHgmCP8uAUjKQNJKUxICmptd1gMggAytA=
 github.com/gobuffalo/genny v0.0.0-20190329153409-7be1b23270eb/go.mod h1:WGiyExKBGcMizwBYYmNL3LIyTRMP6wJQaD7MEYuM7Zk=
 github.com/gobuffalo/gitgen v0.0.0-20190219185555-91c2c5f0aad5/go.mod h1:ZzGIrxBvCJEluaU4i3CN0GFlu1Qmb3yK8ziV02evJ1E=
-github.com/gobuffalo/gitgen v0.0.0-20190315122116-cc086187d211 h1:mSVZ4vj4khv+oThUfS+SQU3UuFIZ5Zo6UNcvK8E8Mz8=
 github.com/gobuffalo/gitgen v0.0.0-20190315122116-cc086187d211/go.mod h1:vEHJk/E9DmhejeLeNt7UVvlSGv3ziL+djtTr3yyzcOw=
 github.com/gobuffalo/github_flavored_markdown v1.0.4/go.mod h1:uRowCdK+q8d/RF0Kt3/DSalaIXbb0De/dmTqMQdkQ4I=
 github.com/gobuffalo/github_flavored_markdown v1.0.5/go.mod h1:U0643QShPF+OF2tJvYNiYDLDGDuQmJZXsf/bHOJPsMY=
@@ -223,7 +221,6 @@ github.com/gobuffalo/licenser v0.0.0-20181128165715-cc7305f8abed/go.mod h1:oU9F9
 github.com/gobuffalo/licenser v0.0.0-20181128170751-82cc989582b9/go.mod h1:oU9F9UCE+AzI/MueCKZamsezGOOHfSirltllOVeRTAE=
 github.com/gobuffalo/licenser v0.0.0-20181203160806-fe900bbede07/go.mod h1:ph6VDNvOzt1CdfaWC+9XwcBnlSTBz2j49PBwum6RFaU=
 github.com/gobuffalo/licenser v0.0.0-20181211173111-f8a311c51159/go.mod h1:ve/Ue99DRuvnTaLq2zKa6F4KtHiYf7W046tDjuGYPfM=
-github.com/gobuffalo/licenser v0.0.0-20190224205124-37799bc2ebf6 h1:wA78dZPzQB40A/uW3c7O4fG6p+R/qO5vZ06t/j//nJE=
 github.com/gobuffalo/licenser v0.0.0-20190224205124-37799bc2ebf6/go.mod h1:ve/Ue99DRuvnTaLq2zKa6F4KtHiYf7W046tDjuGYPfM=
 github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27/go.mod h1:8sQkgyhWipz1mIctHF4jTxmJh1Vxhp7mP8IqbljgJZo=
 github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
@@ -260,20 +257,13 @@ github.com/gobuffalo/mw-basicauth v1.0.7/go.mod h1:xJ9/OSiOWl+kZkjaSun62srODr3Cx
 github.com/gobuffalo/mw-contenttype v0.0.0-20180802152300-74f5a47f4d56/go.mod h1:7EvcmzBbeCvFtQm5GqF9ys6QnCxz2UM1x0moiWLq1No=
 github.com/gobuffalo/mw-contenttype v0.0.0-20190129203934-2554e742333b/go.mod h1:7x87+mDrr9Peh7AqhOtESyJLanMd2zQNz2Hts+vtBoE=
 github.com/gobuffalo/mw-csrf v0.0.0-20180802151833-446ff26e108b/go.mod h1:sbGtb8DmDZuDUQoxjr8hG1ZbLtZboD9xsn6p77ppcHo=
-github.com/gobuffalo/mw-csrf v0.0.0-20190129204204-25460a055517 h1:pOOXwl1xPLLP8oZw3e3t2wwrc/KSzmlRBcaQwGpG9oo=
 github.com/gobuffalo/mw-csrf v0.0.0-20190129204204-25460a055517/go.mod h1:o5u+nnN0Oa7LBeDYH9QP36qeMPnXV9qbVnbZ4D+Kb0Q=
 github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130/go.mod h1:JvNHRj7bYNAMUr/5XMkZaDcw3jZhUZpsmzhd//FFWmQ=
-github.com/gobuffalo/mw-forcessl v0.0.0-20190224202501-6d1ef7ffb276 h1:IBQ1spJCPJpE4qkete2kY7dkPOaqojAsBJP0qOb1g6c=
-github.com/gobuffalo/mw-forcessl v0.0.0-20190224202501-6d1ef7ffb276/go.mod h1:JvNHRj7bYNAMUr/5XMkZaDcw3jZhUZpsmzhd//FFWmQ=
 github.com/gobuffalo/mw-i18n v0.0.0-20180802152014-e3060b7e13d6/go.mod h1:91AQfukc52A6hdfIfkxzyr+kpVYDodgAeT5cjX1UIj4=
 github.com/gobuffalo/mw-i18n v0.0.0-20181027200759-09e0c99be4d3/go.mod h1:1PpGPgqP8VsfUppgBA9FrTOXjI6X9gjqhh/8dmg48lg=
 github.com/gobuffalo/mw-i18n v0.0.0-20190129204410-552713a3ebb4/go.mod h1:rBg2eHxsyxVjtYra6fGy4GSF5C8NysOvz+Znnzk42EM=
-github.com/gobuffalo/mw-i18n v0.0.0-20190224203426-337de00e4c33 h1:hC+H4xA6irfe0gGPKp4Wa6VIkthZkGXM4/IxCaVuWaY=
-github.com/gobuffalo/mw-i18n v0.0.0-20190224203426-337de00e4c33/go.mod h1:rBg2eHxsyxVjtYra6fGy4GSF5C8NysOvz+Znnzk42EM=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20181005191442-d6ee392ec72e/go.mod h1:6OJr6VwSzgJMqWMj7TYmRUqzNe2LXu/W1rRW4MAz/ME=
 github.com/gobuffalo/mw-paramlogger v0.0.0-20190129202837-395da1998525/go.mod h1:gEo/ABCsKqvpp/KCxN2AIzDEe0OJUXbJ9293FYrXw+w=
-github.com/gobuffalo/mw-paramlogger v0.0.0-20190224201358-0d45762ab655 h1:AyNMaazysbv8UbPD7H6Ha/b6bX9T4boBtbaiuZl1dE0=
-github.com/gobuffalo/mw-paramlogger v0.0.0-20190224201358-0d45762ab655/go.mod h1:gEo/ABCsKqvpp/KCxN2AIzDEe0OJUXbJ9293FYrXw+w=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20181001105134-8545f626c189/go.mod h1:UqBF00IfKvd39ni5+yI5MLMjAf4gX7cDKN/26zDOD6c=
 github.com/gobuffalo/mw-tokenauth v0.0.0-20190129201951-95847f29c5c8/go.mod h1:n2oa93LHGD94hGI+PoJO+6cf60DNrXrAIv9L/Ke3GXc=
 github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87 h1:5crg1Kr62BIj/RVGneCwJtOD7/fHegH71kJD0D0ugp0=
@@ -374,10 +364,7 @@ github.com/gobuffalo/release v1.1.3/go.mod h1:CuXc5/m+4zuq8idoDt1l4va0AXAn/OSs08
 github.com/gobuffalo/release v1.1.6/go.mod h1:18naWa3kBsqO0cItXZNJuefCKOENpbbUIqRL1g+p6z0=
 github.com/gobuffalo/release v1.2.5/go.mod h1:tkFFZua2N5WRxyGDk2cSwQjzkZ/apKKXl5T8P+kEO+E=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
-github.com/gobuffalo/shoulders v1.0.3 h1:ezS7rE72J3x7torZxcj4RgHQX3jZhxjxMw8ysZwHRP4=
 github.com/gobuffalo/shoulders v1.0.3/go.mod h1:LqMcHhKRuBPMAYElqOe3POHiZ1x7Ry0BE8ZZ84Bx+k4=
-github.com/gobuffalo/suite v2.6.1+incompatible h1:oKypk5QU9c5M0xn3rgBjAKhi9Guo7yvFhYg+5Vok4UU=
-github.com/gobuffalo/suite v2.6.1+incompatible/go.mod h1:VCaZ8EgrnJKbt0QGkrEKIMsJlWFxMXWYSHXqjH2UJJE=
 github.com/gobuffalo/syncx v0.0.0-20181120191700-98333ab04150/go.mod h1:HhnNqWY95UYwwW3uSASeV7vtgYkT2t16hJgV3AEPUpw=
 github.com/gobuffalo/syncx v0.0.0-20181120194010-558ac7de985f/go.mod h1:HhnNqWY95UYwwW3uSASeV7vtgYkT2t16hJgV3AEPUpw=
 github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754 h1:tpom+2CJmpzAWj5/VEHync2rJGi+epHNIeRSWjzGA+4=
@@ -533,7 +520,6 @@ github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd h1:IXT4e1P5FWjF2z
 github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd/go.mod h1:JKa2av1XVkGjhxdLS59nDoXa2JpmIHpnURWNbzCtXtc=
 github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86/go.mod h1:kHJEU3ofeGjhHklVoIGuVj85JJwZ6kWPaJwCIxgnFmo=
 github.com/neelance/sourcemap v0.0.0-20151028013722-8c68805598ab/go.mod h1:Qr6/a/Q4r9LP1IltGz7tA7iOK1WonHEYhu1HRBA7ZiM=
-github.com/nicksnyder/go-i18n v1.10.0 h1:5AzlPKvXBH4qBzmZ09Ua9Gipyruv6uApMcrNZdo96+Q=
 github.com/nicksnyder/go-i18n v1.10.0/go.mod h1:HrK7VCrbOvQoUAQ7Vpy7i87N7JZZZ7R2xBGjv0j365Q=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0 h1:WSHQ+IS43OoUrWtD1/bbclrwK8TTH5hzp+umCiuxHgs=
@@ -633,8 +619,6 @@ github.com/unrolled/secure v0.0.0-20180918153822-f340ee86eb8b/go.mod h1:mnPT77IA
 github.com/unrolled/secure v0.0.0-20181005190816-ff9db2ff917f/go.mod h1:mnPT77IAdsi/kV7+Es7y+pXALeV3h7G6dQF6mNYjcLA=
 github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606/go.mod h1:mnPT77IAdsi/kV7+Es7y+pXALeV3h7G6dQF6mNYjcLA=
 github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c/go.mod h1:mnPT77IAdsi/kV7+Es7y+pXALeV3h7G6dQF6mNYjcLA=
-github.com/unrolled/secure v1.0.0 h1:2p4MlT30bNNjaFxA+gtDuLT/73fnXblTC+W/lCzOaZc=
-github.com/unrolled/secure v1.0.0/go.mod h1:mnPT77IAdsi/kV7+Es7y+pXALeV3h7G6dQF6mNYjcLA=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
 go.opencensus.io v0.18.0/go.mod h1:vKdFvxhtzZ9onBp9VKHK8z/sRpBMnKAsufL7wlDrCOA=
 go4.org v0.0.0-20180809161055-417644f6feb5/go.mod h1:MkTOUMDaeVYJUOUsaDXIhWPZYa1yOyC1qaOBpL57BhE=

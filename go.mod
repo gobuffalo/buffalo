@@ -1,7 +1,5 @@
 module github.com/gobuffalo/buffalo
 
-go 1.12
-
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
@@ -21,10 +19,6 @@ require (
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
-	github.com/gobuffalo/mw-csrf v0.0.0-20190129204204-25460a055517
-	github.com/gobuffalo/mw-forcessl v0.0.0-20190224202501-6d1ef7ffb276
-	github.com/gobuffalo/mw-i18n v0.0.0-20190224203426-337de00e4c33
-	github.com/gobuffalo/mw-paramlogger v0.0.0-20190224201358-0d45762ab655
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
 	github.com/gobuffalo/packd v0.0.0-20190315124812-a385830c7fc0
 	github.com/gobuffalo/packr v1.24.0
@@ -32,7 +26,6 @@ require (
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190329152458-0555238fe0d9
 	github.com/gobuffalo/pop v4.10.0+incompatible
-	github.com/gobuffalo/suite v2.6.1+incompatible
 	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
@@ -52,7 +45,6 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.3.0
-	github.com/unrolled/secure v1.0.0
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
 	golang.org/x/tools v0.0.0-20190402160749-c5ac96b4c419
