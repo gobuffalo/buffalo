@@ -1,7 +1,7 @@
 package info
 
 import (
-	"path/filepath"
+	"path"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packd"
@@ -19,8 +19,8 @@ func configs(opts *Options, box ListWalker) genny.RunFn {
 		if len(box.List()) == 0 {
 			return nil
 		}
-		return box.Walk(func(path string, f packr.File) error {
-			opts.Out.Header("Buffalo: " + filepath.Join("config", path))
+		return box.Walk(func(p string, f packr.File) error {
+			opts.Out.Header("Buffalo: " + path.Join("config", p))
 			opts.Out.WriteString(f.String() + "\n")
 			return nil
 		})

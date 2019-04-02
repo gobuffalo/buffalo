@@ -34,6 +34,6 @@ func Test_configs(t *testing.T) {
 	r.NoError(run.Run())
 
 	x := bb.String()
-	r.Contains(x, "### buffalo-app.toml\napp")
-	r.Contains(x, "### buffalo-plugins.toml\nplugins")
+	r.Contains(x, "Buffalo: config/buffalo-app.toml\napp")
+	r.Contains(x, "Buffalo: config/buffalo-plugins.toml\nplugins")
 }
