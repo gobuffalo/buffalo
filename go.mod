@@ -8,13 +8,13 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.14.0
 	github.com/gobuffalo/buffalo-pop v1.9.0
-	github.com/gobuffalo/clara v0.4.0
+	github.com/gobuffalo/clara v0.4.1
 	github.com/gobuffalo/depgen v0.0.0-20190329151759-d478694a28d3
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.3.1
 	github.com/gobuffalo/fizz v1.6.1 // indirect
 	github.com/gobuffalo/flect v0.1.1
-	github.com/gobuffalo/genny v0.0.0-20190329153409-7be1b23270eb
+	github.com/gobuffalo/genny v0.0.0-20190403191548-3ca520ef0d9e
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5
 	github.com/gobuffalo/httptest v1.1.0
@@ -41,13 +41,13 @@ require (
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
 	github.com/pkg/errors v0.8.1
-	github.com/sirupsen/logrus v1.4.0
+	github.com/sirupsen/logrus v1.4.1
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
-	golang.org/x/tools v0.0.0-20190401205534-4c644d7e323d
+	golang.org/x/tools v0.0.0-20190403183509-8a44e74612bc
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
