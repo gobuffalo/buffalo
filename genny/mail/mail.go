@@ -64,7 +64,6 @@ const mailerTmpl = `package mailers
 import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/mail"
-	"errors"
 )
 
 func Send{{.opts.Name.Resource}}() error {
