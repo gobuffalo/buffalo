@@ -25,17 +25,11 @@ func New(opts *Options) (*genny.Generator, error) {
 			return err
 		}
 
-		css := bs4
-		if opts.Bootstrap == 3 {
-			css = bs3
-		}
-
-		s := strings.Replace(f.String(), "</title>", "</title>\n"+css, 1)
+		s := strings.Replace(f.String(), "</title>", "</title>\n"+bs4, 1)
 		return r.File(genny.NewFileS(f.Name(), s))
 	})
 
 	return g, nil
 }
 
-const bs3 = `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">`
-const bs4 = `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">`
+const bs4 = `<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">`
