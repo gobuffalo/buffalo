@@ -7,7 +7,7 @@ require (
 	github.com/gobuffalo/attrs v0.0.0-20190224210810-a9411de4debd
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.14.0
-	github.com/gobuffalo/buffalo-pop v1.9.0
+	github.com/gobuffalo/buffalo-pop v1.10.0
 	github.com/gobuffalo/clara v0.4.1
 	github.com/gobuffalo/depgen v0.0.0-20190329151759-d478694a28d3
 	github.com/gobuffalo/envy v1.6.15
@@ -19,11 +19,12 @@ require (
 	github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5
 	github.com/gobuffalo/httptest v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
+	github.com/gobuffalo/makr v1.1.5 // indirect
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
 	github.com/gobuffalo/packd v0.0.0-20190315124812-a385830c7fc0
-	github.com/gobuffalo/packr v1.24.0
-	github.com/gobuffalo/packr/v2 v2.0.9
+	github.com/gobuffalo/packr v1.24.1
+	github.com/gobuffalo/packr/v2 v2.0.10
 	github.com/gobuffalo/plush v3.7.33+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190329152458-0555238fe0d9
 	github.com/gobuffalo/pop v4.10.0+incompatible
@@ -46,8 +47,8 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
+	golang.org/x/crypto v0.0.0-20190403202508-8e1b8d32e692
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6
-	golang.org/x/tools v0.0.0-20190403183509-8a44e74612bc
+	golang.org/x/tools v0.0.0-20190404132500-923d25813098
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
