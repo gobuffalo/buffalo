@@ -8,6 +8,7 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.0.6
 	github.com/gobuffalo/buffalo-plugins v1.14.0
 	github.com/gobuffalo/buffalo-pop v1.10.0
+	github.com/gobuffalo/clara v0.4.1
 	github.com/gobuffalo/depgen v0.0.0-20190329151759-d478694a28d3
 	github.com/gobuffalo/envy v1.6.15
 	github.com/gobuffalo/events v1.3.1
