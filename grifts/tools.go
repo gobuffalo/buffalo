@@ -5,7 +5,6 @@ import (
 	"os/exec"
 
 	"github.com/markbates/grift/grift"
-	"github.com/pkg/errors"
 )
 
 var _ = grift.Namespace("tools", func() {
@@ -21,10 +20,10 @@ var _ = grift.Namespace("tools", func() {
 	var _ = grift.Add("install", func(c *grift.Context) error {
 		if _, err := exec.LookPath("gometalinter"); err != nil {
 			if err := run("go", "get", "-u", "-v", "github.com/alecthomas/gometalinter"); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			if err := run("gometalinter", "--install"); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		return nil

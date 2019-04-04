@@ -3,16 +3,17 @@ package buffalo
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gobuffalo/flect"
 	"html/template"
 	"net/http"
 	"reflect"
 	"strings"
 
+	"github.com/gobuffalo/flect"
+	"github.com/pkg/errors"
+
 	"github.com/gobuffalo/events"
 	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 )
 
 // RouteInfo provides information about the underlying route that

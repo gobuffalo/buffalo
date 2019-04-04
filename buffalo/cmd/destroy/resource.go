@@ -3,13 +3,14 @@ package destroy
 import (
 	"bufio"
 	"fmt"
-	"github.com/gobuffalo/flect"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/flect"
+
+	"errors"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -34,7 +35,7 @@ var ResourceCmd = &cobra.Command{
 
 		removeTemplates(fileName)
 		if err := removeActions(fileName); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		removeLocales(fileName)

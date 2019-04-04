@@ -1,10 +1,11 @@
 package web
 
 import (
+	"errors"
+
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
-	"github.com/pkg/errors"
 )
 
 // Options for a web app
@@ -21,7 +22,7 @@ func (opts *Options) Validate() error {
 	}
 
 	if err := opts.Options.Validate(); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if opts.Docker != nil {
@@ -29,7 +30,7 @@ func (opts *Options) Validate() error {
 			opts.Docker.App = opts.App
 		}
 		if err := opts.Docker.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -38,7 +39,7 @@ func (opts *Options) Validate() error {
 			opts.Webpack.App = opts.App
 		}
 		if err := opts.Webpack.Validate(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 

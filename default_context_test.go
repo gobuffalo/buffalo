@@ -11,7 +11,6 @@ import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/logger"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -157,7 +156,7 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})
@@ -240,7 +239,7 @@ func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})
@@ -264,7 +263,7 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})

@@ -2,11 +2,11 @@ package worker
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/markbates/safe"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -51,7 +51,7 @@ func (w *Simple) Register(name string, h Handler) error {
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if _, ok := w.handlers[name]; ok {
-		return errors.Errorf("handler already mapped for name %s", name)
+		return fmt.Errorf("handler already mapped for name %s", name)
 	}
 	w.handlers[name] = h
 	return nil
@@ -75,7 +75,7 @@ func (w Simple) Stop() error {
 func (w Simple) Perform(job Job) error {
 	w.Logger.Debugf("Performing job %s", job)
 	if job.Handler == "" {
-		err := errors.Errorf("no handler name given for %s", job)
+		err := fmt.Errorf("no handler name given for %s", job)
 		w.Logger.Error(err)
 		return err
 	}
@@ -94,7 +94,7 @@ func (w Simple) Perform(job Job) error {
 		}()
 		return nil
 	}
-	err := errors.Errorf("no handler mapped for name %s", job.Handler)
+	err := fmt.Errorf("no handler mapped for name %s", job.Handler)
 	w.Logger.Error(err)
 	return err
 }

@@ -9,14 +9,13 @@ import (
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 func archivedAssets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	app := opts.App
@@ -38,12 +37,12 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 		err := box.Walk(func(path string, file packr.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			header, err := zip.FileInfoHeader(info)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			var baseDir string
@@ -53,7 +52,7 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 			if baseDir != "" {
 				rel, err := filepath.Rel(source, path)
 				if err != nil {
-					return errors.WithStack(err)
+					return err
 				}
 				header.Name = filepath.Join(baseDir, rel)
 			}
@@ -66,7 +65,7 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 
 			writer, err := archive.CreateHeader(header)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			if info.IsDir() {
@@ -74,12 +73,12 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 			}
 
 			if _, err = io.Copy(writer, file); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			return r.File(genny.NewFile(target, bb))
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	})
@@ -87,7 +86,7 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 	g.RunFn(func(r *genny.Runner) error {
 		f, err := r.FindFile("actions/app.go")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		opts.rollback.Store(f.Name(), f.String())
 		body := strings.Replace(f.String(), `app.ServeFiles("/assets"`, `// app.ServeFiles("/assets"`, 1)

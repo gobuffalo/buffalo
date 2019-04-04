@@ -9,7 +9,6 @@ import (
 
 	"github.com/gobuffalo/x/randx"
 	"github.com/markbates/grift/grift"
-	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,7 +27,7 @@ func secretGrift() {
 			b := []byte(randx.String(64))
 			b, err := bcrypt.GenerateFromPassword(b, bcrypt.DefaultCost)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			bb = append(bb, b...)
 		}

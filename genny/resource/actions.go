@@ -6,19 +6,18 @@ import (
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
 )
 
 func addResource(pres presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		f, err := r.FindFile("actions/app.go")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		stmt := fmt.Sprintf("app.Resource(\"/%s\", %sResource{})", pres.Name.URL(), pres.Name.Resource())
 		f, err = gogen.AddInsideBlock(f, "if app == nil {", stmt)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}

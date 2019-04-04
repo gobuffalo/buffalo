@@ -1,12 +1,12 @@
 package buffalo
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 
 	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 )
 
 // App is where it all happens! It holds on to options,
@@ -55,7 +55,7 @@ func New(opts Options) *App {
 	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
 		return func(res http.ResponseWriter, req *http.Request) {
 			c := a.newContext(RouteInfo{}, res, req)
-			err := errors.Errorf(errorf, req.Method, req.URL.Path)
+			err := fmt.Errorf(errorf, req.Method, req.URL.Path)
 			a.ErrorHandlers.Get(code)(code, err, c)
 		}
 	}

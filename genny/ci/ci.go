@@ -1,12 +1,12 @@
 package ci
 
 import (
+	"fmt"
 	"html/template"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New generator for adding travis or gitlab
@@ -14,7 +14,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.Transformer(genny.Replace("-no-pop", ""))
@@ -33,12 +33,12 @@ func New(opts *Options) (*genny.Generator, error) {
 			fname = "-dot-gitlab-ci-no-pop.yml.tmpl"
 		}
 	default:
-		return g, errors.Errorf("could not find a template for %s", opts.Provider)
+		return g, fmt.Errorf("could not find a template for %s", opts.Provider)
 	}
 
 	f, err := box.FindString(fname)
 	if err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.File(genny.NewFileS(fname, f))

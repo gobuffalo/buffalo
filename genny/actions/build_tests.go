@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 // buildTests is the top level action/test builder
@@ -27,18 +26,18 @@ func buildNewTests(fn string, pres *presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		h, err := box.FindString("tests_header.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		a, err := box.FindString("test.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		f := genny.NewFileS(fn+".tmpl", h+a)
 
 		f, err = transform(pres, f)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}
@@ -50,12 +49,12 @@ func appendTests(f genny.File, pres *presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		a, err := box.FindString("test.go.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		f := genny.NewFileS(f.Name()+".tmpl", f.String()+a)
 		f, err = transform(pres, f)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}

@@ -9,7 +9,6 @@ import (
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 
 	pack "github.com/gobuffalo/packr/builder"
 )
@@ -18,7 +17,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	if opts.App.WithWebpack {
@@ -51,7 +50,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 		// mount the archived assets generator
 		aa, err := archivedAssets(opts)
 		if err != nil {
-			return g, errors.WithStack(err)
+			return g, err
 		}
 		g.Merge(aa)
 	}

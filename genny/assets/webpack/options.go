@@ -1,6 +1,8 @@
 package webpack
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/meta"
 )
 

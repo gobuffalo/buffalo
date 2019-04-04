@@ -10,7 +10,6 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
 )
 
 // packages to add to Gopkg.toml
@@ -55,7 +54,7 @@ func runDepEnsure(r *Runner) error {
 		if err := depRunner(args); err != nil {
 			// *sigh* - yeah, i know
 			if !strings.Contains(err.Error(), "is already in Gopkg.toml") {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 	}
@@ -63,7 +62,7 @@ func runDepEnsure(r *Runner) error {
 	if len(upkg) > 0 {
 		args := []string{"ensure", "-v", "-update"}
 		if err := depRunner(args); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 

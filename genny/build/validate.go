@@ -5,11 +5,12 @@ import (
 	"html/template"
 	"strings"
 
+	"errors"
+
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/plush"
 	"github.com/markbates/safe"
-	"github.com/pkg/errors"
 )
 
 // TemplateValidator is given a file and returns an
@@ -31,7 +32,7 @@ func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 		err := packd.SkipWalker(walk, packd.CommonSkipPrefixes, func(path string, file packd.File) error {
 			info, err := file.FileInfo()
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			if info.IsDir() {
 				return nil
@@ -45,7 +46,7 @@ func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 					}
 				})
 				if err != nil {
-					return errors.WithStack(err)
+					return err
 				}
 			}
 

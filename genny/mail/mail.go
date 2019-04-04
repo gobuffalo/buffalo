@@ -6,7 +6,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New mailer generator. It will init the mailers directory if it doesn't already exist
@@ -14,13 +13,13 @@ func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 
 	if err := opts.Validate(); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	if !opts.SkipInit {
 		g, err := initGenerator(opts)
 		if err != nil {
-			return gg, errors.WithStack(err)
+			return gg, err
 		}
 		gg.Add(g)
 	}
@@ -44,7 +43,7 @@ func New(opts *Options) (*genny.Group, error) {
 func initGenerator(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
-	g.Box(packr.New("buffalo:genny:mail:init", "../mail/init/templates"))
+	g.Box(packr.New("github.com/gobuffalo/buffalo/genny/mail/init/templates", "../mail/init/templates"))
 	h := template.FuncMap{}
 	data := map[string]interface{}{
 		"opts": opts,
@@ -65,7 +64,6 @@ const mailerTmpl = `package mailers
 import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/mail"
-	"github.com/pkg/errors"
 )
 
 func Send{{.opts.Name.Resource}}() error {
@@ -77,7 +75,7 @@ func Send{{.opts.Name.Resource}}() error {
 	m.To = []string{}
 	err := m.AddBody(r.HTML("{{.opts.Name.File}}.html"), render.Data{})
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return smtp.Send(m)
 }

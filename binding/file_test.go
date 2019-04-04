@@ -13,7 +13,6 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,21 +29,21 @@ func App() *buffalo.App {
 	a.POST("/on-struct", func(c buffalo.Context) error {
 		wf := &WithFile{}
 		if err := c.Bind(wf); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, render.String(wf.MyFile.Filename))
 	})
 	a.POST("/named-file", func(c buffalo.Context) error {
 		wf := &NamedFile{}
 		if err := c.Bind(wf); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, render.String(wf.MyFile.Filename))
 	})
 	a.POST("/on-context", func(c buffalo.Context) error {
 		f, err := c.File("MyFile")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, render.String(f.Filename))
 	})
