@@ -4,8 +4,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"reflect"
-
-	"github.com/pkg/errors"
 )
 
 // MaxFileMemory can be used to set the maximum size, in bytes, for files to be
@@ -36,10 +34,10 @@ func init() {
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseMultipartForm(MaxFileMemory)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		if err := decoder.Decode(req.Form, i); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		form := req.MultipartForm.File
@@ -68,7 +66,7 @@ func init() {
 			}
 			mf, mh, err := req.FormFile(n)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			f.Set(reflect.ValueOf(File{
 				File:       mf,

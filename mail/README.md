@@ -22,7 +22,7 @@ import (
 	"github.com/gobuffalo/packr"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/buffalo/mail"
-	"github.com/pkg/errors"
+	"errors"
 	"gitlab.com/wawandco/app/models"
 )
 
@@ -68,12 +68,12 @@ func SendContactMessage(c *models.Contact) error {
 	err := m.AddBodies(data, r.HTML("mail/contact.html"), r.Plain("mail/contact.txt"))
 
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	err = smtp.Send(m)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	return nil

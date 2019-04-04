@@ -9,7 +9,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 func fixDocker(r *Runner) error {
@@ -22,7 +21,7 @@ func fixDocker(r *Runner) error {
 	run.WithRun(func(r *genny.Runner) error {
 		dk, err := r.FindFile(filepath.Join(app.Root, "Dockerfile"))
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		ex := regexp.MustCompile(`(v[0-9.][\S]+)`)

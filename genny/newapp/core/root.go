@@ -9,7 +9,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 func rootGenerator(opts *Options) (*genny.Generator, error) {
@@ -17,14 +16,14 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 
 	// validate opts
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.Transformer(genny.Dot())
 
 	// add common templates
 	if err := g.Box(packr.New("buffalo:genny:newapp:core", "../core/templates")); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	data := map[string]interface{}{
@@ -46,7 +45,7 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 	g.RunFn(func(r *genny.Runner) error {
 		f := genny.NewFile("config/buffalo-app.toml", nil)
 		if err := toml.NewEncoder(f).Encode(opts.App); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	})

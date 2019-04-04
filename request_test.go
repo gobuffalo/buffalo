@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/httptest"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,7 +26,7 @@ func Test_Request_MultipleReads(t *testing.T) {
 		return func(c Context) error {
 			b, err := ioutil.ReadAll(c.Request().Body)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			reads = append(reads, string(b))
 			return next(c)
@@ -36,7 +35,7 @@ func Test_Request_MultipleReads(t *testing.T) {
 	app.POST("/", func(c Context) error {
 		b, err := ioutil.ReadAll(c.Request().Body)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		reads = append(reads, string(b))
 		return nil

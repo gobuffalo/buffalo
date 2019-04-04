@@ -7,7 +7,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New generator for creating basic asset files
@@ -23,7 +22,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.RunFn(func(r *genny.Runner) error {
 		f, err := r.FindFile("templates/application.html")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		css := bs4

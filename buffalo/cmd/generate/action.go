@@ -3,10 +3,11 @@ package generate
 import (
 	"context"
 
+	"errors"
+
 	"github.com/gobuffalo/buffalo/genny/actions"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 

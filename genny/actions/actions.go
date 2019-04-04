@@ -8,7 +8,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 var box = packr.New("github.com/gobuffalo/buffalo/genny/actions/templates", "../actions/templates")
@@ -18,7 +17,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.RunFn(construct(opts))
@@ -43,12 +42,12 @@ func construct(opts *Options) genny.RunFn {
 		}
 
 		if err := updateApp(pres)(r); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		if !opts.SkipTemplates {
 			if err := buildTemplates(pres)(r); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		return nil
@@ -66,7 +65,7 @@ func updateApp(pres *presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		f, err := r.FindFile("actions/app.go")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		var lines []string
 		body := f.String()
@@ -78,7 +77,7 @@ func updateApp(pres *presenter) genny.RunFn {
 		}
 		f, err = gogen.AddInsideBlock(f, "app == nil", strings.Join(lines, "\n\t\t"))
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return r.File(f)
 	}

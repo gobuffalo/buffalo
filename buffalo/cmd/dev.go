@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,7 +16,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/meta"
 	"github.com/markbates/refresh/refresh"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
@@ -72,7 +72,7 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 
 		err := wg.Wait()
 		if err != context.Canceled {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	},
@@ -91,13 +91,13 @@ func startWebpack(ctx context.Context) error {
 			tool = "npm"
 		}
 		if _, err := exec.LookPath(tool); err != nil {
-			return errors.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
+			return fmt.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
 		}
 		cmd := exec.CommandContext(ctx, tool, "install")
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -115,11 +115,11 @@ func startDevServer(ctx context.Context, args []string) error {
 		run := genny.WetRunner(ctx)
 		err = run.WithNew(rg.New(&rg.Options{App: app}))
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		if err := run.Run(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 	c := &refresh.Configuration{}

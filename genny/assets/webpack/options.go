@@ -1,8 +1,9 @@
 package webpack
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Options for creating a new webpack setup
@@ -18,7 +19,7 @@ func (opts *Options) Validate() error {
 	}
 	bs := opts.Bootstrap
 	if bs < 3 && bs > 4 {
-		return errors.Errorf("unknown bootstrap version %d", bs)
+		return fmt.Errorf("unknown bootstrap version %d", bs)
 	}
 	if opts.App.IsZero() {
 		opts.App = meta.New(".")

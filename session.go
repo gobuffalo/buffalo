@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
-	"github.com/pkg/errors"
 )
 
 // Session wraps the "github.com/gorilla/sessions" API
@@ -69,7 +68,7 @@ func sessionSaver(next Handler) Handler {
 	return func(c Context) error {
 		err := next(c)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Session().Save()
 	}

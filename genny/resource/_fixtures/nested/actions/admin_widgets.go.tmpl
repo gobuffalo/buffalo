@@ -2,7 +2,7 @@ package actions
 
 import (
 
-  "github.com/pkg/errors"
+  "errors"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/pop"
   "github.com/markbates/coke/models"
@@ -31,7 +31,7 @@ func (v AdminWidgetsResource) List(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   widgets := &models.Widgets{}
@@ -42,7 +42,7 @@ func (v AdminWidgetsResource) List(c buffalo.Context) error {
 
   // Retrieve all Widgets from the DB
   if err := q.All(widgets); err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   // Add the paginator to the context so it can be used in the template.
@@ -59,7 +59,7 @@ func (v AdminWidgetsResource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -91,19 +91,19 @@ func (v AdminWidgetsResource) Create(c buffalo.Context) error {
 
   // Bind widget to the html form elements
   if err := c.Bind(widget); err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   // Validate the data from the html form
   verrs, err := tx.ValidateAndCreate(widget)
   if err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   if verrs.HasAny() {
@@ -127,7 +127,7 @@ func (v AdminWidgetsResource) Edit(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -148,7 +148,7 @@ func (v AdminWidgetsResource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -160,12 +160,12 @@ func (v AdminWidgetsResource) Update(c buffalo.Context) error {
 
   // Bind Widget to the html form elements
   if err := c.Bind(widget); err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   verrs, err := tx.ValidateAndUpdate(widget)
   if err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   if verrs.HasAny() {
@@ -189,7 +189,7 @@ func (v AdminWidgetsResource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.WithStack(errors.New("no transaction found"))
+    return errors.New("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -201,7 +201,7 @@ func (v AdminWidgetsResource) Destroy(c buffalo.Context) error {
   }
 
   if err := tx.Destroy(widget); err != nil {
-    return errors.WithStack(err)
+    return err
   }
 
   // If there are no errors set a flash message
