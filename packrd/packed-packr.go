@@ -121,12 +121,6 @@ var _ = func() error {
 	}()
 
 	func() {
-		b := packr.New("buffalo:genny:mail:init", "../mail/init/templates")
-		b.SetResolver("mailers/mailers.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "4458f74dae2e5b725e2ccf002ce9ed98"})
-		b.SetResolver("templates/mail/layout.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "7e4ac7be867ba59c2d5b2fd5252a4c06"})
-	}()
-
-	func() {
 		b := packr.New("buffalo:genny:newapp:api", "../api/templates")
 		b.SetResolver("actions/app.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "73ebe94c550be297aea1d1d45640408d"})
 		b.SetResolver("actions/home.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "81f7b0862d1e52602eed2b3f9d226446"})
@@ -187,6 +181,12 @@ var _ = func() error {
 		b.SetResolver("a/aa.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "06011b1be9e2c4c5af5b87c37b111fb5"})
 		b.SetResolver("buffalo_build_main.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "bd3de4bd2aa1420e2461a4e53ca27995"})
 		b.SetResolver("migrations/-dot-pop-tmp.md", packr.Pointer{ForwardBox: gk, ForwardPath: "ecb1546dcc0221b6c0b61a1b5a50e58f"})
+	}()
+
+	func() {
+		b := packr.New("github.com/gobuffalo/buffalo/genny/mail/init/templates", "../mail/init/templates")
+		b.SetResolver("mailers/mailers.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "4458f74dae2e5b725e2ccf002ce9ed98"})
+		b.SetResolver("templates/mail/layout.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "7e4ac7be867ba59c2d5b2fd5252a4c06"})
 	}()
 
 	func() {
