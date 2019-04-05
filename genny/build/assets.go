@@ -1,8 +1,8 @@
 package build
 
 import (
+	"bytes"
 	"context"
-	"io/ioutil"
 	"os/exec"
 	"path/filepath"
 
@@ -32,9 +32,17 @@ func assets(opts *Options) (*genny.Generator, error) {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
-		c := exec.Command(webpack.BinPath)
-		c.Stdout = ioutil.Discard
-		g.Command(c)
+		g.RunFn(func(r *genny.Runner) error {
+			bb := &bytes.Buffer{}
+			c := exec.Command(webpack.BinPath)
+			c.Stdout = bb
+			c.Stderr = bb
+			if err := r.Exec(c); err != nil {
+				r.Logger.Error(bb.String())
+				return err
+			}
+			return nil
+		})
 	}
 
 	p := pack.New(context.Background(), opts.App.Root)
