@@ -13,8 +13,6 @@ import (
 	"strings"
 
 	"golang.org/x/tools/go/ast/astutil"
-
-	"github.com/pkg/errors"
 )
 
 // ImportConverter will changes imports from a -> b
@@ -30,7 +28,7 @@ func (c ImportConverter) Process(r *Runner) error {
 
 	err := filepath.Walk(".", c.processFile)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if !r.App.WithDep {
@@ -39,7 +37,7 @@ func (c ImportConverter) Process(r *Runner) error {
 
 	b, err := ioutil.ReadFile("Gopkg.toml")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	for k := range c.Data {
@@ -55,7 +53,7 @@ func (c ImportConverter) processFile(p string, info os.FileInfo, err error) erro
 	er := onlyRelevantFiles(p, info, err, func(p string) error {
 		err := c.rewriteFile(p)
 		if err != nil {
-			err = errors.WithStack(err)
+			err = err
 		}
 
 		return err

@@ -3,8 +3,9 @@ package grift
 import (
 	"strings"
 
+	"errors"
+
 	"github.com/gobuffalo/flect/name"
-	"github.com/pkg/errors"
 )
 
 // Options for creating a new grift task

@@ -13,7 +13,6 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -104,7 +103,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
-			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			eh(404, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
 

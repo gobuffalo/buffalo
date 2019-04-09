@@ -2,14 +2,13 @@ package build
 
 import (
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 func apkg(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.RunFn(copyInflections)

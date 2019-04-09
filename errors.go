@@ -81,7 +81,7 @@ func (a *App) PanicHandler(next Handler) Handler {
 				default:
 					err = errors.New(fmt.Sprint(t))
 				}
-				err = errors.WithStack(err)
+				err = err
 				events.EmitError(events.ErrPanic, err,
 					map[string]interface{}{
 						"context": c,
@@ -190,7 +190,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			Code:  status,
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
@@ -200,7 +200,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			Code:  status,
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	default:
 		c.Response().Header().Set("content-type", defaultErrorCT)
@@ -228,7 +228,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		ctx := plush.NewContextWith(data)
 		t, err := plush.Render(devErrorTmpl, ctx)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		res := c.Response()
 		_, err = res.Write([]byte(t))

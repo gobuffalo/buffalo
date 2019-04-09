@@ -43,7 +43,7 @@ func Test_New(t *testing.T) {
 	layout, ferr := res.Find("templates/application.html")
 	r.NoError(ferr)
 
-	r.Contains(layout.String(), "<link rel=\"stylesheet\"")
+	r.Contains(layout.String(), "href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\"")
 }
 
 const layout = `<!DOCTYPE html>

@@ -8,7 +8,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +27,7 @@ var MailCmd = &cobra.Command{
 		mailOptions.Name = name.New(args[0])
 		gg, err := mail.New(mailOptions.Options)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		run := genny.WetRunner(context.Background())
@@ -38,7 +37,7 @@ var MailCmd = &cobra.Command{
 
 		g, err := gogen.Fmt(mailOptions.App.Root)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.With(g)
 

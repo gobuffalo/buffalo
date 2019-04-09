@@ -1,8 +1,9 @@
 package actions
 
 import (
+	"errors"
+
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Options for the actions generator

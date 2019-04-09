@@ -3,15 +3,17 @@ package binding
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
 
+	"errors"
+
 	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/x/httpx"
 	"github.com/monoculum/formam"
-	"github.com/pkg/errors"
 )
 
 // Binder takes a request and binds it to an interface.
@@ -85,7 +87,7 @@ func Exec(req *http.Request, value interface{}) error {
 	if b, ok := binders[ct]; ok {
 		return b(req, value)
 	}
-	return errors.Errorf("could not find a binder for %s", ct)
+	return fmt.Errorf("could not find a binder for %s", ct)
 }
 
 func init() {
@@ -103,7 +105,7 @@ func init() {
 
 		t, err := parseTime(vals)
 		if err != nil {
-			return ti, errors.WithStack(err)
+			return ti, err
 		}
 		ti.Time = t
 		ti.Valid = true
@@ -114,11 +116,11 @@ func init() {
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		if err := decoder.Decode(req.Form, i); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	}
@@ -166,7 +168,7 @@ func parseTime(vals []string) (time.Time, error) {
 	}
 
 	if err != nil {
-		return t, errors.WithStack(err)
+		return t, err
 	}
 
 	return t, nil

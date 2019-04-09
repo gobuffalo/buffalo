@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Response implements the http.ResponseWriter interface and allows
@@ -35,7 +35,7 @@ func (w *Response) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	if hj, ok := w.ResponseWriter.(http.Hijacker); ok {
 		return hj.Hijack()
 	}
-	return nil, nil, errors.WithStack(errors.New("does not implement http.Hijack"))
+	return nil, nil, errors.New("does not implement http.Hijack")
 }
 
 // Flush the response

@@ -4,14 +4,13 @@ import (
 	"fmt"
 
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 func buildTemplates(pres *presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
 		f, err := box.FindString("view.html.tmpl")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		for _, a := range pres.Actions {
 			pres.Data["action"] = a
@@ -19,10 +18,10 @@ func buildTemplates(pres *presenter) genny.RunFn {
 			xf := genny.NewFileS(fn, f)
 			xf, err = transform(pres, xf)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			if err := r.File(xf); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 		return nil

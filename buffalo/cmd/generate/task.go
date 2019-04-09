@@ -4,8 +4,6 @@ import (
 	"context"
 	"os"
 
-	"github.com/pkg/errors"
-
 	"github.com/gobuffalo/buffalo/genny/grift"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
@@ -34,14 +32,14 @@ var TaskCmd = &cobra.Command{
 		opts.Args = args
 		g, err := grift.New(opts)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.With(g)
 
 		pwd, _ := os.Getwd()
 		g, err = gogen.Fmt(pwd)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.With(g)
 

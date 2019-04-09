@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"errors"
+
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
 	"github.com/gobuffalo/pop"
@@ -34,7 +35,7 @@ var testCmd = &cobra.Command{
 			// there's a database
 			test, err := pop.Connect("test")
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			// drop the test db:
@@ -43,7 +44,7 @@ var testCmd = &cobra.Command{
 			// create the test db:
 			err = test.Dialect.CreateDB()
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			forceMigrations = strings.Contains(strings.Join(args, ""), "--force-migrations")
@@ -64,7 +65,7 @@ var testCmd = &cobra.Command{
 			if schema := findSchema(); schema != nil {
 				err = test.Dialect.LoadSchema(schema)
 				if err != nil {
-					return errors.WithStack(err)
+					return err
 				}
 			}
 		}
@@ -129,7 +130,7 @@ func testRunner(args []string) error {
 
 	pkgs, err := testPackages(pargs)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	cmd.Args = append(cmd.Args, pkgs...)
 	logrus.Info(strings.Join(cmd.Args, " "))
@@ -149,7 +150,7 @@ func (m mFlagRunner) Run() error {
 
 	pkgs, err := testPackages(m.pargs)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	var errs bool
 	for _, p := range pkgs {

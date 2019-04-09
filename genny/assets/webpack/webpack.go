@@ -5,10 +5,11 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"errors"
+
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // BinPath is the path to the local install of webpack
@@ -22,14 +23,14 @@ var BinPath = func() string {
 
 // Templates used for generating webpack
 // (exported mostly for the "fix" command)
-var Templates = packr.New("buffalo:genny:assets:webpack", "../webpack/templates")
+var Templates = packr.New("github.com/gobuffalo/buffalo/genny/assets/webpack", "../webpack/templates")
 
 // New generator for creating webpack asset files
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.RunFn(func(r *genny.Runner) error {
@@ -62,7 +63,7 @@ func installPkgs(r *genny.Runner, opts *Options) error {
 		command = "npm"
 	} else {
 		if err := installYarn(r); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 	args := []string{"install", "--no-progress", "--save"}

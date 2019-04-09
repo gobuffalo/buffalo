@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 func transformMain(opts *Options) genny.RunFn {
@@ -15,7 +14,7 @@ func transformMain(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
 		f, err := r.FindFile("main.go")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		opts.rollback.Store(f.Name(), f.String())
 		s := strings.Replace(f.String(), "func main()", "func originalMain()", -1)

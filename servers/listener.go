@@ -4,8 +4,6 @@ import (
 	"context"
 	"net"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // Listener server for using a pre-defined net.Listener
@@ -31,7 +29,7 @@ func (s *Listener) Start(c context.Context, h http.Handler) error {
 func UnixSocket(addr string) (*Listener, error) {
 	listener, err := net.Listen("unix", addr)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 	return &Listener{
 		Server:   &http.Server{},

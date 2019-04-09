@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Routes returns a list of all of the routes defined
