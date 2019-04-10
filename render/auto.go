@@ -9,8 +9,9 @@ import (
 	"regexp"
 	"strings"
 
+	"errors"
+
 	"github.com/gobuffalo/flect/name"
-	"github.com/pkg/errors"
 )
 
 var errNoID = errors.New("no ID on model")
@@ -137,7 +138,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 
 	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	if x.MatchString(cp) {
 		return ir.HTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)

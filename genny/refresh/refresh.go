@@ -5,14 +5,13 @@ import (
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/plushgen"
-	"github.com/pkg/errors"
 )
 
 // New generator to generate refresh templates
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 	g.Box(packr.New("buffalo:genny:refresh", "../refresh/templates"))
 

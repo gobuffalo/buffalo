@@ -6,7 +6,6 @@ import (
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New generator for adding VCS to an application
@@ -14,7 +13,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	if opts.Provider == "none" {
@@ -24,7 +23,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	box := packr.New("buffalo:genny:vcs", "../vcs/templates")
 	s, err := box.FindString("ignore.tmpl")
 	if err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	p := opts.Provider

@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/events"
 	"github.com/markbates/oncer"
 	"github.com/markbates/safe"
-	"github.com/pkg/errors"
 )
 
 // LoadPlugins will add listeners for any plugins that support "events"
@@ -25,7 +24,7 @@ func LoadPlugins() error {
 		}
 		plugs, err := plugins.Available()
 		if err != nil {
-			err = errors.WithStack(err)
+			err = err
 			return
 		}
 		for _, cmds := range plugs {
@@ -52,13 +51,13 @@ func LoadPlugins() error {
 						}
 						_, err := events.NamedListen(n, events.Filter(c.ListenFor, fn))
 						if err != nil {
-							return errors.WithStack(err)
+							return err
 						}
 						return nil
 					})
 				}(c)
 				if err != nil {
-					err = errors.WithStack(err)
+					err = err
 					return
 				}
 			}

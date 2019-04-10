@@ -13,7 +13,6 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -94,7 +93,7 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 	path := path.Join(a.Prefix, p)
 	a.filepaths = append(a.filepaths, path)
 
-	h := stripAsset(path, a.fileServer(root))
+	h := stripAsset(path, a.fileServer(root), a)
 	a.router.PathPrefix(path).Handler(h)
 }
 
@@ -104,7 +103,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
-			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			eh(404, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
 
@@ -316,7 +315,7 @@ func (a *App) buildRouteName(p string) string {
 	return name.VarCase(underscore)
 }
 
-func stripAsset(path string, h http.Handler) http.Handler {
+func stripAsset(path string, h http.Handler, a *App) http.Handler {
 	if path == "" {
 		return h
 	}
@@ -325,12 +324,14 @@ func stripAsset(path string, h http.Handler) http.Handler {
 		up := r.URL.Path
 		up = strings.TrimPrefix(up, path)
 		up = strings.TrimSuffix(up, "/")
+
 		u, err := url.Parse(up)
 		if err != nil {
-			w.WriteHeader(500)
-			w.Write([]byte(err.Error()))
+			eh := a.ErrorHandlers.Get(400)
+			eh(400, err, a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
 		r.URL = u
 		h.ServeHTTP(w, r)
 	})

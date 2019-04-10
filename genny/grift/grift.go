@@ -6,7 +6,6 @@ import (
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
 )
 
 // New generator to create a grift task
@@ -14,7 +13,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	data := map[string]interface{}{

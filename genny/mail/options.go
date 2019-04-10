@@ -1,9 +1,10 @@
 package mail
 
 import (
+	"errors"
+
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Options needed to create a new mailer

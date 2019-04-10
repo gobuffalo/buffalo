@@ -5,7 +5,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Check interface for runnable checker functions
@@ -44,7 +43,7 @@ func Run() error {
 
 	for _, c := range checks {
 		if err := c(r); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 	return nil

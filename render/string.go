@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 type stringRenderer struct {

@@ -4,21 +4,20 @@ import (
 	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
 )
 
 func buildDeps(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	if opts.App.WithDep {
 		// mount the dep generator
 		dg, err := depgen.Ensure(false)
 		if err != nil {
-			return g, errors.WithStack(err)
+			return g, err
 		}
 		g.Merge(dg)
 	} else {

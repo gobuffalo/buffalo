@@ -3,9 +3,10 @@ package buffalo
 import (
 	"testing"
 
+	"errors"
+
 	"github.com/gobuffalo/httptest"
 
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -78,7 +79,7 @@ func Test_PanicHandler(t *testing.T) {
 		{"/error", "error boom"},
 	}
 
-	const stack = `github.com/gobuffalo/buffalo.(*App).PanicHandler`
+	const stack = `github.com/gobuffalo/buffalo.Test_PanicHandler`
 
 	w := httptest.New(app)
 	for _, tt := range table {

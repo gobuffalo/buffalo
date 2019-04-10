@@ -6,7 +6,6 @@ import (
 
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/tags"
-	"github.com/pkg/errors"
 )
 
 func init() {
@@ -18,7 +17,7 @@ func init() {
 		}
 		t, err := tags.Pagination(pagination, opts)
 		if err != nil {
-			return "", errors.WithStack(err)
+			return "", err
 		}
 		return t.HTML(), nil
 	})

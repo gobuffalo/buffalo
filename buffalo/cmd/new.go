@@ -59,7 +59,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 
 	pwd, err := os.Getwd()
 	if err != nil {
-		return nopts, errors.WithStack(err)
+		return nopts, err
 	}
 	app := meta.New(pwd)
 	app.WithGrifts = true
@@ -157,7 +157,7 @@ var newCmd = &cobra.Command{
 
 		nopts, err := parseNewOptions(args)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		opts := nopts.Options
@@ -201,24 +201,24 @@ var newCmd = &cobra.Command{
 			if errors.Cause(err) == core.ErrNotInGoPath {
 				return notInGoPath(app)
 			}
-			return errors.WithStack(err)
+			return err
 		}
 		run.WithGroup(gg)
 
 		if err := run.WithNew(gogen.Fmt(app.Root)); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		// setup VCS last
 		if opts.VCS != nil {
 			// add the VCS generator
 			if err := run.WithNew(vcs.New(opts.VCS)); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 
 		if err := run.Run(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		run.Logger.Infof("Congratulations! Your application, %s, has been successfully built!", app.Name)
@@ -248,7 +248,7 @@ func currentUser() (string, error) {
 func notInGoPath(app meta.App) error {
 	username, err := currentUser()
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
@@ -281,7 +281,6 @@ func init() {
 	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().String("module", "", "specify the root module (package) name. [defaults to 'automatic']")
-	newCmd.Flags().Int("bootstrap", 4, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
 	cfgFile := newCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.buffalo.yaml)")
 	skipConfig := newCmd.Flags().Bool("skip-config", false, "skips using the config file")

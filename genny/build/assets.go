@@ -1,15 +1,14 @@
 package build
 
 import (
+	"bytes"
 	"context"
-	"io/ioutil"
 	"os/exec"
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 
 	pack "github.com/gobuffalo/packr/builder"
 )
@@ -18,7 +17,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	if opts.App.WithWebpack {
@@ -32,9 +31,17 @@ func assets(opts *Options) (*genny.Generator, error) {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
-		c := exec.Command(webpack.BinPath)
-		c.Stdout = ioutil.Discard
-		g.Command(c)
+		g.RunFn(func(r *genny.Runner) error {
+			bb := &bytes.Buffer{}
+			c := exec.Command(webpack.BinPath)
+			c.Stdout = bb
+			c.Stderr = bb
+			if err := r.Exec(c); err != nil {
+				r.Logger.Error(bb.String())
+				return err
+			}
+			return nil
+		})
 	}
 
 	p := pack.New(context.Background(), opts.App.Root)
@@ -51,7 +58,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 		// mount the archived assets generator
 		aa, err := archivedAssets(opts)
 		if err != nil {
-			return g, errors.WithStack(err)
+			return g, err
 		}
 		g.Merge(aa)
 	}
