@@ -1,7 +1,5 @@
 module github.com/gobuffalo/buffalo
 
-go 1.12
-
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
