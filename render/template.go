@@ -149,7 +149,7 @@ func (s templateRenderer) exts(name string) []string {
 
 func (s templateRenderer) assetPath(file string) (string, error) {
 
-	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
+	if len(assetMap.Keys()) == 0 || os.Getenv("GO_ENV") != "production" {
 		manifest, err := s.AssetsBox.FindString("manifest.json")
 
 		if err != nil {
