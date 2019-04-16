@@ -17,7 +17,7 @@ require (
 	github.com/gobuffalo/genny v0.0.0-20190403191548-3ca520ef0d9e
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5
-	github.com/gobuffalo/helpers v0.0.0-20190415192652-e827cf26a2fb
+	github.com/gobuffalo/helpers v0.0.0-20190416145308-27f192fc9a44
 	github.com/gobuffalo/httptest v1.2.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
 	github.com/gobuffalo/makr v1.1.5 // indirect
@@ -32,7 +32,6 @@ require (
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
-	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.1
 	github.com/gorilla/sessions v1.1.3
@@ -51,9 +50,7 @@ require (
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190411191339-88737f569e3a
-	golang.org/x/net v0.0.0-20190415100556-4a65cf94b679 // indirect
 	golang.org/x/sync v0.0.0-20190412183630-56d357773e84
-	golang.org/x/sys v0.0.0-20190415145633-3fd5a3612ccd // indirect
-	golang.org/x/tools v0.0.0-20190415154727-2b5498619ef1
+	golang.org/x/tools v0.0.0-20190415205951-2e9de471ebd3
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
