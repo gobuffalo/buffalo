@@ -30,7 +30,7 @@ require (
 	github.com/gobuffalo/plushgen v0.0.0-20190329152458-0555238fe0d9
 	github.com/gobuffalo/pop v4.10.0+incompatible
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
-	github.com/gobuffalo/tags v2.0.16+incompatible
+	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.1
