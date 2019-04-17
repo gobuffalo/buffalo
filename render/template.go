@@ -108,11 +108,11 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		"partialFeeder": s.partialFeeder,
 	}
 
-	helpers = s.addAssetsHelpers(helpers)
-
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
+
+	helpers = s.addAssetsHelpers(helpers)
 
 	body := string(source)
 	for _, ext := range s.exts(name) {

@@ -1,6 +1,9 @@
 package render
 
 import (
+	"github.com/gobuffalo/helpers"
+	"github.com/gobuffalo/helpers/forms"
+	"github.com/gobuffalo/helpers/forms/bootstrap"
 	"github.com/gobuffalo/plush"
 )
 
@@ -16,7 +19,11 @@ type Engine struct {
 // and some defaults we think you might like.
 func New(opts Options) *Engine {
 	if opts.Helpers == nil {
-		opts.Helpers = map[string]interface{}{}
+		opts.Helpers = Helpers{}
+	}
+
+	if len(opts.Helpers) == 0 {
+		opts.Helpers = defaultHelpers()
 	}
 
 	if opts.TemplateEngines == nil {
@@ -49,4 +56,12 @@ func New(opts Options) *Engine {
 		Options: opts,
 	}
 	return e
+}
+
+func defaultHelpers() Helpers {
+	h := Helpers(helpers.ALL())
+	h[forms.FormKey] = bootstrap.Form
+	h[forms.FormForKey] = bootstrap.FormFor
+	h["form_for"] = bootstrap.FormFor
+	return h
 }
