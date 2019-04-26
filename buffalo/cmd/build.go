@@ -25,6 +25,7 @@ var buildOptions = struct {
 	SkipTemplateValidation bool
 	DryRun                 bool
 	Verbose                bool
+	Module                 string
 }{
 	Options: &build.Options{
 		BuildTime: time.Now(),
@@ -40,6 +41,10 @@ var xbuildCmd = &cobra.Command{
 		defer cancel()
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
+
+		if buildOptions.Module != "" {
+			buildOptions.App.PackageRoot(buildOptions.Module)
+		}
 
 		run := genny.WetRunner(ctx)
 		if buildOptions.DryRun {
@@ -78,6 +83,7 @@ func init() {
 
 	xbuildCmd.Flags().StringVarP(&buildOptions.Bin, "output", "o", buildOptions.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
+	xbuildCmd.Flags().StringVarP(&buildOptions.Module, "module", "", "", "specify the root module (package) name.")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.SkipAssets, "skip-assets", "k", false, "skip running webpack and building assets")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
