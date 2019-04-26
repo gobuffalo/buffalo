@@ -26,6 +26,7 @@ var buildOptions = struct {
 	DryRun                 bool
 	Verbose                bool
 	Module                 string
+	bin                    string
 }{
 	Options: &build.Options{
 		BuildTime: time.Now(),
