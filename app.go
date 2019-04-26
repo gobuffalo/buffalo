@@ -1,13 +1,12 @@
 package buffalo
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/events"
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 )
 
 // App is where it all happens! It holds on to options,
@@ -16,15 +15,14 @@ import (
 type App struct {
 	Options
 	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware      *MiddlewareStack `json:"-"`
-	ErrorHandlers   ErrorHandlers    `json:"-"`
-	ErrorMiddleware MiddlewareFunc   `json:"-"`
-	router          *mux.Router
-	moot            *sync.RWMutex
-	routes          RouteList
-	root            *App
-	children        []*App
-	filepaths       []string
+	Middleware    *MiddlewareStack `json:"-"`
+	ErrorHandlers ErrorHandlers    `json:"-"`
+	router        *mux.Router
+	moot          *sync.RWMutex
+	routes        RouteList
+	root          *App
+	children      []*App
+	filepaths     []string
 }
 
 // Muxer returns the underlying mux router to allow
@@ -35,7 +33,7 @@ func (a *App) Muxer() *mux.Router {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
-	events.LoadPlugins()
+	LoadPlugins()
 	envy.Load()
 	opts = optionsWithDefaults(opts)
 
@@ -52,15 +50,12 @@ func New(opts Options) *App {
 	}
 
 	dem := a.defaultErrorMiddleware
-	if a.ErrorMiddleware != nil {
-		dem = a.ErrorMiddleware
-	}
 	a.Middleware = newMiddlewareStack(dem)
 
 	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
 		return func(res http.ResponseWriter, req *http.Request) {
 			c := a.newContext(RouteInfo{}, res, req)
-			err := errors.Errorf(errorf, req.Method, req.URL.Path)
+			err := fmt.Errorf(errorf, req.Method, req.URL.Path)
 			a.ErrorHandlers.Get(code)(code, err, c)
 		}
 	}

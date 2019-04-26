@@ -10,7 +10,7 @@ builds:
   env:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
-  binary: buffalo-no-sqlite
+  binary: buffalo
 
 checksum:
   name_template: 'checksums.txt'
@@ -24,4 +24,16 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+
+brew:
+  name: buffalo
+  github:
+    owner: gobuffalo
+    name: homebrew-tap
+  homepage: https://gobuffalo.io
+  description: A Go web development eco-system, designed to make your life easier.
+  install: |
+    bin.install "buffalo"
+  test: |
+    system "#{bin}/buffalo", "version"
 

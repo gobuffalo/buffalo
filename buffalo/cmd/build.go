@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/markbates/sigtx"
 	"github.com/spf13/cobra"
 )
@@ -35,11 +34,18 @@ var buildOptions = struct {
 
 var xbuildCmd = &cobra.Command{
 	Use:     "build",
-	Aliases: []string{"b", "bill"},
+	Aliases: []string{"b", "bill", "install"},
 	Short:   "Build the application binary, including bundling of assets (packr & webpack)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
+
+		pwd, _ := os.Getwd()
+
+		buildOptions.App = meta.New(pwd)
+		if len(buildOptions.bin) > 0 {
+			buildOptions.App.Bin = buildOptions.bin
+		}
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
 
@@ -55,7 +61,7 @@ var xbuildCmd = &cobra.Command{
 		if buildOptions.Verbose || buildOptions.Debug {
 			lg := logger.New(logger.DebugLevel)
 			run.Logger = lg
-			plog.Logger = lg
+			// plog.Logger = lg
 			buildOptions.BuildFlags = append(buildOptions.BuildFlags, "-v")
 		}
 
@@ -70,6 +76,11 @@ var xbuildCmd = &cobra.Command{
 			opts.TemplateValidators = append(opts.TemplateValidators, build.PlushValidator, build.GoTemplateValidator)
 		}
 
+		if cmd.CalledAs() == "install" {
+			opts.GoCommand = "install"
+		}
+		clean := build.Cleanup(opts)
+		defer clean(run)
 		run.WithNew(build.New(opts))
 		return run.Run()
 	},
@@ -78,11 +89,7 @@ var xbuildCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(xbuildCmd)
 
-	pwd, _ := os.Getwd()
-
-	buildOptions.App = meta.New(pwd)
-
-	xbuildCmd.Flags().StringVarP(&buildOptions.Bin, "output", "o", buildOptions.Bin, "set the name of the binary")
+	xbuildCmd.Flags().StringVarP(&buildOptions.bin, "output", "o", buildOptions.Bin, "set the name of the binary")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Module, "module", "", "", "specify the root module (package) name.")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
@@ -90,10 +97,11 @@ func init() {
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
 	xbuildCmd.Flags().StringVar(&buildOptions.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Verbose, "verbose", "v", false, "print debugging information")
-	xbuildCmd.Flags().BoolVarP(&buildOptions.Debug, "deprecated-verbose", "d", false, "[deprecated] use -v instead")
 	xbuildCmd.Flags().BoolVar(&buildOptions.DryRun, "dry-run", false, "runs the build 'dry'")
 	xbuildCmd.Flags().BoolVar(&buildOptions.SkipTemplateValidation, "skip-template-validation", false, "skip validating templates")
+	xbuildCmd.Flags().BoolVar(&buildOptions.CleanAssets, "clean-assets", false, "will delete public/assets before calling webpack")
 	xbuildCmd.Flags().StringVarP(&buildOptions.Environment, "environment", "", "development", "set the environment for the binary")
+	xbuildCmd.Flags().StringVar(&buildOptions.Mod, "mod", "", "-mod flag for go build")
 }
 
 func buildVersion(version string) string {

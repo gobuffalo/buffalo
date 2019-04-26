@@ -5,6 +5,6 @@ const (
 	EvtBuildStart = "buffalo:build:start"
 	// EvtBuildStop is emitted when building stops
 	EvtBuildStop = "buffalo:build:stop"
-	// EvtBuildStopErr is emitted when building stops
+	// EvtBuildStopErr is emitted when building is stopped due to an error
 	EvtBuildStopErr = "buffalo:build:stop:err"
 )

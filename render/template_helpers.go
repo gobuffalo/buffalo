@@ -7,7 +7,6 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/tags"
-	"github.com/pkg/errors"
 )
 
 var assetsMutex = &sync.RWMutex{}
@@ -53,7 +52,7 @@ func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 				}
 				f, err := s.assetPath(file)
 				if err != nil {
-					return "", errors.WithStack(err)
+					return "", err
 				}
 				return h.fn(f, options), nil
 			}

@@ -10,17 +10,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
-	fname "github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/gobuffalo/logger"
-	"github.com/gobuffalo/packr/v2/plog"
-	"github.com/spf13/pflag"
-
-	"github.com/sirupsen/logrus"
-
-	"github.com/pkg/errors"
-
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
@@ -31,9 +20,17 @@ import (
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
 	"github.com/gobuffalo/envy"
+	fname "github.com/gobuffalo/flect/name"
+	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/gobuffalo/plush"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -62,10 +59,10 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 
 	pwd, err := os.Getwd()
 	if err != nil {
-		return nopts, errors.WithStack(err)
+		return nopts, err
 	}
 	app := meta.New(pwd)
-
+	app.WithGrifts = true
 	app.Name = fname.New(args[0])
 	app.Bin = filepath.Join("bin", app.Name.String())
 
@@ -92,10 +89,13 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	app.WithPop = !viper.GetBool("skip-pop")
 	app.WithWebpack = !viper.GetBool("skip-webpack")
 	app.WithYarn = !viper.GetBool("skip-yarn")
+	app.WithNodeJs = app.WithYarn || app.WithWebpack
 	app.AsWeb = !app.AsAPI
 
 	if app.AsAPI {
 		app.WithWebpack = false
+		app.WithYarn = false
+		app.WithNodeJs = false
 	}
 
 	opts := &core.Options{}
@@ -105,6 +105,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 		opts.Docker = &docker.Options{
 			Style: x,
 		}
+		app.WithDocker = true
 	}
 
 	x = viper.GetString("ci-provider")
@@ -156,7 +157,7 @@ var newCmd = &cobra.Command{
 
 		nopts, err := parseNewOptions(args)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		opts := nopts.Options
@@ -200,24 +201,24 @@ var newCmd = &cobra.Command{
 			if errors.Cause(err) == core.ErrNotInGoPath {
 				return notInGoPath(app)
 			}
-			return errors.WithStack(err)
+			return err
 		}
 		run.WithGroup(gg)
 
-		if err := run.WithNew(gotools.GoFmt(app.Root)); err != nil {
-			return errors.WithStack(err)
+		if err := run.WithNew(gogen.Fmt(app.Root)); err != nil {
+			return err
 		}
 
 		// setup VCS last
 		if opts.VCS != nil {
 			// add the VCS generator
 			if err := run.WithNew(vcs.New(opts.VCS)); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 
 		if err := run.Run(); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		run.Logger.Infof("Congratulations! Your application, %s, has been successfully built!", app.Name)
@@ -247,7 +248,7 @@ func currentUser() (string, error) {
 func notInGoPath(app meta.App) error {
 	username, err := currentUser()
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	pwd, _ := os.Getwd()
 	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
@@ -280,7 +281,6 @@ func init() {
 	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().String("module", "", "specify the root module (package) name. [defaults to 'automatic']")
-	newCmd.Flags().Int("bootstrap", 4, "specify version for Bootstrap [3, 4]")
 	viper.BindPFlags(newCmd.Flags())
 	cfgFile := newCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.buffalo.yaml)")
 	skipConfig := newCmd.Flags().Bool("skip-config", false, "skips using the config file")

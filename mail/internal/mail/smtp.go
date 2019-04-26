@@ -63,14 +63,6 @@ func NewDialer(host string, port int, username, password string) *Dialer {
 	}
 }
 
-// NewPlainDialer returns a new SMTP Dialer. The given parameters are used to
-// connect to the SMTP server.
-//
-// Deprecated: Use NewDialer instead.
-func NewPlainDialer(host string, port int, username, password string) *Dialer {
-	return NewDialer(host, port, username, password)
-}
-
 // NetDialTimeout specifies the DialTimeout function to establish a connection
 // to the SMTP server. This can be used to override dialing in the case that a
 // proxy or other special behavior is needed.

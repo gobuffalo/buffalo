@@ -9,7 +9,6 @@ import (
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packd"
 	"github.com/karrick/godirwalk"
-	"github.com/pkg/errors"
 )
 
 type dirWalker struct {
@@ -38,11 +37,11 @@ func (d dirWalker) Walk(fn packd.WalkFunc) error {
 		}
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		f, err := packd.NewFile(path, bytes.NewReader(b))
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return fn(path, f)
 	}

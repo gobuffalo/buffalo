@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gobuffalo/events"
+	"github.com/gobuffalo/buffalo"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +19,7 @@ var RootCmd = &cobra.Command{
 	Use:           "buffalo",
 	Short:         "Build Buffalo applications with ease",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		if err := events.LoadPlugins(); err != nil {
+		if err := buffalo.LoadPlugins(); err != nil {
 			return err
 		}
 		isFreeCommand := false
@@ -49,7 +49,7 @@ func Execute() {
 			logrus.Errorf(popInstallInstructions)
 			os.Exit(-1)
 		}
-		logrus.Errorf("Error: %s\n\n", err)
+		logrus.Errorf("Error: %s", err)
 		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
 			fmt.Println(popInstallInstructions)
 			os.Exit(-1)
@@ -62,9 +62,7 @@ const dbNotFound = `unknown command "db"`
 const popNotFound = `unknown command "pop"`
 const popInstallInstructions = `Pop support has been moved to the https://github.com/gobuffalo/buffalo-pop plugin.
 
-Go Get Installation:
-
-	$ go get github.com/gobuffalo/buffalo-pop
+!! PLEASE READ PLUGIN DOCUMENTATION - https://gobuffalo.io/en/docs/plugins
 
 Buffalo Plugins Installation*:
 

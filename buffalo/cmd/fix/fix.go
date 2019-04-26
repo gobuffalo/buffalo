@@ -54,6 +54,7 @@ var checks = []Check{
 	DepEnsure,
 	installTools,
 	DeprecrationsCheck,
+	fixDocker,
 	encodeApp,
 }
 

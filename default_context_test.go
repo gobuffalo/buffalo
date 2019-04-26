@@ -10,14 +10,14 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/logger"
 	"github.com/stretchr/testify/require"
 )
 
 func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
-		logger:  NewLogger("debug"),
+		logger:  logger.New(logger.DebugLevel),
 		data:    make(map[string]interface{}),
 		flash:   &Flash{data: make(map[string][]string)},
 		moot:    &sync.RWMutex{},
@@ -156,7 +156,7 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})
@@ -239,7 +239,7 @@ func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})
@@ -263,7 +263,7 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return c.Render(201, nil)
 	})

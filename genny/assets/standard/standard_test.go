@@ -1,21 +1,27 @@
 package standard
 
 import (
-	"context"
 	"testing"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/gentest"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_New(t *testing.T) {
 	r := require.New(t)
 
-	g, err := New(nil)
+	g, err := New(&Options{})
 	r.NoError(err)
 
-	run := genny.DryRunner(context.Background())
+	run := gentest.NewRunner()
+	run.Disk.Add(genny.NewFileS("templates/application.html", layout))
+	run.LookPathFn = func(s string) (string, error) {
+		return s, nil
+	}
+
 	run.With(g)
+
 	r.NoError(run.Run())
 
 	res := run.Results()
@@ -26,9 +32,28 @@ func Test_New(t *testing.T) {
 		"public/assets/application.js",
 		"public/assets/buffalo.css",
 		"public/assets/images/favicon.ico",
+		"templates/application.html",
 	}
+
 	r.Len(res.Files, len(files))
 	for i, f := range res.Files {
 		r.Equal(files[i], f.Name())
 	}
+
+	layout, ferr := res.Find("templates/application.html")
+	r.NoError(ferr)
+
+	r.Contains(layout.String(), "href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\"")
 }
+
+const layout = `<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buffalo - Foo</title>
+    <%= stylesheetTag("buffalo.css") %>
+    <%= stylesheetTag("application.css") %>
+  </head>
+  <body>
+  </body>
+</html>
+`

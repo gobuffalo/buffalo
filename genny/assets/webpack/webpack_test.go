@@ -1,7 +1,6 @@
 package webpack
 
 import (
-	"strconv"
 	"strings"
 	"testing"
 
@@ -78,38 +77,6 @@ func Test_Webpack_New_WithYarn(t *testing.T) {
 
 	c := res.Commands[0]
 	r.Equal("yarnpkg install --no-progress --save", strings.Join(c.Args, " "))
-}
-
-func Test_Webpack_Updates_Layout(t *testing.T) {
-	table := []struct {
-		v   int
-		css string
-	}{
-		{3, bs3},
-		{4, bs4},
-	}
-
-	for _, tt := range table {
-		t.Run(strconv.Itoa(tt.v), func(st *testing.T) {
-			r := require.New(st)
-			run := runner()
-
-			run.WithNew(New(&Options{
-				Bootstrap: tt.v,
-			}))
-
-			r.NoError(run.Run())
-
-			res := run.Results()
-
-			f, err := res.Find("templates/application.html")
-			r.NoError(err)
-
-			body := f.String()
-			r.Contains(body, "</title>\n"+tt.css)
-			r.Contains(body, `<%= stylesheetTag("application.css") %>`)
-		})
-	}
 }
 
 const layout = `<!DOCTYPE html>

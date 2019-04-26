@@ -1,6 +1,7 @@
 package build
 
 import (
+	"os"
 	"sync"
 	"time"
 
@@ -16,7 +17,9 @@ type Options struct {
 	// a) git sha of last commit or
 	// b) to time.RFC3339 of BuildTime
 	BuildVersion string `json:"build_version,omitempty"`
-	WithAssets   bool   `json:"with_assets,omitempty"`
+	// CleanAssets will remove the public/assets folder build compiling
+	CleanAssets bool `json:"clean_assets"`
+	WithAssets  bool `json:"with_assets,omitempty"`
 	// places ./public/assets into ./bin/assets.zip.
 	// requires WithAssets = true
 	ExtractAssets bool `json:"extract_assets,omitempty"`
@@ -35,13 +38,18 @@ type Options struct {
 	// TemplateValidators can be used to validate the applications templates.
 	// Empty by default
 	TemplateValidators []TemplateValidator `json:"-"`
-	rollback           *sync.Map
+	// Mod is the -mod flag
+	Mod string `json:"mod"`
+	// GoCommand is the `go X` command to be used. Default is "build".
+	GoCommand string `json:"go_command"`
+	rollback  *sync.Map
 }
 
 // Validate that options are usuable
 func (opts *Options) Validate() error {
+	pwd, _ := os.Getwd()
 	if opts.App.IsZero() {
-		opts.App = meta.New(".")
+		opts.App = meta.New(pwd)
 	}
 	if len(opts.Environment) == 0 {
 		opts.Environment = "development"
@@ -54,6 +62,9 @@ func (opts *Options) Validate() error {
 	}
 	if opts.rollback == nil {
 		opts.rollback = &sync.Map{}
+	}
+	if len(opts.GoCommand) == 0 {
+		opts.GoCommand = "build"
 	}
 	return nil
 }

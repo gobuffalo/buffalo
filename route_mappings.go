@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/markbates/inflect"
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/flect"
+	"github.com/gobuffalo/flect/name"
 )
 
 const (
@@ -93,7 +93,7 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 	path := path.Join(a.Prefix, p)
 	a.filepaths = append(a.filepaths, path)
 
-	h := stripAsset(path, a.fileServer(root))
+	h := stripAsset(path, a.fileServer(root), a)
 	a.router.PathPrefix(path).Handler(h)
 }
 
@@ -103,16 +103,24 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(404)
-			eh(404, errors.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			eh(404, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
 
 		stat, _ := f.Stat()
 		maxAge := envy.Get(AssetsAgeVarName, "31536000")
-		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime()))
+		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime().UnixNano()))
 		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
+}
+
+type newable interface {
+	New(Context) error
+}
+
+type editable interface {
+	Edit(Context) error
 }
 
 // Resource maps an implementation of the Resource interface
@@ -135,6 +143,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
+
 	g := a.Group(p)
 	p = "/"
 
@@ -146,8 +155,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	rt := rv.Type()
 	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
 
-	name := strings.TrimSuffix(rt.Name(), "Resource")
-	paramName := inflect.Name(name).ParamID()
+	n := strings.TrimSuffix(rt.Name(), "Resource")
+	paramName := name.New(n).ParamID().String()
 
 	type paramKeyable interface {
 		ParamKey() string
@@ -160,12 +169,20 @@ func (a *App) Resource(p string, r Resource) *App {
 	spath := path.Join(p, "{"+paramName+"}")
 	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
 	g.GET(p, r.List)
-	setFuncKey(r.New, fmt.Sprintf(rname, "New"))
-	g.GET(path.Join(p, "new"), r.New)
+
+	if n, ok := r.(newable); ok {
+		setFuncKey(n.New, fmt.Sprintf(rname, "New"))
+		g.GET(path.Join(p, "new"), n.New)
+	}
+
 	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
 	g.GET(path.Join(spath), r.Show)
-	setFuncKey(r.Edit, fmt.Sprintf(rname, "Edit"))
-	g.GET(path.Join(spath, "edit"), r.Edit)
+
+	if n, ok := r.(editable); ok {
+		setFuncKey(n.Edit, fmt.Sprintf(rname, "Edit"))
+		g.GET(path.Join(spath, "edit"), n.Edit)
+	}
+
 	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
 	g.POST(p, r.Create)
 	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
@@ -274,7 +291,7 @@ func (a *App) buildRouteName(p string) string {
 
 		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
 		if shouldSingularize {
-			part = inflect.Singularize(part)
+			part = flect.Singularize(part)
 		}
 
 		if parts[index] == "new" || parts[index] == "edit" {
@@ -295,10 +312,10 @@ func (a *App) buildRouteName(p string) string {
 	}
 
 	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return inflect.CamelizeDownFirst(underscore)
+	return name.VarCase(underscore)
 }
 
-func stripAsset(path string, h http.Handler) http.Handler {
+func stripAsset(path string, h http.Handler, a *App) http.Handler {
 	if path == "" {
 		return h
 	}
@@ -307,12 +324,14 @@ func stripAsset(path string, h http.Handler) http.Handler {
 		up := r.URL.Path
 		up = strings.TrimPrefix(up, path)
 		up = strings.TrimSuffix(up, "/")
+
 		u, err := url.Parse(up)
 		if err != nil {
-			w.WriteHeader(500)
-			w.Write([]byte(err.Error()))
+			eh := a.ErrorHandlers.Get(400)
+			eh(400, err, a.newContext(RouteInfo{}, w, r))
 			return
 		}
+
 		r.URL = u
 		h.ServeHTTP(w, r)
 	})

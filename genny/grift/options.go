@@ -3,21 +3,22 @@ package grift
 import (
 	"strings"
 
-	"github.com/markbates/inflect"
-	"github.com/pkg/errors"
+	"errors"
+
+	"github.com/gobuffalo/flect/name"
 )
 
 // Options for creating a new grift task
 type Options struct {
-	Name       inflect.Name   `json:"name"`
-	Parts      []inflect.Name `json:"parts"`
-	Args       []string       `json:"args"`
-	Namespaced bool           `json:"namespaced"`
+	Name       name.Ident   `json:"name"`
+	Parts      []name.Ident `json:"parts"`
+	Args       []string     `json:"args"`
+	Namespaced bool         `json:"namespaced"`
 }
 
 // Last checks if the name is the last of the parts
-func (opts Options) Last(n inflect.Name) bool {
-	return opts.Parts[len(opts.Parts)-1] == n
+func (opts Options) Last(n name.Ident) bool {
+	return opts.Parts[len(opts.Parts)-1].String() == n.String()
 }
 
 // Validate options
@@ -29,7 +30,7 @@ func (opts *Options) Validate() error {
 	opts.Namespaced = strings.Contains(opts.Args[0], ":")
 
 	for _, n := range strings.Split(opts.Args[0], ":") {
-		opts.Parts = append(opts.Parts, inflect.Name(n))
+		opts.Parts = append(opts.Parts, name.New(n))
 	}
 	opts.Name = opts.Parts[len(opts.Parts)-1]
 	return nil

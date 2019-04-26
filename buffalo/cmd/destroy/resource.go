@@ -8,20 +8,21 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/flect"
 
-	"github.com/markbates/inflect"
+	"errors"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-//YesToAll means not to ask when destroying but simply confirm all beforehand.
+// YesToAll means not to ask when destroying but simply confirm all beforehand.
 var YesToAll = false
 
-//ResourceCmd destroys a passed resource
+// ResourceCmd destroys a passed resource
 var ResourceCmd = &cobra.Command{
 	Use: "resource [name]",
-	//Example: "resource cars",
+	// Example: "resource cars",
 	Aliases: []string{"r"},
 	Short:   "Destroy resource files",
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -30,11 +31,11 @@ var ResourceCmd = &cobra.Command{
 		}
 
 		name := args[0]
-		fileName := inflect.Pluralize(inflect.Underscore(name))
+		fileName := flect.Pluralize(flect.Underscore(name))
 
 		removeTemplates(fileName)
 		if err := removeActions(fileName); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		removeLocales(fileName)
@@ -56,17 +57,17 @@ func confirm(msg string) bool {
 func removeTemplates(fileName string) {
 	if YesToAll || confirm("Want to remove templates? (y/N)") {
 		templatesFolder := filepath.Join("templates", fileName)
-		logrus.Infof("- Deleted %v folder\n", templatesFolder)
+		logrus.Infof("- Deleted %v folder", templatesFolder)
 		os.RemoveAll(templatesFolder)
 	}
 }
 
 func removeActions(fileName string) error {
 	if YesToAll || confirm("Want to remove actions? (y/N)") {
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v.go", fileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("actions/%v.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v.go", fileName)))
 
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("actions/%v_test.go", fileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("actions/%v_test.go", fileName))
 		os.Remove(filepath.Join("actions", fmt.Sprintf("%v_test.go", fileName)))
 
 		content, err := ioutil.ReadFile(filepath.Join("actions", "app.go"))
@@ -75,7 +76,7 @@ func removeActions(fileName string) error {
 			return err
 		}
 
-		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, inflect.Camelize(fileName))
+		resourceExpression := fmt.Sprintf("app.Resource(\"/%v\", %vResource{})", fileName, flect.Pascalize(fileName))
 		newContents := strings.Replace(string(content), resourceExpression, "", -1)
 
 		err = ioutil.WriteFile(filepath.Join("actions", "app.go"), []byte(newContents), 0)
@@ -84,7 +85,7 @@ func removeActions(fileName string) error {
 			return err
 		}
 
-		logrus.Infof("- Deleted References for %v in actions/app.go\n", fileName)
+		logrus.Infof("- Deleted References for %v in actions/app.go", fileName)
 	}
 
 	return nil
@@ -98,13 +99,13 @@ func removeLocales(fileName string) {
 
 func removeModel(name string) {
 	if YesToAll || confirm("Want to remove model? (y/N)") {
-		modelFileName := inflect.Singularize(inflect.Underscore(name))
+		modelFileName := flect.Singularize(flect.Underscore(name))
 
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v.go", modelFileName)))
 		os.Remove(filepath.Join("models", fmt.Sprintf("%v_test.go", modelFileName)))
 
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v.go", modelFileName))
-		logrus.Infof("- Deleted %v\n", fmt.Sprintf("models/%v_test.go", modelFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("models/%v.go", modelFileName))
+		logrus.Infof("- Deleted %v", fmt.Sprintf("models/%v_test.go", modelFileName))
 	}
 }
 
@@ -123,7 +124,7 @@ func removeMatch(folder, pattern string) {
 			if !f.IsDir() && matches {
 				path := filepath.Join(folder, f.Name())
 				os.Remove(path)
-				logrus.Infof("- Deleted %v\n", path)
+				logrus.Infof("- Deleted %v", path)
 			}
 		}
 	}

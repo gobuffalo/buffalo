@@ -5,20 +5,19 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New generator for creating a Buffalo API application
 func New(opts *Options) (*genny.Group, error) {
 	if err := opts.Validate(); err != nil {
-		return nil, errors.WithStack(err)
+		return nil, err
 	}
 
 	gg, err := core.New(opts.Options)
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	g := genny.New()
@@ -28,7 +27,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	helpers := template.FuncMap{}
 
-	t := gotools.TemplateTransformer(data, helpers)
+	t := gogen.TemplateTransformer(data, helpers)
 	g.Transformer(t)
 	g.Box(packr.New("buffalo:genny:newapp:api", "../api/templates"))
 

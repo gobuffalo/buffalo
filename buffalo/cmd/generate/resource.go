@@ -3,11 +3,12 @@ package generate
 import (
 	"context"
 
+	"errors"
+
+	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/buffalo/genny/resource"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/attrs"
 	"github.com/gobuffalo/logger"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -43,11 +44,13 @@ var ResourceCmd = &cobra.Command{
 		if len(resourceOptions.Name) == 0 {
 			resourceOptions.Name = args[0]
 		}
-		ats, err := attrs.ParseArgs(args[0:]...)
-		if err != nil {
-			return errors.WithStack(err)
+		if len(args) > 1 {
+			ats, err := attrs.ParseArgs(args[1:]...)
+			if err != nil {
+				return err
+			}
+			resourceOptions.Attrs = ats
 		}
-		resourceOptions.Attrs = ats
 
 		if err := run.WithNew(resource.New(resourceOptions.Options)); err != nil {
 			return err

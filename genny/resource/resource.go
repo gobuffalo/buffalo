@@ -6,10 +6,9 @@ import (
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // New resource generator
@@ -17,14 +16,14 @@ func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	if !opts.SkipTemplates {
 		core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
 
 		if err := g.Box(core); err != nil {
-			return g, errors.WithStack(err)
+			return g, err
 		}
 	}
 
@@ -36,7 +35,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	if err := g.Box(abox); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	pres := presenter{
@@ -53,7 +52,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	data := map[string]interface{}{
 		"opts":    pres,
-		"actions": actions,
+		"actions": actions(opts),
 		"folder":  folder,
 	}
 	helpers := template.FuncMap{
@@ -61,7 +60,7 @@ func New(opts *Options) (*genny.Generator, error) {
 			return flect.Camelize(s)
 		},
 	}
-	g.Transformer(gotools.TemplateTransformer(data, helpers))
+	g.Transformer(gogen.TemplateTransformer(data, helpers))
 
 	g.RunFn(installPop(opts))
 

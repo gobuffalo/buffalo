@@ -3,16 +3,17 @@ package binding
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/gobuffalo/pop/nulls"
+	"errors"
+
+	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/x/httpx"
-	"github.com/markbates/oncer"
 	"github.com/monoculum/formam"
-	"github.com/pkg/errors"
 )
 
 // Binder takes a request and binds it to an interface.
@@ -54,12 +55,6 @@ func RegisterTimeFormats(layouts ...string) {
 	timeFormats = append(layouts, timeFormats...)
 }
 
-// RegisterCustomDecorder is deprecated. Use RegisterCustomDecoder instead
-func RegisterCustomDecorder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
-	oncer.Deprecate(0, "binding.RegisterCustomDecorder", "Use binding.RegisterCustomDecoder instead")
-	RegisterCustomDecoder(fn, types, fields)
-}
-
 // RegisterCustomDecoder allows to define custom type decoders.
 func RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
 	rawFunc := (func([]string) (interface{}, error))(fn)
@@ -81,6 +76,10 @@ func Register(contentType string, fn Binder) {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "https://github.com/monoculum/formam".
 func Exec(req *http.Request, value interface{}) error {
+	if ba, ok := value.(Bindable); ok {
+		return ba.Bind(req)
+	}
+
 	ct := httpx.ContentType(req)
 	if ct == "" {
 		return errors.New("blank content type")
@@ -88,7 +87,7 @@ func Exec(req *http.Request, value interface{}) error {
 	if b, ok := binders[ct]; ok {
 		return b(req, value)
 	}
-	return errors.Errorf("could not find a binder for %s", ct)
+	return fmt.Errorf("could not find a binder for %s", ct)
 }
 
 func init() {
@@ -106,7 +105,7 @@ func init() {
 
 		t, err := parseTime(vals)
 		if err != nil {
-			return ti, errors.WithStack(err)
+			return ti, err
 		}
 		ti.Time = t
 		ti.Valid = true
@@ -117,11 +116,11 @@ func init() {
 	sb := func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		if err := decoder.Decode(req.Form, i); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		return nil
 	}
@@ -169,7 +168,7 @@ func parseTime(vals []string) (time.Time, error) {
 	}
 
 	if err != nil {
-		return t, errors.WithStack(err)
+		return t, err
 	}
 
 	return t, nil

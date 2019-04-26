@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"errors"
+
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
@@ -358,14 +360,46 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
 }
 
+func Test_Router_InvalidURL(t *testing.T) {
+	r := require.New(t)
+
+	box := packd.NewMemoryBox()
+	box.AddString("foo.png", "foo")
+	a := New(Options{})
+	a.ServeFiles("/", box)
+
+	w := httptest.New(a)
+	s := "/%25%7dn2zq0%3cscript%3ealert(1)%3c\\/script%3evea7f"
+
+	request, _ := http.NewRequest("GET", s, nil)
+	response := httptest.NewRecorder()
+
+	w.ServeHTTP(response, request)
+	r.Equal(http.StatusBadRequest, response.Code, "(400) BadRequest response is expected")
+}
+
+type WebResource struct {
+	BaseResource
+}
+
+// Edit default implementation. Returns a 404
+func (v WebResource) Edit(c Context) error {
+	return c.Error(404, errors.New("resource not implemented"))
+}
+
+// New default implementation. Returns a 404
+func (v WebResource) New(c Context) error {
+	return c.Error(404, errors.New("resource not implemented"))
+}
+
 func Test_App_NamedRoutes(t *testing.T) {
 
 	type CarsResource struct {
-		*BaseResource
+		WebResource
 	}
 
 	type ResourcesResource struct {
-		*BaseResource
+		WebResource
 	}
 
 	r := require.New(t)
@@ -520,7 +554,7 @@ func Test_Resource(t *testing.T) {
 }
 
 type paramKeyResource struct {
-	Resource
+	*userResource
 }
 
 func (paramKeyResource) ParamKey() string {
@@ -529,7 +563,7 @@ func (paramKeyResource) ParamKey() string {
 
 func Test_Resource_ParamKey(t *testing.T) {
 	r := require.New(t)
-	fr := &paramKeyResource{&BaseResource{}}
+	fr := &paramKeyResource{&userResource{}}
 	a := New(Options{})
 	a.Resource("/foo", fr)
 	rt := a.Routes()

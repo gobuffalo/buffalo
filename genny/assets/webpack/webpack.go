@@ -3,27 +3,34 @@ package webpack
 import (
 	"os/exec"
 	"path/filepath"
-	"strings"
+	"runtime"
+
+	"errors"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
+	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/pkg/errors"
 )
 
 // BinPath is the path to the local install of webpack
-var BinPath = filepath.Join("node_modules", ".bin", "webpack")
+var BinPath = func() string {
+	s := filepath.Join("node_modules", ".bin", "webpack")
+	if runtime.GOOS == "windows" {
+		s += ".cmd"
+	}
+	return s
+}()
 
 // Templates used for generating webpack
 // (exported mostly for the "fix" command)
-var Templates = packr.New("buffalo:genny:assets:webpack", "../webpack/templates")
+var Templates = packr.New("github.com/gobuffalo/buffalo/genny/assets/webpack", "../webpack/templates")
 
 // New generator for creating webpack asset files
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
 	if err := opts.Validate(); err != nil {
-		return g, errors.WithStack(err)
+		return g, err
 	}
 
 	g.RunFn(func(r *genny.Runner) error {
@@ -38,25 +45,12 @@ func New(opts *Options) (*genny.Generator, error) {
 	data := map[string]interface{}{
 		"opts": opts,
 	}
-	t := gotools.TemplateTransformer(data, gotools.TemplateHelpers)
+	t := gogen.TemplateTransformer(data, gogen.TemplateHelpers)
 	g.Transformer(t)
 	g.Transformer(genny.Dot())
 
 	g.RunFn(func(r *genny.Runner) error {
 		return installPkgs(r, opts)
-	})
-
-	g.RunFn(func(r *genny.Runner) error {
-		f, err := r.FindFile("templates/application.html")
-		if err != nil {
-			return errors.WithStack(err)
-		}
-		css := bs4
-		if opts.Bootstrap == 3 {
-			css = bs3
-		}
-		s := strings.Replace(f.String(), "</title>", "</title>\n"+css, 1)
-		return r.File(genny.NewFileS(f.Name(), s))
 	})
 
 	return g, nil
@@ -69,7 +63,7 @@ func installPkgs(r *genny.Runner, opts *Options) error {
 		command = "npm"
 	} else {
 		if err := installYarn(r); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 	args := []string{"install", "--no-progress", "--save"}
@@ -101,7 +95,3 @@ func installYarn(r *genny.Runner) error {
 	yargs := []string{"install", "-g", "yarn"}
 	return r.Exec(exec.Command("npm", yargs...))
 }
-
-const bs3 = `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">`
-
-const bs4 = `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">`

@@ -14,8 +14,8 @@ RUN service postgresql start && \
     su -c "psql -c \"ALTER USER postgres  WITH PASSWORD 'postgres';\"" - postgres
 
 RUN go get -u github.com/golang/dep/cmd/dep \
-&& go get -v -u github.com/gobuffalo/pop \
-&& go get -v -u github.com/gobuffalo/buffalo-pop \
+&& go get -tags sqlite -v -u github.com/gobuffalo/pop \
+&& go get -tags sqlite -v -u github.com/gobuffalo/buffalo-pop \
 && go get -v -u github.com/gobuffalo/packr/packr \
 && go get -v -u github.com/gobuffalo/packr/v2/packr2 \
 && go get -v -u github.com/markbates/filetest \
@@ -43,7 +43,7 @@ RUN npm install -g --no-progress yarn \
 
 COPY . .
 
-RUN make ci-deps && make install
+RUN go get -tags sqlite -t -v ./... && packr2 && go install -v -tags sqlite ./buffalo
 
 RUN buffalo version
 

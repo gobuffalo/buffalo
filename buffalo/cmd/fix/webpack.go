@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
-	"github.com/pkg/errors"
 )
 
 // WebpackCheck will compare the current default Buffalo
@@ -26,12 +25,12 @@ func WebpackCheck(r *Runner) error {
 
 	f, err := box.FindString("webpack.config.js.tmpl")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	tmpl, err := template.New("webpack").Parse(f)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	bb := &bytes.Buffer{}
@@ -41,12 +40,12 @@ func WebpackCheck(r *Runner) error {
 		},
 	})
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	b, err := ioutil.ReadFile("webpack.config.js")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if string(b) == bb.String() {
@@ -60,11 +59,11 @@ func WebpackCheck(r *Runner) error {
 
 	wf, err := os.Create("webpack.config.js")
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	_, err = wf.Write(bb.Bytes())
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return wf.Close()
 }

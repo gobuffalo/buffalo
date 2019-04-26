@@ -17,7 +17,7 @@ import (
 // TODO: once `buffalo new` is converted to use genny
 // create an integration test that first generates a new application
 // and then tries to build using genny/build.
-var coke = packr.NewBox("../build/_fixtures/coke")
+var coke = packr.New("github.com/gobuffalo/buffalo/genny/build/build_test", "../build/_fixtures/coke")
 
 var cokeRunner = func() *genny.Runner {
 	run := gentest.NewRunner()
@@ -57,7 +57,7 @@ func Test_New(t *testing.T) {
 			r.Equal(s, strings.Join(c.Args, " "))
 		}
 
-		cmds := []string{"go get ./...", "go build -i -tags bar -o bin/foo"}
+		cmds := []string{"go get -tags bar ./...", "go build -i -tags bar -o bin/foo"}
 		r.Len(res.Commands, len(cmds))
 		for i, c := range res.Commands {
 			eq(cmds[i], c)

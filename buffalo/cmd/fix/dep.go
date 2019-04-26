@@ -9,8 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/movinglater/gotools"
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/gogen"
 )
 
 // packages to add to Gopkg.toml
@@ -24,7 +23,6 @@ var upkg = []string{
 	"github.com/gobuffalo/events",
 	"github.com/gobuffalo/suite",
 	"github.com/gobuffalo/flect",
-	"github.com/markbates/inflect",
 }
 
 // DepEnsure runs `dep ensure -v` or `go get -u` depending on app tooling
@@ -56,7 +54,7 @@ func runDepEnsure(r *Runner) error {
 		if err := depRunner(args); err != nil {
 			// *sigh* - yeah, i know
 			if !strings.Contains(err.Error(), "is already in Gopkg.toml") {
-				return errors.WithStack(err)
+				return err
 			}
 		}
 	}
@@ -64,7 +62,7 @@ func runDepEnsure(r *Runner) error {
 	if len(upkg) > 0 {
 		args := []string{"ensure", "-v", "-update"}
 		if err := depRunner(args); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 	}
 
@@ -81,18 +79,20 @@ func depRunner(args []string) error {
 
 func modGetUpdate(r *Runner) error {
 	run := genny.WetRunner(context.Background())
+	g := genny.New()
 	for _, x := range upkg {
 		if x == "github.com/gobuffalo/buffalo" {
 			continue
 		}
-		run.WithRun(gotools.Get(x))
+		g.Command(gogen.Get(x))
 	}
 
 	for _, x := range []string{"beta", "rc"} {
 		if !strings.Contains(runtime.Version, x) {
 			continue
 		}
-		run.WithRun(gotools.Get("github.com/gobuffalo/buffalo@"+runtime.Version, "-u"))
+		g.Command(gogen.Get("github.com/gobuffalo/buffalo@"+runtime.Version, "-u"))
 	}
+	run.With(g)
 	return run.Run()
 }

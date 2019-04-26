@@ -1,16 +1,17 @@
 package mail
 
 import (
+	"errors"
+
+	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/meta"
-	"github.com/markbates/inflect"
-	"github.com/pkg/errors"
 )
 
 // Options needed to create a new mailer
 type Options struct {
-	App      meta.App     `json:"app"`
-	Name     inflect.Name `json:"name"`
-	SkipInit bool         `json:"skip_init"`
+	App      meta.App   `json:"app"`
+	Name     name.Ident `json:"name"`
+	SkipInit bool       `json:"skip_init"`
 }
 
 // Validate options are useful

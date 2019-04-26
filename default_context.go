@@ -16,7 +16,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/pop"
 	"github.com/pkg/errors"
 )
 
@@ -101,6 +100,10 @@ func (d *DefaultContext) Flash() *Flash {
 	return d.flash
 }
 
+type paginable interface {
+	Paginate() string
+}
+
 // Render a status code and render.Renderer to the associated Response.
 // The request parameters will be made available to the render.Renderer
 // "{{.params}}". Any values set onto the Context will also automatically
@@ -129,7 +132,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			if er, ok := errors.Cause(err).(render.ErrRedirect); ok {
 				return d.Redirect(er.Status, er.URL)
 			}
-			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
+			return HTTPError{Status: 500, Cause: err}
 		}
 
 		if d.Session() != nil {
@@ -138,13 +141,13 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		}
 
 		d.Response().Header().Set("Content-Type", rr.ContentType())
-		if p, ok := data["pagination"].(*pop.Paginator); ok {
-			d.Response().Header().Set("X-Pagination", p.String())
+		if p, ok := data["pagination"].(paginable); ok {
+			d.Response().Header().Set("X-Pagination", p.Paginate())
 		}
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
-			return HTTPError{Status: 500, Cause: errors.WithStack(err)}
+			return HTTPError{Status: 500, Cause: err}
 		}
 
 		return nil
@@ -177,7 +180,7 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
-	return HTTPError{Status: status, Cause: errors.WithStack(err)}
+	return HTTPError{Status: status, Cause: err}
 }
 
 var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
@@ -188,23 +191,23 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 
 	if strings.HasSuffix(url, "Path()") {
 		if len(args) > 1 {
-			return errors.WithStack(errors.Errorf("you must pass only a map[string]interface{} to a route path: %T", args))
+			return fmt.Errorf("you must pass only a map[string]interface{} to a route path: %T", args)
 		}
 		var m map[string]interface{}
 		if len(args) == 1 {
 			rv := reflect.Indirect(reflect.ValueOf(args[0]))
 			if !rv.Type().ConvertibleTo(mapType) {
-				return errors.WithStack(errors.Errorf("you must pass only a map[string]interface{} to a route path: %T", args))
+				return fmt.Errorf("you must pass only a map[string]interface{} to a route path: %T", args)
 			}
 			m = rv.Convert(mapType).Interface().(map[string]interface{})
 		}
 		h, ok := d.Value(strings.TrimSuffix(url, "()")).(RouteHelperFunc)
 		if !ok {
-			return errors.WithStack(errors.Errorf("could not find a route helper named %s", url))
+			return fmt.Errorf("could not find a route helper named %s", url)
 		}
 		url, err := h(m)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		http.Redirect(d.Response(), d.Request(), string(url), status)
 		return nil
@@ -253,7 +256,7 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 		FileHeader: h,
 	}
 	if err != nil {
-		return bf, errors.WithStack(err)
+		return bf, err
 	}
 	return bf, nil
 }

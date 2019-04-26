@@ -25,14 +25,14 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		"app": a,
 	}
 	if err := events.EmitPayload(EvtAppStart, payload); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 
 	if len(srvs) == 0 {
 		if strings.HasPrefix(a.Options.Addr, "unix:") {
 			tcp, err := servers.UnixSocket(a.Options.Addr[5:])
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			srvs = append(srvs, tcp)
 		} else {
