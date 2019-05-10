@@ -19,6 +19,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/buffalo-pop](https://godoc.org/github.com/gobuffalo/buffalo-pop)
 
+* [github.com/gobuffalo/clara](https://godoc.org/github.com/gobuffalo/clara)
+
 * [github.com/gobuffalo/depgen](https://godoc.org/github.com/gobuffalo/depgen)
 
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
@@ -38,6 +40,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
 
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
+
+* [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
 
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
@@ -81,7 +85,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
-* [errors](https://godoc.org/errors)
+* [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
 
