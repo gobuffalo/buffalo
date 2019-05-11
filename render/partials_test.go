@@ -53,11 +53,17 @@ func Test_Template_Partial_Form(t *testing.T) {
 
 	const newHTML = `<%= form_for(user, {}) { return partial("form.html") } %>`
 	const formHTML = `<%= f.InputTag("Name") %>`
-	const result = `<form id="-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="-Name" name="Name" type="text" value="Mark" /></div></form>`
+	const result = `<form action="/users/1" id="user-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="user-Name" name="Name" type="text" value="Mark" /></div></form>`
 
-	u := struct {
+	type user struct {
+		ID   int
 		Name string
-	}{Name: "Mark"}
+	}
+
+	u := user{
+		ID:   1,
+		Name: "Mark",
+	}
 
 	err := withHTMLFile("new.html", newHTML, func(e *Engine) {
 		err := withHTMLFile("_form.html", formHTML, func(e *Engine) {
