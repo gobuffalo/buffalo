@@ -1,15 +1,12 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/refresh"
-	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
@@ -32,15 +29,14 @@ func New(opts *Options) (*genny.Group, error) {
 	app := opts.App
 
 	if app.WithModules {
-		fmt.Println("Is with modules!")
-		g, err := gomods.Init(app.PackagePkg, app.Root)
-		if err != nil {
-			return gg, err
-		}
-		g.Command(gogen.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
-		g.Command(gogen.Get("./..."))
+		// g, err := gomods.Init(app.PackagePkg, app.Root)
+		// if err != nil {
+		// 	return gg, err
+		// }
+		// g.Command(gogen.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
+		// g.Command(gogen.Get("./..."))
 
-		gg.Add(g)
+		// gg.Add(g)
 	}
 
 	plugs, err := plugdeps.List(app)
