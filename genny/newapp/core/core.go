@@ -1,6 +1,8 @@
 package core
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	"github.com/gobuffalo/buffalo-plugins/genny/install"
 	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
@@ -30,6 +32,7 @@ func New(opts *Options) (*genny.Group, error) {
 	app := opts.App
 
 	if app.WithModules {
+		fmt.Println("Is with modules!")
 		g, err := gomods.Init(app.PackagePkg, app.Root)
 		if err != nil {
 			return gg, err
