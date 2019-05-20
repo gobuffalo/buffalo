@@ -21,6 +21,7 @@ require (
 	github.com/gobuffalo/gogen v0.1.1
 	github.com/gobuffalo/helpers v0.0.0-20190506214229-8e6f634af7c3
 	github.com/gobuffalo/httptest v1.2.0
+	github.com/gobuffalo/licenser v1.0.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
@@ -29,6 +30,7 @@ require (
 	github.com/gobuffalo/plush v3.8.2+incompatible
 	github.com/gobuffalo/plushgen v0.1.0
 	github.com/gobuffalo/pop v4.11.1+incompatible
+	github.com/gobuffalo/release v1.5.0
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
