@@ -111,7 +111,7 @@ func Available() (List, error) {
 						return nil
 					}
 					base := filepath.Base(path)
-					if strings.HasPrefix(base, "buffalo-") {
+					if strings.HasPrefix(base, "buffalo-") && !strings.HasPrefix(base, "buffalo-plugins") {
 						ctx, cancel := context.WithTimeout(context.Background(), timeout())
 						commands := askBin(ctx, path)
 						cancel()

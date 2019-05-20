@@ -13,9 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ErrPlugMissing ...
+// ErrPlugMissing error for when a plugin is missing
 var ErrPlugMissing = errors.New("plugin missing")
 
+// Decorate setup cobra Commands for plugins
 func Decorate(c Command) *cobra.Command {
 	var flags []string
 	if len(c.Flags) > 0 {
@@ -60,7 +61,7 @@ func Decorate(c Command) *cobra.Command {
 	return cc
 }
 
-// LookPath ...
+// LookPath for plugin
 func LookPath(s string) (string, error) {
 	if _, err := os.Stat(s); err == nil {
 		return s, nil

@@ -20,6 +20,7 @@ type cachedPlugin struct {
 
 type cachedPlugins map[string]cachedPlugin
 
+// CachePath returns the path to the plugins cache
 var CachePath = func() string {
 	home := "."
 	if usr, err := user.Current(); err == nil {
