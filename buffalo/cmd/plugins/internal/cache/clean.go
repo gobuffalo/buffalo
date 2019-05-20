@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// cacheCmd represents the cache command
+// CleanCmd cleans the plugins cache
 var CleanCmd = &cobra.Command{
 	Use:   "clean",
 	Short: "cleans the plugins cache",

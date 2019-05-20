@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// GenerateCmd generates a plugin project with go mods
 func GenerateCmd(opts *plugin.Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 	if err := opts.Validate(); err != nil {

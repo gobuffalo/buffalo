@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// cacheCmd represents the cache command
+// BuildCmd rebuilds the plugins cache
 var BuildCmd = &cobra.Command{
 	Use:   "build",
 	Short: "rebuilds the plugins cache",

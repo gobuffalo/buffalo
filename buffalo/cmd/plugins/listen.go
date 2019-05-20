@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Listen is listener for plugin events pipeline
 func Listen(e events.Event) error {
 	if e.Kind != "buffalo:setup:started" {
 		return nil

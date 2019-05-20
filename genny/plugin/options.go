@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Options container for passing needed info for
+// generating a plugin project.
 type Options struct {
 	PluginPkg string
 	Year      int
@@ -19,6 +21,7 @@ type Options struct {
 	Root      string
 }
 
+// Validate makes sure that the options are valid for generator
 func (opts *Options) Validate() error {
 	if opts.PluginPkg == "" {
 		return errors.New("plugin has to have a package name")

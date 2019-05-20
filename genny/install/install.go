@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New installs plugins and then added them to the config file
 func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 
