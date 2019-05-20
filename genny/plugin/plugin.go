@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New generates a plugin project
 func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 

@@ -8,6 +8,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Options container for passing needed info for
+// installing plugins and adding them to the config file.
 type Options struct {
 	App     meta.App
 	Plugins []plugdeps.Plugin

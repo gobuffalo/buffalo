@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New add plugin to the config file
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 

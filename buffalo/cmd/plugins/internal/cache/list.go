@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// cacheCmd represents the cache command
+// ListCmd displays the contents of the plugin cache
 var ListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "displays the contents of the plugin cache",
