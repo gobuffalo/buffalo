@@ -18,6 +18,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
 	github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5
 	github.com/gobuffalo/httptest v1.2.0
+	github.com/gobuffalo/licenser v0.0.0-20190329153211-c35c0a2813b2
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
 	github.com/gobuffalo/makr v1.1.5 // indirect
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
@@ -28,6 +29,7 @@ require (
 	github.com/gobuffalo/plush v3.7.34+incompatible
 	github.com/gobuffalo/plushgen v0.0.0-20190329152458-0555238fe0d9
 	github.com/gobuffalo/pop v4.10.0+incompatible
+	github.com/gobuffalo/release v1.4.0
 	github.com/gobuffalo/tags v2.0.16+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gorilla/context v1.1.1
