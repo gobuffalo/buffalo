@@ -8,7 +8,6 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.0.0-20190224210810-a9411de4debd
 	github.com/gobuffalo/buffalo-docker v1.0.7
-	github.com/gobuffalo/buffalo-plugins v1.14.1
 	github.com/gobuffalo/buffalo-pop v1.12.0
 	github.com/gobuffalo/clara v0.4.1
 	github.com/gobuffalo/depgen v0.1.1

@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/gobuffalo/buffalo-plugins/plugins"
+	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

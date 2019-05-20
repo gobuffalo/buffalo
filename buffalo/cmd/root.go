@@ -45,11 +45,6 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		if strings.Contains(err.Error(), pluginNotFound) {
-			//TODO: register the plugin commands from the plugins lib and then return -1 if the re-execution errors
-			logrus.Errorf(pluginsInstallInstructions)
-			os.Exit(-1)
-		}
 		if strings.Contains(err.Error(), dbNotFound) || strings.Contains(err.Error(), popNotFound) {
 			logrus.Errorf(popInstallInstructions)
 			os.Exit(-1)
@@ -73,14 +68,6 @@ Buffalo Plugins Installation*:
 
 	$ buffalo plugins install github.com/gobuffalo/buffalo-pop
 
-* Requires https://github.com/gobuffalo/buffalo-plugins installed.
-`
-
-const pluginNotFound = `unknown command "plugins"`
-const pluginsInstallInstructions = `Plugins support has not yet been installed for this project or in your GOPATH
-To install please run the following*:
-
-	$ buffalo plugins install github.com/gobuffalo/buffalo-pop
 `
 
 func init() {

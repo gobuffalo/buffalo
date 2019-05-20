@@ -108,7 +108,6 @@ github.com/gobuffalo/buffalo-plugins v1.12.0/go.mod h1:kw4Mj2vQXqe4X5TI36PEQgswb
 github.com/gobuffalo/buffalo-plugins v1.13.0/go.mod h1:Y9nH2VwHVkeKhmdM380ulNXmhhD5On81nRVeD+WlDTQ=
 github.com/gobuffalo/buffalo-plugins v1.13.1/go.mod h1:VcvhrgWcZLhOp8JPLckHBDtv05KepY/MxHsT2+06xX4=
 github.com/gobuffalo/buffalo-plugins v1.14.0/go.mod h1:r2lykSXBT79c3T5JK1ouivVDrHvvCZUdZBmn+lPMHU8=
-github.com/gobuffalo/buffalo-plugins v1.14.1 h1:ZL22sNZif+k/0I9X7LB8cpVMWh7zcVjfpiqxFlH4xSY=
 github.com/gobuffalo/buffalo-plugins v1.14.1/go.mod h1:9BRBvXuKxR0m4YttVFRtuUcAP9Rs97mGq6OleyDbIuo=
 github.com/gobuffalo/buffalo-pop v1.0.5/go.mod h1:Fw/LfFDnSmB/vvQXPvcXEjzP98Tc+AudyNWUBWKCwQ8=
 github.com/gobuffalo/buffalo-pop v1.1.2/go.mod h1:czNLXcYbg5/fjr+uht0NyjZaQ0V2W23H1jzyORgCzQ4=
