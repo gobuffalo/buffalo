@@ -3,8 +3,8 @@ package plugins
 import (
 	"context"
 
-	"github.com/gobuffalo/buffalo-plugins/genny/install"
-	"github.com/gobuffalo/buffalo-plugins/plugins"
+	"github.com/gobuffalo/buffalo/genny/install"
+	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
 	"github.com/pkg/errors"

@@ -61,7 +61,7 @@ var _ = func() error {
 	}()
 
 	func() {
-		b := packr.New("buffalo-plugins:genny:plugin", "../plugin/templates")
+		b := packr.New("buffalo:genny:plugin", "../plugin/templates")
 		b.SetResolver("-short-/listen.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "4d28e1deaaf258f4346bd9491c376098"})
 		b.SetResolver("-short-/version.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "d935586ff49465c8710f2ec7f82d0567"})
 		b.SetResolver("README.md.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "89ae21d51779b8540143aebf69368c43"})

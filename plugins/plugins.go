@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
+	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
 	"github.com/karrick/godirwalk"

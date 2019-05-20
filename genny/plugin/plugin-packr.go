@@ -5,4 +5,4 @@
 // and any other packr generated files.
 package plugin
 
-import _ "github.com/gobuffalo/buffalo-plugins/packrd"
+import _ "github.com/gobuffalo/buffalo/plugins/packrd"

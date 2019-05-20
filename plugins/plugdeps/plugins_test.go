@@ -31,7 +31,7 @@ func Test_Plugins_Decode(t *testing.T) {
 	plugs := New()
 	r.NoError(plugs.Decode(strings.NewReader(eToml)))
 
-	names := []string{"buffalo-hello.rb", "buffalo-heroku", "buffalo-plugins", "buffalo-pop"}
+	names := []string{"buffalo-hello.rb", "buffalo-heroku", "buffalo-pop"}
 	list := plugs.List()
 
 	r.Len(list, len(names))
@@ -45,7 +45,7 @@ func Test_Plugins_Remove(t *testing.T) {
 
 	plugs := New()
 	plugs.Add(pop, heroku)
-	r.Len(plugs.List(), 3)
-	plugs.Remove(pop)
 	r.Len(plugs.List(), 2)
+	plugs.Remove(pop)
+	r.Len(plugs.List(), 1)
 }

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo-plugins/genny/plugin"
-	"github.com/gobuffalo/buffalo-plugins/genny/plugin/with"
+	"github.com/gobuffalo/buffalo/genny/plugin"
+	"github.com/gobuffalo/buffalo/genny/plugin/with"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"

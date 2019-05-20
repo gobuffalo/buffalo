@@ -38,7 +38,7 @@ func Test_List_Off(t *testing.T) {
 	plugs, err := List(app)
 	r.Error(err)
 	r.Equal(errors.Cause(err), ErrMissingConfig)
-	r.Len(plugs.List(), 1)
+	r.Len(plugs.List(), 0)
 }
 
 func Test_List_On(t *testing.T) {
@@ -55,7 +55,7 @@ func Test_List_On(t *testing.T) {
 
 	plugs, err := List(app)
 	r.NoError(err)
-	r.Len(plugs.List(), 4)
+	r.Len(plugs.List(), 3)
 }
 
 const eToml = `[[plugin]]
@@ -70,10 +70,6 @@ const eToml = `[[plugin]]
   [[plugin.command]]
     name = "deploy"
     flags = ["-v"]
-
-[[plugin]]
-  binary = "buffalo-plugins"
-  go_get = "github.com/gobuffalo/buffalo-plugins"
 
 [[plugin]]
   binary = "buffalo-pop"

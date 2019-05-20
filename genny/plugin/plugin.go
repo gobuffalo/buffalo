@@ -20,7 +20,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	g := genny.New()
-	g.Box(packr.New("buffalo-plugins:genny:plugin", "../plugin/templates"))
+	g.Box(packr.New("buffalo:genny:plugin", "../plugin/templates"))
 	ctx := plush.NewContext()
 	ctx.Set("opts", opts)
 	g.Transformer(plushgen.Transformer(ctx))
