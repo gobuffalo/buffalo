@@ -26,6 +26,14 @@ var cokeRunner = func() *genny.Runner {
 	return run
 }
 
+var eq = func(r *require.Assertions, s string, c *exec.Cmd) {
+	if runtime.GOOS == "windows" {
+		s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
+		s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
+	}
+	r.Equal(s, strings.Join(c.Args, " "))
+}
+
 func Test_New(t *testing.T) {
 	envy.Temp(func() {
 		envy.Set(envy.GO111MODULE, "off")
@@ -34,9 +42,10 @@ func Test_New(t *testing.T) {
 		run := cokeRunner()
 
 		opts := &Options{
-			WithAssets:  true,
-			Environment: "bar",
-			App:         meta.New("."),
+			WithAssets:    true,
+			WithBuildDeps: true,
+			Environment:   "bar",
+			App:           meta.New("."),
 		}
 		opts.App.Bin = "bin/foo"
 		r.NoError(run.WithNew(New(opts)))
@@ -49,18 +58,39 @@ func Test_New(t *testing.T) {
 		// we should never leave any files modified or dropped
 		r.Len(res.Files, 0)
 
-		eq := func(s string, c *exec.Cmd) {
-			if runtime.GOOS == "windows" {
-				s = strings.Replace(s, "bin/build", `bin\build.exe`, 1)
-				s = strings.Replace(s, "bin/foo", `bin\foo.exe`, 1)
-			}
-			r.Equal(s, strings.Join(c.Args, " "))
-		}
-
 		cmds := []string{"go get -tags bar ./...", "go build -i -tags bar -o bin/foo"}
 		r.Len(res.Commands, len(cmds))
 		for i, c := range res.Commands {
-			eq(cmds[i], c)
+			eq(r, cmds[i], c)
+		}
+	})
+}
+
+func Test_NewWithoutBuildDeps(t *testing.T) {
+	envy.Temp(func() {
+		envy.Set(envy.GO111MODULE, "off")
+		r := require.New(t)
+
+		run := cokeRunner()
+
+		opts := &Options{
+			WithAssets:    false,
+			WithBuildDeps: false,
+			Environment:   "bar",
+			App:           meta.New("."),
+		}
+		opts.App.Bin = "bin/foo"
+		r.NoError(run.WithNew(New(opts)))
+		run.Root = opts.App.Root
+
+		r.NoError(run.Run())
+
+		res := run.Results()
+
+		cmds := []string{"go build -i -tags bar -o bin/foo"}
+		r.Len(res.Commands, len(cmds))
+		for i, c := range res.Commands {
+			eq(r, cmds[i], c)
 		}
 	})
 }
