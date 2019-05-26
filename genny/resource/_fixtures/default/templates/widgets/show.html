@@ -3,9 +3,17 @@
 </div>
 
 <ul class="list-unstyled list-inline">
-  <li class="list-inline-item"><a href="<%= widgetsPath() %>" class="btn btn-info">Back to all Widgets</a></li>
-  <li class="list-inline-item"><a href="<%= editWidgetPath({ widget_id: widget.ID })%>" class="btn btn-warning">Edit</a></li>
-  <li class="list-inline-item"><a href="<%= widgetPath({ widget_id: widget.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+  <li class="list-inline-item">
+    <%= linkTo(widgetsPath(), {class: "btn btn-info"}) { %>
+      Back to all Widgets
+    <% } %>
+  </li>
+  <li class="list-inline-item">
+    <%= linkTo(editWidgetPath({ widget_id: widget.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+  </li>
+  <li class="list-inline-item">
+    <%= linkTo(widgetPath({ widget_id: widget.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </li>
 </ul>
 
 <p>

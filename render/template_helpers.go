@@ -4,31 +4,11 @@ import (
 	"encoding/json"
 	"html/template"
 	"path/filepath"
-	"sync"
 
+	ht "github.com/gobuffalo/helpers/tags"
+	"github.com/gobuffalo/syncx"
 	"github.com/gobuffalo/tags"
 )
-
-var assetsMutex = &sync.RWMutex{}
-var assetMap map[string]string
-
-func loadManifest(manifest string) error {
-	assetsMutex.Lock()
-	defer assetsMutex.Unlock()
-
-	err := json.Unmarshal([]byte(manifest), &assetMap)
-	return err
-}
-
-func assetPathFor(file string) string {
-	assetsMutex.RLock()
-	filePath := assetMap[file]
-	assetsMutex.RUnlock()
-	if filePath == "" {
-		filePath = file
-	}
-	return filepath.ToSlash(filepath.Join("/assets", filePath))
-}
 
 type helperTag struct {
 	name string
@@ -39,9 +19,9 @@ func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 	helpers["assetPath"] = s.assetPath
 
 	ah := []helperTag{
-		{"javascriptTag", jsTag},
-		{"stylesheetTag", cssTag},
-		{"imgTag", imgTag},
+		{"javascriptTag", ht.JS},
+		{"stylesheetTag", ht.CSS},
+		{"imgTag", ht.Img},
 	}
 
 	for _, h := range ah {
@@ -62,35 +42,25 @@ func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 	return helpers
 }
 
-func jsTag(src string, options tags.Options) template.HTML {
-	if options["type"] == nil {
-		options["type"] = "text/javascript"
+var assetMap = syncx.StringMap{}
+
+func assetPathFor(file string) string {
+	filePath, ok := assetMap.Load(file)
+	if filePath == "" || !ok {
+		filePath = file
 	}
-
-	options["src"] = src
-	jsTag := tags.New("script", options)
-
-	return jsTag.HTML()
+	return filepath.ToSlash(filepath.Join("/assets", filePath))
 }
 
-func cssTag(href string, options tags.Options) template.HTML {
-	if options["rel"] == nil {
-		options["rel"] = "stylesheet"
+func loadManifest(manifest string) error {
+	m := map[string]string{}
+
+	err := json.Unmarshal([]byte(manifest), &m)
+	if err != nil {
+		return err
 	}
-
-	if options["media"] == nil {
-		options["media"] = "screen"
+	for k, v := range m {
+		assetMap.Store(k, v)
 	}
-
-	options["href"] = href
-	cssTag := tags.New("link", options)
-
-	return cssTag.HTML()
-}
-
-func imgTag(src string, options tags.Options) template.HTML {
-	options["src"] = src
-	imgTag := tags.New("img", options)
-
-	return imgTag.HTML()
+	return nil
 }
