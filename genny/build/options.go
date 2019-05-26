@@ -1,7 +1,6 @@
 package build
 
 import (
-	"fmt"
 	"os"
 	"sync"
 	"time"
