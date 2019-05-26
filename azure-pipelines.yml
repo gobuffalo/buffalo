@@ -18,6 +18,7 @@ jobs:
     matrix:
       go 1.10:
         go_version: "1.10"
+        GO111MODULE: "off"
       go 1.11 (on):
         go_version: "1.11.5"
         GO111MODULE: "on"
@@ -40,6 +41,7 @@ jobs:
     matrix:
       go 1.10:
         go_version: "1.10"
+        GO111MODULE: "off"
       go 1.11 (on):
         go_version: "1.11.5"
         GO111MODULE: "on"
@@ -62,6 +64,7 @@ jobs:
     matrix:
       go 1.10:
         go_version: "1.10"
+        GO111MODULE: "off"
       go 1.11 (on):
         go_version: "1.11.5"
         GO111MODULE: "on"

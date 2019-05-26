@@ -39,8 +39,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
-* [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
-
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
 * [github.com/gobuffalo/nulls](https://godoc.org/github.com/gobuffalo/nulls)
