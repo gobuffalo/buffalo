@@ -104,15 +104,14 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		return "", err
 	}
 
-	helpers := map[string]interface{}{
-		"partialFeeder": s.partialFeeder,
-	}
+	helpers := map[string]interface{}{}
 
 	helpers = s.addAssetsHelpers(helpers)
 
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
+	helpers["partialFeeder"] = s.partialFeeder
 
 	body := string(source)
 	for _, ext := range s.exts(name) {
