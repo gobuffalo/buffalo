@@ -38,6 +38,7 @@ func Test_New(t *testing.T) {
 
 	cmds := []string{"go get github.com/gobuffalo/buffalo-plugins",
 		"go get -t ./...",
+		"go get -t ./...",
 	}
 	r.Len(res.Commands, len(cmds))
 
