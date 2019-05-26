@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/packd"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
@@ -12,40 +13,44 @@ import (
 func Test_Template_Partial(t *testing.T) {
 	r := require.New(t)
 
-	err := withHTMLFile("index.html", `<%= partial("foo.html") %>`, func(e *Engine) {
-		err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
+	const indexHTML = `<%= partial("foo.html") %>`
+	const fooHTML = "Foo > <%= name %>"
 
-			re := e.Template("foo/bar", "index.html")
-			r.Equal("foo/bar", re.ContentType())
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("index.html", indexHTML))
+	r.NoError(box.AddString("_foo.html", fooHTML))
 
-		})
-		r.NoError(err)
+	re := New(Options{
+		TemplatesBox: box,
 	})
+
+	bb := &bytes.Buffer{}
+
+	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
 	r.NoError(err)
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 
 }
 
 func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	r := require.New(t)
 
-	err := withHTMLFile("index.html", `<%= partial("foo") %>`, func(e *Engine) {
-		err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
+	const indexHTML = `<%= partial("foo") %>`
+	const fooHTML = "Foo > <%= name %>"
 
-			re := e.Template("text/html; charset=utf-8", "index.html")
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("index.html", indexHTML))
+	r.NoError(box.AddString("_foo.html", fooHTML))
 
-		})
-		r.NoError(err)
+	re := New(Options{
+		TemplatesBox: box,
 	})
-	r.NoError(err)
 
+	bb := &bytes.Buffer{}
+
+	err := re.Template("text/html", "index.html").Render(bb, Data{"name": "Mark"})
+	r.NoError(err)
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
 func Test_Template_Partial_Form(t *testing.T) {
@@ -53,25 +58,23 @@ func Test_Template_Partial_Form(t *testing.T) {
 
 	const newHTML = `<%= form_for(user, {}) { return partial("form.html") } %>`
 	const formHTML = `<%= f.InputTag("Name") %>`
-	const result = `<form id="-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="-Name" name="Name" type="text" value="Mark" /></div></form>`
+	const result = `<form action="/Mark" id="widget-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="widget-Name" name="Name" type="text" value="Mark" /></div></form>`
 
-	u := struct {
-		Name string
-	}{Name: "Mark"}
+	u := Widget{Name: "Mark"}
 
-	err := withHTMLFile("new.html", newHTML, func(e *Engine) {
-		err := withHTMLFile("_form.html", formHTML, func(e *Engine) {
-
-			re := e.Template("", "new.html")
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"user": u})
-			r.NoError(errors.Cause(err))
-			r.Equal(result, strings.TrimSpace(bb.String()))
-
-		})
-		r.NoError(err)
+	re := New(Options{
+		TemplatesBox: packd.NewMemoryBox(),
 	})
+	err := re.TemplatesBox.AddString("new.html", newHTML)
 	r.NoError(err)
+
+	err = re.TemplatesBox.AddString("_form.html", formHTML)
+	r.NoError(err)
+
+	bb := &bytes.Buffer{}
+	err = re.HTML("new.html").Render(bb, Data{"user": u})
+	r.NoError(errors.Cause(err))
+	r.Equal(result, strings.TrimSpace(bb.String()))
 
 }
 
@@ -82,24 +85,26 @@ func Test_Template_Partial_With_For(t *testing.T) {
 	const rowHTML = `Hi <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	users := []struct {
-		Name string
-	}{{Name: "Mark"}, {Name: "Yonghwan"}}
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("for.html", forHTML))
+	r.NoError(box.AddString("_row.html", rowHTML))
 
-	err := withHTMLFile("for.html", forHTML, func(e *Engine) {
-		err := withHTMLFile("_row.html", rowHTML, func(e *Engine) {
-
-			re := e.Template("text/html; charset=utf-8", "for.html")
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"users": users})
-			r.NoError(err)
-			r.Equal(result, strings.TrimSpace(bb.String()))
-
-		})
-		r.NoError(err)
+	re := New(Options{
+		TemplatesBox: box,
 	})
-	r.NoError(err)
 
+	bb := &bytes.Buffer{}
+
+	tmpl := re.Template("text/html; charset=utf-8", "for.html")
+	r.Equal("text/html; charset=utf-8", tmpl.ContentType())
+
+	err := tmpl.Render(bb, Data{"users": []Widget{
+		{Name: "Mark"},
+		{Name: "Yonghwan"},
+	}})
+
+	r.NoError(err)
+	r.Equal(result, strings.TrimSpace(bb.String()))
 }
 
 func Test_Template_Partial_With_For_And_Local(t *testing.T) {
@@ -109,24 +114,26 @@ func Test_Template_Partial_With_For_And_Local(t *testing.T) {
 	const rowHTML = `<%= say %> <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	users := []struct {
-		Name string
-	}{{Name: "Mark"}, {Name: "Yonghwan"}}
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("for.html", forHTML))
+	r.NoError(box.AddString("_row.html", rowHTML))
 
-	err := withHTMLFile("for.html", forHTML, func(e *Engine) {
-		err := withHTMLFile("_row.html", rowHTML, func(e *Engine) {
-
-			re := e.Template("text/html; charset=utf-8", "for.html")
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"users": users})
-			r.NoError(err)
-			r.Equal(result, strings.TrimSpace(bb.String()))
-
-		})
-		r.NoError(err)
+	re := New(Options{
+		TemplatesBox: box,
 	})
-	r.NoError(err)
 
+	bb := &bytes.Buffer{}
+
+	tmpl := re.Template("text/html; charset=utf-8", "for.html")
+	r.Equal("text/html; charset=utf-8", tmpl.ContentType())
+
+	err := tmpl.Render(bb, Data{"users": []Widget{
+		{Name: "Mark"},
+		{Name: "Yonghwan"},
+	}})
+
+	r.NoError(err)
+	r.Equal(result, strings.TrimSpace(bb.String()))
 }
 
 func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T) {
@@ -136,39 +143,42 @@ func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T)
 	const fooHTML = `<%= other %>|<%= name %>`
 	const result = `Other|Mark`
 
-	err := withHTMLFile("index.html", indexHTML, func(e *Engine) {
-		err := withHTMLFile("_foo.html", fooHTML, func(e *Engine) {
-			re := e.Template("", "index.html")
-			bb := &bytes.Buffer{}
-			err := re.Render(bb, Data{"name": "Mark"})
-			r.NoError(errors.Cause(err))
-			r.Equal(result, strings.TrimSpace(bb.String()))
-		})
-		r.NoError(err)
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("index.html", indexHTML))
+	r.NoError(box.AddString("_foo.html", fooHTML))
+
+	re := New(Options{
+		TemplatesBox: box,
 	})
+
+	bb := &bytes.Buffer{}
+
+	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
 	r.NoError(err)
+	r.Equal(result, strings.TrimSpace(bb.String()))
 }
 
 func Test_Template_Partial_With_Layout(t *testing.T) {
 	r := require.New(t)
 
-	err := withHTMLFile("index.html", `<%= partial("foo.html",{layout:"layout.html"}) %>`, func(e *Engine) {
-		err := withHTMLFile("_layout.html", "Layout > <%= yield %>", func(e *Engine) {
-			err := withHTMLFile("_foo.html", "Foo > <%= name %>", func(e *Engine) {
+	const indexHTML = `<%= partial("foo.html",{layout:"layout.html"}) %>`
+	const layoutHTML = `Layout > <%= yield %>`
+	const fooHTML = "Foo > <%= name %>"
+	const result = `Layout > Foo > Mark`
 
-				re := e.Template("foo/bar", "index.html")
-				//r.Equal("foo/bar", re.ContentType())
-				bb := &bytes.Buffer{}
-				err := re.Render(bb, Data{"name": "Mark"})
-				r.NoError(err)
-				r.Equal("Layout > Foo > Mark", strings.TrimSpace(bb.String()))
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("index.html", indexHTML))
+	r.NoError(box.AddString("_layout.html", layoutHTML))
+	r.NoError(box.AddString("_foo.html", fooHTML))
 
-			})
-			r.NoError(err)
-		})
-		r.NoError(err)
-
+	re := New(Options{
+		TemplatesBox: box,
 	})
+
+	bb := &bytes.Buffer{}
+
+	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
 	r.NoError(err)
+	r.Equal(result, strings.TrimSpace(bb.String()))
 
 }
