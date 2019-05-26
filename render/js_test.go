@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
@@ -119,48 +120,38 @@ func Test_JavaScript_JS_Partial_Without_Extension(t *testing.T) {
 
 	const testJS = "let a = 1;\n<%= partial(\"part\") %>"
 	const partJS = "alert('Hi <%= name %>!');"
+	box := packd.NewMemoryBox()
 
-	err := withHTMLFile("test.js", testJS, func(e *Engine) {
-		err := withHTMLFile("_part.js", partJS, func(e *Engine) {
-			bb := &bytes.Buffer{}
-			renderer := e.JavaScript("test.js")
-			r.Equal("application/javascript", renderer.ContentType())
-			err := renderer.Render(bb, Data{"name": "Yonghwan"})
-			r.NoError(err)
-			r.Equal("let a = 1;\nalert('Hi Yonghwan!');", bb.String())
-		})
-		r.NoError(err)
+	r.NoError(box.AddString("_part.js", partJS))
+	r.NoError(box.AddString("test.js", testJS))
+
+	re := New(Options{
+		TemplatesBox: box,
 	})
+
+	bb := &bytes.Buffer{}
+
+	err := re.JavaScript("test.js").Render(bb, Data{"name": "Yonghwan"})
 	r.NoError(err)
+	r.Equal("let a = 1;\nalert('Hi Yonghwan!');", bb.String())
 }
 
 func Test_JavaScript_HTML_Partial(t *testing.T) {
 	r := require.New(t)
 
-	dir, err := ioutil.TempDir("", "")
-	r.NoError(err)
-	defer os.RemoveAll(dir)
-
-	re := New(Options{
-		TemplatesBox: packr.New(dir, dir),
-	})
-
-	pf, err := os.Create(filepath.Join(dir, "_part.html"))
-	r.NoError(err)
-
 	const h = `<div id="foo">
 	<p>hi</p>
 </div>`
-	_, err = pf.WriteString(h)
-	r.NoError(err)
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("_part.html", h))
+	r.NoError(box.AddString("test.js", "let a = \"<%= partial(\"part.html\") %>\""))
 
-	tf, err := os.Create(filepath.Join(dir, "test.js"))
-	r.NoError(err)
-	_, err = tf.WriteString("let a = \"<%= partial(\"part.html\") %>\"")
-	r.NoError(err)
+	re := New(Options{
+		TemplatesBox: box,
+	})
 
 	bb := &bytes.Buffer{}
-	err = re.JavaScript("test.js").Render(bb, map[string]interface{}{})
+	err := re.JavaScript("test.js").Render(bb, map[string]interface{}{})
 	r.NoError(err)
 
 	r.Equal("let a = \"\\x3Cdiv id=\\\"foo\\\"\\x3E\\u000A\\u0009\\x3Cp\\x3Ehi\\x3C/p\\x3E\\u000A\\x3C/div\\x3E\"", bb.String())
