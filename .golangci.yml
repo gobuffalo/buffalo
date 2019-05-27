@@ -14,3 +14,5 @@ linters:
     - unconvert
     - megacheck
     - varcheck
+  disable:
+    - errcheck
