@@ -19,7 +19,7 @@ var _ = grift.Namespace("tools", func() {
 
 	var _ = grift.Add("install", func(c *grift.Context) error {
 		if _, err := exec.LookPath("golangci-lint"); err != nil {
-			if err := run("go", "get", "-u", "-v", "github.com/golangci/golangci-lint/cmd/golangci-lint"); err != nil {
+			if err := run("go", "get", "-v", "github.com/golangci/golangci-lint/cmd/golangci-lint"); err != nil {
 				return err
 			}
 		}
