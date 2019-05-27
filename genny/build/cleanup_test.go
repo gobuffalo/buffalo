@@ -1,7 +1,6 @@
 package build
 
 import (
-	"fmt"
 	"sync"
 	"testing"
 
@@ -34,7 +33,6 @@ func Test_WithDeps(t *testing.T) {
 
 	cmds := []string{"go mod tidy"}
 	for i, c := range results.Commands {
-		fmt.Println(fmt.Sprintf("c: %v", c))
 		eq(r, cmds[i], c)
 	}
 }
