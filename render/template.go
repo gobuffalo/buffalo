@@ -106,12 +106,12 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 	helpers := map[string]interface{}{}
 
-	helpers = s.addAssetsHelpers(helpers)
-
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
 	helpers["partialFeeder"] = s.partialFeeder
+
+	helpers = s.addAssetsHelpers(helpers)
 
 	body := string(source)
 	for _, ext := range s.exts(name) {
@@ -148,7 +148,7 @@ func (s templateRenderer) exts(name string) []string {
 
 func (s templateRenderer) assetPath(file string) (string, error) {
 
-	if len(assetMap) == 0 || os.Getenv("GO_ENV") != "production" {
+	if len(assetMap.Keys()) == 0 || os.Getenv("GO_ENV") != "production" {
 		manifest, err := s.AssetsBox.FindString("manifest.json")
 
 		if err != nil {

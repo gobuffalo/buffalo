@@ -2,7 +2,11 @@
   <h1>Widgets</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= newWidgetsPath() %>" class="btn btn-primary">Create New Widget</a></li>
+  <li>
+    <%= linkTo(newWidgetsPath(), {class: "btn btn-primary"}) { %>
+      Create New Widget
+    <% } %>
+  </li>
 </ul>
 
 <table class="table table-striped">
@@ -16,9 +20,9 @@
       <td><%= widget.Name %></td>
         <td>
           <div class="pull-right">
-            <a href="<%= widgetPath({ widget_id: widget.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= editWidgetPath({ widget_id: widget.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= widgetPath({ widget_id: widget.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <%= linkTo(widgetPath({ widget_id: widget.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editWidgetPath({ widget_id: widget.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(widgetPath({ widget_id: widget.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
           </div>
         </td>
       </tr>

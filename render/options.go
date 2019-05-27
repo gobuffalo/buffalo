@@ -1,9 +1,12 @@
 package render
 
-import "github.com/gobuffalo/packd"
+import (
+	"github.com/gobuffalo/helpers/hctx"
+	"github.com/gobuffalo/packd"
+)
 
 // Helpers to be included in all templates
-type Helpers map[string]interface{}
+type Helpers hctx.Map
 
 // Options for render.Engine
 type Options struct {

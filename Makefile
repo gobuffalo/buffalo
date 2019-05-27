@@ -3,11 +3,11 @@ GO_BIN ?= go
 
 install: deps
 	make tidy
+	packr2
 	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
 	make tidy
 
 tidy:
-	packr2
 ifeq ($(GO111MODULE),on)
 	$(GO_BIN) mod tidy
 else

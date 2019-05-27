@@ -40,6 +40,7 @@ func Test_New(t *testing.T) {
 
 	cmds := []string{
 		"go get -t ./...",
+		"go get -t ./...",
 	}
 	r.Len(res.Commands, len(cmds))
 
