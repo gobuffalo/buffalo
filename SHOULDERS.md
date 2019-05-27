@@ -37,6 +37,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/gogen](https://godoc.org/github.com/gobuffalo/gogen)
 
+* [github.com/gobuffalo/helpers](https://godoc.org/github.com/gobuffalo/helpers)
+
 * [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
 
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
@@ -56,6 +58,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/plushgen](https://godoc.org/github.com/gobuffalo/plushgen)
 
 * [github.com/gobuffalo/pop](https://godoc.org/github.com/gobuffalo/pop)
+
+* [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
 
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 

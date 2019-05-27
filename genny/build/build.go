@@ -70,12 +70,14 @@ func New(opts *Options) (*genny.Generator, error) {
 		g.Merge(ag)
 	}
 
-	// mount the build time dependency generator
-	dg, err := buildDeps(opts)
-	if err != nil {
-		return g, err
+	if opts.WithBuildDeps {
+		// mount the build time dependency generator
+		dg, err := buildDeps(opts)
+		if err != nil {
+			return g, err
+		}
+		g.Merge(dg)
 	}
-	g.Merge(dg)
 
 	g.RunFn(func(r *genny.Runner) error {
 		return jam.Pack(jam.PackOptions{})

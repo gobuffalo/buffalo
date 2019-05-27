@@ -8,6 +8,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/gogen/gomods"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -32,7 +33,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	t := gogen.TemplateTransformer(data, helpers)
 	g.Transformer(t)
-	g.Box(packr.New("buffalo:genny:newapp:web", "../web/templates"))
+	g.Box(packr.New("github.com/gobuffalo/buffalo/genny/newapp/web", "../web/templates"))
 
 	gg.Add(g)
 
@@ -48,6 +49,21 @@ func New(opts *Options) (*genny.Group, error) {
 	if opts.Standard != nil {
 		// add the standard generator
 		g, err = standard.New(opts.Standard)
+		if err != nil {
+			return gg, err
+		}
+		gg.Add(g)
+	}
+
+	// DEP/MODS/go get should be last
+	if !opts.App.WithDep && !opts.App.WithModules {
+		g := genny.New()
+		g.Command(gogen.Get("./...", "-t"))
+		gg.Add(g)
+	}
+
+	if opts.App.WithModules {
+		g, err := gomods.Tidy(opts.App.Root, false)
 		if err != nil {
 			return gg, err
 		}
