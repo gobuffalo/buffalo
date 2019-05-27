@@ -1,14 +1,16 @@
 fast: true
 linters:
+  enable-all: false
+  disable-all: false
   enable:
     - govet
     - golint
     - goimports
     - deadcode
-    - gotype
+    - typecheck
     - ineffassign
     - misspell
     - nakedret
     - unconvert
     - megacheck
-    - varcheck"
+    - varcheck
