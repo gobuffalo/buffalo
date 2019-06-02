@@ -35,6 +35,7 @@ func (a *App) Muxer() *mux.Router {
 func New(opts Options) *App {
 	LoadPlugins()
 	envy.Load()
+
 	opts = optionsWithDefaults(opts)
 
 	a := &App{
@@ -56,7 +57,8 @@ func New(opts Options) *App {
 		return func(res http.ResponseWriter, req *http.Request) {
 			c := a.newContext(RouteInfo{}, res, req)
 			err := fmt.Errorf(errorf, req.Method, req.URL.Path)
-			a.ErrorHandlers.Get(code)(code, err, c)
+			_ = a.ErrorHandlers.Get(code)(code, err, c)
+
 		}
 	}
 

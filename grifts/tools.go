@@ -18,11 +18,8 @@ var _ = grift.Namespace("tools", func() {
 	}
 
 	var _ = grift.Add("install", func(c *grift.Context) error {
-		if _, err := exec.LookPath("gometalinter"); err != nil {
-			if err := run("go", "get", "-u", "-v", "github.com/alecthomas/gometalinter"); err != nil {
-				return err
-			}
-			if err := run("gometalinter", "--install"); err != nil {
+		if _, err := exec.LookPath("golangci-lint"); err != nil {
+			if err := run("go", "get", "-v", "github.com/golangci/golangci-lint/cmd/golangci-lint"); err != nil {
 				return err
 			}
 		}
@@ -33,7 +30,8 @@ var _ = grift.Namespace("tools", func() {
 		if err := grift.Run("tools:install", c); err != nil {
 			return err
 		}
-		return run("gometalinter", "--vendor", "--deadline=3m", "./...")
+
+		return run("golangci-lint", "run", "--fast", "--deadline=3m")
 	})
 
 })
