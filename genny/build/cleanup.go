@@ -36,7 +36,7 @@ func Cleanup(opts *Options) genny.RunFn {
 				return err
 			}
 		}
-		if envy.Mods() {
+		if envy.Mods() && opts.WithBuildDeps {
 			if err := r.Exec(exec.Command(genny.GoBin(), "mod", "tidy")); err != nil {
 				return err
 			}

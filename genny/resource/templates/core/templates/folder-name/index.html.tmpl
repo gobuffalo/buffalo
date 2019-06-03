@@ -2,7 +2,11 @@
   <h1>{{.opts.Model.Group}}</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= new{{.opts.Name.Resource}}Path() %>" class="btn btn-primary">Create New {{.opts.Model.Proper}}</a></li>
+  <li>
+    <%= linkTo(new{{.opts.Name.Resource}}Path(), {class: "btn btn-primary"}) { %>
+      Create New {{.opts.Model.Proper}}
+    <% } %>
+  </li>
 </ul>
 
 <table class="table table-striped">
@@ -24,9 +28,9 @@
       {{ end -}}
         <td>
           <div class="pull-right">
-            <a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= edit{{.opts.Name.Proper}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <%= linkTo({{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(edit{{.opts.Name.Proper}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo({{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
           </div>
         </td>
       </tr>

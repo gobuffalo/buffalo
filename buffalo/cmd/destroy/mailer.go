@@ -3,10 +3,10 @@ package destroy
 import (
 	"errors"
 	"fmt"
-	"github.com/gobuffalo/flect"
 	"os"
 	"path/filepath"
 
+	"github.com/gobuffalo/flect"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

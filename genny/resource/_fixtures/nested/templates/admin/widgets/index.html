@@ -2,7 +2,11 @@
   <h1>Widgets</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= newAdminWidgetsPath() %>" class="btn btn-primary">Create New Widget</a></li>
+  <li>
+    <%= linkTo(newAdminWidgetsPath(), {class: "btn btn-primary"}) { %>
+      Create New Widget
+    <% } %>
+  </li>
 </ul>
 
 <table class="table table-striped">
@@ -16,9 +20,9 @@
       <td><%= widget.Name %></td>
         <td>
           <div class="pull-right">
-            <a href="<%= adminWidgetPath({ admin_widget_id: widget.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= editAdminWidgetPath({ admin_widget_id: widget.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= adminWidgetPath({ admin_widget_id: widget.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <%= linkTo(adminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editAdminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(adminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
           </div>
         </td>
       </tr>

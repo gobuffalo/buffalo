@@ -3,11 +3,11 @@ GO_BIN ?= go
 
 install: deps
 	make tidy
+	packr2
 	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
 	make tidy
 
 tidy:
-	packr2
 ifeq ($(GO111MODULE),on)
 	$(GO_BIN) mod tidy
 else
@@ -43,7 +43,7 @@ ci-test:
 	docker build . --no-cache --build-arg TRAVIS_BRANCH=$$(git symbolic-ref --short HEAD)
 
 lint:
-	gometalinter --vendor ./... --deadline=1m --skip=internal
+	golangci-lint --vendor ./... --deadline=1m --skip=internal
 
 update:
 	$(GO_BIN) get -u -tags ${TAGS}

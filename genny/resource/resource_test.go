@@ -73,7 +73,7 @@ func Test_New(t *testing.T) {
 				r.NoError(err)
 			}
 
-			exp := packr.New(tt.Name, filepath.Join("_fixtures", tt.Name))
+			exp := packr.Folder(filepath.Join("_fixtures", tt.Name))
 			gentest.CompareFiles(exp.List(), res.Files)
 
 			for _, n := range exp.List() {
