@@ -10,7 +10,6 @@ RUN go version && go get -v -u github.com/markbates/deplist/deplist
 RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/gobuffalo/flect \
 && go get -v -u github.com/gobuffalo/makr \
-&& go get -v -u github.com/gobuffalo/packr \
 && go get -v -u github.com/gobuffalo/packr/v2 \
 && go get -v -u github.com/gobuffalo/tags \
 && go get -v -u github.com/gobuffalo/pop \

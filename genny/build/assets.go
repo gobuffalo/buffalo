@@ -2,7 +2,6 @@ package build
 
 import (
 	"bytes"
-	"context"
 	"os/exec"
 	"path/filepath"
 
@@ -10,7 +9,8 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 
-	pack "github.com/gobuffalo/packr/builder"
+	"github.com/gobuffalo/packr/v2/jam"
+	"github.com/gobuffalo/packr/v2/jam/parser"
 )
 
 func assets(opts *Options) (*genny.Generator, error) {
@@ -44,17 +44,21 @@ func assets(opts *Options) (*genny.Generator, error) {
 		})
 	}
 
-	p := pack.New(context.Background(), opts.App.Root)
-	p.Compress = true
+	g.RunFn(func(r *genny.Runner) error {
+		ro := &parser.RootsOptions{}
 
-	if !opts.WithAssets {
-		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
-	} else {
-		p.IgnoredFolders = p.IgnoredFolders[1:]
-	}
+		if !opts.WithAssets {
+			ro.Ignores = append(ro.Ignores, "public/assets")
+		}
+
+		opts := jam.PackOptions{
+			Roots:        []string{opts.App.Root},
+			RootsOptions: ro,
+		}
+		return jam.Pack(opts)
+	})
 
 	if opts.ExtractAssets && opts.WithAssets {
-		p.IgnoredBoxes = append(p.IgnoredBoxes, "../public/assets")
 		// mount the archived assets generator
 		aa, err := archivedAssets(opts)
 		if err != nil {
@@ -62,10 +66,6 @@ func assets(opts *Options) (*genny.Generator, error) {
 		}
 		g.Merge(aa)
 	}
-
-	g.RunFn(func(r *genny.Runner) error {
-		return p.Run()
-	})
 
 	return g, nil
 }
