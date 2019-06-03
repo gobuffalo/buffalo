@@ -48,8 +48,8 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
+	golang.org/x/crypto v0.0.0-20190530122614-20be4c3c3ed5
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51
+	golang.org/x/tools v0.0.0-20190603152906-08e0b306e832
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
