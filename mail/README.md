@@ -19,7 +19,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
 	"github.com/gobuffalo/buffalo/mail"
 	"errors"
@@ -46,7 +46,7 @@ func init() {
 
 	//The rendering engine, this is usually generated inside actions/render.go in your buffalo app.
 	r = render.New(render.Options{
-		TemplatesBox:   packr.NewBox("../templates"),
+		TemplatesBox:   packr.New("app:mail", "../templates"),
 	})
 }
 
