@@ -2,8 +2,8 @@ package destroy
 
 import (
 	"errors"
-	"github.com/gobuffalo/flect"
 
+	"github.com/gobuffalo/flect"
 	"github.com/spf13/cobra"
 )
 

@@ -43,7 +43,7 @@ ci-test:
 	docker build . --no-cache --build-arg TRAVIS_BRANCH=$$(git symbolic-ref --short HEAD)
 
 lint:
-	gometalinter --vendor ./... --deadline=1m --skip=internal
+	golangci-lint --vendor ./... --deadline=1m --skip=internal
 
 update:
 	$(GO_BIN) get -u -tags ${TAGS}
