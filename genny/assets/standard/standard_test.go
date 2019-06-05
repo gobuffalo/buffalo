@@ -32,6 +32,7 @@ func Test_New(t *testing.T) {
 		"public/assets/application.js",
 		"public/assets/buffalo.css",
 		"public/assets/images/favicon.ico",
+		"public/assets/images/logo.svg",
 		"templates/application.html",
 	}
 
