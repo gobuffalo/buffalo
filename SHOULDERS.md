@@ -15,8 +15,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/buffalo-docker](https://godoc.org/github.com/gobuffalo/buffalo-docker)
 
-* [github.com/gobuffalo/buffalo-plugins](https://godoc.org/github.com/gobuffalo/buffalo-plugins)
-
 * [github.com/gobuffalo/buffalo-pop](https://godoc.org/github.com/gobuffalo/buffalo-pop)
 
 * [github.com/gobuffalo/clara](https://godoc.org/github.com/gobuffalo/clara)

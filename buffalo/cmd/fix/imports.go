@@ -51,12 +51,7 @@ func (c ImportConverter) Process(r *Runner) error {
 
 func (c ImportConverter) processFile(p string, info os.FileInfo, err error) error {
 	er := onlyRelevantFiles(p, info, err, func(p string) error {
-		err := c.rewriteFile(p)
-		if err != nil {
-			err = err
-		}
-
-		return err
+		return c.rewriteFile(p)
 	})
 
 	return er

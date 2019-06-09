@@ -1,0 +1,22 @@
+<p align="center"><img src="https://github.com/gobuffalo/buffalo/blob/master/logo.svg" width="360"></p>
+
+<p align="center">
+<a href="https://godoc.org/<%= opts.PluginPkg %>"><img src="https://godoc.org/<%= opts.PluginPkg %>?status.svg" alt="GoDoc" /></a>
+<a href="https://goreportcard.com/report/<%= opts.PluginPkg %>"><img src="https://goreportcard.com/badge/<%= opts.PluginPkg %>" alt="Go Report Card" /></a>
+</p>
+
+# <%= opts.PluginPkg %>
+
+TODO: Description
+
+## Installation
+
+```bash
+$ go get -u -v <%= opts.PluginPkg %>
+```
+
+## Usage
+
+```bash
+$ buffalo <%= opts.ShortName %> --help
+```
