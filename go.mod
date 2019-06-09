@@ -1,5 +1,7 @@
 module github.com/gobuffalo/buffalo
 
+go 1.12
+
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
@@ -26,7 +28,7 @@ require (
 	github.com/gobuffalo/packr/v2 v2.3.2
 	github.com/gobuffalo/plush v3.8.2+incompatible
 	github.com/gobuffalo/plushgen v0.1.0
-	github.com/gobuffalo/pop v4.11.0+incompatible
+	github.com/gobuffalo/pop v4.11.1+incompatible
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
@@ -43,12 +45,12 @@ require (
 	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spf13/cobra v0.0.4
+	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190603231351-8aaa1484dc10
+	golang.org/x/tools v0.0.0-20190608022120-eacb66d2a7c3
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
