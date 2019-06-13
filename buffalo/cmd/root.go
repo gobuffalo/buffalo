@@ -68,7 +68,6 @@ Buffalo Plugins Installation*:
 
 	$ buffalo plugins install github.com/gobuffalo/buffalo-pop
 
-* Requires https://github.com/gobuffalo/buffalo-plugins installed.
 `
 
 func init() {

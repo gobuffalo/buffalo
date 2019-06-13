@@ -18,7 +18,6 @@ var apkg = []string{}
 // packages ensure get updated
 var upkg = []string{
 	"github.com/gobuffalo/buffalo",
-	"github.com/gobuffalo/buffalo-plugins",
 	"github.com/gobuffalo/plush",
 	"github.com/gobuffalo/events",
 	"github.com/gobuffalo/suite",

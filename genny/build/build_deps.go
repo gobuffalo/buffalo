@@ -2,6 +2,7 @@ package build
 
 import (
 	"github.com/gobuffalo/depgen"
+	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/gogen"
 )
@@ -13,20 +14,20 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 		return g, err
 	}
 
+	if envy.Mods() {
+		return g, nil
+	}
+
 	if opts.App.WithDep {
 		// mount the dep generator
-		dg, err := depgen.Ensure(false)
-		if err != nil {
-			return g, err
-		}
-		g.Merge(dg)
-	} else {
-		// mount the go get runner
-		tf := opts.App.BuildTags(opts.Environment, opts.Tags...)
-		if len(tf) > 0 {
-			tf = append([]string{"-tags"}, tf.String())
-		}
-		g.Command(gogen.Get("./...", tf...))
+		return depgen.Ensure(false)
 	}
+
+	// mount the go get runner
+	tf := opts.App.BuildTags(opts.Environment, opts.Tags...)
+	if len(tf) > 0 {
+		tf = append([]string{"-tags"}, tf.String())
+	}
+	g.Command(gogen.Get("./...", tf...))
 	return g, nil
 }

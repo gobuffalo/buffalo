@@ -1,0 +1,23 @@
+package cmd
+
+import (
+    "fmt"
+
+  "<%= opts.PluginPkg %>/<%= opts.ShortName %>"
+  "github.com/gobuffalo/buffalo/plugins"
+  "github.com/spf13/cobra"
+)
+
+// versionCmd represents the version command
+var versionCmd = &cobra.Command{
+  Use:   "version",
+  Short: "current version of <%= opts.ShortName %>",
+  RunE: func(cmd *cobra.Command, args []string) error {
+    fmt.Println("<%= opts.ShortName %>", <%= opts.ShortName %>.Version)
+    return nil
+  },
+}
+
+func init() {
+  <%= opts.ShortName %>Cmd.AddCommand(versionCmd)
+}

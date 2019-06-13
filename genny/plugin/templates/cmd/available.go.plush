@@ -1,0 +1,14 @@
+package cmd
+
+import (
+	"github.com/gobuffalo/buffalo/plugins/plugcmds"
+	"<%= opts.PluginPkg %>"
+)
+
+var Available = plugcmds.NewAvailable()
+
+func init() {
+	Available.Add("root", <%= opts.ShortName %>Cmd)
+	Available.Listen(<%= opts.ShortName %>.Listen)
+	Available.Mount(rootCmd)
+}
