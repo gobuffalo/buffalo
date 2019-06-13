@@ -20,12 +20,12 @@ RUN go get -u github.com/golang/dep/cmd/dep \
 && go get -v -u github.com/gobuffalo/packr/v2/packr2 \
 && go get -v -u github.com/markbates/filetest \
 && go get -v -u github.com/markbates/grift \
-&& go get -v -u github.com/markbates/refresh 
+&& go get -v -u github.com/markbates/refresh \
+&& rm -rfv $GOPATH/src && mkdir -p $BP
 
-RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
+# Install golangci
+RUN  curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
 
-# clear out the src so that we can fill it with new versions
-RUN rm -rfv $GOPATH/src && mkdir -p $BP
 WORKDIR $BP
 
 ADD go.mod .
