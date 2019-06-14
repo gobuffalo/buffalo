@@ -6,10 +6,10 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/attrs v0.0.0-20190224210810-a9411de4debd
+	github.com/gobuffalo/attrs v0.1.0
 	github.com/gobuffalo/buffalo-docker v1.0.7
 	github.com/gobuffalo/buffalo-pop v1.13.0
-	github.com/gobuffalo/clara v0.4.1
+	github.com/gobuffalo/clara v0.5.0
 	github.com/gobuffalo/depgen v0.1.1
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.3.1
@@ -25,7 +25,7 @@ require (
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
 	github.com/gobuffalo/packd v0.1.0
-	github.com/gobuffalo/packr/v2 v2.3.2
+	github.com/gobuffalo/packr/v2 v2.4.0
 	github.com/gobuffalo/plush v3.8.2+incompatible
 	github.com/gobuffalo/plushgen v0.1.0
 	github.com/gobuffalo/pop v4.11.1+incompatible
