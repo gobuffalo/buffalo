@@ -39,6 +39,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/httptest](https://godoc.org/github.com/gobuffalo/httptest)
 
+* [github.com/gobuffalo/licenser](https://godoc.org/github.com/gobuffalo/licenser)
+
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
@@ -47,8 +49,6 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/packd](https://godoc.org/github.com/gobuffalo/packd)
 
-* [github.com/gobuffalo/packr](https://godoc.org/github.com/gobuffalo/packr)
-
 * [github.com/gobuffalo/packr/v2](https://godoc.org/github.com/gobuffalo/packr/v2)
 
 * [github.com/gobuffalo/plush](https://godoc.org/github.com/gobuffalo/plush)
@@ -56,6 +56,8 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/plushgen](https://godoc.org/github.com/gobuffalo/plushgen)
 
 * [github.com/gobuffalo/pop](https://godoc.org/github.com/gobuffalo/pop)
+
+* [github.com/gobuffalo/release](https://godoc.org/github.com/gobuffalo/release)
 
 * [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
 
