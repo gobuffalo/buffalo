@@ -9,27 +9,27 @@ require (
 	github.com/gobuffalo/attrs v0.1.0
 	github.com/gobuffalo/buffalo-docker v1.0.7
 	github.com/gobuffalo/buffalo-pop v1.13.0
-	github.com/gobuffalo/clara v0.5.0
-	github.com/gobuffalo/depgen v0.1.1
+	github.com/gobuffalo/clara v0.6.0
+	github.com/gobuffalo/depgen v0.2.0
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.3.1
 	github.com/gobuffalo/fizz v1.9.0 // indirect
 	github.com/gobuffalo/flect v0.1.5
-	github.com/gobuffalo/genny v0.1.1
+	github.com/gobuffalo/genny v0.2.0
 	github.com/gobuffalo/github_flavored_markdown v1.0.7
-	github.com/gobuffalo/gogen v0.1.1
-	github.com/gobuffalo/helpers v0.0.0-20190506214229-8e6f634af7c3
-	github.com/gobuffalo/httptest v1.2.0
-	github.com/gobuffalo/licenser v1.0.0
+	github.com/gobuffalo/gogen v0.2.0
+	github.com/gobuffalo/helpers v0.2.2
+	github.com/gobuffalo/httptest v1.3.0
+	github.com/gobuffalo/licenser v1.1.0
 	github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2
 	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
-	github.com/gobuffalo/packd v0.1.0
+	github.com/gobuffalo/packd v0.2.0
 	github.com/gobuffalo/packr/v2 v2.4.0
 	github.com/gobuffalo/plush v3.8.2+incompatible
-	github.com/gobuffalo/plushgen v0.1.0
+	github.com/gobuffalo/plushgen v0.1.2
 	github.com/gobuffalo/pop v4.11.1+incompatible
-	github.com/gobuffalo/release v1.6.2
+	github.com/gobuffalo/release v1.7.0
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
