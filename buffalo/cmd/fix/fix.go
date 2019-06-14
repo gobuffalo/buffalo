@@ -19,6 +19,7 @@ var replace = map[string]string{
 	"github.com/satori/go.uuid":                    "github.com/gobuffalo/uuid",
 	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
 	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
+	"github.com/gobuffalo/buffalo-plugins":         "github.com/gobuffalo/buffalo/plugins",
 }
 
 var ic = ImportConverter{

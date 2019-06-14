@@ -2,11 +2,11 @@ package core
 
 import (
 	"github.com/gobuffalo/buffalo-docker/genny/docker"
-	"github.com/gobuffalo/buffalo-plugins/genny/install"
-	"github.com/gobuffalo/buffalo-plugins/plugins/plugdeps"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
+	"github.com/gobuffalo/buffalo/genny/install"
 	"github.com/gobuffalo/buffalo/genny/refresh"
+	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"

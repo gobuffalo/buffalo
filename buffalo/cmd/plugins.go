@@ -1,11 +1,16 @@
 package cmd
 
 import (
-	"github.com/gobuffalo/buffalo-plugins/plugins"
+	pluginscmd "github.com/gobuffalo/buffalo/buffalo/cmd/plugins"
+	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/markbates/oncer"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+func init() {
+	RootCmd.AddCommand(pluginscmd.PluginsCmd)
+}
 
 var _plugs plugins.List
 

@@ -38,7 +38,6 @@ func Test_New(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go get github.com/gobuffalo/buffalo-plugins",
 		"go get -t ./...",
 	}
 	r.NoError(gentest.CompareCommands(cmds, res.Commands))
@@ -95,7 +94,6 @@ func Test_New_Mods(t *testing.T) {
 			"go mod init coke",
 			"go get github.com/gobuffalo/buffalo@" + runtime.Version,
 			"go get ./...",
-			"go get github.com/gobuffalo/buffalo-plugins",
 			"go mod tidy",
 		}
 		r.NoError(gentest.CompareCommands(cmds, res.Commands))

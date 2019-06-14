@@ -38,7 +38,7 @@ func Test_New(t *testing.T) {
 
 	res := run.Results()
 
-	cmds := []string{"go get github.com/gobuffalo/buffalo-plugins",
+	cmds := []string{
 		"go get -t ./...",
 		"go get -t ./...",
 	}
