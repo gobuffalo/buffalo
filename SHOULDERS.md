@@ -59,6 +59,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/release](https://godoc.org/github.com/gobuffalo/release)
 
+* [github.com/gobuffalo/shoulders](https://godoc.org/github.com/gobuffalo/shoulders)
+
 * [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
 
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
