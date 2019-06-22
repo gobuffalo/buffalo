@@ -10,7 +10,6 @@ import (
 	"github.com/gobuffalo/plushgen"
 	"github.com/gobuffalo/release/genny/initgen"
 	"github.com/gobuffalo/release/genny/makefile"
-	"github.com/pkg/errors"
 )
 
 // New generates a plugin project
@@ -18,7 +17,7 @@ func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 
 	if err := opts.Validate(); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	g := genny.New()
@@ -37,7 +36,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	g, err := licenser.New(lopts)
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	gg.Add(g)
 
@@ -50,7 +49,7 @@ func New(opts *Options) (*genny.Group, error) {
 		},
 	})
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	gg.Merge(ig)
 

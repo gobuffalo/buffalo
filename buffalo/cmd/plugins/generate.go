@@ -13,7 +13,6 @@ import (
 	"github.com/gobuffalo/gogen"
 	"github.com/gobuffalo/licenser/genny/licenser"
 	"github.com/gobuffalo/logger"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -42,7 +41,7 @@ var generateCmd = &cobra.Command{
 
 		gg, err := plugin.New(popts)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		r.Root = popts.Root
 		r.WithRun(genny.Force(r.Root, viper.GetBool("force")))
@@ -51,14 +50,14 @@ var generateCmd = &cobra.Command{
 		if viper.GetBool("with-gen") {
 			gg, err := with.GenerateCmd(popts)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			r.WithGroup(gg)
 		}
 
 		g, err := gogen.Fmt(r.Root)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		r.With(g)
 

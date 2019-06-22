@@ -22,14 +22,14 @@ func (opts *Options) Validate() error {
 	if opts.App.IsZero() {
 		pwd, err := os.Getwd()
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		opts.App = meta.New(pwd)
 	}
 	if len(opts.Plugins) == 0 {
 		plugs, err := plugdeps.List(opts.App)
 		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-			return errors.WithStack(err)
+			return err
 		}
 		opts.Plugins = plugs.List()
 	}

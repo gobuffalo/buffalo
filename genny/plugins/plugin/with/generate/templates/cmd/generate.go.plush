@@ -30,13 +30,13 @@ var generateCmd = &cobra.Command{
 
 		g, err := <%= opts.ShortName %>.New(generateOptions.Options)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		r.With(g)
 
 		g, err = gotools.GoFmt(r.Root)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		r.With(g)
 

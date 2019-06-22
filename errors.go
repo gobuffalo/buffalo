@@ -77,9 +77,9 @@ func (a *App) PanicHandler(next Handler) Handler {
 				case error:
 					err = t
 				case string:
-					err = errors.New(t)
+					err = fmt.Errorf(t)
 				default:
-					err = errors.New(fmt.Sprint(t))
+					err = fmt.Errorf(fmt.Sprint(t))
 				}
 				err = err
 				events.EmitError(events.ErrPanic, err,

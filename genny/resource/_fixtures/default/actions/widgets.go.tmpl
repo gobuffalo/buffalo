@@ -31,7 +31,7 @@ func (v WidgetsResource) List(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   widgets := &models.Widgets{}
@@ -57,7 +57,7 @@ func (v WidgetsResource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -91,7 +91,7 @@ func (v WidgetsResource) Create(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Validate the data from the html form
@@ -121,7 +121,7 @@ func (v WidgetsResource) Edit(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -140,7 +140,7 @@ func (v WidgetsResource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty Widget
@@ -181,7 +181,7 @@ func (v WidgetsResource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty Widget

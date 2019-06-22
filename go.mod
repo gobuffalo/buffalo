@@ -4,7 +4,6 @@ go 1.12
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/cpuguy83/go-md2man v1.0.10
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.1.0
@@ -55,5 +54,4 @@ require (
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	golang.org/x/tools v0.0.0-20190621195816-6e04913cbbac
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/yaml.v2 v2.2.2
 )

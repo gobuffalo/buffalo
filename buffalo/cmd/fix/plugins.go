@@ -18,7 +18,7 @@ func Plugins(r *Runner) error {
 	os.RemoveAll(plugins.CachePath)
 	plugs, err := plugdeps.List(r.App)
 	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-		return errors.WithStack(err)
+		return err
 	}
 
 	run := genny.WetRunner(context.Background())

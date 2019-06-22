@@ -51,7 +51,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	}
 
 	if len(args) == 0 {
-		return nopts, errors.New("you must enter a name for your new application")
+		return nopts, fmt.Errorf("you must enter a name for your new application")
 	}
 	if configError != nil {
 		return nopts, configError

@@ -3,6 +3,7 @@ package plugins
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"path"
 	"strings"
 
@@ -23,7 +24,7 @@ var removeCmd = &cobra.Command{
 	Short: "removes plugin from config/buffalo-plugins.toml",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("you must specify at least one package")
+			return fmt.Errorf("you must specify at least one package")
 		}
 		run := genny.WetRunner(context.Background())
 		if removeOptions.dryRun {
@@ -33,7 +34,7 @@ var removeCmd = &cobra.Command{
 		app := meta.New(".")
 		plugs, err := plugdeps.List(app)
 		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-			return errors.WithStack(err)
+			return err
 		}
 
 		for _, a := range args {
@@ -49,12 +50,12 @@ var removeCmd = &cobra.Command{
 			p := plugdeps.ConfigPath(app)
 			bb := &bytes.Buffer{}
 			if err := plugs.Encode(bb); err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 			return r.File(genny.NewFile(p, bb))
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		return run.Run()

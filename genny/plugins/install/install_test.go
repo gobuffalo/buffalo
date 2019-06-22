@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -34,7 +33,7 @@ func Test_New(t *testing.T) {
 	run.FileFn = func(f genny.File) (genny.File, error) {
 		bb := &bytes.Buffer{}
 		if _, err := io.Copy(bb, f); err != nil {
-			return f, errors.WithStack(err)
+			return f, err
 		}
 		return genny.NewFile(f.Name(), bb), nil
 	}

@@ -31,7 +31,7 @@ var addCmd = &cobra.Command{
 		app := meta.New(".")
 		plugs, err := plugdeps.List(app)
 		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-			return errors.WithStack(err)
+			return err
 		}
 
 		tags := app.BuildTags("", addOptions.buildTags...)
@@ -54,7 +54,7 @@ var addCmd = &cobra.Command{
 			Plugins: plugs.List(),
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.With(g)
 

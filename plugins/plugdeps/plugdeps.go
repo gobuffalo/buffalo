@@ -24,7 +24,7 @@ func List(app meta.App) (*Plugins, error) {
 
 	lp, err := listLocal(app)
 	if err != nil {
-		return plugs, errors.WithStack(err)
+		return plugs, err
 	}
 	plugs.Add(lp.List()...)
 
@@ -35,10 +35,10 @@ func List(app meta.App) (*Plugins, error) {
 	p := ConfigPath(app)
 	tf, err := os.Open(p)
 	if err != nil {
-		return plugs, errors.WithStack(err)
+		return plugs, err
 	}
 	if err := plugs.Decode(tf); err != nil {
-		return plugs, errors.WithStack(err)
+		return plugs, err
 	}
 
 	return plugs, nil
@@ -67,7 +67,7 @@ func listLocal(app meta.App) (*Plugins, error) {
 		},
 	})
 	if err != nil {
-		return plugs, errors.WithStack(err)
+		return plugs, err
 	}
 
 	return plugs, nil

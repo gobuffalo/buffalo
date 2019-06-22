@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/flect"
-	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/events"
 	"github.com/gorilla/mux"
@@ -80,7 +79,7 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return "", errors.Wrapf(err, "missing parameters for %v", cRoute.Path)
+			return "", fmt.Errorf("missing parameters for %v: %s", cRoute.Path, err)
 		}
 
 		result := url.Path
