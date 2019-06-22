@@ -7,7 +7,6 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.1.0
-	github.com/gobuffalo/buffalo-docker v1.1.0
 	github.com/gobuffalo/buffalo-pop v1.14.0
 	github.com/gobuffalo/clara v0.6.0
 	github.com/gobuffalo/depgen v0.2.0
