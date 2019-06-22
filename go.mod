@@ -30,7 +30,6 @@ require (
 	github.com/gobuffalo/pop v4.11.1+incompatible
 	github.com/gobuffalo/release v1.7.0
 	github.com/gobuffalo/shoulders v1.1.0 // indirect
-	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190614162758-d80e318e1bb4
 	github.com/gorilla/mux v1.7.2
