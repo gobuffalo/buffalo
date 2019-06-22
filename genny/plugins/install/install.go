@@ -8,7 +8,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/add"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/pkg/errors"
 )
 

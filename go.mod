@@ -10,14 +10,12 @@ require (
 	github.com/gobuffalo/buffalo-docker v1.1.0
 	github.com/gobuffalo/buffalo-pop v1.14.0
 	github.com/gobuffalo/clara v0.6.0
-	github.com/gobuffalo/depgen v0.2.0
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.3.1
 	github.com/gobuffalo/fizz v1.9.1 // indirect
 	github.com/gobuffalo/flect v0.1.5
 	github.com/gobuffalo/genny v0.3.0
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
-	github.com/gobuffalo/gogen v0.2.0
 	github.com/gobuffalo/helpers v0.2.2
 	github.com/gobuffalo/httptest v1.3.0
 	github.com/gobuffalo/licenser v1.1.0
@@ -27,7 +25,6 @@ require (
 	github.com/gobuffalo/packd v0.2.0
 	github.com/gobuffalo/packr/v2 v2.4.0
 	github.com/gobuffalo/plush v3.8.2+incompatible
-	github.com/gobuffalo/plushgen v0.1.2
 	github.com/gobuffalo/pop v4.11.1+incompatible
 	github.com/gobuffalo/release v1.7.0
 	github.com/gobuffalo/shoulders v1.1.0 // indirect

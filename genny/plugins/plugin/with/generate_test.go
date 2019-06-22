@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/plugins/plugin"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
-	"github.com/gobuffalo/gogen/gomods"
+	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
