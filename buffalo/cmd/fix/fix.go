@@ -57,6 +57,7 @@ var checks = []Check{
 	DeprecrationsCheck,
 	fixDocker,
 	encodeApp,
+	Plugins,
 }
 
 func encodeApp(r *Runner) error {

@@ -12,7 +12,6 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/events"
-	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 )
 
@@ -92,8 +91,6 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 }
 
 func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	defer gcontext.Clear(req)
-
 	a := ri.App
 
 	c := a.newContext(ri, res, req)
