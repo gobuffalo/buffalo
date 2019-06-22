@@ -8,7 +8,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/genny/install"
+	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"

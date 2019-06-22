@@ -35,7 +35,6 @@ require (
 	github.com/gobuffalo/syncx v0.0.0-20190224160051-33c29581e754
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/gobuffalo/x v0.0.0-20190614162758-d80e318e1bb4
-	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.2
 	github.com/gorilla/sessions v1.1.3
 	github.com/karrick/godirwalk v1.10.12
