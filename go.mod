@@ -15,7 +15,7 @@ require (
 	github.com/gobuffalo/events v1.3.1
 	github.com/gobuffalo/fizz v1.9.1 // indirect
 	github.com/gobuffalo/flect v0.1.5
-	github.com/gobuffalo/genny v0.2.0
+	github.com/gobuffalo/genny v0.3.0
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/gogen v0.2.0
 	github.com/gobuffalo/helpers v0.2.2
@@ -44,7 +44,6 @@ require (
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
-	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.3

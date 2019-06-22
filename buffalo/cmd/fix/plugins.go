@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/genny/plugins/install"
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 // Plugins will fix plugins between releases
@@ -17,7 +17,7 @@ func Plugins(r *Runner) error {
 	fmt.Println("~~~ Cleaning plugins cache ~~~")
 	os.RemoveAll(plugins.CachePath)
 	plugs, err := plugdeps.List(r.App)
-	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
+	if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
 		return err
 	}
 

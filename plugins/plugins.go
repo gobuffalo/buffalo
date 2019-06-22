@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
 	"github.com/karrick/godirwalk"
 	"github.com/markbates/oncer"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -206,7 +206,7 @@ func listPlugDeps(app meta.App) (List, error) {
 		}
 		bin, err := LookPath(bin)
 		if err != nil {
-			if errors.Cause(err) != ErrPlugMissing {
+			if errx.Unwrap(err) != ErrPlugMissing {
 				return list, err
 			}
 			continue

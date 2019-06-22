@@ -6,7 +6,6 @@ import (
 	"<%= opts.PluginPkg %>/genny/<%= opts.ShortName %>"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gogen"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 

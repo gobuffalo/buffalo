@@ -1,17 +1,17 @@
 package plugdeps
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/meta"
 	"github.com/karrick/godirwalk"
-	"github.com/pkg/errors"
 )
 
 // ErrMissingConfig is if config/buffalo-plugins.toml file is not found. Use plugdeps#On(app) to test if plugdeps are being used
-var ErrMissingConfig = errors.Errorf("could not find a buffalo-plugins config file at %s", ConfigPath(meta.New(".")))
+var ErrMissingConfig = fmt.Errorf("could not find a buffalo-plugins config file at %s", ConfigPath(meta.New(".")))
 
 // List all of the plugins the application depeneds on. Will return ErrMissingConfig
 // if the app is not using config/buffalo-plugins.toml to manage their plugins.

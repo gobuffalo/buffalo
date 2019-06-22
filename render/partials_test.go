@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/packd"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -73,7 +73,7 @@ func Test_Template_Partial_Form(t *testing.T) {
 
 	bb := &bytes.Buffer{}
 	err = re.HTML("new.html").Render(bb, Data{"user": u})
-	r.NoError(errors.Cause(err))
+	r.NoError(errx.Unwrap(err))
 	r.Equal(result, strings.TrimSpace(bb.String()))
 
 }

@@ -3,9 +3,9 @@ package add
 import (
 	"os"
 
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // Options container for passing needed info for
@@ -26,7 +26,7 @@ func (opts *Options) Validate() error {
 	}
 	if len(opts.Plugins) == 0 {
 		plugs, err := plugdeps.List(opts.App)
-		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
+		if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
 			return err
 		}
 		opts.Plugins = plugs.List()

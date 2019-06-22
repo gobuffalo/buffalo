@@ -15,8 +15,8 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/pkg/errors"
 )
 
 // assert that DefaultContext is implementing Context
@@ -129,7 +129,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 
 		err := rr.Render(bb, data)
 		if err != nil {
-			if er, ok := errors.Cause(err).(render.ErrRedirect); ok {
+			if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
 				return d.Redirect(er.Status, er.URL)
 			}
 			return HTTPError{Status: 500, Cause: err}
