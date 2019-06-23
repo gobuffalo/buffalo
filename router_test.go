@@ -8,8 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"errors"
-
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
@@ -384,12 +382,12 @@ type WebResource struct {
 
 // Edit default implementation. Returns a 404
 func (v WebResource) Edit(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 // New default implementation. Returns a 404
 func (v WebResource) New(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 func Test_App_NamedRoutes(t *testing.T) {

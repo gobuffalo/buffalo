@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/BurntSushi/toml"
-	"github.com/pkg/errors"
 )
 
 // Plugins manages the config/buffalo-plugins.toml file
@@ -23,7 +22,7 @@ func (plugs *Plugins) Encode(w io.Writer) error {
 	}
 
 	if err := toml.NewEncoder(w).Encode(tp); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	return nil
 }
@@ -34,7 +33,7 @@ func (plugs *Plugins) Decode(r io.Reader) error {
 		Plugins: []Plugin{},
 	}
 	if _, err := toml.DecodeReader(r, tp); err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	for _, p := range tp.Plugins {
 		plugs.Add(p)

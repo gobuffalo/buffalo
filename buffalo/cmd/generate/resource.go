@@ -2,8 +2,7 @@ package generate
 
 import (
 	"context"
-
-	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/buffalo/genny/resource"
@@ -28,7 +27,7 @@ var ResourceCmd = &cobra.Command{
 	Short:   "Generate a new actions/resource file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("you must supply a name")
+			return fmt.Errorf("you must supply a name")
 		}
 		ctx := context.Background()
 		run := genny.WetRunner(ctx)

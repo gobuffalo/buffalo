@@ -16,7 +16,7 @@ package buffalo
 	}
 
 	func (c Context) error {
-		return c.Error(422, errors.New("oops!!"))
+		return c.Error(422, fmt.Errorf("oops!!"))
 	}
 */
 type Handler func(Context) error

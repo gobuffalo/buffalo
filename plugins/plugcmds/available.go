@@ -2,12 +2,12 @@ package plugcmds
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -140,13 +140,13 @@ func buildListen(fn func(e events.Event) error) *cobra.Command {
 		Aliases: []string{},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
-				return errors.New("must pass a payload")
+				return fmt.Errorf("must pass a payload")
 			}
 
 			e := events.Event{}
 			err := json.Unmarshal([]byte(args[0]), &e)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			return fn(e)

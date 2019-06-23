@@ -9,8 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"errors"
-
 	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/monoculum/formam"
@@ -82,7 +80,7 @@ func Exec(req *http.Request, value interface{}) error {
 
 	ct := httpx.ContentType(req)
 	if ct == "" {
-		return errors.New("blank content type")
+		return fmt.Errorf("blank content type")
 	}
 	if b, ok := binders[ct]; ok {
 		return b(req, value)
