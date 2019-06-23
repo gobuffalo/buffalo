@@ -9,7 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 // packages to add to Gopkg.toml

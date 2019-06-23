@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/plugins/plugin/with"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/licenser/genny/licenser"
 	"github.com/gobuffalo/logger"
 	"github.com/pkg/errors"

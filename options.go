@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/pop/logging"
-	"github.com/gobuffalo/x/defaults"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/oncer"
 )

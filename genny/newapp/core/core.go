@@ -8,10 +8,10 @@ import (
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
-	"github.com/gobuffalo/depgen"
+	"github.com/gobuffalo/genny/depgen"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
-	"github.com/gobuffalo/gogen/gomods"
+	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/pkg/errors"
 )
