@@ -5,7 +5,7 @@ import (
 	"html/template"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/packr/v2"
 )
 
