@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/buffalo-pop v1.14.0
 	github.com/gobuffalo/clara v0.6.0
 	github.com/gobuffalo/envy v1.7.0
-	github.com/gobuffalo/events v1.3.1
+	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/fizz v1.9.1 // indirect
 	github.com/gobuffalo/flect v0.1.5
 	github.com/gobuffalo/genny v0.3.0
@@ -31,7 +31,7 @@ require (
 	github.com/gobuffalo/x v0.0.0-20190614162758-d80e318e1bb4 // indirect
 	github.com/gorilla/mux v1.7.2
 	github.com/gorilla/sessions v1.1.3
-	github.com/karrick/godirwalk v1.10.3
+	github.com/karrick/godirwalk v1.10.12
 	github.com/markbates/deplist v1.2.0
 	github.com/markbates/grift v1.0.6
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
