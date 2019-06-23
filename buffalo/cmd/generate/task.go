@@ -6,7 +6,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/grift"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/spf13/cobra"
 )
 

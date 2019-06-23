@@ -4,10 +4,10 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/plushgen"
 	"github.com/gobuffalo/licenser/genny/licenser"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/plushgen"
 	"github.com/gobuffalo/release/genny/initgen"
 	"github.com/gobuffalo/release/genny/makefile"
 )

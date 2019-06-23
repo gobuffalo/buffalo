@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/add"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 // New installs plugins and then added them to the config file

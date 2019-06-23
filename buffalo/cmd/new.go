@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	"github.com/gobuffalo/buffalo/genny/docker"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
@@ -23,7 +23,7 @@ import (
 	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr/v2/plog"

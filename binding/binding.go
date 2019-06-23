@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/nulls"
-	"github.com/gobuffalo/x/httpx"
+	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/monoculum/formam"
 )
 

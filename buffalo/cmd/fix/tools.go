@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 var rTools = []string{}
