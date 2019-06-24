@@ -19,10 +19,10 @@ require (
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.2.0
 	github.com/gobuffalo/logger v1.0.0
-	github.com/gobuffalo/meta v0.0.0-20190329152330-e161e8a93e3b
+	github.com/gobuffalo/meta v0.1.0
 	github.com/gobuffalo/nulls v0.0.0-20190305142546-85f3c9250d87
-	github.com/gobuffalo/packd v0.2.0
-	github.com/gobuffalo/packr/v2 v2.4.0
+	github.com/gobuffalo/packd v0.3.0
+	github.com/gobuffalo/packr/v2 v2.5.1
 	github.com/gobuffalo/plush v3.8.2+incompatible
 	github.com/gobuffalo/pop v4.11.1+incompatible
 	github.com/gobuffalo/release v1.8.1
@@ -45,6 +45,6 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190624150748-8ea4f8e3e5bf
+	golang.org/x/tools v0.0.0-20190624181036-64633d5e8629
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
