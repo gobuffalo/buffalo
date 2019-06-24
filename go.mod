@@ -7,7 +7,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.1.0
-	github.com/gobuffalo/buffalo-pop v1.14.0
+	github.com/gobuffalo/buffalo-pop v1.15.0
 	github.com/gobuffalo/clara v0.6.0
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.4.0
@@ -39,6 +39,7 @@ require (
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
 	github.com/sirupsen/logrus v1.4.2
+	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.4.0

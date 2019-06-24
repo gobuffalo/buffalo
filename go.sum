@@ -125,8 +125,8 @@ github.com/gobuffalo/buffalo-pop v1.9.0/go.mod h1:MfrkBg0iN9+RdlxdHHAqqGFAC/iyCf
 github.com/gobuffalo/buffalo-pop v1.10.0/go.mod h1:C3/cFXB8Zd38XiGgHFdE7dw3Wu9MOKeD7bfELQicGPI=
 github.com/gobuffalo/buffalo-pop v1.12.0/go.mod h1:pO2ONSJOCjyroGp4BwVHfMkfd7sLg1U9BvMJqRy6Otk=
 github.com/gobuffalo/buffalo-pop v1.13.0/go.mod h1:h+zfyXCUFwihFqz6jmo9xsdsZ1Tm9n7knYpQjW0gv18=
-github.com/gobuffalo/buffalo-pop v1.14.0 h1:ofG/vKnX6igsG7+X3QNtAdU5i0Agcg95HK8trALIVMk=
-github.com/gobuffalo/buffalo-pop v1.14.0/go.mod h1:GHa0wM1kuRn2E6pEJvz9Bf4Vym2KL3rf7Wz7OqU87Tw=
+github.com/gobuffalo/buffalo-pop v1.15.0 h1:tk8F1C4O/ibGN46CGrbj01cqwucXBRJd8guawhW67MY=
+github.com/gobuffalo/buffalo-pop v1.15.0/go.mod h1:4r1aTrLpQWFSlea6wIDCUb/gZ7jr2DJuS4J80A+LBhE=
 github.com/gobuffalo/clara v0.4.1/go.mod h1:3QgAPqYgPqAzhfGbNLlp4UztaZRi2SOg+ZrZwaq9L94=
 github.com/gobuffalo/clara v0.6.0 h1:rThH7BmFnjgc1R2I2ePjaWhwsVWyakqIvmn48cNeNP8=
 github.com/gobuffalo/clara v0.6.0/go.mod h1:RKZxkcH80pLykRi2hLkoxGMxA8T06Dc9fN/pFvutMFY=
@@ -405,7 +405,6 @@ github.com/gobuffalo/plushgen v0.0.0-20190104222512-177cd2b872b3/go.mod h1:tYxCo
 github.com/gobuffalo/plushgen v0.0.0-20190224160205-347ea233336e/go.mod h1:tYxCozi8X62bpZyKXYHw1ncx2ZtT2nFvG42kuLwYjoc=
 github.com/gobuffalo/plushgen v0.0.0-20190329152458-0555238fe0d9/go.mod h1:3U71v6HWZpVER1nInTXeAwdoRNsRd4W8aeIa1Lyp+Bk=
 github.com/gobuffalo/plushgen v0.1.0/go.mod h1:NK33QLkRK/xKexiPFSxlWRT286F4yStZUa/Fbx0guvo=
-github.com/gobuffalo/plushgen v0.1.2 h1:s4yAgNdfNMyMQ7o+Is4f1VlH2L1tKosT+m7BF28C8H4=
 github.com/gobuffalo/plushgen v0.1.2/go.mod h1:3U71v6HWZpVER1nInTXeAwdoRNsRd4W8aeIa1Lyp+Bk=
 github.com/gobuffalo/pop v4.8.2+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
 github.com/gobuffalo/pop v4.8.3+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
