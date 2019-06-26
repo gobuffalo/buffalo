@@ -31,10 +31,10 @@ require (
 	github.com/gorilla/mux v1.7.2
 	github.com/gorilla/sessions v1.1.3
 	github.com/karrick/godirwalk v1.10.12
-	github.com/markbates/deplist v1.2.0
-	github.com/markbates/grift v1.0.6
+	github.com/markbates/deplist v1.3.0
+	github.com/markbates/grift v1.1.0
 	github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2
-	github.com/markbates/refresh v1.7.1
+	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
