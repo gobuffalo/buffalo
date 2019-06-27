@@ -1,7 +1,7 @@
 package web
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
@@ -44,7 +44,7 @@ func (opts *Options) Validate() error {
 	}
 
 	if opts.Standard != nil && opts.Webpack != nil {
-		return errors.New("you can not use both webpack and standard generators")
+		return fmt.Errorf("you can not use both webpack and standard generators")
 	}
 
 	return nil

@@ -10,8 +10,6 @@ import (
 
 	"github.com/gobuffalo/flect"
 
-	"errors"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -27,7 +25,7 @@ var ResourceCmd = &cobra.Command{
 	Short:   "Destroy resource files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("you need to provide a valid resource name in order to destroy it")
+			return fmt.Errorf("you need to provide a valid resource name in order to destroy it")
 		}
 
 		name := args[0]

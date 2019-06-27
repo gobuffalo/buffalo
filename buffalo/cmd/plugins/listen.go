@@ -3,11 +3,10 @@ package plugins
 import (
 	"context"
 
-	"github.com/gobuffalo/buffalo/genny/install"
+	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
-	"github.com/pkg/errors"
 )
 
 // Listen is listener for plugin events pipeline
@@ -21,7 +20,7 @@ func Listen(e events.Event) error {
 	opts := &install.Options{}
 	gg, err := install.New(opts)
 	if err != nil {
-		return errors.WithStack(err)
+		return err
 	}
 	run.WithGroup(gg)
 	payload := e.Payload
@@ -29,7 +28,7 @@ func Listen(e events.Event) error {
 	events.EmitPayload(plugins.EvtSetupStarted, payload)
 	if err := run.Run(); err != nil {
 		events.EmitError(plugins.EvtSetupErr, err, payload)
-		return errors.WithStack(err)
+		return err
 	}
 	events.EmitPayload(plugins.EvtSetupFinished, payload)
 	return nil

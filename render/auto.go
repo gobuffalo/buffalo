@@ -9,12 +9,10 @@ import (
 	"regexp"
 	"strings"
 
-	"errors"
-
 	"github.com/gobuffalo/flect/name"
 )
 
-var errNoID = errors.New("no ID on model")
+var errNoID = fmt.Errorf("no ID on model")
 
 // ErrRedirect indicates to Context#Render that this is a
 // redirect and a template shouldn't be rendered.

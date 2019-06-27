@@ -1,10 +1,9 @@
 package mail
 
 import (
+	"fmt"
 	"io"
 	"strconv"
-
-	"errors"
 
 	gomail "github.com/gobuffalo/buffalo/mail/internal/mail"
 )
@@ -77,7 +76,7 @@ func NewSMTPSender(host string, port string, user string, password string) (SMTP
 	iport, err := strconv.Atoi(port)
 
 	if err != nil {
-		return SMTPSender{}, errors.New("invalid port for the SMTP mail")
+		return SMTPSender{}, fmt.Errorf("invalid port for the SMTP mail")
 	}
 
 	dialer := &gomail.Dialer{

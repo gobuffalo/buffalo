@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	"github.com/gobuffalo/buffalo/genny/docker"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
@@ -19,15 +19,15 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/web"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/gobuffalo/plush"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -51,7 +51,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	}
 
 	if len(args) == 0 {
-		return nopts, errors.New("you must enter a name for your new application")
+		return nopts, fmt.Errorf("you must enter a name for your new application")
 	}
 	if configError != nil {
 		return nopts, configError
@@ -198,7 +198,7 @@ var newCmd = &cobra.Command{
 			gg, err = web.New(wo)
 		}
 		if err != nil {
-			if errors.Cause(err) == core.ErrNotInGoPath {
+			if errx.Unwrap(err) == core.ErrNotInGoPath {
 				return notInGoPath(app)
 			}
 			return err

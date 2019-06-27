@@ -1,16 +1,25 @@
 package buffalo
 
 import (
+	"crypto/rand"
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
-	"github.com/gobuffalo/x/httpx"
-	"github.com/gobuffalo/x/randx"
+	"github.com/gobuffalo/buffalo/internal/httpx"
 )
 
 // RequestLogger can be be overridden to a user specified
 // function that can be used to log the request.
 var RequestLogger = RequestLoggerFunc
+
+func randString(i int) (string, error) {
+	if i == 0 {
+		i = 64
+	}
+	b := make([]byte, i)
+	_, err := rand.Read(b)
+	return string(b), err
+}
 
 // RequestLoggerFunc is the default implementation of the RequestLogger.
 // By default it will log a uniq "request_id", the HTTP Method of the request,
@@ -19,13 +28,22 @@ var RequestLogger = RequestLoggerFunc
 // code of the response.
 func RequestLoggerFunc(h Handler) Handler {
 	return func(c Context) error {
+		rs, err := randString(10)
+		if err != nil {
+			return err
+		}
 		var irid interface{}
 		if irid = c.Session().Get("requestor_id"); irid == nil {
-			irid = randx.String(10)
+			rs, err := randString(10)
+			if err != nil {
+				return err
+			}
+			irid = rs
 			c.Session().Set("requestor_id", irid)
 			c.Session().Save()
 		}
-		rid := irid.(string) + "-" + randx.String(10)
+
+		rid := irid.(string) + "-" + rs
 		c.Set("request_id", rid)
 		c.LogField("request_id", rid)
 

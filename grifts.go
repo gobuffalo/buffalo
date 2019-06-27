@@ -1,15 +1,13 @@
 package buffalo
 
 import (
+	"crypto/rand"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 	"text/tabwriter"
 
-	"github.com/gobuffalo/x/randx"
 	"github.com/markbates/grift/grift"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Grifts decorates the app with tasks
@@ -22,19 +20,12 @@ func Grifts(app *App) {
 func secretGrift() {
 	grift.Desc("secret", "Generate a cryptographically secure secret key")
 	grift.Add("secret", func(c *grift.Context) error {
-		bb := []byte{}
-		for i := 0; i < 4; i++ {
-			b := []byte(randx.String(64))
-			b, err := bcrypt.GenerateFromPassword(b, bcrypt.DefaultCost)
-			if err != nil {
-				return err
-			}
-			bb = append(bb, b...)
+		b := make([]byte, 64)
+		_, err := rand.Read(b)
+		if err != nil {
+			return err
 		}
-		rx := regexp.MustCompile(`(\W+)`)
-		bb = rx.ReplaceAll(bb, []byte(""))
-		s := randx.String(6) + string(bb)
-		fmt.Println(s[:127])
+		fmt.Println(string(b))
 		return nil
 	})
 }

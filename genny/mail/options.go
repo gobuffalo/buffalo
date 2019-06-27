@@ -1,7 +1,7 @@
 package mail
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/meta"
@@ -21,7 +21,7 @@ func (opts *Options) Validate() error {
 	}
 
 	if len(opts.Name.String()) == 0 {
-		return errors.New("you must supply a name for your mailer")
+		return fmt.Errorf("you must supply a name for your mailer")
 	}
 	return nil
 }

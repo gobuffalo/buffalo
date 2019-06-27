@@ -6,8 +6,6 @@ import (
 	"net/url"
 	"sort"
 	"strings"
-
-	"errors"
 )
 
 // Routes returns a list of all of the routes defined
@@ -81,5 +79,5 @@ func (a RouteList) Lookup(name string) (*RouteInfo, error) {
 			return ri, nil
 		}
 	}
-	return nil, errors.New("path name not found")
+	return nil, fmt.Errorf("path name not found")
 }

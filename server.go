@@ -7,12 +7,12 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/packd"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
-	"github.com/pkg/errors"
 )
 
 // Serve the application at the specified address/port and listen for OS
@@ -100,7 +100,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
-	if err != nil && errors.Cause(err) != context.Canceled {
+	if err != nil && errx.Unwrap(err) != context.Canceled {
 		a.Logger.Error(err)
 		return err
 	}
