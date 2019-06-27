@@ -28,9 +28,13 @@ Support for Go Modules were introduced in [Release v0.13.0-beta.1](https://githu
 4. Make sure tests run when doing `go test ./...`. You may need to do `go get -t ./...` first to get the testing dependencies.
 5. (Optional) There is a much longer set of integration tests that can be run. These will be run by Travis-CI when you open a PR. If you want to run them locally, you can by running `docker build .`.
 
+Feel free to ask for help, but don't target a specific person (unless you're replying to this person). e.g. don't @ markbates, but @ gobuffalo/core-managers instead.
+
 ### Making your Pull Request
 
-Open a PR against the `development` branch. **_DO NOT_** open one against `master` unless you are explicitly told to. All "unreleased" work happens in the `development` branch.
+Open a PR against the `development` branch. **_DO NOT_** open one against `master`. All "unreleased" work happens in the `development` branch, and we will fix the master branch if necessary.
+
+**WE WILL CLOSE ANY PR OPENED AGAINST MASTER BRANCH**.
 
 ## Documentation Welcome
 
