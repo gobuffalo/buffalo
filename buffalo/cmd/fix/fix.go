@@ -52,6 +52,7 @@ var checks = []Check{
 	mr.transformPackages,
 	WebpackCheck,
 	PackageJSONCheck,
+	AddPackageJSONScripts,
 	DepEnsure,
 	installTools,
 	DeprecrationsCheck,

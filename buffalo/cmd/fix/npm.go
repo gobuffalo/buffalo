@@ -2,6 +2,7 @@ package fix
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -11,6 +12,55 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 )
+
+// AddPackageJSONScripts rewrites the package.json file
+// to add dev and build scripts if there are missing.
+func AddPackageJSONScripts(r *Runner) error {
+	if !r.App.WithWebpack {
+		return nil
+	}
+	fmt.Println("~~~ Patching package.json to add dev and build scripts ~~~")
+
+	b, err := ioutil.ReadFile("package.json")
+	if err != nil {
+		return err
+	}
+
+	packageJSON := map[string]interface{}{}
+	if err := json.Unmarshal(b, &packageJSON); err != nil {
+		return fmt.Errorf("could not rewrite package.json: %s", err.Error())
+	}
+
+	if _, ok := packageJSON["scripts"]; !ok {
+		// Add scripts
+		packageJSON["scripts"] = map[string]string{
+			"dev":   "webpack --watch",
+			"build": "webpack -p --progress",
+		}
+	} else {
+		// Add missing scripts
+		scripts, ok := packageJSON["scripts"].(map[string]string)
+		if !ok {
+			return fmt.Errorf("could not rewrite package.json: invalid scripts section")
+		}
+		if _, ok := scripts["dev"]; !ok {
+			scripts["dev"] = "webpack --watch"
+		}
+		if _, ok := scripts["build"]; !ok {
+			scripts["build"] = "webpack -p --progress"
+		}
+		packageJSON["scripts"] = scripts
+	}
+
+	b, err = json.Marshal(packageJSON)
+	if err != nil {
+		return fmt.Errorf("could not rewrite package.json: %s", err.Error())
+	}
+
+	ioutil.WriteFile("package.json", b, 644)
+
+	return nil
+}
 
 // PackageJSONCheck will compare the current default Buffalo
 // package.json against the applications package.json. If they are
