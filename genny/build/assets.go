@@ -39,7 +39,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 				tool = "npm"
 			}
 			bb := &bytes.Buffer{}
-			c := exec.Command(tool)
+			c := exec.CommandContext(r.Context, tool, "run", "build")
 			c.Stdout = bb
 			c.Stderr = bb
 			if err := r.Exec(c); err != nil {
