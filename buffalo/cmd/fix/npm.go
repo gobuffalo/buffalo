@@ -39,7 +39,7 @@ func AddPackageJSONScripts(r *Runner) error {
 		}
 	} else {
 		// Add missing scripts
-		scripts, ok := packageJSON["scripts"].(map[string]string)
+		scripts, ok := packageJSON["scripts"].(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("could not rewrite package.json: invalid scripts section")
 		}
@@ -52,7 +52,7 @@ func AddPackageJSONScripts(r *Runner) error {
 		packageJSON["scripts"] = scripts
 	}
 
-	b, err = json.Marshal(packageJSON)
+	b, err = json.MarshalIndent(packageJSON, "", "  ")
 	if err != nil {
 		return fmt.Errorf("could not rewrite package.json: %s", err.Error())
 	}

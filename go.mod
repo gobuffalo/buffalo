@@ -3,6 +3,7 @@ module github.com/gobuffalo/buffalo
 go 1.12
 
 require (
+	cloud.google.com/go v0.36.0 // indirect
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
