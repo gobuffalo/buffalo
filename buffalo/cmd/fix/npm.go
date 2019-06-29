@@ -26,12 +26,14 @@ func AddPackageJSONScripts(r *Runner) error {
 		return err
 	}
 
+	needRewrite := false
 	packageJSON := map[string]interface{}{}
 	if err := json.Unmarshal(b, &packageJSON); err != nil {
 		return fmt.Errorf("could not rewrite package.json: %s", err.Error())
 	}
 
 	if _, ok := packageJSON["scripts"]; !ok {
+		needRewrite = true
 		// Add scripts
 		packageJSON["scripts"] = map[string]string{
 			"dev":   "webpack --watch",
@@ -44,20 +46,26 @@ func AddPackageJSONScripts(r *Runner) error {
 			return fmt.Errorf("could not rewrite package.json: invalid scripts section")
 		}
 		if _, ok := scripts["dev"]; !ok {
+			needRewrite = true
 			scripts["dev"] = "webpack --watch"
 		}
 		if _, ok := scripts["build"]; !ok {
+			needRewrite = true
 			scripts["build"] = "webpack -p --progress"
 		}
 		packageJSON["scripts"] = scripts
 	}
 
-	b, err = json.MarshalIndent(packageJSON, "", "  ")
-	if err != nil {
-		return fmt.Errorf("could not rewrite package.json: %s", err.Error())
-	}
+	if needRewrite {
+		b, err = json.MarshalIndent(packageJSON, "", "  ")
+		if err != nil {
+			return fmt.Errorf("could not rewrite package.json: %s", err.Error())
+		}
 
-	ioutil.WriteFile("package.json", b, 644)
+		ioutil.WriteFile("package.json", b, 644)
+	} else {
+		fmt.Println("~~~ package.json doesn't need to be patched, skipping. ~~~")
+	}
 
 	return nil
 }
