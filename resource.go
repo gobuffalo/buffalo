@@ -30,10 +30,9 @@ type Resource interface {
 	Destroy(Context) error
 }
 
-// ResourceMW can be implemented on a Reource type
-// to specify additional middleware specific to the
-// resource
-type ResourceMW interface {
+// HasMiddleware can be implemented to specify additional
+// middleware specific to the resource
+type HasMiddleware interface {
 	Use() []MiddlewareFunc
 }
 
