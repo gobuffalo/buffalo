@@ -572,6 +572,46 @@ func Test_Resource_ParamKey(t *testing.T) {
 	r.Contains(paths, "/foo/{bazKey}/edit/")
 }
 
+type mwResource struct {
+	WebResource
+}
+
+func (mwResource) Use() []MiddlewareFunc {
+	var mw []MiddlewareFunc
+
+	mw = append(mw, func(next Handler) Handler {
+		return func(c Context) error {
+			if c.Param("good") == "" {
+				return fmt.Errorf("not good")
+			}
+			return next(c)
+		}
+	})
+
+	return mw
+}
+
+func (m mwResource) List(c Context) error {
+	return c.Render(200, render.String("southern harmony and the musical companion"))
+}
+
+func Test_Resource_MW(t *testing.T) {
+	r := require.New(t)
+	fr := mwResource{}
+	a := New(Options{})
+	a.Resource("/foo", fr)
+
+	w := httptest.New(a)
+	res := w.HTML("/foo?good=true").Get()
+	r.Equal(200, res.Code)
+	r.Contains(res.Body.String(), "southern harmony")
+
+	res = w.HTML("/foo").Get()
+	r.Equal(500, res.Code)
+
+	r.NotContains(res.Body.String(), "southern harmony")
+}
+
 type userResource struct{}
 
 func (u *userResource) List(c Context) error {
