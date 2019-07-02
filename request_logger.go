@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
@@ -18,7 +19,7 @@ func randString(i int) (string, error) {
 	}
 	b := make([]byte, i)
 	_, err := rand.Read(b)
-	return string(b), err
+	return hex.EncodeToString(b), err
 }
 
 // RequestLoggerFunc is the default implementation of the RequestLogger.
