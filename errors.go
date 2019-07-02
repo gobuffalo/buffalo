@@ -169,7 +169,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return nil
 	}
 
-	trace := fmt.Sprintf("%s\n\n%+v", origErr, origErr)
+	trace := origErr.Error()
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")

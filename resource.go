@@ -30,6 +30,12 @@ type Resource interface {
 	Destroy(Context) error
 }
 
+// HasMiddleware can be implemented to specify additional
+// middleware specific to the resource
+type HasMiddleware interface {
+	Use() []MiddlewareFunc
+}
+
 // BaseResource fills in the gaps for any Resource interface
 // functions you don't want/need to implement.
 /*
