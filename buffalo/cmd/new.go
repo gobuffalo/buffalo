@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/genny/docker"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/ci"
+	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/buffalo/genny/newapp/api"
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
 	"github.com/gobuffalo/buffalo/genny/newapp/web"
@@ -89,7 +89,7 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 	app.WithPop = !viper.GetBool("skip-pop")
 	app.WithWebpack = !viper.GetBool("skip-webpack")
 	app.WithYarn = !viper.GetBool("skip-yarn")
-	app.WithNodeJs = app.WithYarn || app.WithWebpack
+	app.WithNodeJs = app.WithWebpack
 	app.AsWeb = !app.AsAPI
 
 	if app.AsAPI {

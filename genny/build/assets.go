@@ -5,7 +5,6 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 
@@ -20,7 +19,10 @@ func assets(opts *Options) (*genny.Generator, error) {
 		return g, err
 	}
 
-	if opts.App.WithWebpack {
+	if opts.App.WithNodeJs {
+		if _, err := opts.App.NodeScript("build"); err != nil {
+			return g, err
+		}
 		if opts.CleanAssets {
 			g.RunFn(func(r *genny.Runner) error {
 				r.Delete(filepath.Join(opts.App.Root, "public", "assets"))
@@ -32,8 +34,12 @@ func assets(opts *Options) (*genny.Generator, error) {
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
 		g.RunFn(func(r *genny.Runner) error {
+			tool := "yarnpkg"
+			if !opts.App.WithYarn {
+				tool = "npm"
+			}
 			bb := &bytes.Buffer{}
-			c := exec.Command(webpack.BinPath)
+			c := exec.CommandContext(r.Context, tool, "run", "build")
 			c.Stdout = bb
 			c.Stderr = bb
 			if err := r.Exec(c); err != nil {
