@@ -40,7 +40,10 @@ var xbuildCmd = &cobra.Command{
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
 
-		pwd, _ := os.Getwd()
+		pwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
 
 		buildOptions.App = meta.New(pwd)
 		if len(buildOptions.bin) > 0 {

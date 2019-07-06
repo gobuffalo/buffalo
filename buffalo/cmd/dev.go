@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
@@ -67,7 +65,15 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 		})
 
 		wg.Go(func() error {
-			return startWebpack(ctx)
+			app := meta.New(".")
+			if !app.WithNodeJs {
+				// No need to run dev script
+				return nil
+			}
+			if _, err := app.NodeScript("dev"); err != nil {
+				return err
+			}
+			return runDevScript(ctx, app)
 		})
 
 		err := wg.Wait()
@@ -78,30 +84,15 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 	},
 }
 
-func startWebpack(ctx context.Context) error {
-	app := meta.New(".")
-	if !app.WithWebpack {
-		// there's no webpack, so don't do anything
-		return nil
+func runDevScript(ctx context.Context, app meta.App) error {
+	tool := "yarnpkg"
+	if !app.WithYarn {
+		tool = "npm"
 	}
-
-	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
-		tool := "yarnpkg"
-		if !app.WithYarn {
-			tool = "npm"
-		}
-		if _, err := exec.LookPath(tool); err != nil {
-			return fmt.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
-		}
-		cmd := exec.CommandContext(ctx, tool, "install")
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
-		if err := cmd.Run(); err != nil {
-			return err
-		}
+	if _, err := exec.LookPath(tool); err != nil {
+		return fmt.Errorf("could not find %s tool", tool)
 	}
-
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	cmd := exec.CommandContext(ctx, tool, "run", "dev")
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
