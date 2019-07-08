@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/internal/errx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/packd"
 	"github.com/stretchr/testify/require"
 )
@@ -25,7 +25,6 @@ func Test_Template_Partial(t *testing.T) {
 	})
 
 	bb := &bytes.Buffer{}
-
 	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
 	r.NoError(err)
 	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))

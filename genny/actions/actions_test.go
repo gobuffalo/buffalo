@@ -1,12 +1,14 @@
 package actions
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	packr "github.com/gobuffalo/packr/v2"
+	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +17,13 @@ func compare(a, b string) bool {
 	a = strings.Replace(a, "\r", "", -1)
 	b = strings.TrimSpace(b)
 	b = strings.Replace(b, "\r", "", -1)
-	return a == b
+	a = strings.TrimSpace(a)
+	b = strings.TrimSpace(b)
+	res := cmp.Equal(a, b)
+	if !res {
+		fmt.Println(cmp.Diff(a, b))
+	}
+	return res
 }
 
 func runner() *genny.Runner {
@@ -52,6 +60,8 @@ func Test_New(t *testing.T) {
 		r.NoError(err)
 		f, err := res.Find(strings.TrimSuffix(s, ".tmpl"))
 		r.NoError(err)
+		fmt.Println(x)
+		fmt.Println(f.String())
 		r.True(compare(x, f.String()))
 	}
 }

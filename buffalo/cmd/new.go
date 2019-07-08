@@ -19,7 +19,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/web"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
-	"github.com/gobuffalo/buffalo/internal/errx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"

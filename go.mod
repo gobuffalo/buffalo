@@ -8,7 +8,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.1.0
-	github.com/gobuffalo/buffalo-pop v1.15.0
+	github.com/gobuffalo/buffalo-pop v1.16.0
 	github.com/gobuffalo/clara v0.7.0
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.4.0
@@ -25,10 +25,10 @@ require (
 	github.com/gobuffalo/packd v0.3.0
 	github.com/gobuffalo/packr/v2 v2.5.2
 	github.com/gobuffalo/plush v3.8.2+incompatible
-	github.com/gobuffalo/pop v4.11.1+incompatible
+	github.com/gobuffalo/pop v4.11.2+incompatible
 	github.com/gobuffalo/release v1.8.3
 	github.com/gobuffalo/tags v2.1.0+incompatible
-	github.com/gobuffalo/x v0.1.0 // indirect
+	github.com/google/go-cmp v0.3.0
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.1.3
 	github.com/karrick/godirwalk v1.10.12
@@ -46,7 +46,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190701194522-38ae2c8f6412
+	golang.org/x/tools v0.0.0-20190706070813-72ffa07ba3db
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.2
 )

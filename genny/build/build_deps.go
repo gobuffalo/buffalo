@@ -1,9 +1,9 @@
 package build
 
 import (
-	"github.com/gobuffalo/genny/depgen"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/depgen"
 	"github.com/gobuffalo/genny/gogen"
 )
 
