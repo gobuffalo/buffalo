@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Plugins will fix plugins between releases
+// Plush will update foo.html templates to foo.plush.html templates
 func Plush(r *Runner) error {
 	fmt.Println("~~~ Adding .plush extension to .html files ~~~")
 	return filepath.Walk(r.App.Root, func(p string, info os.FileInfo, err error) error {
