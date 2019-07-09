@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -28,7 +29,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	for _, name := range s.names {
 		body, err = s.exec(name, data)
 		if err != nil {
-			return err
+			return errx.Wrap(err, name)
 		}
 		data["yield"] = body
 	}

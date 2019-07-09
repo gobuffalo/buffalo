@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/buffalo/internal/httpx"
+	"github.com/gobuffalo/nulls"
 	"github.com/monoculum/formam"
 )
 

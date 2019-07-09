@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/errx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/meta"

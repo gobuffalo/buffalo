@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/internal/defaults"
-	"github.com/gobuffalo/buffalo/internal/errx"
 	"github.com/gobuffalo/buffalo/internal/httpx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
 )
@@ -168,7 +168,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		c.Response().Write(responseBody)
 		return nil
 	}
-
 	trace := origErr.Error()
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":

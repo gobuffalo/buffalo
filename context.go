@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/gobuffalo/buffalo/binding"
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/buffalo/internal/httpx"
+	"github.com/gobuffalo/buffalo/render"
 	"github.com/gorilla/mux"
 )
 

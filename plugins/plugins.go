@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gobuffalo/buffalo/internal/errx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
