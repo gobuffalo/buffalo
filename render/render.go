@@ -32,6 +32,9 @@ func New(opts Options) *Engine {
 	if _, ok := opts.TemplateEngines["html"]; !ok {
 		opts.TemplateEngines["html"] = plush.BuffaloRenderer
 	}
+	if _, ok := opts.TemplateEngines["plush"]; !ok {
+		opts.TemplateEngines["html"] = plush.BuffaloRenderer
+	}
 	if _, ok := opts.TemplateEngines["text"]; !ok {
 		opts.TemplateEngines["text"] = plush.BuffaloRenderer
 	}

@@ -8,13 +8,13 @@ import (
 
 func buildTemplates(pres *presenter) genny.RunFn {
 	return func(r *genny.Runner) error {
-		f, err := box.FindString("view.html.tmpl")
+		f, err := box.FindString("view.plush.html.tmpl")
 		if err != nil {
 			return err
 		}
 		for _, a := range pres.Actions {
 			pres.Data["action"] = a
-			fn := fmt.Sprintf("templates/%s/%s.html.tmpl", pres.Name.Folder(), a.File())
+			fn := fmt.Sprintf("templates/%s/%s.plush.html.tmpl", pres.Name.Folder(), a.File())
 			xf := genny.NewFileS(fn, f)
 			xf, err = transform(pres, xf)
 			if err != nil {

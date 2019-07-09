@@ -59,6 +59,7 @@ var checks = []Check{
 	fixDocker,
 	encodeApp,
 	Plugins,
+	Plush,
 }
 
 func encodeApp(r *Runner) error {
