@@ -9,7 +9,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/gobuffalo/syncx"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
+	"github.com/gobuffalo/packd"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,13 +19,58 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
+	aliases     syncx.StringMap
 }
 
 func (s templateRenderer) ContentType() string {
 	return s.contentType
 }
 
+func (s templateRenderer) resolve(name string) ([]byte, error) {
+	if s.TemplatesBox == nil {
+		return nil, fmt.Errorf("no templates box is defined")
+	}
+
+	if s.TemplatesBox.Has(name) {
+		return s.TemplatesBox.Find(name)
+	}
+
+	v, ok := s.aliases.Load(name)
+	if !ok {
+		return nil, fmt.Errorf("could not find template %s", name)
+	}
+
+	return s.TemplatesBox.Find(v)
+}
+
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
+	if s.TemplatesBox != nil {
+		err := s.TemplatesBox.Walk(func(p string, f packd.File) error {
+			base := filepath.Base(p)
+
+			dir := filepath.Dir(p)
+
+			var exts []string
+			sep := strings.Split(base, ".")
+			if len(sep) >= 1 {
+				base = sep[0]
+			}
+			if len(sep) > 1 {
+				exts = sep[1:]
+			}
+
+			for _, ext := range exts {
+				pn := filepath.Join(dir, base+"."+ext)
+				s.aliases.Store(pn, p)
+			}
+
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+
 	var body template.HTML
 	var err error
 	for _, name := range s.names {
@@ -61,7 +108,8 @@ func (s templateRenderer) partialFeeder(name string) (string, error) {
 	name = filepath.Join(d, "_"+f)
 	name = fixExtension(name, ct)
 
-	return s.TemplatesBox.FindString(name)
+	b, err := s.resolve(name)
+	return string(b), err
 }
 
 func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
@@ -86,7 +134,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 					break
 				}
 				candidateName = rawName + "." + strings.ToLower(l) + ext
-				if s.TemplatesBox.Has(candidateName) {
+				if _, err := s.resolve(candidateName); err == nil {
 					// Replace name with the existing suffixed version
 					templateName = candidateName
 					break
@@ -100,7 +148,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		data["current_template"] = templateName
 	}
 
-	source, err := s.TemplatesBox.Find(templateName)
+	source, err := s.resolve(templateName)
 	if err != nil {
 		return "", err
 	}
@@ -190,5 +238,6 @@ func (e *Engine) Template(c string, names ...string) Renderer {
 		Engine:      e,
 		contentType: c,
 		names:       names,
+		aliases:     syncx.StringMap{},
 	}
 }

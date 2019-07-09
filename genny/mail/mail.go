@@ -34,7 +34,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	fn := opts.Name.File().String()
 	g.File(genny.NewFileS("mailers/"+fn+".go.tmpl", mailerTmpl))
-	g.File(genny.NewFileS("templates/mail/"+fn+".html.tmpl", mailTmpl))
+	g.File(genny.NewFileS("templates/mail/"+fn+".plush.html.tmpl", mailTmpl))
 	gg.Add(g)
 
 	return gg, nil
@@ -83,4 +83,4 @@ func Send{{.opts.Name.Resource}}() error {
 
 const mailTmpl = `<h2>{{.opts.Name.Titleize}}</h2>
 
-<h3>../templates/mail/{{.opts.Name.File}}.html</h3>`
+<h3>../templates/mail/{{.opts.Name.File}}.plush.html</h3>`

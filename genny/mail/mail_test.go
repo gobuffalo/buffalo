@@ -31,12 +31,12 @@ func Test_New_NoMailers(t *testing.T) {
 	r.Equal("mailers/mailers.go", f.Name())
 
 	f = res.Files[2]
-	r.Equal("templates/mail/foo.html", f.Name())
+	r.Equal("templates/mail/foo.plush.html", f.Name())
 	body = f.String()
-	r.Contains(body, `<h3>../templates/mail/foo.html</h3>`)
+	r.Contains(body, `<h3>../templates/mail/foo.plush.html</h3>`)
 
 	f = res.Files[3]
-	r.Equal("templates/mail/layout.html", f.Name())
+	r.Equal("templates/mail/layout.plush.html", f.Name())
 }
 
 func Test_New_WithMailers(t *testing.T) {
@@ -60,7 +60,7 @@ func Test_New_WithMailers(t *testing.T) {
 	r.Contains(body, `err := m.AddBody(r.HTML("foo.html"), render.Data{})`)
 
 	f = res.Files[2]
-	r.Equal("templates/mail/foo.html", f.Name())
+	r.Equal("templates/mail/foo.plush.html", f.Name())
 	body = f.String()
-	r.Contains(body, `<h3>../templates/mail/foo.html</h3>`)
+	r.Contains(body, `<h3>../templates/mail/foo.plush.html</h3>`)
 }
