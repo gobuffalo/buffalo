@@ -60,8 +60,6 @@ func Test_New(t *testing.T) {
 		r.NoError(err)
 		f, err := res.Find(strings.TrimSuffix(s, ".tmpl"))
 		r.NoError(err)
-		fmt.Println(x)
-		fmt.Println(f.String())
 		r.True(compare(x, f.String()))
 	}
 }
