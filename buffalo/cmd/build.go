@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -80,8 +81,15 @@ var xbuildCmd = &cobra.Command{
 			opts.GoCommand = "install"
 		}
 		clean := build.Cleanup(opts)
-		defer clean(run)
-		run.WithNew(build.New(opts))
+		// defer clean(run)
+		defer func() {
+			if err := clean(run); err != nil {
+				log.Fatal("build:clean", err)
+			}
+		}()
+		if err := run.WithNew(build.New(opts)); err != nil {
+			return err
+		}
 		return run.Run()
 	},
 }
