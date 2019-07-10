@@ -6,7 +6,6 @@ import (
 	"io"
 	"path"
 	"reflect"
-	"regexp"
 	"strings"
 
 	"github.com/gobuffalo/flect/name"
@@ -93,8 +92,9 @@ func (htmlAutoRenderer) ContentType() string {
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	n := name.New(ir.typeName())
 	pname := name.New(n.Pluralize().String())
+	isPlural := ir.isPlural()
 
-	if ir.isPlural() {
+	if isPlural {
 		data[pname.VarCasePlural().String()] = ir.model
 	} else {
 		data[n.VarCaseSingle().String()] = ir.model
@@ -134,11 +134,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 	}
 
-	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
-	if err != nil {
-		return err
-	}
-	if x.MatchString(cp) {
+	if !isPlural {
 		return ir.HTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)
 	}
 	return defCase()
