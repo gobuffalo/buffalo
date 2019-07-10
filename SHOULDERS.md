@@ -53,7 +53,7 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
-* [github.com/gobuffalo/x](https://godoc.org/github.com/gobuffalo/x)
+* [github.com/google/go-cmp](https://godoc.org/github.com/google/go-cmp)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)
 
@@ -92,3 +92,5 @@ Thank you to the following **GIANTS**:
 * [golang.org/x/tools](https://godoc.org/golang.org/x/tools)
 
 * [gopkg.in/alexcesaro/quotedprintable.v3](https://godoc.org/gopkg.in/alexcesaro/quotedprintable.v3)
+
+* [gopkg.in/yaml.v2](https://godoc.org/gopkg.in/yaml.v2)
