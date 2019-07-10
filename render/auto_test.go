@@ -138,6 +138,32 @@ func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
 	r.NoError(err)
 }
 
+func Test_Auto_HTML_List_Plural_MultiWord_Dashed(t *testing.T) {
+	r := require.New(t)
+
+	type RoomProvider struct {
+		Name string
+	}
+
+	type RoomProviders []RoomProvider
+
+	err := withHTMLFile("room_providers/index.html", "INDEX: <%= len(roomProviders) %>", func(e *render.Engine) {
+		app := buffalo.New(buffalo.Options{})
+		app.GET("/room-providers", func(c buffalo.Context) error {
+			return c.Render(200, e.Auto(c, RoomProviders{
+				RoomProvider{Name: "Ford"},
+				RoomProvider{Name: "Chevy"},
+			}))
+		})
+
+		w := httptest.New(app)
+		res := w.HTML("/room-providers").Get()
+
+		r.Contains(res.Body.String(), "INDEX: 2")
+	})
+	r.NoError(err)
+}
+
 func Test_Auto_HTML_Show(t *testing.T) {
 	r := require.New(t)
 
@@ -150,6 +176,28 @@ func Test_Auto_HTML_Show(t *testing.T) {
 		w := httptest.New(app)
 		res := w.HTML("/cars/1").Get()
 		r.Contains(res.Body.String(), "Show: Honda")
+	})
+	r.NoError(err)
+}
+
+func Test_Auto_HTML_Show_MultiWord_Dashed(t *testing.T) {
+	r := require.New(t)
+
+	type RoomProvider struct {
+		ID   int
+		Name string
+	}
+
+	err := withHTMLFile("room_providers/show.html", "SHOW: <%= roomProvider.Name %>", func(e *render.Engine) {
+		app := buffalo.New(buffalo.Options{})
+		app.GET("/room-providers/{id}", func(c buffalo.Context) error {
+			return c.Render(200, e.Auto(c, RoomProvider{ID: 1, Name: "Ford"}))
+		})
+
+		w := httptest.New(app)
+		res := w.HTML("/room-providers/1").Get()
+
+		r.Contains(res.Body.String(), "SHOW: Ford")
 	})
 	r.NoError(err)
 }
