@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/genny"
@@ -70,9 +72,6 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 				// No need to run dev script
 				return nil
 			}
-			if _, err := app.NodeScript("dev"); err != nil {
-				return err
-			}
 			return runDevScript(ctx, app)
 		})
 
@@ -89,10 +88,25 @@ func runDevScript(ctx context.Context, app meta.App) error {
 	if !app.WithYarn {
 		tool = "npm"
 	}
+
 	if _, err := exec.LookPath(tool); err != nil {
 		return fmt.Errorf("could not find %s tool", tool)
 	}
+
+	// make sure that the node_modules folder is properly "installed"
+	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
+		cmd := exec.CommandContext(ctx, tool, "install")
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			return err
+		}
+	}
+
 	cmd := exec.CommandContext(ctx, tool, "run", "dev")
+	if _, err := app.NodeScript("dev"); err != nil {
+		cmd = exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	}
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()
