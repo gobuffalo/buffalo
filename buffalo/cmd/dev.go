@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -71,7 +72,8 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 				return nil
 			}
 			if _, err := app.NodeScript("dev"); err != nil {
-				return err
+				// Fallback on legacy webpack runner
+				return startWebpack(ctx)
 			}
 			return runDevScript(ctx, app)
 		})
@@ -82,6 +84,35 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 		}
 		return nil
 	},
+}
+
+func startWebpack(ctx context.Context) error {
+	app := meta.New(".")
+	if !app.WithWebpack {
+		// there's no webpack, so don't do anything
+		return nil
+	}
+
+	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
+		tool := "yarnpkg"
+		if !app.WithYarn {
+			tool = "npm"
+		}
+		if _, err := exec.LookPath(tool); err != nil {
+			return fmt.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
+		}
+		cmd := exec.CommandContext(ctx, tool, "install")
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			return err
+		}
+	}
+
+	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
 }
 
 func runDevScript(ctx context.Context, app meta.App) error {
