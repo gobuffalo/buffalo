@@ -1,19 +1,19 @@
 package core
 
 import (
-	"github.com/gobuffalo/buffalo-docker/genny/docker"
 	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
-	"github.com/gobuffalo/buffalo/genny/install"
+	"github.com/gobuffalo/buffalo/genny/docker"
+	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/genny/refresh"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
-	"github.com/gobuffalo/depgen"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
-	"github.com/gobuffalo/gogen/gomods"
+	"github.com/gobuffalo/genny/depgen"
+	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 )
 
 // New generator for creating a Buffalo application
@@ -41,7 +41,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	plugs, err := plugdeps.List(app)
-	if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
+	if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
 		return nil, err
 	}
 

@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/gobuffalo/buffalo-docker/genny/docker"
+	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny/gentest"

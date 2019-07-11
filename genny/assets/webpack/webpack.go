@@ -1,14 +1,13 @@
 package webpack
 
 import (
+	"fmt"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 
-	"errors"
-
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -35,7 +34,7 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	g.RunFn(func(r *genny.Runner) error {
 		if _, err := r.LookPath("npm"); err != nil {
-			return errors.New("could not find npm executable")
+			return fmt.Errorf("could not find npm executable")
 		}
 		return nil
 	})

@@ -1,164 +1,31 @@
 language: go
 
 go:
-	- "1.11.x"
+  - "1.11.x"
 
 env:
-	- GO_ENV=test
+  - GO_ENV=test
 
 {{ if eq .opts.DBType "postgres" -}}
 services:
-	- postgresql
+  - postgresql
 {{- end }}
 
 before_script:
 {{- if eq .opts.DBType "postgres" }}
-	- psql -c 'create database {{.opts.App.Name.File}}_test;' -U postgres
+  - psql -c 'create database {{.opts.App.Name.File}}_test;' -U postgres
 {{- end }}
-	- mkdir -p $TRAVIS_BUILD_DIR/public/assets
+  - mkdir -p $TRAVIS_BUILD_DIR/public/assets
 
 go_import_path: {{.opts.App.PackagePkg}}
 
 install:
-	- go get github.com/gobuffalo/buffalo/buffalo
+  - go get github.com/gobuffalo/buffalo/buffalo
 {{- if .opts.App.WithDep }}
-	- go get github.com/golang/dep/cmd/dep
-	- dep ensure
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure
 {{- else }}
-	- go get $(go list ./... | grep -v /vendor/)
+  - go get $(go list ./... | grep -v /vendor/)
 {{- end }}
 
 script: buffalo test
-`
-
-const nGitlabCi = `before_script:
-{{- if eq .opts.DBType "postgres" }}
-  - apt-get update && apt-get install -y postgresql-client
-{{- else if eq .opts.DBType "mysql" }}
-  - apt-get update && apt-get install -y mysql-client
-{{- end }}
-  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.App.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.App.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
-  - go get -t -v ./...
-{{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
-
-stages:
-  - test
-
-.test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
-{{- if eq .opts.DBType "postgres" }}
-    POSTGRES_DB: "{{.opts.App.Name.File}}_test"
-{{- else if eq .opts.DBType "mysql" }}
-    MYSQL_DATABASE: "{{.opts.App.Name.File}}_test"
-    MYSQL_ROOT_PASSWORD: "root"
-{{- end }}
-    TEST_DATABASE_URL: "{{.testDbUrl}}"
-
-# Golang version choice helper
-.use-golang-image: &use-golang-latest
-  image: golang:latest
-
-.use-golang-image: &use-golang-1-8
-  image: golang:1.8
-
-test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  services:
-{{- if eq .opts.DBType "mysql" }}
-    - mysql:5
-{{- else if eq .opts.DBType "postgres" }}
-    - postgres:latest
-{{- end }}
-  script:
-    - buffalo test
-`
-
-const nGitlabCiNoPop = `before_script:
-  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.App.PackagePkg}}
-  - mkdir -p public/assets
-  - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.App.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
-  - go get -t -v ./...
-{{- end }}
-  - export PATH="$PATH:$GOPATH/bin"
-
-stages:
-  - test
-
-.test-vars: &test-vars
-  variables:
-    GO_ENV: "test"
-
-# Golang version choice helper
-.use-golang-image: &use-golang-latest
-  image: golang:latest
-
-.use-golang-image: &use-golang-1-8
-  image: golang:1.8
-
-test:
-  # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
-  <<: *test-vars
-  stage: test
-  script:
-    - buffalo test
-`
-
-const nVCSIgnore = `vendor/
-**/*.log
-**/*.sqlite
-.idea/
-bin/
-tmp/
-node_modules/
-.sass-cache/
-*-packr.go
-public/assets/
-{{ .opts.App.Name.File }}
-.vscode/
-.grifter/
-.env
-`
-
-// GopkgTomlTmpl is the default dep Gopkg.toml
-const GopkgTomlTmpl = `
-[[constraint]]
-	name = "github.com/gobuffalo/buffalo"
-	{{- if eq .opts.Version "development" }}
-	branch = "development"
-	{{- else }}
-	version = "{{.opts.Version}}"
-	{{- end}}
-
-{{ if .addPrune }}
-[prune]
-	go-tests = true
-	unused-packages = true
-{{ end }}
-
-	# DO NOT DELETE
-	[[prune.project]] # buffalo
-		name = "github.com/gobuffalo/buffalo"
-		unused-packages = false
-
-	# DO NOT DELETE
-	[[prune.project]] # pop
-		name = "github.com/gobuffalo/pop"
-		unused-packages = false

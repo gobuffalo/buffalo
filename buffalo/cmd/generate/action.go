@@ -2,8 +2,7 @@ package generate
 
 import (
 	"context"
-
-	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/buffalo/genny/actions"
 	"github.com/gobuffalo/genny"
@@ -26,11 +25,11 @@ var ActionCmd = &cobra.Command{
 	Short:   "Generate new action(s)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("you must provide a name")
+			return fmt.Errorf("you must provide a name")
 		}
 		actionOptions.Name = args[0]
 		if len(args) == 1 {
-			return errors.New("you must provide at least one action name")
+			return fmt.Errorf("you must provide at least one action name")
 		}
 		actionOptions.Actions = args[1:]
 

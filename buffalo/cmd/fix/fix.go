@@ -52,11 +52,13 @@ var checks = []Check{
 	mr.transformPackages,
 	WebpackCheck,
 	PackageJSONCheck,
+	AddPackageJSONScripts,
 	DepEnsure,
 	installTools,
 	DeprecrationsCheck,
 	fixDocker,
 	encodeApp,
+	Plugins,
 }
 
 func encodeApp(r *Runner) error {

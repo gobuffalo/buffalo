@@ -9,11 +9,11 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/internal/defaults"
+	"github.com/gobuffalo/buffalo/internal/httpx"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/x/defaults"
-	"github.com/gobuffalo/x/httpx"
-	"github.com/pkg/errors"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
@@ -77,9 +77,9 @@ func (a *App) PanicHandler(next Handler) Handler {
 				case error:
 					err = t
 				case string:
-					err = errors.New(t)
+					err = fmt.Errorf(t)
 				default:
-					err = errors.New(fmt.Sprint(t))
+					err = fmt.Errorf(fmt.Sprint(t))
 				}
 				err = err
 				events.EmitError(events.ErrPanic, err,
@@ -104,7 +104,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		}
 		status := 500
 		// unpack root cause and check for HTTPError
-		cause := errors.Cause(err)
+		cause := errx.Unwrap(err)
 		switch cause {
 		case sql.ErrNoRows:
 			status = 404
@@ -155,10 +155,6 @@ type ErrorResponse struct {
 
 const defaultErrorCT = "text/html; charset=utf-8"
 
-type stackTracer interface {
-	StackTrace() errors.StackTrace
-}
-
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
@@ -172,20 +168,12 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		c.Response().Write(responseBody)
 		return nil
 	}
-
-	trace := fmt.Sprintf("%s\n\n%+v", origErr, origErr)
-	if st, ok := origErr.(stackTracer); ok {
-		var log []string
-		for _, t := range st.StackTrace() {
-			log = append(log, fmt.Sprintf("%+v", t))
-		}
-		trace = fmt.Sprintf("%s\n%s", origErr, strings.Join(log, "\n"))
-	}
+	trace := origErr.Error()
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
-			Error: errors.Cause(origErr).Error(),
+			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
 			Code:  status,
 		})
@@ -195,7 +183,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
-			Error: errors.Cause(origErr).Error(),
+			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
 			Code:  status,
 		})

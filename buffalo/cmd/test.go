@@ -2,13 +2,12 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"errors"
 
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
@@ -173,7 +172,7 @@ func (m mFlagRunner) Run() error {
 		}
 	}
 	if errs {
-		return errors.New("errors running tests")
+		return fmt.Errorf("errors running tests")
 	}
 	return nil
 }

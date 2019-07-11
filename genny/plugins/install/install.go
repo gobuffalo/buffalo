@@ -1,6 +1,7 @@
 package install
 
 import (
+	"fmt"
 	"go/build"
 	"os"
 	"path/filepath"
@@ -8,8 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/add"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 // New installs plugins and then added them to the config file
@@ -17,7 +17,7 @@ func New(opts *Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 
 	if err := opts.Validate(); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	aopts := &add.Options{
@@ -26,7 +26,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	if err := aopts.Validate(); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	g := genny.New()
@@ -49,7 +49,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	g, err := add.New(aopts)
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	gg.Add(g)
@@ -61,13 +61,13 @@ func pRun(proot string, p plugdeps.Plugin) genny.RunFn {
 	return func(r *genny.Runner) error {
 		c := build.Default
 		if c.GOOS == "windows" {
-			return errors.New("vendoring of plugins is currently not supported on windows. PRs are VERY welcome! :)")
+			return fmt.Errorf("vendoring of plugins is currently not supported on windows. PRs are VERY welcome! :)")
 		}
 
 		bp := filepath.Join(c.GOPATH, "bin", p.Binary)
 		sf, err := r.FindFile(bp)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		pbp := filepath.Join(proot, p.Binary)
@@ -75,7 +75,7 @@ func pRun(proot string, p plugdeps.Plugin) genny.RunFn {
 
 		df := genny.NewFile(pbp, sf)
 		if err := r.File(df); err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		os.Chmod(pbp, 0555)

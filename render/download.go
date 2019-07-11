@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
-
-	"errors"
 )
 
 type downloadRenderer struct {
@@ -36,7 +34,7 @@ func (r downloadRenderer) Render(w io.Writer, d Data) error {
 
 	ctx, ok := r.ctx.(responsible)
 	if !ok {
-		return errors.New("context has no response writer")
+		return fmt.Errorf("context has no response writer")
 	}
 
 	header := ctx.Response().Header()

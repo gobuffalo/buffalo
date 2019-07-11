@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/gogen/gomods"
+	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )

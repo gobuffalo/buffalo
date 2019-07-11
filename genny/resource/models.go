@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 func modelCommand(model name.Ident, opts *Options) *exec.Cmd {

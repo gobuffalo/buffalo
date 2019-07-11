@@ -2,7 +2,6 @@ package render
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -66,7 +65,7 @@ func NewEventSource(w http.ResponseWriter) (*EventSource, error) {
 	var ok bool
 	es.fl, ok = w.(http.Flusher)
 	if !ok {
-		return es, errors.New("streaming is not supported")
+		return es, fmt.Errorf("streaming is not supported")
 	}
 
 	es.w.Header().Set("Content-Type", "text/event-stream")

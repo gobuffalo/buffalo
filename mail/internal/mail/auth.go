@@ -2,7 +2,6 @@ package mail
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"net/smtp"
 )
@@ -24,11 +23,11 @@ func (a *loginAuth) Start(server *smtp.ServerInfo) (string, []byte, error) {
 			}
 		}
 		if !advertised {
-			return "", nil, errors.New("gomail: unencrypted connection")
+			return "", nil, fmt.Errorf("gomail: unencrypted connection")
 		}
 	}
 	if server.Name != a.host {
-		return "", nil, errors.New("gomail: wrong host name")
+		return "", nil, fmt.Errorf("gomail: wrong host name")
 	}
 	return "LOGIN", nil, nil
 }

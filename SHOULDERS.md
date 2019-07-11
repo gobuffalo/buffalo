@@ -13,13 +13,9 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/attrs](https://godoc.org/github.com/gobuffalo/attrs)
 
-* [github.com/gobuffalo/buffalo-docker](https://godoc.org/github.com/gobuffalo/buffalo-docker)
-
 * [github.com/gobuffalo/buffalo-pop](https://godoc.org/github.com/gobuffalo/buffalo-pop)
 
 * [github.com/gobuffalo/clara](https://godoc.org/github.com/gobuffalo/clara)
-
-* [github.com/gobuffalo/depgen](https://godoc.org/github.com/gobuffalo/depgen)
 
 * [github.com/gobuffalo/envy](https://godoc.org/github.com/gobuffalo/envy)
 
@@ -32,8 +28,6 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/genny](https://godoc.org/github.com/gobuffalo/genny)
 
 * [github.com/gobuffalo/github_flavored_markdown](https://godoc.org/github.com/gobuffalo/github_flavored_markdown)
-
-* [github.com/gobuffalo/gogen](https://godoc.org/github.com/gobuffalo/gogen)
 
 * [github.com/gobuffalo/helpers](https://godoc.org/github.com/gobuffalo/helpers)
 
@@ -53,19 +47,13 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/plush](https://godoc.org/github.com/gobuffalo/plush)
 
-* [github.com/gobuffalo/plushgen](https://godoc.org/github.com/gobuffalo/plushgen)
-
 * [github.com/gobuffalo/pop](https://godoc.org/github.com/gobuffalo/pop)
 
 * [github.com/gobuffalo/release](https://godoc.org/github.com/gobuffalo/release)
 
-* [github.com/gobuffalo/syncx](https://godoc.org/github.com/gobuffalo/syncx)
-
 * [github.com/gobuffalo/tags](https://godoc.org/github.com/gobuffalo/tags)
 
-* [github.com/gobuffalo/x](https://godoc.org/github.com/gobuffalo/x)
-
-* [github.com/gorilla/context](https://godoc.org/github.com/gorilla/context)
+* [github.com/google/go-cmp](https://godoc.org/github.com/google/go-cmp)
 
 * [github.com/gorilla/mux](https://godoc.org/github.com/gorilla/mux)
 
@@ -87,9 +75,9 @@ Thank you to the following **GIANTS**:
 
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
-* [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
-
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
+
+* [github.com/spf13/afero](https://godoc.org/github.com/spf13/afero)
 
 * [github.com/spf13/cobra](https://godoc.org/github.com/spf13/cobra)
 
@@ -99,10 +87,10 @@ Thank you to the following **GIANTS**:
 
 * [github.com/stretchr/testify](https://godoc.org/github.com/stretchr/testify)
 
-* [golang.org/x/crypto](https://godoc.org/golang.org/x/crypto)
-
 * [golang.org/x/sync](https://godoc.org/golang.org/x/sync)
 
 * [golang.org/x/tools](https://godoc.org/golang.org/x/tools)
 
 * [gopkg.in/alexcesaro/quotedprintable.v3](https://godoc.org/gopkg.in/alexcesaro/quotedprintable.v3)
+
+* [gopkg.in/yaml.v2](https://godoc.org/gopkg.in/yaml.v2)

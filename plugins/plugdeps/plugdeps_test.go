@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,7 +37,7 @@ func Test_List_Off(t *testing.T) {
 	app := meta.App{}
 	plugs, err := List(app)
 	r.Error(err)
-	r.Equal(errors.Cause(err), ErrMissingConfig)
+	r.Equal(errx.Unwrap(err), ErrMissingConfig)
 	r.Len(plugs.List(), 0)
 }
 

@@ -8,12 +8,12 @@ import (
 	"path"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/genny/install"
+	"github.com/gobuffalo/buffalo/genny/plugins/install"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +34,7 @@ var installCmd = &cobra.Command{
 				run.FileFn = func(f genny.File) (genny.File, error) {
 					bb := &bytes.Buffer{}
 					if _, err := io.Copy(bb, f); err != nil {
-						return f, errors.WithStack(err)
+						return f, err
 					}
 					return genny.NewFile(f.Name(), bb), nil
 				}
@@ -43,8 +43,8 @@ var installCmd = &cobra.Command{
 
 		app := meta.New(".")
 		plugs, err := plugdeps.List(app)
-		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-			return errors.WithStack(err)
+		if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
+			return err
 		}
 
 		for _, a := range args {
@@ -66,7 +66,7 @@ var installCmd = &cobra.Command{
 			Vendor:  installOptions.vendor,
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.WithGroup(gg)
 

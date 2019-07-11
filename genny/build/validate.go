@@ -5,8 +5,6 @@ import (
 	"html/template"
 	"strings"
 
-	"errors"
-
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/plush"
@@ -58,7 +56,7 @@ func ValidateTemplates(walk packd.Walker, tvs []TemplateValidator) genny.RunFn {
 		if len(errs) == 0 {
 			return nil
 		}
-		return errors.New(strings.Join(errs, "\n"))
+		return fmt.Errorf(strings.Join(errs, "\n"))
 	}
 }
 

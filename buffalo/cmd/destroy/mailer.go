@@ -1,7 +1,6 @@
 package destroy
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -19,7 +18,7 @@ var MailerCmd = &cobra.Command{
 	Short:   "Destroy mailer files",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return errors.New("you need to provide a valid mailer name in order to destroy it")
+			return fmt.Errorf("you need to provide a valid mailer name in order to destroy it")
 		}
 
 		name := args[0]

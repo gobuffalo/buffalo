@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/gobuffalo/meta"
 )
@@ -18,11 +18,11 @@ type Options struct {
 // Validate that options are usuable
 func (opts *Options) Validate() error {
 	if len(opts.Name) == 0 {
-		return errors.New("you must provide a name")
+		return fmt.Errorf("you must provide a name")
 	}
 
 	if len(opts.Actions) == 0 {
-		return errors.New("you must provide at least one action name")
+		return fmt.Errorf("you must provide at least one action name")
 	}
 
 	if opts.App.IsZero() {
