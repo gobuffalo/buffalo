@@ -32,24 +32,16 @@ func assets(opts *Options) (*genny.Generator, error) {
 			return envy.MustSet("NODE_ENV", opts.Environment)
 		})
 		g.RunFn(func(r *genny.Runner) error {
-			if _, err := app.NodeScript("build"); err != nil {
-				// Fallback on legacy webpack runner
-				bb := &bytes.Buffer{}
-				c := exec.Command(webpack.BinPath)
-				c.Stdout = bb
-				c.Stderr = bb
-				if err := r.Exec(c); err != nil {
-					r.Logger.Error(bb.String())
-					return err
-				}
-				return nil
-			}
 			tool := "yarnpkg"
 			if !opts.App.WithYarn {
 				tool = "npm"
 			}
-			bb := &bytes.Buffer{}
 			c := exec.CommandContext(r.Context, tool, "run", "build")
+			if _, err := opts.App.NodeScript("build"); err != nil {
+				// Fallback on legacy webpack runner
+				c = exec.Command(webpack.BinPath)
+			}
+			bb := &bytes.Buffer{}
 			c.Stdout = bb
 			c.Stderr = bb
 			if err := r.Exec(c); err != nil {
