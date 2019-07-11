@@ -20,7 +20,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 		return g, err
 	}
 
-	if opts.App.WithNodeJs {
+	if opts.App.WithNodeJs || opts.App.WithWebpack {
 		if opts.CleanAssets {
 			g.RunFn(func(r *genny.Runner) error {
 				r.Delete(filepath.Join(opts.App.Root, "public", "assets"))
@@ -39,6 +39,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 
 			c := exec.CommandContext(r.Context, tool, "run", "build")
 			if _, err := opts.App.NodeScript("build"); err != nil {
+				// Fallback on legacy runner
 				c = exec.CommandContext(r.Context, webpack.BinPath)
 			}
 

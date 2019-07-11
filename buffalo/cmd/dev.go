@@ -105,6 +105,7 @@ func runDevScript(ctx context.Context, app meta.App) error {
 
 	cmd := exec.CommandContext(ctx, tool, "run", "dev")
 	if _, err := app.NodeScript("dev"); err != nil {
+		// Fallback on legacy runner
 		cmd = exec.CommandContext(ctx, webpack.BinPath, "--watch")
 	}
 	cmd.Stderr = os.Stderr
