@@ -9,12 +9,11 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
 // ErrPlugMissing error for when a plugin is missing
-var ErrPlugMissing = errors.New("plugin missing")
+var ErrPlugMissing = fmt.Errorf("plugin missing")
 
 // Decorate setup cobra Commands for plugins
 func Decorate(c Command) *cobra.Command {
@@ -44,7 +43,7 @@ func Decorate(c Command) *cobra.Command {
 
 			bin, err := LookPath(c.Binary)
 			if err != nil {
-				return errors.WithStack(err)
+				return err
 			}
 
 			ex := exec.Command(bin, ax...)
@@ -74,7 +73,7 @@ func LookPath(s string) (string, error) {
 	var bin string
 	pwd, err := os.Getwd()
 	if err != nil {
-		return "", errors.WithStack(err)
+		return "", err
 	}
 
 	var looks []string
@@ -93,7 +92,7 @@ func LookPath(s string) (string, error) {
 	}
 
 	if len(bin) == 0 {
-		return "", errors.Wrapf(ErrPlugMissing, "could not find %s in %q", s, looks)
+		return "", ErrPlugMissing
 	}
 	return bin, nil
 }

@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
 	"github.com/stretchr/testify/require"
 )
@@ -16,7 +15,10 @@ func Test_assets(t *testing.T) {
 		WithAssets: true,
 	}
 	r.NoError(opts.Validate())
-	opts.App.WithWebpack = true
+	opts.App.WithNodeJs = true
+	opts.App.PackageJSON.Scripts = map[string]string{
+		"build": "webpack -p --progress",
+	}
 
 	run := cokeRunner()
 	run.WithNew(assets(opts))
@@ -32,7 +34,7 @@ func Test_assets(t *testing.T) {
 
 	res := run.Results()
 
-	cmds := []string{webpack.BinPath}
+	cmds := []string{"npm run build"}
 	r.Len(res.Commands, len(cmds))
 	for i, c := range res.Commands {
 		r.Equal(cmds[i], strings.Join(c.Args, " "))

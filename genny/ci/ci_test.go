@@ -3,6 +3,8 @@ package ci
 import (
 	"testing"
 
+	"gopkg.in/yaml.v2"
+
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
@@ -29,6 +31,17 @@ func Test_New(t *testing.T) {
 
 	f := res.Files[0]
 	r.Equal(".travis.yml", f.Name())
+	travisYml := struct {
+		Language     string
+		Go           []string
+		Env          []string
+		Services     []string
+		BeforeScript []string `yaml:"before_script"`
+		GoImportPath string   `yaml:"go_import_path"`
+		Install      []string
+		Script       string
+	}{}
+	r.NoError(yaml.NewDecoder(f).Decode(&travisYml), ".travis.yml is a valid YAML file")
 }
 
 func Test_New_Gitlab(t *testing.T) {

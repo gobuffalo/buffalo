@@ -1,9 +1,8 @@
 package buffalo
 
 import (
+	"fmt"
 	"testing"
-
-	"errors"
 
 	"github.com/gobuffalo/httptest"
 
@@ -14,7 +13,7 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, errors.New("boom"))
+		return c.Error(401, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
@@ -28,7 +27,7 @@ func Test_defaultErrorHandler_JSON(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, errors.New("boom"))
+		return c.Error(401, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
@@ -46,7 +45,7 @@ func Test_defaultErrorHandler_XML(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, errors.New("boom"))
+		return c.Error(401, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
@@ -68,7 +67,7 @@ func Test_PanicHandler(t *testing.T) {
 		panic("string boom")
 	})
 	app.GET("/error", func(c Context) error {
-		panic(errors.New("error boom"))
+		panic(fmt.Errorf("error boom"))
 	})
 
 	table := []struct {
@@ -110,7 +109,7 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	app.Use(func(next Handler) Handler {
 		return func(c Context) error {
 			c.Set("T", "t")
-			return c.Error(422, errors.New("boom"))
+			return c.Error(422, fmt.Errorf("boom"))
 		}
 	})
 	app.GET("/", func(c Context) error {
@@ -134,7 +133,7 @@ func Test_SetErrorMiddleware(t *testing.T) {
 		return nil
 	})
 	app.GET("/", func(c Context) error {
-		return c.Error(422, errors.New("boom"))
+		return c.Error(422, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)

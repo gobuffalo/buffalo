@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -8,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pkg/errors"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -28,7 +29,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	for _, name := range s.names {
 		body, err = s.exec(name, data)
 		if err != nil {
-			return err
+			return errx.Wrap(err, name)
 		}
 		data["yield"] = body
 	}
@@ -122,7 +123,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		}
 		body, err = te(body, data, helpers)
 		if err != nil {
-			return "", errors.Wrap(err, name)
+			return "", err
 		}
 	}
 
@@ -160,7 +161,7 @@ func (s templateRenderer) assetPath(file string) (string, error) {
 
 		err = loadManifest(manifest)
 		if err != nil {
-			return assetPathFor(file), errors.Wrap(err, "your manifest.json is not correct")
+			return assetPathFor(file), fmt.Errorf("your manifest.json is not correct: %s", err)
 		}
 	}
 

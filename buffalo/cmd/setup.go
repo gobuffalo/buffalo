@@ -10,8 +10,6 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"errors"
-
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/meta"
@@ -222,10 +220,10 @@ func yarnCheck(app meta.App) error {
 
 func nodeCheck(meta.App) error {
 	if _, err := exec.LookPath("node"); err != nil {
-		return errors.New("this application requires node, and we could not find it installed on your system please install node and try again")
+		return fmt.Errorf("this application requires node, and we could not find it installed on your system please install node and try again")
 	}
 	if _, err := exec.LookPath("npm"); err != nil {
-		return errors.New("this application requires npm, and we could not find it installed on your system please install npm and try again")
+		return fmt.Errorf("this application requires npm, and we could not find it installed on your system please install npm and try again")
 	}
 	return nil
 }

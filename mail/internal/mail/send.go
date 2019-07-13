@@ -1,7 +1,6 @@
 package mail
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	stdmail "net/mail"
@@ -66,7 +65,7 @@ func (m *Message) getFrom() (string, error) {
 	if len(from) == 0 {
 		from = m.header["From"]
 		if len(from) == 0 {
-			return "", errors.New(`gomail: invalid message, "From" field is absent`)
+			return "", fmt.Errorf(`gomail: invalid message, "From" field is absent`)
 		}
 	}
 

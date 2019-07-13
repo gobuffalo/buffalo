@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -40,7 +41,10 @@ var xbuildCmd = &cobra.Command{
 		ctx, cancel := sigtx.WithCancel(context.Background(), os.Interrupt)
 		defer cancel()
 
-		pwd, _ := os.Getwd()
+		pwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
 
 		buildOptions.App = meta.New(pwd)
 		if len(buildOptions.bin) > 0 {
@@ -77,8 +81,15 @@ var xbuildCmd = &cobra.Command{
 			opts.GoCommand = "install"
 		}
 		clean := build.Cleanup(opts)
-		defer clean(run)
-		run.WithNew(build.New(opts))
+		// defer clean(run)
+		defer func() {
+			if err := clean(run); err != nil {
+				log.Fatal("build:clean", err)
+			}
+		}()
+		if err := run.WithNew(build.New(opts)); err != nil {
+			return err
+		}
 		return run.Run()
 	},
 }
