@@ -144,11 +144,6 @@ func askBin(ctx context.Context, path string) Commands {
 	}()
 
 	commands := Commands{}
-	defer func() {
-		addToCache(path, cachedPlugin{
-			Commands: commands,
-		})
-	}()
 	if cp, ok := findInCache(path); ok {
 		s := sum(path)
 		if s == cp.CheckSum {
@@ -167,12 +162,17 @@ func askBin(ctx context.Context, path string) Commands {
 	cmd.Stdout = bb
 	err := cmd.Run()
 	if err != nil {
+		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
 		return commands
 	}
+
 	msg := bb.String()
 	for len(msg) > 0 {
 		err = json.NewDecoder(strings.NewReader(msg)).Decode(&commands)
 		if err == nil {
+			addToCache(path, cachedPlugin{
+				Commands: commands,
+			})
 			return commands
 		}
 		msg = msg[1:]
