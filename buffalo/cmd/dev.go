@@ -67,7 +67,12 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 		})
 
 		wg.Go(func() error {
-			return startWebpack(ctx)
+			app := meta.New(".")
+			if !app.WithNodeJs {
+				// No need to run dev script
+				return nil
+			}
+			return runDevScript(ctx, app)
 		})
 
 		err := wg.Wait()
@@ -78,21 +83,18 @@ This behavior can be changed in .buffalo.dev.yml file.`,
 	},
 }
 
-func startWebpack(ctx context.Context) error {
-	app := meta.New(".")
-	if !app.WithWebpack {
-		// there's no webpack, so don't do anything
-		return nil
+func runDevScript(ctx context.Context, app meta.App) error {
+	tool := "yarnpkg"
+	if !app.WithYarn {
+		tool = "npm"
 	}
 
+	if _, err := exec.LookPath(tool); err != nil {
+		return fmt.Errorf("could not find %s tool", tool)
+	}
+
+	// make sure that the node_modules folder is properly "installed"
 	if _, err := os.Stat(filepath.Join(app.Root, "node_modules")); err != nil {
-		tool := "yarnpkg"
-		if !app.WithYarn {
-			tool = "npm"
-		}
-		if _, err := exec.LookPath(tool); err != nil {
-			return fmt.Errorf("no node_modules directory found, and couldn't find %s to install it with", tool)
-		}
 		cmd := exec.CommandContext(ctx, tool, "install")
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
@@ -101,7 +103,11 @@ func startWebpack(ctx context.Context) error {
 		}
 	}
 
-	cmd := exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	cmd := exec.CommandContext(ctx, tool, "run", "dev")
+	if _, err := app.NodeScript("dev"); err != nil {
+		// Fallback on legacy runner
+		cmd = exec.CommandContext(ctx, webpack.BinPath, "--watch")
+	}
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	return cmd.Run()

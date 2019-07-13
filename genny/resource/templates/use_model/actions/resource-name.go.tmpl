@@ -2,7 +2,7 @@ package actions
 
 import (
 
-  "errors"
+  "fmt"
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/pop"
   "{{.opts.App.ModelsPkg}}"
@@ -31,7 +31,7 @@ func (v {{.opts.Name.Resource}}Resource) List(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   {{.opts.Model.VarCasePlural}} := &models.{{.opts.Model.Group}}{}
@@ -61,7 +61,7 @@ func (v {{.opts.Name.Resource}}Resource) Show(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty {{.opts.Model.Proper}}
@@ -105,7 +105,7 @@ func (v {{.opts.Name.Resource}}Resource) Create(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Validate the data from the html form
@@ -139,7 +139,7 @@ func (v {{.opts.Name.Resource}}Resource) Edit(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty {{.opts.Model.Proper}}
@@ -163,7 +163,7 @@ func (v {{.opts.Name.Resource}}Resource) Update(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty {{.opts.Model.Proper}}
@@ -207,7 +207,7 @@ func (v {{.opts.Name.Resource}}Resource) Destroy(c buffalo.Context) error {
   // Get the DB connection from the context
   tx, ok := c.Value("tx").(*pop.Connection)
   if !ok {
-    return errors.New("no transaction found")
+    return fmt.Errorf("no transaction found")
   }
 
   // Allocate an empty {{.opts.Model.Proper}}

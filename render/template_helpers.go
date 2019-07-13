@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	ht "github.com/gobuffalo/helpers/tags"
-	"github.com/gobuffalo/syncx"
 	"github.com/gobuffalo/tags"
 )
 
@@ -42,7 +41,7 @@ func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 	return helpers
 }
 
-var assetMap = syncx.StringMap{}
+var assetMap = stringMap{}
 
 func assetPathFor(file string) string {
 	filePath, ok := assetMap.Load(file)

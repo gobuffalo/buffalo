@@ -1,9 +1,8 @@
 package grift
 
 import (
+	"fmt"
 	"strings"
-
-	"errors"
 
 	"github.com/gobuffalo/flect/name"
 )
@@ -24,7 +23,7 @@ func (opts Options) Last(n name.Ident) bool {
 // Validate options
 func (opts *Options) Validate() error {
 	if len(opts.Args) == 0 {
-		return errors.New("you need to provide a name for the grift task")
+		return fmt.Errorf("you need to provide a name for the grift task")
 	}
 
 	opts.Namespaced = strings.Contains(opts.Args[0], ":")

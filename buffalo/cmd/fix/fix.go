@@ -10,16 +10,18 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-//YesToAll will be used by the command to skip the questions
+// YesToAll will be used by the command to skip the questions
 var YesToAll bool
 
 var replace = map[string]string{
 	"github.com/markbates/pop":                     "github.com/gobuffalo/pop",
 	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
-	"github.com/satori/go.uuid":                    "github.com/gobuffalo/uuid",
+	"github.com/satori/go.uuid":                    "github.com/gofrs/uuid",
 	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
 	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
 	"github.com/gobuffalo/buffalo-plugins":         "github.com/gobuffalo/buffalo/plugins",
+	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid",
+	"github.com/gobuffalo/pop/nulls":               "github.com/gobuffalo/nulls",
 }
 
 var ic = ImportConverter{
@@ -52,11 +54,13 @@ var checks = []Check{
 	mr.transformPackages,
 	WebpackCheck,
 	PackageJSONCheck,
+	AddPackageJSONScripts,
 	DepEnsure,
 	installTools,
 	DeprecrationsCheck,
 	fixDocker,
 	encodeApp,
+	Plugins,
 }
 
 func encodeApp(r *Runner) error {

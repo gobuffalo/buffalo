@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/fakesmtp"
 	"github.com/gobuffalo/buffalo/mail"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/x/fakesmtp"
 	"github.com/stretchr/testify/require"
 )
 

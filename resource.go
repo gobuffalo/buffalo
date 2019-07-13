@@ -1,6 +1,6 @@
 package buffalo
 
-import "errors"
+import "fmt"
 
 // Resource interface allows for the easy mapping
 // of common RESTful actions to a set of paths. See
@@ -30,6 +30,12 @@ type Resource interface {
 	Destroy(Context) error
 }
 
+// HasMiddleware can be implemented to specify additional
+// middleware specific to the resource
+type HasMiddleware interface {
+	Use() []MiddlewareFunc
+}
+
 // BaseResource fills in the gaps for any Resource interface
 // functions you don't want/need to implement.
 /*
@@ -49,25 +55,25 @@ type BaseResource struct{}
 
 // List default implementation. Returns a 404
 func (v BaseResource) List(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 // Show default implementation. Returns a 404
 func (v BaseResource) Show(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 // Create default implementation. Returns a 404
 func (v BaseResource) Create(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 // Update default implementation. Returns a 404
 func (v BaseResource) Update(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }
 
 // Destroy default implementation. Returns a 404
 func (v BaseResource) Destroy(c Context) error {
-	return c.Error(404, errors.New("resource not implemented"))
+	return c.Error(404, fmt.Errorf("resource not implemented"))
 }

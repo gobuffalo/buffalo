@@ -6,15 +6,12 @@ import (
 	"io"
 	"path"
 	"reflect"
-	"regexp"
 	"strings"
-
-	"errors"
 
 	"github.com/gobuffalo/flect/name"
 )
 
-var errNoID = errors.New("no ID on model")
+var errNoID = fmt.Errorf("no ID on model")
 
 // ErrRedirect indicates to Context#Render that this is a
 // redirect and a template shouldn't be rendered.
@@ -95,8 +92,9 @@ func (htmlAutoRenderer) ContentType() string {
 func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	n := name.New(ir.typeName())
 	pname := name.New(n.Pluralize().String())
+	isPlural := ir.isPlural()
 
-	if ir.isPlural() {
+	if isPlural {
 		data[pname.VarCasePlural().String()] = ir.model
 	} else {
 		data[n.VarCaseSingle().String()] = ir.model
@@ -136,11 +134,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 		return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 	}
 
-	x, err := regexp.Compile(fmt.Sprintf("%s/.+", pname.URL()))
-	if err != nil {
-		return err
-	}
-	if x.MatchString(cp) {
+	if !isPlural {
 		return ir.HTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)
 	}
 	return defCase()

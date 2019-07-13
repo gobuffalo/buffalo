@@ -2,9 +2,9 @@ package refresh
 
 import (
 	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/plushgen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/plushgen"
 )
 
 // New generator to generate refresh templates

@@ -7,19 +7,19 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/packd"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
-	"github.com/pkg/errors"
 )
 
 // Serve the application at the specified address/port and listen for OS
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve(srvs ...servers.Server) error {
-	a.Logger.Infof("Starting application at %s", a.Options.Addr)
+	a.Logger.Infof("Starting application at http://%s", a.Options.Addr)
 
 	payload := events.Payload{
 		"app": a,
@@ -100,7 +100,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
-	if err != nil && errors.Cause(err) != context.Canceled {
+	if err != nil && errx.Unwrap(err) != context.Canceled {
 		a.Logger.Error(err)
 		return err
 	}

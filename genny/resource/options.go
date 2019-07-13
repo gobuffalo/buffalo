@@ -1,7 +1,7 @@
 package resource
 
 import (
-	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/gobuffalo/attrs"
@@ -26,7 +26,7 @@ func (opts *Options) Validate() error {
 	}
 
 	if len(opts.Name) == 0 {
-		return errors.New("you must provide a name")
+		return fmt.Errorf("you must provide a name")
 	}
 
 	if len(opts.Model) == 0 {

@@ -4,26 +4,25 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/genny/plugin"
+	"github.com/gobuffalo/buffalo/genny/plugins/plugin"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/genny/new"
+	"github.com/gobuffalo/genny/plushgen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/plushgen"
-	"github.com/pkg/errors"
 )
 
 // GenerateCmd generates a plugin project with go mods
 func GenerateCmd(opts *plugin.Options) (*genny.Group, error) {
 	gg := &genny.Group{}
 	if err := opts.Validate(); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 
 	g := genny.New()
 	box := packr.New("./generate/templates", "./generate/templates")
 	if err := g.Box(box); err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	ctx := plush.NewContext()
 	ctx.Set("opts", opts)
@@ -35,7 +34,7 @@ func GenerateCmd(opts *plugin.Options) (*genny.Group, error) {
 	g.RunFn(func(r *genny.Runner) error {
 		f, err := r.FindFile("cmd/available.go")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		const g = `Available.Add("generate", generateCmd)`
 		const m = `Available.Mount(rootCmd)`
@@ -50,7 +49,7 @@ func GenerateCmd(opts *plugin.Options) (*genny.Group, error) {
 		Prefix: "genny",
 	})
 	if err != nil {
-		return gg, errors.WithStack(err)
+		return gg, err
 	}
 	gg.Add(g)
 

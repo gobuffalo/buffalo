@@ -1,13 +1,12 @@
 package plugin
 
 import (
+	"fmt"
 	"os/user"
 	"path"
 	"path/filepath"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // Options container for passing needed info for
@@ -24,7 +23,7 @@ type Options struct {
 // Validate makes sure that the options are valid for generator
 func (opts *Options) Validate() error {
 	if opts.PluginPkg == "" {
-		return errors.New("plugin has to have a package name")
+		return fmt.Errorf("plugin has to have a package name")
 	}
 	if len(opts.License) == 0 {
 		opts.License = "mit"
@@ -47,7 +46,7 @@ func (opts *Options) Validate() error {
 	if len(opts.Author) == 0 {
 		u, err := user.Current()
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		if len(u.Name) != 0 {
 			opts.Author = u.Name

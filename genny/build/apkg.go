@@ -23,8 +23,11 @@ func copyDatabase(r *genny.Runner) error {
 	}()
 	f, err := r.FindFile("database.yml")
 	if err != nil {
-		// it's ok to not have this file
-		return nil
+		f, err = r.FindFile("config/database.yml")
+		if err != nil {
+			// it's ok to not have this file
+			return nil
+		}
 	}
 	return r.File(genny.NewFile("a/database.yml", f))
 }

@@ -1,7 +1,6 @@
 package ci
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -33,7 +32,7 @@ func (opts *Options) Validate() error {
 	}
 
 	if len(opts.Provider) == 0 {
-		return errors.New("no provider chosen")
+		return fmt.Errorf("no provider chosen")
 	}
 	opts.Provider = strings.ToLower(opts.Provider)
 
