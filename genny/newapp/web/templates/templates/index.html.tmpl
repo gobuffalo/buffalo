@@ -46,7 +46,7 @@
                 <%= if (r.Method != "GET" || r.Path ~= "{") {
                   return r.Path
                 } else {
-                  return linkTo(r.Path)
+                  return linkTo(r.Path, {body: r.Path})
                 } %>
               </td>
               <td>
