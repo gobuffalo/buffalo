@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://godoc.org/github.com/gobuffalo/buffalo"><img src="https://godoc.org/github.com/gobuffalo/buffalo?status.svg" alt="GoDoc" /></a>
-<a href="https://travis-ci.org/gobuffalo/buffalo"><img src="https://travis-ci.org/gobuffalo/buffalo.svg?branch=master" alt="Build Status" /></a>
+<a href="https://dev.azure.com/markbates/buffalo/_build?definitionId=1"><img src="https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.buffalo?branchName=master" alt="Build Status" /></a>
 <a href="https://goreportcard.com/report/github.com/gobuffalo/buffalo"><img src="https://goreportcard.com/badge/github.com/gobuffalo/buffalo" alt="Go Report Card" /></a>
 <a href="https://www.codetriage.com/gobuffalo/buffalo"><img src="https://www.codetriage.com/gobuffalo/buffalo/badges/users.svg" alt="Open Source Helpers" /></a>
 </p>
@@ -58,4 +58,12 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 
 First, thank you so much for wanting to contribute! It means so much that you care enough to want to contribute. We appreciate every PR from the smallest of typos to the be biggest of features.
 
-To contribute, please read the contribution guidelines: [CONTRIBUTING](.github/CONTRIBUTING.md)
+**Here are the core rules to respect**:
+* If you have any question, please consider using the [Slack channel](https://gobuffalo.io/docs/slack) (*#buffalo*, *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo). We use GitHub issues for **bug reports and feature requests only**.
+* All contributors of this project are working on their free time: be patient and kind. :)
+* Consider opening an issue **BEFORE** creating a Pull request (PR): you won't loose your time on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
+* All PRs **MUST** be opened against the *development* branch. If you want to write an hot-fix, we'll first fix the *development* branch before moving the patch to *master* branch.
+
+**WE WILL CLOSE ANY ISSUE OR PR NOT FOLLOWING THESE CORE RULES**.
+
+For the full contribution guidelines, please read [CONTRIBUTING](.github/CONTRIBUTING.md).

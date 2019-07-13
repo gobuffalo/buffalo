@@ -9,10 +9,8 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/flect"
-	"github.com/pkg/errors"
 
 	"github.com/gobuffalo/events"
-	gcontext "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 )
 
@@ -81,7 +79,7 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 
 		url, err := cRoute.MuxRoute.URL(pairs...)
 		if err != nil {
-			return "", errors.Wrapf(err, "missing parameters for %v", cRoute.Path)
+			return "", fmt.Errorf("missing parameters for %v: %s", cRoute.Path, err)
 		}
 
 		result := url.Path
@@ -92,8 +90,6 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 }
 
 func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	defer gcontext.Clear(req)
-
 	a := ri.App
 
 	c := a.newContext(ri, res, req)

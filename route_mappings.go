@@ -143,8 +143,12 @@ type editable interface {
 	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
-
 	g := a.Group(p)
+
+	if mw, ok := r.(HasMiddleware); ok {
+		g.Use(mw.Use()...)
+	}
+
 	p = "/"
 
 	rv := reflect.ValueOf(r)

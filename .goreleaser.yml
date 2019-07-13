@@ -7,6 +7,14 @@ builds:
     - darwin
     - linux
     - windows
+  goarch:
+    - amd64
+    - 386
+    - arm
+    - arm64
+  goarm:
+    - 6
+    - 7
   env:
     - CGO_ENABLED=0
   main: ./buffalo/main.go
@@ -24,16 +32,4 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
-
-brew:
-  name: buffalo
-  github:
-    owner: gobuffalo
-    name: homebrew-tap
-  homepage: https://gobuffalo.io
-  description: A Go web development eco-system, designed to make your life easier.
-  install: |
-    bin.install "buffalo"
-  test: |
-    system "#{bin}/buffalo", "version"
 

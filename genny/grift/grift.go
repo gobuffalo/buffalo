@@ -5,7 +5,7 @@ import (
 	"text/template"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/gogen"
+	"github.com/gobuffalo/genny/gogen"
 )
 
 // New generator to create a grift task

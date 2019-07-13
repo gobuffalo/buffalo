@@ -9,7 +9,6 @@ import (
 	"text/tabwriter"
 
 	pluginsin "github.com/gobuffalo/buffalo/plugins"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +18,7 @@ var listCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		list, err := pluginsin.Available()
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		var cmds pluginsin.Commands

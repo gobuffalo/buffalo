@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 
 	"github.com/gobuffalo/buffalo/plugins"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -17,16 +16,16 @@ var ListCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		b, err := ioutil.ReadFile(plugins.CachePath)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		m := map[string]interface{}{}
 		err = json.Unmarshal(b, &m)
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		is, err := json.MarshalIndent(m, "", "  ")
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 
 		fmt.Println(string(is))

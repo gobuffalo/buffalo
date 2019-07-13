@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/genny/add"
+	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/meta"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -30,8 +30,8 @@ var addCmd = &cobra.Command{
 
 		app := meta.New(".")
 		plugs, err := plugdeps.List(app)
-		if err != nil && (errors.Cause(err) != plugdeps.ErrMissingConfig) {
-			return errors.WithStack(err)
+		if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
+			return err
 		}
 
 		tags := app.BuildTags("", addOptions.buildTags...)
@@ -54,7 +54,7 @@ var addCmd = &cobra.Command{
 			Plugins: plugs.List(),
 		})
 		if err != nil {
-			return errors.WithStack(err)
+			return err
 		}
 		run.With(g)
 
