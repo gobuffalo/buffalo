@@ -72,14 +72,19 @@ func archivedAssets(opts *Options) (*genny.Generator, error) {
 				return nil
 			}
 
-			if _, err = io.Copy(writer, file); err != nil {
-				return err
-			}
-			return r.File(genny.NewFile(target, bb))
+			_, err = io.Copy(writer, file)
+			return err
 		})
 		if err != nil {
 			return err
 		}
+		// We need to close the archive before passing the buffer to genny, otherwise the zip
+		// will be corrupted.
+		archive.Close()
+		if err := r.File(genny.NewFile(target, bb)); err != nil {
+			return err
+		}
+		opts.keep.Store(target, struct{}{})
 		return nil
 	})
 
