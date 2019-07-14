@@ -44,6 +44,7 @@ type Options struct {
 	// GoCommand is the `go X` command to be used. Default is "build".
 	GoCommand string `json:"go_command"`
 	rollback  *sync.Map
+	keep      *sync.Map
 }
 
 // Validate that options are usuable
@@ -63,6 +64,9 @@ func (opts *Options) Validate() error {
 	}
 	if opts.rollback == nil {
 		opts.rollback = &sync.Map{}
+	}
+	if opts.keep == nil {
+		opts.keep = &sync.Map{}
 	}
 	if len(opts.GoCommand) == 0 {
 		opts.GoCommand = "build"
