@@ -54,4 +54,8 @@ func TestAskBin_respectsTimeout(t *testing.T) {
 	case <-done:
 		t.Log("timed-out successfully")
 	}
+
+	if _, ok := findInCache(from); ok {
+		r.Fail("expected plugin not to be added to cache on failure, but it was in cache")
+	}
 }
