@@ -1,22 +1,23 @@
 [{
-  "path": "actions/comments.go",
-  "contains": [
-    "func CommentsShow(c buffalo.Context) error {",
-	  "func CommentsEdit(c buffalo.Context) error {",
-    "comments/edit.html",
-	  "comments/show.html"
-  ]
-},
-{
-  "path": "actions/app.go",
-  "contains": [
-    "app.GET(\"/comments/show\", CommentsShow)",
-    "app.GET(\"/comments/edit\", CommentsEdit)"
-  ]
-},
-{
-  "path": "templates/comments/show.html",
-  "contains": [
-    "<h1>Comments#Show</h1>"
-  ]
-}]
+    "path": "actions/comments.go",
+    "contains": [
+      "func CommentsShow(c buffalo.Context) error {",
+      "func CommentsEdit(c buffalo.Context) error {",
+      "comments/edit.html",
+      "comments/show.html"
+    ]
+  },
+  {
+    "path": "actions/app.go",
+    "contains": [
+      "app.GET(\"/comments/show\", CommentsShow)",
+      "app.GET(\"/comments/edit\", CommentsEdit)"
+    ]
+  },
+  {
+    "path": "templates/comments/show.plush.html",
+    "contains": [
+      "<h1>Comments#Show</h1>"
+    ]
+  }
+]

@@ -15,14 +15,10 @@ func (w Widget) ToPath() string {
 	return w.Name
 }
 
-func withHTMLFile(name string, contents string, fn func(*Engine)) error {
-	box := packd.NewMemoryBox()
-	box.AddString(name, contents)
-	e := New(Options{
-		TemplatesBox: box,
+func NewEngine() *Engine {
+	return New(Options{
+		TemplatesBox: packd.NewMemoryBox(),
 	})
-	fn(e)
-	return nil
 }
 
 type rendFriend func(string, RendererFunc) Renderer

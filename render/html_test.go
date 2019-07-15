@@ -8,68 +8,62 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_HTML(t *testing.T) {
+const htmlLayout = "layout.html"
+const htmlAltLayout = "alt_layout.plush.html"
+const htmlTemplate = "my-template.html"
+
+func Test_HTML_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	err := withHTMLFile("test.html", "<%= name %>", func(e *Engine) {
-		t.Run("without a layout", func(st *testing.T) {
-			r := require.New(st)
+	e := NewEngine()
 
-			h := e.HTML("test.html")
-			r.Equal("text/html; charset=utf-8", h.ContentType())
-			bb := &bytes.Buffer{}
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
 
-			err := h.Render(bb, map[string]interface{}{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("Mark", strings.TrimSpace(bb.String()))
-		})
+	h := e.HTML(htmlTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-	})
+	data := map[string]interface{}{"name": "Mark"}
+	r.NoError(h.Render(bb, data))
+	r.Equal("Mark", strings.TrimSpace(bb.String()))
+}
 
-	r.NoError(err)
+func Test_HTML_WithLayout(t *testing.T) {
+	r := require.New(t)
 
-	// t.Run("with a layout", func(st *testing.T) {
-	// 	r := require.New(st)
-	//
-	// 	layout, err := os.Create(filepath.Join(tmpDir, "layout.html"))
-	// 	r.NoError(err)
-	// 	defer os.Remove(layout.Name())
-	//
-	// 	_, err = layout.Write([]byte("<body><%= yield %></body>"))
-	// 	r.NoError(err)
-	//
-	// 	re := render.New(render.Options{
-	// 		TemplatesBox: packr.New(tmpDir, tmpDir),
-	// 		HTMLLayout:   filepath.Base(layout.Name()),
-	// 	})
-	//
-	// 	st.Run("using just the HTMLLayout", func(sst *testing.T) {
-	// 		r := require.New(sst)
-	// 		h := re.HTML(filepath.Base(tmpFile.Name()))
-	//
-	// 		r.Equal("text/html; charset=utf-8", h.ContentType())
-	// 		bb := &bytes.Buffer{}
-	// 		err = h.Render(bb, map[string]interface{}{"name": "Mark"})
-	// 		r.NoError(err)
-	// 		r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
-	// 	})
-	//
-	// 	st.Run("overriding the HTMLLayout", func(sst *testing.T) {
-	// 		r := require.New(sst)
-	// 		nlayout, err := os.Create(filepath.Join(tmpDir, "layout2.html"))
-	// 		r.NoError(err)
-	// 		defer os.Remove(nlayout.Name())
-	//
-	// 		_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
-	// 		r.NoError(err)
-	// 		h := re.HTML(filepath.Base(tmpFile.Name()), filepath.Base(nlayout.Name()))
-	//
-	// 		r.Equal("text/html; charset=utf-8", h.ContentType())
-	// 		bb := &bytes.Buffer{}
-	// 		err = h.Render(bb, map[string]interface{}{"name": "Mark"})
-	// 		r.NoError(err)
-	// 		r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
-	// 	})
-	//
-	// })
+	e := NewEngine()
+	e.HTMLLayout = htmlLayout
+
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
+
+	h := e.HTML(htmlTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
+
+	data := map[string]interface{}{"name": "Mark"}
+	r.NoError(h.Render(bb, data))
+	r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+}
+
+func Test_HTML_WithLayout_Override(t *testing.T) {
+	r := require.New(t)
+
+	e := NewEngine()
+	e.HTMLLayout = htmlLayout
+
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
+	r.NoError(box.AddString(htmlAltLayout, "<html><%= yield %></html>"))
+
+	h := e.HTML(htmlTemplate, htmlAltLayout)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
+
+	data := map[string]interface{}{"name": "Mark"}
+	r.NoError(h.Render(bb, data))
+	r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
 }
