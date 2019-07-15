@@ -30,9 +30,9 @@ type Resource interface {
 	Destroy(Context) error
 }
 
-// HasMiddleware can be implemented to specify additional
+// Middler can be implemented to specify additional
 // middleware specific to the resource
-type HasMiddleware interface {
+type Middler interface {
 	Use() []MiddlewareFunc
 }
 
