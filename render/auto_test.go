@@ -1,15 +1,13 @@
 package render_test
 
 import (
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/packd"
 	"github.com/stretchr/testify/require"
 )
 
@@ -398,28 +396,11 @@ func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
 }
 
 func withHTMLFile(name string, contents string, fn func(*render.Engine)) error {
-	tmpDir := filepath.Join(os.TempDir(), filepath.Dir(name))
-	err := os.MkdirAll(tmpDir, 0766)
-	if err != nil {
-		return err
-	}
-	defer os.Remove(tmpDir)
-
-	tmpFile, err := os.Create(filepath.Join(tmpDir, filepath.Base(name)))
-	if err != nil {
-		return err
-	}
-	defer os.Remove(tmpFile.Name())
-
-	_, err = tmpFile.Write([]byte(contents))
-	if err != nil {
-		return err
-	}
-
+	box := packd.NewMemoryBox()
+	box.AddString(name, contents)
 	e := render.New(render.Options{
-		TemplatesBox: packr.New(os.TempDir(), os.TempDir()),
+		TemplatesBox: box,
 	})
-
 	fn(e)
 	return nil
 }
