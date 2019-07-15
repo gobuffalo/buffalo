@@ -32,6 +32,10 @@ func Cleanup(opts *Options) genny.RunFn {
 			return err
 		}
 		for _, f := range r.Disk.Files() {
+			if _, keep := opts.keep.Load(f.Name()); keep {
+				// Keep this file
+				continue
+			}
 			if err := r.Disk.Delete(f.Name()); err != nil {
 				return err
 			}
