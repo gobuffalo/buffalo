@@ -24,8 +24,7 @@ func Test_HTML_WithoutLayout(t *testing.T) {
 	r.Equal("text/html; charset=utf-8", h.ContentType())
 	bb := &bytes.Buffer{}
 
-	data := map[string]interface{}{"name": "Mark"}
-	r.NoError(h.Render(bb, data))
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
 	r.Equal("Mark", strings.TrimSpace(bb.String()))
 }
 
@@ -43,8 +42,7 @@ func Test_HTML_WithLayout(t *testing.T) {
 	r.Equal("text/html; charset=utf-8", h.ContentType())
 	bb := &bytes.Buffer{}
 
-	data := map[string]interface{}{"name": "Mark"}
-	r.NoError(h.Render(bb, data))
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
 	r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
 }
 
@@ -63,7 +61,6 @@ func Test_HTML_WithLayout_Override(t *testing.T) {
 	r.Equal("text/html; charset=utf-8", h.ContentType())
 	bb := &bytes.Buffer{}
 
-	data := map[string]interface{}{"name": "Mark"}
-	r.NoError(h.Render(bb, data))
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
 	r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
 }

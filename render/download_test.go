@@ -37,8 +37,8 @@ func Test_Download_KnownExtension(t *testing.T) {
 		ctx := dlContext{rw: httptest.NewRecorder()}
 
 		re := dl(ctx, "filename.pdf", bytes.NewReader(data))
-		bb := &bytes.Buffer{}
 
+		bb := &bytes.Buffer{}
 		r.NoError(re.Render(bb, nil))
 
 		r.Equal(data, bb.Bytes())
@@ -56,13 +56,13 @@ func Test_Download_UnknownExtension(t *testing.T) {
 		New(Options{}).Download,
 	}
 
-	for _, d := range table {
+	for _, dl := range table {
 		ctx := dlContext{rw: httptest.NewRecorder()}
-		re := d(ctx, "filename", bytes.NewReader(data))
-		bb := new(bytes.Buffer)
-		err := re.Render(bb, nil)
+		re := dl(ctx, "filename", bytes.NewReader(data))
 
-		r.NoError(err)
+		bb := &bytes.Buffer{}
+		r.NoError(re.Render(bb, nil))
+
 		r.Equal(data, bb.Bytes())
 		r.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
 		r.Equal("attachment; filename=filename", ctx.Response().Header().Get("Content-Disposition"))
@@ -78,12 +78,10 @@ func Test_InvalidContext(t *testing.T) {
 		New(Options{}).Download,
 	}
 
-	for _, d := range table {
-		ctx := context.TODO()
-		re := d(ctx, "filename", bytes.NewReader(data))
-		bb := new(bytes.Buffer)
-		err := re.Render(bb, nil)
+	for _, dl := range table {
+		re := dl(context.TODO(), "filename", bytes.NewReader(data))
 
-		r.Error(err)
+		bb := &bytes.Buffer{}
+		r.Error(re.Render(bb, nil))
 	}
 }
