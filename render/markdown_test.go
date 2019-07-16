@@ -1,70 +1,47 @@
-package render_test
+package render
 
 import (
 	"bytes"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
-func Test_Markdown(t *testing.T) {
+const mdLayout = "layout.md"
+const mdAltLayout = "alt_layout.plush.md.html"
+const mdTemplate = "my-template.md"
+
+func Test_MD_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	tmpDir := filepath.Join(os.TempDir(), "markdown_test")
-	err := os.MkdirAll(tmpDir, 0766)
-	r.NoError(err)
-	defer os.Remove(tmpDir)
+	e := NewEngine()
 
-	tmpFile, err := os.Create(filepath.Join(tmpDir, "t.md"))
-	r.NoError(err)
+	box := e.TemplatesBox
+	r.NoError(box.AddString(mdTemplate, "<%= name %>"))
 
-	_, err = tmpFile.Write([]byte("<%= name %>"))
-	r.NoError(err)
+	h := e.HTML(mdTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-	type ji func(...string) render.Renderer
-	t.Run("without a layout", func(st *testing.T) {
-		r := require.New(st)
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("<p>Mark</p>", strings.TrimSpace(bb.String()))
+}
 
-		table := []ji{
-			render.New(render.Options{
-				TemplatesBox: packr.New(tmpDir, tmpDir),
-			}).HTML,
-		}
+func Test_MD_WithLayout(t *testing.T) {
+	r := require.New(t)
 
-		for _, j := range table {
-			re := j(filepath.Base(tmpFile.Name()))
-			r.Equal("text/html; charset=utf-8", re.ContentType())
-			bb := &bytes.Buffer{}
-			err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("<p>Mark</p>", strings.TrimSpace(bb.String()))
-		}
-	})
+	e := NewEngine()
+	e.HTMLLayout = htmlLayout
 
-	t.Run("with a layout", func(st *testing.T) {
-		r := require.New(st)
+	box := e.TemplatesBox
+	r.NoError(box.AddString(mdTemplate, "<%= name %>"))
+	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
 
-		layout, err := os.Create(filepath.Join(tmpDir, "test.html"))
-		r.NoError(err)
-		defer os.Remove(layout.Name())
+	h := e.HTML(mdTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-		_, err = layout.Write([]byte("<body><%= yield %></body>"))
-		r.NoError(err)
-
-		re := render.New(render.Options{
-			HTMLLayout:   filepath.Base(layout.Name()),
-			TemplatesBox: packr.New(tmpDir, tmpDir),
-		}).HTML(filepath.Base(tmpFile.Name()))
-
-		r.Equal("text/html; charset=utf-8", re.ContentType())
-		bb := &bytes.Buffer{}
-		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-		r.NoError(err)
-		r.Equal("<body><p>Mark</p>\n</body>", strings.TrimSpace(bb.String()))
-	})
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("<body><p>Mark</p>\n</body>", strings.TrimSpace(bb.String()))
 }
