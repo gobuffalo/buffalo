@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/packd"
 	"github.com/stretchr/testify/require"
 )
@@ -13,42 +12,40 @@ import (
 func Test_Template_Partial(t *testing.T) {
 	r := require.New(t)
 
-	const indexHTML = `<%= partial("foo.html") %>`
-	const fooHTML = "Foo > <%= name %>"
+	const part = `<%= partial("foo.html") %>`
+	const tmpl = "Foo > <%= name %>"
 
 	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("index.html", indexHTML))
-	r.NoError(box.AddString("_foo.html", fooHTML))
+	r.NoError(box.AddString(htmlTemplate, tmpl))
+	r.NoError(box.AddString("_foo.html", part))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
-	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
-	r.NoError(err)
-	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 
+	re := e.Template("foo/bar", htmlTemplate)
+	r.NoError(re.Render(bb, Data{"name": "Mark"}))
+	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
 func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	r := require.New(t)
 
-	const indexHTML = `<%= partial("foo") %>`
-	const fooHTML = "Foo > <%= name %>"
+	const part = `<%= partial("foo") %>`
+	const tmpl = "Foo > <%= name %>"
 
 	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("index.html", indexHTML))
-	r.NoError(box.AddString("_foo.html", fooHTML))
+	r.NoError(box.AddString(htmlTemplate, tmpl))
+	r.NoError(box.AddString("_foo.html", part))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
 
-	err := re.Template("text/html", "index.html").Render(bb, Data{"name": "Mark"})
-	r.NoError(err)
+	re := e.Template("foo/bar", htmlTemplate)
+	r.NoError(re.Render(bb, Data{"name": "Mark"}))
 	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
@@ -59,22 +56,19 @@ func Test_Template_Partial_Form(t *testing.T) {
 	const formHTML = `<%= f.InputTag("Name") %>`
 	const result = `<form action="/Mark" id="widget-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="widget-Name" name="Name" type="text" value="Mark" /></div></form>`
 
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("new.html", newHTML))
+	r.NoError(box.AddString("_form.html", formHTML))
+
+	e := NewEngine()
+	e.TemplatesBox = box
+
 	u := Widget{Name: "Mark"}
 
-	re := New(Options{
-		TemplatesBox: packd.NewMemoryBox(),
-	})
-	err := re.TemplatesBox.AddString("new.html", newHTML)
-	r.NoError(err)
-
-	err = re.TemplatesBox.AddString("_form.html", formHTML)
-	r.NoError(err)
-
 	bb := &bytes.Buffer{}
-	err = re.HTML("new.html").Render(bb, Data{"user": u})
-	r.NoError(errx.Unwrap(err))
+	re := e.HTML("new.html")
+	r.NoError(re.Render(bb, Data{"user": u}))
 	r.Equal(result, strings.TrimSpace(bb.String()))
-
 }
 
 func Test_Template_Partial_With_For(t *testing.T) {
@@ -88,16 +82,15 @@ func Test_Template_Partial_With_For(t *testing.T) {
 	r.NoError(box.AddString("for.html", forHTML))
 	r.NoError(box.AddString("_row.html", rowHTML))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
 
-	tmpl := re.Template("text/html; charset=utf-8", "for.html")
-	r.Equal("text/html; charset=utf-8", tmpl.ContentType())
+	re := e.Template("text/html; charset=utf-8", "for.html")
+	r.Equal("text/html; charset=utf-8", re.ContentType())
 
-	err := tmpl.Render(bb, Data{"users": []Widget{
+	err := re.Render(bb, Data{"users": []Widget{
 		{Name: "Mark"},
 		{Name: "Yonghwan"},
 	}})
@@ -117,16 +110,15 @@ func Test_Template_Partial_With_For_And_Local(t *testing.T) {
 	r.NoError(box.AddString("for.html", forHTML))
 	r.NoError(box.AddString("_row.html", rowHTML))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
 
-	tmpl := re.Template("text/html; charset=utf-8", "for.html")
-	r.Equal("text/html; charset=utf-8", tmpl.ContentType())
+	re := e.Template("text/html; charset=utf-8", "for.html")
+	r.Equal("text/html; charset=utf-8", re.ContentType())
 
-	err := tmpl.Render(bb, Data{"users": []Widget{
+	err := re.Render(bb, Data{"users": []Widget{
 		{Name: "Mark"},
 		{Name: "Yonghwan"},
 	}})
@@ -146,14 +138,13 @@ func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T)
 	r.NoError(box.AddString("index.html", indexHTML))
 	r.NoError(box.AddString("_foo.html", fooHTML))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
 
-	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
-	r.NoError(err)
+	re := e.Template("foo/bar", "index.html")
+	r.NoError(re.Render(bb, Data{"name": "Mark"}))
 	r.Equal(result, strings.TrimSpace(bb.String()))
 }
 
@@ -170,14 +161,12 @@ func Test_Template_Partial_With_Layout(t *testing.T) {
 	r.NoError(box.AddString("_layout.html", layoutHTML))
 	r.NoError(box.AddString("_foo.html", fooHTML))
 
-	re := New(Options{
-		TemplatesBox: box,
-	})
+	e := NewEngine()
+	e.TemplatesBox = box
 
 	bb := &bytes.Buffer{}
 
-	err := re.Template("foo/bar", "index.html").Render(bb, Data{"name": "Mark"})
-	r.NoError(err)
+	re := e.Template("foo/bar", "index.html")
+	r.NoError(re.Render(bb, Data{"name": "Mark"}))
 	r.Equal(result, strings.TrimSpace(bb.String()))
-
 }
