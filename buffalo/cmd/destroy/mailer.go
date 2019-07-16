@@ -33,10 +33,16 @@ func removeMailer(name string) {
 	if YesToAll || confirm("Want to remove mailer? (y/N)") {
 		mailerFileName := flect.Singularize(flect.Underscore(name))
 
-		os.Remove(filepath.Join("mailers", fmt.Sprintf("%v.go", mailerFileName)))
-		os.Remove(filepath.Join("templates/mail", fmt.Sprintf("%v.html", mailerFileName)))
+		files := []string{
+			filepath.Join("mailers", fmt.Sprintf("%v.go", mailerFileName)),
+			filepath.Join("templates/mail", fmt.Sprintf("%v.html", mailerFileName)),
+			filepath.Join("templates/mail", fmt.Sprintf("%v.plush.html", mailerFileName)),
+		}
 
-		logrus.Infof("- Deleted %v", fmt.Sprintf("mailers/%v.go", mailerFileName))
-		logrus.Infof("- Deleted %v", fmt.Sprintf("templates/mail/%v.html", mailerFileName))
+		for _, f := range files {
+			os.Remove(f)
+			logrus.Infof("- Deleted %v", f)
+		}
+
 	}
 }

@@ -145,7 +145,7 @@ type editable interface {
 func (a *App) Resource(p string, r Resource) *App {
 	g := a.Group(p)
 
-	if mw, ok := r.(HasMiddleware); ok {
+	if mw, ok := r.(Middler); ok {
 		g.Use(mw.Use()...)
 	}
 

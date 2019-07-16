@@ -1,16 +1,19 @@
-[
-    {
-        "path": "actions/users.go",
-        "contains": [
-            "func UsersCreate(c buffalo.Context) error {"
-        ]
-    },
-    {
-        "path": "templates/users/update.html",
-        "absent": true
-    },
-    {
-        "path": "actions/app.go",
-        "contains": ["app.POST(\"/users/update\", UsersUpdate)"]
-    }
+[{
+    "path": "actions/users.go",
+    "contains": [
+      "func UsersCreate(c buffalo.Context) error {"
+    ]
+  },
+  {
+    "path": "templates/users/update.html",
+    "absent": true
+  },
+  {
+    "path": "templates/users/update.plush.html",
+    "absent": true
+  },
+  {
+    "path": "actions/app.go",
+    "contains": ["app.POST(\"/users/update\", UsersUpdate)"]
+  }
 ]

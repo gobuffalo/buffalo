@@ -13,6 +13,44 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const jsLayout = "layout.js"
+const jsAltLayout = "alt_layout.plush.js"
+const jsTemplate = "my-template.js"
+
+func Test_JavaScript_WithoutLayout(t *testing.T) {
+	r := require.New(t)
+
+	e := NewEngine()
+
+	box := e.TemplatesBox
+	r.NoError(box.AddString(jsTemplate, "alert(<%= name %>)"))
+
+	h := e.JavaScript(jsTemplate)
+	r.Equal("application/javascript", h.ContentType())
+	bb := &bytes.Buffer{}
+
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("alert(Mark)", strings.TrimSpace(bb.String()))
+}
+
+// func Test_HTML_WithLayout(t *testing.T) {
+// 	r := require.New(t)
+//
+// 	e := NewEngine()
+// 	e.HTMLLayout = htmlLayout
+//
+// 	box := e.TemplatesBox
+// 	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+// 	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
+//
+// 	h := e.HTML(htmlTemplate)
+// 	r.Equal("text/html; charset=utf-8", h.ContentType())
+// 	bb := &bytes.Buffer{}
+//
+// 	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+// 	r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+// }
+
 func Test_JavaScript(t *testing.T) {
 	r := require.New(t)
 

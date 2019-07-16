@@ -53,15 +53,13 @@ func Test_New(t *testing.T) {
 
 	box := packr.New("genny/actions/Test_New", "../actions/_fixtures/outputs/clean")
 
-	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/index.html"}
+	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/index.plush.html"}
 
 	for _, s := range files {
 		x, err := box.FindString(s)
 		r.NoError(err)
 		f, err := res.Find(strings.TrimSuffix(s, ".tmpl"))
 		r.NoError(err)
-		fmt.Println(x)
-		fmt.Println(f.String())
 		r.True(compare(x, f.String()))
 	}
 }
@@ -87,7 +85,7 @@ func Test_New_Multi(t *testing.T) {
 
 	box := packr.New("genny/actions/Test_New_Multi", "../actions/_fixtures/outputs/multi")
 
-	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/show.html", "templates/user/edit.html"}
+	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/show.plush.html", "templates/user/edit.plush.html"}
 
 	for _, s := range files {
 		x, err := box.FindString(s)
@@ -126,7 +124,7 @@ func Test_New_Multi_Existing(t *testing.T) {
 
 	box := packr.New("genny/actions/Test_New_Multi_Existing", "../actions/_fixtures/outputs/existing")
 
-	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/show.html", "templates/user/edit.html"}
+	files := []string{"actions/user.go.tmpl", "actions/app.go.tmpl", "actions/user_test.go.tmpl", "templates/user/show.plush.html", "templates/user/edit.plush.html"}
 
 	for _, s := range files {
 		x, err := box.FindString(s)

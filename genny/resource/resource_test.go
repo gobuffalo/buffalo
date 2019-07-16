@@ -68,7 +68,7 @@ func Test_New(t *testing.T) {
 			nn := name.New(tt.Options.Name).Pluralize().String()
 			actions := []string{"_form", "index", "show", "new", "edit"}
 			for _, s := range actions {
-				p := path.Join("templates", nn, s+".html")
+				p := path.Join("templates", nn, s+".plush.html")
 				_, err = res.Find(p)
 				r.NoError(err)
 			}
@@ -210,7 +210,7 @@ func Test_New_UseModel(t *testing.T) {
 	r.Len(res.Files, 9)
 
 	for _, s := range []string{"_form", "edit", "index", "new", "show"} {
-		p := path.Join("templates", "widgets", s+".html")
+		p := path.Join("templates", "widgets", s+".plush.html")
 		_, err = res.Find(p)
 		r.NoError(err)
 	}

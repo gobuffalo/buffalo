@@ -1,5 +1,9 @@
 package render
 
+import (
+	"github.com/gobuffalo/packd"
+)
+
 type Widget struct {
 	Name string
 }
@@ -7,3 +11,11 @@ type Widget struct {
 func (w Widget) ToPath() string {
 	return w.Name
 }
+
+func NewEngine() *Engine {
+	return New(Options{
+		TemplatesBox: packd.NewMemoryBox(),
+	})
+}
+
+type rendFriend func(string, RendererFunc) Renderer

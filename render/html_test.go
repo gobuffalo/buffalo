@@ -1,89 +1,66 @@
-package render_test
+package render
 
 import (
 	"bytes"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"
 )
 
-func Test_HTML(t *testing.T) {
+const htmlLayout = "layout.html"
+const htmlAltLayout = "alt_layout.plush.html"
+const htmlTemplate = "my-template.html"
+
+func Test_HTML_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	tmpDir := filepath.Join(os.TempDir(), "html_test")
-	err := os.MkdirAll(tmpDir, 0766)
-	r.NoError(err)
-	defer os.Remove(tmpDir)
+	e := NewEngine()
 
-	tmpFile, err := os.Create(filepath.Join(tmpDir, "test.html"))
-	r.NoError(err)
-	defer os.Remove(tmpFile.Name())
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
 
-	_, err = tmpFile.Write([]byte("<%= name %>"))
-	r.NoError(err)
+	h := e.HTML(htmlTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-	t.Run("without a layout", func(st *testing.T) {
-		r := require.New(st)
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("Mark", strings.TrimSpace(bb.String()))
+}
 
-		j := render.New(render.Options{
-			TemplatesBox: packr.New(tmpDir, tmpDir),
-		}).HTML
+func Test_HTML_WithLayout(t *testing.T) {
+	r := require.New(t)
 
-		re := j(filepath.Base(tmpFile.Name()))
-		r.Equal("text/html; charset=utf-8", re.ContentType())
-		bb := &bytes.Buffer{}
-		err = re.Render(bb, map[string]interface{}{"name": "Mark"})
-		r.NoError(err)
-		r.Equal("Mark", strings.TrimSpace(bb.String()))
-	})
+	e := NewEngine()
+	e.HTMLLayout = htmlLayout
 
-	t.Run("with a layout", func(st *testing.T) {
-		r := require.New(st)
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
 
-		layout, err := os.Create(filepath.Join(tmpDir, "layout.html"))
-		r.NoError(err)
-		defer os.Remove(layout.Name())
+	h := e.HTML(htmlTemplate)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-		_, err = layout.Write([]byte("<body><%= yield %></body>"))
-		r.NoError(err)
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+}
 
-		re := render.New(render.Options{
-			TemplatesBox: packr.New(tmpDir, tmpDir),
-			HTMLLayout:   filepath.Base(layout.Name()),
-		})
+func Test_HTML_WithLayout_Override(t *testing.T) {
+	r := require.New(t)
 
-		st.Run("using just the HTMLLayout", func(sst *testing.T) {
-			r := require.New(sst)
-			h := re.HTML(filepath.Base(tmpFile.Name()))
+	e := NewEngine()
+	e.HTMLLayout = htmlLayout
 
-			r.Equal("text/html; charset=utf-8", h.ContentType())
-			bb := &bytes.Buffer{}
-			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
-		})
+	box := e.TemplatesBox
+	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
+	r.NoError(box.AddString(htmlAltLayout, "<html><%= yield %></html>"))
 
-		st.Run("overriding the HTMLLayout", func(sst *testing.T) {
-			r := require.New(sst)
-			nlayout, err := os.Create(filepath.Join(tmpDir, "layout2.html"))
-			r.NoError(err)
-			defer os.Remove(nlayout.Name())
+	h := e.HTML(htmlTemplate, htmlAltLayout)
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
 
-			_, err = nlayout.Write([]byte("<html><%= yield %></html>"))
-			r.NoError(err)
-			h := re.HTML(filepath.Base(tmpFile.Name()), filepath.Base(nlayout.Name()))
-
-			r.Equal("text/html; charset=utf-8", h.ContentType())
-			bb := &bytes.Buffer{}
-			err = h.Render(bb, map[string]interface{}{"name": "Mark"})
-			r.NoError(err)
-			r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
-		})
-
-	})
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
 }

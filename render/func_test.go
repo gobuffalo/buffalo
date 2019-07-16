@@ -1,34 +1,33 @@
-package render_test
+package render
 
 import (
 	"bytes"
 	"io"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_Func(t *testing.T) {
 	r := require.New(t)
 
-	type ji func(string, render.RendererFunc) render.Renderer
-
-	table := []ji{
-		render.Func,
-		render.New(render.Options{}).Func,
+	table := []rendFriend{
+		Func,
+		New(Options{}).Func,
 	}
 
-	for _, j := range table {
+	for _, tt := range table {
 		bb := &bytes.Buffer{}
-		re := j("foo/bar", func(w io.Writer, data render.Data) error {
+
+		re := tt("foo/bar", func(w io.Writer, data Data) error {
 			_, err := w.Write([]byte(data["name"].(string)))
 			return err
 		})
 
 		r.Equal("foo/bar", re.ContentType())
-		err := re.Render(bb, render.Data{"name": "Mark"})
+		err := re.Render(bb, Data{"name": "Mark"})
 		r.NoError(err)
 		r.Equal("Mark", bb.String())
 	}
+
 }

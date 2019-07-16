@@ -1,12 +1,15 @@
-[
-    {
-        "path": "actions/users.go",
-        "contains": [
-            "func UsersCreate(c buffalo.Context) error {"
-        ]
-    },
-    {
-        "path": "templates/users/create.html",
-        "absent": true
-    }
+[{
+    "path": "actions/users.go",
+    "contains": [
+      "func UsersCreate(c buffalo.Context) error {"
+    ]
+  },
+  {
+    "path": "templates/users/create.html",
+    "absent": true
+  },
+  {
+    "path": "templates/users/create.plush.html",
+    "absent": true
+  }
 ]

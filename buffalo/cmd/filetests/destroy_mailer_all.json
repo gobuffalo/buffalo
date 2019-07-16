@@ -1,8 +1,14 @@
 [{
-  "path": "mailers/ouch.go",
-  "absent": true
-},
-{
-  "path": "templates/mail/ouch.html",
-  "absent": true
-}]
+    "path": "mailers/ouch.go",
+    "absent": true
+  },
+  {
+    "path": "templates/mail/ouch.html",
+    "absent": true
+  },
+  {
+    "path": "templates/mail/ouch.plush.html",
+    "absent": true
+  }
+
+]

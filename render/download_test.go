@@ -1,4 +1,4 @@
-package render_test
+package render
 
 import (
 	"bytes"
@@ -9,82 +9,79 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/stretchr/testify/require"
 )
 
-var data = []byte("data")
+type dlRenderer func(context.Context, string, io.Reader) Renderer
 
-func Test_Download_KnownExtension(t *testing.T) {
-	assert := require.New(t)
-
-	type di func(context.Context, string, io.Reader) render.Renderer
-	table := []di{
-		render.Download,
-		render.New(render.Options{}).Download,
-	}
-
-	for _, d := range table {
-		ctx := testContext{rw: httptest.NewRecorder()}
-		re := d(ctx, "filename.pdf", bytes.NewReader(data))
-		bb := new(bytes.Buffer)
-		err := re.Render(bb, nil)
-
-		assert.NoError(err)
-		assert.Equal(data, bb.Bytes())
-		assert.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
-		assert.Equal("attachment; filename=filename.pdf", ctx.Response().Header().Get("Content-Disposition"))
-		assert.Equal("application/pdf", re.ContentType())
-	}
-}
-
-func Test_Download_UnknownExtension(t *testing.T) {
-	assert := require.New(t)
-
-	type di func(context.Context, string, io.Reader) render.Renderer
-	table := []di{
-		render.Download,
-		render.New(render.Options{}).Download,
-	}
-
-	for _, d := range table {
-		ctx := testContext{rw: httptest.NewRecorder()}
-		re := d(ctx, "filename", bytes.NewReader(data))
-		bb := new(bytes.Buffer)
-		err := re.Render(bb, nil)
-
-		assert.NoError(err)
-		assert.Equal(data, bb.Bytes())
-		assert.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
-		assert.Equal("attachment; filename=filename", ctx.Response().Header().Get("Content-Disposition"))
-		assert.Equal("application/octet-stream", re.ContentType())
-	}
-}
-
-func Test_InvalidContext(t *testing.T) {
-	assert := require.New(t)
-
-	type di func(context.Context, string, io.Reader) render.Renderer
-	table := []di{
-		render.Download,
-		render.New(render.Options{}).Download,
-	}
-
-	for _, d := range table {
-		ctx := context.TODO()
-		re := d(ctx, "filename", bytes.NewReader(data))
-		bb := new(bytes.Buffer)
-		err := re.Render(bb, nil)
-
-		assert.Error(err)
-	}
-}
-
-type testContext struct {
+type dlContext struct {
 	context.Context
 	rw http.ResponseWriter
 }
 
-func (c testContext) Response() http.ResponseWriter {
+func (c dlContext) Response() http.ResponseWriter {
 	return c.rw
+}
+
+var data = []byte("data")
+
+func Test_Download_KnownExtension(t *testing.T) {
+	r := require.New(t)
+
+	table := []dlRenderer{
+		Download,
+		New(Options{}).Download,
+	}
+
+	for _, dl := range table {
+		ctx := dlContext{rw: httptest.NewRecorder()}
+
+		re := dl(ctx, "filename.pdf", bytes.NewReader(data))
+
+		bb := &bytes.Buffer{}
+		r.NoError(re.Render(bb, nil))
+
+		r.Equal(data, bb.Bytes())
+		r.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
+		r.Equal("attachment; filename=filename.pdf", ctx.Response().Header().Get("Content-Disposition"))
+		r.Equal("application/pdf", re.ContentType())
+	}
+}
+
+func Test_Download_UnknownExtension(t *testing.T) {
+	r := require.New(t)
+
+	table := []dlRenderer{
+		Download,
+		New(Options{}).Download,
+	}
+
+	for _, dl := range table {
+		ctx := dlContext{rw: httptest.NewRecorder()}
+		re := dl(ctx, "filename", bytes.NewReader(data))
+
+		bb := &bytes.Buffer{}
+		r.NoError(re.Render(bb, nil))
+
+		r.Equal(data, bb.Bytes())
+		r.Equal(strconv.Itoa(len(data)), ctx.Response().Header().Get("Content-Length"))
+		r.Equal("attachment; filename=filename", ctx.Response().Header().Get("Content-Disposition"))
+		r.Equal("application/octet-stream", re.ContentType())
+	}
+}
+
+func Test_InvalidContext(t *testing.T) {
+	r := require.New(t)
+
+	table := []dlRenderer{
+		Download,
+		New(Options{}).Download,
+	}
+
+	for _, dl := range table {
+		re := dl(context.TODO(), "filename", bytes.NewReader(data))
+
+		bb := &bytes.Buffer{}
+		r.Error(re.Render(bb, nil))
+	}
 }

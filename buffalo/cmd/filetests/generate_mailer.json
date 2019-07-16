@@ -9,9 +9,9 @@
     ]
   },
   {
-    "path": "templates/mail/layout.html",
+    "path": "templates/mail/layout.plush.html",
     "contains": [
-      "<h1>templates/mailers/layout.html</h1>"
+      "<h1>templates/mailers/layout.plush.html</h1>"
     ]
   },
   {
@@ -21,10 +21,10 @@
     ]
   },
   {
-    "path": "templates/mail/welcome_email.html",
+    "path": "templates/mail/welcome_email.plush.html",
     "contains": [
       "<h2>Welcome Email</h2>",
-      "<h3>../templates/mail/welcome_email.html</h3>"
+      "<h3>../templates/mail/welcome_email.plush.html</h3>"
     ]
   }
 ]
