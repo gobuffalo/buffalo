@@ -3,7 +3,6 @@ module github.com/gobuffalo/buffalo
 go 1.12
 
 require (
-	cloud.google.com/go v0.36.0 // indirect
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
@@ -24,7 +23,7 @@ require (
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
 	github.com/gobuffalo/packr/v2 v2.5.2
-	github.com/gobuffalo/plush v3.8.2+incompatible
+	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.11.2+incompatible
 	github.com/gobuffalo/release v1.8.3
 	github.com/gobuffalo/tags v2.1.0+incompatible
@@ -46,7 +45,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190712162323-d5f455491e2f
+	golang.org/x/tools v0.0.0-20190715221914-9b2cb0e5f602
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.2
 )

@@ -1,9 +1,6 @@
 package render
 
 import (
-	"context"
-	"net/http"
-
 	"github.com/gobuffalo/packd"
 )
 
@@ -22,12 +19,3 @@ func NewEngine() *Engine {
 }
 
 type rendFriend func(string, RendererFunc) Renderer
-
-type testContext struct {
-	context.Context
-	rw http.ResponseWriter
-}
-
-func (c testContext) Response() http.ResponseWriter {
-	return c.rw
-}

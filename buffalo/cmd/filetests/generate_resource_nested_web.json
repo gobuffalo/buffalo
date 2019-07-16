@@ -20,19 +20,19 @@
     ]
   },
   {
-    "path": "templates/admin/planes/_form.html",
+    "path": "templates/admin/planes/_form.plush.html",
     "contains": [
       "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
     ]
   },
   {
-    "path": "templates/admin/planes/index.html",
+    "path": "templates/admin/planes/index.plush.html",
     "contains": [
       "newAdminPlanesPath()"
     ]
   },
   {
-    "path": "templates/admin/planes/show.html",
+    "path": "templates/admin/planes/show.plush.html",
     "contains": [
       "editAdminPlanePath({ admin_plane_id: plane.ID })"
     ]
