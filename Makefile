@@ -30,7 +30,7 @@ build:
 
 test:
 	packr2
-	$(GO_BIN) test -tags ${TAGS} ./...
+	$(GO_BIN) test -tags ${TAGS} -cover ./...
 	packr2
 	make tidy
 

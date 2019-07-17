@@ -1,30 +1,23 @@
-package render_test
+package render
 
 import (
 	"bytes"
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/render"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_JSON(t *testing.T) {
 	r := require.New(t)
 
-	type ji func(v interface{}) render.Renderer
+	e := NewEngine()
 
-	table := []ji{
-		render.JSON,
-		render.New(render.Options{}).JSON,
-	}
+	re := e.JSON(Data{"hello": "world"})
+	r.Equal("application/json; charset=utf-8", re.ContentType())
 
-	for _, j := range table {
-		re := j(map[string]string{"hello": "world"})
-		r.Equal("application/json; charset=utf-8", re.ContentType())
-		bb := &bytes.Buffer{}
-		err := re.Render(bb, nil)
-		r.NoError(err)
-		r.Equal(`{"hello":"world"}`, strings.TrimSpace(bb.String()))
-	}
+	bb := &bytes.Buffer{}
+
+	r.NoError(re.Render(bb, nil))
+	r.Equal(`{"hello":"world"}`, strings.TrimSpace(bb.String()))
 }

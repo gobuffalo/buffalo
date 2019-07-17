@@ -15,6 +15,7 @@ func (w Widget) ToPath() string {
 func NewEngine() *Engine {
 	return New(Options{
 		TemplatesBox: packd.NewMemoryBox(),
+		AssetsBox:    packd.NewMemoryBox(),
 	})
 }
 
