@@ -2,7 +2,7 @@ FROM golang:alpine
 EXPOSE 3000
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 RUN apk add --no-cache --upgrade apk-tools \
-&& apk add --no-cache bash curl openssl git build-base nodejs npm postgresql libpq postgresql-contrib sqlite sqlite-dev mysql-client vim
+&& apk add --no-cache bash curl openssl git build-base nodejs npm postgresql libpq postgresql-contrib sqlite sqlite-dev vim
 
 RUN go version && go get -v -u github.com/markbates/deplist/deplist
 
