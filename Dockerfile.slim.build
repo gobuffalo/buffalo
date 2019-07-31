@@ -34,7 +34,12 @@ RUN rm -rfv $BP && mkdir -p $BP
 WORKDIR $BP
 
 COPY . .
+ENV GO111MODULE=on 
+ENV GOPROXY=https://proxy.golang.org 
 RUN make deps && make install
+
+ENV GO111MODULE=auto
+ENV GOPROXY=
 
 RUN buffalo version
 
