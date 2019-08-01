@@ -63,7 +63,7 @@ func Test_New(t *testing.T) {
 		"models/models.go",
 		"go.mod",
 		".buffalo.dev.yml",
-		"assets/css/application.scss.css",
+		"assets/scss/application.scss.css",
 		"public/assets/application.js",
 	}
 
