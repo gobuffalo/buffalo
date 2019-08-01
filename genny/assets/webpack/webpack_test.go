@@ -38,8 +38,8 @@ func Test_Webpack_New(t *testing.T) {
 
 	files := []string{
 		".babelrc",
-		"assets/scss/_buffalo.scss",
-		"assets/scss/application.scss",
+		"assets/css/_buffalo.scss",
+		"assets/css/application.scss",
 		"assets/images/favicon.ico",
 		"assets/images/logo.svg",
 		"assets/js/application.js",

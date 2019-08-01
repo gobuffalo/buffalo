@@ -12,12 +12,12 @@ const configurator = {
     var entries = {
       application: [
         './node_modules/jquery-ujs/src/rails.js',
-        './assets/scss/application.scss',
+        './assets/css/application.scss',
       ],
     }
 
     Glob.sync("./assets/*/*.*").forEach((entry) => {
-      if (entry === './assets/scss/application.scss') {
+      if (entry === './assets/css/application.scss') {
         return
       }
 

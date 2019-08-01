@@ -59,7 +59,7 @@ func Test_New(t *testing.T) {
 		"models/models.go",
 		"go.mod",
 		".buffalo.dev.yml",
-		"assets/scss/application.scss.css",
+		"assets/css/application.scss.css",
 		"public/assets/application.js",
 	}
 
@@ -109,7 +109,7 @@ func Test_New_Mods(t *testing.T) {
 			"database.yml",
 			"models/models.go",
 			".buffalo.dev.yml",
-			"assets/scss/application.scss.css",
+			"assets/css/application.scss.css",
 			"public/assets/application.js",
 		}
 		for _, u := range unexpected {

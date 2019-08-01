@@ -201,8 +201,8 @@ var _ = func() error {
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/genny/assets/webpack", "../webpack/templates")
 		b.SetResolver("-dot-babelrc.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "c8f891e9a5df1b77140ba5dad298cc3e"})
-		b.SetResolver("assets/scss/_buffalo.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ec8652e62d2eb70a8198fe338e649eb2"})
-		b.SetResolver("assets/scss/application.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ecdf6a3b8924ecbd21b3179af40db25a"})
+		b.SetResolver("assets/css/_buffalo.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ec8652e62d2eb70a8198fe338e649eb2"})
+		b.SetResolver("assets/css/application.scss.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ecdf6a3b8924ecbd21b3179af40db25a"})
 		b.SetResolver("assets/images/favicon.ico.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "80fc98a1e2bcaf004a0ae6186e3c7387"})
 		b.SetResolver("assets/images/logo.svg", packr.Pointer{ForwardBox: gk, ForwardPath: "6046dc01b561b25c62c4c0d22e8131a1"})
 		b.SetResolver("assets/js/application.js.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "108d5933b56a75738dec1d893c62c321"})
