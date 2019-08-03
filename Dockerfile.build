@@ -1,6 +1,8 @@
 FROM golang:latest
 EXPOSE 3000
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+ENV GOPROXY=https://proxy.golang.org
+
 RUN go version
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash \
