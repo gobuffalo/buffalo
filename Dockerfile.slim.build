@@ -1,6 +1,8 @@
 FROM golang:alpine
 EXPOSE 3000
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+ENV GOPROXY=https://proxy.golang.org 
+
 RUN apk add --no-cache --upgrade apk-tools \
 && apk add --no-cache bash curl openssl git build-base nodejs npm postgresql libpq postgresql-contrib sqlite sqlite-dev mysql-client vim
 
@@ -34,7 +36,9 @@ RUN rm -rfv $BP && mkdir -p $BP
 WORKDIR $BP
 
 COPY . .
+ENV GO111MODULE=on
 RUN make deps && make install
+ENV GO111MODULE=
 
 RUN buffalo version
 
