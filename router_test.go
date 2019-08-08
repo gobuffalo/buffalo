@@ -408,7 +408,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	var resourcesResource Resource = ResourcesResource{}
 
 	rr := render.New(render.Options{
-		HTMLLayout:   "application.html",
+		HTMLLayout:   "application.plush.html",
 		TemplatesBox: packr.New("../templates", "../templates"),
 		Helpers:      map[string]interface{}{},
 	})
@@ -461,7 +461,7 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 	a := New(Options{})
 
 	rr := render.New(render.Options{
-		HTMLLayout:   "application.html",
+		HTMLLayout:   "application.plush.html",
 		TemplatesBox: packr.New("../templates", "../templates"),
 		Helpers:      map[string]interface{}{},
 	})

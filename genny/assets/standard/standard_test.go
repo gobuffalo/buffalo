@@ -15,7 +15,7 @@ func Test_New(t *testing.T) {
 	r.NoError(err)
 
 	run := gentest.NewRunner()
-	run.Disk.Add(genny.NewFileS("templates/application.html", layout))
+	run.Disk.Add(genny.NewFileS("templates/application.plush.html", layout))
 	run.LookPathFn = func(s string) (string, error) {
 		return s, nil
 	}
@@ -33,7 +33,7 @@ func Test_New(t *testing.T) {
 		"public/assets/buffalo.css",
 		"public/assets/images/favicon.ico",
 		"public/assets/images/logo.svg",
-		"templates/application.html",
+		"templates/application.plush.html",
 	}
 
 	r.Len(res.Files, len(files))
@@ -41,7 +41,7 @@ func Test_New(t *testing.T) {
 		r.Equal(files[i], f.Name())
 	}
 
-	layout, ferr := res.Find("templates/application.html")
+	layout, ferr := res.Find("templates/application.plush.html")
 	r.NoError(ferr)
 
 	r.Contains(layout.String(), "href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\"")

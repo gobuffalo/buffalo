@@ -33,7 +33,7 @@ func New(opts *Options) (*genny.Group, error) {
 
 	t := gogen.TemplateTransformer(data, helpers)
 	g.Transformer(t)
-	g.Box(packr.New("github.com/gobuffalo/buffalo/genny/newapp/web", "../web/templates"))
+	g.Box(packr.New("github.com/gobuffalo/buffalo:genny/newapp/web", "../web/templates"))
 
 	gg.Add(g)
 
