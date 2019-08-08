@@ -10,8 +10,8 @@ import (
 
 // Plush will update foo.html templates to foo.plush.html templates
 func Plush(r *Runner) error {
-	fmt.Println("~~~ Adding .plush extension to .html files ~~~")
-	return filepath.Walk(r.App.Root, func(p string, info os.FileInfo, err error) error {
+	fmt.Println("~~~ Adding .plush extension to .html/.js/.md files ~~~")
+	return filepath.Walk(filepath.Join(r.App.Root, "templates"), func(p string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -20,7 +20,8 @@ func Plush(r *Runner) error {
 		base := filepath.Base(p)
 		sep := strings.Split(base, ".")
 
-		if filepath.Ext(p) != ".html" {
+		ext := filepath.Ext(p)
+		if !(ext == ".html" || ext == ".js" || ext == ".md") {
 			return nil
 		}
 

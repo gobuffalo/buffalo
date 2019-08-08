@@ -88,7 +88,7 @@ var commonExpected = []string{
 	"README.md",
 	"locales/all.en-us.yaml",
 	"public/robots.txt",
-	"templates/_flash.html",
-	"templates/application.html",
-	"templates/index.html",
+	"templates/_flash.plush.html",
+	"templates/application.plush.html",
+	"templates/index.plush.html",
 }

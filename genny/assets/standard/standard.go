@@ -20,7 +20,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.Transformer(t)
 
 	g.RunFn(func(r *genny.Runner) error {
-		f, err := r.FindFile("templates/application.html")
+		f, err := r.FindFile("templates/application.plush.html")
 		if err != nil {
 			return err
 		}

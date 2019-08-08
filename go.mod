@@ -27,7 +27,7 @@ require (
 	github.com/gobuffalo/pop v4.11.2+incompatible
 	github.com/gobuffalo/release v1.8.3
 	github.com/gobuffalo/tags v2.1.0+incompatible
-	github.com/google/go-cmp v0.3.0
+	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/karrick/godirwalk v1.10.12
@@ -37,7 +37,7 @@ require (
 	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd
+	github.com/monoculum/formam v0.0.0-20190730134247-0612307a4099
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/afero v1.2.1 // indirect
 	github.com/spf13/cobra v0.0.5
@@ -45,7 +45,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190716221150-e98af2309876
+	golang.org/x/tools v0.0.0-20190807223507-b346f7fd45de
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.2
 )
