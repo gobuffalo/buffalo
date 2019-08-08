@@ -1,4 +1,5 @@
 FROM gobuffalo/buffalo:latest
+ENV GOPROXY=https://proxy.golang.org
 
 ARG CODECOV_TOKEN
 

@@ -1,6 +1,7 @@
 variables:
   GOBIN:  "$(GOPATH)/bin" # Go binaries path
   GOPATH: "$(system.defaultWorkingDirectory)/gopath" # Go workspace path
+  GOPROXY: "https://proxy.golang.org"
   modulePath: "$(GOPATH)/src/github.com/$(build.repository.name)" # Path to the module"s code
 
 jobs:
