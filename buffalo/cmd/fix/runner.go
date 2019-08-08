@@ -2,6 +2,8 @@ package fix
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/meta"
@@ -42,6 +44,13 @@ func Run() error {
 	}()
 
 	for _, c := range checks {
+		if r.App.WithModules {
+			cmd := exec.Command("go", "mod", "tidy")
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				return err
+			}
+		}
 		if err := c(r); err != nil {
 			return err
 		}
