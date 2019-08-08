@@ -16,20 +16,26 @@ func Plush(r *Runner) error {
 			return err
 		}
 
+		if info.IsDir() {
+			return nil
+		}
+
 		dir := filepath.Dir(p)
 		base := filepath.Base(p)
-		sep := strings.Split(base, ".")
 
-		ext := filepath.Ext(p)
-		if !(ext == ".html" || ext == ".js" || ext == ".md") {
-			return nil
+		var exts []string
+		ext := filepath.Ext(base)
+		for len(ext) != 0 {
+			if ext == ".plush" || ext == ".fizz" {
+				return nil
+			}
+			exts = append([]string{ext}, exts...)
+			base = strings.TrimSuffix(base, ext)
+			ext = filepath.Ext(base)
 		}
+		exts = append([]string{".plush"}, exts...)
 
-		if len(sep) != 2 {
-			return nil
-		}
-
-		pn := filepath.Join(dir, sep[0]+".plush."+sep[1])
+		pn := filepath.Join(dir, base+strings.Join(exts, ""))
 
 		fn, err := os.Create(pn)
 		if err != nil {
