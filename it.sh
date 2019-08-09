@@ -6,6 +6,9 @@ set -ex
 BP=$GOPATH/src/github.com/gobuffalo/buffalo
 
 export GO111MODULE=on
+
+go get github.com/markbates/filetest
+
 make install
 buffalo version
 go test -tags "sqlite integration_test" -race  ./...
