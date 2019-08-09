@@ -3,6 +3,7 @@ module github.com/gobuffalo/buffalo
 go 1.12
 
 require (
+	cloud.google.com/go v0.36.0 // indirect
 	github.com/BurntSushi/toml v0.3.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
@@ -31,7 +32,7 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/karrick/godirwalk v1.10.12
-	github.com/markbates/deplist v1.3.0
+	github.com/markbates/deplist v1.3.0 // indirect
 	github.com/markbates/grift v1.1.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0

@@ -10,7 +10,6 @@ import (
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/depgen"
 	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
@@ -103,17 +102,7 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 	gg.Merge(ig)
 
-	// DEP/MODS/go get should be last
-	if app.WithDep {
-		// init dep
-		di, err := depgen.Init("", false)
-		if err != nil {
-			return gg, err
-		}
-		gg.Add(di)
-	}
-
-	if !app.WithDep && !app.WithModules {
+	if !app.WithModules {
 		g := genny.New()
 		g.Command(gogen.Get("./...", "-t"))
 		gg.Add(g)
