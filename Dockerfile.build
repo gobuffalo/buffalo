@@ -20,8 +20,7 @@ RUN npm -v
 RUN service postgresql start && \
     su -c "psql -c \"ALTER USER postgres  WITH PASSWORD 'postgres';\"" - postgres
 
-RUN go get -u github.com/golang/dep/cmd/dep \
-&& go get -tags sqlite -v -u github.com/gobuffalo/pop \
+RUN go get -tags sqlite -v -u github.com/gobuffalo/pop \
 && go get -tags sqlite -v -u github.com/gobuffalo/packr/v2/packr2 \
 && go get -tags sqlite -v -u github.com/gobuffalo/buffalo-pop \
 && rm -rf $GOPATH/src && mkdir -p $BP

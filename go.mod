@@ -31,7 +31,6 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/karrick/godirwalk v1.10.12
-	github.com/markbates/deplist v1.3.0
 	github.com/markbates/grift v1.1.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0
