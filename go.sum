@@ -584,8 +584,9 @@ github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czP
 github.com/markbates/deplist v1.0.4/go.mod h1:gRRbPbbuA8TmMiRvaOzUlRfzfjeCCBqX2A6arxN01MM=
 github.com/markbates/deplist v1.0.5/go.mod h1:gRRbPbbuA8TmMiRvaOzUlRfzfjeCCBqX2A6arxN01MM=
 github.com/markbates/deplist v1.1.3/go.mod h1:BF7ioVzAJYEtzQN/os4rt8H8Ti3h0T7EoN+7eyALktE=
-github.com/markbates/deplist v1.2.0 h1:4O1+3kAk6xat7T5tVahmKrrtTgzArSNeKpZVGBm5Hl4=
 github.com/markbates/deplist v1.2.0/go.mod h1:dtsWLZ5bWoazbM0rCxZncQaAPifWbvHgBJk8UNI1Yfk=
+github.com/markbates/deplist v1.3.0 h1:uPgoloPraPBPYtNSxj2UwZBh2EHW9TmMvQCP2FBiRlU=
+github.com/markbates/deplist v1.3.0/go.mod h1:dtsWLZ5bWoazbM0rCxZncQaAPifWbvHgBJk8UNI1Yfk=
 github.com/markbates/going v1.0.2/go.mod h1:UWCk3zm0UKefHZ7l8BNqi26UyiEMniznk8naLdTcy6c=
 github.com/markbates/going v1.0.3/go.mod h1:fQiT6v6yQar9UD6bd/D4Z5Afbk9J6BBVBtLiyY4gp2o=
 github.com/markbates/grift v1.0.4/go.mod h1:wbmtW74veyx+cgfwFhlnnMWqhoz55rnHR47oMXzsyVs=
