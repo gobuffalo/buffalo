@@ -37,6 +37,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 
+* [github.com/gobuffalo/makr](https://godoc.org/github.com/gobuffalo/makr)
+
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 
 * [github.com/gobuffalo/nulls](https://godoc.org/github.com/gobuffalo/nulls)
@@ -76,8 +78,6 @@ Thank you to the following **GIANTS**:
 * [github.com/monoculum/formam](https://godoc.org/github.com/monoculum/formam)
 
 * [github.com/sirupsen/logrus](https://godoc.org/github.com/sirupsen/logrus)
-
-* [github.com/spf13/afero](https://godoc.org/github.com/spf13/afero)
 
 * [github.com/spf13/cobra](https://godoc.org/github.com/spf13/cobra)
 
