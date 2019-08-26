@@ -19,7 +19,7 @@
     ]
   },
   {
-    "path": "templates/admin/users/_form.html",
+    "path": "templates/admin/users/_form.plush.html",
     "contains": [
       "<button class=\"btn btn-success\" role=\"submit\">Save</button>"
     ]
