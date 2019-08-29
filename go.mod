@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-cli v0.0.0-20190829172719-c997dad8054d
+	github.com/gobuffalo/buffalo-cli v0.0.0-20190829195950-c879914d00f2
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/flect v0.1.6
@@ -15,7 +15,6 @@ require (
 	github.com/gobuffalo/logger v1.0.1
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
-	github.com/gobuffalo/packr/v2 v2.6.0
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.11.6+incompatible
 	github.com/gobuffalo/tags v2.1.0+incompatible

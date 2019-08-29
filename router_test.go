@@ -12,7 +12,6 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
 )
@@ -409,7 +408,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.plush.html",
-		TemplatesBox: packr.New("../templates", "../templates"),
+		TemplatesBox: packd.NewMemoryBox(),
 		Helpers:      map[string]interface{}{},
 	})
 
@@ -462,7 +461,7 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 
 	rr := render.New(render.Options{
 		HTMLLayout:   "application.plush.html",
-		TemplatesBox: packr.New("../templates", "../templates"),
+		TemplatesBox: packd.NewMemoryBox(),
 		Helpers:      map[string]interface{}{},
 	})
 

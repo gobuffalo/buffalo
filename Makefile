@@ -1,9 +1,7 @@
-TAGS ?= "sqlite"
-GO_BIN ?= go
+TAGS ?= ""
+GO_BIN ?= "go"
 
-install: deps
-	make tidy
-	packr2
+install: 
 	$(GO_BIN) install -tags ${TAGS} -v ./buffalo
 	make tidy
 
@@ -15,50 +13,49 @@ else
 endif
 
 deps:
-	$(GO_BIN) get github.com/gobuffalo/release
-	$(GO_BIN) get github.com/gobuffalo/packr/v2/packr2
-	packr2 clean
-ifneq ($(GO111MODULE),on)
-	$(GO_BIN) get -tags ${TAGS} -u -t ./...
-endif
+	$(GO_BIN) get -tags ${TAGS} -t ./...
 	make tidy
 
-build:
-	packr2
+build: 
 	$(GO_BIN) build -v .
 	make tidy
 
-test:
-	packr2
-	$(GO_BIN) test -tags ${TAGS} -cover ./...
-	packr2
+test: 
+	$(GO_BIN) test -cover -tags ${TAGS} ./...
 	make tidy
 
-ci-deps:
-	$(GO_BIN) get -u github.com/gobuffalo/packr/v2/packr2
-	$(GO_BIN) get github.com/gobuffalo/buffalo-pop
-	$(GO_BIN) get -tags ${TAGS} -t -v ./...
-	make tidy
+ci-deps: 
+	$(GO_BIN) get -tags ${TAGS} -t ./...
 
-ci-test:
-	docker build . --no-cache --build-arg TRAVIS_BRANCH=$$(git symbolic-ref --short HEAD)
+ci-test: 
+	$(GO_BIN) test -tags ${TAGS} -race ./...
 
 lint:
-	golangci-lint --vendor ./... --deadline=1m --skip=internal
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint
+	golangci-lint run --enable-all
+	make tidy
 
 update:
+ifeq ($(GO111MODULE),on)
+	rm go.*
+	$(GO_BIN) mod init
+	$(GO_BIN) mod tidy
+else
 	$(GO_BIN) get -u -tags ${TAGS}
-	make tidy
-	packr2
+endif
 	make test
 	make install
 	make tidy
 
-release-test:
-	make test
+release-test: 
+	$(GO_BIN) test -tags ${TAGS} -race ./...
 	make tidy
 
 release:
+	$(GO_BIN) get github.com/gobuffalo/release
 	make tidy
-	release -y -f ./runtime/version.go --skip-packr
+	release -y -f version.go --skip-packr
 	make tidy
+
+
+
