@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-cli v0.0.0-20190829195950-c879914d00f2
+	github.com/gobuffalo/buffalo-cli v0.0.0-20190829200242-3c4521473d6c
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/flect v0.1.6
