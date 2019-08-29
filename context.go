@@ -3,6 +3,7 @@ package buffalo
 import (
 	"context"
 	"net/http"
+	"net/url"
 	"sync"
 
 	"github.com/gobuffalo/buffalo/binding"
@@ -46,16 +47,21 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	if ws, ok := res.(*Response); ok {
 		res = ws
 	}
-	params := req.URL.Query()
+
+	// Parse URL Params
+	params := url.Values{}
 	vars := mux.Vars(req)
 	for k, v := range vars {
-		params.Set(k, v)
+		params.Add(k, v)
 	}
 
+	// Parse URL Query String Params
+	// For POST, PUT, and PATCH requests, it also parse the request body as a form.
+	// Request body parameters take precedence over URL query string values in params
 	if err := req.ParseForm(); err == nil {
 		for k, v := range req.Form {
 			for _, vv := range v {
-				params.Set(k, vv)
+				params.Add(k, vv)
 			}
 		}
 	}
