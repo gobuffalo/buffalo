@@ -33,7 +33,6 @@ func (a *App) Muxer() *mux.Router {
 
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
-	LoadPlugins()
 	envy.Load()
 
 	opts = optionsWithDefaults(opts)

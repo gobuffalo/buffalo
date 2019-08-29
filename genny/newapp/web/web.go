@@ -1,74 +1,7 @@
 package web
 
-import (
-	"html/template"
+import "github.com/gobuffalo/buffalo-cli/genny/newapp/web"
 
-	"github.com/gobuffalo/buffalo/genny/assets/standard"
-	"github.com/gobuffalo/buffalo/genny/assets/webpack"
-	"github.com/gobuffalo/buffalo/genny/newapp/core"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
-	"github.com/gobuffalo/genny/gogen/gomods"
-	"github.com/gobuffalo/packr/v2"
-)
+var New = web.New
 
-// New generator for creating a Buffalo Web application
-func New(opts *Options) (*genny.Group, error) {
-	if err := opts.Validate(); err != nil {
-		return nil, err
-	}
-
-	gg, err := core.New(opts.Options)
-	if err != nil {
-		return gg, err
-	}
-
-	g := genny.New()
-	g.Transformer(genny.Dot())
-	data := map[string]interface{}{
-		"opts": opts,
-	}
-
-	helpers := template.FuncMap{}
-
-	t := gogen.TemplateTransformer(data, helpers)
-	g.Transformer(t)
-	g.Box(packr.New("github.com/gobuffalo/buffalo:genny/newapp/web", "../web/templates"))
-
-	gg.Add(g)
-
-	if opts.Webpack != nil {
-		// add the webpack generator
-		g, err = webpack.New(opts.Webpack)
-		if err != nil {
-			return gg, err
-		}
-		gg.Add(g)
-	}
-
-	if opts.Standard != nil {
-		// add the standard generator
-		g, err = standard.New(opts.Standard)
-		if err != nil {
-			return gg, err
-		}
-		gg.Add(g)
-	}
-
-	// DEP/MODS/go get should be last
-	if !opts.App.WithModules {
-		g := genny.New()
-		g.Command(gogen.Get("./...", "-t"))
-		gg.Add(g)
-	}
-
-	if opts.App.WithModules {
-		g, err := gomods.Tidy(opts.App.Root, false)
-		if err != nil {
-			return gg, err
-		}
-		gg.Add(g)
-	}
-
-	return gg, nil
-}
+type Options = web.Options

@@ -1,28 +1,9 @@
 package info
 
-import (
-	"path/filepath"
+import "github.com/gobuffalo/buffalo-cli/genny/info"
 
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/packr/v2"
-)
+type ListWalker = info.ListWalker
 
-// New returns a generator that performs buffalo
-// related rx checks
-func New(opts *Options) (*genny.Generator, error) {
-	g := genny.New()
+var New = info.New
 
-	if err := opts.Validate(); err != nil {
-		return g, err
-	}
-
-	g.RunFn(appDetails(opts))
-
-	cBox := packr.Folder(filepath.Join(opts.App.Root, "config"))
-	g.RunFn(configs(opts, cBox))
-
-	aBox := packr.Folder(opts.App.Root)
-	g.RunFn(pkgChecks(opts, aBox))
-
-	return g, nil
-}
+type Options = info.Options
