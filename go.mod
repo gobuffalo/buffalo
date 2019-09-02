@@ -49,3 +49,5 @@ require (
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.2
 )
+
+replace git.apache.org/thrift.git => github.com/apache/thrift v0.12.0
