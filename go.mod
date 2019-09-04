@@ -1,11 +1,11 @@
 module github.com/gobuffalo/buffalo
 
-go 1.12
+go 1.13
 
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
-	github.com/gobuffalo/buffalo-cli v0.0.0-20190829200242-3c4521473d6c
+	github.com/gobuffalo/buffalo-cli v0.0.0-20190829212839-d52a4be898a7
 	github.com/gobuffalo/envy v1.7.0
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/flect v0.1.6
@@ -25,7 +25,7 @@ require (
 	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/monoculum/formam v0.0.0-20190730134247-0612307a4099
+	github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc

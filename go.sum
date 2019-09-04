@@ -8,8 +8,9 @@ dmitri.shuralyov.com/state v0.0.0-20180228185332-28bcc343414c/go.mod h1:0PRwlb0D
 git.apache.org/thrift.git v0.0.0-20180902110319-2566ecd5d999/go.mod h1:fPE2ZNJGynbRyZ4dJvy6G277gSllfV2HJqblrnkyeyg=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Masterminds/semver v1.4.2 h1:WBLTQ37jOCzSLtXNdoo8bNM8876KhNqOKvrlGITgsTc=
 github.com/Masterminds/semver v1.4.2/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
+github.com/Masterminds/semver v1.4.3-0.20190829202958-e21c53f7d696 h1:OqELdiOlY8GBlSvZ1FA8pVR2EbVZjoPD54HeujJgbkc=
+github.com/Masterminds/semver v1.4.3-0.20190829202958-e21c53f7d696/go.mod h1:8CV7kYbvgykQs8Io0EDPxUVkQQsXveUpKzLB6tuHV2w=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/ajg/form v0.0.0-20160822230020-523a5da1a92f/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
@@ -84,8 +85,8 @@ github.com/gobuffalo/buffalo v0.14.5/go.mod h1:RWK6evR4hY4nRVfw9xie9V/LYK3j0U9wU
 github.com/gobuffalo/buffalo v0.14.6/go.mod h1:71Un+T2JGgwXLjBqYFdGSooz/OUjw15BJM0nbbcAM0o=
 github.com/gobuffalo/buffalo v0.14.9/go.mod h1:M8XWw+Rcotn7C4NYpCEGBg3yX+O1TeD1pBfmiILhgHw=
 github.com/gobuffalo/buffalo v0.14.10/go.mod h1:49A7/JYlsCyTkVHtvKl91w6rG35ZiywwjWMVC1zKWsQ=
-github.com/gobuffalo/buffalo-cli v0.0.0-20190829200242-3c4521473d6c h1:bP6ppkOcji/BA8+JroepqvUtUvbzSMlnR1HUtOBmFGw=
-github.com/gobuffalo/buffalo-cli v0.0.0-20190829200242-3c4521473d6c/go.mod h1:/exso+8ulG96Nz1lMbHozbRwX+Xl+ZOUme7MZQfX+pg=
+github.com/gobuffalo/buffalo-cli v0.0.0-20190829212839-d52a4be898a7 h1:kOvG+WePEa20Ov6vLwPwsheZgBAP/5GOR2iFOlRcQqw=
+github.com/gobuffalo/buffalo-cli v0.0.0-20190829212839-d52a4be898a7/go.mod h1:duijcKSVGTGzbnhKWw9pGsi5e331JtA4lkdnw8yjJIg=
 github.com/gobuffalo/buffalo-docker v1.0.5/go.mod h1:NZ3+21WIdqOUlOlM2onCt7cwojYp4Qwlsngoolw8zlE=
 github.com/gobuffalo/buffalo-docker v1.0.6/go.mod h1:UlqKHJD8CQvyIb+pFq+m/JQW2w2mXuhxsaKaTj1X1XI=
 github.com/gobuffalo/buffalo-docker v1.0.7/go.mod h1:BdB8AhcmjwR6Lo3rDPMzyh/+eNjYnZ1TAO0eZeLkhig=
@@ -378,6 +379,7 @@ github.com/gobuffalo/packr v1.21.9/go.mod h1:GC76q6nMzRtR+AEN/VV4w0z2/4q7SOaEmXh
 github.com/gobuffalo/packr v1.22.0/go.mod h1:Qr3Wtxr3+HuQEwWqlLnNW4t1oTvK+7Gc/Rnoi/lDFvA=
 github.com/gobuffalo/packr v1.24.0/go.mod h1:p9Sgang00I1hlr1ub+tgI9AQdFd4f+WH1h62jYpzetM=
 github.com/gobuffalo/packr v1.24.1/go.mod h1:absPnW/XUUa4DmIh5ga7AipGXXg0DOcd5YWKk5RZs8Y=
+github.com/gobuffalo/packr v1.25.0 h1:NtPK45yOKFdTKHTvRGKL+UIKAKmJVWIVJOZBDI/qEdY=
 github.com/gobuffalo/packr v1.25.0/go.mod h1:NqsGg8CSB2ZD+6RBIRs18G7aZqdYDlYNNvsSqP6T4/U=
 github.com/gobuffalo/packr/v2 v2.0.0-rc.5/go.mod h1:e6gmOfhf3KmT4zl2X/NDRSfBXk2oV4TXZ+NNOM0xwt8=
 github.com/gobuffalo/packr/v2 v2.0.0-rc.7/go.mod h1:BzhceHWfF3DMAkbPUONHYWs63uacCZxygFY1b4H9N2A=
@@ -467,8 +469,8 @@ github.com/gobuffalo/release v1.2.5/go.mod h1:tkFFZua2N5WRxyGDk2cSwQjzkZ/apKKXl5
 github.com/gobuffalo/release v1.4.0/go.mod h1:f4uUPnD9dxrWxVy9yy0k/mvDf3EzhFtf7/byl0tTdY4=
 github.com/gobuffalo/release v1.7.0/go.mod h1:xH2NjAueVSY89XgC4qx24ojEQ4zQ9XCGVs5eXwJTkEs=
 github.com/gobuffalo/release v1.8.3/go.mod h1:gCk/x5WD+aIGkPodO4CuLxdnhYn9Jgp7yFYxntK/8mk=
-github.com/gobuffalo/release v1.9.0 h1:9Tc0Gyz6WbKmjhGm1owVSlhdwZivzN2L5CtDrQnoEus=
-github.com/gobuffalo/release v1.9.0/go.mod h1:bJ/Y5D1qopS+6jSsAQi9nKUmgQEjl8u68nST0wdhhAs=
+github.com/gobuffalo/release v1.11.0 h1:1umIYJperaiOwZdS/qt4lBpg2Xffw9aGOR8/HdMoBoE=
+github.com/gobuffalo/release v1.11.0/go.mod h1:WZ8Rb3dXBvlOck5AajnXRCT3j5NNndRBD+i+tozufTk=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
 github.com/gobuffalo/shoulders v1.0.3/go.mod h1:LqMcHhKRuBPMAYElqOe3POHiZ1x7Ry0BE8ZZ84Bx+k4=
 github.com/gobuffalo/shoulders v1.0.4/go.mod h1:LqMcHhKRuBPMAYElqOe3POHiZ1x7Ry0BE8ZZ84Bx+k4=
@@ -654,8 +656,9 @@ github.com/mitchellh/mapstructure v1.1.2 h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQz
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/monoculum/formam v0.0.0-20180901015400-4e68be1d79ba/go.mod h1:RKgILGEJq24YyJ2ban8EO0RUVSJlF1pGsEvoLEACr/Q=
 github.com/monoculum/formam v0.0.0-20190307031628-bc555adff0cd/go.mod h1:JKa2av1XVkGjhxdLS59nDoXa2JpmIHpnURWNbzCtXtc=
-github.com/monoculum/formam v0.0.0-20190730134247-0612307a4099 h1:zOo1doIqdLBWPFiIVGCkEzOeq36jmzD3S3++1VWxQGw=
 github.com/monoculum/formam v0.0.0-20190730134247-0612307a4099/go.mod h1:JKa2av1XVkGjhxdLS59nDoXa2JpmIHpnURWNbzCtXtc=
+github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407 h1:ZU5O9BawmEx9Mu1lxn9NLIwO9DrqRfjE+HWKU+e9GKQ=
+github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407/go.mod h1:JKa2av1XVkGjhxdLS59nDoXa2JpmIHpnURWNbzCtXtc=
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86/go.mod h1:kHJEU3ofeGjhHklVoIGuVj85JJwZ6kWPaJwCIxgnFmo=
 github.com/neelance/sourcemap v0.0.0-20151028013722-8c68805598ab/go.mod h1:Qr6/a/Q4r9LP1IltGz7tA7iOK1WonHEYhu1HRBA7ZiM=
@@ -971,8 +974,8 @@ golang.org/x/tools v0.0.0-20190624180213-70d37148ca0c/go.mod h1:/rFqwRUd4F7ZHNgw
 golang.org/x/tools v0.0.0-20190628153133-6cdbf07be9d0/go.mod h1:/rFqwRUd4F7ZHNgwSSTFct+R/Kf4OFW1sUzUTQQTgfc=
 golang.org/x/tools v0.0.0-20190809145639-6d4652c779c4/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20190825031127-d72b05d2b1b6/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
-golang.org/x/tools v0.0.0-20190829183309-bce6695301c7 h1:7OqZ5Xk9S1aGDat+GsbKnCcIkOxL2l8KAAzbYZ8OH/I=
-golang.org/x/tools v0.0.0-20190829183309-bce6695301c7/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
+golang.org/x/tools v0.0.0-20190829210313-340205e581e5 h1:81HMWNxFB0Wem7RQNDbTj49XBH1cPbr4Db3doi0IHVU=
+golang.org/x/tools v0.0.0-20190829210313-340205e581e5/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/api v0.0.0-20180910000450-7ca32eb868bf/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
 google.golang.org/api v0.0.0-20181030000543-1d582fd0359e/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
