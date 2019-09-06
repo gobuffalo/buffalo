@@ -16,7 +16,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.4.0
 	github.com/gobuffalo/httptest v1.4.0
-	github.com/gobuffalo/licenser v1.2.0
+	github.com/gobuffalo/licenser v1.4.0
 	github.com/gobuffalo/logger v1.0.1
 	github.com/gobuffalo/meta v0.1.0
 	github.com/gobuffalo/nulls v0.1.0

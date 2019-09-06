@@ -293,6 +293,8 @@ github.com/gobuffalo/licenser v0.0.0-20190329153211-c35c0a2813b2/go.mod h1:ZVWE6
 github.com/gobuffalo/licenser v1.1.0/go.mod h1:ZVWE6uKUE3rGf7sedUHWVjNWrEgxaUQLVFL+pQiWpfY=
 github.com/gobuffalo/licenser v1.2.0 h1:nHodbRRk7aO44QqSGCxoSuazdJWOr9pr4txNuhmzbng=
 github.com/gobuffalo/licenser v1.2.0/go.mod h1:ZqDQ+UOqsXPovl65rbCr3Tye6+nKjT4ovwurjVxvMQM=
+github.com/gobuffalo/licenser v1.4.0 h1:S8WY0nLT9zkBTjFYcbJ0E9MEK7SgE86aMfjsnuThQjY=
+github.com/gobuffalo/licenser v1.4.0/go.mod h1:YkyTh2T/d7KECTh32j65auPV876gkJJk55aAdBfDehg=
 github.com/gobuffalo/logger v0.0.0-20181022175615-46cfb361fc27/go.mod h1:8sQkgyhWipz1mIctHF4jTxmJh1Vxhp7mP8IqbljgJZo=
 github.com/gobuffalo/logger v0.0.0-20181027144941-73d08d2bb969/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
 github.com/gobuffalo/logger v0.0.0-20181027193913-9cf4dd0efe46/go.mod h1:7uGg2duHKpWnN4+YmyKBdLXfhopkAdVM6H3nKbyFbz8=
