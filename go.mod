@@ -14,7 +14,7 @@ require (
 	github.com/gobuffalo/flect v0.1.6
 	github.com/gobuffalo/genny v0.4.0
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
-	github.com/gobuffalo/helpers v0.3.0
+	github.com/gobuffalo/helpers v0.4.0
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.2.0
 	github.com/gobuffalo/logger v1.0.1
@@ -37,13 +37,11 @@ require (
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407
-	github.com/rogpeppe/go-internal v1.3.1 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	golang.org/x/tools v0.0.0-20190906185503-8159a2d3d69b
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
