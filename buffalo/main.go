@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gobuffalo/buffalo-cli/buffalo/cmd"
+	"github.com/gobuffalo/buffalo-cli/cmd"
 )
 
 func main() {
