@@ -84,8 +84,8 @@ github.com/gobuffalo/buffalo v0.14.5/go.mod h1:RWK6evR4hY4nRVfw9xie9V/LYK3j0U9wU
 github.com/gobuffalo/buffalo v0.14.6/go.mod h1:71Un+T2JGgwXLjBqYFdGSooz/OUjw15BJM0nbbcAM0o=
 github.com/gobuffalo/buffalo v0.14.9/go.mod h1:M8XWw+Rcotn7C4NYpCEGBg3yX+O1TeD1pBfmiILhgHw=
 github.com/gobuffalo/buffalo v0.14.10/go.mod h1:49A7/JYlsCyTkVHtvKl91w6rG35ZiywwjWMVC1zKWsQ=
-github.com/gobuffalo/buffalo-cli v0.1.0 h1:7vRjPC6r/i/rrNs988cR2FnQI+c0evMBh1/QsK3cHKI=
-github.com/gobuffalo/buffalo-cli v0.1.0/go.mod h1:ZDgIu27edlDWYRMDP0tjLFSOJoqLYE18VQQyJGiJlSg=
+github.com/gobuffalo/buffalo-cli v0.2.0 h1:dEIfLq3k6LERnIu1o3HgqmXMNsWjI+rZJuRX0sKuFgI=
+github.com/gobuffalo/buffalo-cli v0.2.0/go.mod h1:GPBZrNzE8G1Vity74iVMZtjpc9RXk4jr3DtFJqw14L8=
 github.com/gobuffalo/buffalo-docker v1.0.5/go.mod h1:NZ3+21WIdqOUlOlM2onCt7cwojYp4Qwlsngoolw8zlE=
 github.com/gobuffalo/buffalo-docker v1.0.6/go.mod h1:UlqKHJD8CQvyIb+pFq+m/JQW2w2mXuhxsaKaTj1X1XI=
 github.com/gobuffalo/buffalo-docker v1.0.7/go.mod h1:BdB8AhcmjwR6Lo3rDPMzyh/+eNjYnZ1TAO0eZeLkhig=
@@ -986,6 +986,8 @@ golang.org/x/tools v0.0.0-20190905035308-adb45749da8e/go.mod h1:b+2E5dAYhXwXZwtn
 golang.org/x/tools v0.0.0-20190906203814-12febf440ab1/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20190907020128-2ca718005c18 h1:xFbv3LvlvQAmbNJFCBKRv1Ccvnh9FVsW0FX2kTWWowE=
 golang.org/x/tools v0.0.0-20190907020128-2ca718005c18/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
+golang.org/x/tools v0.0.0-20190908135931-fef9eaa9e42b h1:s3JPx1wx+Kydg1rKI8uzmNMeYA+rr9m5kiLGVqEBufM=
+golang.org/x/tools v0.0.0-20190908135931-fef9eaa9e42b/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/api v0.0.0-20180910000450-7ca32eb868bf/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
 google.golang.org/api v0.0.0-20181030000543-1d582fd0359e/go.mod h1:4mhQ8q/RsB7i+udVvVy5NUi08OU8ZlA0gRVgrF7VFY0=
