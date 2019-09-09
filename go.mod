@@ -19,7 +19,6 @@ require (
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.2.0
 	github.com/gobuffalo/logger v1.0.1
-	github.com/gobuffalo/makr v1.2.0 // indirect
 	github.com/gobuffalo/meta v0.1.0
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
