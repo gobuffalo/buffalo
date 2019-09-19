@@ -27,7 +27,7 @@ require (
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.11.3+incompatible
 	github.com/gobuffalo/release v1.8.3
-	github.com/gobuffalo/tags v2.1.0+incompatible
+	github.com/gobuffalo/tags v2.1.1+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
