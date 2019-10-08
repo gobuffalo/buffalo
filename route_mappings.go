@@ -157,7 +157,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	}
 
 	rt := rv.Type()
-	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
+	resourceName := rt.Name()
+	handlerName := fmt.Sprintf("%s.%s", rt.PkgPath(), resourceName) + ".%s"
 
 	n := strings.TrimSuffix(rt.Name(), "Resource")
 	paramName := name.New(n).ParamID().String()
@@ -171,29 +172,42 @@ func (a *App) Resource(p string, r Resource) *App {
 	}
 
 	spath := path.Join(p, "{"+paramName+"}")
-	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
+
+	indexBeforeResourceAdded := a.routes.Len()
+
+	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
 	g.GET(p, r.List)
 
 	if n, ok := r.(newable); ok {
-		setFuncKey(n.New, fmt.Sprintf(rname, "New"))
+		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
 		g.GET(path.Join(p, "new"), n.New)
 	}
 
-	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
+	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
 	g.GET(path.Join(spath), r.Show)
 
 	if n, ok := r.(editable); ok {
-		setFuncKey(n.Edit, fmt.Sprintf(rname, "Edit"))
+		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
 		g.GET(path.Join(spath, "edit"), n.Edit)
 	}
 
-	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
+	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
 	g.POST(p, r.Create)
-	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
+
+	setFuncKey(r.Update, fmt.Sprintf(handlerName, "Update"))
 	g.PUT(path.Join(spath), r.Update)
-	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
+
+	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
+
 	g.Prefix = path.Join(g.Prefix, spath)
+
+	// set route resource names for each routes added
+	// no length check because cause at least 5 routes have been added so there cannot be an out of range
+	for i := indexBeforeResourceAdded; i < a.routes.Len(); i++ {
+		a.routes[i].ResourceName = resourceName
+	}
+
 	return g
 }
 
