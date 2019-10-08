@@ -22,6 +22,51 @@ func Test_App_Routes_without_Root(t *testing.T) {
 	r.NotZero(route.HandlerName)
 }
 
+type resourceHandler struct{}
+
+func (r resourceHandler) List(Context) error {
+	return nil
+}
+
+func (r resourceHandler) Show(Context) error {
+	return nil
+}
+
+func (r resourceHandler) Create(Context) error {
+	return nil
+}
+
+func (r resourceHandler) Update(Context) error {
+	return nil
+}
+
+func (r resourceHandler) Destroy(Context) error {
+	return nil
+}
+
+func Test_App_Routes_Resource(t *testing.T) {
+	r := require.New(t)
+
+	a := New(Options{})
+	r.Nil(a.root)
+
+	a.GET("/foo", voidHandler)
+	a.Resource("/r", resourceHandler{})
+
+	routes := a.Routes()
+	r.Len(routes, 6)
+	route := routes[0]
+	r.Equal("GET", route.Method)
+	r.Equal("/foo/", route.Path)
+	r.NotZero(route.HandlerName)
+
+	for k, v := range routes {
+		if k > 0 {
+			r.Equal("resourceHandler", v.ResourceName)
+		}
+	}
+}
+
 func Test_App_Routes_with_Root(t *testing.T) {
 	r := require.New(t)
 

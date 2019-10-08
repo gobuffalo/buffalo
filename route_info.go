@@ -17,14 +17,15 @@ import (
 // RouteInfo provides information about the underlying route that
 // was built.
 type RouteInfo struct {
-	Method      string     `json:"method"`
-	Path        string     `json:"path"`
-	HandlerName string     `json:"handler"`
-	PathName    string     `json:"pathName"`
-	Aliases     []string   `json:"aliases"`
-	MuxRoute    *mux.Route `json:"-"`
-	Handler     Handler    `json:"-"`
-	App         *App       `json:"-"`
+	Method       string     `json:"method"`
+	Path         string     `json:"path"`
+	HandlerName  string     `json:"handler"`
+	ResourceName string     `json:"resourceName,omitempty"`
+	PathName     string     `json:"pathName"`
+	Aliases      []string   `json:"aliases"`
+	MuxRoute     *mux.Route `json:"-"`
+	Handler      Handler    `json:"-"`
+	App          *App       `json:"-"`
 }
 
 // String returns a JSON representation of the RouteInfo
