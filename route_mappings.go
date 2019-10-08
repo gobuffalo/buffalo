@@ -178,6 +178,11 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
 	g.GET(p, r.List)
 
+	if n, ok := r.(newable); ok {
+		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
+		g.GET(path.Join(p, "new"), n.New)
+	}
+
 	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
 	g.GET(path.Join(spath), r.Show)
 
@@ -189,11 +194,6 @@ func (a *App) Resource(p string, r Resource) *App {
 
 	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy)
-
-	if n, ok := r.(newable); ok {
-		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
-		g.GET(path.Join(p, "new"), n.New)
-	}
 
 	if n, ok := r.(editable); ok {
 		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
