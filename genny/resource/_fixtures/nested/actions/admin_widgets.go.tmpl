@@ -3,6 +3,8 @@ package actions
 import (
 
   "fmt"
+  "net/http"
+  
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/pop"
   "github.com/markbates/coke/models"
@@ -50,7 +52,7 @@ func (v AdminWidgetsResource) List(c buffalo.Context) error {
 
   // hint for Auto renderer to search proper template location
   c.Set("template_prefix", "admin/widgets")
-  return c.Render(200, r.Auto(c, widgets))
+  return c.Render(http.StatusOK, r.Auto(c, widgets))
 }
 
 // Show gets the data for one Widget. This function is mapped to
@@ -67,12 +69,12 @@ func (v AdminWidgetsResource) Show(c buffalo.Context) error {
 
   // To find the Widget the parameter admin_widget_id is used.
   if err := tx.Find(widget, c.Param("admin_widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   // hint for Auto renderer to search proper template location
   c.Set("template_prefix", "admin/widgets")
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // New renders the form for creating a new Widget.
@@ -80,7 +82,7 @@ func (v AdminWidgetsResource) Show(c buffalo.Context) error {
 func (v AdminWidgetsResource) New(c buffalo.Context) error {
   // hint for Auto renderer to search proper template location
   c.Set("template_prefix", "admin/widgets")
-  return c.Render(200, r.Auto(c, &models.Widget{}))
+  return c.Render(http.StatusOK, r.Auto(c, &models.Widget{}))
 }
 
 // Create adds a Widget to the DB. This function is mapped to the
@@ -112,13 +114,13 @@ func (v AdminWidgetsResource) Create(c buffalo.Context) error {
 
     // Render again the new.html template that the user can
     // correct the input.
-    return c.Render(422, r.Auto(c, widget))
+    return c.Render(http.StatusUnprocessableEntity, r.Auto(c, widget))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", T.Translate(c, "widget.created.success"))
   // and redirect to the admin/widgets index page
-  return c.Render(201, r.Auto(c, widget))
+  return c.Render(http.StatusCreated, r.Auto(c, widget))
 }
 
 // Edit renders a edit form for a Widget. This function is
@@ -134,12 +136,12 @@ func (v AdminWidgetsResource) Edit(c buffalo.Context) error {
   widget := &models.Widget{}
 
   if err := tx.Find(widget, c.Param("admin_widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   // hint for Auto renderer to search proper template location
   c.Set("template_prefix", "admin/widgets")
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // Update changes a Widget in the DB. This function is mapped to
@@ -155,7 +157,7 @@ func (v AdminWidgetsResource) Update(c buffalo.Context) error {
   widget := &models.Widget{}
 
   if err := tx.Find(widget, c.Param("admin_widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   // Bind Widget to the html form elements
@@ -174,13 +176,13 @@ func (v AdminWidgetsResource) Update(c buffalo.Context) error {
 
     // Render again the edit.html template that the user can
     // correct the input.
-    return c.Render(422, r.Auto(c, widget))
+    return c.Render(http.StatusUnprocessableEntity, r.Auto(c, widget))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", T.Translate(c, "widget.updated.success"))
   // and redirect to the admin/widgets index page
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // Destroy deletes a Widget from the DB. This function is mapped
@@ -197,7 +199,7 @@ func (v AdminWidgetsResource) Destroy(c buffalo.Context) error {
 
   // To find the Widget the parameter admin_widget_id is used.
   if err := tx.Find(widget, c.Param("admin_widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   if err := tx.Destroy(widget); err != nil {
@@ -207,5 +209,5 @@ func (v AdminWidgetsResource) Destroy(c buffalo.Context) error {
   // If there are no errors set a flash message
   c.Flash().Add("success", T.Translate(c, "widget.destroyed.success"))
   // Redirect to the admin/widgets index page
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }

@@ -3,6 +3,8 @@ package actions
 import (
 
   "fmt"
+  "net/http"
+
   "github.com/gobuffalo/buffalo"
   "github.com/gobuffalo/pop"
   "github.com/markbates/coke/models"
@@ -48,7 +50,7 @@ func (v WidgetsResource) List(c buffalo.Context) error {
   // Add the paginator to the context so it can be used in the template.
   c.Set("pagination", q.Paginator)
 
-  return c.Render(200, r.Auto(c, widgets))
+  return c.Render(http.StatusOK, r.Auto(c, widgets))
 }
 
 // Show gets the data for one Widget. This function is mapped to
@@ -65,16 +67,16 @@ func (v WidgetsResource) Show(c buffalo.Context) error {
 
   // To find the Widget the parameter widget_id is used.
   if err := tx.Find(widget, c.Param("widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // New renders the form for creating a new Widget.
 // This function is mapped to the path GET /widgets/new
 func (v WidgetsResource) New(c buffalo.Context) error {
-  return c.Render(200, r.Auto(c, &models.Widget{}))
+  return c.Render(http.StatusOK, r.Auto(c, &models.Widget{}))
 }
 
 // Create adds a Widget to the DB. This function is mapped to the
@@ -106,13 +108,13 @@ func (v WidgetsResource) Create(c buffalo.Context) error {
 
     // Render again the new.html template that the user can
     // correct the input.
-    return c.Render(422, r.Auto(c, widget))
+    return c.Render(http.StatusUnprocessableEntity, r.Auto(c, widget))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", T.Translate(c, "widget.created.success"))
   // and redirect to the widgets index page
-  return c.Render(201, r.Auto(c, widget))
+  return c.Render(http.StatusCreated, r.Auto(c, widget))
 }
 
 // Edit renders a edit form for a Widget. This function is
@@ -128,10 +130,10 @@ func (v WidgetsResource) Edit(c buffalo.Context) error {
   widget := &models.Widget{}
 
   if err := tx.Find(widget, c.Param("widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // Update changes a Widget in the DB. This function is mapped to
@@ -147,7 +149,7 @@ func (v WidgetsResource) Update(c buffalo.Context) error {
   widget := &models.Widget{}
 
   if err := tx.Find(widget, c.Param("widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   // Bind Widget to the html form elements
@@ -166,13 +168,13 @@ func (v WidgetsResource) Update(c buffalo.Context) error {
 
     // Render again the edit.html template that the user can
     // correct the input.
-    return c.Render(422, r.Auto(c, widget))
+    return c.Render(http.StatusUnprocessableEntity, r.Auto(c, widget))
   }
 
   // If there are no errors set a success message
   c.Flash().Add("success", T.Translate(c, "widget.updated.success"))
   // and redirect to the widgets index page
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }
 
 // Destroy deletes a Widget from the DB. This function is mapped
@@ -189,7 +191,7 @@ func (v WidgetsResource) Destroy(c buffalo.Context) error {
 
   // To find the Widget the parameter widget_id is used.
   if err := tx.Find(widget, c.Param("widget_id")); err != nil {
-    return c.Error(404, err)
+    return c.Error(http.StatusNotFound, err)
   }
 
   if err := tx.Destroy(widget); err != nil {
@@ -199,5 +201,5 @@ func (v WidgetsResource) Destroy(c buffalo.Context) error {
   // If there are no errors set a flash message
   c.Flash().Add("success", T.Translate(c, "widget.destroyed.success"))
   // Redirect to the widgets index page
-  return c.Render(200, r.Auto(c, widget))
+  return c.Render(http.StatusOK, r.Auto(c, widget))
 }

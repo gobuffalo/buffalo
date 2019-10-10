@@ -1,8 +1,11 @@
 package actions
 
-import "github.com/gobuffalo/buffalo"
+import (
+	"net/http"
+	"github.com/gobuffalo/buffalo"
+)
 
 // UserIndex default implementation.
 func UserIndex(c buffalo.Context) error {
-	return c.Render(200, r.HTML("user/index.html"))
+	return c.Render(http.StatusOK, r.HTML("user/index.html"))
 }

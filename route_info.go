@@ -106,7 +106,7 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	err := a.Middleware.handler(ri)(c)
 
 	if err != nil {
-		status := 500
+		status := http.StatusInternalServerError
 		if he, ok := err.(HTTPError); ok {
 			status = he.Status
 		}
