@@ -173,40 +173,32 @@ func (a *App) Resource(p string, r Resource) *App {
 
 	spath := path.Join(p, "{"+paramName+"}")
 
-	indexBeforeResourceAdded := a.routes.Len()
-
 	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
-	g.GET(p, r.List)
+	g.GET(p, r.List).ResourceName = resourceName
 
 	if n, ok := r.(newable); ok {
 		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
-		g.GET(path.Join(p, "new"), n.New)
+		g.GET(path.Join(p, "new"), n.New).ResourceName = resourceName
 	}
 
 	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
-	g.GET(path.Join(spath), r.Show)
+	g.GET(path.Join(spath), r.Show).ResourceName = resourceName
 
 	if n, ok := r.(editable); ok {
 		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
-		g.GET(path.Join(spath, "edit"), n.Edit)
+		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
 	}
 
 	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
-	g.POST(p, r.Create)
+	g.POST(p, r.Create).ResourceName = resourceName
 
 	setFuncKey(r.Update, fmt.Sprintf(handlerName, "Update"))
-	g.PUT(path.Join(spath), r.Update)
+	g.PUT(path.Join(spath), r.Update).ResourceName = resourceName
 
 	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
-	g.DELETE(path.Join(spath), r.Destroy)
+	g.DELETE(path.Join(spath), r.Destroy).ResourceName = resourceName
 
 	g.Prefix = path.Join(g.Prefix, spath)
-
-	// set route resource names for each routes added
-	// no length check because cause at least 5 routes have been added so there cannot be an out of range
-	for i := indexBeforeResourceAdded; i < a.routes.Len(); i++ {
-		a.routes[i].ResourceName = resourceName
-	}
 
 	return g
 }
