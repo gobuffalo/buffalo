@@ -61,7 +61,7 @@ First, thank you so much for wanting to contribute! It means so much that you ca
 **Here are the core rules to respect**:
 * If you have any question, please consider using the [Slack channel](https://gobuffalo.io/docs/slack) (*#buffalo*, *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo). We use GitHub issues for **bug reports and feature requests only**.
 * All contributors of this project are working on their free time: be patient and kind. :)
-* Consider opening an issue **BEFORE** creating a Pull request (PR): you won't loose your time on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
+* Consider opening an issue **BEFORE** creating a Pull request (PR): you won't lose your time on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
 * All PRs **MUST** be opened against the *development* branch. If you want to write an hot-fix, we'll first fix the *development* branch before moving the patch to *master* branch.
 
 **WE WILL CLOSE ANY ISSUE OR PR NOT FOLLOWING THESE CORE RULES**.
