@@ -19,12 +19,17 @@ require (
 	github.com/gobuffalo/licenser v1.4.0
 	github.com/gobuffalo/logger v1.0.1
 	github.com/gobuffalo/meta v0.2.0
+	github.com/gobuffalo/mw-csrf v0.0.0-20190129204204-25460a055517
+	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
+	github.com/gobuffalo/mw-i18n v0.0.0-20190129204410-552713a3ebb4
+	github.com/gobuffalo/mw-paramlogger v0.0.0-20190129202837-395da1998525
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
 	github.com/gobuffalo/packr/v2 v2.6.0
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.11.6+incompatible
 	github.com/gobuffalo/release v1.13.2
+	github.com/gobuffalo/suite v2.8.2+incompatible
 	github.com/gobuffalo/tags v2.1.0+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
