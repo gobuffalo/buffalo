@@ -25,7 +25,7 @@ require (
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.12.1+incompatible
 	github.com/gobuffalo/release v1.13.2
-	github.com/gobuffalo/tags v2.1.4+incompatible
+	github.com/gobuffalo/tags v2.1.5+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
@@ -42,7 +42,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191007185444-6536af71d98a
+	golang.org/x/tools v0.0.0-20191015150414-f936694f27bf
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.4
 )

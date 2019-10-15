@@ -490,8 +490,8 @@ github.com/gobuffalo/tags v2.0.14+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s6
 github.com/gobuffalo/tags v2.0.15+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
 github.com/gobuffalo/tags v2.0.16+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
 github.com/gobuffalo/tags v2.1.0+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
-github.com/gobuffalo/tags v2.1.4+incompatible h1:EyO1K8rMIRLn6ChjFmvYhUUo12Y1LsZHHgWVwsLERac=
-github.com/gobuffalo/tags v2.1.4+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
+github.com/gobuffalo/tags v2.1.5+incompatible h1:aYMwNlKa2ZX1yPMxa+syV85rv+gwqQSv8IArC0UoIi8=
+github.com/gobuffalo/tags v2.1.5+incompatible/go.mod h1:9XmhOkyaB7UzvuY4UoZO4s67q8/xRMVJEaakauVQYeY=
 github.com/gobuffalo/uuid v2.0.3+incompatible/go.mod h1:ErhIzkRhm0FtRuiE/PeORqcw4cVi1RtSpnwYrxuvkfE=
 github.com/gobuffalo/uuid v2.0.4+incompatible/go.mod h1:ErhIzkRhm0FtRuiE/PeORqcw4cVi1RtSpnwYrxuvkfE=
 github.com/gobuffalo/uuid v2.0.5+incompatible h1:c5uWRuEnYggYCrT9AJm0U2v1QTG7OVDAvxhj8tIV5Gc=
@@ -1034,8 +1034,8 @@ golang.org/x/tools v0.0.0-20190905035308-adb45749da8e/go.mod h1:b+2E5dAYhXwXZwtn
 golang.org/x/tools v0.0.0-20190906203814-12febf440ab1/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20190907020128-2ca718005c18/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20191004055002-72853e10c5a3/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
-golang.org/x/tools v0.0.0-20191007185444-6536af71d98a h1:mtF1GhqcFEC1RVSQxvgrZWOM22dax6fiM9VfcQoTv6U=
-golang.org/x/tools v0.0.0-20191007185444-6536af71d98a/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
+golang.org/x/tools v0.0.0-20191015150414-f936694f27bf h1:60bAcFbqQ3hW1i1JqrAcVJhY4qUUJhgBAimCcAKNvDE=
+golang.org/x/tools v0.0.0-20191015150414-f936694f27bf/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/xerrors v0.0.0-20190410155217-1f06c39b4373/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20190513163551-3ee3066db522/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7 h1:9zdDQZ7Thm29KFXgAX/+yaf3eVbP7djjWp/dXAppNCc=
