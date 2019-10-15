@@ -27,7 +27,7 @@ jobs:
 
 - job: macOS
   pool:
-    vmImage: "macOS-10.13.1"
+    vmImage: "macOS-10.13"
   strategy:
     matrix:
       go 1.12 (on):
