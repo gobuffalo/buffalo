@@ -60,7 +60,7 @@ func Test_New(t *testing.T) {
 
 	f, err = res.Find("actions/home.go")
 	r.NoError(err)
-	r.Contains(f.String(), `return c.Render(200, r.JSON(map[string]string{"message": "Welcome to Buffalo!"}))`)
+	r.Contains(f.String(), `return c.Render(http.StatusOK, r.JSON(map[string]string{"message": "Welcome to Buffalo!"}))`)
 
 	unexpected := []string{
 		"Dockerfile",

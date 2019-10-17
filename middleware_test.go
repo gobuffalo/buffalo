@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -126,11 +127,11 @@ type carsResource struct {
 }
 
 func (ur *carsResource) Show(c Context) error {
-	return c.Render(200, render.String("show"))
+	return c.Render(http.StatusOK, render.String("show"))
 }
 
 func (ur *carsResource) List(c Context) error {
-	return c.Render(200, render.String("list"))
+	return c.Render(http.StatusOK, render.String("list"))
 }
 
 // Test_Middleware_Skip tests that middleware gets skipped

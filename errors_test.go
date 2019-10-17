@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/httptest"
@@ -13,12 +14,12 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, fmt.Errorf("boom"))
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/").Get()
-	r.Equal(401, res.Code)
+	r.Equal(http.StatusUnauthorized, res.Code)
 	ct := res.Header().Get("content-type")
 	r.Equal("text/html; charset=utf-8", ct)
 }
@@ -27,12 +28,12 @@ func Test_defaultErrorHandler_JSON(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, fmt.Errorf("boom"))
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
 	res := w.JSON("/").Get()
-	r.Equal(401, res.Code)
+	r.Equal(http.StatusUnauthorized, res.Code)
 	ct := res.Header().Get("content-type")
 	r.Equal("application/json", ct)
 	b := res.Body.String()
@@ -45,12 +46,12 @@ func Test_defaultErrorHandler_XML(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
-		return c.Error(401, fmt.Errorf("boom"))
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
 	res := w.XML("/").Get()
-	r.Equal(401, res.Code)
+	r.Equal(http.StatusUnauthorized, res.Code)
 	ct := res.Header().Get("content-type")
 	r.Equal("text/xml", ct)
 	b := res.Body.String()
@@ -86,7 +87,7 @@ func Test_PanicHandler(t *testing.T) {
 			r := require.New(st)
 
 			res := w.HTML(tt.path).Get()
-			r.Equal(500, res.Code)
+			r.Equal(http.StatusInternalServerError, res.Code)
 
 			body := res.Body.String()
 			r.Contains(body, tt.expected)
@@ -100,7 +101,7 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	app := New(Options{})
 	var x string
 	var ok bool
-	app.ErrorHandlers[422] = func(code int, err error, c Context) error {
+	app.ErrorHandlers[http.StatusUnprocessableEntity] = func(code int, err error, c Context) error {
 		x, ok = c.Value("T").(string)
 		c.Response().WriteHeader(code)
 		c.Response().Write([]byte(err.Error()))
@@ -109,7 +110,7 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 	app.Use(func(next Handler) Handler {
 		return func(c Context) error {
 			c.Set("T", "t")
-			return c.Error(422, fmt.Errorf("boom"))
+			return c.Error(http.StatusUnprocessableEntity, fmt.Errorf("boom"))
 		}
 	})
 	app.GET("/", func(c Context) error {
@@ -118,7 +119,7 @@ func Test_defaultErrorMiddleware(t *testing.T) {
 
 	w := httptest.New(app)
 	res := w.HTML("/").Get()
-	r.Equal(422, res.Code)
+	r.Equal(http.StatusUnprocessableEntity, res.Code)
 	r.True(ok)
 	r.Equal("t", x)
 }
@@ -128,16 +129,16 @@ func Test_SetErrorMiddleware(t *testing.T) {
 	app := New(Options{})
 	app.ErrorHandlers.Default(func(code int, err error, c Context) error {
 		res := c.Response()
-		res.WriteHeader(418)
+		res.WriteHeader(http.StatusTeapot)
 		res.Write([]byte("i'm a teapot"))
 		return nil
 	})
 	app.GET("/", func(c Context) error {
-		return c.Error(422, fmt.Errorf("boom"))
+		return c.Error(http.StatusUnprocessableEntity, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/").Get()
-	r.Equal(418, res.Code)
+	r.Equal(http.StatusTeapot, res.Code)
 	r.Equal("i'm a teapot", res.Body.String())
 }
