@@ -35,7 +35,7 @@ func New(opts *Options) (*genny.Group, error) {
 	gg.Add(g)
 
 	// DEP/MODS/go get should be last
-	if !opts.App.WithDep && !opts.App.WithModules {
+	if !opts.App.WithModules {
 		g := genny.New()
 		g.Command(gogen.Get("./...", "-t"))
 		gg.Add(g)

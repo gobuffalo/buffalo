@@ -25,14 +25,10 @@ func Test_pkgChecks(t *testing.T) {
 
 	box := packd.NewMemoryBox()
 	box.AddString("go.mod", "module foo")
-	box.AddString("Gopkg.toml", "dep toml")
-	box.AddString("Gopkg.lock", "dep lock")
 	run.WithRun(pkgChecks(opts, box))
 
 	r.NoError(run.Run())
 
 	res := bb.String()
 	r.Contains(res, "Buffalo: go.mod")
-	r.Contains(res, "Buffalo: Gopkg.toml")
-	r.Contains(res, "Buffalo: Gopkg.lock")
 }

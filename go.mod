@@ -30,7 +30,6 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/karrick/godirwalk v1.12.0
-	github.com/markbates/deplist v1.3.0
 	github.com/markbates/grift v1.1.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0
@@ -43,7 +42,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191015150414-f936694f27bf
+	golang.org/x/tools v0.0.0-20191017163857-e4d7c6f25b8e
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.4
 )

@@ -1,12 +1,10 @@
 package fix
 
 import (
-	"bytes"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -26,27 +24,8 @@ type ImportConverter struct {
 func (c ImportConverter) Process(r *Runner) error {
 	fmt.Println("~~~ Rewriting Imports ~~~")
 
-	err := filepath.Walk(".", c.processFile)
-	if err != nil {
-		return err
-	}
+	return filepath.Walk(".", c.processFile)
 
-	if !r.App.WithDep {
-		return nil
-	}
-
-	b, err := ioutil.ReadFile("Gopkg.toml")
-	if err != nil {
-		return err
-	}
-
-	for k := range c.Data {
-		if bytes.Contains(b, []byte(k)) {
-			r.Warnings = append(r.Warnings, fmt.Sprintf("Your Gopkg.toml contains the following import that need to be changed MANUALLY: %s", k))
-		}
-	}
-
-	return nil
 }
 
 func (c ImportConverter) processFile(p string, info os.FileInfo, err error) error {
