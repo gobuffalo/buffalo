@@ -107,6 +107,32 @@ func Test_DefaultContext_Param_form(t *testing.T) {
 	r.Equal("Mark", name)
 }
 
+func Test_DefaultContext_Param_Multiple(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{})
+	var params ParamValues
+	var param string
+	app.POST("/{id}", func(c Context) error {
+		params = c.Params()
+		param = c.Param("id")
+		return nil
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/a?id=c&y=z&id=d").Post(map[string]string{
+		"id": "b",
+	})
+	paramsExpected := url.Values{
+		"id": []string{"a", "b", "c", "d"},
+		"y":  []string{"z"},
+	}
+
+	r.Equal(200, res.Code)
+	r.Equal(paramsExpected, params.(url.Values))
+	r.Equal("a", param)
+}
+
 func Test_DefaultContext_GetSet(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()
