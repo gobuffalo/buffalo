@@ -69,19 +69,20 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	session := a.getSession(req, res)
 
 	ct := httpx.ContentType(req)
-	contextData := map[string]interface{}{
-		"app":           a,
-		"env":           a.Env,
-		"routes":        a.Routes(),
-		"current_route": info,
-		"current_path":  req.URL.Path,
-		"contentType":   ct,
-		"method":        req.Method,
-	}
+
+	data := &sync.Map{}
+
+	data.Store("app", a)
+	data.Store("env", a.Env)
+	data.Store("routes", a.Routes())
+	data.Store("current_route", info)
+	data.Store("current_path", req.URL.Path)
+	data.Store("contentType", ct)
+	data.Store("method", req.Method)
 
 	for _, route := range a.Routes() {
 		cRoute := route
-		contextData[cRoute.PathName] = cRoute.BuildPathHelper()
+		data.Store(cRoute.PathName, cRoute.BuildPathHelper())
 	}
 
 	return &DefaultContext{
@@ -93,7 +94,6 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		logger:      a.Logger,
 		session:     session,
 		flash:       newFlash(session),
-		data:        contextData,
-		moot:        &sync.RWMutex{},
+		data:        data,
 	}
 }
