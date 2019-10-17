@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -34,7 +35,7 @@ func Test_FlashRender(t *testing.T) {
 		c.Flash().Add("errors", "Error AJ set")
 		c.Flash().Add("errors", "Error DAL set")
 
-		return c.Render(201, rr.String(errorsTPL))
+		return c.Render(http.StatusCreated, rr.String(errorsTPL))
 	})
 
 	w := httptest.New(a)
@@ -50,7 +51,7 @@ func Test_FlashRenderEmpty(t *testing.T) {
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
-		return c.Render(201, rr.String(errorsTPL))
+		return c.Render(http.StatusCreated, rr.String(errorsTPL))
 	})
 
 	w := httptest.New(a)
@@ -73,7 +74,7 @@ func Test_FlashRenderEntireFlash(t *testing.T) {
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("something", "something to say!")
-		return c.Render(201, rr.String(keyTPL))
+		return c.Render(http.StatusCreated, rr.String(keyTPL))
 	})
 
 	w := httptest.New(a)
@@ -94,7 +95,7 @@ func Test_FlashRenderCustomKey(t *testing.T) {
 
 	a.GET("/", func(c Context) error {
 		c.Flash().Add("something", "something to say!")
-		return c.Render(201, rr.String(keyTPL))
+		return c.Render(http.StatusCreated, rr.String(keyTPL))
 	})
 
 	w := httptest.New(a)
@@ -108,7 +109,7 @@ func Test_FlashRenderCustomKeyNotDefined(t *testing.T) {
 	rr := render.New(render.Options{})
 
 	a.GET("/", func(c Context) error {
-		return c.Render(201, rr.String(customKeyTPL))
+		return c.Render(http.StatusCreated, rr.String(customKeyTPL))
 	})
 
 	w := httptest.New(a)

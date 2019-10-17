@@ -60,6 +60,7 @@ func Test_New(t *testing.T) {
 		r.NoError(err)
 		f, err := res.Find(strings.TrimSuffix(s, ".tmpl"))
 		r.NoError(err)
+		fmt.Printf("\nfile %s", s)
 		r.True(compare(x, f.String()))
 	}
 }
@@ -92,6 +93,7 @@ func Test_New_Multi(t *testing.T) {
 		r.NoError(err)
 		f, err := res.Find(strings.TrimSuffix(s, ".tmpl"))
 		r.NoError(err)
+		fmt.Printf("\nfile %s", f)
 		r.True(compare(x, f.String()))
 	}
 }

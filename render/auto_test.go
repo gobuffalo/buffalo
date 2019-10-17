@@ -1,6 +1,7 @@
 package render_test
 
 import (
+	"net/http"
 	"strings"
 	"testing"
 
@@ -27,7 +28,7 @@ func Test_Auto_DefaultContentType(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
+		return c.Render(http.StatusOK, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
 	})
 
 	res := httptest.NewRecorder()
@@ -43,7 +44,7 @@ func Test_Auto_JSON(t *testing.T) {
 	re := render.New(render.Options{})
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
+		return c.Render(http.StatusOK, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
 	})
 
 	w := httptest.New(app)
@@ -58,7 +59,7 @@ func Test_Auto_XML(t *testing.T) {
 	re := render.New(render.Options{})
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
+		return c.Render(http.StatusOK, re.Auto(c, []string{"Honda", "Toyota", "Ford", "Chevy"}))
 	})
 
 	w := httptest.New(app)
@@ -80,7 +81,7 @@ func Test_Auto_HTML_List(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, Cars{
+		return c.Render(http.StatusOK, re.Auto(c, Cars{
 			{Name: "Ford"},
 			{Name: "Chevy"},
 		}))
@@ -111,7 +112,7 @@ func Test_Auto_HTML_List_Plural(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/people", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, People{
+		return c.Render(http.StatusOK, re.Auto(c, People{
 			Person{Name: "Ford"},
 			Person{Name: "Chevy"},
 		}))
@@ -136,7 +137,7 @@ func Test_Auto_HTML_Show(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars/{id}", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, Car{Name: "Honda"}))
+		return c.Render(http.StatusOK, re.Auto(c, Car{Name: "Honda"}))
 	})
 
 	w := httptest.New(app)
@@ -158,7 +159,7 @@ func Test_Auto_HTML_New(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars/new", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, Car{Name: "Honda"}))
+		return c.Render(http.StatusOK, re.Auto(c, Car{Name: "Honda"}))
 	})
 
 	w := httptest.New(app)
@@ -179,7 +180,7 @@ func Test_Auto_HTML_Create(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.POST("/cars", func(c buffalo.Context) error {
-		return c.Render(201, re.Auto(c, Car{Name: "Honda"}))
+		return c.Render(http.StatusCreated, re.Auto(c, Car{Name: "Honda"}))
 	})
 
 	w := httptest.New(app)
@@ -192,7 +193,7 @@ func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.POST("/cars", func(c buffalo.Context) error {
-		return c.Render(201, render.Auto(c, Car{
+		return c.Render(http.StatusCreated, render.Auto(c, Car{
 			ID:   1,
 			Name: "Honda",
 		}))
@@ -201,7 +202,7 @@ func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 	w := httptest.New(app)
 	res := w.HTML("/cars").Post(nil)
 	r.Equal("/cars/1", res.Location())
-	r.Equal(302, res.Code)
+	r.Equal(http.StatusFound, res.Code)
 }
 
 func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
@@ -220,12 +221,12 @@ func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
 		b := Car{
 			Name: "Honda",
 		}
-		return c.Render(422, re.Auto(c, b))
+		return c.Render(http.StatusUnprocessableEntity, re.Auto(c, b))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/cars").Post(nil)
-	r.Equal(422, res.Code)
+	r.Equal(http.StatusUnprocessableEntity, res.Code)
 	r.Contains(res.Body.String(), "Create: Honda")
 }
 
@@ -235,7 +236,7 @@ func Test_Auto_HTML_Create_Nested_Redirect(t *testing.T) {
 	app := buffalo.New(buffalo.Options{})
 	admin := app.Group("/admin")
 	admin.POST("/cars", func(c buffalo.Context) error {
-		return c.Render(201, render.Auto(c, Car{
+		return c.Render(http.StatusCreated, render.Auto(c, Car{
 			ID:   1,
 			Name: "Honda",
 		}))
@@ -244,7 +245,7 @@ func Test_Auto_HTML_Create_Nested_Redirect(t *testing.T) {
 	w := httptest.New(app)
 	res := w.HTML("/admin/cars").Post(nil)
 	r.Equal("/admin/cars/1", res.Location())
-	r.Equal(302, res.Code)
+	r.Equal(http.StatusFound, res.Code)
 }
 
 func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
@@ -253,7 +254,7 @@ func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
 	app := buffalo.New(buffalo.Options{})
 	admin := app.Group("/admin")
 	admin.DELETE("/cars", func(c buffalo.Context) error {
-		return c.Render(200, render.Auto(c, Car{
+		return c.Render(http.StatusOK, render.Auto(c, Car{
 			ID:   1,
 			Name: "Honda",
 		}))
@@ -262,7 +263,7 @@ func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
 	w := httptest.New(app)
 	res := w.HTML("/admin/cars").Delete()
 	r.Equal("/admin/cars", res.Location())
-	r.Equal(302, res.Code)
+	r.Equal(http.StatusFound, res.Code)
 }
 
 func Test_Auto_HTML_Edit(t *testing.T) {
@@ -278,7 +279,7 @@ func Test_Auto_HTML_Edit(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars/{id}/edit", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, Car{Name: "Honda"}))
+		return c.Render(http.StatusOK, re.Auto(c, Car{Name: "Honda"}))
 	})
 
 	w := httptest.New(app)
@@ -299,7 +300,7 @@ func Test_Auto_HTML_Update(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.PUT("/cars/{id}", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, Car{Name: "Honda"}))
+		return c.Render(http.StatusOK, re.Auto(c, Car{Name: "Honda"}))
 	})
 
 	w := httptest.New(app)
@@ -317,13 +318,13 @@ func Test_Auto_HTML_Update_Redirect(t *testing.T) {
 			ID:   1,
 			Name: "Honda",
 		}
-		return c.Render(200, render.Auto(c, b))
+		return c.Render(http.StatusOK, render.Auto(c, b))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/cars/1").Put(nil)
 	r.Equal("/cars/1", res.Location())
-	r.Equal(302, res.Code)
+	r.Equal(http.StatusFound, res.Code)
 }
 
 func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
@@ -343,12 +344,12 @@ func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
 			ID:   1,
 			Name: "Honda",
 		}
-		return c.Render(422, re.Auto(c, b))
+		return c.Render(http.StatusUnprocessableEntity, re.Auto(c, b))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/cars/1").Put(nil)
-	r.Equal(422, res.Code)
+	r.Equal(http.StatusUnprocessableEntity, res.Code)
 	r.Contains(res.Body.String(), "Update: Honda")
 }
 
@@ -361,13 +362,13 @@ func Test_Auto_HTML_Destroy_Redirect(t *testing.T) {
 			ID:   1,
 			Name: "Honda",
 		}
-		return c.Render(200, render.Auto(c, b))
+		return c.Render(http.StatusOK, render.Auto(c, b))
 	})
 
 	w := httptest.New(app)
 	res := w.HTML("/cars/1").Delete()
 	r.Equal("/cars/", res.Location())
-	r.Equal(302, res.Code)
+	r.Equal(http.StatusFound, res.Code)
 }
 
 func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
@@ -389,7 +390,7 @@ func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/room_providers", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, RoomProviders{
+		return c.Render(http.StatusOK, re.Auto(c, RoomProviders{
 			RoomProvider{Name: "Ford"},
 			RoomProvider{Name: "Chevy"},
 		}))
@@ -420,7 +421,7 @@ func Test_Auto_HTML_List_Plural_MultiWord_Dashed(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/room-providers", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, RoomProviders{
+		return c.Render(http.StatusOK, re.Auto(c, RoomProviders{
 			RoomProvider{Name: "Ford"},
 			RoomProvider{Name: "Chevy"},
 		}))
@@ -450,7 +451,7 @@ func Test_Auto_HTML_Show_MultiWord_Dashed(t *testing.T) {
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/room-providers/{id}", func(c buffalo.Context) error {
-		return c.Render(200, re.Auto(c, RoomProvider{ID: 1, Name: "Ford"}))
+		return c.Render(http.StatusOK, re.Auto(c, RoomProvider{ID: 1, Name: "Ford"}))
 	})
 
 	w := httptest.New(app)
