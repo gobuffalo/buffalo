@@ -7,9 +7,9 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
 	github.com/gobuffalo/attrs v0.1.0
-	github.com/gobuffalo/buffalo-pop v1.20.1
+	github.com/gobuffalo/buffalo-pop v1.22.0
 	github.com/gobuffalo/clara v0.9.1
-	github.com/gobuffalo/envy v1.7.0
+	github.com/gobuffalo/envy v1.7.1
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/flect v0.1.6
 	github.com/gobuffalo/genny v0.4.1
@@ -19,22 +19,17 @@ require (
 	github.com/gobuffalo/licenser v1.4.0
 	github.com/gobuffalo/logger v1.0.1
 	github.com/gobuffalo/meta v0.2.0
-	github.com/gobuffalo/mw-csrf v0.0.0-20190129204204-25460a055517
-	github.com/gobuffalo/mw-forcessl v0.0.0-20180802152810-73921ae7a130
-	github.com/gobuffalo/mw-i18n v0.0.0-20190129204410-552713a3ebb4
-	github.com/gobuffalo/mw-paramlogger v0.0.0-20190129202837-395da1998525
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
-	github.com/gobuffalo/packr/v2 v2.6.0
+	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/plush v3.8.3+incompatible
-	github.com/gobuffalo/pop v4.11.6+incompatible
-	github.com/gobuffalo/release v1.13.2
-	github.com/gobuffalo/suite v2.8.2+incompatible
-	github.com/gobuffalo/tags v2.1.0+incompatible
+	github.com/gobuffalo/pop v4.12.1+incompatible
+	github.com/gobuffalo/release v1.13.4
+	github.com/gobuffalo/tags v2.1.5+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
-	github.com/karrick/godirwalk v1.10.12
+	github.com/karrick/godirwalk v1.12.0
 	github.com/markbates/grift v1.1.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0
@@ -43,12 +38,11 @@ require (
 	github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
-	github.com/spf13/pflag v1.0.3
+	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
-	github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c
-	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/tools v0.0.0-20190909030654-5b82db07426d
+	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/tools v0.0.0-20191017101817-846f856e7d71
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.2.4
 )
