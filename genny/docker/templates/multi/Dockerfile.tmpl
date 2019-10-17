@@ -21,7 +21,7 @@ ADD . .
 RUN dep ensure
 {{else -}}
 {{if .opts.App.WithModules -}}
-ENV GO111MODULES=on
+ENV GO111MODULE=on
 {{end -}}
 RUN go get ./...
 {{end -}}
