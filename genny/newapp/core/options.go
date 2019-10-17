@@ -72,10 +72,6 @@ func (opts *Options) Validate() error {
 		}
 	}
 
-	if opts.App.WithModules && opts.App.WithDep {
-		return ErrGoModulesWithDep
-	}
-
 	name := strings.ToLower(opts.App.Name.String())
 	fb := append(opts.ForbiddenNames, "buffalo", "test", "dev")
 	for _, n := range fb {

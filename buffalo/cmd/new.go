@@ -81,7 +81,6 @@ func parseNewOptions(args []string) (newAppOptions, error) {
 
 	app.AsAPI = viper.GetBool("api")
 	app.VCS = viper.GetString("vcs")
-	app.WithDep = viper.GetBool("with-dep")
 	if app.WithDep {
 		app.WithModules = false
 		envy.MustSet("GO111MODULE", "off")
@@ -273,7 +272,6 @@ func init() {
 	newCmd.Flags().BoolP("dry-run", "d", false, "dry run")
 	newCmd.Flags().BoolP("verbose", "v", false, "verbosely print out the go get commands")
 	newCmd.Flags().Bool("skip-pop", false, "skips adding pop/soda to your app")
-	newCmd.Flags().Bool("with-dep", false, "adds github.com/golang/dep to your app")
 	newCmd.Flags().Bool("skip-webpack", false, "skips adding Webpack to your app")
 	newCmd.Flags().Bool("skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
 	newCmd.Flags().String("db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
