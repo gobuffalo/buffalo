@@ -41,8 +41,8 @@ func New(opts Options) *App {
 	a := &App{
 		Options: opts,
 		ErrorHandlers: ErrorHandlers{
-			404: defaultErrorHandler,
-			500: defaultErrorHandler,
+			http.StatusNotFound:            defaultErrorHandler,
+			http.StatusInternalServerError: defaultErrorHandler,
 		},
 		router:   mux.NewRouter(),
 		moot:     &sync.RWMutex{},
@@ -62,8 +62,8 @@ func New(opts Options) *App {
 		}
 	}
 
-	a.router.NotFoundHandler = notFoundHandler("path not found: %s %s", 404)
-	a.router.MethodNotAllowedHandler = notFoundHandler("method not found: %s %s", 405)
+	a.router.NotFoundHandler = notFoundHandler("path not found: %s %s", http.StatusNotFound)
+	a.router.MethodNotAllowedHandler = notFoundHandler("method not found: %s %s", http.StatusMethodNotAllowed)
 
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride

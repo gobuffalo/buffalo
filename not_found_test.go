@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"encoding/json"
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/httptest"
@@ -21,7 +22,7 @@ func Test_App_Dev_NotFound(t *testing.T) {
 	body := res.Body.String()
 	r.Contains(body, "404 - ERROR!")
 	r.Contains(body, "/foo")
-	r.Equal(404, res.Code)
+	r.Equal(http.StatusNotFound, res.Code)
 }
 
 func Test_App_Dev_NotFound_JSON(t *testing.T) {
@@ -33,20 +34,20 @@ func Test_App_Dev_NotFound_JSON(t *testing.T) {
 
 	w := httptest.New(a)
 	res := w.JSON("/bad").Get()
-	r.Equal(404, res.Code)
+	r.Equal(http.StatusNotFound, res.Code)
 
 	jb := map[string]interface{}{}
 	err := json.NewDecoder(res.Body).Decode(&jb)
 	r.NoError(err)
-	r.Equal(float64(404), jb["code"])
+	r.Equal(float64(http.StatusNotFound), jb["code"])
 }
 
 func Test_App_Override_NotFound(t *testing.T) {
 	r := require.New(t)
 
 	a := New(Options{})
-	a.ErrorHandlers[404] = func(status int, err error, c Context) error {
-		c.Response().WriteHeader(404)
+	a.ErrorHandlers[http.StatusNotFound] = func(status int, err error, c Context) error {
+		c.Response().WriteHeader(http.StatusNotFound)
 		c.Response().Write([]byte("oops!!!"))
 		return nil
 	}
@@ -54,7 +55,7 @@ func Test_App_Override_NotFound(t *testing.T) {
 
 	w := httptest.New(a)
 	res := w.HTML("/bad").Get()
-	r.Equal(404, res.Code)
+	r.Equal(http.StatusNotFound, res.Code)
 
 	body := res.Body.String()
 	r.Equal(body, "oops!!!")

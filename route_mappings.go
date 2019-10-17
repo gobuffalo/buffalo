@@ -102,8 +102,8 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
-			eh := a.ErrorHandlers.Get(404)
-			eh(404, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			eh := a.ErrorHandlers.Get(http.StatusNotFound)
+			eh(http.StatusNotFound, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
 
@@ -331,8 +331,8 @@ func stripAsset(path string, h http.Handler, a *App) http.Handler {
 
 		u, err := url.Parse(up)
 		if err != nil {
-			eh := a.ErrorHandlers.Get(400)
-			eh(400, err, a.newContext(RouteInfo{}, w, r))
+			eh := a.ErrorHandlers.Get(http.StatusBadRequest)
+			eh(http.StatusBadRequest, err, a.newContext(RouteInfo{}, w, r))
 			return
 		}
 

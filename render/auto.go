@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"path"
 	"reflect"
 	"strings"
@@ -108,7 +109,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	switch data["method"] {
 	case "PUT", "POST", "DELETE":
 		if err := ir.redirect(pname, w, data); err != nil {
-			if er, ok := err.(ErrRedirect); ok && er.Status >= 300 && er.Status < 400 {
+			if er, ok := err.(ErrRedirect); ok && er.Status >= http.StatusMultipleChoices && er.Status < http.StatusBadRequest {
 				return err
 			}
 			if data["method"] == "PUT" {
@@ -167,9 +168,9 @@ func (ir htmlAutoRenderer) redirect(name name.Ident, w io.Writer, data Data) err
 			}
 		}
 
-		code := 302
+		code := http.StatusFound
 		if i, ok := data["status"].(int); ok {
-			if i >= 300 {
+			if i >= http.StatusMultipleChoices {
 				code = i
 			}
 		}
