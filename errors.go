@@ -196,15 +196,18 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
 		routes := c.Value("routes")
-		if cd, ok := c.(*DefaultContext); ok {
-			delete(cd.data, "app")
-			delete(cd.data, "routes")
-		}
+
+		cd := c.Data()
+		// if cd, ok := c.(*DefaultContext); ok {
+		// 		data := cd.Data()
+		delete(cd, "app")
+		delete(cd, "routes")
+		// }
 		data := map[string]interface{}{
 			"routes":      routes,
 			"error":       trace,
 			"status":      status,
-			"data":        c.Data(),
+			"data":        cd,
 			"params":      c.Params(),
 			"posted_form": c.Request().Form,
 			"context":     c,
