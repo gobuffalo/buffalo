@@ -18,9 +18,8 @@ func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
 		logger:  logger.New(logger.DebugLevel),
-		data:    make(map[string]interface{}),
+		data:    &sync.Map{},
 		flash:   &Flash{data: make(map[string][]string)},
-		moot:    &sync.RWMutex{},
 	}
 }
 
