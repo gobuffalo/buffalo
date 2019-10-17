@@ -2,6 +2,7 @@ package mail
 
 import (
 	"html/template"
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
@@ -26,7 +27,7 @@ func Test_New(t *testing.T) {
 	app.GET("/", func(c buffalo.Context) error {
 		c.Set("foo", "bar")
 		m = New(c)
-		return c.Render(200, render.String(""))
+		return c.Render(http.StatusOK, render.String(""))
 	})
 	w := httptest.New(app)
 	w.HTML("/").Get()

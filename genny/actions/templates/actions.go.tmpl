@@ -1,6 +1,6 @@
 {{ range $action := .actions }}
 // {{$.name.Pascalize}}{{$action.Pascalize}} default implementation.
 func {{$.name.Pascalize}}{{$action.Pascalize}}(c buffalo.Context) error {
-	return c.Render(200, r.HTML("{{$.name.File}}/{{$action.File}}.html"))
+	return c.Render(http.StatusOK, r.HTML("{{$.name.File}}/{{$action.File}}.html"))
 }
 {{end}}

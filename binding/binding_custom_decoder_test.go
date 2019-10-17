@@ -1,6 +1,7 @@
 package binding_test
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo"
@@ -33,7 +34,7 @@ func Test_RegisterCustomDecoder(t *testing.T) {
 	res := w.HTML("/").Post(&U{
 		Xt: Xt{[]string{"foo"}},
 	})
-	r.Equal(200, res.Code)
+	r.Equal(http.StatusOK, res.Code)
 
 	r.Equal([]string{"X"}, ux.Xt.Vals)
 }
