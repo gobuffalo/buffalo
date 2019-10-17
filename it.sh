@@ -81,9 +81,6 @@ filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/gener
 buffalo g actions comments destroy
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_action_existing.json
 
-buffalo g resource user
-filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_singular.json
-
 buffalo g resource cars
 filetest -c $GOPATH/src/github.com/gobuffalo/buffalo/buffalo/cmd/filetests/generate_resource_plural.json
 
