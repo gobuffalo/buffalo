@@ -48,14 +48,7 @@ var testCmd = &cobra.Command{
 
 			// Read and remove --force-migrations flag from args:
 			forceMigrations = strings.Contains(strings.Join(args, ""), "--force-migrations")
-			for i, v := range args {
-				if v != "--force-migrations" {
-					continue
-				}
-
-				args = append(args[:i], args[i+1:]...)
-				break
-			}
+			args = cutArg("--force-migrations", args)
 
 			if forceMigrations {
 				fm, err := pop.NewFileMigrator("./migrations", test)
@@ -225,4 +218,14 @@ func newTestCmd(args []string) *exec.Cmd {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd
+}
+
+func cutArg(arg string, args []string) []string {
+	for i, v := range args {
+		if v == arg {
+			return append(args[:i], args[i+1:]...)
+		}
+	}
+
+	return args
 }
