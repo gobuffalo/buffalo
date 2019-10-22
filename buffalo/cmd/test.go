@@ -105,13 +105,13 @@ func testRunner(args []string) error {
 	var larg string
 	for i, a := range args {
 		switch a {
-		case "-run", "-m":
+		case "-run", "-m", "-timeout":
 			query = args[i+1]
 			mFlag = true
 		case "-v":
 			cargs = append(cargs, "-v")
 		default:
-			if larg != "-run" && larg != "-m" {
+			if larg != "-run" && larg != "-m" && larg != "-timeout" {
 				pargs = append(pargs, a)
 			}
 		}
