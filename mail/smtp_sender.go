@@ -18,8 +18,8 @@ func (sm SMTPSender) Send(message Message) error {
 	return sm.Dialer.DialAndSend(sm.prepareMessage(message))
 }
 
-//Send batch of message with one connection, returns general error or errors specific for each message
-func (sm SMTPSender) SendBatch(messages ...Message) (generalError error, errorsByMessages []error) {
+// SendBatch of message with one connection, returns general error or errors specific for each message
+func (sm SMTPSender) SendBatch(messages ...Message) (errorsByMessages []error, generalError error) {
 	preparedMessages := make([]*gomail.Message, len(messages))
 	for i, message := range messages {
 		preparedMessages[i] = sm.prepareMessage(message)
@@ -27,13 +27,13 @@ func (sm SMTPSender) SendBatch(messages ...Message) (generalError error, errorsB
 
 	s, err := sm.Dialer.Dial()
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 	defer s.Close()
 
 	errs := gomail.Send(s, preparedMessages...)
 	if errs != nil {
-		return nil, errs
+		return errs, nil
 	}
 
 	return
