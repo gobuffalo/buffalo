@@ -199,7 +199,7 @@ func (d *Dialer) DialAndSend(m ...*Message) error {
 	}
 	defer s.Close()
 
-	if errs := Send(s, m...); len(errs) > 0 {
+	if errs := Send(s, m...); errs[0] != nil {
 		return errs[0]
 	}
 

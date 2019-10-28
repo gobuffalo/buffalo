@@ -31,12 +31,7 @@ func (sm SMTPSender) SendBatch(messages ...Message) (errorsByMessages []error, g
 	}
 	defer s.Close()
 
-	errs := gomail.Send(s, preparedMessages...)
-	if errs != nil {
-		return errs, nil
-	}
-
-	return
+	return gomail.Send(s, preparedMessages...), nil
 }
 func (sm SMTPSender) prepareMessage(message Message) *gomail.Message {
 	gm := gomail.NewMessage()

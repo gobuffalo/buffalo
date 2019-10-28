@@ -8,5 +8,5 @@ type Sender interface {
 // BatchSender interface for sending batch or single mail
 type BatchSender interface {
 	Sender
-	SendBatch(messages ...Message) (generalError error, errorsByMessages []error)
+	SendBatch(messages ...Message) (errorsByMessages []error, generalError error)
 }
