@@ -24,7 +24,7 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.12.1+incompatible
-	github.com/gobuffalo/release v1.13.4
+	github.com/gobuffalo/release v1.14.0
 	github.com/gobuffalo/tags v2.1.5+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
