@@ -33,7 +33,7 @@ type ErrorHandler func(int, error, Context) error
 // ErrorHandlers is used to hold a list of ErrorHandler
 // types that can be used to handle specific status codes.
 /*
-	a.ErrorHandlers[500] = func(status int, err error, c buffalo.Context) error {
+	a.ErrorHandlers[http.StatusInternalServerError] = func(status int, err error, c buffalo.Context) error {
 		res := c.Response()
 		res.WriteHeader(status)
 		res.Write([]byte(err.Error()))
@@ -88,8 +88,8 @@ func (a *App) PanicHandler(next Handler) Handler {
 						"app":     a,
 					},
 				)
-				eh := a.ErrorHandlers.Get(500)
-				eh(500, err, c)
+				eh := a.ErrorHandlers.Get(http.StatusInternalServerError)
+				eh(http.StatusInternalServerError, err, c)
 			}
 		}()
 		return next(c)
@@ -102,12 +102,12 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		if err == nil {
 			return nil
 		}
-		status := 500
+		status := http.StatusInternalServerError
 		// unpack root cause and check for HTTPError
 		cause := errx.Unwrap(err)
 		switch cause {
 		case sql.ErrNoRows:
-			status = 404
+			status = http.StatusNotFound
 		default:
 			if h, ok := cause.(HTTPError); ok {
 				status = h.Status
@@ -130,7 +130,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 			})
 			// things have really hit the fan if we're here!!
 			a.Logger.Error(err)
-			c.Response().WriteHeader(500)
+			c.Response().WriteHeader(http.StatusInternalServerError)
 			c.Response().Write([]byte(err.Error()))
 		}
 		return nil
@@ -196,15 +196,18 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
 		routes := c.Value("routes")
-		if cd, ok := c.(*DefaultContext); ok {
-			delete(cd.data, "app")
-			delete(cd.data, "routes")
-		}
+
+		cd := c.Data()
+		// if cd, ok := c.(*DefaultContext); ok {
+		// 		data := cd.Data()
+		delete(cd, "app")
+		delete(cd, "routes")
+		// }
 		data := map[string]interface{}{
 			"routes":      routes,
 			"error":       trace,
 			"status":      status,
-			"data":        c.Data(),
+			"data":        cd,
 			"params":      c.Params(),
 			"posted_form": c.Request().Form,
 			"context":     c,

@@ -8,8 +8,8 @@ import (
 
 // BuildInfo holds information about the build
 type BuildInfo struct {
-	Version string
-	Time    time.Time
+	Version string    `json:"version"`
+	Time    time.Time `json:"-"`
 }
 
 // String implements fmt.String

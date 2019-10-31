@@ -33,9 +33,8 @@ type DefaultContext struct {
 	logger      Logger
 	session     *Session
 	contentType string
-	data        map[string]interface{}
+	data        *sync.Map
 	flash       *Flash
-	moot        *sync.RWMutex
 }
 
 // Response returns the original Response for the request.
@@ -68,17 +67,13 @@ func (d *DefaultContext) Param(key string) string {
 // Set a value onto the Context. Any value set onto the Context
 // will be automatically available in templates.
 func (d *DefaultContext) Set(key string, value interface{}) {
-	d.moot.Lock()
-	d.data[key] = value
-	d.moot.Unlock()
+	d.data.Store(key, value)
 }
 
 // Value that has previously stored on the context.
 func (d *DefaultContext) Value(key interface{}) interface{} {
 	if k, ok := key.(string); ok {
-		d.moot.RLock()
-		defer d.moot.RUnlock()
-		if v, ok := d.data[k]; ok {
+		if v, ok := d.data.Load(k); ok {
 			return v
 		}
 	}
@@ -132,7 +127,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
 				return d.Redirect(er.Status, er.URL)
 			}
-			return HTTPError{Status: 500, Cause: err}
+			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
 		}
 
 		if d.Session() != nil {
@@ -147,7 +142,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
-			return HTTPError{Status: 500, Cause: err}
+			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
 		}
 
 		return nil
@@ -222,12 +217,15 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 
 // Data contains all the values set through Get/Set.
 func (d *DefaultContext) Data() map[string]interface{} {
-	d.moot.Lock()
 	m := map[string]interface{}{}
-	for k, v := range d.data {
-		m[k] = v
-	}
-	d.moot.Unlock()
+	d.data.Range(func(k, v interface{}) bool {
+		s, ok := k.(string)
+		if !ok {
+			return false
+		}
+		m[s] = v
+		return true
+	})
 	return m
 }
 

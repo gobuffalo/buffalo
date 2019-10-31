@@ -1,6 +1,9 @@
 package buffalo
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // Resource interface allows for the easy mapping
 // of common RESTful actions to a set of paths. See
@@ -44,7 +47,7 @@ type Middler interface {
 	}
 
 	func (ur *UsersResource) List(c Context) error {
-		return c.Render(200, render.String("hello")
+		return c.Render(http.StatusOK, render.String("hello")
 	}
 
 	// This will fulfill the Resource interface, despite only having
@@ -55,25 +58,25 @@ type BaseResource struct{}
 
 // List default implementation. Returns a 404
 func (v BaseResource) List(c Context) error {
-	return c.Error(404, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
 }
 
 // Show default implementation. Returns a 404
 func (v BaseResource) Show(c Context) error {
-	return c.Error(404, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
 }
 
 // Create default implementation. Returns a 404
 func (v BaseResource) Create(c Context) error {
-	return c.Error(404, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
 }
 
 // Update default implementation. Returns a 404
 func (v BaseResource) Update(c Context) error {
-	return c.Error(404, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
 }
 
 // Destroy default implementation. Returns a 404
 func (v BaseResource) Destroy(c Context) error {
-	return c.Error(404, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
 }
