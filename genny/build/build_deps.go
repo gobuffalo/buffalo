@@ -3,7 +3,6 @@ package build
 import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/depgen"
 	"github.com/gobuffalo/genny/gogen"
 )
 
@@ -16,11 +15,6 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 
 	if envy.Mods() {
 		return g, nil
-	}
-
-	if opts.App.WithDep {
-		// mount the dep generator
-		return depgen.Ensure(false)
 	}
 
 	// mount the go get runner

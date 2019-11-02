@@ -102,8 +102,8 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
-			eh := a.ErrorHandlers.Get(404)
-			eh(404, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
+			eh := a.ErrorHandlers.Get(http.StatusNotFound)
+			eh(http.StatusNotFound, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return
 		}
 
@@ -157,7 +157,8 @@ func (a *App) Resource(p string, r Resource) *App {
 	}
 
 	rt := rv.Type()
-	rname := fmt.Sprintf("%s.%s", rt.PkgPath(), rt.Name()) + ".%s"
+	resourceName := rt.Name()
+	handlerName := fmt.Sprintf("%s.%s", rt.PkgPath(), resourceName) + ".%s"
 
 	n := strings.TrimSuffix(rt.Name(), "Resource")
 	paramName := name.New(n).ParamID().String()
@@ -171,29 +172,34 @@ func (a *App) Resource(p string, r Resource) *App {
 	}
 
 	spath := path.Join(p, "{"+paramName+"}")
-	setFuncKey(r.List, fmt.Sprintf(rname, "List"))
-	g.GET(p, r.List)
+
+	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
+	g.GET(p, r.List).ResourceName = resourceName
 
 	if n, ok := r.(newable); ok {
-		setFuncKey(n.New, fmt.Sprintf(rname, "New"))
-		g.GET(path.Join(p, "new"), n.New)
+		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
+		g.GET(path.Join(p, "new"), n.New).ResourceName = resourceName
 	}
 
-	setFuncKey(r.Show, fmt.Sprintf(rname, "Show"))
-	g.GET(path.Join(spath), r.Show)
+	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
+	g.GET(path.Join(spath), r.Show).ResourceName = resourceName
 
 	if n, ok := r.(editable); ok {
-		setFuncKey(n.Edit, fmt.Sprintf(rname, "Edit"))
-		g.GET(path.Join(spath, "edit"), n.Edit)
+		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
+		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
 	}
 
-	setFuncKey(r.Create, fmt.Sprintf(rname, "Create"))
-	g.POST(p, r.Create)
-	setFuncKey(r.Update, fmt.Sprintf(rname, "Update"))
-	g.PUT(path.Join(spath), r.Update)
-	setFuncKey(r.Destroy, fmt.Sprintf(rname, "Destroy"))
-	g.DELETE(path.Join(spath), r.Destroy)
+	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
+	g.POST(p, r.Create).ResourceName = resourceName
+
+	setFuncKey(r.Update, fmt.Sprintf(handlerName, "Update"))
+	g.PUT(path.Join(spath), r.Update).ResourceName = resourceName
+
+	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
+	g.DELETE(path.Join(spath), r.Destroy).ResourceName = resourceName
+
 	g.Prefix = path.Join(g.Prefix, spath)
+
 	return g
 }
 
@@ -331,8 +337,8 @@ func stripAsset(path string, h http.Handler, a *App) http.Handler {
 
 		u, err := url.Parse(up)
 		if err != nil {
-			eh := a.ErrorHandlers.Get(400)
-			eh(400, err, a.newContext(RouteInfo{}, w, r))
+			eh := a.ErrorHandlers.Get(http.StatusBadRequest)
+			eh(http.StatusBadRequest, err, a.newContext(RouteInfo{}, w, r))
 			return
 		}
 

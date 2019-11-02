@@ -8,15 +8,15 @@ package buffalo
 // mean returning an error.
 /*
 	func (c Context) error {
-		return c.Render(200, render.String("Hello World!"))
+		return c.Render(http.StatusOK, render.String("Hello World!"))
 	}
 
 	func (c Context) error {
-		return c.Redirect(301, "http://github.com/gobuffalo/buffalo")
+		return c.Redirect(http.StatusMovedPermanently, "http://github.com/gobuffalo/buffalo")
 	}
 
 	func (c Context) error {
-		return c.Error(422, fmt.Errorf("oops!!"))
+		return c.Error(http.StatusUnprocessableEntity, fmt.Errorf("oops!!"))
 	}
 */
 type Handler func(Context) error

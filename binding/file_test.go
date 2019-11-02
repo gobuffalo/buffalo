@@ -31,21 +31,21 @@ func App() *buffalo.App {
 		if err := c.Bind(wf); err != nil {
 			return err
 		}
-		return c.Render(201, render.String(wf.MyFile.Filename))
+		return c.Render(http.StatusCreated, render.String(wf.MyFile.Filename))
 	})
 	a.POST("/named-file", func(c buffalo.Context) error {
 		wf := &NamedFile{}
 		if err := c.Bind(wf); err != nil {
 			return err
 		}
-		return c.Render(201, render.String(wf.MyFile.Filename))
+		return c.Render(http.StatusCreated, render.String(wf.MyFile.Filename))
 	})
 	a.POST("/on-context", func(c buffalo.Context) error {
 		f, err := c.File("MyFile")
 		if err != nil {
 			return err
 		}
-		return c.Render(201, render.String(f.Filename))
+		return c.Render(http.StatusCreated, render.String(f.Filename))
 	})
 
 	return a
@@ -60,7 +60,7 @@ func Test_File_Upload_On_Struct(t *testing.T) {
 
 	App().ServeHTTP(res, req)
 
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 	r.Equal("file_test.go", res.Body.String())
 }
 
@@ -73,7 +73,7 @@ func Test_File_Upload_On_Struct_WithTag(t *testing.T) {
 
 	App().ServeHTTP(res, req)
 
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 	r.Equal("file_test.go", res.Body.String())
 }
 
@@ -86,7 +86,7 @@ func Test_File_Upload_On_Context(t *testing.T) {
 
 	App().ServeHTTP(res, req)
 
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 	r.Equal("file_test.go", res.Body.String())
 }
 

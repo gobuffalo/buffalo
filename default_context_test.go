@@ -28,7 +28,7 @@ func Test_DefaultContext_Redirect(t *testing.T) {
 	a := New(Options{})
 	u := "/foo?bar=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback%2Ffacebook"
 	a.GET("/", func(c Context) error {
-		return c.Redirect(302, u)
+		return c.Redirect(http.StatusFound, u)
 	})
 
 	w := httptest.New(a)
@@ -47,23 +47,23 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 		{
 			E: "/foo/baz/",
 			I: map[string]interface{}{"bar": "baz"},
-			S: 302,
+			S: http.StatusPermanentRedirect,
 		},
 		{
-			S: 500,
+			S: http.StatusInternalServerError,
 		},
 	}
 
 	for _, tt := range table {
 		a := New(Options{})
 		a.GET("/foo/{bar}", func(c Context) error {
-			return c.Render(200, render.String(c.Param("bar")))
+			return c.Render(http.StatusOK, render.String(c.Param("bar")))
 		})
 		a.GET("/", func(c Context) error {
-			return c.Redirect(302, "fooPath()", tt.I)
+			return c.Redirect(http.StatusPermanentRedirect, "fooPath()", tt.I)
 		})
 		a.GET("/nomap", func(c Context) error {
-			return c.Redirect(302, "rootPath()")
+			return c.Redirect(http.StatusPermanentRedirect, "rootPath()")
 		})
 
 		w := httptest.New(a)
@@ -72,7 +72,7 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 		r.Equal(tt.E, res.Location())
 
 		res = w.HTML("/nomap").Get()
-		r.Equal(302, res.Code)
+		r.Equal(http.StatusPermanentRedirect, res.Code)
 		r.Equal("/", res.Location())
 	}
 }
@@ -103,8 +103,34 @@ func Test_DefaultContext_Param_form(t *testing.T) {
 		"name": "Mark",
 	})
 
-	r.Equal(200, res.Code)
+	r.Equal(http.StatusOK, res.Code)
 	r.Equal("Mark", name)
+}
+
+func Test_DefaultContext_Param_Multiple(t *testing.T) {
+	r := require.New(t)
+
+	app := New(Options{})
+	var params ParamValues
+	var param string
+	app.POST("/{id}", func(c Context) error {
+		params = c.Params()
+		param = c.Param("id")
+		return nil
+	})
+
+	w := httptest.New(app)
+	res := w.HTML("/a?id=c&y=z&id=d").Post(map[string]string{
+		"id": "b",
+	})
+	paramsExpected := url.Values{
+		"id": []string{"a", "b", "c", "d"},
+		"y":  []string{"z"},
+	}
+
+	r.Equal(200, res.Code)
+	r.Equal(paramsExpected, params.(url.Values))
+	r.Equal("a", param)
 }
 
 func Test_DefaultContext_GetSet(t *testing.T) {
@@ -137,10 +163,10 @@ func Test_DefaultContext_Render(t *testing.T) {
 	c.params = url.Values{"name": []string{"Mark"}}
 	c.Set("greet", "Hello")
 
-	err := c.Render(123, render.String(`<%= greet %> <%= params["name"] %>!`))
+	err := c.Render(http.StatusTeapot, render.String(`<%= greet %> <%= params["name"] %>!`))
 	r.NoError(err)
 
-	r.Equal(123, res.Code)
+	r.Equal(http.StatusTeapot, res.Code)
 	r.Equal("Hello Mark!", res.Body.String())
 }
 
@@ -157,13 +183,13 @@ func Test_DefaultContext_Bind_Default(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		return c.Render(201, nil)
+		return c.Render(http.StatusCreated, nil)
 	})
 
 	w := httptest.New(a)
 	uv := url.Values{"first_name": []string{"Mark"}}
 	res := w.HTML("/").Post(uv)
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 
 	r.Equal("Mark", user.FirstName)
 }
@@ -181,9 +207,9 @@ func Test_DefaultContext_Bind_No_ContentType(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return c.Error(422, err)
+			return c.Error(http.StatusUnprocessableEntity, err)
 		}
-		return c.Render(201, nil)
+		return c.Render(http.StatusCreated, nil)
 	})
 
 	bb := &bytes.Buffer{}
@@ -192,7 +218,7 @@ func Test_DefaultContext_Bind_No_ContentType(t *testing.T) {
 	req.Header.Del("Content-Type")
 	res := httptest.NewRecorder()
 	a.ServeHTTP(res, req)
-	r.Equal(422, res.Code)
+	r.Equal(http.StatusUnprocessableEntity, res.Code)
 	r.Contains(res.Body.String(), "blank content type")
 }
 
@@ -209,9 +235,9 @@ func Test_DefaultContext_Bind_Empty_ContentType(t *testing.T) {
 	a.POST("/", func(c Context) error {
 		err := c.Bind(&user)
 		if err != nil {
-			return c.Error(422, err)
+			return c.Error(http.StatusUnprocessableEntity, err)
 		}
-		return c.Render(201, nil)
+		return c.Render(http.StatusCreated, nil)
 	})
 
 	bb := &bytes.Buffer{}
@@ -221,7 +247,7 @@ func Test_DefaultContext_Bind_Empty_ContentType(t *testing.T) {
 	req.Header.Set("Content-Type", "")
 	res := httptest.NewRecorder()
 	a.ServeHTTP(res, req)
-	r.Equal(422, res.Code)
+	r.Equal(http.StatusUnprocessableEntity, res.Code)
 	r.Contains(res.Body.String(), "blank content type")
 }
 
@@ -240,13 +266,13 @@ func Test_DefaultContext_Bind_Default_BlankFields(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		return c.Render(201, nil)
+		return c.Render(http.StatusCreated, nil)
 	})
 
 	w := httptest.New(a)
 	uv := url.Values{"first_name": []string{""}}
 	res := w.HTML("/").Post(uv)
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 
 	r.Equal("", user.FirstName)
 }
@@ -264,14 +290,14 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		return c.Render(201, nil)
+		return c.Render(http.StatusCreated, nil)
 	})
 
 	w := httptest.New(a)
 	res := w.JSON("/").Post(map[string]string{
 		"first_name": "Mark",
 	})
-	r.Equal(201, res.Code)
+	r.Equal(http.StatusCreated, res.Code)
 
 	r.Equal("Mark", user.FirstName)
 }

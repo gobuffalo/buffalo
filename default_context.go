@@ -127,7 +127,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
 				return d.Redirect(er.Status, er.URL)
 			}
-			return HTTPError{Status: 500, Cause: err}
+			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
 		}
 
 		if d.Session() != nil {
@@ -142,7 +142,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 		d.Response().WriteHeader(status)
 		_, err = io.Copy(d.Response(), bb)
 		if err != nil {
-			return HTTPError{Status: 500, Cause: err}
+			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
 		}
 
 		return nil

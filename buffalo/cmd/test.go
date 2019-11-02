@@ -46,7 +46,9 @@ var testCmd = &cobra.Command{
 				return err
 			}
 
+			// Read and remove --force-migrations flag from args:
 			forceMigrations = strings.Contains(strings.Join(args, ""), "--force-migrations")
+			args = cutArg("--force-migrations", args)
 			if forceMigrations {
 				fm, err := pop.NewFileMigrator("./migrations", test)
 
@@ -105,13 +107,13 @@ func testRunner(args []string) error {
 	var larg string
 	for i, a := range args {
 		switch a {
-		case "-run", "-m":
+		case "-run", "-m", "-timeout":
 			query = args[i+1]
 			mFlag = true
 		case "-v":
 			cargs = append(cargs, "-v")
 		default:
-			if larg != "-run" && larg != "-m" {
+			if larg != "-run" && larg != "-m" && larg != "-timeout" {
 				pargs = append(pargs, a)
 			}
 		}
@@ -215,4 +217,14 @@ func newTestCmd(args []string) *exec.Cmd {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd
+}
+
+func cutArg(arg string, args []string) []string {
+	for i, v := range args {
+		if v == arg {
+			return append(args[:i], args[i+1:]...)
+		}
+	}
+
+	return args
 }

@@ -7,7 +7,7 @@ import (
 
 func pkgChecks(opts *Options, box packd.Finder) genny.RunFn {
 	return func(r *genny.Runner) error {
-		for _, x := range []string{"go.mod", "Gopkg.toml", "Gopkg.lock"} {
+		for _, x := range []string{"go.mod"} {
 			f, err := box.FindString(x)
 			if err == nil {
 				opts.Out.Header("\nBuffalo: " + x)
