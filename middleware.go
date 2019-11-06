@@ -71,11 +71,10 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 	ms.stack = append(ms.stack, mw...)
 }
 
-// Remove the specified Middleware(s) for the App/group. This is useful when 
+// Remove the specified Middleware(s) for the App/group. This is useful when
 // the middleware will be skipped by the entire group.
 /*
 	a.Middleware.Remove(Authorization)
-*/
 */
 func (ms *MiddlewareStack) Remove(mws ...MiddlewareFunc) {
 	result := []MiddlewareFunc{}
