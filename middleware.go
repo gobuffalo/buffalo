@@ -71,6 +71,28 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 	ms.stack = append(ms.stack, mw...)
 }
 
+// Use the specified Middleware for the App.
+// When defined on an `*App` the specified middleware will be
+// inherited by any `Group` calls that are made on that on
+// the App.
+func (ms *MiddlewareStack) Remove(mws ...MiddlewareFunc) {
+	result := []MiddlewareFunc{}
+
+base:
+	for _, existing := range ms.stack {
+		for _, banned := range mws {
+			if funcKey(existing) == funcKey(banned) {
+				continue base
+			}
+		}
+
+		result = append(result, existing)
+	}
+
+	ms.stack = result
+
+}
+
 // Skip a specified piece of middleware the specified Handlers.
 // This is useful for things like wrapping your application in an
 // authorization middleware, but skipping it for things the home
