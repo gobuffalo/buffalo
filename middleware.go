@@ -71,10 +71,12 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 	ms.stack = append(ms.stack, mw...)
 }
 
-// Use the specified Middleware for the App.
-// When defined on an `*App` the specified middleware will be
-// inherited by any `Group` calls that are made on that on
-// the App.
+// Remove the specified Middleware(s) for the App/group. This is useful when 
+// the middleware will be skipped by the entire group.
+/*
+	a.Middleware.Remove(Authorization)
+*/
+*/
 func (ms *MiddlewareStack) Remove(mws ...MiddlewareFunc) {
 	result := []MiddlewareFunc{}
 
