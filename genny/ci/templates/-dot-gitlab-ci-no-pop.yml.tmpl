@@ -3,12 +3,7 @@ before_script:
   - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.App.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
   - go get -t -v ./...
-{{- end }}
   - export PATH="$PATH:$GOPATH/bin"
 
 stages:
