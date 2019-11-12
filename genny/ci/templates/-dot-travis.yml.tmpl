@@ -21,11 +21,6 @@ go_import_path: {{.opts.App.PackagePkg}}
 
 install:
   - go get github.com/gobuffalo/buffalo/buffalo
-{{- if .opts.App.WithDep }}
-  - go get github.com/golang/dep/cmd/dep
-  - dep ensure
-{{- else }}
   - go get $(go list ./... | grep -v /vendor/)
-{{- end }}
 
 script: buffalo test

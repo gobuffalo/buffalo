@@ -17,11 +17,7 @@ RUN npm install --no-progress
 {{end -}}
 
 ADD . .
-{{if .opts.App.WithDep -}}
-RUN dep ensure
-{{else -}}
 RUN go get $(go list ./... | grep -v /vendor/)
-{{end -}}
 RUN buffalo build --static -o /bin/app
 
 # Uncomment to run the binary in "production" mode:
