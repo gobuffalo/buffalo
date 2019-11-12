@@ -10,7 +10,6 @@ steps:
         mkdir -p "$(GOPATH)/pkg"
         mkdir -p "$(modulePath)"
         shopt -s extglob
-        go get -u -v github.com/gobuffalo/release/...
         mv !(gopath) "$(modulePath)"
     displayName: "Setup Go Workspace"
   - script: |
