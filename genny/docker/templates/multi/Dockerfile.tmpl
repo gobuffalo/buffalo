@@ -21,7 +21,6 @@ ADD . .
 ENV GO111MODULE=on
 {{end -}}
 RUN go get ./...
-{{end -}}
 RUN buffalo build --static -o /bin/app
 
 FROM alpine
