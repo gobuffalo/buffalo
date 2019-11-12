@@ -152,7 +152,7 @@ func optionsWithDefaults(opts Options) Options {
 	if opts.SessionStore == nil {
 		secret := envy.Get("SESSION_SECRET", "")
 
-		if opts.Env == "development" || opts.Env == "test" {
+		if secret == "" && (opts.Env == "development" || opts.Env == "test") {
 			secret = "buffalo-secret"
 		}
 
