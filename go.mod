@@ -15,7 +15,6 @@ require (
 	github.com/gobuffalo/genny v0.4.1
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.4.0
-	github.com/gobuffalo/here v0.4.1 // indirect
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.4.0
 	github.com/gobuffalo/logger v1.0.1
@@ -31,7 +30,7 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	github.com/karrick/godirwalk v1.13.0
-	github.com/markbates/grift v1.1.1-0.20191115203834-a01c5489b22b
+	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
@@ -43,7 +42,7 @@ require (
 	github.com/spf13/viper v1.5.0
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191115173008-1c71899d35ca
+	golang.org/x/tools v0.0.0-20191115202509-3a792d9c32b2
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.5
 )
