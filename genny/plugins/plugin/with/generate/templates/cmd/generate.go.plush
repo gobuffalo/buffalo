@@ -33,7 +33,7 @@ var generateCmd = &cobra.Command{
 		}
 		r.With(g)
 
-		g, err = gotools.GoFmt(r.Root)
+		g, err = gogen.Fmt(r.Root)
 		if err != nil {
 			return err
 		}
