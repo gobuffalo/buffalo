@@ -71,6 +71,29 @@ func (ms *MiddlewareStack) Use(mw ...MiddlewareFunc) {
 	ms.stack = append(ms.stack, mw...)
 }
 
+// Remove the specified Middleware(s) for the App/group. This is useful when
+// the middleware will be skipped by the entire group.
+/*
+	a.Middleware.Remove(Authorization)
+*/
+func (ms *MiddlewareStack) Remove(mws ...MiddlewareFunc) {
+	result := []MiddlewareFunc{}
+
+base:
+	for _, existing := range ms.stack {
+		for _, banned := range mws {
+			if funcKey(existing) == funcKey(banned) {
+				continue base
+			}
+		}
+
+		result = append(result, existing)
+	}
+
+	ms.stack = result
+
+}
+
 // Skip a specified piece of middleware the specified Handlers.
 // This is useful for things like wrapping your application in an
 // authorization middleware, but skipping it for things the home

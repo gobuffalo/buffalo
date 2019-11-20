@@ -33,6 +33,12 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	g.RunFn(func(r *genny.Runner) error {
+		if opts.App.WithYarn {
+			if _, err := r.LookPath("yarnpkg"); err == nil {
+				return nil
+			}
+			// If yarn is not installed, it still can be installed with npm.
+		}
 		if _, err := r.LookPath("npm"); err != nil {
 			return fmt.Errorf("could not find npm executable")
 		}

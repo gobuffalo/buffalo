@@ -24,13 +24,13 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.12.2+incompatible
-	github.com/gobuffalo/release v1.14.0
-	github.com/gobuffalo/tags v2.1.6+incompatible
+	github.com/gobuffalo/release v1.15.0
+	github.com/gobuffalo/tags v2.1.7+incompatible
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
-	github.com/karrick/godirwalk v1.12.0
-	github.com/markbates/grift v1.1.0
+	github.com/karrick/godirwalk v1.13.0
+	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
@@ -39,10 +39,10 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.4.0
+	github.com/spf13/viper v1.5.0
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191030062658-86caa796c7ab
+	golang.org/x/tools v0.0.0-20191115202509-3a792d9c32b2
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/yaml.v2 v2.2.4
+	gopkg.in/yaml.v2 v2.2.5
 )
