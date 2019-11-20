@@ -447,6 +447,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/stretchr/testify](https://godoc.org/github.com/stretchr/testify)
 
+* [github.com/subosito/gotenv](https://godoc.org/github.com/subosito/gotenv)
+
 * [github.com/tarm/serial](https://godoc.org/github.com/tarm/serial)
 
 * [github.com/tmc/grpc-websocket-proxy](https://godoc.org/github.com/tmc/grpc-websocket-proxy)
