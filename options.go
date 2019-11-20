@@ -151,15 +151,22 @@ func optionsWithDefaults(opts Options) Options {
 
 	if opts.SessionStore == nil {
 		secret := envy.Get("SESSION_SECRET", "")
+
+		if secret == "" && (opts.Env == "development" || opts.Env == "test") {
+			secret = "buffalo-secret"
+		}
+
 		// In production a SESSION_SECRET must be set!
 		if secret == "" {
-			if opts.Env == "development" || opts.Env == "test" {
-				secret = "buffalo-secret"
-			} else {
-				opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
-			}
+			opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
 		}
-		opts.SessionStore = sessions.NewCookieStore([]byte(secret))
+
+		cookieStore := sessions.NewCookieStore([]byte(secret))
+		//Cookie secure attributes, see: https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)
+		cookieStore.Options.HttpOnly = true
+		cookieStore.Options.Secure = true
+
+		opts.SessionStore = cookieStore
 	}
 	if opts.Worker == nil {
 		w := worker.NewSimpleWithContext(opts.Context)

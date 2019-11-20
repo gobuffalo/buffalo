@@ -16,6 +16,7 @@ package x
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
@@ -93,7 +94,7 @@ func ContactFormHandler(c buffalo.Context) error {
 
     //Calling to send the message
     SendContactMessage(contact)
-    return c.Redirect(302, "contact/thanks")
+    return c.Redirect(http.StatusFound, "contact/thanks")
 }
 ...
 ```

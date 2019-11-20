@@ -55,7 +55,6 @@ var checks = []Check{
 	WebpackCheck,
 	PackageJSONCheck,
 	AddPackageJSONScripts,
-	DepEnsure,
 	installTools,
 	DeprecrationsCheck,
 	fixDocker,

@@ -33,9 +33,4 @@ func Test_Options_Validate(t *testing.T) {
 	err = opts.Validate()
 	r.NoError(err)
 
-	opts.App.WithDep = true
-	opts.App.WithModules = true
-	err = opts.Validate()
-	r.Error(err)
-	r.Equal(ErrGoModulesWithDep, err)
 }

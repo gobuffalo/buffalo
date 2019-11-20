@@ -3,6 +3,7 @@ package buffalo
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"net/http"
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
@@ -53,7 +54,7 @@ func RequestLoggerFunc(h Handler) Handler {
 			ws, ok := c.Response().(*Response)
 			if !ok {
 				ws = &Response{ResponseWriter: c.Response()}
-				ws.Status = 200
+				ws.Status = http.StatusOK
 			}
 			req := c.Request()
 			ct := httpx.ContentType(req)

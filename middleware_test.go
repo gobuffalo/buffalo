@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -126,11 +127,11 @@ type carsResource struct {
 }
 
 func (ur *carsResource) Show(c Context) error {
-	return c.Render(200, render.String("show"))
+	return c.Render(http.StatusOK, render.String("show"))
 }
 
 func (ur *carsResource) List(c Context) error {
-	return c.Render(200, render.String("list"))
+	return c.Render(http.StatusOK, render.String("list"))
 }
 
 // Test_Middleware_Skip tests that middleware gets skipped
@@ -197,4 +198,47 @@ func Test_Middleware_Clear(t *testing.T) {
 
 	r.Len(mws.stack, 0)
 	r.Len(mws.skips, 0)
+}
+
+func Test_Middleware_Remove(t *testing.T) {
+	r := require.New(t)
+	log := []string{}
+
+	mw1 := func(h Handler) Handler {
+		log = append(log, "mw1")
+		return h
+	}
+
+	mw2 := func(h Handler) Handler {
+		log = append(log, "mw2")
+		return h
+	}
+
+	a := New(Options{})
+	a.Use(mw2)
+	a.Use(mw1)
+
+	var cr Resource = &carsResource{}
+	g := a.Resource("/autos", cr)
+	g.Middleware.Remove(mw2)
+
+	a.Resource("/all_log_autos", cr)
+	w := httptest.New(a)
+
+	ng := a.Resource("/no_log_autos", cr)
+	ng.Middleware.Remove(mw1, mw2)
+
+	_ = w.HTML("/autos/1").Get()
+	r.Len(log, 1)
+	r.Equal("mw1", log[0])
+
+	log = []string{}
+	_ = w.HTML("/all_log_autos/1").Get()
+	r.Len(log, 2)
+	r.Contains(log, "mw2")
+	r.Contains(log, "mw1")
+
+	log = []string{}
+	_ = w.HTML("/no_log_autos/1").Get()
+	r.Len(log, 0)
 }

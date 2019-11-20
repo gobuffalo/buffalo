@@ -17,14 +17,10 @@ RUN npm install --no-progress
 {{end -}}
 
 ADD . .
-{{if .opts.App.WithDep -}}
-RUN dep ensure
-{{else -}}
 {{if .opts.App.WithModules -}}
-ENV GO111MODULES=on
+ENV GO111MODULE=on
 {{end -}}
 RUN go get ./...
-{{end -}}
 RUN buffalo build --static -o /bin/app
 
 FROM alpine

@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"net/url"
 	"testing"
 
@@ -14,11 +15,11 @@ func Test_MethodOverride(t *testing.T) {
 
 	a := New(Options{})
 	a.PUT("/", func(c Context) error {
-		return c.Render(200, render.String("you put me!"))
+		return c.Render(http.StatusOK, render.String("you put me!"))
 	})
 
 	w := httptest.New(a)
 	res := w.HTML("/").Post(url.Values{"_method": []string{"PUT"}})
-	r.Equal(200, res.Code)
+	r.Equal(http.StatusOK, res.Code)
 	r.Equal("you put me!", res.Body.String())
 }
