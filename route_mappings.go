@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
 )
@@ -108,7 +108,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		}
 
 		stat, _ := f.Stat()
-		maxAge := envy.Get(AssetsAgeVarName, "31536000")
+		maxAge := envx.Get(AssetsAgeVarName, "31536000")
 		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime().UnixNano()))
 		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)

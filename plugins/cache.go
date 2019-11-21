@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/buffalo/internal/envx"
 )
 
 type cachedPlugin struct {
@@ -31,7 +31,7 @@ var CachePath = func() string {
 
 var cacheMoot sync.RWMutex
 
-var cacheOn = envy.Get("BUFFALO_PLUGIN_CACHE", "on")
+var cacheOn = envx.Get("BUFFALO_PLUGIN_CACHE", "on")
 
 var cache = func() cachedPlugins {
 	m := cachedPlugins{}

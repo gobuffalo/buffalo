@@ -2,15 +2,17 @@ package actions
 
 import (
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo-pop/pop/popmw"
 	"github.com/gobuffalo/envy"
-	csrf "github.com/gobuffalo/mw-csrf"
 	forcessl "github.com/gobuffalo/mw-forcessl"
-	i18n "github.com/gobuffalo/mw-i18n"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
-	"github.com/gobuffalo/packr/v2"
-	"github.com/markbates/coke/models"
 	"github.com/unrolled/secure"
+
+	"coke/models"
+
+	"github.com/gobuffalo/buffalo-pop/pop/popmw"
+	csrf "github.com/gobuffalo/mw-csrf"
+	i18n "github.com/gobuffalo/mw-i18n"
+	"github.com/gobuffalo/packr/v2"
 )
 
 // ENV is used to help switch settings based on where the
@@ -71,7 +73,7 @@ func App() *buffalo.App {
 // for more information: https://gobuffalo.io/en/docs/localization
 func translations() buffalo.MiddlewareFunc {
 	var err error
-	if T, err = i18n.New(packr.New("../locales", "../locales"), "en-US"); err != nil {
+	if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
 		app.Stop(err)
 	}
 	return T.Middleware()

@@ -12,7 +12,7 @@ type ActionSuite struct {
 }
 
 func Test_ActionSuite(t *testing.T) {
-	action, err := suite.NewActionWithFixtures(App(), packr.New("../fixtures", "../fixtures"))
+	action, err := suite.NewActionWithFixtures(App(), packr.New("Test_ActionSuite", "../fixtures"))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -8,6 +8,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/internal/defaults"
+	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
@@ -79,20 +80,20 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
+	opts.Env = defaults.String(opts.Env, envx.Get("GO_ENV", "development"))
 	opts.Name = defaults.String(opts.Name, "/")
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
 	}
-	envAddr := envy.Get("ADDR", addr)
+	envAddr := envx.Get("ADDR", addr)
 
 	if strings.HasPrefix(envAddr, "unix:") {
 		// UNIX domain socket doesn't have a port
 		opts.Addr = envAddr
 	} else {
 		// TCP case
-		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envy.Get("PORT", "3000")))
+		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envx.Get("PORT", "3000")))
 	}
 
 	if opts.PreWares == nil {
@@ -150,7 +151,7 @@ func optionsWithDefaults(opts Options) Options {
 	})
 
 	if opts.SessionStore == nil {
-		secret := envy.Get("SESSION_SECRET", "")
+		secret := envx.Get("SESSION_SECRET", "")
 
 		if secret == "" && (opts.Env == "development" || opts.Env == "test") {
 			secret = "buffalo-secret"
@@ -174,6 +175,6 @@ func optionsWithDefaults(opts Options) Options {
 		opts.Worker = w
 	}
 	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
+	opts.Host = defaults.String(opts.Host, envx.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envx.Get("PORT", "3000"))))
 	return opts
 }

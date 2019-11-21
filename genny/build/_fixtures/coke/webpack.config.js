@@ -1,6 +1,5 @@
 const Webpack = require("webpack");
 const Glob = require("glob");
-const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");

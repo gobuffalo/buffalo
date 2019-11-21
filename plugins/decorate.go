@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
@@ -80,7 +81,7 @@ func LookPath(s string) (string, error) {
 	if from, err := envy.MustGet("BUFFALO_PLUGIN_PATH"); err == nil {
 		looks = append(looks, from)
 	} else {
-		looks = []string{filepath.Join(pwd, "plugins"), filepath.Join(envy.GoPath(), "bin"), envy.Get("PATH", "")}
+		looks = []string{filepath.Join(pwd, "plugins"), filepath.Join(envy.GoPath(), "bin"), envx.Get("PATH", "")}
 	}
 
 	for _, p := range looks {

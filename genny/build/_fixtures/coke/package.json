@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "webpack --watch",
+    "build": "webpack -p --progress"
+  },
   "repository": "github.com/gobuffalo/buffalo",
   "dependencies": {
     "bootstrap": "4.3.1",
     "popper.js": "^1.14.4",
-    "font-awesome": "~4.7.0",
+    "@fortawesome/fontawesome-free": "^5.8.1",
     "jquery": "~3.4.1",
     "jquery-ujs": "~1.2.2"
   },
@@ -15,8 +19,7 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "babel-loader": "^8.0.0-beta.6",
-
+    "babel-loader": "^8.0.5",
 
     "css-loader": "~1.0.0",
     "expose-loader": "~0.7.5",
@@ -36,6 +39,6 @@
     "webpack-cli": "3.1.0",
     "webpack-livereload-plugin":"2.1.1",
     "webpack-manifest-plugin": "~2.0.0",
-    "node-sass": "~4.9.0"
+    "node-sass": "~4.12.0"
   }
 }

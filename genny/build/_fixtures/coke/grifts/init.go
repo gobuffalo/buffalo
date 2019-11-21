@@ -1,8 +1,9 @@
 package grifts
 
 import (
+	"coke/actions"
+
 	"github.com/gobuffalo/buffalo"
-	"github.com/markbates/coke/actions"
 )
 
 func init() {
