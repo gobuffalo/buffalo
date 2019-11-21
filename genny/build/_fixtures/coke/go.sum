@@ -321,6 +321,8 @@ github.com/gobuffalo/logger v0.0.0-20190315122211-86e12af44bc2/go.mod h1:QdxcLw5
 github.com/gobuffalo/logger v1.0.0/go.mod h1:2zbswyIUa45I+c+FLXuWl9zSWEiVuthsk8ze5s8JvPs=
 github.com/gobuffalo/logger v1.0.1 h1:ZEgyRGgAm4ZAhAO45YXMs5Fp+bzGLESFewzAVBMKuTg=
 github.com/gobuffalo/logger v1.0.1/go.mod h1:2zbswyIUa45I+c+FLXuWl9zSWEiVuthsk8ze5s8JvPs=
+github.com/gobuffalo/logger v1.0.2 h1:C07Fb1g3P0CVQxTlqFSKyM2T/VIwHTjIVFzkxdYAI4Y=
+github.com/gobuffalo/logger v1.0.2/go.mod h1:3Fdhr3hXXXumcpR83wrlHIMbCn/AGNhDYjrDyYDbixc=
 github.com/gobuffalo/makr v1.1.5/go.mod h1:Y+o0btAH1kYAMDJW/TX3+oAXEu0bmSLLoC9mIFxtzOw=
 github.com/gobuffalo/makr v1.2.0/go.mod h1:SFQUrDtwDpmQ6BxKJqxg0emc4KkNzzvUtAtnHiVK/QQ=
 github.com/gobuffalo/mapi v1.0.0/go.mod h1:4VAGh89y6rVOvm5A8fKFxYG+wIW6LO1FMTG9hnKStFc=

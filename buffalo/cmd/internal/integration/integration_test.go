@@ -12,9 +12,6 @@ import (
 
 func call(args []string, fn func(dir string)) error {
 	gp := os.TempDir()
-	if err != nil {
-		return err
-	}
 
 	if fn == nil {
 		if err := exec(args); err != nil {
@@ -24,9 +21,7 @@ func call(args []string, fn func(dir string)) error {
 
 	tdir := filepath.Join(gp, "testapp")
 	defer os.RemoveAll(tdir)
-	if err != nil {
-		return err
-	}
+
 	if err := os.RemoveAll(tdir); err != nil {
 		return err
 	}
