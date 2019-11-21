@@ -19,16 +19,12 @@ import (
 	"github.com/gobuffalo/buffalo/genny/newapp/web"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/genny/vcs"
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
-	"github.com/gobuffalo/envy"
 	fname "github.com/gobuffalo/flect/name"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr/v2/plog"
-	"github.com/gobuffalo/plush"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -194,9 +190,6 @@ var newCmd = &cobra.Command{
 			gg, err = web.New(wo)
 		}
 		if err != nil {
-			if errx.Unwrap(err) == core.ErrNotInGoPath {
-				return notInGoPath(app)
-			}
 			return err
 		}
 		run.WithGroup(gg)
@@ -239,26 +232,6 @@ func currentUser() (string, error) {
 		username = t[len(t)-1]
 	}
 	return username, nil
-}
-
-func notInGoPath(app meta.App) error {
-	username, err := currentUser()
-	if err != nil {
-		return err
-	}
-	pwd, _ := os.Getwd()
-	t, err := plush.Render(notInGoWorkspace, plush.NewContextWith(map[string]interface{}{
-		"name":     app.Name,
-		"gopath":   envy.GoPath(),
-		"current":  pwd,
-		"username": username,
-	}))
-	if err != nil {
-		return err
-	}
-	logrus.Error(t)
-	os.Exit(-1)
-	return nil
 }
 
 func init() {

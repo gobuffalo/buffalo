@@ -20,7 +20,6 @@ import (
 var buildOptions = struct {
 	*build.Options
 	SkipAssets             bool
-	SkipBuildDeps          bool
 	Debug                  bool
 	Tags                   string
 	SkipTemplateValidation bool
@@ -52,7 +51,6 @@ var xbuildCmd = &cobra.Command{
 		}
 
 		buildOptions.Options.WithAssets = !buildOptions.SkipAssets
-		buildOptions.Options.WithBuildDeps = !buildOptions.SkipBuildDeps
 
 		run := genny.WetRunner(ctx)
 		if buildOptions.DryRun {
@@ -101,7 +99,6 @@ func init() {
 	xbuildCmd.Flags().StringVarP(&buildOptions.Tags, "tags", "t", "", "compile with specific build tags")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.ExtractAssets, "extract-assets", "e", false, "extract the assets and put them in a distinct archive")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.SkipAssets, "skip-assets", "k", false, "skip running webpack and building assets")
-	xbuildCmd.Flags().BoolVarP(&buildOptions.SkipBuildDeps, "skip-build-deps", "", false, "skip building dependencies")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Static, "static", "s", false, "build a static binary using  --ldflags '-linkmode external -extldflags \"-static\"'")
 	xbuildCmd.Flags().StringVar(&buildOptions.LDFlags, "ldflags", "", "set any ldflags to be passed to the go build")
 	xbuildCmd.Flags().BoolVarP(&buildOptions.Verbose, "verbose", "v", false, "print debugging information")

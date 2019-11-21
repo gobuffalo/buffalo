@@ -35,35 +35,31 @@ var eq = func(r *require.Assertions, s string, c *exec.Cmd) {
 }
 
 func Test_New(t *testing.T) {
-	envy.Temp(func() {
-		envy.Set(envy.GO111MODULE, "off")
-		r := require.New(t)
+	r := require.New(t)
 
-		run := cokeRunner()
+	run := cokeRunner()
 
-		opts := &Options{
-			WithAssets:    true,
-			WithBuildDeps: true,
-			Environment:   "bar",
-			App:           meta.New("."),
-		}
-		opts.App.Bin = "bin/foo"
-		r.NoError(run.WithNew(New(opts)))
-		run.Root = opts.App.Root
+	opts := &Options{
+		WithAssets:  true,
+		Environment: "bar",
+		App:         meta.New("."),
+	}
+	opts.App.Bin = "bin/foo"
+	r.NoError(run.WithNew(New(opts)))
+	run.Root = opts.App.Root
 
-		r.NoError(run.Run())
+	r.NoError(run.Run())
 
-		res := run.Results()
+	res := run.Results()
 
-		// we should never leave any files modified or dropped
-		r.Len(res.Files, 0)
+	// we should never leave any files modified or dropped
+	r.Len(res.Files, 0)
 
-		cmds := []string{"go get -tags bar ./...", "go build -i -tags bar -o bin/foo"}
-		r.Len(res.Commands, len(cmds))
-		for i, c := range res.Commands {
-			eq(r, cmds[i], c)
-		}
-	})
+	cmds := []string{"go build -tags bar -o bin/foo", "go mod tidy"}
+	r.Len(res.Commands, len(cmds))
+	for i, c := range res.Commands {
+		eq(r, cmds[i], c)
+	}
 }
 
 func Test_NewWithoutBuildDeps(t *testing.T) {
@@ -74,10 +70,9 @@ func Test_NewWithoutBuildDeps(t *testing.T) {
 		run := cokeRunner()
 
 		opts := &Options{
-			WithAssets:    false,
-			WithBuildDeps: false,
-			Environment:   "bar",
-			App:           meta.New("."),
+			WithAssets:  false,
+			Environment: "bar",
+			App:         meta.New("."),
 		}
 		opts.App.Bin = "bin/foo"
 		r.NoError(run.WithNew(New(opts)))
@@ -87,7 +82,7 @@ func Test_NewWithoutBuildDeps(t *testing.T) {
 
 		res := run.Results()
 
-		cmds := []string{"go build -i -tags bar -o bin/foo"}
+		cmds := []string{"go build -tags bar -o bin/foo", "go mod tidy"}
 		r.Len(res.Commands, len(cmds))
 		for i, c := range res.Commands {
 			eq(r, cmds[i], c)

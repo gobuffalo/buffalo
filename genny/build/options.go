@@ -18,9 +18,8 @@ type Options struct {
 	// b) to time.RFC3339 of BuildTime
 	BuildVersion string `json:"build_version,omitempty"`
 	// CleanAssets will remove the public/assets folder build compiling
-	CleanAssets   bool `json:"clean_assets"`
-	WithAssets    bool `json:"with_assets,omitempty"`
-	WithBuildDeps bool `json:"with_build_deps,omitempty"`
+	CleanAssets bool `json:"clean_assets"`
+	WithAssets  bool `json:"with_assets,omitempty"`
 	// places ./public/assets into ./bin/assets.zip.
 	// requires WithAssets = true
 	ExtractAssets bool `json:"extract_assets,omitempty"`

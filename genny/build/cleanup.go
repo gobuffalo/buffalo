@@ -5,7 +5,6 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/packr/v2/jam"
 )
@@ -40,11 +39,6 @@ func Cleanup(opts *Options) genny.RunFn {
 				return err
 			}
 		}
-		if envy.Mods() && opts.WithBuildDeps {
-			if err := r.Exec(exec.Command(genny.GoBin(), "mod", "tidy")); err != nil {
-				return err
-			}
-		}
-		return nil
+		return r.Exec(exec.Command(genny.GoBin(), "mod", "tidy"))
 	}
 }
