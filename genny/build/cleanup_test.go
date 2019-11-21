@@ -4,7 +4,6 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
@@ -12,7 +11,6 @@ import (
 
 func Test_WithDeps(t *testing.T) {
 	r := require.New(t)
-	envy.Set(envy.GO111MODULE, "on")
 
 	run := gentest.NewRunner()
 

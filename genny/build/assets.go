@@ -2,11 +2,11 @@ package build
 
 import (
 	"bytes"
+	"os"
 	"os/exec"
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 
 	"github.com/gobuffalo/packr/v2/jam"
@@ -29,7 +29,7 @@ func assets(opts *Options) (*genny.Generator, error) {
 		}
 		g.RunFn(func(r *genny.Runner) error {
 			r.Logger.Debugf("setting NODE_ENV = %s", opts.Environment)
-			return envy.MustSet("NODE_ENV", opts.Environment)
+			return os.Setenv("NODE_ENV", opts.Environment)
 		})
 		g.RunFn(func(r *genny.Runner) error {
 			tool := "yarnpkg"

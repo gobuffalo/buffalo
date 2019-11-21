@@ -78,7 +78,6 @@ func New(opts Options) *App {
 
 // Load .env files. Files will be loaded in the same order that are received.
 // Redefined vars will override previously existing values.
-// IE: envy.Load(".env", "test_env/.env") will result in DIR=test_env
 // If no arg passed, it will try to load a .env file.
 func loadEnv(files ...string) error {
 

@@ -3,6 +3,7 @@ module coke
 go 1.13
 
 require (
+	github.com/cockroachdb/cockroach-go v0.0.0-20190925194419-606b3d062051 // indirect
 	github.com/codegangsta/negroni v1.0.0 // indirect
 	github.com/gobuffalo/buffalo v0.15.2-0.20191120211510-584997c3f17d
 	github.com/gobuffalo/buffalo-pop v1.23.1
@@ -15,6 +16,7 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/pop v4.12.2+incompatible
 	github.com/gobuffalo/suite v2.8.2+incompatible
+	github.com/jackc/pgconn v1.1.0 // indirect
 	github.com/markbates/grift v1.5.0
 	github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c
 )

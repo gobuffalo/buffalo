@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gentest"
 	"github.com/gobuffalo/meta"
@@ -60,32 +59,4 @@ func Test_New(t *testing.T) {
 	for i, c := range res.Commands {
 		eq(r, cmds[i], c)
 	}
-}
-
-func Test_NewWithoutBuildDeps(t *testing.T) {
-	envy.Temp(func() {
-		envy.Set(envy.GO111MODULE, "off")
-		r := require.New(t)
-
-		run := cokeRunner()
-
-		opts := &Options{
-			WithAssets:  false,
-			Environment: "bar",
-			App:         meta.New("."),
-		}
-		opts.App.Bin = "bin/foo"
-		r.NoError(run.WithNew(New(opts)))
-		run.Root = opts.App.Root
-
-		r.NoError(run.Run())
-
-		res := run.Results()
-
-		cmds := []string{"go build -tags bar -o bin/foo", "go mod tidy"}
-		r.Len(res.Commands, len(cmds))
-		for i, c := range res.Commands {
-			eq(r, cmds[i], c)
-		}
-	})
 }

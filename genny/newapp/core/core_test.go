@@ -1,28 +1,23 @@
 package core
 
 import (
-	"path/filepath"
+	"io/ioutil"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/buffalo/runtime"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny/gentest"
-	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/packr/v2/plog"
 	"github.com/stretchr/testify/require"
 )
 
-func init() {
-	// normalize command output
-	envy.Set("GO_BIN", "go")
-}
-
 func Test_New(t *testing.T) {
 	r := require.New(t)
-	plog.Logger = logger.New(logger.DebugLevel)
-	app := meta.Named("coke", filepath.Join(envy.GoPath(), "src"))
+
+	tdir, err := ioutil.TempDir("", "")
+	r.NoError(err)
+
+	app := meta.Named("coke", tdir)
 	app.WithModules = false
 
 	gg, err := New(&Options{
@@ -71,53 +66,49 @@ func Test_New(t *testing.T) {
 
 func Test_New_Mods(t *testing.T) {
 	r := require.New(t)
-	envy.Temp(func() {
-		envy.Set(envy.GO111MODULE, "on")
+	app := meta.Named("coke", ".")
+	(&app).PackageRoot("coke")
+	app.WithModules = true
 
-		app := meta.Named("coke", ".")
-		(&app).PackageRoot("coke")
-		app.WithModules = true
-
-		gg, err := New(&Options{
-			App: app,
-		})
-		r.NoError(err)
-
-		run := gentest.NewRunner()
-		run.WithGroup(gg)
-
-		r.NoError(run.Run())
-
-		res := run.Results()
-
-		cmds := []string{
-			"go mod init coke",
-			"go get github.com/gobuffalo/buffalo@" + runtime.Version,
-			"go get ./...",
-			"go mod tidy",
-		}
-		r.NoError(gentest.CompareCommands(cmds, res.Commands))
-
-		expected := commonExpected
-		for _, e := range expected {
-			_, err = res.Find(e)
-			r.NoError(err)
-		}
-
-		unexpected := []string{
-			"Dockerfile",
-			"database.yml",
-			"models/models.go",
-			".buffalo.dev.yml",
-			"assets/css/application.scss.css",
-			"public/assets/application.js",
-		}
-		for _, u := range unexpected {
-			_, err = res.Find(u)
-			r.Error(err)
-		}
-
+	gg, err := New(&Options{
+		App: app,
 	})
+	r.NoError(err)
+
+	run := gentest.NewRunner()
+	run.WithGroup(gg)
+
+	r.NoError(run.Run())
+
+	res := run.Results()
+
+	cmds := []string{
+		"go mod init coke",
+		"go get github.com/gobuffalo/buffalo@" + runtime.Version,
+		"go get ./...",
+		"go mod tidy",
+	}
+	r.NoError(gentest.CompareCommands(cmds, res.Commands))
+
+	expected := commonExpected
+	for _, e := range expected {
+		_, err = res.Find(e)
+		r.NoError(err)
+	}
+
+	unexpected := []string{
+		"Dockerfile",
+		"database.yml",
+		"models/models.go",
+		".buffalo.dev.yml",
+		"assets/css/application.scss.css",
+		"public/assets/application.js",
+	}
+	for _, u := range unexpected {
+		_, err = res.Find(u)
+		r.Error(err)
+	}
+
 }
 
 func Test_New_Docker(t *testing.T) {

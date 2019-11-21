@@ -1,20 +1,18 @@
 package build
 
 import (
+	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_buildCmd(t *testing.T) {
-	envy.Set("GO_BIN", "go")
-	gomods.Force(true)
+	os.Setenv("GO_BIN", "go")
 	r := require.New(t)
 
 	eq := func(s string, c *exec.Cmd) {
@@ -73,8 +71,7 @@ func Test_buildCmd_Unix_RemovesExe(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		return
 	}
-	envy.Set("GO_BIN", "go")
-	gomods.Force(true)
+	os.Setenv("GO_BIN", "go")
 	r := require.New(t)
 
 	eq := func(s string, c *exec.Cmd) {
@@ -95,8 +92,7 @@ func Test_buildCmd_Windows_AddsExe(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		return
 	}
-	envy.Set("GO_BIN", "go")
-	gomods.Force(true)
+	os.Setenv("GO_BIN", "go")
 	r := require.New(t)
 
 	eq := func(s string, c *exec.Cmd) {
@@ -116,8 +112,7 @@ func Test_buildCmd_Windows_AddsExe(t *testing.T) {
 }
 
 func Test_installCmd(t *testing.T) {
-	envy.Set("GO_BIN", "go")
-	gomods.Force(true)
+	os.Setenv("GO_BIN", "go")
 	r := require.New(t)
 
 	eq := func(s string, c *exec.Cmd) {
