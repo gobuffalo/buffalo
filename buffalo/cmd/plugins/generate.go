@@ -3,12 +3,11 @@ package plugins
 import (
 	"context"
 	"fmt"
-	"path/filepath"
+	"os"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/genny/plugins/plugin"
 	"github.com/gobuffalo/buffalo/genny/plugins/plugin/with"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/licenser/genny/licenser"
@@ -37,7 +36,11 @@ var generateCmd = &cobra.Command{
 			r = genny.DryRunner(context.Background())
 		}
 
-		popts.Root = filepath.Join(envy.GoPath(), "src")
+		pwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		popts.Root = pwd
 
 		gg, err := plugin.New(popts)
 		if err != nil {
