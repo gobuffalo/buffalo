@@ -1,0 +1,24 @@
+name: Tests
+on: [push]
+jobs:
+
+  tests:
+    name: ${{matrix.os}} Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: |
+        go mod tidy -v
+        go test -tags "sqlite integration_test" -race ./...
