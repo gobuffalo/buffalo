@@ -29,6 +29,7 @@ require (
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
+	github.com/joho/godotenv v1.3.0
 	github.com/karrick/godirwalk v1.13.0
 	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0

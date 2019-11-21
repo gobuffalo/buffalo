@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/envy"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,20 +26,15 @@ func TestOptions_NewOptions(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			r := require.New(t)
-			envy.Temp(func() {
-				envy.Set("GO_ENV", test.env)
-				envy.Set("SESSION_SECRET", test.secret)
+			opts := NewOptions()
 
-				opts := NewOptions()
+			req, _ := http.NewRequest("GET", "/", strings.NewReader(""))
+			req.AddCookie(&http.Cookie{Name: "_buffalo_session"})
 
-				req, _ := http.NewRequest("GET", "/", strings.NewReader(""))
-				req.AddCookie(&http.Cookie{Name: "_buffalo_session"})
+			_, err := opts.SessionStore.New(req, "_buffalo_session")
 
-				_, err := opts.SessionStore.New(req, "_buffalo_session")
-
-				r.Error(err)
-				r.Contains(err.Error(), test.expectErr)
-			})
+			r.Error(err)
+			r.Contains(err.Error(), test.expectErr)
 		})
 	}
 }

@@ -12,28 +12,27 @@ import (
 
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
 	"github.com/karrick/godirwalk"
 	"github.com/markbates/oncer"
 	"github.com/sirupsen/logrus"
 )
 
-const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
+const BUFFALO_PLUGIN_TIMEOUT = "BUFFALO_PLUGIN_TIMEOUT"
 
 var t = time.Second * 2
 
 func timeout() time.Duration {
 	oncer.Do("plugins.timeout", func() {
-		rawTimeout, err := envy.MustGet(timeoutEnv)
-		if err == nil {
-			if parsed, err := time.ParseDuration(rawTimeout); err == nil {
-				t = parsed
-			} else {
-				logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, t, err)
-			}
-		} else {
-			logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, t)
+		rawTimeout := os.Getenv(BUFFALO_PLUGIN_TIMEOUT)
+		if len(rawTimeout) == 0 {
+			logrus.Debugf("%q not set, assuming default of %v", BUFFALO_PLUGIN_TIMEOUT, t)
+			return
+		}
+		var err error
+		t, err = time.ParseDuration(rawTimeout)
+		if err != nil {
+			logrus.Errorf("%q value is malformed assuming default %q: %v", BUFFALO_PLUGIN_TIMEOUT, t, err)
 		}
 	})
 	return t
@@ -78,18 +77,10 @@ func Available() (List, error) {
 			return
 		}
 
-		paths := []string{"plugins"}
-
-		from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
+		paths, err := pluginBins()
 		if err != nil {
-			from, err = envy.MustGet("GOPATH")
-			if err != nil {
-				return
-			}
-			from = filepath.Join(from, "bin")
+			return
 		}
-
-		paths = append(paths, strings.Split(from, string(os.PathListSeparator))...)
 
 		list := List{}
 		for _, p := range paths {
@@ -229,4 +220,18 @@ func listPlugDeps(app meta.App) (List, error) {
 		}
 	}
 	return list, nil
+}
+
+func pluginBins() ([]string, error) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	from := os.Getenv(BUFFALO_PLUGIN_PATH)
+	if len(from) == 0 {
+		return []string{filepath.Join(pwd, "plugins"), os.Getenv("PATH")}, nil
+	}
+	return []string{from}, nil
+
 }

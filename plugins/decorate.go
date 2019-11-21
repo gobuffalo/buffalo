@@ -8,13 +8,13 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
-	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
 
 // ErrPlugMissing error for when a plugin is missing
 var ErrPlugMissing = fmt.Errorf("plugin missing")
+
+const BUFFALO_PLUGIN_PATH = "BUFFALO_PLUGIN_PATH"
 
 // Decorate setup cobra Commands for plugins
 func Decorate(c Command) *cobra.Command {
@@ -49,7 +49,7 @@ func Decorate(c Command) *cobra.Command {
 
 			ex := exec.Command(bin, ax...)
 			if runtime.GOOS != "windows" {
-				ex.Env = append(envy.Environ(), "BUFFALO_PLUGIN=1")
+				ex.Env = append(os.Environ(), "BUFFALO_PLUGIN=1")
 			}
 			ex.Stdin = os.Stdin
 			ex.Stdout = os.Stdout
@@ -72,16 +72,10 @@ func LookPath(s string) (string, error) {
 	}
 
 	var bin string
-	pwd, err := os.Getwd()
+
+	looks, err := pluginBins()
 	if err != nil {
 		return "", err
-	}
-
-	var looks []string
-	if from, err := envy.MustGet("BUFFALO_PLUGIN_PATH"); err == nil {
-		looks = append(looks, from)
-	} else {
-		looks = []string{filepath.Join(pwd, "plugins"), filepath.Join(envy.GoPath(), "bin"), envx.Get("PATH", "")}
 	}
 
 	for _, p := range looks {

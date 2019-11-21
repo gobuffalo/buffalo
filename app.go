@@ -3,10 +3,11 @@ package buffalo
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 
-	"github.com/gobuffalo/envy"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 // App is where it all happens! It holds on to options,
@@ -34,7 +35,7 @@ func (a *App) Muxer() *mux.Router {
 // New returns a new instance of App and adds some sane, and useful, defaults.
 func New(opts Options) *App {
 	LoadPlugins()
-	envy.Load()
+	loadEnv()
 
 	opts = optionsWithDefaults(opts)
 
@@ -73,4 +74,34 @@ func New(opts Options) *App {
 	a.Use(sessionSaver)
 
 	return a
+}
+
+// Load .env files. Files will be loaded in the same order that are received.
+// Redefined vars will override previously existing values.
+// IE: envy.Load(".env", "test_env/.env") will result in DIR=test_env
+// If no arg passed, it will try to load a .env file.
+func loadEnv(files ...string) error {
+
+	// If no files received, load the default one
+	if len(files) == 0 {
+		return godotenv.Overload()
+	}
+
+	// We received a list of files
+	for _, file := range files {
+
+		// Check if it exists or we can access
+		if _, err := os.Stat(file); err != nil {
+			// It does not exist or we can not access.
+			// Return and stop loading
+			return err
+		}
+
+		// It exists and we have permission. Load it
+		if err := godotenv.Overload(file); err != nil {
+			return err
+		}
+
+	}
+	return nil
 }
