@@ -9,7 +9,7 @@ require (
 	github.com/gobuffalo/attrs v0.1.0
 	github.com/gobuffalo/buffalo-pop v1.23.1
 	github.com/gobuffalo/clara v0.9.1
-	github.com/gobuffalo/envy v1.7.1
+	github.com/gobuffalo/envy v1.8.0
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/flect v0.1.6
 	github.com/gobuffalo/genny v0.4.1
@@ -42,7 +42,7 @@ require (
 	github.com/spf13/viper v1.5.0
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191115202509-3a792d9c32b2
+	golang.org/x/tools v0.0.0-20191121040551-947d4aa89328
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/yaml.v2 v2.2.5
+	gopkg.in/yaml.v2 v2.2.7
 )
