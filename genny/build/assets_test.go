@@ -1,11 +1,11 @@
 package build
 
 import (
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/internal/envx"
-	"github.com/gobuffalo/envy"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +24,7 @@ func Test_assets(t *testing.T) {
 	run := cokeRunner()
 	run.WithNew(assets(opts))
 
-	envy.MustSet("NODE_ENV", "")
+	os.Setenv("NODE_ENV", "")
 	ne := envx.Get("NODE_ENV", "")
 	r.Empty(ne)
 	r.NoError(run.Run())
