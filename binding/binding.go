@@ -11,6 +11,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/nulls"
+	"github.com/gobuffalo/packd"
 	"github.com/monoculum/formam"
 )
 
@@ -131,7 +132,11 @@ func init() {
 
 func init() {
 	jb := func(req *http.Request, value interface{}) error {
-		return json.NewDecoder(req.Body).Decode(value)
+		fBody, err := packd.NewFile("", req.Body)
+		if err != nil {
+			return err
+		}
+		return json.NewDecoder(fBody).Decode(value)
 	}
 
 	binders["application/json"] = jb
@@ -141,7 +146,11 @@ func init() {
 
 func init() {
 	xb := func(req *http.Request, value interface{}) error {
-		return xml.NewDecoder(req.Body).Decode(value)
+		fBody, err := packd.NewFile("", req.Body)
+		if err != nil {
+			return err
+		}
+		return xml.NewDecoder(fBody).Decode(value)
 	}
 
 	binders["application/xml"] = xb
