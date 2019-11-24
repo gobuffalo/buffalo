@@ -3,7 +3,7 @@ package install
 import (
 	"bytes"
 	"io"
-	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -28,7 +28,16 @@ func Test_New(t *testing.T) {
 	r.NoError(err)
 
 	run := gentest.NewRunner()
-	run.Disk.Add(genny.NewFile(filepath.Join(os.Getenv("PATH"), "buffalo-pop"), &bytes.Buffer{}))
+	gp, err := func() (string, error) {
+		c := exec.Command("go", "env", "GOPATH")
+		b, err := c.CombinedOutput()
+		if err != nil {
+			return "", err
+		}
+		return strings.TrimSpace(string(b)), nil
+	}()
+
+	run.Disk.Add(genny.NewFile(filepath.Join(gp, "bin", "buffalo-pop"), &bytes.Buffer{}))
 	run.FileFn = func(f genny.File) (genny.File, error) {
 		bb := &bytes.Buffer{}
 		if _, err := io.Copy(bb, f); err != nil {
