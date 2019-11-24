@@ -13,6 +13,7 @@ require (
 	github.com/gobuffalo/flect v0.1.7
 	github.com/gobuffalo/genny v0.4.1
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
+	github.com/gobuffalo/gogen v0.2.0
 	github.com/gobuffalo/helpers v0.4.0
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.4.0

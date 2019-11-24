@@ -44,7 +44,7 @@ type List map[string]Commands
 var _list List
 
 // Available plugins for the `buffalo` command.
-// It will look in $GOPATH/bin and the `./plugins` directory.
+// It will look in $PATH and the `./plugins` directory.
 // This can be changed by setting the $BUFFALO_PLUGIN_PATH
 // environment variable.
 //

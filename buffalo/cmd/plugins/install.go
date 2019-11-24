@@ -63,7 +63,6 @@ var installCmd = &cobra.Command{
 		gg, err := install.New(&install.Options{
 			App:     app,
 			Plugins: plugs.List(),
-			Vendor:  installOptions.vendor,
 		})
 		if err != nil {
 			return err
@@ -81,5 +80,4 @@ var installCmd = &cobra.Command{
 func init() {
 	installCmd.Flags().BoolVarP(&installOptions.dryRun, "dry-run", "d", false, "dry run")
 	installCmd.Flags().BoolVarP(&installOptions.verbose, "verbose", "v", false, "turn on verbose logging")
-	installCmd.Flags().BoolVar(&installOptions.vendor, "vendor", false, "will install plugin binaries into ./plugins [WINDOWS not currently supported]")
 }

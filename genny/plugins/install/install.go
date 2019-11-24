@@ -30,7 +30,6 @@ func New(opts *Options) (*genny.Group, error) {
 	}
 
 	g := genny.New()
-	proot := filepath.Join(opts.App.Root, "plugins")
 	for _, p := range opts.Plugins {
 		if len(p.GoGet) == 0 {
 			continue
@@ -41,9 +40,6 @@ func New(opts *Options) (*genny.Group, error) {
 			args = append(args, "-tags", p.Tags.String())
 		}
 		g.Command(gogen.Get(p.GoGet, args...))
-		if opts.Vendor {
-			g.RunFn(pRun(proot, p))
-		}
 	}
 	gg.Add(g)
 

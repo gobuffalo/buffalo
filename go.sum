@@ -267,6 +267,7 @@ github.com/gobuffalo/gogen v0.0.0-20190224213239-1c6076128bbc/go.mod h1:tQqPADZK
 github.com/gobuffalo/gogen v0.0.0-20190315121717-8f38393713f5/go.mod h1:V9QVDIxsgKNZs6L2IYiGR8datgMhB577vzTDqypH360=
 github.com/gobuffalo/gogen v0.1.0/go.mod h1:8NTelM5qd8RZ15VjQTFkAW6qOMx5wBbW4dSCS3BY8gg=
 github.com/gobuffalo/gogen v0.1.1/go.mod h1:y8iBtmHmGc4qa3urIyo1shvOD8JftTtfcKi+71xfDNE=
+github.com/gobuffalo/gogen v0.2.0 h1:Xx7NCe+/y++eII2aWAFZ09/81MhDCsZwvMzIFJoQRnU=
 github.com/gobuffalo/gogen v0.2.0/go.mod h1:V9QVDIxsgKNZs6L2IYiGR8datgMhB577vzTDqypH360=
 github.com/gobuffalo/helpers v0.0.0-20190422082217-384f90c6579f/go.mod h1:g0I3qKQEyJxwnHtEmLugD75eoOiWxEtibcV62tYah9w=
 github.com/gobuffalo/helpers v0.0.0-20190506214229-8e6f634af7c3/go.mod h1:HlNpmw2+Rjx882VUf6hJfNJs5wpNRzX02KcqCXDlLGc=

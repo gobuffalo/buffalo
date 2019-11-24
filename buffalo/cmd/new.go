@@ -277,13 +277,3 @@ func initConfig(skipConfig *bool, cfgFile *string) func() {
 
 	}
 }
-
-const notInGoWorkspace = `Oops! It would appear that you are not in your Go Workspace.
-
-Your $GOPATH is set to "<%= gopath %>".
-
-You are currently in "<%= current %>".
-
-The standard location for putting Go projects is something along the lines of "$GOPATH/src/github.com/<%= username %>/<%= name %>" (adjust accordingly).
-
-We recommend you go to "$GOPATH/src/github.com/<%= username %>/" and try "buffalo new <%= name %>" again.`

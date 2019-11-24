@@ -14,7 +14,6 @@ type Options struct {
 	App     meta.App
 	Plugins []plugdeps.Plugin
 	Tags    meta.BuildTags
-	Vendor  bool
 }
 
 // Validate that options are usuable
