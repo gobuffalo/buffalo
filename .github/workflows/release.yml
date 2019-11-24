@@ -16,7 +16,7 @@ jobs:
           go-version: 1.13
         id: go
       -
-        name: Checkout
+        name: Checkout Code
         uses: actions/checkout@master
       -
         name: Run GoReleaser

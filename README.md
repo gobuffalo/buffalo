@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://godoc.org/github.com/gobuffalo/buffalo"><img src="https://godoc.org/github.com/gobuffalo/buffalo?status.svg" alt="GoDoc" /></a>
-<a href="https://dev.azure.com/markbates/buffalo/_build?definitionId=1"><img src="https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.buffalo?branchName=master" alt="Build Status" /></a>
+<a href="https://github.com/gobuffalo/buffalo/actions"><img src="https://github.com/gobuffalo/buffalo/workflows/Tests/badge.svg" alt="Build Status" /></a>
 <a href="https://goreportcard.com/report/github.com/gobuffalo/buffalo"><img src="https://goreportcard.com/badge/github.com/gobuffalo/buffalo" alt="Go Report Card" /></a>
 <a href="https://www.codetriage.com/gobuffalo/buffalo"><img src="https://www.codetriage.com/gobuffalo/buffalo/badges/users.svg" alt="Open Source Helpers" /></a>
 </p>
