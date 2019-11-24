@@ -9,7 +9,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
@@ -157,7 +156,10 @@ const defaultErrorCT = "text/html; charset=utf-8"
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
+	requestCT := httpx.ContentType(c.Request())
+	if len(requestCT) == 0 {
+		requestCT = defaultErrorCT
+	}
 
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)

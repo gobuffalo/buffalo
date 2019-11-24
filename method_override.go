@@ -2,8 +2,6 @@ package buffalo
 
 import (
 	"net/http"
-
-	"github.com/gobuffalo/buffalo/internal/defaults"
 )
 
 // MethodOverride is the default implementation for the
@@ -14,7 +12,10 @@ import (
 // an alternative is defined in the Options.
 func MethodOverride(res http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
-		req.Method = defaults.String(req.FormValue("_method"), "POST")
+		md := req.FormValue("_method")
+		if len(md) != 0 {
+			req.Method = md
+		}
 		req.Form.Del("_method")
 		req.PostForm.Del("_method")
 	}

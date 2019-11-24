@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/logger"
@@ -77,8 +76,12 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, envx.Get("GO_ENV", "development"))
-	opts.Name = defaults.String(opts.Name, "/")
+	if len(opts.Env) == 0 {
+		opts.Env = envx.Get("GO_ENV", "development")
+	}
+	if len(opts.Name) == 0 {
+		opts.Name = "/"
+	}
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
@@ -88,9 +91,9 @@ func optionsWithDefaults(opts Options) Options {
 	if strings.HasPrefix(envAddr, "unix:") {
 		// UNIX domain socket doesn't have a port
 		opts.Addr = envAddr
-	} else {
-		// TCP case
-		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envx.Get("PORT", "3000")))
+	}
+	if len(opts.Addr) == 0 {
+		opts.Addr = fmt.Sprintf("%s:%s", envAddr, envx.Get("PORT", "3000"))
 	}
 
 	if opts.PreWares == nil {
@@ -165,7 +168,11 @@ func optionsWithDefaults(opts Options) Options {
 		w.Logger = opts.Logger
 		opts.Worker = w
 	}
-	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, envx.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envx.Get("PORT", "3000"))))
+	if len(opts.SessionName) == 0 {
+		opts.SessionName = "_buffalo_session"
+	}
+	if len(opts.Host) == 0 {
+		opts.Host = envx.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envx.Get("PORT", "3000")))
+	}
 	return opts
 }
