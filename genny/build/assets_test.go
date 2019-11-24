@@ -10,6 +10,9 @@ import (
 )
 
 func Test_assets(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	opts := &Options{
@@ -43,6 +46,9 @@ func Test_assets(t *testing.T) {
 }
 
 func Test_assets_Archived(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	opts := &Options{

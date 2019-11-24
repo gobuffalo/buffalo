@@ -34,6 +34,9 @@ var eq = func(r *require.Assertions, s string, c *exec.Cmd) {
 }
 
 func Test_New(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	run := cokeRunner()

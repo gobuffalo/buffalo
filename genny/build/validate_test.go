@@ -18,6 +18,9 @@ var goodTemplates = func() packd.Box {
 }()
 
 func Test_TemplateValidator_Good(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	tvs := []TemplateValidator{PlushValidator}
@@ -29,6 +32,9 @@ func Test_TemplateValidator_Good(t *testing.T) {
 }
 
 func Test_TemplateValidator_Bad(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	box := packr.New("../build/_fixtures/template_validator/bad", "../build/_fixtures/template_validator/bad")

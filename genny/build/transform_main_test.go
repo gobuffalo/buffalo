@@ -10,6 +10,9 @@ import (
 )
 
 func Test_transformMain(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	run := gentest.NewRunner()

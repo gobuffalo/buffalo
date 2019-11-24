@@ -25,7 +25,7 @@ build:
 	make tidy
 
 test:
-	$(GO_BIN) test -tags ${TAGS} -cover ./...
+	$(GO_BIN) test -short -tags ${TAGS} -cover ./...
 	make tidy
 
 ci-deps:

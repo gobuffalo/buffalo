@@ -12,6 +12,9 @@ import (
 )
 
 func Test_buildCmd(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	os.Setenv("GO_BIN", "go")
 	r := require.New(t)
 

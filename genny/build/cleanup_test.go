@@ -9,7 +9,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_WithDeps(t *testing.T) {
+func Test_Cleanup(t *testing.T) {
+	if testing.Short() {
+		t.SkipNow()
+	}
 	r := require.New(t)
 
 	run := gentest.NewRunner()
