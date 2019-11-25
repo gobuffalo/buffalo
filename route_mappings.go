@@ -10,52 +10,47 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
 )
 
-const (
-	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
-	AssetsAgeVarName = "ASSETS_MAX_AGE"
-)
-
 // GET maps an HTTP "GET" request to the path and the specified handler.
 func (a *App) GET(p string, h Handler) *RouteInfo {
-	return a.addRoute("GET", p, h)
+	return a.addRoute(consts.HTTP_GET, p, h)
 }
 
 // POST maps an HTTP "POST" request to the path and the specified handler.
 func (a *App) POST(p string, h Handler) *RouteInfo {
-	return a.addRoute("POST", p, h)
+	return a.addRoute(consts.HTTP_POST, p, h)
 }
 
 // PUT maps an HTTP "PUT" request to the path and the specified handler.
 func (a *App) PUT(p string, h Handler) *RouteInfo {
-	return a.addRoute("PUT", p, h)
+	return a.addRoute(consts.HTTP_PUT, p, h)
 }
 
 // DELETE maps an HTTP "DELETE" request to the path and the specified handler.
 func (a *App) DELETE(p string, h Handler) *RouteInfo {
-	return a.addRoute("DELETE", p, h)
+	return a.addRoute(consts.HTTP_DELETE, p, h)
 }
 
 // HEAD maps an HTTP "HEAD" request to the path and the specified handler.
 func (a *App) HEAD(p string, h Handler) *RouteInfo {
-	return a.addRoute("HEAD", p, h)
+	return a.addRoute(consts.HTTP_HEAD, p, h)
 }
 
 // OPTIONS maps an HTTP "OPTIONS" request to the path and the specified handler.
 func (a *App) OPTIONS(p string, h Handler) *RouteInfo {
-	return a.addRoute("OPTIONS", p, h)
+	return a.addRoute(consts.HTTP_OPTIONS, p, h)
 }
 
 // PATCH maps an HTTP "PATCH" request to the path and the specified handler.
 func (a *App) PATCH(p string, h Handler) *RouteInfo {
-	return a.addRoute("PATCH", p, h)
+	return a.addRoute(consts.HTTP_PATCH, p, h)
 }
 
-// Redirect from one URL to another URL. Only works for "GET" requests.
+// Redirect from one URL to another URL. Only works for consts.HTTP_GET requests.
 func (a *App) Redirect(status int, from, to string) *RouteInfo {
 	return a.GET(from, func(c Context) error {
 		return c.Redirect(status, to)
@@ -108,9 +103,12 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		}
 
 		stat, _ := f.Stat()
-		maxAge := envx.Get(AssetsAgeVarName, "31536000")
-		w.Header().Add("ETag", fmt.Sprintf("%x", stat.ModTime().UnixNano()))
-		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
+		maxAge := os.Getenv(consts.ASSETS_MAX_AGE)
+		if len(maxAge) == 0 {
+			maxAge = consts.Def_AssestsMaxAge
+		}
+		w.Header().Add(consts.HTTP_ETag, fmt.Sprintf("%x", stat.ModTime().UnixNano()))
+		w.Header().Add(consts.HTTP_CacheControl, fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
 }

@@ -37,6 +37,10 @@ func (e Env) Production() bool {
 	return string(e) == consts.Production
 }
 
+func (e Env) NotProd() bool {
+	return string(e) != consts.Production
+}
+
 // Options are used to configure and define how your application should run.
 type Options struct {
 	Name string `json:"name"`
@@ -114,16 +118,16 @@ func (opts *Options) defPort() error {
 
 	port := os.Getenv(consts.PORT)
 	if len(port) == 0 {
-		port = consts.Port
+		port = consts.Def_Port
 	}
 	opts.Port = port
 	return nil
 }
 
 func (opts *Options) defAddr() error {
-	addr := consts.Addr
+	addr := consts.Def_Addr
 	if opts.Env.Development() {
-		addr = consts.AddrDev
+		addr = consts.Def_AddrDev
 	}
 	envAddr := os.Getenv(consts.ADDR)
 	if len(envAddr) == 0 {
@@ -185,7 +189,7 @@ func (opts *Options) defLogger() error {
 
 func (opts *Options) defSession() error {
 	if len(opts.SessionName) == 0 {
-		opts.SessionName = consts.SessionName
+		opts.SessionName = consts.Def_SessionName
 	}
 
 	if opts.SessionStore != nil {
@@ -252,7 +256,7 @@ func (opts *Options) SensibleDefaults() error {
 	}
 
 	if len(opts.Name) == 0 {
-		opts.Name = "/"
+		opts.Name = consts.Def_Root
 	}
 
 	if opts.Context == nil {
