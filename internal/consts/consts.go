@@ -54,6 +54,8 @@ const (
 	PORT           = "PORT"
 	SESSION_SECRET = "SESSION_SECRET"
 
+	BUFFALO_PLUGIN_CACHE = "BUFFALO_PLUGIN_CACHE"
+
 	// Other
 
 	NL = "\n"

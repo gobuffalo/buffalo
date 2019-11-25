@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type cachedPlugin struct {
@@ -31,7 +31,13 @@ var CachePath = func() string {
 
 var cacheMoot sync.RWMutex
 
-var cacheOn = envx.Get("BUFFALO_PLUGIN_CACHE", "on")
+var cacheOn = func() string {
+	x := os.Getenv(consts.BUFFALO_PLUGIN_CACHE)
+	if len(x) > 0 {
+		return x
+	}
+	return "on"
+}()
 
 var cache = func() cachedPlugins {
 	m := cachedPlugins{}

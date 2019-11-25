@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/gobuffalo/meta"
 	"github.com/sirupsen/logrus"
 
@@ -194,7 +193,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 		return givenArgs, nil
 	}
 	args := []string{}
-	out, err := exec.Command(envx.Get("GO_BIN", "go"), "list", "./...").Output()
+	out, err := exec.Command("go", "list", "./...").Output()
 	if err != nil {
 		return args, err
 	}
@@ -212,7 +211,7 @@ func newTestCmd(args []string) *exec.Cmd {
 	app := meta.New(".")
 	cargs = append(cargs, "-tags", app.BuildTags("development").String())
 	cargs = append(cargs, args...)
-	cmd := exec.Command(envx.Get("GO_BIN", "go"), cargs...)
+	cmd := exec.Command("go", cargs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

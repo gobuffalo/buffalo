@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,11 +27,11 @@ func Test_assets(t *testing.T) {
 	run.WithNew(assets(opts))
 
 	os.Setenv("NODE_ENV", "")
-	ne := envx.Get("NODE_ENV", "")
+	ne := os.Getenv("NODE_ENV")
 	r.Empty(ne)
 	r.NoError(run.Run())
 
-	ne = envx.Get("NODE_ENV", "")
+	ne = os.Getenv("NODE_ENV")
 	r.NotEmpty(ne)
 	r.Equal(opts.Environment, ne)
 
