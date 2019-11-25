@@ -73,7 +73,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	data := &sync.Map{}
 
 	data.Store("app", a)
-	data.Store("env", a.Env)
+	data.Store("env", string(a.Env))
 	data.Store("routes", a.Routes())
 	data.Store("current_route", info)
 	data.Store("current_path", req.URL.Path)

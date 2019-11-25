@@ -155,7 +155,6 @@ type ErrorResponse struct {
 const defaultErrorCT = "text/html; charset=utf-8"
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
-	env := c.Value("env")
 	requestCT := httpx.ContentType(c.Request())
 	if len(requestCT) == 0 {
 		requestCT = defaultErrorCT
@@ -164,11 +163,14 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
-	if env != nil && env.(string) == "production" {
-		c.Response().Header().Set("content-type", defaultErrorCT)
-		responseBody := productionErrorResponseFor(status)
-		c.Response().Write(responseBody)
-		return nil
+	env := c.Value("env")
+	if e, ok := env.(string); ok {
+		if e == "production" {
+			c.Response().Header().Set("content-type", defaultErrorCT)
+			responseBody := productionErrorResponseFor(status)
+			c.Response().Write(responseBody)
+			return nil
+		}
 	}
 	trace := origErr.Error()
 	switch strings.ToLower(requestCT) {

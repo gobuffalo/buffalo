@@ -5,8 +5,38 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/stretchr/testify/require"
 )
+
+func Test_Env(t *testing.T) {
+	r := require.New(t)
+
+	e := Env("")
+	r.True(e.Development())
+	r.False(e.Test())
+	r.False(e.Production())
+
+	e = Env(consts.Development)
+	r.True(e.Development())
+	r.False(e.Test())
+	r.False(e.Production())
+
+	e = Env(consts.Test)
+	r.False(e.Development())
+	r.True(e.Test())
+	r.False(e.Production())
+
+	e = Env(consts.Production)
+	r.False(e.Development())
+	r.False(e.Test())
+	r.True(e.Production())
+
+	e = Env("foo")
+	r.False(e.Development())
+	r.False(e.Test())
+	r.False(e.Production())
+}
 
 func TestOptions_NewOptions(t *testing.T) {
 	tests := []struct {
