@@ -17,6 +17,6 @@ jobs:
     - name: Test
       run: |
         go mod tidy -v
-        go test -race ./...
+        go test -tags "sqlite integration_test" -race ./...
 
 
