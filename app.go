@@ -37,7 +37,7 @@ func New(opts Options) *App {
 	LoadPlugins()
 	loadEnv()
 
-	opts = optionsWithDefaults(opts)
+	(&opts).SensibleDefaults()
 
 	a := &App{
 		Options: opts,

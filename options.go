@@ -65,17 +65,15 @@ type Options struct {
 	cancel context.CancelFunc
 }
 
-// PreWare takes an http.Handler and returns and http.Handler
-// and acts as a pseudo-middleware between the http.Server and
-// a Buffalo application.
-type PreWare func(http.Handler) http.Handler
-
 // NewOptions returns a new Options instance with sensible defaults
 func NewOptions() Options {
-	return optionsWithDefaults(Options{})
+	var opts Options
+	(&opts).SensibleDefaults()
+	return opts
 }
 
-func optionsWithDefaults(opts Options) Options {
+// SensibleDefaults will set any unset values to sensible defaults values.
+func (opts *Options) SensibleDefaults() error {
 	if len(opts.Env) == 0 {
 		opts.Env = envx.Get("GO_ENV", "development")
 	}
@@ -174,5 +172,5 @@ func optionsWithDefaults(opts Options) Options {
 	if len(opts.Host) == 0 {
 		opts.Host = envx.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envx.Get("PORT", "3000")))
 	}
-	return opts
+	return nil
 }
