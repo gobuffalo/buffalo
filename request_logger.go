@@ -7,6 +7,7 @@ import (
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 )
 
@@ -24,30 +25,31 @@ func randString(i int) (string, error) {
 }
 
 // RequestLoggerFunc is the default implementation of the RequestLogger.
-// By default it will log a uniq "request_id", the HTTP Method of the request,
+// By default it will log a uniq consts.REQ_ID, the HTTP Method of the request,
 // the path that was requested, the duration (time) it took to process the
 // request, the size of the response (and the "human" size), and the status
 // code of the response.
 func RequestLoggerFunc(h Handler) Handler {
+	const requestID = consts.REQ_ID
 	return func(c Context) error {
 		rs, err := randString(10)
 		if err != nil {
 			return err
 		}
 		var irid interface{}
-		if irid = c.Session().Get("requestor_id"); irid == nil {
+		if irid = c.Session().Get(consts.REQ_RequestorID); irid == nil {
 			rs, err := randString(10)
 			if err != nil {
 				return err
 			}
 			irid = rs
-			c.Session().Set("requestor_id", irid)
+			c.Session().Set(consts.REQ_RequestorID, irid)
 			c.Session().Save()
 		}
 
 		rid := irid.(string) + "-" + rs
-		c.Set("request_id", rid)
-		c.LogField("request_id", rid)
+		c.Set(consts.REQ_ID, rid)
+		c.LogField(consts.REQ_ID, rid)
 
 		start := time.Now()
 		defer func() {

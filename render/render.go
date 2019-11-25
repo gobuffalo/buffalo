@@ -1,6 +1,7 @@
 package render
 
 import (
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/helpers"
 	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/helpers/forms/bootstrap"
@@ -52,7 +53,7 @@ func New(opts Options) *Engine {
 	}
 
 	if opts.DefaultContentType == "" {
-		opts.DefaultContentType = "text/html; charset=utf-8"
+		opts.DefaultContentType = consts.MIME_HTML
 	}
 
 	e := &Engine{

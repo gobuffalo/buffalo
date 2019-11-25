@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/flect/name"
 )
 
@@ -107,12 +108,12 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	}
 
 	switch data["method"] {
-	case "PUT", "POST", "DELETE":
+	case consts.HTTP_PUT, consts.HTTP_POST, consts.HTTP_DELETE:
 		if err := ir.redirect(pname, w, data); err != nil {
 			if er, ok := err.(ErrRedirect); ok && er.Status >= http.StatusMultipleChoices && er.Status < http.StatusBadRequest {
 				return err
 			}
-			if data["method"] == "PUT" {
+			if data["method"] == consts.HTTP_PUT {
 				return ir.HTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
 			}
 			return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
@@ -160,7 +161,7 @@ func (ir htmlAutoRenderer) redirect(name name.Ident, w io.Writer, data Data) err
 		id := fmt.Sprint(f.Interface())
 		url = strings.TrimSuffix(url, "/")
 		switch m {
-		case "DELETE":
+		case consts.HTTP_DELETE:
 			url = strings.TrimSuffix(url, id)
 		default:
 			if !strings.HasSuffix(url, id) {

@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/envx"
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/oncer"
@@ -18,8 +18,9 @@ import (
 func LoadPlugins() error {
 	var err error
 	oncer.Do("events.LoadPlugins", func() {
+		env := Env(os.Getenv(consts.GO_ENV))
 		// don't send plugins events during testing
-		if envx.Get("GO_ENV", "development") == "test" {
+		if env.Test() {
 			return
 		}
 		plugs, err := plugins.Available()

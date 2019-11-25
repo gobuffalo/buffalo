@@ -1,5 +1,7 @@
 package render
 
+import "github.com/gobuffalo/buffalo/internal/consts"
+
 // Plain renders the named files using the 'text/html'
 // content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
@@ -20,7 +22,7 @@ func Plain(names ...string) Renderer {
 func (e *Engine) Plain(names ...string) Renderer {
 	hr := &templateRenderer{
 		Engine:      e,
-		contentType: "text/plain; charset=utf-8",
+		contentType: consts.MIME_Text,
 		names:       names,
 	}
 	return hr

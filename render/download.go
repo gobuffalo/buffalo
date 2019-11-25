@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type downloadRenderer struct {
@@ -19,11 +21,12 @@ type downloadRenderer struct {
 func (r downloadRenderer) ContentType() string {
 	ext := filepath.Ext(r.name)
 	t := mime.TypeByExtension(ext)
-	if t == "" {
-		t = "application/octet-stream"
+
+	if len(t) != 0 {
+		return t
 	}
 
-	return t
+	return consts.MIME_Octet_Stream
 }
 
 func (r downloadRenderer) Render(w io.Writer, d Data) error {
@@ -39,9 +42,9 @@ func (r downloadRenderer) Render(w io.Writer, d Data) error {
 
 	header := ctx.Response().Header()
 	disposition := fmt.Sprintf("attachment; filename=%s", r.name)
-	header.Add("Content-Disposition", disposition)
+	header.Add(consts.HTTP_ContentDisposition, disposition)
 	contentLength := strconv.Itoa(int(written))
-	header.Add("Content-Length", contentLength)
+	header.Add(consts.HTTP_ContentLength, contentLength)
 
 	return nil
 }

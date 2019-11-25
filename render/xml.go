@@ -3,6 +3,8 @@ package render
 import (
 	"encoding/xml"
 	"io"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type xmlRenderer struct {
@@ -10,7 +12,7 @@ type xmlRenderer struct {
 }
 
 func (s xmlRenderer) ContentType() string {
-	return "application/xml; charset=utf-8"
+	return consts.MIME_XML
 }
 
 func (s xmlRenderer) Render(w io.Writer, data Data) error {

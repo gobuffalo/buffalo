@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/stretchr/testify/require"
 )
 
@@ -21,7 +22,7 @@ func Test_JavaScript_WithoutLayout(t *testing.T) {
 	r.NoError(box.AddString(jsTemplate, "alert(<%= name %>)"))
 
 	h := e.JavaScript(jsTemplate)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{"name": "Mark"}))
@@ -39,7 +40,7 @@ func Test_JavaScript_WithLayout(t *testing.T) {
 	r.NoError(box.AddString(jsLayout, "$(<%= yield %>)"))
 
 	h := e.JavaScript(jsTemplate)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{"name": "Mark"}))
@@ -58,7 +59,7 @@ func Test_JavaScript_WithLayout_Override(t *testing.T) {
 	r.NoError(box.AddString(jsAltLayout, "_(<%= yield %>)"))
 
 	h := e.JavaScript(jsTemplate, jsAltLayout)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{"name": "Mark"}))
@@ -78,7 +79,7 @@ func Test_JavaScript_Partial_Without_Extension(t *testing.T) {
 	r.NoError(box.AddString("_part.js", part))
 
 	h := e.JavaScript(jsTemplate)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{"name": "Yonghwan"}))
@@ -98,7 +99,7 @@ func Test_JavaScript_Partial(t *testing.T) {
 	r.NoError(box.AddString("_part.js", part))
 
 	h := e.JavaScript(jsTemplate)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{"name": "Yonghwan"}))
@@ -120,7 +121,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	r.NoError(box.AddString("_part.html", part))
 
 	h := e.JavaScript(jsTemplate)
-	r.Equal("application/javascript", h.ContentType())
+	r.Equal(consts.MIME_JavaScript, h.ContentType())
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{}))

@@ -3,6 +3,8 @@ package render
 import (
 	"fmt"
 	"io"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type stringRenderer struct {
@@ -11,7 +13,7 @@ type stringRenderer struct {
 }
 
 func (s stringRenderer) ContentType() string {
-	return "text/plain; charset=utf-8"
+	return consts.MIME_Text
 }
 
 func (s stringRenderer) Render(w io.Writer, data Data) error {

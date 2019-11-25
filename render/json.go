@@ -3,6 +3,8 @@ package render
 import (
 	"encoding/json"
 	"io"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type jsonRenderer struct {
@@ -10,7 +12,7 @@ type jsonRenderer struct {
 }
 
 func (s jsonRenderer) ContentType() string {
-	return "application/json; charset=utf-8"
+	return consts.MIME_JSON
 }
 
 func (s jsonRenderer) Render(w io.Writer, data Data) error {
