@@ -1,13 +1,7 @@
 package install
 
 import (
-	"fmt"
-	"go/build"
-	"os"
-	"path/filepath"
-
 	"github.com/gobuffalo/buffalo/genny/add"
-	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gogen"
 )
@@ -51,31 +45,4 @@ func New(opts *Options) (*genny.Group, error) {
 	gg.Add(g)
 
 	return gg, nil
-}
-
-func pRun(proot string, p plugdeps.Plugin) genny.RunFn {
-	return func(r *genny.Runner) error {
-		c := build.Default
-		if c.GOOS == "windows" {
-			return fmt.Errorf("vendoring of plugins is currently not supported on windows. PRs are VERY welcome! :)")
-		}
-
-		bp := filepath.Join(c.GOPATH, "bin", p.Binary)
-		sf, err := r.FindFile(bp)
-		if err != nil {
-			return err
-		}
-
-		pbp := filepath.Join(proot, p.Binary)
-		r.Disk.Delete(pbp)
-
-		df := genny.NewFile(pbp, sf)
-		if err := r.File(df); err != nil {
-			return err
-		}
-
-		os.Chmod(pbp, 0555)
-
-		return nil
-	}
 }
