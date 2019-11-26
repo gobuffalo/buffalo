@@ -16,7 +16,7 @@ require (
 	github.com/gobuffalo/helpers v0.4.0
 	github.com/gobuffalo/httptest v1.4.0
 	github.com/gobuffalo/licenser v1.4.0
-	github.com/gobuffalo/logger v1.0.2
+	github.com/gobuffalo/logger v1.0.3
 	github.com/gobuffalo/meta v0.2.1
 	github.com/gobuffalo/nulls v0.1.0
 	github.com/gobuffalo/packd v0.3.0
@@ -39,7 +39,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/tools v0.0.0-20191124021906-f5828fc9a103 // indirect
+	golang.org/x/tools v0.0.0-20191126055441-b0650ceb63d9 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.7
 )

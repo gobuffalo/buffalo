@@ -1,7 +1,0 @@
-[{
-  "path": "actions/person_events.go",
-  "contains": [
-    "c.Render(http.StatusOK, r.Auto(c, personEvents))",
-    "c.Render(http.StatusOK, r.Auto(c, personEvent))"
-  ]
-}]
