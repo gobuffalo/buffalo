@@ -18,8 +18,4 @@ jobs:
       run: |
         go mod tidy
         go mod download
-        go test -tags "sqlite integration_test" -race ./...
-        cd ./buffalo
-        go mod tidy
-        go mod download
-        go test -tags "sqlite integration_test" -race ./...
+        go test -cover -tags "sqlite integration_test" -race ./...
