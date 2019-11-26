@@ -9,6 +9,7 @@ require (
 	github.com/gobuffalo/events v1.4.0
 	github.com/gobuffalo/fizz v1.9.5 // indirect
 	github.com/gobuffalo/flect v0.1.7
+	github.com/gobuffalo/genny v0.4.1 // indirect
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.4.0
 	github.com/gobuffalo/httptest v1.4.0
@@ -27,8 +28,10 @@ require (
 	github.com/markbates/refresh v1.8.0
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
+	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/monoculum/formam v0.0.0-20190830100315-7ff9597b1407
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
+	gopkg.in/yaml.v2 v2.2.7 // indirect
 )
