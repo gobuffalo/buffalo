@@ -15,6 +15,8 @@ jobs:
       with:
         fetch-depth: 1
     - name: Test
+      env:
+        GO111MODULE: "on"
       run: |
         go mod tidy -v
         go test -tags "sqlite integration_test" -cover -race ./...
