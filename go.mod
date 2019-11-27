@@ -6,8 +6,8 @@ require (
 	github.com/cockroachdb/cockroach-go v0.0.0-20190925194419-606b3d062051 // indirect
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.7.0
+	github.com/gobuffalo/buffalo-cli v0.4.1 // indirect
 	github.com/gobuffalo/events v1.4.0
-	github.com/gobuffalo/fizz v1.9.5 // indirect
 	github.com/gobuffalo/flect v0.1.7
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.4.0

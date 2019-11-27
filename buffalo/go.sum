@@ -49,8 +49,8 @@ github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/gobuffalo/attrs v0.1.0 h1:LY6/rbhPD/hfa+AfviaMXBmZBGb0fGHF12yg7f3dPQA=
 github.com/gobuffalo/attrs v0.1.0/go.mod h1:fmNpaWyHM0tRm8gCZWKx8yY9fvaNLo2PyzBNSrBZ5Hw=
-github.com/gobuffalo/buffalo-cli v0.3.1-0.20191126165859-4a60b0d2b302 h1:3XouUFbCZXdbx/tYnb7n+ZV76JPtR2k5CYh1pUwhaDA=
-github.com/gobuffalo/buffalo-cli v0.3.1-0.20191126165859-4a60b0d2b302/go.mod h1:2/FwMhXE40f6M/MNh4P5i7Fi1R+7bhtDmrCh+oMyY+c=
+github.com/gobuffalo/buffalo-cli v0.4.1 h1:WvFUiv8wZcK0ZHnnT1vyoa6BLqJAz+PZFYpfaWU8+yY=
+github.com/gobuffalo/buffalo-cli v0.4.1/go.mod h1:2/FwMhXE40f6M/MNh4P5i7Fi1R+7bhtDmrCh+oMyY+c=
 github.com/gobuffalo/buffalo-pop v1.23.1 h1:AnxJQZu/ZN7HCm3L8YBJoNWc2UiwSe6UHv5S4DfXUDA=
 github.com/gobuffalo/buffalo-pop v1.23.1/go.mod h1:Sb+fy/hLtxfhOrtLAJiL7JsKqazydmAVqp5rcHio/yg=
 github.com/gobuffalo/clara v0.9.1 h1:LYjwmKG0VwwW/nOG2f5jNamvAcfdm2Ysokc/eoVhtZ8=
