@@ -208,9 +208,12 @@ func (opts *Options) defSession() error {
 	}
 
 	cookieStore := sessions.NewCookieStore([]byte(secret))
+
 	//Cookie secure attributes, see: https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)
 	cookieStore.Options.HttpOnly = true
-	cookieStore.Options.Secure = true
+	if opts.Env == "production" {
+		cookieStore.Options.Secure = true
+	}
 
 	opts.SessionStore = cookieStore
 	return nil
