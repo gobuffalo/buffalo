@@ -1,0 +1,20 @@
+name: Tests
+on: [push]
+jobs:
+
+  tests-on:
+    name: ${{matrix.go-version}} ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go-version: [1.12.x, 1.13.x]
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Test
+      run: |
+        go mod tidy -v
+        go test -tags "sqlite integration_test" -cover -race ./...
