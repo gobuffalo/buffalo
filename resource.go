@@ -56,27 +56,29 @@ type Middler interface {
 */
 type BaseResource struct{}
 
+var errResourceNotImplemented = fmt.Errorf("resource not implemented")
+
 // List default implementation. Returns a 404
 func (v BaseResource) List(c Context) error {
-	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, errResourceNotImplemented)
 }
 
 // Show default implementation. Returns a 404
 func (v BaseResource) Show(c Context) error {
-	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, errResourceNotImplemented)
 }
 
 // Create default implementation. Returns a 404
 func (v BaseResource) Create(c Context) error {
-	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, errResourceNotImplemented)
 }
 
 // Update default implementation. Returns a 404
 func (v BaseResource) Update(c Context) error {
-	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, errResourceNotImplemented)
 }
 
 // Destroy default implementation. Returns a 404
 func (v BaseResource) Destroy(c Context) error {
-	return c.Error(http.StatusNotFound, fmt.Errorf("resource not implemented"))
+	return c.Error(http.StatusNotFound, errResourceNotImplemented)
 }

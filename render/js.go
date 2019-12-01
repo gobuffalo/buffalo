@@ -1,5 +1,7 @@
 package render
 
+import "github.com/gobuffalo/buffalo/internal/consts"
+
 // JavaScript renders the named files using the 'application/javascript'
 // content type and the github.com/gobuffalo/plush
 // package for templating. If more than 1 file is provided
@@ -26,7 +28,7 @@ func (e *Engine) JavaScript(names ...string) Renderer {
 	}
 	hr := &templateRenderer{
 		Engine:      e,
-		contentType: "application/javascript",
+		contentType: consts.MIME_JavaScript,
 		names:       names,
 	}
 	return hr

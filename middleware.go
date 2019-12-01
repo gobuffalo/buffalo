@@ -5,6 +5,8 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 // MiddlewareFunc defines the interface for a piece of Buffalo
@@ -43,7 +45,7 @@ func (ms MiddlewareStack) String() string {
 		s = append(s, funcKey(m))
 	}
 
-	return strings.Join(s, "\n")
+	return strings.Join(s, consts.NL)
 }
 
 func (ms *MiddlewareStack) clone() *MiddlewareStack {

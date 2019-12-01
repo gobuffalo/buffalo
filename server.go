@@ -7,6 +7,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
@@ -29,7 +30,8 @@ func (a *App) Serve(srvs ...servers.Server) error {
 	}
 
 	if len(srvs) == 0 {
-		if strings.HasPrefix(a.Options.Addr, "unix:") {
+		const unix = "unix:"
+		if strings.HasPrefix(a.Options.Addr, unix) {
 			tcp, err := servers.UnixSocket(a.Options.Addr[5:])
 			if err != nil {
 				return err
@@ -128,7 +130,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.URL.Path = a.normalizePath(r.URL.Path)
 
 	var h http.Handler = a.router
-	if a.Env == "development" {
+	if a.Env.Development() {
 		h = web.ErrorChecker(h)
 	}
 	h.ServeHTTP(ws, r)
@@ -162,16 +164,16 @@ func (a *App) processPreHandlers(res http.ResponseWriter, req *http.Request) boo
 }
 
 func (a *App) normalizePath(path string) string {
-	if strings.HasSuffix(path, "/") {
+	if strings.HasSuffix(path, consts.Def_Root) {
 		return path
 	}
 	for _, p := range a.filepaths {
-		if p == "/" {
+		if p == consts.Def_Root {
 			continue
 		}
 		if strings.HasPrefix(path, p) {
 			return path
 		}
 	}
-	return path + "/"
+	return path + consts.Def_Root
 }

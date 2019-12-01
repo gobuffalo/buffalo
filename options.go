@@ -4,18 +4,42 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gobuffalo/buffalo/internal/defaults"
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/worker"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/pop/logging"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/oncer"
 )
+
+type Env string
+
+func (e Env) String() string {
+	return string(e)
+}
+
+func (e Env) Development() bool {
+	if len(e) == 0 {
+		return true
+	}
+	return string(e) == consts.Development
+}
+
+func (e Env) Test() bool {
+	return string(e) == consts.Test
+}
+
+func (e Env) Production() bool {
+	return string(e) == consts.Production
+}
+
+func (e Env) NotProd() bool {
+	return string(e) != consts.Production
+}
 
 // Options are used to configure and define how your application should run.
 type Options struct {
@@ -26,11 +50,12 @@ type Options struct {
 	// Host that this application will be available at. Default is "http://127.0.0.1:[$PORT|3000]".
 	Host string `json:"host"`
 
-	// Env is the "environment" in which the App is running. Default is "development".
-	Env string `json:"env"`
+	// Port that this application will be available at. Defaults is "3000. Can be set using ENV var "PORT"
+	Port string `json:"port"`
 
-	// LogLevel defaults to "debug". Deprecated use LogLvl instead
-	LogLevel string `json:"log_level"`
+	// Env is the "environment" in which the App is running. Default is "development".
+	Env Env `json:"env"`
+
 	// LogLevl defaults to logger.DebugLvl.
 	LogLvl logger.Level `json:"log_lvl"`
 	// Logger to be used with the application. A default one is provided.
@@ -68,67 +93,78 @@ type Options struct {
 	cancel context.CancelFunc
 }
 
-// PreWare takes an http.Handler and returns and http.Handler
-// and acts as a pseudo-middleware between the http.Server and
-// a Buffalo application.
-type PreWare func(http.Handler) http.Handler
-
 // NewOptions returns a new Options instance with sensible defaults
 func NewOptions() Options {
-	return optionsWithDefaults(Options{})
+	var opts Options
+	(&opts).SensibleDefaults()
+	return opts
 }
 
-func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, envy.Get("GO_ENV", "development"))
-	opts.Name = defaults.String(opts.Name, "/")
-	addr := "0.0.0.0"
-	if opts.Env == "development" {
-		addr = "127.0.0.1"
+func (opts *Options) defEnv() error {
+	if len(opts.Env) == 0 {
+		opts.Env = Env(os.Getenv(consts.GO_ENV))
 	}
-	envAddr := envy.Get("ADDR", addr)
 
-	if strings.HasPrefix(envAddr, "unix:") {
+	if len(opts.Env) == 0 {
+		opts.Env = consts.Development
+	}
+	return nil
+}
+
+func (opts *Options) defPort() error {
+	if len(opts.Port) > 0 {
+		return nil
+	}
+
+	port := os.Getenv(consts.PORT)
+	if len(port) == 0 {
+		port = consts.Def_Port
+	}
+	opts.Port = port
+	return nil
+}
+
+func (opts *Options) defAddr() error {
+	addr := consts.Def_Addr
+	if opts.Env.Development() {
+		addr = consts.Def_AddrDev
+	}
+	envAddr := os.Getenv(consts.ADDR)
+	if len(envAddr) == 0 {
+		envAddr = addr
+	}
+
+	const unix = "unix:"
+	if strings.HasPrefix(envAddr, unix) {
 		// UNIX domain socket doesn't have a port
 		opts.Addr = envAddr
-	} else {
-		// TCP case
-		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envy.Get("PORT", "3000")))
 	}
-
-	if opts.PreWares == nil {
-		opts.PreWares = []PreWare{}
+	if len(opts.Addr) > 0 {
+		return nil
 	}
-	if opts.PreHandlers == nil {
-		opts.PreHandlers = []http.Handler{}
+	if err := opts.defPort(); err != nil {
+		return err
 	}
+	opts.Addr = fmt.Sprintf("%s:%s", envAddr, opts.Port)
+	return nil
+}
 
-	if opts.Context == nil {
-		opts.Context = context.Background()
+func (opts *Options) defLogger() error {
+	if opts.Logger != nil {
+		return nil
 	}
-	opts.Context, opts.cancel = context.WithCancel(opts.Context)
-
-	if opts.Logger == nil {
-		if lvl, err := envy.MustGet("LOG_LEVEL"); err == nil {
-			opts.LogLvl, err = logger.ParseLevel(lvl)
-			if err != nil {
-				opts.LogLvl = logger.DebugLevel
-			}
-		}
-
-		if len(opts.LogLevel) > 0 {
-			var err error
-			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
-			opts.LogLvl, err = logger.ParseLevel(opts.LogLevel)
-			if err != nil {
-				opts.LogLvl = logger.DebugLevel
-			}
-		}
-		if opts.LogLvl == 0 {
+	var err error
+	lvl := os.Getenv(consts.LOG_LEVEL)
+	if len(lvl) > 0 {
+		opts.LogLvl, err = logger.ParseLevel(lvl)
+		if err != nil {
 			opts.LogLvl = logger.DebugLevel
 		}
-
-		opts.Logger = logger.New(opts.LogLvl)
 	}
+	if opts.LogLvl == 0 {
+		opts.LogLvl = logger.DebugLevel
+	}
+	opts.Logger = logger.New(opts.LogLvl)
 
 	pop.SetLogger(func(level logging.Level, s string, args ...interface{}) {
 		if !pop.Debug {
@@ -148,35 +184,103 @@ func optionsWithDefaults(opts Options) Options {
 
 		l.Debug(s)
 	})
+	return nil
+}
 
-	if opts.SessionStore == nil {
-		secret := envy.Get("SESSION_SECRET", "")
-
-		if secret == "" && (opts.Env == "development" || opts.Env == "test") {
-			secret = "buffalo-secret"
-		}
-
-		// In production a SESSION_SECRET must be set!
-		if secret == "" {
-			opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
-		}
-
-		cookieStore := sessions.NewCookieStore([]byte(secret))
-
-		//Cookie secure attributes, see: https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)
-		cookieStore.Options.HttpOnly = true
-		if opts.Env == "production" {
-			cookieStore.Options.Secure = true
-		}
-
-		opts.SessionStore = cookieStore
+func (opts *Options) defSession() error {
+	if len(opts.SessionName) == 0 {
+		opts.SessionName = consts.Def_SessionName
 	}
-	if opts.Worker == nil {
-		w := worker.NewSimpleWithContext(opts.Context)
-		w.Logger = opts.Logger
-		opts.Worker = w
+
+	if opts.SessionStore != nil {
+		return nil
 	}
-	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
-	return opts
+	secret := os.Getenv(consts.SESSION_SECRET)
+
+	const bufsec = "buffalo-secret"
+	if len(secret) == 0 && (opts.Env.Development() || opts.Env.Test()) {
+		secret = bufsec
+	}
+
+	// In production a SESSION_SECRET must be set!
+	if len(secret) == 0 {
+		opts.Logger.Warn("Unless you set SESSION_SECRET env variable, your session storage is not protected!")
+	}
+
+	cookieStore := sessions.NewCookieStore([]byte(secret))
+
+	//Cookie secure attributes, see: https://www.owasp.org/index.php/Testing_for_cookies_attributes_(OTG-SESS-002)
+	cookieStore.Options.HttpOnly = true
+	if opts.Env == "production" {
+		cookieStore.Options.Secure = true
+	}
+
+	opts.SessionStore = cookieStore
+	return nil
+}
+
+func (opts *Options) defWorker() error {
+	if opts.Worker != nil {
+		return nil
+	}
+	w := worker.NewSimpleWithContext(opts.Context)
+	w.Logger = opts.Logger
+	opts.Worker = w
+	return nil
+}
+
+func (opts *Options) defHost() error {
+	if len(opts.Host) > 0 {
+		return nil
+	}
+
+	host := os.Getenv(consts.HOST)
+	if len(host) > 0 {
+		opts.Host = host
+		return nil
+	}
+
+	if err := opts.defPort(); err != nil {
+		return err
+	}
+
+	opts.Host = fmt.Sprintf("http://%s:%s", opts.Addr, opts.Port)
+
+	return nil
+}
+
+// SensibleDefaults will set any unset values to sensible defaults values.
+func (opts *Options) SensibleDefaults() error {
+	if err := opts.defEnv(); err != nil {
+		return err
+	}
+	if err := opts.defAddr(); err != nil {
+		return err
+	}
+
+	if len(opts.Name) == 0 {
+		opts.Name = consts.Def_Root
+	}
+
+	if opts.Context == nil {
+		opts.Context = context.Background()
+	}
+
+	opts.Context, opts.cancel = context.WithCancel(opts.Context)
+
+	if err := opts.defLogger(); err != nil {
+		return err
+	}
+
+	if err := opts.defSession(); err != nil {
+		return err
+	}
+
+	if err := opts.defWorker(); err != nil {
+		return err
+	}
+
+	if len(opts.Host) == 0 {
+	}
+	return nil
 }

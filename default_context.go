@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/render"
 )
@@ -135,7 +136,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 			d.Flash().persist(d.Session())
 		}
 
-		d.Response().Header().Set("Content-Type", rr.ContentType())
+		d.Response().Header().Set(consts.HTTP_ContentType, rr.ContentType())
 		if p, ok := data["pagination"].(paginable); ok {
 			d.Response().Header().Set("X-Pagination", p.Paginate())
 		}

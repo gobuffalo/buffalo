@@ -1,8 +1,0 @@
-[{
-  "path": "grifts/plain_task.go",
-  "contains": [
-    "var _ = Desc(\"plain_task\", \"Task Description\")",
-    "var _ = Add(\"plain_task\", func(c *Context) error {",
-    "return nil"
-  ]
-}]

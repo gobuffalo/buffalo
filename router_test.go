@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
@@ -344,18 +345,18 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.Equal(http.StatusOK, res.Code)
 	r.Equal("foo", res.Body.String())
 
-	r.NotEqual(res.Header().Get("ETag"), "")
-	r.Equal(res.Header().Get("Cache-Control"), "max-age=31536000")
+	r.NotEqual(res.Header().Get(consts.HTTP_ETag), "")
+	r.Equal(res.Header().Get(consts.HTTP_CacheControl), "max-age=31536000")
 
-	envy.Set(AssetsAgeVarName, "3600")
+	os.Setenv(consts.ASSETS_MAX_AGE, "3600")
 	w = httptest.New(a)
 	res = w.HTML("/assets/foo.png").Get()
 
 	r.Equal(http.StatusOK, res.Code)
 	r.Equal("foo", res.Body.String())
 
-	r.NotEqual(res.Header().Get("ETag"), "")
-	r.Equal(res.Header().Get("Cache-Control"), "max-age=3600")
+	r.NotEqual(res.Header().Get(consts.HTTP_ETag), "")
+	r.Equal(res.Header().Get(consts.HTTP_CacheControl), "max-age=3600")
 }
 
 func Test_Router_InvalidURL(t *testing.T) {

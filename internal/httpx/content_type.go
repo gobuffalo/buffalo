@@ -3,13 +3,14 @@ package httpx
 import (
 	"net/http"
 	"strings"
-
-	"github.com/gobuffalo/buffalo/internal/defaults"
 )
 
 func ContentType(req *http.Request) string {
-	ct := defaults.String(req.Header.Get("Content-Type"), req.Header.Get("Accept"))
-	ct = strings.TrimSpace(ct)
+	ct := req.Header.Get("Content-Type")
+	if len(ct) == 0 {
+		ct = req.Header.Get("Accept")
+	}
+
 	var cts []string
 	if strings.Contains(ct, ",") {
 		cts = strings.Split(ct, ",")

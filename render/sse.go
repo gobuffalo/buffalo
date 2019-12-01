@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gobuffalo/buffalo/internal/consts"
 )
 
 type sse struct {
@@ -68,9 +70,9 @@ func NewEventSource(w http.ResponseWriter) (*EventSource, error) {
 		return es, fmt.Errorf("streaming is not supported")
 	}
 
-	es.w.Header().Set("Content-Type", "text/event-stream")
-	es.w.Header().Set("Cache-Control", "no-cache")
-	es.w.Header().Set("Connection", "keep-alive")
-	es.w.Header().Set("Access-Control-Allow-Origin", "*")
+	es.w.Header().Set(consts.HTTP_ContentType, "text/event-stream")
+	es.w.Header().Set(consts.HTTP_CacheControl, "no-cache")
+	es.w.Header().Set(consts.HTTP_Connection, "keep-alive")
+	es.w.Header().Set(consts.HTTP_CORS, "*")
 	return es, nil
 }

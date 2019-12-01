@@ -3,6 +3,7 @@ package render
 import (
 	"html"
 
+	"github.com/gobuffalo/buffalo/internal/consts"
 	"github.com/gobuffalo/github_flavored_markdown"
 	"github.com/gobuffalo/plush"
 )
@@ -33,7 +34,7 @@ func (e *Engine) HTML(names ...string) Renderer {
 	}
 	hr := &templateRenderer{
 		Engine:      e,
-		contentType: "text/html; charset=utf-8",
+		contentType: consts.MIME_HTML,
 		names:       names,
 	}
 	return hr
