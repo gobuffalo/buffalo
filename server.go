@@ -130,7 +130,7 @@ func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.URL.Path = a.normalizePath(r.URL.Path)
 
 	var h http.Handler = a.router
-	if a.Env.Development() {
+	if Env(a.Env).Development() {
 		h = web.ErrorChecker(h)
 	}
 	h.ServeHTTP(ws, r)

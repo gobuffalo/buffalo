@@ -113,6 +113,8 @@ github.com/gobuffalo/plush v3.8.3+incompatible/go.mod h1:rQ4zdtUUyZNqULlc6bqd5sc
 github.com/gobuffalo/plushgen v0.1.2/go.mod h1:3U71v6HWZpVER1nInTXeAwdoRNsRd4W8aeIa1Lyp+Bk=
 github.com/gobuffalo/pop v4.12.2+incompatible h1:WFHMzzHbVLulZnEium1VlYRnWkzHz39FzVLov6rZdDI=
 github.com/gobuffalo/pop v4.12.2+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
+github.com/gobuffalo/pop v4.13.0+incompatible h1:sE2C/dmCENwLhSfXyFXk3re4dzBbSkH/Ut62g6N1zDw=
+github.com/gobuffalo/pop v4.13.0+incompatible/go.mod h1:DwBz3SD5SsHpTZiTubcsFWcVDpJWGsxjVjMPnkiThWg=
 github.com/gobuffalo/release v1.15.0 h1:bE97SdPFoRDz5BKC+QmTNYJa+aHbBMqG/nUkHW6xSug=
 github.com/gobuffalo/release v1.15.0/go.mod h1:LwotdbqCKcpQ+bKAvk1vvXLZhM8ftBTI5AlE7mx/1H8=
 github.com/gobuffalo/shoulders v1.2.0 h1:XcPmWbzN7944VXS/I//R7o2eupUHEp3mLFWbUlk1Sco=

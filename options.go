@@ -19,6 +19,9 @@ import (
 type Env string
 
 func (e Env) String() string {
+	if len(e) == 0 {
+		return consts.Development
+	}
 	return string(e)
 }
 
@@ -54,7 +57,7 @@ type Options struct {
 	Port string `json:"port"`
 
 	// Env is the "environment" in which the App is running. Default is "development".
-	Env Env `json:"env"`
+	Env string `json:"env"`
 
 	// LogLevl defaults to logger.DebugLvl.
 	LogLvl logger.Level `json:"log_lvl"`
@@ -102,7 +105,7 @@ func NewOptions() Options {
 
 func (opts *Options) defEnv() error {
 	if len(opts.Env) == 0 {
-		opts.Env = Env(os.Getenv(consts.GO_ENV))
+		opts.Env = os.Getenv(consts.GO_ENV)
 	}
 
 	if len(opts.Env) == 0 {
@@ -126,7 +129,7 @@ func (opts *Options) defPort() error {
 
 func (opts *Options) defAddr() error {
 	addr := consts.Def_Addr
-	if opts.Env.Development() {
+	if Env(opts.Env).Development() {
 		addr = consts.Def_AddrDev
 	}
 	envAddr := os.Getenv(consts.ADDR)
@@ -198,7 +201,8 @@ func (opts *Options) defSession() error {
 	secret := os.Getenv(consts.SESSION_SECRET)
 
 	const bufsec = "buffalo-secret"
-	if len(secret) == 0 && (opts.Env.Development() || opts.Env.Test()) {
+	env := Env(opts.Env)
+	if len(secret) == 0 && (env.Development() || env.Test()) {
 		secret = bufsec
 	}
 
