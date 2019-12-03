@@ -12,7 +12,7 @@
 
 ### **As of December 1st, 2019 Buffalo, and all related packages, require Go Modules and the use of the `GOPATH` is no longer supported.**
 
-Please see this blog post for more information [https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5.](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5.)
+Please see this blog post for more information [https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5.](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5).
 
 ---
 
