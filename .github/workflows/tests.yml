@@ -1,0 +1,27 @@
+name: Tests
+on: [push]
+jobs:
+
+
+  tests-off:
+    name: (GOPATH) ${{matrix.go-version}} ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go-version: [1.12.x, 1.13.x]
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    env:
+      GO111MODULE: on
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+        path: src/github.com/${{ github.repository }}
+    - name: Test
+      env:
+        GOPATH: ${{runner.workspace}}
+      run: |
+        go mod tidy -v
+        go test -tags "sqlite integration_test" -cover -race ./...
+
