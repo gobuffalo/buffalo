@@ -159,7 +159,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
-	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {

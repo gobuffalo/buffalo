@@ -175,6 +175,12 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
+	d.LogField("error", err.Error())
+	ws, ok := d.Response().(*Response)
+	if !ok {
+		ws = &Response{ResponseWriter: d.Response()}
+	}
+	ws.Status = status
 	return HTTPError{Status: status, Cause: err}
 }
 
