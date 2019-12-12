@@ -71,7 +71,13 @@ func RequestLoggerFunc(h Handler) Handler {
 				"human_size": humanize.Bytes(uint64(ws.Size)),
 				"status":     ws.Status,
 			})
-			c.Logger().Info(req.URL.String())
+			// Log with level according to status code
+			switch status := ws.Status; {
+			case status >= http.StatusInternalServerError:
+				c.Logger().Error(req.URL.String())
+			default:
+				c.Logger().Info(req.URL.String())
+			}
 		}()
 		return h(c)
 	}

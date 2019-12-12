@@ -160,7 +160,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		requestCT = defaultErrorCT
 	}
 
-	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	env := c.Value("env")
