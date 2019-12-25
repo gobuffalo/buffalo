@@ -214,6 +214,9 @@ var newCmd = &cobra.Command{
 		}
 
 		if err := run.Run(); err != nil {
+			if err := os.RemoveAll(app.Root); err == nil {
+				run.Logger.Debugf("Succussfully removed all intermediate files due to error")
+			}
 			return err
 		}
 
