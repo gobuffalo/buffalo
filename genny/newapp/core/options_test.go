@@ -33,4 +33,11 @@ func Test_Options_Validate(t *testing.T) {
 	err = opts.Validate()
 	r.NoError(err)
 
+	opts.App.Name = name.New("test")
+	err = opts.Validate()
+	r.Error(err)
+
+	opts.App.Name = name.New("testapp")
+	err = opts.Validate()
+	r.NoError(err)
 }

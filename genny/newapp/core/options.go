@@ -75,11 +75,7 @@ func (opts *Options) Validate() error {
 	name := strings.ToLower(opts.App.Name.String())
 	fb := append(opts.ForbiddenNames, "buffalo", "test", "dev")
 	for _, n := range fb {
-		rx, err := regexp.Compile(n)
-		if err != nil {
-			return err
-		}
-		if rx.MatchString(name) {
+		if n == name {
 			return fmt.Errorf("name %s is not allowed, try a different application name", opts.App.Name)
 		}
 	}
