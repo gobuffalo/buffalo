@@ -54,6 +54,6 @@ func Test_New(t *testing.T) {
 	efiles := []string{"bin/buffalo-pop", "config/buffalo-plugins.toml"}
 	r.Len(res.Files, len(efiles))
 	for i, f := range res.Files {
-		r.True(strings.HasSuffix(f.Name(), efiles[i]), fmt.Sprintf("Not found %v", f))
+		r.True(strings.HasSuffix(f.Name(), efiles[i]), fmt.Sprintf("Not found %v", efiles[i]))
 	}
 }
