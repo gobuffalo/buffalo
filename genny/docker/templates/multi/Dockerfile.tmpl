@@ -5,8 +5,8 @@ FROM gobuffalo/buffalo:{{.opts.Version}} as builder
 ENV GO111MODULE on
 ENV GOPROXY https://proxy.golang.org
 
-RUN mkdir -p $GOPATH/src/{{.opts.App.Name}}
-WORKDIR $GOPATH/src/{{.opts.App.Name}}
+RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
+WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
 {{if .opts.App.WithWebpack -}}
 # this will cache the npm install step, unless package.json changes

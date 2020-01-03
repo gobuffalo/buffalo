@@ -3,8 +3,8 @@ FROM gobuffalo/buffalo:{{.opts.Version}}
 ENV GO111MODULE on
 ENV GOPROXY https://proxy.golang.org
 
-RUN mkdir -p $GOPATH/src/{{.opts.App.Name}}
-WORKDIR $GOPATH/src/{{.opts.App.Name}}
+RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
+WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
 {{if .opts.App.AsWeb -}}
 {{if .opts.App.WithWebpack -}}
