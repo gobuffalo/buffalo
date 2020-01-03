@@ -2,12 +2,13 @@
 # https://docs.docker.com/engine/userguide/eng-image/multistage-build/
 FROM gobuffalo/buffalo:{{.opts.Version}} as builder
 
-ENV GO111MODULE on
+
 ENV GOPROXY https://proxy.golang.org
 
 RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
 WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
+ENV GO111MODULE on
 {{if .opts.App.WithWebpack -}}
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
