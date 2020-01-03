@@ -34,11 +34,20 @@ func New(opts *Options) (*genny.Group, error) {
 
 	gg.Add(g)
 
-	g, err := gomods.Tidy(opts.App.Root, false)
-	if err != nil {
-		return gg, err
+	// DEP/MODS/go get should be last
+	if !opts.App.WithModules {
+		g := genny.New()
+		g.Command(gogen.Get("./...", "-t"))
+		gg.Add(g)
 	}
-	gg.Add(g)
+
+	if opts.App.WithModules {
+		g, err := gomods.Tidy(opts.App.Root, false)
+		if err != nil {
+			return gg, err
+		}
+		gg.Add(g)
+	}
 
 	return gg, nil
 }

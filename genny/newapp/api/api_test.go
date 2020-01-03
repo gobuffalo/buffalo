@@ -20,7 +20,7 @@ func Test_New(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.New(".")
-	app.WithModules = true
+	app.WithModules = false
 	app.AsAPI = true
 	app.AsWeb = false
 
