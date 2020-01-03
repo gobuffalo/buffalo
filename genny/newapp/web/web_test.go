@@ -20,7 +20,7 @@ func Test_New(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.New(".")
-	app.WithModules = false
+	app.WithModules = true
 
 	gg, err := New(&Options{
 		Options: &core.Options{

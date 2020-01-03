@@ -23,7 +23,7 @@ func Test_New(t *testing.T) {
 	r := require.New(t)
 	plog.Logger = logger.New(logger.DebugLevel)
 	app := meta.Named("coke", filepath.Join(envy.GoPath(), "src"))
-	app.WithModules = false
+	app.WithModules = true
 
 	gg, err := New(&Options{
 		App: app,
@@ -124,7 +124,7 @@ func Test_New_Docker(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.New(".")
-	app.WithModules = false
+	app.WithModules = true
 
 	gg, err := New(&Options{
 		Docker: &docker.Options{},
