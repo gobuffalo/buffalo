@@ -1,12 +1,16 @@
 FROM gobuffalo/buffalo:latest
-ENV GOPROXY=https://proxy.golang.org
 
 ARG CODECOV_TOKEN
 
-ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
+ENV GOPROXY         https://proxy.golang.org
+ENV GO111MODULE     on
+ENV BP              /src/buffalo
+
 RUN rm -rf $BP
 RUN mkdir -p $BP
-WORKDIR $BP
 
+WORKDIR $BP
 COPY . .
-RUN bash ./it.sh
+
+RUN go mod tidy
+RUN go test -tags "sqlite integration_test" -cover -race -v ./...

@@ -20,7 +20,8 @@ func Test_New(t *testing.T) {
 	r := require.New(t)
 
 	app := meta.New(".")
-	app.WithModules = false
+	app.WithModules = true
+	envy.Set(envy.GO111MODULE, "on")
 
 	gg, err := New(&Options{
 		Options: &core.Options{
@@ -37,8 +38,10 @@ func Test_New(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go get -t ./...",
-		"go get -t ./...",
+		"go mod init web",
+		"go get github.com/gobuffalo/buffalo@v0.15.3",
+		"go get ./...",
+		"go mod tidy",
 	}
 	r.Len(res.Commands, len(cmds))
 
