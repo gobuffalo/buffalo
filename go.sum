@@ -492,8 +492,6 @@ github.com/gobuffalo/release v1.4.0/go.mod h1:f4uUPnD9dxrWxVy9yy0k/mvDf3EzhFtf7/
 github.com/gobuffalo/release v1.7.0/go.mod h1:xH2NjAueVSY89XgC4qx24ojEQ4zQ9XCGVs5eXwJTkEs=
 github.com/gobuffalo/release v1.8.3/go.mod h1:gCk/x5WD+aIGkPodO4CuLxdnhYn9Jgp7yFYxntK/8mk=
 github.com/gobuffalo/release v1.13.4/go.mod h1:5Cc4TSNxP4QFV2ZUYcgPiBBV7YyRomHecGTQuuy26G4=
-github.com/gobuffalo/release v1.15.0 h1:bE97SdPFoRDz5BKC+QmTNYJa+aHbBMqG/nUkHW6xSug=
-github.com/gobuffalo/release v1.15.0/go.mod h1:LwotdbqCKcpQ+bKAvk1vvXLZhM8ftBTI5AlE7mx/1H8=
 github.com/gobuffalo/shoulders v1.0.1/go.mod h1:V33CcVmaQ4gRUmHKwq1fiTXuf8Gp/qjQBUL5tHPmvbA=
 github.com/gobuffalo/shoulders v1.0.3/go.mod h1:LqMcHhKRuBPMAYElqOe3POHiZ1x7Ry0BE8ZZ84Bx+k4=
 github.com/gobuffalo/shoulders v1.0.4/go.mod h1:LqMcHhKRuBPMAYElqOe3POHiZ1x7Ry0BE8ZZ84Bx+k4=

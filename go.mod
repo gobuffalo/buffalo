@@ -16,7 +16,6 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.6.0
 	github.com/gobuffalo/httptest v1.4.0
-	github.com/gobuffalo/licenser v1.4.0
 	github.com/gobuffalo/logger v1.0.3
 	github.com/gobuffalo/meta v0.2.1
 	github.com/gobuffalo/nulls v0.1.0
@@ -24,7 +23,6 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.13.1+incompatible
-	github.com/gobuffalo/release v1.15.0
 	github.com/gobuffalo/tags v2.1.7+incompatible
 	github.com/gobuffalo/tags/v3 v3.0.2
 	github.com/google/go-cmp v0.4.0

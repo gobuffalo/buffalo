@@ -1,11 +1,10 @@
 package core
 
 import (
-	"go/build"
 	"html/template"
+	"os/exec"
 
 	"github.com/BurntSushi/toml"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/genny"
 	"github.com/gobuffalo/genny/gogen"
 	"github.com/gobuffalo/packr/v2"
@@ -18,6 +17,8 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 	if err := opts.Validate(); err != nil {
 		return g, err
 	}
+
+	g.Command(exec.Command("go", "mod", "init", opts.App.PackagePkg))
 
 	g.Transformer(genny.Dot())
 
@@ -34,13 +35,6 @@ func rootGenerator(opts *Options) (*genny.Generator, error) {
 
 	t := gogen.TemplateTransformer(data, helpers)
 	g.Transformer(t)
-
-	if !opts.App.WithModules {
-		c := build.Default
-		dirs := c.SrcDirs()
-		dirs = append(dirs, envy.GoPaths()...)
-		g.RunFn(validateInGoPath(dirs))
-	}
 
 	g.RunFn(func(r *genny.Runner) error {
 		f := genny.NewFile("config/buffalo-app.toml", nil)

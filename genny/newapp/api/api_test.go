@@ -39,8 +39,7 @@ func Test_New(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go get -t ./...",
-		"go get -t ./...",
+		"go mod init github.com/gobuffalo/buffalo/genny/newapp/api",
 	}
 	r.Len(res.Commands, len(cmds))
 
