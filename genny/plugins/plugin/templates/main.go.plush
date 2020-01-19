@@ -1,7 +1,0 @@
-package main
-
-import "<%= opts.PluginPkg %>/cmd"
-
-func main() {
-	cmd.Execute()
-}
