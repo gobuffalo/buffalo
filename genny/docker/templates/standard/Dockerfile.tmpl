@@ -1,5 +1,8 @@
 FROM gobuffalo/buffalo:{{.opts.Version}}
 
+ENV GO111MODULE on
+ENV GOPROXY http://proxy.golang.org
+
 RUN mkdir -p $GOPATH/src/{{.opts.App.PackagePkg}}
 WORKDIR $GOPATH/src/{{.opts.App.PackagePkg}}
 
@@ -17,7 +20,6 @@ RUN npm install --no-progress
 {{end -}}
 
 ADD . .
-RUN go get $(go list ./... | grep -v /vendor/)
 RUN buffalo build --static -o /bin/app
 
 # Uncomment to run the binary in "production" mode:

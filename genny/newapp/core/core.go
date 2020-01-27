@@ -8,10 +8,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/buffalo/runtime"
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
-	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
 )
 
@@ -27,17 +24,6 @@ func New(opts *Options) (*genny.Group, error) {
 	gg.Add(g)
 
 	app := opts.App
-
-	if app.WithModules {
-		g, err := gomods.Init(app.PackagePkg, app.Root)
-		if err != nil {
-			return gg, err
-		}
-		g.Command(gogen.Get("github.com/gobuffalo/buffalo@" + runtime.Version))
-		g.Command(gogen.Get("./..."))
-
-		gg.Add(g)
-	}
 
 	plugs, err := plugdeps.List(app)
 	if err != nil && (errx.Unwrap(err) != plugdeps.ErrMissingConfig) {
@@ -101,20 +87,6 @@ func New(opts *Options) (*genny.Group, error) {
 		return gg, err
 	}
 	gg.Merge(ig)
-
-	if !app.WithModules {
-		g := genny.New()
-		g.Command(gogen.Get("./...", "-t"))
-		gg.Add(g)
-	}
-
-	if app.WithModules {
-		g, err := gomods.Tidy(app.Root, false)
-		if err != nil {
-			return gg, err
-		}
-		gg.Add(g)
-	}
 
 	return gg, nil
 }

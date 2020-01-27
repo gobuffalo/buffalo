@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen/gomods"
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {
@@ -14,10 +13,6 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 		opts.GoCommand = "build"
 	}
 	buildArgs := []string{opts.GoCommand}
-
-	if !gomods.On() {
-		buildArgs = append(buildArgs, "-i")
-	}
 
 	if len(opts.Mod) != 0 {
 		buildArgs = append(buildArgs, "-mod", opts.Mod)

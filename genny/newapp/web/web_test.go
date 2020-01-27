@@ -19,8 +19,10 @@ func init() {
 func Test_New(t *testing.T) {
 	r := require.New(t)
 
-	app := meta.New(".")
-	app.WithModules = false
+	app := meta.Named("web", ".")
+	(&app).PackageRoot("web")
+	app.WithModules = true
+	envy.Set(envy.GO111MODULE, "on")
 
 	gg, err := New(&Options{
 		Options: &core.Options{
@@ -37,8 +39,7 @@ func Test_New(t *testing.T) {
 	res := run.Results()
 
 	cmds := []string{
-		"go get -t ./...",
-		"go get -t ./...",
+		"go mod init web",
 	}
 	r.Len(res.Commands, len(cmds))
 

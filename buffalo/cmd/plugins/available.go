@@ -18,11 +18,9 @@ var PluginsCmd = &cobra.Command{
 func init() {
 	PluginsCmd.AddCommand(addCmd)
 	PluginsCmd.AddCommand(listCmd)
-	PluginsCmd.AddCommand(generateCmd)
 	PluginsCmd.AddCommand(removeCmd)
 	PluginsCmd.AddCommand(installCmd)
 	PluginsCmd.AddCommand(cacheCmd)
 
-	Available.Add("generate", generateCmd)
 	Available.ListenFor("buffalo:setup:.+", Listen)
 }
