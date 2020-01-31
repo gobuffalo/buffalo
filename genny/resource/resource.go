@@ -20,7 +20,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	}
 
 	if !opts.SkipTemplates {
-		core := packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/core", "../resource/templates/core")
+		core := packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/core", "../resource/templates/core")
 
 		if err := g.Box(core); err != nil {
 			return g, err
@@ -29,9 +29,9 @@ func New(opts *Options) (*genny.Generator, error) {
 
 	var abox packd.Box
 	if opts.SkipModel {
-		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/standard", "../resource/templates/standard")
+		abox = packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/standard", "../resource/templates/standard")
 	} else {
-		abox = packr.New("github.com/gobuffalo/buffalo/genny/resource/templates/use_model", "../resource/templates/use_model")
+		abox = packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/use_model", "../resource/templates/use_model")
 	}
 
 	if err := g.Box(abox); err != nil {
