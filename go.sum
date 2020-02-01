@@ -356,6 +356,8 @@ github.com/gobuffalo/meta v0.1.0/go.mod h1:vAgu28tKdaPIkt8j60wYv1dLuJ1UwOmAjZtYO
 github.com/gobuffalo/meta v0.2.0/go.mod h1:KZ9Hk/o+kFpwRhzUO95EOuxf3jXU4GleCTUDSTpe3hQ=
 github.com/gobuffalo/meta v0.2.1 h1:6SWsmdlfPC91ysIaPHhXjtVzcAIqUxxC5uetDd4fpdo=
 github.com/gobuffalo/meta v0.2.1/go.mod h1:KZ9Hk/o+kFpwRhzUO95EOuxf3jXU4GleCTUDSTpe3hQ=
+github.com/gobuffalo/meta v0.3.0 h1:F0BFeZuQ1UmsHAVBgsnzolheLmv11t2GQ+53OFOP7lk=
+github.com/gobuffalo/meta v0.3.0/go.mod h1:cpr6mrUX5H/B4wEP86Gdq568TK4+dKUD8oRPl698RUw=
 github.com/gobuffalo/mw-basicauth v1.0.3/go.mod h1:dg7+ilMZOKnQFHDefUzUHufNyTswVUviCBgF244C1+0=
 github.com/gobuffalo/mw-basicauth v1.0.6/go.mod h1:RFyeGeDLZlVgp/eBflqu2eavFqyv0j0fVVP87WPYFwY=
 github.com/gobuffalo/mw-basicauth v1.0.7/go.mod h1:xJ9/OSiOWl+kZkjaSun62srODr3Cx8OB4AKr+G4FlS4=
@@ -801,6 +803,8 @@ github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFR
 github.com/rogpeppe/go-internal v1.3.2/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
 github.com/rogpeppe/go-internal v1.4.0 h1:LUa41nrWTQNGhzdsZ5lTnkwbNjj6rXTdazA1cSdjkOY=
 github.com/rogpeppe/go-internal v1.4.0/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
+github.com/rogpeppe/go-internal v1.5.2 h1:qLvObTrvO/XRCqmkKxUlOBc48bI3efyDuAZe25QiF0w=
+github.com/rogpeppe/go-internal v1.5.2/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
 github.com/rs/xid v1.2.1/go.mod h1:+uKXf+4Djp6Md1KODXJxgGQPKngRmWyn10oCKFzNHOQ=
 github.com/rs/zerolog v1.13.0/go.mod h1:YbFCdg8HfsridGWAh22vktObvhZbQsZXe4/zB0OKkWU=
 github.com/rs/zerolog v1.15.0/go.mod h1:xYTKnLHcpfU2225ny5qZjxnj9NvkumZYjJHlAThCjNc=

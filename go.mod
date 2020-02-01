@@ -17,7 +17,7 @@ require (
 	github.com/gobuffalo/helpers v0.6.0
 	github.com/gobuffalo/httptest v1.4.1
 	github.com/gobuffalo/logger v1.0.3
-	github.com/gobuffalo/meta v0.2.1
+	github.com/gobuffalo/meta v0.3.0
 	github.com/gobuffalo/nulls v0.2.0
 	github.com/gobuffalo/packd v1.0.0
 	github.com/gobuffalo/packr/v2 v2.7.1
