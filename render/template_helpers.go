@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	ht "github.com/gobuffalo/helpers/tags"
-	"github.com/gobuffalo/tags"
+	"github.com/gobuffalo/tags/v3"
 )
 
 type helperTag struct {
