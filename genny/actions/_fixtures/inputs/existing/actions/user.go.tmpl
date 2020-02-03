@@ -1,13 +1,13 @@
 package actions
 
 import (
-    "net/http"
-    
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 )
 
 // UserEdit default implementation.
 func UserEdit(c buffalo.Context) error {
-  // custom existing work
+	// custom existing work
 	return c.Render(http.StatusOK, r.HTML("user/edit.html"))
 }
