@@ -39,6 +39,7 @@ ci-test:
 	docker build . --no-cache --build-arg TRAVIS_BRANCH=$$(git symbolic-ref --short HEAD)
 
 lint:
+	! grep -rE --include='*.go.tmpl' --include='*.go.plush' '^[ ]+'
 	golangci-lint --vendor ./... --deadline=1m --skip=internal
 
 update:
