@@ -23,6 +23,8 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/pop v4.13.1+incompatible
+	github.com/gobuffalo/pop/v5 v5.0.7
+	github.com/gobuffalo/suite v2.8.2+incompatible
 	github.com/gobuffalo/tags v2.1.7+incompatible
 	github.com/gobuffalo/tags/v3 v3.0.2
 	github.com/google/go-cmp v0.4.0
