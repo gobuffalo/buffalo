@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/helpers/forms/bootstrap"
 	"github.com/gobuffalo/plush"
-	"github.com/gobuffalo/tags"
+	"github.com/gobuffalo/tags/v3"
 )
 
 func init() {
