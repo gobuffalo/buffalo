@@ -24,8 +24,8 @@ var app *buffalo.App
 //
 // It also means that routes are checked in the order they are declared.
 // `ServeFiles` is a CATCH-ALL route, so it should always be
-// placed last in the route declarations, as it will prevent routes
-// declared after it to never be called.
+// placed last in the route declarations, as it will ensure routes
+// declared after it will never be called.
 func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.New(buffalo.Options{

@@ -1,24 +1,22 @@
-<div class="page-header">
-  <h1>Widget#Show</h1>
-</div>
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Widget Details</h3>
 
-<ul class="list-unstyled list-inline">
-  <li class="list-inline-item">
+  <div class="float-right">
     <%= linkTo(widgetsPath(), {class: "btn btn-info"}) { %>
       Back to all Widgets
     <% } %>
-  </li>
-  <li class="list-inline-item">
     <%= linkTo(editWidgetPath({ widget_id: widget.ID }), {class: "btn btn-warning", body: "Edit"}) %>
-  </li>
-  <li class="list-inline-item">
     <%= linkTo(widgetPath({ widget_id: widget.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+<ul class="list-group mb-2 ">
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Name</label>
+    <p class="d-inline-block"><%= widget.Name %></p>
+  </li>
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Desc</label>
+    <p class="d-inline-block"><%= widget.Desc %></p>
   </li>
 </ul>
-
-<p>
-  <strong>Name</strong>: <%= widget.Name %>
-</p>
-<p>
-  <strong>Desc</strong>: <%= widget.Desc %>
-</p>

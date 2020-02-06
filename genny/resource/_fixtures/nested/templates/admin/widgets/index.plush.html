@@ -1,25 +1,23 @@
-<div class="page-header">
-  <h1>Widgets</h1>
-</div>
-<ul class="list-unstyled list-inline">
-  <li>
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Widgets</h3>
+  <div class="float-right">
     <%= linkTo(newAdminWidgetsPath(), {class: "btn btn-primary"}) { %>
       Create New Widget
     <% } %>
-  </li>
-</ul>
+  </div>
+</div>
 
-<table class="table table-striped">
-  <thead>
-  <th>Name</th>
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    <th>Name</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for (widget) in widgets { %>
       <tr>
-      <td><%= widget.Name %></td>
+        <td class="align-middle"><%= widget.Name %></td>
         <td>
-          <div class="pull-right">
+          <div class="float-right">
             <%= linkTo(adminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-info", body: "View"}) %>
             <%= linkTo(editAdminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-warning", body: "Edit"}) %>
             <%= linkTo(adminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>

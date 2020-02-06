@@ -1,33 +1,31 @@
-<div class="page-header">
-  <h1>{{.opts.Model.Group}}</h1>
-</div>
-<ul class="list-unstyled list-inline">
-  <li>
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">{{.opts.Model.Group}}</h3>
+  <div class="float-right">
     <%= linkTo(new{{.opts.Name.Resource}}Path(), {class: "btn btn-primary"}) { %>
       Create New {{.opts.Model.Proper}}
     <% } %>
-  </li>
-</ul>
+  </div>
+</div>
 
-<table class="table table-striped">
-  <thead>
-  {{ range $p := .opts.Attrs -}}
-    {{ if ne $p.CommonType "text" -}}
-    <th>{{ $p.Name.Pascalize }}</th>
-    {{ end -}}
-  {{ end -}}
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    {{ range $p := .opts.Attrs -}}
+      {{- if ne $p.CommonType "text" -}}
+      <th>{{ $p.Name.Pascalize }}</th>
+      {{- end -}}
+    {{- end }}
     <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for ({{.opts.Model.VarCaseSingle}}) in {{.opts.Model.VarCasePlural}} { %>
       <tr>
-      {{ range $mp := .opts.Attrs -}}
-        {{ if ne $mp.CommonType "text" -}}
-        <td><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name.Pascalize}} %></td>
-        {{ end -}}
-      {{ end -}}
+        {{ range $mp := .opts.Attrs -}}
+          {{- if ne $mp.CommonType "text" -}}
+        <td class="align-middle"><%= {{$.opts.Model.VarCaseSingle}}.{{$mp.Name.Pascalize}} %></td>
+          {{- end -}}
+        {{- end }}
         <td>
-          <div class="pull-right">
+          <div class="float-right">
             <%= linkTo({{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-info", body: "View"}) %>
             <%= linkTo(edit{{.opts.Name.Proper}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-warning", body: "Edit"}) %>
             <%= linkTo({{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>

@@ -1,12 +1,11 @@
 const Webpack = require("webpack");
 const Glob = require("glob");
-const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
-const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
+const TerserPlugin = require("terser-webpack-plugin");
+const LiveReloadPlugin = require("webpack-livereload-plugin");
 
 const configurator = {
   entries: function(){
@@ -93,17 +92,19 @@ const configurator = {
       return config
     }
 
-    const uglifier = new UglifyJsPlugin({
-      uglifyOptions: {
-        beautify: false,
+    const terser = new TerserPlugin({
+      terserOptions: {
+        compress: {},
         mangle: {keep_fnames: true},
-        output: {comments: false},
-        compress: {}
-      }
+        output: {
+          comments: false,
+        },
+      },
+      extractComments: false,
     })
 
     config.optimization = {
-      minimizer: [uglifier]
+      minimizer: [terser]
     }
 
     return config
