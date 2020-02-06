@@ -26,6 +26,7 @@ require (
 	github.com/gobuffalo/pop v4.13.1+incompatible
 	github.com/gobuffalo/tags/v3 v3.1.0
 	github.com/gobuffalo/validate v2.0.4+incompatible // indirect
+	github.com/gobuffalo/validate/v3 v3.1.0 // indirect
 	github.com/google/go-cmp v0.4.0
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
@@ -43,7 +44,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20200204104054-c9f3fb736b72 // indirect
+	golang.org/x/crypto v0.0.0-20200206161412-a0c6ece9d31a // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5 // indirect
 	golang.org/x/tools v0.0.0-20200131211209-ecb101ed6550
