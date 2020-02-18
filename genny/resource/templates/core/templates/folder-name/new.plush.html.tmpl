@@ -1,5 +1,5 @@
-<div class="page-header">
-  <h1>New {{.opts.Model.Proper}}</h1>
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">New {{.opts.Model.Proper}}</h3>
 </div>
 
 <%= formFor({{.opts.Model.VarCaseSingle}}, {action: {{.opts.Name.VarCasePlural}}Path(), method: "POST"}) { %>

@@ -25,6 +25,7 @@ build:
 	make tidy
 
 test:
+	packr2
 	$(GO_BIN) test -tags ${TAGS} -cover ./...
 	packr2
 	make tidy
