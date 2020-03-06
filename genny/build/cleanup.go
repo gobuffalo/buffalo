@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/packr/v2/jam"
 )
 

@@ -73,7 +73,7 @@ var _ = func() error {
 	}()
 
 	func() {
-		b := packr.New("github.com/gobuffalo/genny/genny/new", "../new/templates")
+		b := packr.New("github.com/gobuffalo/genny/v2/genny/new", "../new/templates")
 		b.SetResolver("-name-/-name-.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "920fdc8a8285bc442cfb791bcafe45b6"})
 		b.SetResolver("-name-/-name-_test.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "a61b972dce26544398f591b4e2f715f3"})
 		b.SetResolver("-name-/options.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "cb9f04739ceb356f960fa53f13efd3f3"})

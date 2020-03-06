@@ -4,8 +4,8 @@ import (
 	"os/exec"
 
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 )
 
 func modelCommand(model name.Ident, opts *Options) *exec.Cmd {

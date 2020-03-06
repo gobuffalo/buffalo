@@ -8,7 +8,7 @@ import (
 
 	"github.com/gobuffalo/packd"
 
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )

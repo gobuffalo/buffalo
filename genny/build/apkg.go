@@ -1,7 +1,7 @@
 package build
 
 import (
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 func apkg(opts *Options) (*genny.Generator, error) {

@@ -2,8 +2,8 @@ package build
 
 import (
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 )
 
 func buildDeps(opts *Options) (*genny.Generator, error) {

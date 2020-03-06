@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/clara/genny/rx"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packd"
 	"github.com/stretchr/testify/require"

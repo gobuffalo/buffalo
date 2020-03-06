@@ -7,14 +7,12 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny/gogen/gomods"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_buildCmd(t *testing.T) {
 	envy.Set("GO_BIN", "go")
-	gomods.Force(true)
 	r := require.New(t)
 
 	eq := func(s string, c *exec.Cmd) {

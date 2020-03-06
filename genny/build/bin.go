@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {

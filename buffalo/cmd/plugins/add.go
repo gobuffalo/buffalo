@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/add"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 	"github.com/spf13/cobra"
 )

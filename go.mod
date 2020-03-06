@@ -12,7 +12,8 @@ require (
 	github.com/gobuffalo/envy v1.9.0
 	github.com/gobuffalo/events v1.4.1
 	github.com/gobuffalo/flect v0.2.1
-	github.com/gobuffalo/genny v0.6.0
+	github.com/gobuffalo/genny v0.6.0 // indirect
+	github.com/gobuffalo/genny/v2 v2.0.5
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.6.1
 	github.com/gobuffalo/httptest v1.4.1
@@ -41,9 +42,9 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20200206161412-a0c6ece9d31a // indirect
+	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5 // indirect
+	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/tools v0.0.0-20200131211209-ecb101ed6550
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.8
