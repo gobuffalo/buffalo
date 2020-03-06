@@ -4,7 +4,7 @@ import (
 	"html"
 
 	"github.com/gobuffalo/github_flavored_markdown"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // HTML renders the named files using the 'text/html'

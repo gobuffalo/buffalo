@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/genny/plushgen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/packr/v2/jam"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // New generator for building a Buffalo application

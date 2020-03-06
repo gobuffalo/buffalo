@@ -27,7 +27,7 @@ import (
 	"github.com/gobuffalo/logger"
 	"github.com/gobuffalo/meta"
 	"github.com/gobuffalo/packr/v2/plog"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
