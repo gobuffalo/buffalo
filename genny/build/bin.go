@@ -4,8 +4,6 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
-
-	"github.com/gobuffalo/genny"
 )
 
 func buildCmd(opts *Options) (*exec.Cmd, error) {
@@ -52,5 +50,5 @@ func buildCmd(opts *Options) (*exec.Cmd, error) {
 		buildArgs = append(buildArgs, "-ldflags", strings.Join(flags, " "))
 	}
 
-	return exec.Command(genny.GoBin(), buildArgs...), nil
+	return exec.Command("go", buildArgs...), nil
 }

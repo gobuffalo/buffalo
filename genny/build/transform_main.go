@@ -4,7 +4,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 func transformMain(opts *Options) genny.RunFn {

@@ -155,6 +155,8 @@ github.com/gobuffalo/clara v0.7.0/go.mod h1:pen7ZMmnuYUYVF/3BbnvidYVAbMEfkyO4O+T
 github.com/gobuffalo/clara v0.9.1/go.mod h1:OQ3HmSqLQJHaMmKhuTkmBCvBLL4BhgjweNpywRGulWo=
 github.com/gobuffalo/clara v0.10.1 h1:tY6AR1eFEXQwj2fUZVkjPaA47x8Rw5w5UiDaHnExlPM=
 github.com/gobuffalo/clara v0.10.1/go.mod h1:XcB5V5Vx5wuq/cXZOV0kAPetk7CYxSLFG5YvpyTxzxI=
+github.com/gobuffalo/clara/v2 v2.0.2 h1:3BEYfr5xVoS3bpv/12iz/sGER0PE0UmHF9Rq4Z754pc=
+github.com/gobuffalo/clara/v2 v2.0.2/go.mod h1:bbPiHMLsf17cx+hTe0q7Y/yWN8KmpJjgir1t5MZuf0w=
 github.com/gobuffalo/depgen v0.0.0-20190219190223-ba8c93fa0c2c/go.mod h1:CE/HUV4vDCXtJayRf6WoMWgezb1yH4QHg8GNK8FL0JI=
 github.com/gobuffalo/depgen v0.0.0-20190315122043-8442b3fa16db/go.mod h1:3STtPUQYuzV0gBVOY3vy6CfMm/ljR4pABfrTeHNLHUY=
 github.com/gobuffalo/depgen v0.0.0-20190315124901-e02f65b90669/go.mod h1:yTQe8xo5pGIDOApkeO95DjePS4ZOSSSx+ItkqJHxUG4=

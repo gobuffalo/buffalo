@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/genny/info"
-	"github.com/gobuffalo/clara/genny/rx"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/clara/v2/genny/rx"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 	"github.com/spf13/cobra"
 )

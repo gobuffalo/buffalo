@@ -3,7 +3,7 @@ package build
 import (
 	"testing"
 
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"

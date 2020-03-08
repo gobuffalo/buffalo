@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/gobuffalo/buffalo/genny/grift"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 	"github.com/spf13/cobra"
 )
 
