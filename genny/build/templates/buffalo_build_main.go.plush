@@ -13,7 +13,7 @@ import (
   _ "<%= opts.ActionsPkg %>"
   <%= if (opts.WithPop) { %>
   "github.com/gobuffalo/packr/v2"
-  "github.com/gobuffalo/pop"
+  "github.com/gobuffalo/pop/v5"
   "<%= opts.ModelsPkg %>"
   <% } %>
   <%= if (opts.WithGrifts) { %>
