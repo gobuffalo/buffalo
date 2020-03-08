@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )

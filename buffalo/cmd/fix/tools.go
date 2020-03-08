@@ -16,7 +16,7 @@ func installTools(r *Runner) error {
 	g := genny.New()
 	app := r.App
 	if app.WithPop {
-		rTools = append(rTools, "github.com/gobuffalo/buffalo-pop")
+		rTools = append(rTools, "github.com/gobuffalo/buffalo-pop/v2")
 	}
 	for _, t := range rTools {
 		g.Command(gogen.Get(t))

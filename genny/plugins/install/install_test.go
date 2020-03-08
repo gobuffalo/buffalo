@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ func Test_New(t *testing.T) {
 	g, err := New(&Options{
 		App: meta.New("."),
 		Plugins: []plugdeps.Plugin{
-			{Binary: "buffalo-pop", GoGet: "github.com/gobuffalo/buffalo-pop", Tags: meta.BuildTags{"sqlite"}},
+			{Binary: "buffalo-pop", GoGet: "github.com/gobuffalo/buffalo-pop/v2", Tags: meta.BuildTags{"sqlite"}},
 			{Binary: "buffalo-hello.rb", Local: "./plugins/buffalo-hello.rb"},
 		},
 	})
@@ -44,7 +44,7 @@ func Test_New(t *testing.T) {
 
 	res := run.Results()
 
-	ecmds := []string{"go get -tags sqlite github.com/gobuffalo/buffalo-pop"}
+	ecmds := []string{"go get -tags sqlite github.com/gobuffalo/buffalo-pop/v2"}
 	r.Len(res.Commands, len(ecmds))
 	for i, c := range res.Commands {
 		r.Equal(ecmds[i], strings.Join(c.Args, " "))

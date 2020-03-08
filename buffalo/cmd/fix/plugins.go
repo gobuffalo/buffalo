@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 // Plugins will fix plugins between releases

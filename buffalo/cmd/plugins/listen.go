@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 // Listen is listener for plugin events pipeline
