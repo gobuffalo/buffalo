@@ -21,41 +21,28 @@ require (
 	github.com/gobuffalo/meta v0.3.0
 	github.com/gobuffalo/nulls v0.2.0
 	github.com/gobuffalo/packd v1.0.0
-	github.com/gobuffalo/packr/v2 v2.7.1
+	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/gobuffalo/plush v3.8.3+incompatible
 	github.com/gobuffalo/plush/v4 v4.0.0
-	github.com/gobuffalo/pop v4.13.1+incompatible
-	github.com/gobuffalo/pop/v5 v5.0.9 // indirect
-	github.com/gobuffalo/release v1.15.0 // indirect
+	github.com/gobuffalo/pop/v5 v5.0.9
 	github.com/gobuffalo/tags/v3 v3.1.0
-	github.com/gobuffalo/validate v2.0.4+incompatible // indirect
 	github.com/google/go-cmp v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/gorilla/sessions v1.2.0
-	github.com/jackc/pgconn v1.4.0 // indirect
 	github.com/karrick/godirwalk v1.15.3
 	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.11.1
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/mattn/go-colorable v0.1.6 // indirect
 	github.com/monoculum/formam v0.0.0-20191229172733-952f0766a724
-	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spf13/afero v1.2.2 // indirect
-	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v0.0.6
-	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/tools v0.0.0-20200308013534-11ec41452d41
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
-	gopkg.in/ini.v1 v1.54.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
 )
