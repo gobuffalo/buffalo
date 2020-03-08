@@ -40,6 +40,7 @@ func (opts *Options) Validate() error {
 		if err := opts.Pop.Validate(); err != nil {
 			return err
 		}
+		opts.Pop.Root = opts.App.Root
 	}
 
 	if opts.CI != nil {
