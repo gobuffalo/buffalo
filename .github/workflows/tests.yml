@@ -21,5 +21,5 @@ jobs:
     - name: Test
       run: |
         go mod tidy -v
-        go test -tags "sqlite integration_test" -cover -race -gcflags=all=-d=checkptr=0 ./...
+        go test -tags "sqlite integration_test" -cover  ./...
 
