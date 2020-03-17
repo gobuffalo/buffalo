@@ -16,10 +16,10 @@ var YesToAll bool
 var replace = map[string]string{
 	"github.com/gobuffalo/buffalo-plugins":         "github.com/gobuffalo/buffalo/plugins",
 	"github.com/gobuffalo/genny":                   "github.com/gobuffalo/genny/v2",
-	"github.com/gobuffalo/pop":                     "github.com/gobuffalo/pop/v2",
+	"github.com/gobuffalo/pop":                     "github.com/gobuffalo/pop/v5",
 	"github.com/gobuffalo/pop/nulls":               "github.com/gobuffalo/nulls",
 	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid",
-	"github.com/markbates/pop":                     "github.com/gobuffalo/pop/v2",
+	"github.com/markbates/pop":                     "github.com/gobuffalo/pop/v5",
 	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
 	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
 	"github.com/satori/go.uuid":                    "github.com/gofrs/uuid",

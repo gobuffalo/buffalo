@@ -27,20 +27,20 @@ require (
 	github.com/google/go-cmp v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/gorilla/sessions v1.2.0
-	github.com/karrick/godirwalk v1.15.3
+	github.com/karrick/godirwalk v1.15.5
 	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.11.1
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/monoculum/formam v0.0.0-20191229172733-952f0766a724
+	github.com/monoculum/formam v0.0.0-20200316225015-49f0baed3a1b
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20200308013534-11ec41452d41
+	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
+	golang.org/x/tools v0.0.0-20200317043434-63da46f3035e
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 	gopkg.in/yaml.v2 v2.2.8
 )
