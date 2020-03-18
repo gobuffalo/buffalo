@@ -1,9 +1,10 @@
 package build
 
 import (
+	"os/exec"
+
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
 )
 
 func buildDeps(opts *Options) (*genny.Generator, error) {
@@ -22,6 +23,9 @@ func buildDeps(opts *Options) (*genny.Generator, error) {
 	if len(tf) > 0 {
 		tf = append([]string{"-tags"}, tf.String())
 	}
-	g.Command(gogen.Get("./...", tf...))
+	args := []string{"get"}
+	args = append(args, tf...)
+	args = append(args, "./...")
+	g.Command(exec.Command("go", args...))
 	return g, nil
 }

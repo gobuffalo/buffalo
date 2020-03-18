@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 // buildActions is the top level action builder

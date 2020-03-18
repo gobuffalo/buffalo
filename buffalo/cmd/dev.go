@@ -13,7 +13,7 @@ import (
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	rg "github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 	"github.com/markbates/refresh/refresh"
 	"github.com/sirupsen/logrus"

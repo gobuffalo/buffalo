@@ -3,8 +3,8 @@ package mail
 import (
 	"text/template"
 
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 	"github.com/gobuffalo/packr/v2"
 )
 

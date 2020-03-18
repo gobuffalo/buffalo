@@ -6,11 +6,11 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/plushgen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/plushgen"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/packr/v2/jam"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // New generator for building a Buffalo application

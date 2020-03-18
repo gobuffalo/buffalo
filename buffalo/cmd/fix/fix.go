@@ -14,14 +14,16 @@ import (
 var YesToAll bool
 
 var replace = map[string]string{
-	"github.com/markbates/pop":                     "github.com/gobuffalo/pop",
-	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
-	"github.com/satori/go.uuid":                    "github.com/gofrs/uuid",
-	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
-	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
 	"github.com/gobuffalo/buffalo-plugins":         "github.com/gobuffalo/buffalo/plugins",
-	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid",
+	"github.com/gobuffalo/genny":                   "github.com/gobuffalo/genny/v2",
+	"github.com/gobuffalo/pop":                     "github.com/gobuffalo/pop/v5",
 	"github.com/gobuffalo/pop/nulls":               "github.com/gobuffalo/nulls",
+	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid",
+	"github.com/markbates/pop":                     "github.com/gobuffalo/pop/v5",
+	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
+	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
+	"github.com/satori/go.uuid":                    "github.com/gofrs/uuid",
+	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
 }
 
 var ic = ImportConverter{
@@ -39,12 +41,12 @@ var mr = MiddlewareTransformer{
 
 	Aliases: map[string]string{
 		"github.com/gobuffalo/mw-basicauth":   "basicauth",
-		"github.com/gobuffalo/mw-csrf":        "csrf",
-		"github.com/gobuffalo/mw-i18n":        "i18n",
-		"github.com/gobuffalo/mw-forcessl":    "forcessl",
-		"github.com/gobuffalo/mw-tokenauth":   "tokenauth",
-		"github.com/gobuffalo/mw-paramlogger": "paramlogger",
 		"github.com/gobuffalo/mw-contenttype": "contenttype",
+		"github.com/gobuffalo/mw-csrf":        "csrf",
+		"github.com/gobuffalo/mw-forcessl":    "forcessl",
+		"github.com/gobuffalo/mw-i18n":        "i18n",
+		"github.com/gobuffalo/mw-paramlogger": "paramlogger",
+		"github.com/gobuffalo/mw-tokenauth":   "tokenauth",
 	},
 }
 
