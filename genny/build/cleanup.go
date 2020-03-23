@@ -36,9 +36,7 @@ func Cleanup(opts *Options) genny.RunFn {
 				// Keep this file
 				continue
 			}
-			if err := r.Disk.Delete(f.Name()); err != nil {
-				return err
-			}
+			r.Disk.Delete(f.Name())
 		}
 		if envy.Mods() && opts.WithBuildDeps {
 			if err := r.Exec(exec.Command("go", "mod", "tidy")); err != nil {

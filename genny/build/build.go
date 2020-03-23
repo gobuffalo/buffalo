@@ -41,7 +41,7 @@ func New(opts *Options) (*genny.Generator, error) {
 	g.RunFn(transformMain(opts))
 
 	// add any necessary templates for the build
-	box := packr.New("github.com/gobuffalo/buffalo/genny/build", "../build/templates")
+	box := packr.New("github.com/gobuffalo/buffalo@v0.15.6/genny/build", "../build/templates")
 	if err := g.Box(box); err != nil {
 		return g, err
 	}
