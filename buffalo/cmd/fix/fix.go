@@ -18,12 +18,16 @@ var replace = map[string]string{
 	"github.com/gobuffalo/genny":                   "github.com/gobuffalo/genny/v2",
 	"github.com/gobuffalo/pop":                     "github.com/gobuffalo/pop/v5",
 	"github.com/gobuffalo/pop/nulls":               "github.com/gobuffalo/nulls",
-	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid",
+	"github.com/gobuffalo/uuid":                    "github.com/gofrs/uuid/v3",
 	"github.com/markbates/pop":                     "github.com/gobuffalo/pop/v5",
-	"github.com/markbates/validate":                "github.com/gobuffalo/validate",
+	"github.com/markbates/validate":                "github.com/gobuffalo/validate/v3",
 	"github.com/markbates/willie":                  "github.com/gobuffalo/httptest",
 	"github.com/satori/go.uuid":                    "github.com/gofrs/uuid",
 	"github.com/shurcooL/github_flavored_markdown": "github.com/gobuffalo/github_flavored_markdown",
+	"github.com/gofrs/uuid":                        "github.com/gofrs/uuid/v3",
+	"github.com/gobuffalo/validate":                "github.com/gobuffalo/validate/v3",
+	"github.com/gobuffalo/suite":                   "github.com/gobuffalo/suite/v3",
+	"github.com/gobuffalo/buffalo-pop/":            "github.com/gobuffalo/buffalo-pop/v2",
 }
 
 var ic = ImportConverter{
