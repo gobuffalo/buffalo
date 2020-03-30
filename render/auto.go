@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"path"
+	"path/filepath"
 	"reflect"
 	"strings"
 
@@ -113,32 +114,36 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 				return err
 			}
 			if data["method"] == "PUT" {
-				return ir.HTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
+				return ir.osIndependentHTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
 			}
-			return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
+			return ir.osIndependentHTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 		}
 		return nil
 	}
 	cp, ok := data["current_path"].(string)
 
 	defCase := func() error {
-		return ir.HTML(fmt.Sprintf("%s/%s.html", templatePrefix, "index")).Render(w, data)
+		return ir.osIndependentHTML(fmt.Sprintf("%s/%s.html", templatePrefix, "index")).Render(w, data)
 	}
 	if !ok {
 		return defCase()
 	}
 
 	if strings.HasSuffix(cp, "/edit/") {
-		return ir.HTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
+		return ir.osIndependentHTML(fmt.Sprintf("%s/edit.html", templatePrefix)).Render(w, data)
 	}
 	if strings.HasSuffix(cp, "/new/") {
-		return ir.HTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
+		return ir.osIndependentHTML(fmt.Sprintf("%s/new.html", templatePrefix)).Render(w, data)
 	}
 
 	if !isPlural {
-		return ir.HTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)
+		return ir.osIndependentHTML(fmt.Sprintf("%s/show.html", templatePrefix)).Render(w, data)
 	}
 	return defCase()
+}
+
+func (ir htmlAutoRenderer) osIndependentHTML(path string) Renderer {
+	return ir.HTML(filepath.FromSlash(path))
 }
 
 func (ir htmlAutoRenderer) redirect(name name.Ident, w io.Writer, data Data) error {
