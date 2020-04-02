@@ -13,7 +13,7 @@ import (
 	"github.com/gobuffalo/meta"
 	"github.com/sirupsen/logrus"
 
-	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/v5"
 	"github.com/spf13/cobra"
 )
 

@@ -3,7 +3,7 @@ package actions
 import (
 	"fmt"
 
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 )
 
 func buildTemplates(pres *presenter) genny.RunFn {

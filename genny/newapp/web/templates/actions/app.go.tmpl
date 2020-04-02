@@ -9,7 +9,7 @@ import (
 
   {{ if .opts.App.WithPop }}
   "{{.opts.App.ModelsPkg}}"
-  "github.com/gobuffalo/buffalo-pop/pop/popmw"
+  "github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
   {{ end -}}
 
   csrf "github.com/gobuffalo/mw-csrf"

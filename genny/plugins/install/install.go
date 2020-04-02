@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"go/build"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/gobuffalo/buffalo/genny/add"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
 )
 
 // New installs plugins and then added them to the config file
@@ -40,7 +40,10 @@ func New(opts *Options) (*genny.Group, error) {
 		if len(p.Tags) > 0 {
 			args = append(args, "-tags", p.Tags.String())
 		}
-		g.Command(gogen.Get(p.GoGet, args...))
+		bargs := []string{"get"}
+		bargs = append(bargs, args...)
+		bargs = append(bargs, p.GoGet)
+		g.Command(exec.Command("go", bargs...))
 		if opts.Vendor {
 			g.RunFn(pRun(proot, p))
 		}

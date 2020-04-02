@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
