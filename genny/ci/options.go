@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/v5"
 )
 
 // Available CI implementations

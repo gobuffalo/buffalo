@@ -8,8 +8,8 @@ import (
 
 	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	packr "github.com/gobuffalo/packr/v2"
 	"github.com/stretchr/testify/require"

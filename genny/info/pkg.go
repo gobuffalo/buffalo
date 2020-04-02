@@ -1,7 +1,7 @@
 package info
 
 import (
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/packd"
 )
 

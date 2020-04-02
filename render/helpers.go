@@ -6,7 +6,7 @@ import (
 
 	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/helpers/forms/bootstrap"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 	"github.com/gobuffalo/tags/v3"
 )
 

@@ -13,7 +13,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers

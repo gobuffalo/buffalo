@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gobuffalo/buffalo-pop/genny/newapp"
+	"github.com/gobuffalo/buffalo-pop/v2/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/buffalo/genny/refresh"
@@ -37,12 +37,10 @@ func (opts *Options) Validate() error {
 	}
 
 	if opts.Pop != nil {
-		if opts.Pop.App.IsZero() {
-			opts.Pop.App = opts.App
-		}
 		if err := opts.Pop.Validate(); err != nil {
 			return err
 		}
+		opts.Pop.Root = opts.App.Root
 	}
 
 	if opts.CI != nil {

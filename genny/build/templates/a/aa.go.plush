@@ -4,7 +4,7 @@ import (
   "log"
   "strings"
   "github.com/gobuffalo/flect"
-  "github.com/gobuffalo/pop"
+  "github.com/gobuffalo/pop/v5"
   "github.com/gobuffalo/packr/v2"
   <%= if (opts.Environment != "development") { %>
   "github.com/gobuffalo/envy"
