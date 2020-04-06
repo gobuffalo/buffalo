@@ -1,6 +1,9 @@
 FROM golang:alpine
 EXPOSE 3000
 
+ENV GOPROXY=https://proxy.golang.org
+ENV GO111MODULE=ON
+
 ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 ENV GOPROXY=https://proxy.golang.org 
 
