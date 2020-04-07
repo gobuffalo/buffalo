@@ -19,6 +19,7 @@ builds:
       - 7
 archives:
   -
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
     replacements:
       '386': i386
       darwin: Darwin
