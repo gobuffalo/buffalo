@@ -3,9 +3,9 @@ package fix
 import (
 	"context"
 	"fmt"
+	"os/exec"
 
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
 )
 
 var rTools = []string{}
@@ -16,10 +16,10 @@ func installTools(r *Runner) error {
 	g := genny.New()
 	app := r.App
 	if app.WithPop {
-		rTools = append(rTools, "github.com/gobuffalo/buffalo-pop")
+		rTools = append(rTools, "github.com/gobuffalo/buffalo-pop/v2")
 	}
 	for _, t := range rTools {
-		g.Command(gogen.Get(t))
+		g.Command(exec.Command("go", "get", t))
 	}
 	run.With(g)
 	return run.Run()

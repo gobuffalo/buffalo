@@ -5,8 +5,8 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/mail"
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 	"github.com/gobuffalo/meta"
 	"github.com/spf13/cobra"
 )

@@ -4,11 +4,11 @@ import (
 	"html"
 
 	"github.com/gobuffalo/github_flavored_markdown"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // HTML renders the named files using the 'text/html'
-// content type and the github.com/gobuffalo/plush
+// content type and the github.com/gobuffalo/plush/v4
 // package for templating. If more than 1 file is provided
 // the second file will be considered a "layout" file
 // and the first file will be the "content" file which will
@@ -19,7 +19,7 @@ func HTML(names ...string) Renderer {
 }
 
 // HTML renders the named files using the 'text/html'
-// content type and the github.com/gobuffalo/plush
+// content type and the github.com/gobuffalo/plush/v4
 // package for templating. If more than 1 file is provided
 // the second file will be considered a "layout" file
 // and the first file will be the "content" file which will

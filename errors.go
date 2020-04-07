@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+	"runtime/debug"
 	"sort"
 	"strings"
 
@@ -13,7 +14,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/plush"
+	"github.com/gobuffalo/plush/v4"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
@@ -81,11 +82,12 @@ func (a *App) PanicHandler(next Handler) Handler {
 				default:
 					err = fmt.Errorf(fmt.Sprint(t))
 				}
-				err = err
 				events.EmitError(events.ErrPanic, err,
 					map[string]interface{}{
-						"context": c,
-						"app":     a,
+						"context":    c,
+						"app":        a,
+						"stacktrace": string(debug.Stack()),
+						"error":      err,
 					},
 				)
 				eh := a.ErrorHandlers.Get(http.StatusInternalServerError)

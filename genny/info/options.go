@@ -3,7 +3,7 @@ package info
 import (
 	"os"
 
-	"github.com/gobuffalo/clara/genny/rx"
+	"github.com/gobuffalo/clara/v2/genny/rx"
 	"github.com/gobuffalo/meta"
 )
 

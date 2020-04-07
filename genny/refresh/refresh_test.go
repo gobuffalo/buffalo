@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/flect/name"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
