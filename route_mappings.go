@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -307,8 +308,10 @@ func (a *App) buildRouteName(p string) string {
 			nextPart = parts[index+1]
 		}
 
-		isIdentifierPart := strings.Contains(part, "{") && strings.Contains(part, flect.Singularize(previousPart))
-		if isIdentifierPart || part == "" {
+		isIdentifierPart := strings.Contains(part, "{") && (strings.Contains(part, flect.Singularize(previousPart)))
+		isSimplifiedID, _ := regexp.MatchString(`{[\s+]?id[\s+]?}`, part)
+
+		if isIdentifierPart || isSimplifiedID || part == "" {
 			continue
 		}
 
