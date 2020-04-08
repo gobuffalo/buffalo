@@ -428,6 +428,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 			11. <%= rootPath({"special/":"12=ss"}) %>
 			12. <%= resourcePath({resource_id: 1}) %>
 			13. <%= editResourcePath({resource_id: 1}) %>
+			14. <%= testsPath() %>
+			13. <%= testPath({name: "myTest"}) %>
 		`))
 	}
 
@@ -437,6 +439,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.GET("/peeps", sampleHandler).Name("myPeeps")
 	a.Resource("/car", carsResource)
 	a.Resource("/resources", resourcesResource)
+	a.GET("/test", sampleHandler)
+	a.GET("/test/{name}", sampleHandler)
 
 	w := httptest.New(a)
 	res := w.HTML("/").Get()
@@ -454,6 +458,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "11. /?special%2F=12%3Dss")
 	r.Contains(res.Body.String(), "12. /resources/1")
 	r.Contains(res.Body.String(), "13. /resources/1/edit")
+	r.Contains(res.Body.String(), "14. /test")
+	r.Contains(res.Body.String(), "15. /test/myTest")
 }
 
 func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
@@ -719,9 +725,13 @@ func Test_buildRouteName(t *testing.T) {
 		"/users/{user_id}/children/{child_id}": "userChild",
 		"/users/{user_id}/children/new":        "newUserChildren",
 		"/users/{user_id}/children/{child_id}/build": "userChildBuild",
-		"/admin/planes":                 "adminPlanes",
-		"/admin/planes/{plane_id}":      "adminPlane",
-		"/admin/planes/{plane_id}/edit": "editAdminPlane",
+		"/admin/planes":                         "adminPlanes",
+		"/admin/planes/{plane_id}":              "adminPlane",
+		"/admin/planes/{plane_id}/edit":         "editAdminPlane",
+		"/test":                                 "test",
+		"/tests/{name}":                         "testName",
+		"/tests/{name_id}/cases/{case_id}":      "testNameIdCase",
+		"/tests/{name_id}/cases/{case_id}/edit": "editTestNameIdCase",
 	}
 
 	a := New(Options{})
