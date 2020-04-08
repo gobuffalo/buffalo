@@ -430,6 +430,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 			13. <%= editResourcePath({resource_id: 1}) %>
 			14. <%= testPath() %>
 			15. <%= testNamePath({name: "myTest"}) %>
+			16. <%= paganoPath({id: 1}) %>
 		`))
 	}
 
@@ -441,6 +442,7 @@ func Test_App_NamedRoutes(t *testing.T) {
 	a.Resource("/resources", resourcesResource)
 	a.GET("/test", sampleHandler)
 	a.GET("/test/{name}", sampleHandler)
+	a.GET("/pagano/{id}", sampleHandler)
 
 	w := httptest.New(a)
 	res := w.HTML("/").Get()
@@ -459,7 +461,8 @@ func Test_App_NamedRoutes(t *testing.T) {
 	r.Contains(res.Body.String(), "12. /resources/1")
 	r.Contains(res.Body.String(), "13. /resources/1/edit")
 	r.Contains(res.Body.String(), "14. /test")
-	// r.Contains(res.Body.String(), "15. /test/myTest")
+	r.Contains(res.Body.String(), "15. /test/myTest")
+	r.Contains(res.Body.String(), "16. /pagano/1")
 }
 
 func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
