@@ -10,13 +10,14 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
+	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 )
 
-// plugins will fix plugins between releases
-func plugins(r *Runner) error {
+// Plugins will fix plugins between releases
+func Plugins(r *Runner) error {
 	fmt.Println("~~~ Cleaning plugins cache ~~~")
 	os.RemoveAll(plugins.CachePath)
 	plugs, err := plugdeps.List(r.App)
