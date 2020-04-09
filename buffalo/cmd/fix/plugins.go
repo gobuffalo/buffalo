@@ -37,8 +37,8 @@ func Plugins(r *Runner) error {
 	return run.Run()
 }
 
-// RemoveOldPlugins will remove old Pop plugin
-func RemoveOldPlugins(r *Runner) error {
+// removeOldPlugins will remove old Pop plugin
+func removeOldPlugins(r *Runner) error {
 	fmt.Println("~~~ Removing old plugins ~~~")
 
 	run := genny.WetRunner(context.Background())
