@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/v5"
 )
 
 // DB is a connection to your database to be used
