@@ -66,7 +66,7 @@ var checks = []Check{
 	DeprecrationsCheck,
 	fixDocker,
 	encodeApp,
-	RemoveOldPlugins,
+	removeOldPlugins,
 	Plugins,
 	Plush,
 }
