@@ -123,7 +123,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	cp, ok := data["current_path"].(string)
 
 	defCase := func() error {
-		return ir.osIndependentHTML(fmt.Sprintf("%s/%s.html", templatePrefix, "index")).Render(w, data)
+		return ir.HTML(filepath.Join(tremplatePrefix, "index.html").Render(w, data)
 	}
 	if !ok {
 		return defCase()
