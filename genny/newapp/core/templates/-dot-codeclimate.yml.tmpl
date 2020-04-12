@@ -1,4 +1,9 @@
-engines:
+version: "2"
+checks:
+  method-lines:
+    config:
+      threshold: 100
+plugins:
   fixme:
     enabled: true
   gofmt:
@@ -7,7 +12,7 @@ engines:
     enabled: true
   govet:
     enabled: true
-exclude_paths:
+exclude_patterns:
   - grifts/**/*
   - "**/*_test.go"
   - "*_test.go"
@@ -15,6 +20,4 @@ exclude_paths:
   - logs/*
   - public/*
   - templates/*
-ratings:
-  paths:
-    - "**.go"
+  - "**/node_modules/"
