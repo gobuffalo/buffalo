@@ -101,38 +101,43 @@ func findSchema() io.Reader {
 func testRunner(args []string) error {
 	var mFlag bool
 	var query string
-	cargs := []string{}
-	pargs := []string{}
 
-	var larg string
-	for i, a := range args {
-		switch a {
-		case "-run", "-m", "-timeout":
-			query = args[i+1]
+	commandArgs := []string{}
+	packageArgs := []string{}
+
+	var lastArg string
+	for index, arg := range args {
+		switch arg {
+		case "-run", "-m":
+			query = args[index+1]
 			mFlag = true
-		case "-v":
-			cargs = append(cargs, "-v")
+		case "-v", "-timeout":
+			commandArgs = append(commandArgs, arg)
 		default:
-			if larg != "-run" && larg != "-m" && larg != "-timeout" {
-				pargs = append(pargs, a)
+			if lastArg == "-timeout" {
+				commandArgs = append(commandArgs, arg)
+			} else if lastArg != "-run" && lastArg != "-m" {
+				packageArgs = append(packageArgs, arg)
 			}
 		}
-		larg = a
+
+		lastArg = arg
 	}
 
-	cmd := newTestCmd(cargs)
+	cmd := newTestCmd(commandArgs)
 	if mFlag {
 		return mFlagRunner{
 			query: query,
-			args:  cargs,
-			pargs: pargs,
+			args:  commandArgs,
+			pargs: packageArgs,
 		}.Run()
 	}
 
-	pkgs, err := testPackages(pargs)
+	pkgs, err := testPackages(packageArgs)
 	if err != nil {
 		return err
 	}
+
 	cmd.Args = append(cmd.Args, pkgs...)
 	logrus.Info(strings.Join(cmd.Args, " "))
 	return cmd.Run()
@@ -153,12 +158,15 @@ func (m mFlagRunner) Run() error {
 	if err != nil {
 		return err
 	}
+
 	var errs bool
 	for _, p := range pkgs {
 		os.Chdir(pwd)
+
 		if p == app.PackagePkg {
 			continue
 		}
+
 		p = strings.TrimPrefix(p, app.PackagePkg+string(filepath.Separator))
 		os.Chdir(p)
 
@@ -168,7 +176,9 @@ func (m mFlagRunner) Run() error {
 		} else {
 			cmd.Args = append(cmd.Args, "-run", m.query)
 		}
+
 		logrus.Info(strings.Join(cmd.Args, " "))
+
 		if err := cmd.Run(); err != nil {
 			errs = true
 		}
@@ -193,6 +203,7 @@ func testPackages(givenArgs []string) ([]string, error) {
 	if len(givenArgs) > 0 {
 		return givenArgs, nil
 	}
+
 	args := []string{}
 	out, err := exec.Command(envy.Get("GO_BIN", "go"), "list", "./...").Output()
 	if err != nil {
