@@ -3,12 +3,31 @@ package buffalo
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/gobuffalo/httptest"
+	"github.com/gobuffalo/logger"
+	"github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/require"
 )
+
+//testLoggerHook is useful to test whats being logged.
+type testLoggerHook struct {
+	errors []*logrus.Entry
+}
+
+func (lh *testLoggerHook) Fire(entry *logrus.Entry) error {
+	lh.errors = append(lh.errors, entry)
+	return nil
+}
+
+func (lh *testLoggerHook) Levels() []logrus.Level {
+	return []logrus.Level{
+		logrus.ErrorLevel,
+	}
+}
 
 func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	r := require.New(t)
@@ -22,6 +41,28 @@ func Test_defaultErrorHandler_SetsContentType(t *testing.T) {
 	r.Equal(http.StatusUnauthorized, res.Code)
 	ct := res.Header().Get("content-type")
 	r.Equal("text/html; charset=utf-8", ct)
+}
+
+func Test_defaultErrorHandler_Logger(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.GET("/", func(c Context) error {
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
+	})
+
+	testHook := &testLoggerHook{}
+	l := logrus.New()
+	l.SetOutput(os.Stdout)
+	l.AddHook(testHook)
+	log := logger.Logrus{
+		FieldLogger: l,
+	}
+	app.Logger = log
+
+	w := httptest.New(app)
+	res := w.HTML("/").Get()
+	r.Equal(http.StatusUnauthorized, res.Code)
+	r.Equal(http.StatusUnauthorized, testHook.errors[0].Data["status"])
 }
 
 func Test_defaultErrorHandler_JSON(t *testing.T) {
