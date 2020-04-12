@@ -29,6 +29,7 @@ var replace = map[string]string{
 	"github.com/gobuffalo/suite":                   "github.com/gobuffalo/suite/v3",
 	"github.com/gobuffalo/buffalo-pop/":            "github.com/gobuffalo/buffalo-pop/v2",
 	"github.com/gobuffalo/buffalo-pop/pop/popmw":   "github.com/gobuffalo/buffalo-pop/v2/pop/popmw",
+	"github.com/gobuffalo/plush":                   "github.com/gobuffalo/plush/v4",
 }
 
 var ic = ImportConverter{
