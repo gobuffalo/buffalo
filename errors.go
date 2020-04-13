@@ -161,6 +161,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
+	c.LogField("status", status)
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
@@ -170,7 +171,9 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		c.Response().Write(responseBody)
 		return nil
 	}
+
 	trace := origErr.Error()
+
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
@@ -197,14 +200,13 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
-		routes := c.Value("routes")
 
+		routes := c.Value("routes")
 		cd := c.Data()
-		// if cd, ok := c.(*DefaultContext); ok {
-		// 		data := cd.Data()
+
 		delete(cd, "app")
 		delete(cd, "routes")
-		// }
+
 		data := map[string]interface{}{
 			"routes":      routes,
 			"error":       trace,
@@ -218,13 +220,16 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 				return fmt.Sprintf("%+v", v)
 			},
 		}
+
 		ctx := plush.NewContextWith(data)
 		t, err := plush.Render(devErrorTmpl, ctx)
 		if err != nil {
 			return err
 		}
+
 		res := c.Response()
 		_, err = res.Write([]byte(t))
+
 		return err
 	}
 	return nil
