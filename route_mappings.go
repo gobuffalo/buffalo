@@ -295,21 +295,35 @@ func (a *App) buildRouteName(p string) string {
 
 	for index, part := range parts {
 
-		if strings.Contains(part, "{") || part == "" {
+		originalPart := parts[index]
+
+		var previousPart string
+		if index > 0 {
+			previousPart = parts[index-1]
+		}
+
+		var nextPart string
+		if len(parts) > index+1 {
+			nextPart = parts[index+1]
+		}
+
+		isIdentifierPart := strings.Contains(part, "{") && (strings.Contains(part, flect.Singularize(previousPart)))
+		isSimplifiedID := part == `{id}`
+
+		if isIdentifierPart || isSimplifiedID || part == "" {
 			continue
 		}
 
-		shouldSingularize := (len(parts) > index+1) && strings.Contains(parts[index+1], "{")
-		if shouldSingularize {
+		if strings.Contains(nextPart, "{") {
 			part = flect.Singularize(part)
 		}
 
-		if parts[index] == "new" || parts[index] == "edit" {
+		if originalPart == "new" || originalPart == "edit" {
 			resultParts = append([]string{part}, resultParts...)
 			continue
 		}
 
-		if index > 0 && strings.Contains(parts[index-1], "}") {
+		if strings.Contains(previousPart, "}") {
 			resultParts = append(resultParts, part)
 			continue
 		}
