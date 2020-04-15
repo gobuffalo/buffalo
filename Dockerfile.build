@@ -37,6 +37,8 @@ RUN wget https://github.com/gobuffalo/buffalo/releases/latest/download/buffalo_L
     && tar -xzf buffalo_Linux_x86_64.tar.gz \
     && mv buffalo $(go env GOPATH)/bin/buffalo
 
+RUN buffalo plugins install github.com/gobuffalo/buffalo-pop/v2
 RUN buffalo version
 
-WORKDIR $GOPATH/src
+RUN mkdir /src
+WORKDIR /src
