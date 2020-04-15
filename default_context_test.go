@@ -60,7 +60,7 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 			return c.Render(http.StatusOK, render.String(c.Param("bar")))
 		})
 		a.GET("/", func(c Context) error {
-			return c.Redirect(http.StatusPermanentRedirect, "fooPath()", tt.I)
+			return c.Redirect(http.StatusPermanentRedirect, "fooBarPath()", tt.I)
 		})
 		a.GET("/nomap", func(c Context) error {
 			return c.Redirect(http.StatusPermanentRedirect, "rootPath()")
