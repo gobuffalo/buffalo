@@ -17,6 +17,8 @@ builds:
     goarm:
       - 6
       - 7
+    hooks:
+      post: tar -czvf dist/buffalo_Linux_x86_64.tar.gz dist/buffalo_linux_amd64
 archives:
   -
     replacements:
@@ -35,6 +37,9 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+release:
+  extra_files:
+    - glob: ./dist/buffalo_Linux_x86_64.tar.gz
 brews:
   -
     name: 'buffalo'
