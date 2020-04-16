@@ -62,6 +62,11 @@ type Options struct {
 	// a Buffalo application.
 	PreWares []PreWare `json:"-"`
 
+	// CompressFiles enables gzip compression of static files served by ServeFiles using
+	// gorilla's CompressHandler (https://godoc.org/github.com/gorilla/handlers#CompressHandler).
+	// Default is "false".
+	CompressFiles bool `json:"compress_files"`
+
 	Prefix  string          `json:"prefix"`
 	Context context.Context `json:"-"`
 

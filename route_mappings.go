@@ -115,7 +115,11 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		fsh.ServeHTTP(w, r)
 	})
 
-	return handlers.CompressHandler(baseHandler)
+	if a.CompressFiles {
+		return handlers.CompressHandler(baseHandler)
+	}
+
+	return baseHandler
 }
 
 type newable interface {
