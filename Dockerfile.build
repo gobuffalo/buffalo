@@ -3,7 +3,7 @@ FROM golang:latest
 EXPOSE 3000
 
 ENV GOPROXY=https://proxy.golang.org
-ENV GO111MODULE=ON
+ENV GO111MODULE=on
 
 RUN go version
 
