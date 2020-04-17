@@ -13,6 +13,7 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
+	"github.com/gorilla/handlers"
 )
 
 const (
@@ -99,7 +100,7 @@ func (a *App) ServeFiles(p string, root http.FileSystem) {
 
 func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	baseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		f, err := fs.Open(path.Clean(r.URL.Path))
 		if os.IsNotExist(err) {
 			eh := a.ErrorHandlers.Get(http.StatusNotFound)
@@ -113,6 +114,12 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%s", maxAge))
 		fsh.ServeHTTP(w, r)
 	})
+
+	if a.CompressFiles {
+		return handlers.CompressHandler(baseHandler)
+	}
+
+	return baseHandler
 }
 
 type newable interface {
