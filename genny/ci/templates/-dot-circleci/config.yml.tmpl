@@ -1,0 +1,62 @@
+version: 2
+jobs: 
+  build:
+    docker:
+      - image: circleci/golang:1.12
+      {{ if eq .opts.DBType "postgres" -}}
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: {{.opts.App.Name.File}}_test
+      {{- end }}
+
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
+    steps:
+      - checkout
+      - run: mkdir -p $TEST_RESULTS
+
+      - restore_cache:
+          keys:
+            - v1-pkg-cache
+
+      - run: go get github.com/jstemmer/go-junit-report
+
+      {{ if eq .opts.DBType "postgres" -}}
+      - run: go get github.com/lib/pq
+      - run: go get github.com/mattes/migrate
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgres && exit 1
+      {{- end }}
+
+      - run:
+          name: Install Buffalo
+          command: |
+            go get github.com/gobuffalo/buffalo/buffalo
+            go get $(go list ./... | grep -v /vendor/)
+      - run:
+          name: Run unit tests
+          command: |
+            trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
+            buffalo test | tee ${TEST_RESULTS}/go-test.out
+
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - "/go/pkg"
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results:
+          path: /tmp/test-results

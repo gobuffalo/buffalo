@@ -273,7 +273,7 @@ func init() {
 	newCmd.Flags().Bool("skip-yarn", false, "use npm instead of yarn for frontend dependencies management")
 	newCmd.Flags().String("db-type", "postgres", fmt.Sprintf("specify the type of database you want to use [%s]", strings.Join(pop.AvailableDialects, ", ")))
 	newCmd.Flags().String("docker", "multi", "specify the type of Docker file to generate [none, multi, standard]")
-	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci]")
+	newCmd.Flags().String("ci-provider", "none", "specify the type of ci file you would like buffalo to generate [none, travis, gitlab-ci, circleci]")
 	newCmd.Flags().String("vcs", "git", "specify the Version control system you would like to use [none, git, bzr]")
 	newCmd.Flags().String("module", "", "specify the root module (package) name. [defaults to 'automatic']")
 	viper.BindPFlags(newCmd.Flags())

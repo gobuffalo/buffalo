@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-// New generator for adding travis or gitlab
+// New generator for adding travis, gitlab, or circleci
 func New(opts *Options) (*genny.Generator, error) {
 	g := genny.New()
 
@@ -32,6 +32,8 @@ func New(opts *Options) (*genny.Generator, error) {
 		} else {
 			fname = "-dot-gitlab-ci-no-pop.yml.tmpl"
 		}
+	case "circleci":
+		fname = "-dot-circleci/config.yml.tmpl"
 	default:
 		return g, fmt.Errorf("could not find a template for %s", opts.Provider)
 	}
