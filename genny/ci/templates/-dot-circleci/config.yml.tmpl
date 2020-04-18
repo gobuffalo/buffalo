@@ -23,26 +23,9 @@ jobs:
 
       - run: go get github.com/jstemmer/go-junit-report
 
-      {{ if eq .opts.DBType "postgres" -}}
-      - run: go get github.com/lib/pq
-      - run: go get github.com/mattes/migrate
-      - run:
-          name: Waiting for Postgres to be ready
-          command: |
-            for i in `seq 1 10`;
-            do
-              nc -z localhost 5432 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for Postgres && exit 1
-      {{- end }}
+      - run: go get github.com/gobuffalo/buffalo/buffalo
+      - run: go mod download
 
-      - run:
-          name: Install Buffalo
-          command: |
-            go get github.com/gobuffalo/buffalo/buffalo
-            go get $(go list ./... | grep -v /vendor/)
       - run:
           name: Run unit tests
           command: |
