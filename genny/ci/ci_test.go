@@ -95,3 +95,30 @@ func Test_New_Gitlab_No_pop(t *testing.T) {
 	r.Equal(".gitlab-ci.yml", f.Name())
 	r.NotContains(f.String(), "postgres:5432")
 }
+
+func Test_New_Circle(t *testing.T) {
+	r := require.New(t)
+
+	g, err := New(&Options{
+		Provider: "circleci",
+		DBType:   "postgres",
+	})
+	r.NoError(err)
+
+	run := gentest.NewRunner()
+	run.With(g)
+
+	r.NoError(run.Run())
+
+	res := run.Results()
+
+	r.Len(res.Commands, 0)
+	r.Len(res.Files, 1)
+
+	f := res.Files[0]
+	r.Equal(".circleci/config.yml", f.Name())
+	circleYml := struct {
+		Version      int
+	}{}
+	r.NoError(yaml.NewDecoder(f).Decode(&circleYml), "config.yml is a valid YAML file")
+}
