@@ -27,6 +27,11 @@ type Binder func(*http.Request, interface{}) error
 // CustomTypeDecoder converts a custom type from the request insto its exact type.
 type CustomTypeDecoder func([]string) (interface{}, error)
 
+// RequestTypeBinder are those capable of handling a request type like JSON or XML
+type RequestTypeBinder interface {
+	RegisterTo(*RequestBinder)
+}
+
 // RegisterTimeFormats allows to add custom time layouts that
 // the binder will be able to use for decoding.
 func RegisterTimeFormats(layouts ...string) {

@@ -94,7 +94,3 @@ func NewDefaultRequestBinder(requestBinders ...RequestTypeBinder) *RequestBinder
 
 	return result
 }
-
-type RequestTypeBinder interface {
-	RegisterTo(*RequestBinder)
-}
