@@ -40,7 +40,7 @@ func Test_NullTimeCustomDecoder_Decode(t *testing.T) {
 		},
 	}
 
-	for index, testCase := range testCases {
+	for _, testCase := range testCases {
 
 		tt, err := nullTimeCustom.Decode([]string{testCase.input})
 		r.IsType(tt, nulls.Time{})
