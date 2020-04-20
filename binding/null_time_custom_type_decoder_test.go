@@ -12,7 +12,7 @@ func Test_NullTimeCustomDecoder_Decode(t *testing.T) {
 	r := require.New(t)
 
 	timeCustom := TimeCustomTypeDecoder{
-		formats: &RequestBinder.timeFormats,
+		formats: &defaultRequestBinder.timeFormats,
 	}
 
 	nullTimeCustom := NullTimeCustomTypeDecoder{&timeCustom}

@@ -13,7 +13,12 @@ var MaxFileMemory int64 = 5 * 1024 * 1024
 // RequestBinder is an instance of the default request binder, it comes with preconfigured
 // content type binders for HTML, JSON, XML and Files, as well as custom types decoders
 // for time.Time and nulls.Time
-var RequestBinder = NewDefaultRequestBinder()
+var defaultRequestBinder = NewDefaultRequestBinder(
+	HTMLRequestTypeBinder{},
+	JSONRequestTypeBinder{},
+	XMLRequestTypeBinder{},
+	FileRequestTypeBinder{},
+)
 
 // Binder takes a request and binds it to an interface.
 // If there is a problem it should return an error.
@@ -25,18 +30,18 @@ type CustomTypeDecoder func([]string) (interface{}, error)
 // RegisterTimeFormats allows to add custom time layouts that
 // the binder will be able to use for decoding.
 func RegisterTimeFormats(layouts ...string) {
-	RequestBinder.timeFormats = append(layouts, RequestBinder.timeFormats...)
+	defaultRequestBinder.timeFormats = append(layouts, defaultRequestBinder.timeFormats...)
 }
 
 // RegisterCustomDecoder allows to define custom type decoders.
 func RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
-	RequestBinder.RegisterCustomDecoder(fn, types, fields)
+	defaultRequestBinder.RegisterCustomDecoder(fn, types, fields)
 }
 
 // Register maps a request Content-Type (application/json)
 // to a Binder.
 func Register(contentType string, fn Binder) {
-	RequestBinder.Register(contentType, fn)
+	defaultRequestBinder.Register(contentType, fn)
 }
 
 // Exec will bind the interface to the request.Body. The type of binding
@@ -45,5 +50,5 @@ func Register(contentType string, fn Binder) {
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "https://github.com/monoculum/formam".
 func Exec(req *http.Request, value interface{}) error {
-	return RequestBinder.Exec(req, value)
+	return defaultRequestBinder.Exec(req, value)
 }

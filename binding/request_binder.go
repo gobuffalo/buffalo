@@ -12,7 +12,7 @@ import (
 	"github.com/monoculum/formam"
 )
 
-type DefaultRequestBinder struct {
+type RequestBinder struct {
 	lock        *sync.Mutex
 	binders     map[string]Binder
 	formDecoder *formam.Decoder
@@ -21,19 +21,19 @@ type DefaultRequestBinder struct {
 
 // Register maps a request Content-Type (application/json)
 // to a Binder.
-func (rb DefaultRequestBinder) Register(contentType string, fn Binder) {
+func (rb RequestBinder) Register(contentType string, fn Binder) {
 	rb.lock.Lock()
 	defer rb.lock.Unlock()
 
 	rb.binders[strings.ToLower(contentType)] = fn
 }
 
-func (rb DefaultRequestBinder) RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
+func (rb RequestBinder) RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
 	rawFunc := (func([]string) (interface{}, error))(fn)
 	rb.formDecoder.RegisterCustomType(rawFunc, types, fields)
 }
 
-func (rb DefaultRequestBinder) Exec(req *http.Request, value interface{}) error {
+func (rb RequestBinder) Exec(req *http.Request, value interface{}) error {
 	if ba, ok := value.(Bindable); ok {
 		return ba.Bind(req)
 	}
@@ -50,8 +50,8 @@ func (rb DefaultRequestBinder) Exec(req *http.Request, value interface{}) error 
 	return fmt.Errorf("could not find a binder for %s", ct)
 }
 
-func NewDefaultRequestBinder() *DefaultRequestBinder {
-	result := &DefaultRequestBinder{
+func NewDefaultRequestBinder(requestBinders ...RequestTypeBinder) *RequestBinder {
+	result := &RequestBinder{
 		lock:    &sync.Mutex{},
 		binders: map[string]Binder{},
 
@@ -88,24 +88,13 @@ func NewDefaultRequestBinder() *DefaultRequestBinder {
 	nullTimeCustom := NullTimeCustomTypeDecoder{&timeCustom}
 	result.formDecoder.RegisterCustomType(nullTimeCustom.Decode, []interface{}{nulls.Time{}}, nil)
 
-	htmlDecoder := HTMLDecoder{}
-	result.Register("application/html", htmlDecoder.Binder(result.formDecoder))
-	result.Register("text/html", htmlDecoder.Binder(result.formDecoder))
-	result.Register("application/x-www-form-urlencoded", htmlDecoder.Binder(result.formDecoder))
-	result.Register("html", htmlDecoder.Binder(result.formDecoder))
-
-	xmlDecoder := XMLDecoder{}
-	result.Register("application/xml", xmlDecoder.Binder(result.formDecoder))
-	result.Register("text/xml", xmlDecoder.Binder(result.formDecoder))
-	result.Register("xml", xmlDecoder.Binder(result.formDecoder))
-
-	jsonDecoder := JSONDecoder{}
-	result.Register("application/json", jsonDecoder.Binder(result.formDecoder))
-	result.Register("text/json", jsonDecoder.Binder(result.formDecoder))
-	result.Register("json", jsonDecoder.Binder(result.formDecoder))
-
-	fileDecoder := FileDecoder{}
-	result.Register("multipart/form-data", fileDecoder.Binder(result.formDecoder))
+	for _, requestBinder := range requestBinders {
+		requestBinder.RegisterTo(result)
+	}
 
 	return result
+}
+
+type RequestTypeBinder interface {
+	RegisterTo(*RequestBinder)
 }

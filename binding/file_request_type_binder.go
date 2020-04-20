@@ -7,9 +7,13 @@ import (
 	"github.com/monoculum/formam"
 )
 
-type FileDecoder struct{}
+type FileRequestTypeBinder struct{}
 
-func (ht FileDecoder) Binder(decoder *formam.Decoder) Binder {
+func (ht FileRequestTypeBinder) RegisterTo(binder *RequestBinder) {
+	binder.Register("multipart/form-data", ht.binder(binder.formDecoder))
+}
+
+func (ht FileRequestTypeBinder) binder(decoder *formam.Decoder) Binder {
 	return func(req *http.Request, i interface{}) error {
 		err := req.ParseMultipartForm(MaxFileMemory)
 		if err != nil {
