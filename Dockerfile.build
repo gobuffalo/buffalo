@@ -33,13 +33,8 @@ RUN npm install -g --no-progress yarn \
 RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
 
 # Pulling docker binary from releases
-<<<<<<< HEAD
 RUN wget https://github.com/gobuffalo/buffalo/releases/download/v0.16.8/buffalo_0.16.8_Linux_x86_64.tar.gz \
     && tar -xzf buffalo_0.16.8_Linux_x86_64.tar.gz \
-=======
-RUN wget https://github.com/gobuffalo/buffalo/releases/download/v0.16.7/buffalo_0.16.7_Linux_x86_64.tar.gz \
-    && tar -xzf buffalo_0.16.7_Linux_x86_64.tar.gz \
->>>>>>> 6a7b6f07430ee173838bc2549539c1864faad1c0
     && mv buffalo $(go env GOPATH)/bin/buffalo
 
 RUN buffalo plugins install github.com/gobuffalo/buffalo-pop/v2
