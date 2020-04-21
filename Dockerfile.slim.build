@@ -2,9 +2,8 @@ FROM golang:alpine
 EXPOSE 3000
 
 ENV GOPROXY=https://proxy.golang.org
-ENV GO111MODULE=ON
+ENV GO111MODULE=on
 
-ENV BP=$GOPATH/src/github.com/gobuffalo/buffalo
 ENV GOPROXY=https://proxy.golang.org 
 
 RUN apk add --no-cache --upgrade apk-tools \
@@ -20,10 +19,12 @@ RUN npm i -g --no-progress yarn \
     && yarn config set yarn-offline-mirror-pruning true
 
 # Pulling docker binary from releases
-RUN wget https://github.com/gobuffalo/buffalo/releases/download/v0.16.3/buffalo_0.16.3_Linux_x86_64.tar.gz \
-    && tar -xzf buffalo_0.16.3_Linux_x86_64.tar.gz \
+RUN wget https://github.com/gobuffalo/buffalo/releases/latest/download/buffalo_Linux_x86_64.tar.gz \
+    && tar -xzf buffalo_Linux_x86_64.tar.gz \
     && mv buffalo $(go env GOPATH)/bin/buffalo
 
+RUN buffalo plugins install github.com/gobuffalo/buffalo-pop/v2
 RUN buffalo version
 
-WORKDIR $GOPATH/src
+RUN mkdir /src
+WORKDIR /src
