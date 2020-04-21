@@ -17,8 +17,6 @@ builds:
     goarm:
       - 6
       - 7
-    hooks:
-      post: tar -czvf dist/buffalo_Linux_x86_64.tar.gz dist/buffalo_linux_amd64
 archives:
   -
     replacements:
