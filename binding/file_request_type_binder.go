@@ -7,8 +7,11 @@ import (
 	"github.com/monoculum/formam"
 )
 
+// FileRequestTypeBinder is in charge of binding File request types.
 type FileRequestTypeBinder struct{}
 
+// RegisterTo register this RequestTypeBinder to the passed request binder
+// on the File content types (multipart/form-data).
 func (ht FileRequestTypeBinder) RegisterTo(binder *RequestBinder) {
 	binder.Register("multipart/form-data", ht.binder(binder.formDecoder))
 }

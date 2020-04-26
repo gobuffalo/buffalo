@@ -7,6 +7,7 @@ import (
 	"github.com/monoculum/formam"
 )
 
+// JSONRequestTypeBinder is in charge of binding JSON request types.
 type JSONRequestTypeBinder struct{}
 
 func (js JSONRequestTypeBinder) binder(decoder *formam.Decoder) Binder {
@@ -15,6 +16,8 @@ func (js JSONRequestTypeBinder) binder(decoder *formam.Decoder) Binder {
 	}
 }
 
+// RegisterTo register this RequestTypeBinder to the passed request binder
+// on the JSON content types.
 func (js JSONRequestTypeBinder) RegisterTo(binder *RequestBinder) {
 	binder.Register("application/json", js.binder(binder.formDecoder))
 	binder.Register("text/json", js.binder(binder.formDecoder))

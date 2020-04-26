@@ -6,8 +6,11 @@ import (
 	"github.com/monoculum/formam"
 )
 
+// HTMLRequestTypeBinder is in charge of binding HTML request types.
 type HTMLRequestTypeBinder struct{}
 
+// RegisterTo register this RequestTypeBinder to the passed request binder
+// on the HTML content types.
 func (ht HTMLRequestTypeBinder) RegisterTo(binder *RequestBinder) {
 	binder.Register("application/html", ht.binder(binder.formDecoder))
 	binder.Register("text/html", ht.binder(binder.formDecoder))

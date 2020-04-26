@@ -13,7 +13,7 @@ var MaxFileMemory int64 = 5 * 1024 * 1024
 // RequestBinder is an instance of the default request binder, it comes with preconfigured
 // content type binders for HTML, JSON, XML and Files, as well as custom types decoders
 // for time.Time and nulls.Time
-var defaultRequestBinder = NewDefaultRequestBinder(
+var defaultRequestBinder = NewRequestBinder(
 	HTMLRequestTypeBinder{},
 	JSONRequestTypeBinder{},
 	XMLRequestTypeBinder{},
