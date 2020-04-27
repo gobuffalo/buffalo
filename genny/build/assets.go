@@ -7,7 +7,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 
 	"github.com/gobuffalo/packr/v2/jam"
 	"github.com/gobuffalo/packr/v2/jam/parser"

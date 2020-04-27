@@ -73,5 +73,5 @@ const eToml = `[[plugin]]
 
 [[plugin]]
   binary = "buffalo-pop"
-  go_get = "github.com/gobuffalo/buffalo-pop"
+  go_get = "github.com/gobuffalo/buffalo-pop/v2"
 `

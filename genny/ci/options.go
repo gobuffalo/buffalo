@@ -7,11 +7,11 @@ import (
 	"github.com/gobuffalo/buffalo/runtime"
 
 	"github.com/gobuffalo/meta"
-	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/v5"
 )
 
 // Available CI implementations
-var Available = []string{"travis", "gitlab"}
+var Available = []string{"travis", "gitlab", "circleci"}
 
 // Options for CI
 type Options struct {

@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gentest"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gentest"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
@@ -20,7 +20,7 @@ func Test_New(t *testing.T) {
 	g, err := New(&Options{
 		App: meta.New("."),
 		Plugins: []plugdeps.Plugin{
-			{Binary: "buffalo-pop", GoGet: "github.com/gobuffalo/buffalo-pop"},
+			{Binary: "buffalo-pop", GoGet: "github.com/gobuffalo/buffalo-pop/v2"},
 			{Binary: "buffalo-hello.rb", Local: "./plugins/buffalo-hello.rb"},
 		},
 	})

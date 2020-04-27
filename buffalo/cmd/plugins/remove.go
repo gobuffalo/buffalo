@@ -1,7 +1,6 @@
 package plugins
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"path"
@@ -9,7 +8,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 	"github.com/spf13/cobra"
 )
@@ -46,18 +45,7 @@ var removeCmd = &cobra.Command{
 			})
 		}
 
-		run.WithRun(func(r *genny.Runner) error {
-			p := plugdeps.ConfigPath(app)
-			bb := &bytes.Buffer{}
-			if err := plugs.Encode(bb); err != nil {
-				return err
-			}
-			return r.File(genny.NewFile(p, bb))
-		})
-		if err != nil {
-			return err
-		}
-
+		run.WithRun(NewEncodePluginsRunner(app, plugs))
 		return run.Run()
 	},
 }

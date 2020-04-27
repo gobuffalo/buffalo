@@ -8,7 +8,7 @@ before_script:
   - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
-  - go get -t -v ./...
+  - go mod download
   - export PATH="$PATH:$GOPATH/bin"
 
 stages:

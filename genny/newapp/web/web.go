@@ -6,8 +6,8 @@ import (
 	"github.com/gobuffalo/buffalo/genny/assets/standard"
 	"github.com/gobuffalo/buffalo/genny/assets/webpack"
 	"github.com/gobuffalo/buffalo/genny/newapp/core"
-	"github.com/gobuffalo/genny"
-	"github.com/gobuffalo/genny/gogen"
+	"github.com/gobuffalo/genny/v2"
+	"github.com/gobuffalo/genny/v2/gogen"
 	"github.com/gobuffalo/packr/v2"
 )
 

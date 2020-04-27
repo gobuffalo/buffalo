@@ -1,14 +1,14 @@
 package core
 
 import (
-	pop "github.com/gobuffalo/buffalo-pop/genny/newapp"
+	pop "github.com/gobuffalo/buffalo-pop/v2/genny/newapp"
 	"github.com/gobuffalo/buffalo/genny/ci"
 	"github.com/gobuffalo/buffalo/genny/docker"
 	"github.com/gobuffalo/buffalo/genny/plugins/install"
 	"github.com/gobuffalo/buffalo/genny/refresh"
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/meta"
 )
 
@@ -50,7 +50,7 @@ func New(opts *Options) (*genny.Group, error) {
 		// add the plugin
 		plugs.Add(plugdeps.Plugin{
 			Binary: "buffalo-pop",
-			GoGet:  "github.com/gobuffalo/buffalo-pop",
+			GoGet:  "github.com/gobuffalo/buffalo-pop/v2",
 		})
 	}
 

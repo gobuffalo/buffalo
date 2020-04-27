@@ -11,8 +11,8 @@ import (
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
-	"github.com/gobuffalo/pop"
-	"github.com/gobuffalo/pop/logging"
+	"github.com/gobuffalo/pop/v5"
+	"github.com/gobuffalo/pop/v5/logging"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/oncer"
 )
@@ -61,6 +61,11 @@ type Options struct {
 	// and acts as a pseudo-middleware between the http.Server and
 	// a Buffalo application.
 	PreWares []PreWare `json:"-"`
+
+	// CompressFiles enables gzip compression of static files served by ServeFiles using
+	// gorilla's CompressHandler (https://godoc.org/github.com/gorilla/handlers#CompressHandler).
+	// Default is "false".
+	CompressFiles bool `json:"compress_files"`
 
 	Prefix  string          `json:"prefix"`
 	Context context.Context `json:"-"`

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gobuffalo/attrs"
 	"github.com/gobuffalo/buffalo/genny/resource"
-	"github.com/gobuffalo/genny"
+	"github.com/gobuffalo/genny/v2"
 	"github.com/gobuffalo/logger"
 	"github.com/spf13/cobra"
 )
