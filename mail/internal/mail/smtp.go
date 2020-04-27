@@ -199,8 +199,10 @@ func (d *Dialer) DialAndSend(m ...*Message) error {
 	}
 	defer s.Close()
 
-	if errs := Send(s, m...); errs[0] != nil {
-		return errs[0]
+	for _, err := range Send(s, m...) {
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
