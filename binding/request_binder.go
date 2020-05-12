@@ -33,6 +33,9 @@ func (rb *RequestBinder) Register(contentType string, fn Binder) {
 // Exec binds a request with a passed value, depending on the content type
 // It will look for the correct RequestTypeBinder and use it.
 func (rb *RequestBinder) Exec(req *http.Request, value interface{}) error {
+	rb.lock.Lock()
+	defer rb.lock.Unlock()
+
 	if ba, ok := value.(Bindable); ok {
 		return ba.Bind(req)
 	}
