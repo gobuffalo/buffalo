@@ -15,7 +15,7 @@ var (
 )
 
 // RequestBinder is in charge of binding multiple requests types to
-// structs.
+// struct.
 type RequestBinder struct {
 	lock    *sync.RWMutex
 	binders map[string]Binder
@@ -23,7 +23,7 @@ type RequestBinder struct {
 
 // Register maps a request Content-Type (application/json)
 // to a Binder.
-func (rb RequestBinder) Register(contentType string, fn Binder) {
+func (rb *RequestBinder) Register(contentType string, fn Binder) {
 	rb.lock.Lock()
 	defer rb.lock.Unlock()
 
@@ -32,7 +32,7 @@ func (rb RequestBinder) Register(contentType string, fn Binder) {
 
 // Exec binds a request with a passed value, depending on the content type
 // It will look for the correct RequestTypeBinder and use it.
-func (rb RequestBinder) Exec(req *http.Request, value interface{}) error {
+func (rb *RequestBinder) Exec(req *http.Request, value interface{}) error {
 	if ba, ok := value.(Bindable); ok {
 		return ba.Bind(req)
 	}
@@ -42,11 +42,12 @@ func (rb RequestBinder) Exec(req *http.Request, value interface{}) error {
 		return errBlankContentType
 	}
 
-	if b, ok := rb.binders[ct]; ok {
-		return b(req, value)
+	binder := rb.binders[ct]
+	if binder == nil {
+		return fmt.Errorf("could not find a binder for %s", ct)
 	}
 
-	return fmt.Errorf("could not find a binder for %s", ct)
+	return binder(req, value)
 }
 
 // NewRequestBinder creates our request binder with support for
@@ -58,9 +59,7 @@ func NewRequestBinder(requestBinders ...ContenTypeBinder) *RequestBinder {
 	}
 
 	for _, requestBinder := range requestBinders {
-		contentTypes := requestBinder.ContentTypes()
-
-		for _, contentType := range contentTypes {
+		for _, contentType := range requestBinder.ContentTypes() {
 			result.Register(contentType, requestBinder.BinderFunc())
 		}
 	}

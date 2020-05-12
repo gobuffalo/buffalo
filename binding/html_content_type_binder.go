@@ -3,6 +3,7 @@ package binding
 import (
 	"net/http"
 
+	"github.com/gobuffalo/buffalo/binding/decoders"
 	"github.com/monoculum/formam"
 )
 
@@ -16,7 +17,8 @@ func NewHTMLContentTypeBinder(decoder *formam.Decoder) HTMLContentTypeBinder {
 		decoder: decoder,
 	}
 
-	// decoder.RegisterCustomType(, types []interface{}, fields []interface{})
+	decoder.RegisterCustomType(decoders.TimeDecoderFn(timeFormats), []interface{}{}, []interface{}{})
+	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(timeFormats), []interface{}{}, []interface{}{})
 
 	return htmlBinder
 }
