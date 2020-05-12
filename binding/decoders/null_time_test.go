@@ -1,4 +1,4 @@
-package binding
+package decoders
 
 import (
 	"testing"
@@ -11,11 +11,27 @@ import (
 func Test_NullTimeCustomDecoder_Decode(t *testing.T) {
 	r := require.New(t)
 
-	timeCustom := TimeCustomTypeDecoder{
-		formats: &defaultRequestBinder.timeFormats,
-	}
-
-	nullTimeCustom := NullTimeCustomTypeDecoder{&timeCustom}
+	decoderFn := NullTimeDecoderFn([]string{
+		"2006-02-01",
+		time.RFC3339,
+		"01/02/2006",
+		"2006-01-02",
+		"2006-01-02T15:04",
+		time.ANSIC,
+		time.UnixDate,
+		time.RubyDate,
+		time.RFC822,
+		time.RFC822Z,
+		time.RFC850,
+		time.RFC1123,
+		time.RFC1123Z,
+		time.RFC3339Nano,
+		time.Kitchen,
+		time.Stamp,
+		time.StampMilli,
+		time.StampMicro,
+		time.StampNano,
+	})
 
 	testCases := []struct {
 		input     string
@@ -42,7 +58,7 @@ func Test_NullTimeCustomDecoder_Decode(t *testing.T) {
 
 	for _, testCase := range testCases {
 
-		tt, err := nullTimeCustom.Decode([]string{testCase.input})
+		tt, err := decoderFn([]string{testCase.input})
 		r.IsType(tt, nulls.Time{})
 		nt := tt.(nulls.Time)
 

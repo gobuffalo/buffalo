@@ -13,7 +13,7 @@ func Test_RequestBinder_Exec(t *testing.T) {
 	r := require.New(t)
 
 	var used bool
-	defaultRequestBinder.Register("paganotoni/test", func(*http.Request, interface{}) error {
+	BaseRequestBinder.Register("paganotoni/test", func(*http.Request, interface{}) error {
 		used = true
 		return nil
 	})
@@ -23,7 +23,7 @@ func Test_RequestBinder_Exec(t *testing.T) {
 	r.NoError(err)
 
 	data := &struct{}{}
-	r.NoError(defaultRequestBinder.Exec(req, data))
+	r.NoError(BaseRequestBinder.Exec(req, data))
 	r.True(used)
 }
 
@@ -34,13 +34,13 @@ func Test_RequestBinder_Exec_BlankContentType(t *testing.T) {
 	r.NoError(err)
 
 	data := &struct{}{}
-	r.Equal(defaultRequestBinder.Exec(req, data), errBlankContentType)
+	r.Equal(BaseRequestBinder.Exec(req, data), errBlankContentType)
 }
 
 func Test_RequestBinder_Exec_Bindable(t *testing.T) {
 	r := require.New(t)
 
-	defaultRequestBinder.Register("paganotoni/orbison", func(req *http.Request, val interface{}) error {
+	BaseRequestBinder.Register("paganotoni/orbison", func(req *http.Request, val interface{}) error {
 		switch v := val.(type) {
 		case orbison:
 			v.bound = false
@@ -54,7 +54,7 @@ func Test_RequestBinder_Exec_Bindable(t *testing.T) {
 	r.NoError(err)
 
 	data := &orbison{}
-	r.NoError(defaultRequestBinder.Exec(req, data))
+	r.NoError(BaseRequestBinder.Exec(req, data))
 	r.True(data.bound)
 }
 
@@ -65,7 +65,7 @@ func Test_RequestBinder_Exec_NoBinder(t *testing.T) {
 	req.Header.Add("content-type", "paganotoni/other")
 	r.NoError(err)
 
-	err = defaultRequestBinder.Exec(req, &struct{}{})
+	err = BaseRequestBinder.Exec(req, &struct{}{})
 	r.Error(err)
 	r.Equal(err.Error(), "could not find a binder for paganotoni/other")
 }

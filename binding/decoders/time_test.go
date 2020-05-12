@@ -1,4 +1,4 @@
-package binding
+package decoders
 
 import (
 	"testing"
@@ -10,19 +10,32 @@ import (
 func TestParseTimeErrorParsing(t *testing.T) {
 	r := require.New(t)
 
-	timeCustom := TimeCustomTypeDecoder{
-		formats: &[]string{""},
-	}
-
-	_, err := timeCustom.parseTime([]string{"this is sparta"})
+	_, err := parseTime([]string{"this is sparta"}, []string{})
 	r.Error(err)
 }
 
 func TestParseTime(t *testing.T) {
 	r := require.New(t)
 
-	timeCustom := TimeCustomTypeDecoder{
-		formats: &defaultRequestBinder.timeFormats,
+	formats := []string{
+		time.RFC3339,
+		"01/02/2006",
+		"2006-01-02",
+		"2006-01-02T15:04",
+		time.ANSIC,
+		time.UnixDate,
+		time.RubyDate,
+		time.RFC822,
+		time.RFC822Z,
+		time.RFC850,
+		time.RFC1123,
+		time.RFC1123Z,
+		time.RFC3339Nano,
+		time.Kitchen,
+		time.Stamp,
+		time.StampMilli,
+		time.StampMicro,
+		time.StampNano,
 	}
 
 	testCases := []struct {
@@ -48,7 +61,7 @@ func TestParseTime(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tt, err := timeCustom.parseTime([]string{tc.input})
+		tt, err := parseTime([]string{tc.input}, formats)
 		if !tc.expectErr {
 			r.NoError(err)
 		}
@@ -58,14 +71,33 @@ func TestParseTime(t *testing.T) {
 }
 
 func TestParseTimeConflicting(t *testing.T) {
-	RegisterTimeFormats("2006-02-01")
+	// RegisterTimeFormats()
 
 	r := require.New(t)
-	timeCustom := TimeCustomTypeDecoder{
-		formats: &defaultRequestBinder.timeFormats,
+
+	formats := []string{
+		"2006-02-01",
+		time.RFC3339,
+		"01/02/2006",
+		"2006-01-02",
+		"2006-01-02T15:04",
+		time.ANSIC,
+		time.UnixDate,
+		time.RubyDate,
+		time.RFC822,
+		time.RFC822Z,
+		time.RFC850,
+		time.RFC1123,
+		time.RFC1123Z,
+		time.RFC3339Nano,
+		time.Kitchen,
+		time.Stamp,
+		time.StampMilli,
+		time.StampMicro,
+		time.StampNano,
 	}
 
-	tt, err := timeCustom.parseTime([]string{"2017-01-10"})
+	tt, err := parseTime([]string{"2017-01-10"}, formats)
 
 	r.NoError(err)
 	expected := time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)

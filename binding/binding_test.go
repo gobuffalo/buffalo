@@ -9,12 +9,12 @@ import (
 
 func Test_Register(t *testing.T) {
 	r := require.New(t)
-	l := len(defaultRequestBinder.binders)
+	l := len(BaseRequestBinder.binders)
 	Register("foo/bar", func(*http.Request, interface{}) error {
 		return nil
 	})
 
-	r.Len(defaultRequestBinder.binders, l+1)
+	r.Len(BaseRequestBinder.binders, l+1)
 }
 
 func Test_RegisterCustomDecoder(t *testing.T) {

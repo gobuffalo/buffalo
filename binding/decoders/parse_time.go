@@ -1,19 +1,11 @@
-package binding
+package decoders
 
 import (
 	"errors"
 	"time"
 )
 
-type TimeCustomTypeDecoder struct {
-	formats *[]string
-}
-
-func (td TimeCustomTypeDecoder) Decode(vals []string) (interface{}, error) {
-	return td.parseTime(vals)
-}
-
-func (td TimeCustomTypeDecoder) parseTime(vals []string) (time.Time, error) {
+func parseTime(vals []string, formats []string) (time.Time, error) {
 	var t time.Time
 	var err error
 
@@ -22,11 +14,11 @@ func (td TimeCustomTypeDecoder) parseTime(vals []string) (time.Time, error) {
 		return t, nil
 	}
 
-	if td.formats == nil {
+	if len(formats) == 0 {
 		return t, errors.New("empty time format list")
 	}
 
-	for _, layout := range *td.formats {
+	for _, layout := range formats {
 		t, err = time.Parse(layout, vals[0])
 		if err == nil {
 			return t, nil

@@ -6,11 +6,8 @@ import (
 	"net/http"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/gobuffalo/buffalo/internal/httpx"
-	"github.com/gobuffalo/nulls"
-	"github.com/monoculum/formam"
 )
 
 var (
@@ -20,11 +17,8 @@ var (
 // RequestBinder is in charge of binding multiple requests types to
 // structs.
 type RequestBinder struct {
-	lock    *sync.Mutex
+	lock    *sync.RWMutex
 	binders map[string]Binder
-
-	formDecoder *formam.Decoder
-	timeFormats []string
 }
 
 // Register maps a request Content-Type (application/json)
@@ -34,13 +28,6 @@ func (rb RequestBinder) Register(contentType string, fn Binder) {
 	defer rb.lock.Unlock()
 
 	rb.binders[strings.ToLower(contentType)] = fn
-}
-
-// RegisterCustomDecoder allows to define custom decoders for certain types
-// In the request.
-func (rb RequestBinder) RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
-	rawFunc := (func([]string) (interface{}, error))(fn)
-	rb.formDecoder.RegisterCustomType(rawFunc, types, fields)
 }
 
 // Exec binds a request with a passed value, depending on the content type
@@ -63,48 +50,19 @@ func (rb RequestBinder) Exec(req *http.Request, value interface{}) error {
 }
 
 // NewRequestBinder creates our request binder with support for
-// XML, JSON, HTTP and File request types. It also adds decoders
-// for Time and nulls.Time.
-func NewRequestBinder(requestBinders ...RequestTypeBinder) *RequestBinder {
+// XML, JSON, HTTP and File request types.
+func NewRequestBinder(requestBinders ...ContenTypeBinder) *RequestBinder {
 	result := &RequestBinder{
-		lock:    &sync.Mutex{},
+		lock:    &sync.RWMutex{},
 		binders: map[string]Binder{},
-
-		formDecoder: formam.NewDecoder(&formam.DecoderOptions{
-			TagName:           "form",
-			IgnoreUnknownKeys: true,
-		}),
-
-		timeFormats: []string{
-			time.RFC3339,
-			"01/02/2006",
-			"2006-01-02",
-			"2006-01-02T15:04",
-			time.ANSIC,
-			time.UnixDate,
-			time.RubyDate,
-			time.RFC822,
-			time.RFC822Z,
-			time.RFC850,
-			time.RFC1123,
-			time.RFC1123Z,
-			time.RFC3339Nano,
-			time.Kitchen,
-			time.Stamp,
-			time.StampMilli,
-			time.StampMicro,
-			time.StampNano,
-		},
 	}
 
-	timeCustom := TimeCustomTypeDecoder{&result.timeFormats}
-	result.formDecoder.RegisterCustomType(timeCustom.Decode, []interface{}{time.Time{}}, nil)
-
-	nullTimeCustom := NullTimeCustomTypeDecoder{&timeCustom}
-	result.formDecoder.RegisterCustomType(nullTimeCustom.Decode, []interface{}{nulls.Time{}}, nil)
-
 	for _, requestBinder := range requestBinders {
-		requestBinder.RegisterTo(result)
+		contentTypes := requestBinder.ContentTypes()
+
+		for _, contentType := range contentTypes {
+			result.Register(contentType, requestBinder.BinderFunc())
+		}
 	}
 
 	return result

@@ -8,21 +8,26 @@ import (
 )
 
 // FileRequestTypeBinder is in charge of binding File request types.
-type FileRequestTypeBinder struct{}
+type FileRequestTypeBinder struct {
+	decoder *formam.Decoder
+}
 
 // RegisterTo register this RequestTypeBinder to the passed request binder
 // on the File content types (multipart/form-data).
-func (ht FileRequestTypeBinder) RegisterTo(binder *RequestBinder) {
-	binder.Register("multipart/form-data", ht.binder(binder.formDecoder))
+func (ht FileRequestTypeBinder) ContentTypes() []string {
+	return []string{
+		"multipart/form-data",
+	}
 }
 
-func (ht FileRequestTypeBinder) binder(decoder *formam.Decoder) Binder {
+func (ht FileRequestTypeBinder) BinderFunc() Binder {
 	return func(req *http.Request, i interface{}) error {
 		err := req.ParseMultipartForm(MaxFileMemory)
 		if err != nil {
 			return err
 		}
-		if err := decoder.Decode(req.Form, i); err != nil {
+
+		if err := ht.decoder.Decode(req.Form, i); err != nil {
 			return err
 		}
 
