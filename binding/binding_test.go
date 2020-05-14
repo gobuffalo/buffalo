@@ -2,10 +2,17 @@ package binding
 
 import (
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
+
+type blogPost struct {
+	Tags     []string
+	Dislikes int
+	Likes    int32
+}
 
 func Test_Register(t *testing.T) {
 	r := require.New(t)
@@ -15,34 +22,53 @@ func Test_Register(t *testing.T) {
 	})
 
 	r.NotNil(BaseRequestBinder.binders["foo/bar"])
+
+	req, err := http.NewRequest("POST", "/", nil)
+	r.NoError(err)
+
+	req.Header.Set("Content-Type", "foo/bar")
+	req.Form = url.Values{
+		"Tags":     []string{"AAA"},
+		"Likes":    []string{"12"},
+		"Dislikes": []string{"1000"},
+	}
+
+	req.ParseForm()
+
+	var post blogPost
+	r.NoError(Exec(req, &post))
+
+	r.Equal([]string(nil), post.Tags)
+	r.Equal(int32(0), post.Likes)
+	r.Equal(0, post.Dislikes)
+
 }
 
 func Test_RegisterCustomDecoder(t *testing.T) {
-	// r := require.New(t)
+	r := require.New(t)
 
-	// RegisterCustomDecoder(func(vals []string) (interface{}, error) {
-	// 	return []string{"X"}, nil
-	// }, []interface{}{[]string{}}, nil)
+	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+		return []string{"X"}, nil
+	}, []interface{}{[]string{}}, nil)
 
-	// type Xt struct {
-	// 	Vals []string
-	// }
+	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+		return 0, nil
+	}, []interface{}{int(0)}, nil)
 
-	// type U struct {
-	// 	Xt Xt
-	// }
+	post := blogPost{}
+	req, err := http.NewRequest("POST", "/", nil)
+	r.NoError(err)
 
-	// var ux U
-	// app := buffalo.New(buffalo.Options{})
-	// app.POST("/", func(c buffalo.Context) error {
-	// 	return c.Bind(&ux)
-	// })
+	req.Header.Set("Content-Type", "application/html")
+	req.Form = url.Values{
+		"Tags":     []string{"AAA"},
+		"Likes":    []string{"12"},
+		"Dislikes": []string{"1000"},
+	}
+	req.ParseForm()
 
-	// w := httptest.New(app)
-	// res := w.HTML("/").Post(&U{
-	// 	Xt: Xt{[]string{"foo"}},
-	// })
-
-	// r.Equal(http.StatusOK, res.Code)
-	// r.Equal([]string{"X"}, ux.Xt.Vals)
+	r.NoError(Exec(req, &post))
+	r.Equal([]string{"X"}, post.Tags)
+	r.Equal(int32(12), post.Likes)
+	r.Equal(0, post.Dislikes)
 }
