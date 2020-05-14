@@ -17,8 +17,8 @@ func NewHTMLContentTypeBinder(decoder *formam.Decoder) HTMLContentTypeBinder {
 		decoder: decoder,
 	}
 
-	decoder.RegisterCustomType(decoders.TimeDecoderFn(timeFormats), []interface{}{}, []interface{}{})
-	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(timeFormats), []interface{}{}, []interface{}{})
+	decoder.RegisterCustomType(decoders.TimeDecoderFn(), []interface{}{}, []interface{}{})
+	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(), []interface{}{}, []interface{}{})
 
 	return htmlBinder
 }

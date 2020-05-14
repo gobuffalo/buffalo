@@ -1,11 +1,10 @@
 package decoders
 
 import (
-	"errors"
 	"time"
 )
 
-func parseTime(vals []string, formats []string) (time.Time, error) {
+func parseTime(vals []string) (time.Time, error) {
 	var t time.Time
 	var err error
 
@@ -14,11 +13,7 @@ func parseTime(vals []string, formats []string) (time.Time, error) {
 		return t, nil
 	}
 
-	if len(formats) == 0 {
-		return t, errors.New("empty time format list")
-	}
-
-	for _, layout := range formats {
+	for _, layout := range timeFormats {
 		t, err = time.Parse(layout, vals[0])
 		if err == nil {
 			return t, nil
