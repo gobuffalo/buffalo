@@ -2,69 +2,73 @@ package binding
 
 import (
 	"net/http"
+	"net/url"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
+type blogPost struct {
+	Tags     []string
+	Dislikes int
+	Likes    int32
+}
+
 func Test_Register(t *testing.T) {
 	r := require.New(t)
-	l := len(binders)
+
 	Register("foo/bar", func(*http.Request, interface{}) error {
 		return nil
 	})
-	r.Len(binders, l+1)
-}
 
-func TestParseTimeErrorParsing(t *testing.T) {
-	r := require.New(t)
-	_, err := parseTime([]string{"this is sparta"})
-	r.Error(err)
-}
+	r.NotNil(BaseRequestBinder.binders["foo/bar"])
 
-func TestParseTime(t *testing.T) {
-
-	r := require.New(t)
-
-	testCases := []struct {
-		input     string
-		expected  time.Time
-		expectErr bool
-	}{
-		{
-			input:     "2017-01-01",
-			expected:  time.Date(2017, time.January, 1, 0, 0, 0, 0, time.UTC),
-			expectErr: false,
-		},
-		{
-			input:     "2018-07-13T15:34",
-			expected:  time.Date(2018, time.July, 13, 15, 34, 0, 0, time.UTC),
-			expectErr: false,
-		},
-		{
-			input:     "2018-20-10T30:15",
-			expected:  time.Time{},
-			expectErr: true,
-		},
-	}
-
-	for _, tc := range testCases {
-		tt, err := parseTime([]string{tc.input})
-		if !tc.expectErr {
-			r.NoError(err)
-		}
-		r.Equal(tc.expected, tt)
-	}
-}
-
-func TestParseTimeConflicting(t *testing.T) {
-	RegisterTimeFormats("2006-02-01")
-
-	r := require.New(t)
-	tt, err := parseTime([]string{"2017-01-10"})
-
+	req, err := http.NewRequest("POST", "/", nil)
 	r.NoError(err)
-	expected := time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)
-	r.Equal(expected, tt)
+
+	req.Header.Set("Content-Type", "foo/bar")
+	req.Form = url.Values{
+		"Tags":     []string{"AAA"},
+		"Likes":    []string{"12"},
+		"Dislikes": []string{"1000"},
+	}
+
+	req.ParseForm()
+
+	var post blogPost
+	r.NoError(Exec(req, &post))
+
+	r.Equal([]string(nil), post.Tags)
+	r.Equal(int32(0), post.Likes)
+	r.Equal(0, post.Dislikes)
+
+}
+
+func Test_RegisterCustomDecoder(t *testing.T) {
+	r := require.New(t)
+
+	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+		return []string{"X"}, nil
+	}, []interface{}{[]string{}}, nil)
+
+	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+		return 0, nil
+	}, []interface{}{int(0)}, nil)
+
+	post := blogPost{}
+	req, err := http.NewRequest("POST", "/", nil)
+	r.NoError(err)
+
+	req.Header.Set("Content-Type", "application/html")
+	req.Form = url.Values{
+		"Tags":     []string{"AAA"},
+		"Likes":    []string{"12"},
+		"Dislikes": []string{"1000"},
+	}
+	req.ParseForm()
+
+	r.NoError(Exec(req, &post))
+	r.Equal([]string{"X"}, post.Tags)
+	r.Equal(int32(12), post.Likes)
+	r.Equal(0, post.Dislikes)
 }
