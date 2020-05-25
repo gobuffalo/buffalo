@@ -12,6 +12,8 @@ type HTMLContentTypeBinder struct {
 	decoder *formam.Decoder
 }
 
+// NewHTMLContentTypeBinder returns an instance of HTMLContentTypeBinder with
+// custom type decoders registered for Time and nulls.Time
 func NewHTMLContentTypeBinder(decoder *formam.Decoder) HTMLContentTypeBinder {
 	htmlBinder := HTMLContentTypeBinder{
 		decoder: decoder,
@@ -23,6 +25,7 @@ func NewHTMLContentTypeBinder(decoder *formam.Decoder) HTMLContentTypeBinder {
 	return htmlBinder
 }
 
+// ContentTypes that will be used to identify HTML requests
 func (ht HTMLContentTypeBinder) ContentTypes() []string {
 	return []string{
 		"application/html",
@@ -32,6 +35,7 @@ func (ht HTMLContentTypeBinder) ContentTypes() []string {
 	}
 }
 
+// BinderFunc that will take care of the HTML binding
 func (ht HTMLContentTypeBinder) BinderFunc() Binder {
 	return func(req *http.Request, i interface{}) error {
 		err := req.ParseForm()

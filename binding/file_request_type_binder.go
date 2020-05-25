@@ -20,6 +20,7 @@ func (ht FileRequestTypeBinder) ContentTypes() []string {
 	}
 }
 
+// BinderFunc that will take care of the HTML File binding
 func (ht FileRequestTypeBinder) BinderFunc() Binder {
 	return func(req *http.Request, i interface{}) error {
 		err := req.ParseMultipartForm(MaxFileMemory)
