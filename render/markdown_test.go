@@ -8,8 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const mdLayout = "layout.md"
-const mdAltLayout = "alt_layout.plush.md.html"
 const mdTemplate = "my-template.md"
 
 func Test_MD_WithoutLayout(t *testing.T) {
