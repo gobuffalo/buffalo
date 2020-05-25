@@ -12,8 +12,7 @@ type FileRequestTypeBinder struct {
 	decoder *formam.Decoder
 }
 
-// RegisterTo register this RequestTypeBinder to the passed request binder
-// on the File content types (multipart/form-data).
+// ContentTypes returns the list of content types for FileRequestTypeBinder
 func (ht FileRequestTypeBinder) ContentTypes() []string {
 	return []string{
 		"multipart/form-data",
