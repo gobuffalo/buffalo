@@ -199,7 +199,13 @@ func (d *Dialer) DialAndSend(m ...*Message) error {
 	}
 	defer s.Close()
 
-	return Send(s, m...)
+	for _, err := range Send(s, m...) {
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 type smtpSender struct {
