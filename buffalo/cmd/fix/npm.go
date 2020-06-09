@@ -62,7 +62,7 @@ func AddPackageJSONScripts(r *Runner) error {
 			return fmt.Errorf("could not rewrite package.json: %s", err.Error())
 		}
 
-		ioutil.WriteFile("package.json", b, 644)
+		ioutil.WriteFile("package.json", b, 0644)
 	} else {
 		fmt.Println("~~~ package.json doesn't need to be patched, skipping. ~~~")
 	}
