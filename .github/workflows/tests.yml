@@ -1,10 +1,8 @@
 name: Tests
 on: [push, pull_request]
 jobs:
-
-
   tests-off:
-    name: ${{matrix.go-version}} ${{matrix.os}}
+    name: ${{ matrix.go-version }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -14,7 +12,7 @@ jobs:
       GO111MODULE: on
     steps:
     - name: Checkout code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with:
         fetch-depth: 1
         path: src/github.com/${{ github.repository }}
@@ -22,4 +20,3 @@ jobs:
       run: |
         go mod tidy -v
         go test -tags "sqlite" -cover  ./...
-
