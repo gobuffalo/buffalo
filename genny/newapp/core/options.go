@@ -71,8 +71,7 @@ func (opts *Options) Validate() error {
 	}
 
 	name := strings.ToLower(opts.App.Name.String())
-	fb := append(opts.ForbiddenNames)
-	for _, n := range fb {
+	for _, n := range opts.ForbiddenNames {
 		rx, err := regexp.Compile(n)
 		if err != nil {
 			return err
