@@ -2,8 +2,10 @@ package binding
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gobuffalo/buffalo/binding/decoders"
+	"github.com/gobuffalo/nulls"
 	"github.com/monoculum/formam"
 )
 
@@ -15,14 +17,12 @@ type HTMLContentTypeBinder struct {
 // NewHTMLContentTypeBinder returns an instance of HTMLContentTypeBinder with
 // custom type decoders registered for Time and nulls.Time
 func NewHTMLContentTypeBinder(decoder *formam.Decoder) HTMLContentTypeBinder {
-	htmlBinder := HTMLContentTypeBinder{
+	decoder.RegisterCustomType(decoders.TimeDecoderFn(), []interface{}{time.Time{}}, nil)
+	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(), []interface{}{nulls.Time{}}, nil)
+
+	return HTMLContentTypeBinder{
 		decoder: decoder,
 	}
-
-	decoder.RegisterCustomType(decoders.TimeDecoderFn(), []interface{}{}, []interface{}{})
-	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(), []interface{}{}, []interface{}{})
-
-	return htmlBinder
 }
 
 // ContentTypes that will be used to identify HTML requests
@@ -46,6 +46,7 @@ func (ht HTMLContentTypeBinder) BinderFunc() Binder {
 		if err := ht.decoder.Decode(req.Form, i); err != nil {
 			return err
 		}
+
 		return nil
 	}
 }

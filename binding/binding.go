@@ -19,13 +19,11 @@ var (
 		IgnoreUnknownKeys: true,
 	})
 
-	// BaseRequestBinder is an instance of the requeBinder, it comes with preconfigured
+	// BaseRequestBinder is an instance of the requestBinder, it comes with preconfigured
 	// content type binders for HTML, JSON, XML and Files, as well as custom types decoders
 	// for time.Time and nulls.Time
 	BaseRequestBinder = NewRequestBinder(
-		HTMLContentTypeBinder{
-			decoder: formDecoder,
-		},
+		NewHTMLContentTypeBinder(formDecoder),
 		JSONContentTypeBinder{},
 		XMLRequestTypeBinder{},
 		FileRequestTypeBinder{
