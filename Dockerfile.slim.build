@@ -19,8 +19,8 @@ RUN npm i -g --no-progress yarn \
     && yarn config set yarn-offline-mirror-pruning true
 
 # Pulling docker binary from releases
-RUN wget https://github.com/gobuffalo/buffalo/releases/download/vv0.16.9/buffalo_v0.16.9_Linux_x86_64.tar.gz \
-    && tar -xzf buffalo_v0.16.9_Linux_x86_64.tar.gz \
+RUN wget https://github.com/gobuffalo/buffalo/releases/download/v0.16.11/buffalo_v0.16.11_Linux_x86_64.tar.gz \
+    && tar -xzf buffalo_v0.16.11_Linux_x86_64.tar.gz \
     && mv buffalo $(go env GOPATH)/bin/buffalo
 
 RUN go get github.com/gobuffalo/buffalo-pop/v2

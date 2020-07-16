@@ -71,8 +71,7 @@ func (opts *Options) Validate() error {
 	}
 
 	name := strings.ToLower(opts.App.Name.String())
-	fb := append(opts.ForbiddenNames, "buffalo", "test", "dev")
-	for _, n := range fb {
+	for _, n := range opts.ForbiddenNames {
 		rx, err := regexp.Compile(n)
 		if err != nil {
 			return err
@@ -82,9 +81,19 @@ func (opts *Options) Validate() error {
 		}
 	}
 
+	keywords := []string{"buffalo", "test", "dev"}
+	for _, kw := range keywords {
+		if name != kw {
+			continue
+		}
+
+		return fmt.Errorf("name %s is not allowed, try a different application name", opts.App.Name)
+	}
+
 	if !nameRX.MatchString(name) {
 		return fmt.Errorf("name %s is not allowed, application name can only contain [a-Z0-9-_]", opts.App.Name)
 	}
+
 	return nil
 }
 
