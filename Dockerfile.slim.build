@@ -1,13 +1,11 @@
 FROM golang:alpine
 EXPOSE 3000
 
-ENV GOPROXY=https://proxy.golang.org
 ENV GO111MODULE=on
-
 ENV GOPROXY=https://proxy.golang.org 
 
 RUN apk add --no-cache --upgrade apk-tools \
-    && apk add --no-cache bash curl openssl git build-base nodejs npm sqlite sqlite-dev mysql-client vim postgresql libpq postgresql-contrib
+    && apk add --no-cache bash curl openssl git build-base nodejs npm sqlite sqlite-dev mysql-client vim postgresql libpq postgresql-contrib libc6-compat
 
 # Installing linter
 RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh \
@@ -19,10 +17,7 @@ RUN npm i -g --no-progress yarn \
     && yarn config set yarn-offline-mirror-pruning true
 
 # Pulling docker binary from releases
-RUN wget https://github.com/gobuffalo/buffalo/releases/download/v0.16.12/buffalo_v0.16.12_Linux_x86_64.tar.gz \
-    && tar -xzf buffalo_v0.16.12_Linux_x86_64.tar.gz \
-    && mv buffalo $(go env GOPATH)/bin/buffalo
-
+RUN curl -sf https://gobinaries.com/gobuffalo/buffalo/buffalo@v0.16.13 | sh 
 RUN go get github.com/gobuffalo/buffalo-pop/v2
 RUN buffalo version
 
