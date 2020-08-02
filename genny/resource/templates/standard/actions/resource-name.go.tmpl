@@ -11,9 +11,9 @@ type {{.opts.Name.Resource}}Resource struct{
 }
 
 {{ range $a := .actions }}
-// {{$a.String}} default implementation.
-func (v {{$.opts.Name.Resource}}Resource) {{$a.String}}(c buffalo.Context) error {
-  return c.Render(http.StatusOK, r.String("{{$.opts.Model.Proper}}#{{$a.String}}"))
+// {{$a.Pascalize}} default implementation.
+func (v {{$.opts.Name.Resource}}Resource) {{$a.Pascalize}}(c buffalo.Context) error {
+  return c.Render(http.StatusOK, r.String("{{$.opts.Model.Proper}}#{{$a.Pascalize}}"))
 }
 
 {{end}}
