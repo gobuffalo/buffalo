@@ -246,12 +246,6 @@ func Test_New_SkipModel(t *testing.T) {
 	r.Len(res.Commands, 0)
 	r.Len(res.Files, 9)
 
-	// for _, s := range []string{"_form", "edit", "index", "new", "show"} {
-	// 	p := path.Join("templates", "widgets", s+".plush.html")
-	// 	_, err = res.Find(p)
-	// 	r.NoError(err)
-	// }
-
 	f, err := res.Find("actions/widgets.go")
 	r.NoError(err)
 	actions := []string{"List", "Show", "Create", "Update", "Destroy", "New", "Edit"}
