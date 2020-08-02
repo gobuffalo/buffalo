@@ -62,6 +62,16 @@ func Test_New(t *testing.T) {
 	r.NoError(err)
 	r.Contains(f.String(), `return c.Render(http.StatusOK, r.JSON(map[string]string{"message": "Welcome to Buffalo!"}))`)
 
+	f, err = res.Find("actions/app.go")
+	r.NoError(err)
+	r.Contains(f.String(), `i18n "github.com/gobuffalo/mw-i18n"`)
+	r.Contains(f.String(), `var T *i18n.Translator`)
+	r.Contains(f.String(), `func translations() buffalo.MiddlewareFunc {`)
+
+	f, err = res.Find("locales/all.en-us.yaml")
+	r.NoError(err)
+	r.Contains(f.String(), `translation: "Welcome to Buffalo (EN)"`)
+
 	unexpected := []string{
 		"Dockerfile",
 		"database.yml",
