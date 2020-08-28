@@ -124,6 +124,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 
 	r.NoError(h.Render(bb, Data{}))
 	fmt.Println(bb.String())
-	pre := `let a = "\u003Cdiv id\u003D\"foo\"\u003E\u003Cp\u003Ehi\u003C/p\u003E\u003C/div\u003E"`
+
+	pre := `let a = "<div`
 	r.True(strings.HasPrefix(bb.String(), pre))
 }
