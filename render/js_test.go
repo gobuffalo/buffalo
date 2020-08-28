@@ -124,6 +124,6 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{}))
-	pre := `let a = "\x3Cdiv`
+	pre := `let a = "\u003Cdiv`
 	r.True(strings.HasPrefix(bb.String(), pre))
 }
