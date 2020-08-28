@@ -106,16 +106,14 @@ func Test_JavaScript_Partial(t *testing.T) {
 }
 
 func Test_JavaScript_HTML_Partial(t *testing.T) {
-	const tmpl = "let a = \"<%= partial(\"part.html\") %>\""
-	const part = `<div id="foo">
-	<p>hi</p>
-</div>`
-
 	r := require.New(t)
 
-	e := NewEngine()
+	const tmpl = `let a = "<%= partial("part.html") %>"`
+	const part = `<div id="foo"><p>hi</p></div>`
 
+	e := NewEngine()
 	box := e.TemplatesBox
+
 	r.NoError(box.AddString(jsTemplate, tmpl))
 	r.NoError(box.AddString("_part.html", part))
 
@@ -124,6 +122,6 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{}))
-	pre := `let a = "\u003Cdiv`
+	pre := `let a =`
 	r.True(strings.HasPrefix(bb.String(), pre))
 }
