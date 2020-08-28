@@ -2,6 +2,7 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -122,6 +123,7 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{}))
-	pre := `let a =`
+	fmt.Println(bb.String())
+	pre := `let a = "\u003Cdiv id\u003D\"foo\"\u003E\u003Cp\u003Ehi\u003C/p\u003E\u003C/div\u003E"`
 	r.True(strings.HasPrefix(bb.String(), pre))
 }
