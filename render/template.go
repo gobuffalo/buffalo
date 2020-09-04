@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/gobuffalo/syncx"
@@ -45,27 +44,13 @@ func (s templateRenderer) resolve(name string) ([]byte, error) {
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	if s.TemplatesBox != nil {
+
 		err := s.TemplatesBox.Walk(func(p string, f packd.File) error {
-			base := filepath.Base(p)
-
-			dir := filepath.Dir(p)
-
-			var exts []string
-			sep := strings.Split(base, ".")
-			if len(sep) >= 1 {
-				base = sep[0]
-			}
-			if len(sep) > 1 {
-				exts = sep[1:]
-			}
-
-			for _, ext := range exts {
-				pn := filepath.Join(dir, base+"."+ext)
-				s.aliases.Store(pn, p)
-			}
-
+			fixname := s.fixName(p)
+			s.aliases.Store(fixname, p)
 			return nil
 		})
+
 		if err != nil {
 			return err
 		}
@@ -166,36 +151,20 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	helpers = s.addAssetsHelpers(helpers)
 
 	body := string(source)
-	for _, ext := range s.exts(name) {
-		te, ok := s.TemplateEngines[ext]
-		if !ok {
-			logrus.Errorf("could not find a template engine for %s", ext)
-			continue
-		}
-		body, err = te(body, data, helpers)
-		if err != nil {
-			return "", err
-		}
+
+	ext := s.getExtension(name)
+	ext = strings.ToLower(ext)
+
+	te, ok := s.TemplateEngines[ext]
+	if !ok {
+		logrus.Errorf("could not find a template engine for %s", ext)
+	}
+	body, err = te(body, data, helpers)
+	if err != nil {
+		return "", err
 	}
 
 	return template.HTML(body), nil
-}
-
-func (s templateRenderer) exts(name string) []string {
-	exts := []string{}
-	for {
-		ext := filepath.Ext(name)
-		if ext == "" {
-			break
-		}
-		name = strings.TrimSuffix(name, ext)
-		exts = append(exts, strings.ToLower(ext[1:]))
-	}
-	if len(exts) == 0 {
-		return []string{"html"}
-	}
-	sort.Sort(sort.Reverse(sort.StringSlice(exts)))
-	return exts
 }
 
 func (s templateRenderer) assetPath(file string) (string, error) {
@@ -243,4 +212,29 @@ func (e *Engine) Template(c string, names ...string) Renderer {
 		names:       names,
 		aliases:     syncx.StringMap{},
 	}
+}
+
+func (s templateRenderer) fixName(name string) string {
+	base := filepath.Base(name)
+	dir := filepath.Dir(name)
+	var ext string
+	sep := strings.Split(base, ".")
+	if len(sep) >= 1 {
+		base = sep[0]
+	}
+	if len(sep) > 1 {
+		ext = sep[len(sep)-1]
+	}
+
+	if ext == "" {
+		ext = "html"
+	}
+	filename := filepath.Join(dir, base+"."+ext)
+
+	return filename
+}
+
+func (s templateRenderer) getExtension(name string) string {
+	ext := filepath.Ext(name)
+	return strings.TrimPrefix(ext, ".")
 }
