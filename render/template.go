@@ -144,9 +144,9 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	// Set current_template to context
-	if _, ok := data["current_template"]; !ok {
-		data["current_template"] = templateName
-	}
+	//if _, ok := data["current_template"]; !ok {
+	//	data["current_template"] = templateName
+	//}
 
 	source, err := s.resolve(templateName)
 	if err != nil {
@@ -159,6 +159,9 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		helpers[k] = v
 	}
 	helpers["partialFeeder"] = s.partialFeeder
+	helpers["include"] = func(name string) (template.HTML, error) {
+		return s.exec(name, data)
+	}
 
 	helpers = s.addAssetsHelpers(helpers)
 
