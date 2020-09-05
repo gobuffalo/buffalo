@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"fmt"
 	"path"
 	"path/filepath"
 	"strings"
@@ -218,5 +219,38 @@ func Test_New_UseModel(t *testing.T) {
 	f, err := res.Find("actions/widgets.go")
 	r.NoError(err)
 	r.Contains(f.String(), "users := &models.Users{}")
+
+}
+
+func Test_New_SkipModel(t *testing.T) {
+	r := require.New(t)
+
+	app := meta.New(".")
+	app.PackageRoot("github.com/markbates/coke")
+
+	opts := &Options{
+		App:       app,
+		Name:      "Widget",
+		SkipModel: true,
+	}
+
+	g, err := New(opts)
+	r.NoError(err)
+
+	run := runner()
+	run.With(g)
+	r.NoError(run.Run())
+
+	res := run.Results()
+
+	r.Len(res.Commands, 0)
+	r.Len(res.Files, 9)
+
+	f, err := res.Find("actions/widgets.go")
+	r.NoError(err)
+	actions := []string{"List", "Show", "Create", "Update", "Destroy", "New", "Edit"}
+	for _, action := range actions {
+		r.Contains(f.String(), fmt.Sprintf("func (v WidgetsResource) %v(c buffalo.Context) error {", action))
+	}
 
 }
