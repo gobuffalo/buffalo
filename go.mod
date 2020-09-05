@@ -34,7 +34,7 @@ require (
 	github.com/markbates/refresh v1.11.1
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/monoculum/formam v0.0.0-20200527175922-6f3cce7a46cf
+	github.com/monoculum/formam v0.0.0-20200905010316-d7a8fbd33677
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5
