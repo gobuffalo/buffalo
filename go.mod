@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/clara/v2 v2.0.2
 	github.com/gobuffalo/envy v1.9.0
 	github.com/gobuffalo/events v1.4.1
-	github.com/gobuffalo/flect v0.2.1
+	github.com/gobuffalo/flect v0.2.2
 	github.com/gobuffalo/genny/v2 v2.0.6
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.6.1
@@ -34,7 +34,7 @@ require (
 	github.com/markbates/refresh v1.11.1
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
-	github.com/monoculum/formam v0.0.0-20200316225015-49f0baed3a1b
+	github.com/monoculum/formam v0.0.0-20200905010316-d7a8fbd33677
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5

@@ -124,6 +124,9 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 	bb := &bytes.Buffer{}
 
 	r.NoError(h.Render(bb, Data{}))
-	pre := `let a = "\x3Cdiv`
-	r.True(strings.HasPrefix(bb.String(), pre))
+	r.Contains(bb.String(), `id`)
+	r.Contains(bb.String(), `foo`)
+
+	// To check it has escaped the partial
+	r.NotContains(bb.String(), `<div id="foo">`)
 }
