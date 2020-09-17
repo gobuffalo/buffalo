@@ -18,7 +18,6 @@ exclude_paths:
   - "generators/*/templates/**/*"
   - "buffalo/cmd/filetests/*"
   - "examples/**/*"
-  - "grifts/**/*"
   - "vendor/**/*"
   - "**/*_test.go"
   - "*_test.go"
