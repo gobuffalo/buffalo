@@ -130,9 +130,16 @@ func buildVersion(version string) string {
 		run.Logger.Warnf("could not find %s; defaulting to version %s", vcs, version)
 		return vcs
 	}
+
 	var cmd *exec.Cmd
 	switch vcs {
 	case "git":
+		// If .git folder does not exist return default version
+		if stat, err := os.Stat(".git"); err != nil || !stat.IsDir() {
+			run.Logger.Warnf("could not find .git folder; defaulting to version %s", version)
+			return version
+		}
+
 		cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
 	case "bzr":
 		cmd = exec.Command("bzr", "revno")
