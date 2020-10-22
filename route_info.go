@@ -94,8 +94,6 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	a := ri.App
 
 	c := a.newContext(ri, res, req)
-	defer c.Flash().persist(c.Session())
-
 	payload := events.Payload{
 		"route":   ri,
 		"app":     a,
@@ -103,8 +101,8 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 
 	events.EmitPayload(EvtRouteStarted, payload)
-
 	err := a.Middleware.handler(ri)(c)
+	c.Flash().persist(c.Session())
 
 	if err != nil {
 		status := http.StatusInternalServerError
@@ -117,5 +115,6 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		c.Response().WriteHeader(status)
 		c.Response().Write([]byte(err.Error()))
 	}
+
 	events.EmitPayload(EvtRouteFinished, payload)
 }
