@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/gobuffalo/buffalo/blob/master/logo.svg" width="360"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/gobuffalo/buffalo/master/logo.svg" width="360"></p>
 
 <p align="center">
 <a href="https://pkg.go.dev/github.com/gobuffalo/buffalo"><img src="https://pkg.go.dev/badge/github.com/gobuffalo/buffalo" alt="PkgGoDev"></a>
