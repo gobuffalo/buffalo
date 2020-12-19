@@ -18,9 +18,18 @@ type Response struct {
 }
 
 // WriteHeader sets the status code for a response
-func (w *Response) WriteHeader(i int) {
-	w.Status = i
-	w.ResponseWriter.WriteHeader(i)
+func (w *Response) WriteHeader(code int) {
+	if code == w.Status {
+		return
+	}
+
+	if w.Status > 0 {
+		fmt.Printf("[WARNING] Headers were already written. Wanted to override status code %d with %d", w.Status, code)
+		return
+	}
+
+	w.Status = code
+	w.ResponseWriter.WriteHeader(code)
 }
 
 // Write the body of the response
