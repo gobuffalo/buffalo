@@ -119,29 +119,7 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	name = fixExtension(name, ct)
 
 	// Try to use localized version
-	templateName := name
-	if languages, ok := data["languages"].([]string); ok {
-		ll := len(languages)
-		if ll > 0 {
-			// Default language is the last in the list
-			defaultLanguage := languages[ll-1]
-			ext := filepath.Ext(name)
-			rawName := strings.TrimSuffix(name, ext)
-
-			for _, l := range languages {
-				var candidateName string
-				if l == defaultLanguage {
-					break
-				}
-				candidateName = rawName + "." + strings.ToLower(l) + ext
-				if _, err := s.resolve(candidateName); err == nil {
-					// Replace name with the existing suffixed version
-					templateName = candidateName
-					break
-				}
-			}
-		}
-	}
+	templateName := s.localizedName(name, data)
 
 	// Set current_template to context
 	if _, ok := data["current_template"]; !ok {
@@ -158,7 +136,11 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
-	helpers["partialFeeder"] = s.partialFeeder
+
+	// Allows to specify custom partialFeeder
+	if helpers["partialFeeder"] == nil {
+		helpers["partialFeeder"] = s.partialFeeder
+	}
 
 	helpers = s.addAssetsHelpers(helpers)
 
@@ -176,6 +158,37 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	return template.HTML(body), nil
+}
+
+func (s templateRenderer) localizedName(name string, data Data) string {
+	templateName := name
+
+	languages, ok := data["languages"].([]string)
+	if !ok || len(languages) == 0 {
+		return templateName
+	}
+
+	ll := len(languages)
+	// Default language is the last in the list
+	defaultLanguage := languages[ll-1]
+	ext := filepath.Ext(name)
+	rawName := strings.TrimSuffix(name, ext)
+
+	for _, l := range languages {
+		var candidateName string
+		if l == defaultLanguage {
+			break
+		}
+
+		candidateName = rawName + "." + strings.ToLower(l) + ext
+		if _, err := s.resolve(candidateName); err == nil {
+			// Replace name with the existing suffixed version
+			templateName = candidateName
+			break
+		}
+	}
+
+	return templateName
 }
 
 func (s templateRenderer) exts(name string) []string {
