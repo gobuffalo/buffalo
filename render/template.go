@@ -158,7 +158,11 @@ func (s templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	for k, v := range s.Helpers {
 		helpers[k] = v
 	}
-	helpers["partialFeeder"] = s.partialFeeder
+
+	// Allows to specify custom partialFeeder
+	if helpers["partialFeeder"] == nil {
+		helpers["partialFeeder"] = s.partialFeeder
+	}
 
 	helpers = s.addAssetsHelpers(helpers)
 

@@ -29,6 +29,39 @@ func Test_Template_Partial(t *testing.T) {
 	r.Equal("Foo > Mark", strings.TrimSpace(bb.String()))
 }
 
+func Test_Template_PartialCustomFeeder(t *testing.T) {
+	r := require.New(t)
+
+	box := packd.NewMemoryBox()
+	r.NoError(box.AddString("base.plush.html", `<%= partial("foo.plush.html") %>`))
+	r.NoError(box.AddString("_foo.plush.html", "other"))
+
+	e := NewEngine()
+	e.TemplatesBox = box
+
+	t.Run("Custom Feeder", func(t *testing.T) {
+		e.Helpers["partialFeeder"] = func(path string) (string, error) {
+			return "custom", nil
+		}
+
+		bb := &bytes.Buffer{}
+
+		re := e.HTML("base.plush.html")
+		r.NoError(re.Render(bb, Data{}))
+		r.Equal("custom", strings.TrimSpace(bb.String()))
+	})
+
+	t.Run("Default Feeder", func(t *testing.T) {
+		e.Helpers["partialFeeder"] = nil
+
+		bb := &bytes.Buffer{}
+
+		re := e.HTML("base.plush.html")
+		r.NoError(re.Render(bb, Data{}))
+		r.Equal("other", strings.TrimSpace(bb.String()))
+	})
+}
+
 func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	r := require.New(t)
 
