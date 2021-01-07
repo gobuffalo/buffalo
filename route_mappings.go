@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/envy"
-	"github.com/gobuffalo/flect"
 	"github.com/gobuffalo/flect/name"
 	"github.com/gorilla/handlers"
 )
@@ -263,7 +262,7 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 
 	url = path.Join(a.Prefix, url)
 	url = a.normalizePath(url)
-	name := a.buildRouteName(url)
+	name := a.RouteNamer.NameRoute(url)
 
 	hs := funcKey(h)
 	r := &RouteInfo{
@@ -289,61 +288,6 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 	}
 
 	return r
-}
-
-//buildRouteName builds a route based on the path passed.
-func (a *App) buildRouteName(p string) string {
-	if p == "/" || p == "" {
-		return "root"
-	}
-
-	resultParts := []string{}
-	parts := strings.Split(p, "/")
-
-	for index, part := range parts {
-
-		originalPart := parts[index]
-
-		var previousPart string
-		if index > 0 {
-			previousPart = parts[index-1]
-		}
-
-		var nextPart string
-		if len(parts) > index+1 {
-			nextPart = parts[index+1]
-		}
-
-		isIdentifierPart := strings.Contains(part, "{") && (strings.Contains(part, flect.Singularize(previousPart)))
-		isSimplifiedID := part == `{id}`
-
-		if isIdentifierPart || isSimplifiedID || part == "" {
-			continue
-		}
-
-		if strings.Contains(nextPart, "{") {
-			part = flect.Singularize(part)
-		}
-
-		if originalPart == "new" || originalPart == "edit" {
-			resultParts = append([]string{part}, resultParts...)
-			continue
-		}
-
-		if strings.Contains(previousPart, "}") {
-			resultParts = append(resultParts, part)
-			continue
-		}
-
-		resultParts = append(resultParts, part)
-	}
-
-	if len(resultParts) == 0 {
-		return "unnamed"
-	}
-
-	underscore := strings.TrimSpace(strings.Join(resultParts, "_"))
-	return name.VarCase(underscore)
 }
 
 func stripAsset(path string, h http.Handler, a *App) http.Handler {

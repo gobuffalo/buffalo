@@ -740,7 +740,7 @@ func Test_buildRouteName(t *testing.T) {
 	a := New(Options{})
 
 	for input, result := range cases {
-		fResult := a.buildRouteName(input)
+		fResult := a.RouteNamer.NameRoute(input)
 		r.Equal(result, fResult, input)
 	}
 
@@ -751,7 +751,7 @@ func Test_buildRouteName(t *testing.T) {
 	}
 
 	for input, result := range cases {
-		fResult := a.buildRouteName(input)
+		fResult := a.RouteNamer.NameRoute(input)
 		r.Equal(result, fResult, input)
 	}
 }
