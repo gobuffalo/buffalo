@@ -23,6 +23,10 @@ type App struct {
 	root          *App
 	children      []*App
 	filepaths     []string
+
+	// Routenamer for the app this could be used to override for application
+	// specific automatic route naming.
+	RouteNamer RouteNamer
 }
 
 // Muxer returns the underlying mux router to allow
@@ -48,6 +52,8 @@ func New(opts Options) *App {
 		moot:     &sync.RWMutex{},
 		routes:   RouteList{},
 		children: []*App{},
+
+		RouteNamer: baseRouteNamer{},
 	}
 
 	dem := a.defaultErrorMiddleware
