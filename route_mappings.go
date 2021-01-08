@@ -236,6 +236,7 @@ func (a *App) Group(groupPath string) *App {
 	g.Name = g.Prefix
 
 	g.router = a.router
+	g.RouteNamer = a.RouteNamer
 	g.Middleware = a.Middleware.clone()
 	g.ErrorHandlers = a.ErrorHandlers
 	g.root = a
