@@ -38,7 +38,7 @@ changelog:
 brews:
   -
     name: 'buffalo'
-    github:
+    tap:
       owner: 'gobuffalo'
       name: 'homebrew-tap'
     install: |
