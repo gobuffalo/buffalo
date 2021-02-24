@@ -1,10 +1,7 @@
 before_script:
-  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
   - go mod download
-  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
   - test
