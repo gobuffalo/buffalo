@@ -16,11 +16,15 @@ stages:
     GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
     POSTGRES_DB: "{{.opts.App.Name.File}}_test"
+    POSTGRES_USER: runner
+    POSTGRES_PASSSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
+    TEST_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
 {{- else if eq .opts.DBType "mysql" }}
     MYSQL_DATABASE: "{{.opts.App.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
-{{- end }}
     TEST_DATABASE_URL: "{{.testDbUrl}}"
+{{- end }}
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
