@@ -9,13 +9,6 @@
 
 # Buffalo
 
-
-### **As of December 1st, 2019 Buffalo, and all related packages, require Go Modules and the use of the `GOPATH` is no longer supported.**
-
-Please see this blog post for more information [https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5.](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5).
-
----
-
 A Go web development eco-system, designed to make your project easier.
 
 Buffalo helps you to generate a web project that already has everything from front-end (JavaScript, SCSS, etc.) to the back-end (database, routing, etc.) already hooked up and ready to run. From there it provides easy APIs to build your web application quickly in Go.
@@ -24,6 +17,18 @@ Buffalo **isn't just a framework**; it's a holistic web development environment 
 
 > I :heart: web dev in go again - Brian Ketelsen
 
+## ⚠️ Important
+
+Buffalo works only with Go modules. `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. 
+
+Please see [this blogpost](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
+
+Also, the buffalo team will support the last 2 versions of Go, which at the moment are:
+
+- 1.15.x
+- 1.16.x
+
+While Buffalo `may` work on older versions we encourage you to upgrade to latest 2 versions.
 ## Documentation
 
 Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documentation, examples, and more.
