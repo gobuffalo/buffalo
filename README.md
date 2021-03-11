@@ -19,9 +19,10 @@ Buffalo **isn't just a framework**; it's a holistic web development environment 
 
 ## ⚠️ Important
 
-Buffalo works only with Go modules. `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. 
+Buffalo works only with Go 
+[modules](https://blog.golang.org/using-go-modules). `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. 
 
-Please see [this blogpost](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
+Please see [this blog post](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
 
 Also, the buffalo team will support the last 2 versions of Go, which at the moment are:
 
