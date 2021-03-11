@@ -4,12 +4,9 @@ before_script:
 {{- else if eq .opts.DBType "mysql" }}
   - apt-get update && apt-get install -y mysql-client
 {{- end }}
-  - ln -s /builds /go/src/$(echo "{{.opts.App.PackagePkg}}" | cut -d "/" -f1)
-  - cd /go/src/{{.opts.App.PackagePkg}}
   - mkdir -p public/assets
   - go get -u github.com/gobuffalo/buffalo/buffalo
   - go mod download
-  - export PATH="$PATH:$GOPATH/bin"
 
 stages:
   - test
@@ -19,22 +16,26 @@ stages:
     GO_ENV: "test"
 {{- if eq .opts.DBType "postgres" }}
     POSTGRES_DB: "{{.opts.App.Name.File}}_test"
+    POSTGRES_USER: runner
+    POSTGRES_PASSSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
+    TEST_DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
 {{- else if eq .opts.DBType "mysql" }}
     MYSQL_DATABASE: "{{.opts.App.Name.File}}_test"
     MYSQL_ROOT_PASSWORD: "root"
-{{- end }}
     TEST_DATABASE_URL: "{{.testDbUrl}}"
+{{- end }}
 
 # Golang version choice helper
 .use-golang-image: &use-golang-latest
   image: golang:latest
 
-.use-golang-image: &use-golang-1-8
-  image: golang:1.8
+.use-golang-image: &use-golang-1-15
+  image: golang:1.15
 
 test:
   # Change to "<<: *use-golang-latest" to use the latest Go version
-  <<: *use-golang-1-8
+  <<: *use-golang-1-15
   <<: *test-vars
   stage: test
   services:
