@@ -14,21 +14,21 @@ require (
 	github.com/gobuffalo/flect v0.2.2
 	github.com/gobuffalo/genny/v2 v2.0.6
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
-	github.com/gobuffalo/helpers v0.6.1
+	github.com/gobuffalo/helpers v0.6.2
 	github.com/gobuffalo/httptest v1.5.0
 	github.com/gobuffalo/logger v1.0.3
 	github.com/gobuffalo/meta v0.3.0
 	github.com/gobuffalo/nulls v0.2.0
 	github.com/gobuffalo/packd v1.0.0
 	github.com/gobuffalo/packr/v2 v2.8.0
-	github.com/gobuffalo/plush/v4 v4.0.0
-	github.com/gobuffalo/pop/v5 v5.0.11
+	github.com/gobuffalo/plush/v4 v4.1.4
+	github.com/gobuffalo/pop/v5 v5.3.3
 	github.com/gobuffalo/tags/v3 v3.1.0
 	github.com/google/go-cmp v0.4.0
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.4
 	github.com/gorilla/sessions v1.2.0
-	github.com/karrick/godirwalk v1.15.5
+	github.com/karrick/godirwalk v1.16.1
 	github.com/markbates/grift v1.5.0
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.11.1

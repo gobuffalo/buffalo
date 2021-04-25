@@ -28,6 +28,7 @@ Also, the Buffalo team actively gives support to the last 2 versions of Go, whic
 - 1.16.x
 
 While Buffalo `may` work on older versions, we encourage you to upgrade to latest 2 versions of Go for a better development experience.
+
 ## Documentation
 
 Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documentation, examples, and more.
