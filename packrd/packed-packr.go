@@ -28,7 +28,7 @@ var _ = func() error {
 		"3ab914a64676d62186c6060f4988dd39": "1f8b08000000000000ff7c94c1ab1b3710c6cfd55f31cf2ea4599c7d4e7b28bc4b49531a7269030998107a186bc796b0ac11d2c8db25e47f2fa3f53a79f491e38ad137bfef9bd1ae6147c1f29940187eaf870306be33e683c37882892b1c388375ccc5c7e352d00e27ae1946dac340170a9cce140522d1507a633e7f067f809e9394fe554afdce8b7bc7095e7cf962d66bf80305f75808de93d464cc5b81c07c2a10fc895a5bebb834a6420235cddd30a5e02d8ae708b501210c57a93bf813a360116f1b3fc1c1e722204eeb5452d9547160f005385154617104ab45a49fce6105071f08300e408317f0a297aad23802cb399315fdce11cf543690b09491f35036e0b848d90089edfb1ec4a1006652eecc297b14fa1a1dc58bcf1c35b6de988f5c61f4210086c237d4339e084acd346b75ddc4b5eba00866b9f7b10886d0b01603c08759dd3af696fadbc4ba6ee4f84cba0e966b6ab009a9c32b556fcc7abd86d79914f5a30a2da32ac6fc7dda4061ad7b76a1168e527e27bf264fc34cb4d46c20f278e3b218c1ceedbef551c0c7d97313bbe23d18f3c38fb0bf5e4d9c96ab2f50578ee2d0164c37ecbdb6d6c9abeaabaf7b63ccd2b9389f0a8c5e1c20583e9f95b8b56c731851acfbffda691156e1338ab718c20499f6d5873988370c7b1f314f735d9c004b2129b77ce143dbbfd626d738a7b7181ae8b25a481e5b1de862ccdb365a48eca3cc60fbcc63a1ac9bf2c989a487fbfb973fffda6ffb6dfff2e197ed76fbcf4f4f1e3f6f42c5710d03142240583df11b5841c223f5c674dd6b8ec78c52434ba1dc759d6e479ba4c30bcd384bb28f9e696a51e41aa38fc7b65fb053f77fd1bff29b313b824cea5987a7548e70d0b9f1e5b1b1235fc3e83ddf6c7d7bf87c6e44174f63fb3584a0af41133eea96c0c0b6ea6b9bc1c451566f6f980708d59eee8cf9f48e47ca34c07e5acc3cddcafc170000ffff90de672137050000",
 		"3c5378f5aa59242753fa2bcf50bbb6d2": "1f8b08000000000000ffa454516fda30107ee757dc2c2181b4e0419f5a39912a81c6c3da5515ef93832f89d5c446f6415bd1eeb74f26c012085da53dc5f6ddf7dd77be2f16054a852ee90108a537b02ca5f7315b5a43521b742c44da31679ff7a7a79832aa543486b0f05534d92d5e7c3481d2e6f6880110120a8759cc443f06672d3d482a0643e8272c11bacac1bb6547507a8fe4b9ae648e9e07ce91dfe40c6449316389e0f2288b2bbdf940e3f541e3f541e3f81b90a6127d5366314e82081ab0672c97b6c25fb943246d7216f4085e8c9bd993bf9b468f05d1cadf709e6b2ad6e968692b9edb749d65b2b47cff0d6d1f246632854c46753a03e9b48c0aad149a98915b63685427f019dac68d843b690a14c5e45050d9e5ba424392b435ec620fa1d6a1c0485bded61c24a7d63e5d163c6d96b9a8ac31b9e372bfe8097e306bafcb8f5d5e9c74f8d7afd3dda82f98b86dfcfaaeae922966daa08247bb26f48217571f296e73924c4b8c1cfa95355e6f1a857791561ad4c99e9c5ea16a8aa0d07c6b3ae480f0852259eadcc4acc48c5ae3db818e8da1217481f26eb698ff9c0a4ec55972f270bb987747ee6fef66dd91f9edfdf4c7ecf1342838b9e68c4ff40b4aad7a4d7a4d443f86cc3a18b82168036e77d5b085fe694dd73e0847eabccf939c9adf8dee900aab4e49770a55076f378dce6070a4fa1203fb3e5b30787b03370acf15fc8e816dd910b667680087b476669f79167f072c3d7e042cb5795ad8418dff0adb708f377bbaf76107e1ffb55a13dfcb0a3f4f2496566152a3e7d2a812dd9e40f03a74066cdb2594ae95371d543be6b80d7f4af75371f8347ec2cc5a620908bf92268107fb1c4c02e9ebbf1eb9e636bc5a82d70cfb127f020000ffff0dbe9ce240070000",
 		"3e00c27b916d08ee5aa54c8a3d2f31a5": "1f8b08000000000000ff548fcb6dc3301044ef530a01ef36910e5c80409313890ec555b8348d741f08f900bebdc300efcd64cbd6152168906aeb0ff8672d8390921915b7d214633f14cd3297ddf2a3d215e2d1fd9262daa8089723a68f2eabe178dc6a491add39ced9f464990a597b791fec0a619ba749deaecb755827821c2523d9648f2bff41721c11e2b3419235b7ca652b3eac7fbde803e4be3dff5aeedb530282f819b23320171f8a958d3d0ee6b3e9f737be030000ffffcfa015bc01010000",
-		"4a4954ee92c57e00f8a0f34ec9a08084": "1f8b08000000000000ff84524d6bdc3010bdeb573c9425b40559ec2d98f4104ad99e9a3d945e832ccfca62b51e23c9db429aff5e243b69c852727ae67dcc789eddd181233d241bfd945b012884112a4177b30f7d8276ac53b47af381ecc0908f8f0d4f393577d3d4ec8d3d1a47fba37b7a92f8033b67a81e524ba8c3f6639d66fb9711ff8b56dfe9d8fb0835619abbe0ad3629514e55720c47196a86f37998bbc6f2493beee6c3c104d66ff03972e21e3dff1a039bbe72f47be298b1bffbf1edb3dc146837bbfb82baf3a3142265e3282d25644a5988a6803a9b985a5cbf3c0be06ca2375d58dcc0eefee1ebf79f2d64f14821aeb0e360468733c5e479841dd85bc24061a2289a399172d5a1fcc9386a71fd8a0aa66e07566da1db957e2fbd553717d16d7323444997d7bdc297c18c8e9019f2f6b6c5a78bddb2687322e481b050d8f1f33502781b5b9656f6754db5d116eb39ff7eb2d2f0fab916f16f000000ffffcf5a70eb87020000",
+		"4a4954ee92c57e00f8a0f34ec9a08084": "1f8b08000000000000ff84513d6bc33010ddef573c1cc8509083872c225b29d9daad6b90ed8b2c2afb8c24bb7fbfc876da900c9d4ebc0f9eee5dcd57097c894d7063d20428f45fad0b5023c6a9f6ae39981839c585b202cb096a8275a99beab291fe60a59eae57e3e5f0306f965e5ab4f23d78312d514cc6725ca312c74454e6a16613a2c6fef74dc06c8233b55fd5c0f9e3f2f6fea951644d41b4c359bc192c660ed1c980a613d7303af623072aa7c8ca2e0ae57a6359637f0779b3a4031bb7c27a83ff7357aa3a3e79abb23a12657ffef00eaf9d192c23098ad349e3e529bdc8dc1419a963ac10ce72db878047db16bbc0f74d2da56a6c1bfd5d3397bc5d63257f020000ffff5d890c59f0010000",
 		"524efd5799b78f65989b6c1104215481": "1f8b08000000000000ff94544d8fa3300c3dc3afb0345a69f740c54799a9d2cbfe95405288066294ba2ab3abf9efab244009add4ae7273ece717bf17ef6ad4c4959606fec651af747255825a06459e0ee331fe8ee35672e1af2b5e7f36062f5a2435766818bcbde7bc94f21847031742e98641960e23f8e2a8c23139ab3f2e5ea111d224157ad45d870d82ea1b0b3cf53ccc2d77a4a8936768337b7b424d164632283cae8b5ca56a5ab2b1f4184713a16babc8d2e9b969944e2a24c29e4156b8ba294a383028b7bdf2a55788bc6a9f1d1c8c50e7a1e35f0c94ee949649d561fdb9c0334803606e7137f4488e940859a3e1a45033b868218d050b4a9513c593369e93a37d5faf7153ba13585f7aa9c925ac703a792206f9617efef952b992072c57ef59e95b0ca38b3c7043ce8b725fdc8f7ff1d2ad5b5b6ca4cdf37b69f74e8070acc42b4f76adcb7ec277973b9f42158a2f2003249c79bdff9cf6e9d6b09edc09916caa9b2eef54a319b8b1dffcf55697f63cf4e002b156fced50d9f382e6b5d4248d145b063eee727ef752280ebceb806b013f7b3ecefff5e3231dc65fb636fc3cc188bd79968166a59512ca49d0ef272ddef72fb4289eb488c2ff16a8e8e9ad72ee4d1cbad84bf7947859bc403c0d89af19bb5565f317cfa4ab8b6987cd4b2c4bd31ffff588a0f16a3745b73d332f18fbd07f010000ffffa680b9a8b2050000",
 		"52f14062d5b60ffc0896c4bda40d83fc": "1f8b08000000000000ff9c55df8be336107ef75f311504649a53ee36f4a1ee65e176cb9642f70877d7f6611b0ec5961d114b32929c0b2cf9dfcb48b2e3dcfe80f625966646df37f34933e978b9e78d00c5a5ce32a93a633dd00c80d4ca13fcb6a6095fe3d267218ea20c6b2f952019ae1ae977fd9695462d14b7fb2df7c22d1a2b6b1f7fc977418dd9f675cd5bb318beb6d7110ee02b90f7b31598ce3bb68ef9adf70dccae17fc7bf787d24ba35d74a3133db2061abc7f4bbf5b9b2e8747985dbf98014a601787ab9773ec4cb738fc14fc23f3bda9447b410ca7c8f22485df5001376631cd3fba9ea2e45956f7ba04a9a5a7393c667e0ec25a2856802ab135b74ed0b0fc7477bb5c2e7f9e47d46d2fdbea8b540201f30c30133cf8c30ab46ce1310300a895676b2bb56f3515d662d829034857c03e0b7f8330743084ddefba3678fc2f619d34ba98f0251352ce0301265080c7cd29cf4ea9187c63a118006e1b87c518c73ed8c66500076ec158d948cd5b34c1c3c6792b759301d4c6829ce3213c63b96e444488e5c83ab8562b206fde9064844bb415f0ae13baa203ec23023cbcdd9c02ae7b903fbe2b368cb13c9de6e914fa0ab949d6ad157c1fd6a7249aaca1159a625c8e29bc3b2785f6691239dec2db737eb176585d643a829f0bb80fba059315beb73a5197a84648f01de6e7be495feea00c04aff641c99d00a26463b917a408c8691778ce6f39461ee2fda6c80e5f4ebaf2101e833c777b3207e2c30f777b97e22f147a0fcb5180d634ec8e7bde52a28d07a14ddfecb0a05e09ed1d74dc3951813710b0f38934a1f43059d847f1edd6682f8e3e503c5c6df2a7b4d77035d29683ec217c596c26b8a9c722f2a75e0f90732847d427ed34ad24b553c4ab44cdfbd68f327c1d9b184728fbc398fd9afb1d2569d090fc97e7d09fe77c9675a823a9a4aa91ecd628c57575e64aef7efaea4b55b1cfbe921a426786e5d4617a3f7a4cefa72e4c7070096ba76262044af93f043c8db3e3f2d18573e314abe979a07ee44ab02fd2b782e630bb86c3309adc3f9acce162a2d13ccca6575a258eada13302ebd61cc75bec4c87cfef3e0448a36fcc91867f13b452c2bbae5083cf615bb0c5649fcf41853f11f6ebcd4b937ad4a5a6e48ecb36b643af9105ce5805cc107f32cbe37d6ccd91fdd9d1ff866e7bfd0af4291ba6c3bf010000ffff364833083b080000",
 		"545676fd88c0d1d27198d283049c41b0": "1f8b08000000000000ff4c8e3f4bc4401047fbfd143fb74a4036bda5368782075e612116739bc92698fdc3ecac08c77d770997e2aac70cc37b53c8ff506090d725a76acc124b164567009b588759b558b34d61d1b99d9dcf7108f9dca689d63cecb4a637661870c8910f94c695054b0561e489daaa98f7a56654965f462bdb3d61ce915128b033534bfeded079ec7af79293f29ff660912cb81840589b2478f7c16964e9b647dd49495b3dbe3d42dcebe9f8de452a5f556549e1fb868b8d5c2b05b64fb09fbcfaadaf19cfb7d283bdf6bdb99aff000000ffff5167c69218010000",
@@ -81,7 +81,7 @@ var _ = func() error {
 		"e2d5d81577b142a416eee01f2874f794": "1f8b08000000000000ffb2c930b4abaed6cb4bcc4dd50b482c4e4eccc9ac4aadad55aeaed64b4c2ec9cccf4316b5d1cf30b4e302040000ffff9ca0bf3a33000000",
 		"e8972ac6dc3e57b0c59883df456ad37c": "1f8b08000000000000ff34cdc16ec2301004d0fb7ec5c8a7a4aa927ba59eda5ecb851fd898b531246bcbb14108e5df5120ec6547a3274d627b662f605b42d499284c29e6828600e34339d6a1b371ea7d1caa733cc6fefdb3e841b2a196e8c219191fafa6fb531f54885c558ba0a1342dee04647c6323ff726db6b84bcfe115acf72b8eeb587ea216d1b2bf25f982e194c6607985fd698e6a3e09585a5ae8110000ffff7d25ad33bf000000",
 		"ea761d55cd5f5d08a297041a98564260": "1f8b08000000000000ff4c8e414ac5401044d7f6298aac1290c91d74f3c185e03f41ff4927199c991e3a3d228877974016ae8a2a8ac76b1c3f791370f4a4f5204aa5a9394602862a3eefee6da0b36dc9f7fe0851cbbce9a3af2b679daf1c68229a67dcb4c88deb92c5900e301659b967c77e8dae38c4be04bd9d7fc6ae45d07893406baff13f618cb8f0e155abcbb74f103335fcd0938977ab88e143ea22369e9ee1eeecfd787f7b8685bb5baadb38dc2467c56a5af072c94e13fdd25f000000ffff16411447fa000000",
-		"efa72723cef2e8bfedc523738bf5d159": "1f8b08000000000000ff9454c16edb3814bceb2b064c60ec2e4009392c1008e9c1a95df790c6aea5b4e849a0a46799082d2a24e53670f5ef8524cb8993a6494f4f18be9911f9864c69a50d253633b272a1b7db71c815e80ebeae9cf52797f17d456095b6ae3064199ac6033844e578410e75950b47188d0e882cad134a81df6360dd299e2949a5ebf44959faadc9e6dedea9bf73e82847e2653e08a812dc22486ba9728ba0d081355970fa0f656b0db6dbf5e6e3aaf21722bb15052d6e8ba661f889ac76e03958c0c05767ff766a597e907889daf56d6e7369c02b5475aa6416086bc9d96ea9d0687f9fd728a45bd7a99fe94d50e8b45ead84d2c1933a50363a47aebf974a8bbcc3e847a58dc3621c7f7cc74edb129ecee66d0d525932cfb34e1464c3aed991759ee7b7856f85b12146876f0fd80a2345aafa6e60364fa6d75f42b0b687bd350dc0621ec5b3e5344a2697e1f1d15e8b0df91fa4a2a6491e44df1401e0d3b7e8f3553219c7e3cb71347d55f981b29ccfe364318ea2aff3e52404335a0fce433e80781ac507f1e46679d51bb45a93f4c6a8a6619e77829956a22cb02563a52e91adb5cc086b521519cfaf2df1a2ebe072230a0a317a0429d19d3fb05febe1700fbfc63ee3e7cfa867feb9e7b5ec76602778bf166541701aece222c47fcfbc59bb565b825b137a08333decc6039ed27ad30e7d1c942e5321f6dbb164b6326b53f352448e07c9fb8b1afeffe7e93fcb153f3c21c3991dcd7078b5fad6fdbde9fff157000000ffff99f35612d8040000",
+		"efa72723cef2e8bfedc523738bf5d159": "1f8b08000000000000ff9454516f9b30107ef7af38d1290f934c946d79b13a6dc9c8d287b674816cda1372e042ac194c6d93a942fcf709082cb4ddd63d81eebeefbef3f93bef70af344626d6a2b08c541505b107bc075715d6b8de327c28109c42199b6a340ed43501a0c00b4b53b4501609b70893c91011b9b15c4aa00fd0b3ee258da5c0dcb6f5511a7c56247b30f7f2ff145acaa8789ef405b21f89d0400b28ca9d14f1941b83d6b4a95441538896900a7b28776eacb269aa76e57ecfa59a3efaf6944c2590a89fb9543c21c4589ea2616dd2a2b184b8cd871eb9360c26c33f0138722df84e766880b51fad6ebf32701a8cf3d29903dcf941b8deac82c85b3270aaaa832f8ac2bde519ba9f85c4ba8ebaa223fc36586d18e832cf518f33778b2008bef91b8f81f38874e50761b4d88657d1cd2abcf23d065697c6b6a070158491b70817cb45b08ab69b6bf6bb5d369dbeaa46d2353b0b348a8d60fd7120ccdfbd7d73cef196f5076364a6127c9f08d34cce79b973006ebe075fae87f65e34aa8eb2f1fd70689081a3953ae59f3b7055b517eeedb65ad6b5736e3f72016b25799ec211b5112a87f8a0448c704059a0266e6990a62d828a8ca7c860721692bc3514c029d785d929fc2ff68ccee64fb833773627a4e1371ebc804f079ea70856817379c9e0f51375a7c99506c11e10ba10ac557f1e02f09876926dc3e7e66ff784c1e94406f551c4cd26fcc9f6e3bba4dd8ab3f9df0df06457e8f0f8f4631bbd0efd7bd7414f7bdef5f82b0000ffffdc2fe29312050000",
 		"fb822827dff50f68a3cd4cbdf7a507a1": "1f8b08000000000000ff74903d6b342114856befafb8afc58b2e83032917b6d866cb14c942cae08ace4a6655f49a0fc2fcf7e038c51248a93ecf390793366f7ab2a80df9180a80bfa5980905304eb6900f1307607cf274ad1765e26d9ce2a53aa7e73836398fef0ffc2fa0544f968304a0af64f1b8963cb74b2c94ab21fc06b65b29d51f61017035183cdb42af778220dc6d83d45936af4f1ed0e68cfb03f69447fbd1a5174fd793ffa49a6d11c794841c70dddb10c17fc7f301b952a3db0c2e2530efd6ec7f070c7e6e8d8cd449939e85cd59025b00982eadfbff5d52e3fa71bffdead050d6f73dd52068405d242cf0130000ffff7b2fce9c7d010000",
 		"fcf9b1fe98670ffe85fadf1593a3b534": "1f8b08000000000000ff1cccc14a03311080e173e729869c1229e95df0608bb8a0e2610b1e65c8ced66036b366260711dfbd74af3f1fff4ae99b2e8c942c4b5580bcacd20c5d653b7c99ad0e60ee35a127c5bbc74d8d3d1b073cb3dae7200b0f54a7c2cd07fc835d63c5fb07248dc3f9edd5bb830bf199cd07801d697cfae954fc6d1c4723ebfafeb2c7c61a4f3271d8c849aa51aeea6ff928d36f1cade57af1618fee834b9285d1048f7d9ea9880bf00fd7000000ffffecd480c3c7000000",
 	})
@@ -98,8 +98,7 @@ var _ = func() error {
 		b.SetResolver("public/assets/buffalo.css.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "524efd5799b78f65989b6c1104215481"})
 		b.SetResolver("public/assets/images/favicon.ico.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "1fd3e4602afd3c7e8d6adf2c2aca985c"})
 		b.SetResolver("public/assets/images/logo.svg.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "5c28c6abb0b23e98772f3aaed045abf5"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("buffalo:genny:ci", "../ci/templates")
@@ -107,8 +106,7 @@ var _ = func() error {
 		b.SetResolver("-dot-gitlab-ci-no-pop.yml.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "4a4954ee92c57e00f8a0f34ec9a08084"})
 		b.SetResolver("-dot-gitlab-ci.yml.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "efa72723cef2e8bfedc523738bf5d159"})
 		b.SetResolver("-dot-travis.yml.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "9a6b926cb5a5d57f2ebe46e33ce680be"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("buffalo:genny:newapp:api", "../api/templates")
@@ -117,8 +115,7 @@ var _ = func() error {
 		b.SetResolver("actions/home_test.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ce01971710d9b9f11bba237baf76ec52"})
 		b.SetResolver("actions/render.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "e8972ac6dc3e57b0c59883df456ad37c"})
 		b.SetResolver("locales/all.en-us.yaml.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "9897b71949d4e127aa00c50724ae4b5a"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("buffalo:genny:newapp:core", "../core/templates")
@@ -134,20 +131,17 @@ var _ = func() error {
 		b.SetResolver("grifts/init.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "6d6389bc500aa7c88f06a525ffdc3964"})
 		b.SetResolver("inflections.json.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "67965ff5ea3fd75bf5d6891d715a8d5f"})
 		b.SetResolver("main.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "cf6712125ddfa9d651b4f66d736d6303"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("buffalo:genny:refresh", "../refresh/templates")
 		b.SetResolver("-dot-buffalo.dev.yml.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "c6660b1c6a1a45d1cb79e72c7bb65764"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("buffalo:genny:vcs", "../vcs/templates")
 		b.SetResolver("ignore.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "3e00c27b916d08ee5aa54c8a3d2f31a5"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/core", "../resource/templates/core")
@@ -157,28 +151,24 @@ var _ = func() error {
 		b.SetResolver("templates/folder-name/index.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "6e0c924074f3636a40c0a94549a7d6b0"})
 		b.SetResolver("templates/folder-name/new.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "d7356a0c96560b441eda4c9e940b5754"})
 		b.SetResolver("templates/folder-name/show.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "b97ef3b8e9a685594ebc0fc9eebc931a"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/standard", "../resource/templates/standard")
 		b.SetResolver("actions/resource-name.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "83e722486c9aaa60954a8c8bcd026763"})
 		b.SetResolver("actions/resource-name_test.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "1ecd294aa90a5a249902dadd8b1b7502"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/@v0.15.4/genny/resource/templates/use_model", "../resource/templates/use_model")
 		b.SetResolver("actions/resource-name.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "a5bd9ef051dd34fa95a8ddfe363e527a"})
 		b.SetResolver("actions/resource-name_test.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "b8438980c36888bd6a7b788a487d06ed"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/common", "../docker/templates/common")
 		b.SetResolver("-dot-dockerignore.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "200603a93cae9aee719dcb679b44c289"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/genny/actions/templates", "../actions/templates")
@@ -187,8 +177,7 @@ var _ = func() error {
 		b.SetResolver("test.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "baca6b4ebf8cc8bd0ea945a5a2fffe15"})
 		b.SetResolver("tests_header.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "5a632d314f6d6797fef503c04ff3e44b"})
 		b.SetResolver("view.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "e2d5d81577b142a416eee01f2874f794"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/genny/assets/webpack", "../webpack/templates")
@@ -202,27 +191,23 @@ var _ = func() error {
 		b.SetResolver("postcss.config.js.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "02c0cabc5d0ccf06bf62aef1259e6eaa"})
 		b.SetResolver("public/assets/-dot-keep.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "11a0cc9b3e885f72d7f5b4c016722237"})
 		b.SetResolver("webpack.config.js.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "daae3f6c1877694081e2d9bbe1ef33a2"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/genny/mail/init/templates", "../mail/init/templates")
 		b.SetResolver("mailers/mailers.go.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "70ae08ec6bfcd89151868c693af94486"})
 		b.SetResolver("templates/mail/layout.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "1f893bc0a5e86464fb13af76078ae912"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/multi", "../docker/templates/multi")
 		b.SetResolver("Dockerfile.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "ab8942bb19a00ddb54dfc22df4c36c21"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo/standard", "../docker/templates/standard")
 		b.SetResolver("Dockerfile.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "afc1533d018c2d1730753da9c1eec198"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo:genny/newapp/web", "../web/templates")
@@ -235,15 +220,13 @@ var _ = func() error {
 		b.SetResolver("templates/_flash.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "c942384692540a659219d8746ee9fcae"})
 		b.SetResolver("templates/application.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "70731710a6b9f5808311e8dc2d8f7460"})
 		b.SetResolver("templates/index.plush.html.tmpl", packr.Pointer{ForwardBox: gk, ForwardPath: "3c5378f5aa59242753fa2bcf50bbb6d2"})
-		}()
-
+	}()
 
 	func() {
 		b := packr.New("github.com/gobuffalo/buffalo@v0.15.6/genny/build", "../build/templates")
 		b.SetResolver("a/aa.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "a85bfd7cc3b5f9eb04967d04cf35cc5e"})
 		b.SetResolver("buffalo_build_main.go.plush", packr.Pointer{ForwardBox: gk, ForwardPath: "52f14062d5b60ffc0896c4bda40d83fc"})
 		b.SetResolver("migrations/-dot-pop-tmp.md", packr.Pointer{ForwardBox: gk, ForwardPath: "c6e3e8d28eed67725402c2b7c09dd7e7"})
-		}()
-
+	}()
 	return nil
 }()
