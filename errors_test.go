@@ -106,6 +106,7 @@ func Test_defaultErrorHandler_XML_development(t *testing.T) {
 func Test_defaultErrorHandler_JSON_production(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
+	app.Env = "production"
 	app.GET("/", func(c Context) error {
 		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
@@ -124,8 +125,8 @@ func Test_defaultErrorHandler_JSON_production(t *testing.T) {
 func Test_defaultErrorHandler_XML_production(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
+	app.Env = "production"
 	app.GET("/", func(c Context) error {
-		c.Set("env", "production")
 		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
 
