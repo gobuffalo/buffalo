@@ -165,8 +165,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 
 	if env != nil && env.(string) == "production" {
-		c.Response().Header().Set("content-type", defaultErrorCT)
-		c.Response().WriteHeader(status)
+		c.(*DefaultContext).writeHeaders(defaultErrorCT, status)
 		responseBody := productionErrorResponseFor(status)
 		c.Response().Write(responseBody)
 		return nil
@@ -176,8 +175,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
-		c.Response().Header().Set("content-type", "application/json")
-		c.Response().WriteHeader(status)
+		c.(*DefaultContext).writeHeaders("application/json", status)
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
@@ -187,8 +185,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return err
 		}
 	case "application/xml", "text/xml", "xml":
-		c.Response().Header().Set("content-type", "text/xml")
-		c.Response().WriteHeader(status)
+		c.(*DefaultContext).writeHeaders("text/xml", status)
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
@@ -198,8 +195,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return err
 		}
 	default:
-		c.Response().Header().Set("content-type", defaultErrorCT)
-		c.Response().WriteHeader(status)
+		c.(*DefaultContext).writeHeaders(defaultErrorCT, status)
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
@@ -236,6 +232,11 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return err
 	}
 	return nil
+}
+
+func (c *DefaultContext) writeHeaders(contentType string, status int) {
+	c.Response().Header().Set("content-type", contentType)
+	c.Response().WriteHeader(status)
 }
 
 type inspectHeaders http.Header
