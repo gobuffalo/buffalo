@@ -163,10 +163,10 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 
 	c.LogField("status", status)
 	c.Logger().Error(origErr)
-	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
 		c.Response().Header().Set("content-type", defaultErrorCT)
+		c.Response().WriteHeader(status)
 		responseBody := productionErrorResponseFor(status)
 		c.Response().Write(responseBody)
 		return nil
@@ -177,6 +177,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
+		c.Response().WriteHeader(status)
 		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
@@ -187,6 +188,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
+		c.Response().WriteHeader(status)
 		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
@@ -197,6 +199,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 	default:
 		c.Response().Header().Set("content-type", defaultErrorCT)
+		c.Response().WriteHeader(status)
 		if err := c.Request().ParseForm(); err != nil {
 			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
 		}
