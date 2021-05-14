@@ -163,6 +163,10 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 
 	var defaultErrorResponse *ErrorResponse
 
+	c.LogField("status", status)
+	c.Logger().Error(origErr)
+	c.Response().WriteHeader(status)
+
 	if env != nil && env.(string) == "production" {
 		switch strings.ToLower(requestCT) {
 		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
@@ -177,10 +181,6 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return nil
 		}
 	}
-
-	c.LogField("status", status)
-	c.Logger().Error(origErr)
-	c.Response().WriteHeader(status)
 
 	trace := origErr.Error()
 
