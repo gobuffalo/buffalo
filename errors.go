@@ -151,7 +151,7 @@ func productionErrorResponseFor(status int) []byte {
 type ErrorResponse struct {
 	XMLName xml.Name `json:"-" xml:"response"`
 	Error   string   `json:"error" xml:"error"`
-	Trace   string   `json:"trace,omitempty" xml:"trace"`
+	Trace   string   `json:"trace,omitempty" xml:"trace,omitempty"`
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
