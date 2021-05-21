@@ -65,7 +65,7 @@ func Test_defaultErrorHandler_Logger(t *testing.T) {
 	r.Equal(http.StatusUnauthorized, testHook.errors[0].Data["status"])
 }
 
-func Test_defaultErrorHandler_JSON(t *testing.T) {
+func Test_defaultErrorHandler_JSON_development(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
@@ -83,7 +83,7 @@ func Test_defaultErrorHandler_JSON(t *testing.T) {
 	r.Contains(b, `"trace":"`)
 }
 
-func Test_defaultErrorHandler_XML(t *testing.T) {
+func Test_defaultErrorHandler_XML_development(t *testing.T) {
 	r := require.New(t)
 	app := New(Options{})
 	app.GET("/", func(c Context) error {
@@ -100,6 +100,46 @@ func Test_defaultErrorHandler_XML(t *testing.T) {
 	r.Contains(b, `<error>boom</error>`)
 	r.Contains(b, `<trace>`)
 	r.Contains(b, `</trace>`)
+	r.Contains(b, `</response>`)
+}
+
+func Test_defaultErrorHandler_JSON_production(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.Env = "production"
+	app.GET("/", func(c Context) error {
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.JSON("/").Get()
+	r.Equal(http.StatusUnauthorized, res.Code)
+	ct := res.Header().Get("content-type")
+	r.Equal("application/json", ct)
+	b := res.Body.String()
+	r.Contains(b, `"code":401`)
+	r.Contains(b, fmt.Sprintf(`"error":"%s"`, http.StatusText(http.StatusUnauthorized)))
+	r.NotContains(b, `"trace":"`)
+}
+
+func Test_defaultErrorHandler_XML_production(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.Env = "production"
+	app.GET("/", func(c Context) error {
+		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
+	})
+
+	w := httptest.New(app)
+	res := w.XML("/").Get()
+	r.Equal(http.StatusUnauthorized, res.Code)
+	ct := res.Header().Get("content-type")
+	r.Equal("text/xml", ct)
+	b := res.Body.String()
+	r.Contains(b, `<response code="401">`)
+	r.Contains(b, fmt.Sprintf(`<error>%s</error>`, http.StatusText(http.StatusUnauthorized)))
+	r.NotContains(b, `<trace>`)
+	r.NotContains(b, `</trace>`)
 	r.Contains(b, `</response>`)
 }
 

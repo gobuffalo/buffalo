@@ -151,7 +151,7 @@ func productionErrorResponseFor(status int) []byte {
 type ErrorResponse struct {
 	XMLName xml.Name `json:"-" xml:"response"`
 	Error   string   `json:"error" xml:"error"`
-	Trace   string   `json:"trace" xml:"trace"`
+	Trace   string   `json:"trace,omitempty" xml:"trace,omitempty"`
 	Code    int      `json:"code" xml:"code,attr"`
 }
 
@@ -161,15 +161,25 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
+	var defaultErrorResponse *ErrorResponse
+
 	c.LogField("status", status)
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
 	if env != nil && env.(string) == "production" {
-		c.Response().Header().Set("content-type", defaultErrorCT)
-		responseBody := productionErrorResponseFor(status)
-		c.Response().Write(responseBody)
-		return nil
+		switch strings.ToLower(requestCT) {
+		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
+			defaultErrorResponse = &ErrorResponse{
+				Code:  status,
+				Error: http.StatusText(status),
+			}
+		default:
+			c.Response().Header().Set("content-type", defaultErrorCT)
+			responseBody := productionErrorResponseFor(status)
+			c.Response().Write(responseBody)
+			return nil
+		}
 	}
 
 	trace := origErr.Error()
@@ -177,21 +187,22 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
-		err := json.NewEncoder(c.Response()).Encode(&ErrorResponse{
+
+		err := json.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
 			Code:  status,
-		})
+		}))
 		if err != nil {
 			return err
 		}
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
-		err := xml.NewEncoder(c.Response()).Encode(&ErrorResponse{
+		err := xml.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
 			Error: errx.Unwrap(origErr).Error(),
 			Trace: trace,
 			Code:  status,
-		})
+		}))
 		if err != nil {
 			return err
 		}
@@ -233,6 +244,13 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		return err
 	}
 	return nil
+}
+
+func errorResponseDefault(defaultResponse, alternativeResponse *ErrorResponse) *ErrorResponse {
+	if defaultResponse != nil {
+		return defaultResponse
+	}
+	return alternativeResponse
 }
 
 type inspectHeaders http.Header
