@@ -5,4 +5,4 @@
 // and any other packr generated files.
 package standard
 
-import _ "github.com//gobuffalo/buffalo/packrd"
+import _ "github.com/gobuffalo/buffalo/packrd"
