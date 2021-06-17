@@ -11,7 +11,7 @@ require (
 	github.com/gobuffalo/clara/v2 v2.0.2
 	github.com/gobuffalo/envy v1.9.0
 	github.com/gobuffalo/events v1.4.1
-	github.com/gobuffalo/flect v0.2.2
+	github.com/gobuffalo/flect v0.2.3
 	github.com/gobuffalo/genny/v2 v2.0.6
 	github.com/gobuffalo/github_flavored_markdown v1.1.0
 	github.com/gobuffalo/helpers v0.6.2
