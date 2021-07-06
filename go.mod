@@ -22,7 +22,7 @@ require (
 	github.com/gobuffalo/packd v1.0.0
 	github.com/gobuffalo/packr/v2 v2.8.1
 	github.com/gobuffalo/plush/v4 v4.1.5
-	github.com/gobuffalo/pop/v5 v5.3.4
+	github.com/gobuffalo/pop/v5 v5.3.3
 	github.com/gobuffalo/tags/v3 v3.1.0
 	github.com/google/go-cmp v0.5.6
 	github.com/gorilla/handlers v1.5.1
