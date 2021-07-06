@@ -88,13 +88,13 @@ func New(opts *Options) (*genny.Generator, error) {
 	if err != nil {
 		return g, err
 	}
+
 	g.Command(c)
-
-	g.RunFn(Cleanup(opts))
-
 	g.RunFn(func(r *genny.Runner) error {
 		events.EmitPayload(EvtBuildStop, events.Payload{"opts": opts})
 		return nil
 	})
+
+	g.RunFn(Cleanup(opts))
 	return g, nil
 }
