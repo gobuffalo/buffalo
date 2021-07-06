@@ -1,6 +1,8 @@
 package build
 
 import (
+	"os/exec"
+
 	"github.com/gobuffalo/genny/v2"
 )
 
@@ -13,8 +15,13 @@ func apkg(opts *Options) (*genny.Generator, error) {
 
 	g.RunFn(copyInflections)
 	g.RunFn(copyDatabase)
+	g.RunFn(addDependencies)
 
 	return g, nil
+}
+
+func addDependencies(r *genny.Runner) error {
+	return r.Exec(exec.Command("go", "get", "-d"))
 }
 
 func copyDatabase(r *genny.Runner) error {
