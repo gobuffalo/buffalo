@@ -24,7 +24,6 @@ func LoadPlugins() error {
 		}
 		plugs, err := plugins.Available()
 		if err != nil {
-			err = err
 			return
 		}
 		for _, cmds := range plugs {
@@ -57,11 +56,9 @@ func LoadPlugins() error {
 					})
 				}(c)
 				if err != nil {
-					err = err
 					return
 				}
 			}
-
 		}
 	})
 	return err
