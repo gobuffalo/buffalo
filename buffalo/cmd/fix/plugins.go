@@ -39,6 +39,9 @@ func (pf Plugins) Reinstall(r *Runner) error {
 		App:     r.App,
 		Plugins: plugs.List(),
 	})
+	if err != nil {
+		return err
+	}
 
 	run.WithGroup(gg)
 

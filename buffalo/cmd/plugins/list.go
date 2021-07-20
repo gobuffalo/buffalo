@@ -24,9 +24,7 @@ var listCmd = &cobra.Command{
 		var cmds pluginsin.Commands
 
 		for _, l := range list {
-			for _, c := range l {
-				cmds = append(cmds, c)
-			}
+			cmds = append(cmds, l...)
 		}
 
 		sort.Slice(cmds, func(i, j int) bool {
