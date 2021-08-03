@@ -16,7 +16,7 @@ import (
 
 // LoadPlugins will add listeners for any plugins that support "events"
 func LoadPlugins() error {
-	var err error
+	var errResult error
 	oncer.Do("events.LoadPlugins", func() {
 		// don't send plugins events during testing
 		if envy.Get("GO_ENV", "development") == "test" {
@@ -24,7 +24,7 @@ func LoadPlugins() error {
 		}
 		plugs, err := plugins.Available()
 		if err != nil {
-			err = err
+			errResult = err
 			return
 		}
 		for _, cmds := range plugs {
@@ -57,12 +57,11 @@ func LoadPlugins() error {
 					})
 				}(c)
 				if err != nil {
-					err = err
+					errResult = err
 					return
 				}
 			}
-
 		}
 	})
-	return err
+	return errResult
 }

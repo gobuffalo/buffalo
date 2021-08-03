@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"bufio"
+	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -188,7 +190,7 @@ var newCmd = &cobra.Command{
 			}
 			if app.WithWebpack {
 				wo.Webpack = &webpack.Options{}
-			} else if !app.AsAPI {
+			} else {
 				wo.Standard = &standard.Options{}
 			}
 			gg, err = web.New(wo)
@@ -199,13 +201,38 @@ var newCmd = &cobra.Command{
 			}
 			return err
 		}
-		run.WithGroup(gg)
 
 		g := genny.New()
 		g.Command(exec.Command("go", "mod", "tidy"))
-		if err := run.With(g); err != nil {
+		gg.Add(g)
+
+		g = genny.New()
+		g.RunFn(func(r *genny.Runner) error {
+			deps, err := exec.Command("go", "list", "-f", "{{if not (or .Main .Indirect)}}{{.Path}}{{end}}", "-m", "all").Output()
+			if err != nil {
+				return err
+			}
+
+			scanner := bufio.NewScanner(bytes.NewReader(deps))
+			for scanner.Scan() {
+				if err := exec.Command("go", "get", scanner.Text()).Run(); err != nil {
+					return err
+				}
+			}
+
+			if err := scanner.Err(); err != nil {
+				return err
+			}
+
 			return nil
-		}
+		})
+		gg.Add(g)
+
+		g = genny.New()
+		g.Command(exec.Command("go", "mod", "tidy"))
+		gg.Add(g)
+
+		run.WithGroup(gg)
 
 		if err := run.WithNew(gogen.Fmt(app.Root)); err != nil {
 			return err
