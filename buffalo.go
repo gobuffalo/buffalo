@@ -12,4 +12,4 @@ package buffalo
 // this import the package doesn't get vendored
 // by go mod vendor or by dep. this import fixes
 // this problem.
-import _ "github.com/gobuffalo/buffalo/runtime"
+import _ "github.com/gobuffalo/buffalo/runtime" // Load the runtime package variables
