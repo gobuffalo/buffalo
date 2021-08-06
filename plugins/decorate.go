@@ -19,9 +19,7 @@ var ErrPlugMissing = fmt.Errorf("plugin missing")
 func Decorate(c Command) *cobra.Command {
 	var flags []string
 	if len(c.Flags) > 0 {
-		for _, f := range c.Flags {
-			flags = append(flags, f)
-		}
+		flags = append(flags, c.Flags...)
 	}
 	cc := &cobra.Command{
 		Use:     c.Name,

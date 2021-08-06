@@ -12,13 +12,4 @@ package buffalo
 // this import the package doesn't get vendored
 // by go mod vendor or by dep. this import fixes
 // this problem.
-import "github.com/gobuffalo/buffalo/runtime"
-
-var version string
-
-func init() {
-	// this is here to make sure that goimports
-	// doesn't remove the runtime import because
-	// it isn't being used.
-	version = runtime.Version
-}
+import _ "github.com/gobuffalo/buffalo/runtime" // Load the runtime package variables
