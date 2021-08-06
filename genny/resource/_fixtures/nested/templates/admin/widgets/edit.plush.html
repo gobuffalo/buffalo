@@ -1,8 +1,0 @@
-<div class="py-4 mb-2">
-  <h3 class="d-inline-block">Edit Widget</h3>
-</div>
-
-<%= formFor(widget, {action: adminWidgetPath({ admin_widget_id: widget.ID }), method: "PUT"}) { %>
-  <%= partial("admin/widgets/form.html") %>
-  <%= linkTo(adminWidgetPath({ admin_widget_id: widget.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
-<% } %>
