@@ -1,8 +1,0 @@
-<div class="py-4 mb-2">
-  <h3 class="d-inline-block">Edit {{.opts.Model.Proper}}</h3>
-</div>
-
-<%= formFor({{.opts.Model.VarCaseSingle}}, {action: {{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), method: "PUT"}) { %>
-  <%= partial("{{.folder}}/form.html") %>
-  <%= linkTo({{.opts.Name.VarCaseSingle}}Path({ {{.opts.Name.ParamID}}: {{.opts.Model.VarCaseSingle}}.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
-<% } %>
