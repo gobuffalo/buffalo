@@ -1,11 +1,8 @@
-FROM golang:latest
+FROM golang:1.17
 
 EXPOSE 3000
 
 ENV GOPROXY=https://proxy.golang.org
-ENV GO111MODULE=on
-
-RUN go version
 
 RUN apt-get update \
     && apt-get install -y -q build-essential sqlite3 libsqlite3-dev postgresql libpq-dev vim
@@ -32,9 +29,8 @@ RUN npm install -g --no-progress yarn \
 # Install golangci
 RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
 # Installing buffalo binary
-RUN curl -sf https://gobinaries.com/gobuffalo/buffalo/buffalo@v0.16.26 | sh 
+RUN curl -sf https://gobinaries.com/gobuffalo/cli/buffalo@v0.17.2 | sh
 RUN go get github.com/gobuffalo/buffalo-pop/v2
-RUN buffalo version
 
 RUN mkdir /src
 WORKDIR /src

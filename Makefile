@@ -7,17 +7,10 @@ install: deps
 	make tidy
 
 tidy:
-ifeq ($(GO111MODULE),on)
 	$(GO_BIN) mod tidy
-else
-	echo skipping go mod tidy
-endif
 
 deps:
 	$(GO_BIN) get github.com/gobuffalo/release
-ifneq ($(GO111MODULE),on)
-	$(GO_BIN) get -tags ${TAGS} -u -t ./...
-endif
 	make tidy
 
 build:

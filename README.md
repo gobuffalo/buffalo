@@ -19,13 +19,12 @@ Buffalo **isn't just a framework**; it's a holistic web development environment 
 
 ## ⚠️ Important
 
-Buffalo works only with Go 
-[modules](https://blog.golang.org/using-go-modules). `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. Please see [this blog post](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
+Buffalo works only with Go [modules](https://blog.golang.org/using-go-modules). `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. Please see [this blog post](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
 
 Also, the Buffalo team actively gives support to the last 2 versions of Go, which at the moment are:
 
-- 1.15.x
 - 1.16.x
+- 1.17.x
 
 While Buffalo `may` work on older versions, we encourage you to upgrade to latest 2 versions of Go for a better development experience.
 
@@ -34,9 +33,10 @@ While Buffalo `may` work on older versions, we encourage you to upgrade to lates
 Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documentation, examples, and more.
 
 ### Quick Start
-* [Installation](http://gobuffalo.io/docs/installation)
-* [Create a new project](http://gobuffalo.io/docs/new-project)
-* [Examples](http://gobuffalo.io/docs/examples)
+
+- [Installation](http://gobuffalo.io/docs/installation)
+- [Create a new project](http://gobuffalo.io/docs/new-project)
+- [Examples](http://gobuffalo.io/docs/examples)
 
 ## Shoulders of Giants
 
@@ -58,7 +58,7 @@ Buffalo would not be possible if not for all of the great projects it depends on
 
 [github.com/gobuffalo/pop](https://github.com/gobuffalo/pop) - Accessing databases is nothing new in web applications. Pop, and its command line tool, Soda, were chosen because they strike a nice balance between simplifying common tasks, being idiomatic, and giving you the flexibility you need to build your app. Pop and Soda share the same core philosophies as Buffalo, so they were a natural choice.
 
-### Sessions, Cookies, WebSockets, and more...
+### Sessions, Cookies, WebSockets, and more
 
 [github.com/gorilla](https://github.com/gorilla) - The Gorilla toolkit is a great set of packages designed to improve upon the standard library for a variety of web-related packages. With these high-quality packages Buffalo can keep its "core" code to a minimum and focus on its goal of gluing them all together to make your life better.
 
@@ -71,10 +71,11 @@ Oh, yeah, everyone wants benchmarks! What would a web framework be without its b
 First, thank you so much for wanting to contribute! It means so much that you care enough to want to contribute. We appreciate every PR from the smallest of typos to the be biggest of features.
 
 **Here are the core rules to respect**:
-* If you have any question, please consider using the [Slack channel](https://gobuffalo.io/docs/slack) (*#buffalo*, *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo). We use GitHub issues for **bug reports and feature requests only**.
-* All contributors of this project are working on their free time: be patient and kind. :)
-* Consider opening an issue **BEFORE** creating a Pull request (PR): you won't lose your time on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
-* All PRs **MUST** be opened against the *development* branch. If you want to write an hot-fix, we'll first fix the *development* branch before moving the patch to *master* branch.
+
+- If you have any question, please consider using the [Slack channel](https://gobuffalo.io/docs/slack) (-#buffalo-, *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo). We use GitHub issues for **bug reports and feature requests only**.
+- All contributors of this project are working on their free time: be patient and kind. :-
+- Consider opening an issue **BEFORE** creating a Pull request (PR): you won't lose your -ime on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
+- All PRs **MUST** be opened against the *development* branch. If you want to write an ho--fix, we'll first fix the *development* branch before moving the patch to *master* branch.
 
 **WE WILL CLOSE ANY ISSUE OR PR NOT FOLLOWING THESE CORE RULES**.
 
