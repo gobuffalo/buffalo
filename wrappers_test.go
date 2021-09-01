@@ -45,10 +45,10 @@ func Test_WrapBuffaloHandler(t *testing.T) {
 		path   string
 		status int
 	}{
-		{"GET", "/", 1},
-		{"GET", "/foo", 2},
-		{"POST", "/", 3},
-		{"POST", "/foo", 4},
+		{"GET", "/", 200},
+		{"GET", "/foo", 201},
+		{"POST", "/", 300},
+		{"POST", "/foo", 400},
 	}
 	for _, x := range tt {
 		bf := func(c Context) error {
@@ -77,10 +77,10 @@ func Test_WrapBuffaloHandlerFunc(t *testing.T) {
 		path   string
 		status int
 	}{
-		{"GET", "/", 1},
-		{"GET", "/foo", 2},
-		{"POST", "/", 3},
-		{"POST", "/foo", 4},
+		{"GET", "/", 200},
+		{"GET", "/foo", 201},
+		{"POST", "/", 300},
+		{"POST", "/foo", 400},
 	}
 	for _, x := range tt {
 		bf := func(c Context) error {
