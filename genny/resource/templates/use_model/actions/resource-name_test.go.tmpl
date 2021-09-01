@@ -1,7 +1,0 @@
-package actions
-
-{{ range $a := .actions }}
-func (as *ActionSuite) Test_{{$.opts.Name.Resource}}Resource_{{ $a.Pascalize }}() {
-  as.Fail("Not Implemented!")
-}
-{{ end }}

@@ -3,7 +3,6 @@ FROM gobuffalo/buffalo:latest
 ARG CODECOV_TOKEN
 
 ENV GOPROXY         https://proxy.golang.org
-ENV GO111MODULE     on
 ENV BP              /src/buffalo
 
 RUN rm -rf $BP

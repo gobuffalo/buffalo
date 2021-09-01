@@ -1,7 +1,7 @@
-FROM golang:alpine
+FROM golang:1.17-alpine
+
 EXPOSE 3000
 
-ENV GO111MODULE=on
 ENV GOPROXY=https://proxy.golang.org 
 
 RUN apk add --no-cache --upgrade apk-tools \
@@ -16,10 +16,9 @@ RUN npm i -g --no-progress yarn \
     && yarn config set yarn-offline-mirror /npm-packages-offline-cache \
     && yarn config set yarn-offline-mirror-pruning true
 
-# Pulling docker binary from releases
-RUN curl -sf https://gobinaries.com/gobuffalo/buffalo/buffalo@v0.16.26 | sh 
+# Installing buffalo binary
+RUN go install github.com/gobuffalo/cli/cmd/buffalo@latest
 RUN go get github.com/gobuffalo/buffalo-pop/v2
-RUN buffalo version
 
 RUN mkdir /src
 WORKDIR /src
