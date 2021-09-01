@@ -17,7 +17,7 @@ RUN npm i -g --no-progress yarn \
     && yarn config set yarn-offline-mirror-pruning true
 
 # Installing buffalo binary
-RUN curl -sf https://gobinaries.com/gobuffalo/cli/buffalo@v0.17.2 | sh
+RUN go install github.com/gobuffalo/cli/cmd/buffalo@latest
 RUN go get github.com/gobuffalo/buffalo-pop/v2
 
 RUN mkdir /src
