@@ -3,7 +3,7 @@ module github.com/gobuffalo/buffalo
 go 1.16
 
 require (
-	github.com/BurntSushi/toml v0.3.1
+	github.com/BurntSushi/toml v0.4.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.12.0
 	github.com/gobuffalo/envy v1.9.0
@@ -17,7 +17,7 @@ require (
 	github.com/gobuffalo/nulls v0.4.0
 	github.com/gobuffalo/packd v1.0.0
 	github.com/gobuffalo/packr/v2 v2.8.1
-	github.com/gobuffalo/plush/v4 v4.1.5
+	github.com/gobuffalo/plush/v4 v4.1.6
 	github.com/gobuffalo/pop/v5 v5.3.4
 	github.com/gobuffalo/tags/v3 v3.1.0
 	github.com/gorilla/handlers v1.5.1
