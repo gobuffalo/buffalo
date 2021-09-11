@@ -100,3 +100,29 @@ func Test_WrapBuffaloHandlerFunc(t *testing.T) {
 		r.Contains(res.Body.String(), x.verb+x.path)
 	}
 }
+
+func Benchmark_WrapBuffaloHandler(b *testing.B) {
+	r := require.New(b)
+
+	status := http.StatusOK
+
+	bf := func(c Context) error {
+		return c.Render(status, render.String(http.StatusText(status)))
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/foo", nil)
+	res := httptest.NewRecorder()
+
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+
+		h := WrapBuffaloHandler(bf)
+		r.NotNil(h)
+
+		h.ServeHTTP(res, req)
+
+		r.Equal(status, res.Code)
+		r.Contains(res.Body.String(), http.StatusText(status))
+	}
+	b.StopTimer()
+}
