@@ -109,45 +109,46 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	defer func() {
 		d.LogField("render", time.Since(start))
 	}()
-	if rr != nil {
-		data := d.Data()
-		pp := map[string]string{}
-		for k, v := range d.params {
-			pp[k] = v[0]
-		}
-		data["params"] = pp
-		data["flash"] = d.Flash().data
-		data["session"] = d.Session()
-		data["request"] = d.Request()
-		data["status"] = status
-		bb := &bytes.Buffer{}
-
-		err := rr.Render(bb, data)
-		if err != nil {
-			if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
-				return d.Redirect(er.Status, er.URL)
-			}
-			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
-		}
-
-		if d.Session() != nil {
-			d.Flash().Clear()
-			d.Flash().persist(d.Session())
-		}
-
-		d.Response().Header().Set("Content-Type", rr.ContentType())
-		if p, ok := data["pagination"].(paginable); ok {
-			d.Response().Header().Set("X-Pagination", p.Paginate())
-		}
+	if rr == nil {
 		d.Response().WriteHeader(status)
-		_, err = io.Copy(d.Response(), bb)
-		if err != nil {
-			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
-		}
-
 		return nil
 	}
+
+	data := d.Data()
+	pp := map[string]string{}
+	for k, v := range d.params {
+		pp[k] = v[0]
+	}
+	data["params"] = pp
+	data["flash"] = d.Flash().data
+	data["session"] = d.Session()
+	data["request"] = d.Request()
+	data["status"] = status
+	bb := &bytes.Buffer{}
+
+	err := rr.Render(bb, data)
+	if err != nil {
+		if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
+			return d.Redirect(er.Status, er.URL)
+		}
+		return HTTPError{Status: http.StatusInternalServerError, Cause: err}
+	}
+
+	if d.Session() != nil {
+		d.Flash().Clear()
+		d.Flash().persist(d.Session())
+	}
+
+	d.Response().Header().Set("Content-Type", rr.ContentType())
+	if p, ok := data["pagination"].(paginable); ok {
+		d.Response().Header().Set("X-Pagination", p.Paginate())
+	}
 	d.Response().WriteHeader(status)
+	_, err = io.Copy(d.Response(), bb)
+	if err != nil {
+		return HTTPError{Status: http.StatusInternalServerError, Cause: err}
+	}
+
 	return nil
 }
 
@@ -253,10 +254,7 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 		File:       f,
 		FileHeader: h,
 	}
-	if err != nil {
-		return bf, err
-	}
-	return bf, nil
+	return bf, err
 }
 
 // MarshalJSON implements json marshaling for the context
