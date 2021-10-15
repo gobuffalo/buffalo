@@ -84,7 +84,7 @@ func (a *App) Mount(p string, h http.Handler) {
 	a.ANY(path, WrapHandler(http.StripPrefix(prefix, h)))
 }
 
-// Host creates a new "*App" that would only works if the domain matches.
+// Host creates a new "*App" group that matches the domain passed.
 // This is useful for creating groups of end-points for different domains.
 /*
 	a.Host("www.example.com")
