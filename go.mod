@@ -29,6 +29,7 @@ require (
 	github.com/markbates/refresh v1.11.1
 	github.com/markbates/safe v1.0.1
 	github.com/markbates/sigtx v1.0.0
+	github.com/microcosm-cc/bluemonday v1.0.16 // indirect
 	github.com/monoculum/formam v0.0.0-20210523135142-1af3317b7b9b
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.2.1
