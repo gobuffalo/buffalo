@@ -109,6 +109,7 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 	defer func() {
 		d.LogField("render", time.Since(start))
 	}()
+
 	if rr == nil {
 		d.Response().WriteHeader(status)
 		return nil
@@ -165,6 +166,9 @@ func (d *DefaultContext) Bind(value interface{}) error {
 // as part of the request logging. This allows you to easily add things
 // like metrics (think DB times) to your request.
 func (d *DefaultContext) LogField(key string, value interface{}) {
+	if d.logger == nil {
+		return
+	}
 	d.logger = d.logger.WithField(key, value)
 }
 
@@ -172,6 +176,9 @@ func (d *DefaultContext) LogField(key string, value interface{}) {
 // as part of the request logging. This allows you to easily add things
 // like metrics (think DB times) to your request.
 func (d *DefaultContext) LogFields(values map[string]interface{}) {
+	if d.logger == nil {
+		return
+	}
 	d.logger = d.logger.WithFields(values)
 }
 
