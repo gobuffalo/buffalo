@@ -154,22 +154,14 @@ github.com/gobuffalo/attrs v0.1.0/go.mod h1:fmNpaWyHM0tRm8gCZWKx8yY9fvaNLo2PyzBN
 github.com/gobuffalo/envy v1.8.1/go.mod h1:FurDp9+EDPE4aIUS3ZLyD+7/9fpx7YRt/ukY6jIHf0w=
 github.com/gobuffalo/envy v1.10.1 h1:ppDLoXv2feQ5nus4IcgtyMdHQkKng2lhJCIm33cblM0=
 github.com/gobuffalo/envy v1.10.1/go.mod h1:AWx4++KnNOW3JOeEvhSaq+mvgAvnMYOY1XSIin4Mago=
-<<<<<<< HEAD
-github.com/gobuffalo/events v1.4.1 h1:OLJIun6wRx4DOW19XoL/AoyjuJltqeOBFH3q8cDvNb8=
-github.com/gobuffalo/events v1.4.1/go.mod h1:SjXgWKpeSuvQDvGhgMz5IXx3Czu+IbL+XPLR41NvVQY=
-=======
 github.com/gobuffalo/events v1.4.2 h1:9X4nBKGXOU/N/3AFRO0SxYvpL88lws8M7f5FODbWCm4=
 github.com/gobuffalo/events v1.4.2/go.mod h1:GI0w4OrQDQP/tIIC9FPl04qWs4dTx52DLCCcwVg7Ltc=
->>>>>>> master
 github.com/gobuffalo/fizz v1.10.0 h1:I8vad0PnmR+CLjSnZ5L5jlhBm4S88UIGOoZZL3/3e24=
 github.com/gobuffalo/fizz v1.10.0/go.mod h1:J2XGPO0AfJ1zKw7+2BA+6FEGAkyEsdCOLvN93WCT2WI=
 github.com/gobuffalo/flect v0.1.5/go.mod h1:W3K3X9ksuZfir8f/LrfVtWmCDQFfayuylOJ7sz/Fj80=
 github.com/gobuffalo/flect v0.2.0/go.mod h1:W3K3X9ksuZfir8f/LrfVtWmCDQFfayuylOJ7sz/Fj80=
 github.com/gobuffalo/flect v0.2.1/go.mod h1:vmkQwuZYhN5Pc4ljYQZzP+1sq+NEkK+lh20jmEmX3jc=
-<<<<<<< HEAD
-=======
 github.com/gobuffalo/flect v0.2.3/go.mod h1:vmkQwuZYhN5Pc4ljYQZzP+1sq+NEkK+lh20jmEmX3jc=
->>>>>>> master
 github.com/gobuffalo/flect v0.2.4 h1:BSYA8+T60cdyq+vynaSUjqSVI9mDEg9ZfQUXKmfjo4I=
 github.com/gobuffalo/flect v0.2.4/go.mod h1:1ZyCLIbg0YD7sDkzvFdPoOydPtD8y9JQnrOROolUcM8=
 github.com/gobuffalo/genny/v2 v2.0.5/go.mod h1:kRkJuAw9mdI37AiEYjV4Dl+TgkBDYf8HZVjLkqe5eBg=
@@ -185,13 +177,8 @@ github.com/gobuffalo/here v0.4.0/go.mod h1:bTNk/uKZgycuB358iR0D32dI9kHBClBGpXjW2
 github.com/gobuffalo/httptest v1.5.1 h1:WwCZrMYVDqkjTlxo7OasFOMvdaG4ysriidJoqcedv2M=
 github.com/gobuffalo/httptest v1.5.1/go.mod h1:uEeEFF2BRyTMNAATqFQAKYvpHrWWPNoJbIB3YPuANNM=
 github.com/gobuffalo/logger v1.0.3/go.mod h1:SoeejUwldiS7ZsyCBphOGURmWdwUFXs0J7TCjEhjKxM=
-<<<<<<< HEAD
-github.com/gobuffalo/logger v1.0.4 h1:HFJRqL7AmL4QNvQb9Grss9sDz+3u02VBgAoR03A7q4o=
-github.com/gobuffalo/logger v1.0.4/go.mod h1:/GRUdWb+gM3shxj0P5jiV6ecVS3X0aboJvl+hBu0HeE=
-=======
 github.com/gobuffalo/logger v1.0.6 h1:nnZNpxYo0zx+Aj9RfMPBm+x9zAU2OayFh/xrAWi34HU=
 github.com/gobuffalo/logger v1.0.6/go.mod h1:J31TBEHR1QLV2683OXTAItYIg8pv2JMHnF/quuAbMjs=
->>>>>>> master
 github.com/gobuffalo/meta v0.3.1 h1:wrg94uDwu3bM3HMdmz2wlT8A9iAJvMKbHmYs8Rxi63I=
 github.com/gobuffalo/meta v0.3.1/go.mod h1:garIq5Vcqs5dj8nv3YG8hRbqAdQhIOt0DAXmaLtO7OU=
 github.com/gobuffalo/nulls v0.2.0/go.mod h1:w4q8RoSCEt87Q0K0sRIZWYeIxkxog5mh3eN3C/n+dUc=
@@ -398,11 +385,8 @@ github.com/jackc/puddle v1.1.3/go.mod h1:m4B5Dj62Y0fbyuIc15OsIqK0+JU8nkqQjsgx7dv
 github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
 github.com/jmoiron/sqlx v1.3.3/go.mod h1:2BljVx/86SuTyjE+aPYlHCTNvZrnJXghYGpNiXLBMCQ=
-<<<<<<< HEAD
-=======
 github.com/jmoiron/sqlx v1.3.4 h1:wv+0IJZfL5z0uZoUjlpKgHkgaFSYD+r9CfrXjEXsO7w=
 github.com/jmoiron/sqlx v1.3.4/go.mod h1:2BljVx/86SuTyjE+aPYlHCTNvZrnJXghYGpNiXLBMCQ=
->>>>>>> master
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
 github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
@@ -770,14 +754,9 @@ golang.org/x/net v0.0.0-20210119194325-5f4716e94777/go.mod h1:m0MpNAwzfU5UDzcl9v
 golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
 golang.org/x/net v0.0.0-20210316092652-d523dce5a7f4/go.mod h1:RBQZq4jEuRlivfhVLdyRGr576XBO4/greRjx4P4O3yc=
 golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4/go.mod h1:p54w0d4576C0XHj96bSt6lcn1PtDYWL6XObtHCRCNQM=
-<<<<<<< HEAD
-golang.org/x/net v0.0.0-20210614182718-04defd469f4e h1:XpT3nA5TvE525Ne3hInMh6+GETgn27Zfm9dxsThnX2Q=
-golang.org/x/net v0.0.0-20210614182718-04defd469f4e/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
-=======
 golang.org/x/net v0.0.0-20210614182718-04defd469f4e/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f h1:OfiFi4JbukWwe3lzw+xunroH1mnC1e2Gy5cxNJApiSY=
 golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
->>>>>>> master
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
 golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
@@ -856,10 +835,6 @@ golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210330210617-4fbd30eecc44/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-<<<<<<< HEAD
-golang.org/x/sys v0.0.0-20210510120138-977fb7262007 h1:gG67DSER+11cZvqIMb8S8bt0vZtiN6xWYARwirrOSfE=
-=======
->>>>>>> master
 golang.org/x/sys v0.0.0-20210510120138-977fb7262007/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c h1:F1jZWGFhYfh0Ci55sIpILtKKK8p3i2/krTr0H1rg74I=
