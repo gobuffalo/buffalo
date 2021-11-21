@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/packd"
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,12 +15,12 @@ func Test_Template_Partial(t *testing.T) {
 	const part = `<%= partial("foo.html") %>`
 	const tmpl = "Foo > <%= name %>"
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString(htmlTemplate, tmpl))
-	r.NoError(box.AddString("_foo.html", part))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte(tmpl), 0644))
+	r.NoError(rootFS.WriteFile("_foo.html", []byte(part), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 
@@ -32,12 +32,12 @@ func Test_Template_Partial(t *testing.T) {
 func Test_Template_PartialCustomFeeder(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("base.plush.html", `<%= partial("foo.plush.html") %>`))
-	r.NoError(box.AddString("_foo.plush.html", "other"))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("base.plush.html", []byte(`<%= partial("foo.plush.html") %>`), 0644))
+	r.NoError(rootFS.WriteFile("_foo.plush.html", []byte("other"), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	t.Run("Custom Feeder", func(t *testing.T) {
 		e.Helpers["partialFeeder"] = func(path string) (string, error) {
@@ -68,12 +68,12 @@ func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	const part = `<%= partial("foo") %>`
 	const tmpl = "Foo > <%= name %>"
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString(htmlTemplate, tmpl))
-	r.NoError(box.AddString("_foo.html", part))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte(tmpl), 0644))
+	r.NoError(rootFS.WriteFile("_foo.html", []byte(part), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 
@@ -87,14 +87,14 @@ func Test_Template_Partial_Form(t *testing.T) {
 
 	const newHTML = `<%= form_for(user, {}) { return partial("form.html") } %>`
 	const formHTML = `<%= f.InputTag("Name") %>`
-	const result = `<form action="/Mark" id="widget-form" method="POST"><div class="form-group"><label>Name</label><input class=" form-control" id="widget-Name" name="Name" type="text" value="Mark" /></div></form>`
+	const result = `<form action="/Mark" id="widget-form" method="POST"><div class="form-group"><label class="form-label" for="widget-Name">Name</label><input class="form-control" id="widget-Name" name="Name" type="text" value="Mark" /></div></form>`
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("new.html", newHTML))
-	r.NoError(box.AddString("_form.html", formHTML))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("new.html", []byte(newHTML), 0644))
+	r.NoError(rootFS.WriteFile("_form.html", []byte(formHTML), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	u := Widget{Name: "Mark"}
 
@@ -111,12 +111,12 @@ func Test_Template_Partial_With_For(t *testing.T) {
 	const rowHTML = `Hi <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("for.html", forHTML))
-	r.NoError(box.AddString("_row.html", rowHTML))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("for.html", []byte(forHTML), 0644))
+	r.NoError(rootFS.WriteFile("_row.html", []byte(rowHTML), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 
@@ -139,12 +139,12 @@ func Test_Template_Partial_With_For_And_Local(t *testing.T) {
 	const rowHTML = `<%= say %> <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("for.html", forHTML))
-	r.NoError(box.AddString("_row.html", rowHTML))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("for.html", []byte(forHTML), 0644))
+	r.NoError(rootFS.WriteFile("_row.html", []byte(rowHTML), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 
@@ -167,12 +167,12 @@ func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T)
 	const fooHTML = `<%= other %>|<%= name %>`
 	const result = `Other|Mark`
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("index.html", indexHTML))
-	r.NoError(box.AddString("_foo.html", fooHTML))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.html", []byte(indexHTML), 0644))
+	r.NoError(rootFS.WriteFile("_foo.html", []byte(fooHTML), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 
@@ -189,13 +189,13 @@ func Test_Template_Partial_With_Layout(t *testing.T) {
 	const fooHTML = "Foo > <%= name %>"
 	const result = `Layout > Foo > Mark`
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("index.html", indexHTML))
-	r.NoError(box.AddString("_layout.html", layoutHTML))
-	r.NoError(box.AddString("_foo.html", fooHTML))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.html", []byte(indexHTML), 0644))
+	r.NoError(rootFS.WriteFile("_layout.html", []byte(layoutHTML), 0644))
+	r.NoError(rootFS.WriteFile("_foo.html", []byte(fooHTML), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	bb := &bytes.Buffer{}
 

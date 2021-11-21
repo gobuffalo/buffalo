@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 	"testing"
@@ -11,9 +12,8 @@ import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/packd"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -333,10 +333,10 @@ func Test_Router_Redirect(t *testing.T) {
 func Test_Router_ServeFiles(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	box.AddString("foo.png", "foo")
+	rootFS := memfs.New()
+	rootFS.WriteFile("foo.png", []byte("foo"), 0644)
 	a := New(Options{})
-	a.ServeFiles("/assets", box)
+	a.ServeFiles("/assets", http.FS(rootFS))
 
 	w := httptest.New(a)
 	res := w.HTML("/assets/foo.png").Get()
@@ -361,10 +361,10 @@ func Test_Router_ServeFiles(t *testing.T) {
 func Test_Router_InvalidURL(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	box.AddString("foo.png", "foo")
+	rootFS := memfs.New()
+	rootFS.WriteFile("foo.png", []byte("foo"), 0644)
 	a := New(Options{})
-	a.ServeFiles("/", box)
+	a.ServeFiles("/", http.FS(rootFS))
 
 	w := httptest.New(a)
 	s := "/%25%7dn2zq0%3cscript%3ealert(1)%3c\\/script%3evea7f"
@@ -408,9 +408,9 @@ func Test_App_NamedRoutes(t *testing.T) {
 	var resourcesResource Resource = ResourcesResource{}
 
 	rr := render.New(render.Options{
-		HTMLLayout:   "application.plush.html",
-		TemplatesBox: packr.New("../templates", "../templates"),
-		Helpers:      map[string]interface{}{},
+		HTMLLayout:  "application.plush.html",
+		TemplatesFS: os.DirFS("../templates"),
+		Helpers:     map[string]interface{}{},
 	})
 
 	sampleHandler := func(c Context) error {
@@ -470,9 +470,9 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 	a := New(Options{})
 
 	rr := render.New(render.Options{
-		HTMLLayout:   "application.plush.html",
-		TemplatesBox: packr.New("../templates", "../templates"),
-		Helpers:      map[string]interface{}{},
+		HTMLLayout:  "application.plush.html",
+		TemplatesFS: os.DirFS("../templates"),
+		Helpers:     map[string]interface{}{},
 	})
 
 	sampleHandler := func(c Context) error {

@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/gobuffalo/packd"
+	"github.com/psanford/memfs"
 )
 
 type Widget struct {
@@ -14,8 +14,8 @@ func (w Widget) ToPath() string {
 
 func NewEngine() *Engine {
 	return New(Options{
-		TemplatesBox: packd.NewMemoryBox(),
-		AssetsBox:    packd.NewMemoryBox(),
+		TemplatesFS: memfs.New(),
+		AssetsFS:    memfs.New(),
 	})
 }
 
