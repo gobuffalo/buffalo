@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/gobuffalo/syncx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,7 +18,7 @@ type templateRenderer struct {
 	*Engine
 	contentType string
 	names       []string
-	aliases     syncx.StringMap
+	aliases     sync.Map
 }
 
 func (s *templateRenderer) ContentType() string {
@@ -40,7 +40,7 @@ func (s *templateRenderer) resolve(name string) ([]byte, error) {
 		return nil, fmt.Errorf("could not find template %s", name)
 	}
 
-	f, err = s.TemplatesFS.Open(v)
+	f, err = s.TemplatesFS.Open(v.(string))
 	if err != nil {
 		return nil, err
 	}
@@ -261,6 +261,5 @@ func (e *Engine) Template(c string, names ...string) Renderer {
 		Engine:      e,
 		contentType: c,
 		names:       names,
-		aliases:     syncx.StringMap{},
 	}
 }
