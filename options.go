@@ -11,8 +11,8 @@ import (
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
-	"github.com/gobuffalo/pop/v5"
-	"github.com/gobuffalo/pop/v5/logging"
+	"github.com/gobuffalo/pop/v6"
+	"github.com/gobuffalo/pop/v6/logging"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/oncer"
 )

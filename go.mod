@@ -16,7 +16,7 @@ require (
 	github.com/gobuffalo/meta v0.3.1
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.9
-	github.com/gobuffalo/pop/v5 v5.3.4
+	github.com/gobuffalo/pop/v6 v6.0.0
 	github.com/gobuffalo/tags/v3 v3.1.2
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -34,3 +34,5 @@ require (
 	github.com/stretchr/testify v1.7.0
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )
+
+replace github.com/gobuffalo/pop/v6 v6.0.0 => github.com/fasmat/pop/v6 v6.0.0-20211121130729-c0494e3061e4
