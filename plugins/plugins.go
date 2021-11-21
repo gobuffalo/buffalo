@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
@@ -206,7 +206,7 @@ func listPlugDeps(app meta.App) (List, error) {
 		}
 		bin, err := LookPath(bin)
 		if err != nil {
-			if errx.Unwrap(err) != ErrPlugMissing {
+			if !errors.Is(err, ErrPlugMissing) {
 				return list, err
 			}
 			continue

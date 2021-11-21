@@ -55,8 +55,7 @@ func assetPathFor(file string) string {
 func loadManifest(manifest io.Reader) error {
 	m := map[string]string{}
 
-	err := json.NewDecoder(manifest).Decode(&m)
-	if err != nil {
+	if err := json.NewDecoder(manifest).Decode(&m); err != nil {
 		return err
 	}
 	for k, v := range m {

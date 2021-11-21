@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/http"
 	"runtime/debug"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v4"
 )
@@ -21,6 +21,10 @@ import (
 type HTTPError struct {
 	Status int   `json:"status"`
 	Cause  error `json:"error"`
+}
+
+func (h HTTPError) Unwrap() error {
+	return h.Cause
 }
 
 func (h HTTPError) Error() string {
@@ -105,13 +109,13 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 			return nil
 		}
 		status := http.StatusInternalServerError
-		// unpack root cause and check for HTTPError
-		cause := errx.Unwrap(err)
-		switch cause {
-		case sql.ErrNoRows:
+		// unpack root err and check for HTTPError
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
 			status = http.StatusNotFound
 		default:
-			if h, ok := cause.(HTTPError); ok {
+			var h HTTPError
+			if errors.As(err, &h) {
 				status = h.Status
 			}
 		}
@@ -183,13 +187,16 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	}
 
 	trace := origErr.Error()
+	if cause := errors.Unwrap(origErr); cause != nil {
+		origErr = cause
+	}
 
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
 
 		err := json.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: errx.Unwrap(origErr).Error(),
+			Error: origErr.Error(),
 			Trace: trace,
 			Code:  status,
 		}))
@@ -199,7 +206,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
 		err := xml.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: errx.Unwrap(origErr).Error(),
+			Error: origErr.Error(),
 			Trace: trace,
 			Code:  status,
 		}))

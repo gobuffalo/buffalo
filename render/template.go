@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/buffalo/internal/takeon/github.com/gobuffalo/syncx"
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -87,7 +86,7 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 	for _, name := range s.names {
 		body, err = s.exec(name, data)
 		if err != nil {
-			return errx.Wrap(err, name)
+			return fmt.Errorf("%s: %w", name, err)
 		}
 		data["yield"] = body
 	}

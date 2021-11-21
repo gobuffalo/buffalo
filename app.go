@@ -64,7 +64,6 @@ func New(opts Options) *App {
 			c := a.newContext(RouteInfo{}, res, req)
 			err := fmt.Errorf(errorf, req.Method, req.URL.Path)
 			_ = a.ErrorHandlers.Get(code)(code, err, c)
-
 		}
 	}
 

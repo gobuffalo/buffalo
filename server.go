@@ -2,12 +2,12 @@ package buffalo
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"os"
 	"strings"
 	"syscall"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
@@ -99,7 +99,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
-	if err != nil && errx.Unwrap(err) != context.Canceled {
+	if err != nil && !errors.Is(err, context.Canceled) {
 		a.Logger.Error(err)
 		return err
 	}
