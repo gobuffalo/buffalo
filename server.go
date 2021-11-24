@@ -2,15 +2,14 @@ package buffalo
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"os"
 	"strings"
 	"syscall"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/packd"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
 )
@@ -100,7 +99,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
-	if err != nil && errx.Unwrap(err) != context.Canceled {
+	if err != nil && !errors.Is(err, context.Canceled) {
 		a.Logger.Error(err)
 		return err
 	}
@@ -108,13 +107,6 @@ func (a *App) Stop(err error) error {
 }
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Body != nil {
-		// convert the request's body to a packd.File which can be read N times
-		f, err := packd.NewFile("", r.Body)
-		if err == nil {
-			r.Body = f
-		}
-	}
 	ws := &Response{
 		ResponseWriter: w,
 	}

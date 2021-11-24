@@ -1,11 +1,11 @@
 package plugdeps
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/meta"
 	"github.com/stretchr/testify/require"
 )
@@ -37,7 +37,7 @@ func Test_List_Off(t *testing.T) {
 	app := meta.App{}
 	plugs, err := List(app)
 	r.Error(err)
-	r.Equal(errx.Unwrap(err), ErrMissingConfig)
+	r.True(errors.Is(err, ErrMissingConfig))
 	r.Len(plugs.List(), 0)
 }
 

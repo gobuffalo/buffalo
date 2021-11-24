@@ -23,4 +23,3 @@ exclude_paths:
   - "*_test.go"
   - "**_test.go"
   - "middleware_test.go"
-  - packrd/**.go 

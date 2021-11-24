@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,7 +16,6 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/buffalo/render"
 )
 
@@ -129,7 +129,8 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 
 	err := rr.Render(bb, data)
 	if err != nil {
-		if er, ok := errx.Unwrap(err).(render.ErrRedirect); ok {
+		var er render.ErrRedirect
+		if errors.As(err, &er) {
 			return d.Redirect(er.Status, er.URL)
 		}
 		return HTTPError{Status: http.StatusInternalServerError, Cause: err}
