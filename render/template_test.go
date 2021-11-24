@@ -5,15 +5,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_Template(t *testing.T) {
 	r := require.New(t)
 
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+
 	e := NewEngine()
-	box := e.TemplatesBox
-	r.NoError(box.AddString(htmlTemplate, `<%= name %>`))
+	e.TemplatesFS = rootFS
 
 	re := e.Template("foo/bar", htmlTemplate)
 	r.Equal("foo/bar", re.ContentType())
@@ -25,12 +28,13 @@ func Test_Template(t *testing.T) {
 func Test_AssetPath(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
-
-	abox := e.AssetsBox
-	r.NoError(abox.AddString("manifest.json", `{
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("manifest.json", []byte(`{
 		"application.css": "application.aabbc123.css"
-	}`))
+	}`), 0644))
+
+	e := NewEngine()
+	e.AssetsFS = rootFS
 
 	cases := map[string]string{
 		"something.txt":         "/assets/something.txt",
@@ -40,8 +44,9 @@ func Test_AssetPath(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		tbox := e.TemplatesBox
-		r.NoError(tbox.AddString(htmlTemplate, "<%= assetPath(\""+original+"\") %>"))
+		rootFS := memfs.New()
+		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
 
@@ -62,8 +67,9 @@ func Test_AssetPathNoManifest(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		tbox := e.TemplatesBox
-		r.NoError(tbox.AddString(htmlTemplate, "<%= assetPath(\""+original+"\") %>"))
+		rootFS := memfs.New()
+		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
 
@@ -76,10 +82,11 @@ func Test_AssetPathNoManifest(t *testing.T) {
 func Test_AssetPathNoManifestCorrupt(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("manifest.json", []byte("//shdnn Corrupt!"), 0644))
 
-	abox := e.AssetsBox
-	r.NoError(abox.AddString("manifest.json", "//shdnn Corrupt!"))
+	e := NewEngine()
+	e.AssetsFS = rootFS
 
 	cases := map[string]string{
 		"something.txt": "manifest.json is not correct",
@@ -87,8 +94,9 @@ func Test_AssetPathNoManifestCorrupt(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		tbox := e.TemplatesBox
-		r.NoError(tbox.AddString(htmlTemplate, "<%= assetPath(\""+original+"\") %>"))
+		rootFS := memfs.New()
+		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
 

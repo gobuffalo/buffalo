@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,10 +16,11 @@ const jsTemplate = "my-template.js"
 func Test_JavaScript_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, "alert(<%= name %>)"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
 
 	h := e.JavaScript(jsTemplate)
 	r.Equal("application/javascript", h.ContentType())
@@ -31,12 +33,13 @@ func Test_JavaScript_WithoutLayout(t *testing.T) {
 func Test_JavaScript_WithLayout(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
-	e.JavaScriptLayout = jsLayout
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
+	r.NoError(rootFS.WriteFile(jsLayout, []byte("$(<%= yield %>)"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, "alert(<%= name %>)"))
-	r.NoError(box.AddString(jsLayout, "$(<%= yield %>)"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+	e.JavaScriptLayout = jsLayout
 
 	h := e.JavaScript(jsTemplate)
 	r.Equal("application/javascript", h.ContentType())
@@ -49,13 +52,14 @@ func Test_JavaScript_WithLayout(t *testing.T) {
 func Test_JavaScript_WithLayout_Override(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
-	e.JavaScriptLayout = jsLayout
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
+	r.NoError(rootFS.WriteFile(jsLayout, []byte("$(<%= yield %>)"), 0644))
+	r.NoError(rootFS.WriteFile(jsAltLayout, []byte("_(<%= yield %>)"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, "alert(<%= name %>)"))
-	r.NoError(box.AddString(jsLayout, "$(<%= yield %>)"))
-	r.NoError(box.AddString(jsAltLayout, "_(<%= yield %>)"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+	e.JavaScriptLayout = jsLayout
 
 	h := e.JavaScript(jsTemplate, jsAltLayout)
 	r.Equal("application/javascript", h.ContentType())
@@ -71,12 +75,12 @@ func Test_JavaScript_Partial_Without_Extension(t *testing.T) {
 
 	r := require.New(t)
 
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
+	r.NoError(rootFS.WriteFile("_part.js", []byte(part), 0644))
+
 	e := NewEngine()
-
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, tmpl))
-	r.NoError(box.AddString("_part.js", part))
-
+	e.TemplatesFS = rootFS
 	h := e.JavaScript(jsTemplate)
 	r.Equal("application/javascript", h.ContentType())
 	bb := &bytes.Buffer{}
@@ -91,11 +95,12 @@ func Test_JavaScript_Partial(t *testing.T) {
 
 	r := require.New(t)
 
-	e := NewEngine()
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
+	r.NoError(rootFS.WriteFile("_part.js", []byte(part), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, tmpl))
-	r.NoError(box.AddString("_part.js", part))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
 
 	h := e.JavaScript(jsTemplate)
 	r.Equal("application/javascript", h.ContentType())
@@ -113,11 +118,12 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 
 	r := require.New(t)
 
-	e := NewEngine()
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
+	r.NoError(rootFS.WriteFile("_part.html", []byte(part), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(jsTemplate, tmpl))
-	r.NoError(box.AddString("_part.html", part))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
 
 	h := e.JavaScript(jsTemplate)
 	r.Equal("application/javascript", h.ContentType())

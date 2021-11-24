@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -106,7 +107,8 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		status := http.StatusInternalServerError
-		if he, ok := err.(HTTPError); ok {
+		var he HTTPError
+		if errors.As(err, &he) {
 			status = he.Status
 		}
 		events.EmitError(EvtRouteErr, err, payload)

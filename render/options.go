@@ -1,8 +1,9 @@
 package render
 
 import (
+	"io/fs"
+
 	"github.com/gobuffalo/helpers/hctx"
-	"github.com/gobuffalo/packd"
 )
 
 // Helpers to be included in all templates
@@ -16,11 +17,11 @@ type Options struct {
 	// JavaScriptLayout is the default layout to be used with all JavaScript renders.
 	JavaScriptLayout string
 
-	// TemplatesBox is the location of the templates directory on disk.
-	TemplatesBox packd.Box
+	// TemplateFS is the fs.FS that holds the templates
+	TemplatesFS fs.FS
 
-	// AssetsBox is the location of the public assets the app will serve.
-	AssetsBox packd.Box
+	// AssetsFS is the fs.FS that holds the of the public assets the app will serve.
+	AssetsFS fs.FS
 
 	// Helpers to be rendered with the templates
 	Helpers Helpers

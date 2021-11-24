@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/http"
 	"runtime/debug"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
-	"github.com/gobuffalo/buffalo/internal/takeon/github.com/markbates/errx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v4"
 )
@@ -23,6 +23,12 @@ type HTTPError struct {
 	Cause  error `json:"error"`
 }
 
+// Unwrap allows the error to be unwrapped.
+func (h HTTPError) Unwrap() error {
+	return h.Cause
+}
+
+// Error returns the cause of the error as string.
 func (h HTTPError) Error() string {
 	return h.Cause.Error()
 }
@@ -105,13 +111,13 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 			return nil
 		}
 		status := http.StatusInternalServerError
-		// unpack root cause and check for HTTPError
-		cause := errx.Unwrap(err)
-		switch cause {
-		case sql.ErrNoRows:
+		// unpack root err and check for HTTPError
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
 			status = http.StatusNotFound
 		default:
-			if h, ok := cause.(HTTPError); ok {
+			var h HTTPError
+			if errors.As(err, &h) {
 				status = h.Status
 			}
 		}
@@ -183,26 +189,26 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	}
 
 	trace := origErr.Error()
+	if cause := errors.Unwrap(origErr); cause != nil {
+		origErr = cause
+	}
+
+	errResponse := errorResponseDefault(defaultErrorResponse, &ErrorResponse{
+		Error: origErr.Error(),
+		Trace: trace,
+		Code:  status,
+	})
 
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
-
-		err := json.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: errx.Unwrap(origErr).Error(),
-			Trace: trace,
-			Code:  status,
-		}))
+		err := json.NewEncoder(c.Response()).Encode(errResponse)
 		if err != nil {
 			return err
 		}
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
-		err := xml.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: errx.Unwrap(origErr).Error(),
-			Trace: trace,
-			Code:  status,
-		}))
+		err := xml.NewEncoder(c.Response()).Encode(errResponse)
 		if err != nil {
 			return err
 		}
@@ -238,10 +244,8 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return err
 		}
 
-		res := c.Response()
-		_, err = res.Write([]byte(t))
-
-		return err
+		c.Response().Write([]byte(t))
+		return nil
 	}
 	return nil
 }

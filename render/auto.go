@@ -2,6 +2,7 @@ package render
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -110,7 +111,8 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	switch data["method"] {
 	case "PUT", "POST", "DELETE":
 		if err := ir.redirect(pname, w, data); err != nil {
-			if er, ok := err.(ErrRedirect); ok && er.Status >= http.StatusMultipleChoices && er.Status < http.StatusBadRequest {
+			var er ErrRedirect
+			if errors.As(err, &er) && er.Status >= http.StatusMultipleChoices && er.Status < http.StatusBadRequest {
 				return err
 			}
 

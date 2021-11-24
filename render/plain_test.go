@@ -4,18 +4,18 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/gobuffalo/packd"
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_Plain(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	r.NoError(box.AddString("test.txt", "<%= name %>"))
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("test.txt", []byte("<%= name %>"), 0644))
 
 	e := NewEngine()
-	e.TemplatesBox = box
+	e.TemplatesFS = rootFS
 
 	re := e.Plain("test.txt")
 	r.Equal("text/plain; charset=utf-8", re.ContentType())

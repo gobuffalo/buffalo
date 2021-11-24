@@ -3,6 +3,7 @@ package render
 import (
 	"encoding/json"
 	"html/template"
+	"io"
 	"path/filepath"
 
 	ht "github.com/gobuffalo/helpers/tags"
@@ -14,7 +15,7 @@ type helperTag struct {
 	fn   func(string, tags.Options) template.HTML
 }
 
-func (s templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
+func (s *templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 	helpers["assetPath"] = s.assetPath
 
 	ah := []helperTag{
@@ -51,11 +52,10 @@ func assetPathFor(file string) string {
 	return filepath.ToSlash(filepath.Join("/assets", filePath))
 }
 
-func loadManifest(manifest string) error {
+func loadManifest(manifest io.Reader) error {
 	m := map[string]string{}
 
-	err := json.Unmarshal([]byte(manifest), &m)
-	if err != nil {
+	if err := json.NewDecoder(manifest).Decode(&m); err != nil {
 		return err
 	}
 	for k, v := range m {

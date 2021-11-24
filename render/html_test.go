@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,10 +16,11 @@ const htmlTemplate = "my-template.html"
 func Test_HTML_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
 
 	h := e.HTML(htmlTemplate)
 	r.Equal("text/html; charset=utf-8", h.ContentType())
@@ -31,12 +33,13 @@ func Test_HTML_WithoutLayout(t *testing.T) {
 func Test_HTML_WithLayout(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
-	e.HTMLLayout = htmlLayout
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
-	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+	e.HTMLLayout = htmlLayout
 
 	h := e.HTML(htmlTemplate)
 	r.Equal("text/html; charset=utf-8", h.ContentType())
@@ -49,13 +52,14 @@ func Test_HTML_WithLayout(t *testing.T) {
 func Test_HTML_WithLayout_Override(t *testing.T) {
 	r := require.New(t)
 
-	e := NewEngine()
-	e.HTMLLayout = htmlLayout
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
+	r.NoError(rootFS.WriteFile(htmlAltLayout, []byte("<html><%= yield %></html>"), 0644))
 
-	box := e.TemplatesBox
-	r.NoError(box.AddString(htmlTemplate, "<%= name %>"))
-	r.NoError(box.AddString(htmlLayout, "<body><%= yield %></body>"))
-	r.NoError(box.AddString(htmlAltLayout, "<html><%= yield %></html>"))
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+	e.HTMLLayout = htmlLayout
 
 	h := e.HTML(htmlTemplate, htmlAltLayout)
 	r.Equal("text/html; charset=utf-8", h.ContentType())

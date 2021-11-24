@@ -8,7 +8,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/packd"
+	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -71,13 +71,12 @@ func Test_Auto_XML(t *testing.T) {
 func Test_Auto_HTML_List(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/index.html", "INDEX: <%= len(cars) %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/index.html", []byte("INDEX: <%= len(cars) %>"), 0644))
 
-	re := render.New(render.Options{
-		TemplatesBox: box,
-	})
+	re := render.NewEngine()
+	re.TemplatesFS = rootFS
 
 	app := buffalo.New(buffalo.Options{})
 	app.GET("/cars", func(c buffalo.Context) error {
@@ -102,12 +101,12 @@ func Test_Auto_HTML_List_Plural(t *testing.T) {
 
 	type People []Person
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("people/index.html", "INDEX: <%= len(people) %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("people", 0755))
+	r.NoError(rootFS.WriteFile("people/index.html", []byte("INDEX: <%= len(people) %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -127,12 +126,12 @@ func Test_Auto_HTML_List_Plural(t *testing.T) {
 func Test_Auto_HTML_Show(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/show.html", "Show: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/show.html", []byte("Show: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -143,18 +142,17 @@ func Test_Auto_HTML_Show(t *testing.T) {
 	w := httptest.New(app)
 	res := w.HTML("/cars/1").Get()
 	r.Contains(res.Body.String(), "Show: Honda")
-	r.NoError(err)
 }
 
 func Test_Auto_HTML_New(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/new.html", "New: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/new.html", []byte("New: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -170,12 +168,12 @@ func Test_Auto_HTML_New(t *testing.T) {
 func Test_Auto_HTML_Create(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/new.html", "New: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/new.html", []byte("New: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -208,12 +206,12 @@ func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/new.html", "Create: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/new.html", []byte("Create: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -269,12 +267,12 @@ func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
 func Test_Auto_HTML_Edit(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/edit.html", "Edit: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Edit: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -290,12 +288,12 @@ func Test_Auto_HTML_Edit(t *testing.T) {
 func Test_Auto_HTML_Update(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/edit.html", "Update: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Update: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -330,12 +328,12 @@ func Test_Auto_HTML_Update_Redirect(t *testing.T) {
 func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
 	r := require.New(t)
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("cars/edit.html", "Update: <%= car.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("cars", 0755))
+	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Update: <%= car.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -380,12 +378,12 @@ func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
 
 	type RoomProviders []RoomProvider
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("room_providers/index.html", "INDEX: <%= len(roomProviders) %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("room_providers", 0755))
+	r.NoError(rootFS.WriteFile("room_providers/index.html", []byte("INDEX: <%= len(roomProviders) %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -411,12 +409,12 @@ func Test_Auto_HTML_List_Plural_MultiWord_Dashed(t *testing.T) {
 
 	type RoomProviders []RoomProvider
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("room_providers/index.html", "INDEX: <%= len(roomProviders) %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("room_providers", 0755))
+	r.NoError(rootFS.WriteFile("room_providers/index.html", []byte("INDEX: <%= len(roomProviders) %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
@@ -441,12 +439,12 @@ func Test_Auto_HTML_Show_MultiWord_Dashed(t *testing.T) {
 		Name string
 	}
 
-	box := packd.NewMemoryBox()
-	err := box.AddString("room_providers/show.html", "SHOW: <%= roomProvider.Name %>")
-	r.NoError(err)
+	rootFS := memfs.New()
+	r.NoError(rootFS.MkdirAll("room_providers", 0755))
+	r.NoError(rootFS.WriteFile("room_providers/show.html", []byte("SHOW: <%= roomProvider.Name %>"), 0644))
 
 	re := render.New(render.Options{
-		TemplatesBox: box,
+		TemplatesFS: rootFS,
 	})
 
 	app := buffalo.New(buffalo.Options{})
