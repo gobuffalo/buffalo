@@ -48,50 +48,56 @@ func (s *templateRenderer) resolve(name string) ([]byte, error) {
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
-	if s.TemplatesFS != nil {
-		err := fs.WalkDir(s.TemplatesFS, ".", func(path string, d fs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if d.IsDir() {
-				return nil
-			}
 
-			base := filepath.Base(path)
-			dir := filepath.Dir(path)
-
-			var exts []string
-			sep := strings.Split(base, ".")
-			if len(sep) >= 1 {
-				base = sep[0]
-			}
-			if len(sep) > 1 {
-				exts = sep[1:]
-			}
-
-			for _, ext := range exts {
-				pn := filepath.Join(dir, base+"."+ext)
-				s.aliases.Store(pn, path)
-			}
-
-			return nil
-		})
-		if err != nil {
-			return err
-		}
+	if err := s.updateAliases(); err != nil {
+		return err
 	}
 
 	var body template.HTML
-	var err error
 	for _, name := range s.names {
+		var err error
 		body, err = s.exec(name, data)
 		if err != nil {
 			return fmt.Errorf("%s: %w", name, err)
 		}
 		data["yield"] = body
 	}
-	w.Write([]byte(body))
-	return nil
+	_, err := w.Write([]byte(body))
+	return err
+}
+
+func (s *templateRenderer) updateAliases() error {
+	if s.TemplatesFS == nil {
+		return nil
+	}
+
+	return fs.WalkDir(s.TemplatesFS, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+
+		base := filepath.Base(path)
+		dir := filepath.Dir(path)
+
+		var exts []string
+		sep := strings.Split(base, ".")
+		if len(sep) >= 1 {
+			base = sep[0]
+		}
+		if len(sep) > 1 {
+			exts = sep[1:]
+		}
+
+		for _, ext := range exts {
+			pn := filepath.Join(dir, base+"."+ext)
+			s.aliases.Store(pn, path)
+		}
+
+		return nil
+	})
 }
 
 func fixExtension(name string, ct string) string {
