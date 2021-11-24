@@ -23,10 +23,12 @@ type HTTPError struct {
 	Cause  error `json:"error"`
 }
 
+// Unwrap allows the error to be unwrapped.
 func (h HTTPError) Unwrap() error {
 	return h.Cause
 }
 
+// Error returns the cause of the error as string.
 func (h HTTPError) Error() string {
 	return h.Cause.Error()
 }
@@ -191,25 +193,22 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		origErr = cause
 	}
 
+	errResponse := errorResponseDefault(defaultErrorResponse, &ErrorResponse{
+		Error: origErr.Error(),
+		Trace: trace,
+		Code:  status,
+	})
+
 	switch strings.ToLower(requestCT) {
 	case "application/json", "text/json", "json":
 		c.Response().Header().Set("content-type", "application/json")
-
-		err := json.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: origErr.Error(),
-			Trace: trace,
-			Code:  status,
-		}))
+		err := json.NewEncoder(c.Response()).Encode(errResponse)
 		if err != nil {
 			return err
 		}
 	case "application/xml", "text/xml", "xml":
 		c.Response().Header().Set("content-type", "text/xml")
-		err := xml.NewEncoder(c.Response()).Encode(errorResponseDefault(defaultErrorResponse, &ErrorResponse{
-			Error: origErr.Error(),
-			Trace: trace,
-			Code:  status,
-		}))
+		err := xml.NewEncoder(c.Response()).Encode(errResponse)
 		if err != nil {
 			return err
 		}
@@ -245,10 +244,8 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return err
 		}
 
-		res := c.Response()
-		_, err = res.Write([]byte(t))
-
-		return err
+		c.Response().Write([]byte(t))
+		return nil
 	}
 	return nil
 }
