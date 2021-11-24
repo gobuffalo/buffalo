@@ -244,8 +244,8 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			return err
 		}
 
-		c.Response().Write([]byte(t))
-		return nil
+		_, err = c.Response().Write([]byte(t))
+		return err
 	}
 	return nil
 }
