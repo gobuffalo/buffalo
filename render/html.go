@@ -2,6 +2,7 @@ package render
 
 import (
 	"html"
+	"strings"
 
 	"github.com/gobuffalo/github_flavored_markdown"
 	"github.com/gobuffalo/plush/v4"
@@ -28,6 +29,14 @@ func HTML(names ...string) Renderer {
 // in the options, then that layout file will be used
 // automatically.
 func (e *Engine) HTML(names ...string) Renderer {
+	// just allow leading slash and remove them here.
+	// generated actions were various by buffalo versions.
+	tmp := []string{}
+	for _, name := range names {
+		tmp = append(tmp, strings.TrimPrefix(name, "/"))
+	}
+	names = tmp
+
 	if e.HTMLLayout != "" && len(names) == 1 {
 		names = append(names, e.HTMLLayout)
 	}
