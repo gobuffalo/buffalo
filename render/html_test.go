@@ -68,3 +68,22 @@ func Test_HTML_WithLayout_Override(t *testing.T) {
 	r.NoError(h.Render(bb, Data{"name": "Mark"}))
 	r.Equal("<html>Mark</html>", strings.TrimSpace(bb.String()))
 }
+
+func Test_HTML_LeadingSlash(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+	e.HTMLLayout = htmlLayout
+
+	h := e.HTML("/my-template.html") // instead of "my-template.html"
+	r.Equal("text/html; charset=utf-8", h.ContentType())
+	bb := &bytes.Buffer{}
+
+	r.NoError(h.Render(bb, Data{"name": "Mark"}))
+	r.Equal("<body>Mark</body>", strings.TrimSpace(bb.String()))
+}
