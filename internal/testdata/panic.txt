@@ -1,0 +1,1 @@
+This file must not be accessible from buffalo.FS.
