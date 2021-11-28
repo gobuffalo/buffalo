@@ -77,7 +77,7 @@ func Test_FS_ReadDirFile(t *testing.T) {
 	dir, ok := f.(fs.ReadDirFile)
 	r.True(ok, "folder does not implement fs.ReadDirFile interface")
 
-	// First read should return 1 file
+	// First read should return at most 1 file
 	entries, err := dir.ReadDir(1)
 	r.NoError(err)
 
