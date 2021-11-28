@@ -86,7 +86,7 @@ func Test_FS_ReadDirFile(t *testing.T) {
 	// if err == nil, just continue to call ReadDir until io.EOF is returned.
 	r.LessOrEqual(len(entries), 1, "a call to ReadDir must at most return n entries")
 
-	// First read should return at most 2 files
+	// Second read should return at most 2 files
 	entries, err = dir.ReadDir(2)
 	r.NoError(err)
 
