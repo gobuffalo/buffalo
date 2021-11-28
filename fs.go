@@ -2,7 +2,6 @@ package buffalo
 
 import (
 	"fmt"
-	"io"
 	"io/fs"
 	"os"
 )
@@ -60,28 +59,18 @@ func (f rootFile) ReadDir(n int) (entries []fs.DirEntry, err error) {
 		return nil, fmt.Errorf("%T is not a directory", f.File)
 	}
 
-	if n <= 0 {
-		entries, err = dir.ReadDir(n)
-		entries = hideEmbedFile(entries)
-	} else {
-		entries, err = dir.ReadDir(n + 1)
-		entries = hideEmbedFile(entries)
-		if len(entries) > n {
-			entries = entries[:n-1]
-		}
-	}
-
-	if len(entries) == 0 {
-		return entries, io.EOF
-	}
+	entries, err = dir.ReadDir(n)
+	entries = hideEmbedFile(entries)
 	return entries, err
 }
 
 func hideEmbedFile(entries []fs.DirEntry) []fs.DirEntry {
-	for i, entry := range entries {
-		if entry.Name() == "embed.go" {
-			entries = append(entries[:i], entries[i+1:]...)
+	result := make([]fs.DirEntry, 0, len(entries))
+
+	for _, entry := range entries {
+		if entry.Name() != "embed.go" {
+			result = append(result, entry)
 		}
 	}
-	return entries
+	return result
 }
