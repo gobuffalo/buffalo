@@ -154,3 +154,60 @@ func Test_App_Routes_Resource(t *testing.T) {
 		}
 	}
 }
+
+func Test_App_Host(t *testing.T) {
+	r := require.New(t)
+
+	a1 := New(Options{})
+	r.Nil(a1.root)
+
+	h1 := a1.Host("www.example.com")
+	h1.GET("/foo", voidHandler)
+
+	routes := h1.Routes()
+	r.Len(routes, 1)
+
+	route := routes[0]
+	r.Equal("GET", route.Method)
+	r.Equal("/foo/", route.Path)
+	r.NotZero(route.HandlerName)
+
+	// With Regular Expressions
+
+	a2 := New(Options{})
+	r.Nil(a1.root)
+
+	h2 := a2.Host("{subdomain}.example.com")
+	h2.GET("/foo", voidHandler)
+	h2.GET("/foo/{id}", voidHandler).Name("fooID")
+
+	rh := h2.RouteHelpers()
+
+	routes = h2.Routes()
+	r.Len(routes, 2)
+
+	r.Equal("GET", routes[0].Method)
+	r.Equal("/foo/", routes[0].Path)
+	r.NotZero(routes[0].HandlerName)
+
+	r.Equal("GET", routes[1].Method)
+	r.Equal("/foo/{id}/", routes[1].Path)
+	r.NotZero(routes[1].HandlerName)
+
+	f, ok := rh["fooPath"]
+	r.True(ok)
+	x, err := f(map[string]interface{}{
+		"subdomain": "test",
+	})
+	r.NoError(err)
+	r.Equal("http://test.example.com/foo/", string(x))
+
+	f, ok = rh["fooIDPath"]
+	r.True(ok)
+	x, err = f(map[string]interface{}{
+		"subdomain": "test",
+		"id":        1,
+	})
+	r.NoError(err)
+	r.Equal("http://test.example.com/foo/1/", string(x))
+}

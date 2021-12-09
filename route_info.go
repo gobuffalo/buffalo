@@ -84,7 +84,7 @@ func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 			return "", fmt.Errorf("missing parameters for %v: %s", cRoute.Path, err)
 		}
 
-		result := url.Path
+		result := url.String()
 		result = addExtraParamsTo(result, opts)
 
 		return template.HTML(result), nil
