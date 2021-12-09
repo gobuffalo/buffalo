@@ -112,15 +112,12 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		}
 		status := http.StatusInternalServerError
 		// unpack root err and check for HTTPError
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
+		if errors.Is(err, sql.ErrNoRows) {
 			status = http.StatusNotFound
-			fallthrough
-		default:
-			var h HTTPError
-			if errors.As(err, &h) {
-				status = h.Status
-			}
+		}
+		var h HTTPError
+		if errors.As(err, &h) {
+			status = h.Status
 		}
 		payload := events.Payload{
 			"context": c,
