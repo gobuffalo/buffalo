@@ -84,6 +84,29 @@ func (a *App) Mount(p string, h http.Handler) {
 	a.ANY(path, WrapHandler(http.StripPrefix(prefix, h)))
 }
 
+// Host creates a new "*App" group that matches the domain passed.
+// This is useful for creating groups of end-points for different domains.
+/*
+	a.Host("www.example.com")
+	a.Host("{subdomain}.example.com")
+	a.Host("{subdomain:[a-z]+}.example.com")
+*/
+func (a *App) Host(h string) *App {
+	g := New(a.Options)
+
+	g.router = a.router.Host(h).Subrouter()
+	g.RouteNamer = a.RouteNamer
+	g.Middleware = a.Middleware.clone()
+	g.ErrorHandlers = a.ErrorHandlers
+	g.root = a
+
+	if a.root != nil {
+		g.root = a.root
+	}
+
+	return g
+}
+
 // ServeFiles maps an path to a directory on disk to serve static files.
 // Useful for JavaScript, images, CSS, etc...
 /*
