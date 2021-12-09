@@ -23,7 +23,11 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 		return sql.ErrNoRows
 	})
 
-	app.GET("/wrap", func(c Context) error {
+	app.GET("/gone-unwrap", func(c Context) error {
+		return c.Error(http.StatusGone, sql.ErrNoRows)
+	})
+
+	app.GET("/gone-wrap", func(c Context) error {
 		return c.Error(http.StatusGone, errors.Wrap(sql.ErrNoRows, "some error wrapping here"))
 	})
 
@@ -35,6 +39,9 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 	res = w.HTML("/bad").Get()
 	r.Equal(http.StatusNotFound, res.Code)
 
-	res = w.HTML("/wrap").Get()
+	res = w.HTML("/gone-wrap").Get()
+	r.Equal(http.StatusGone, res.Code)
+
+	res = w.HTML("/gone-unwrap").Get()
 	r.Equal(http.StatusGone, res.Code)
 }
