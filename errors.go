@@ -115,6 +115,7 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		switch {
 		case errors.Is(err, sql.ErrNoRows):
 			status = http.StatusNotFound
+			fallthrough
 		default:
 			var h HTTPError
 			if errors.As(err, &h) {

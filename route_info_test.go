@@ -7,6 +7,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,6 +23,10 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 		return sql.ErrNoRows
 	})
 
+	app.GET("/wrap", func(c Context) error {
+		return c.Error(http.StatusGone, errors.Wrap(sql.ErrNoRows, "some error wrapping here"))
+	})
+
 	w := httptest.New(app)
 
 	res := w.HTML("/good").Get()
@@ -29,4 +34,7 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 
 	res = w.HTML("/bad").Get()
 	r.Equal(http.StatusNotFound, res.Code)
+
+	res = w.HTML("/wrap").Get()
+	r.Equal(http.StatusGone, res.Code)
 }
