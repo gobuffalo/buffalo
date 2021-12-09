@@ -2,12 +2,12 @@ package buffalo
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,12 +23,16 @@ func Test_RouteInfo_ServeHTTP_SQL_Error(t *testing.T) {
 		return sql.ErrNoRows
 	})
 
+	app.GET("/bad-2", func(c Context) error {
+		return sql.ErrTxDone
+	})
+
 	app.GET("/gone-unwrap", func(c Context) error {
-		return c.Error(http.StatusGone, sql.ErrNoRows)
+		return c.Error(http.StatusGone, sql.ErrTxDone)
 	})
 
 	app.GET("/gone-wrap", func(c Context) error {
-		return c.Error(http.StatusGone, errors.Wrap(sql.ErrNoRows, "some error wrapping here"))
+		return c.Error(http.StatusGone, fmt.Errorf("some error wrapping here: %w", sql.ErrNoRows))
 	})
 
 	w := httptest.New(app)
