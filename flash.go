@@ -39,7 +39,6 @@ func (f Flash) Add(key, value string) {
 func (f Flash) persist(session *Session) {
 	b, _ := json.Marshal(f.data)
 	session.Set(flashKey, b)
-	session.Save()
 }
 
 //newFlash creates a new Flash and loads the session data inside its data.
