@@ -54,12 +54,10 @@ func Test_Session_CustomValue(t *testing.T) {
 	})
 
 	w := httptest.New(a)
+	_ = w.HTML("/").Get()
 
-	resSetSession := w.HTML("/").Get()
-
-	// Create second request and set the cookie from the first response
+	// Create second request that should contain the cookie from the first response
 	reqGetSession := w.HTML("/session")
-	reqGetSession.Headers["Set-Cookie"] = resSetSession.Header().Values("Set-Cookie")[0]
 	resGetSession := reqGetSession.Get()
 
 	r.Equal(resGetSession.Body.String(), "test")
