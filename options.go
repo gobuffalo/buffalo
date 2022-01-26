@@ -57,7 +57,7 @@ type Options struct {
 	// PreHandlers are http.Handlers that are called between the http.Server
 	// and the buffalo Application.
 	PreHandlers []http.Handler `json:"-"`
-	// PreWare takes an http.Handler and returns and http.Handler
+	// PreWare takes an http.Handler and returns an http.Handler
 	// and acts as a pseudo-middleware between the http.Server and
 	// a Buffalo application.
 	PreWares []PreWare `json:"-"`
@@ -73,7 +73,7 @@ type Options struct {
 	cancel context.CancelFunc
 }
 
-// PreWare takes an http.Handler and returns and http.Handler
+// PreWare takes an http.Handler and returns an http.Handler
 // and acts as a pseudo-middleware between the http.Server and
 // a Buffalo application.
 type PreWare func(http.Handler) http.Handler
