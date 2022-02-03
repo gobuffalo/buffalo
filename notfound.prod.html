@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        h1,
+        p.powered {
+            text-align: center
+        }
+
+        body {
+            background: #ECECEC;
+            padding-top: 25px;
+            font-family: helvetica neue, helvetica, sans-serif;
+            color: #333
+        }
+
+        .card {
+            box-sizing: border-box;
+            width: 440px;
+            min-width: 270px;
+            margin: 0 auto;
+            padding: 10px 25px 35px 10px;
+            background: #FFF;
+            box-shadow: 0 2px 4px 0 rgba(185, 185, 185, .28);
+            border-radius: 5px
+        }
+
+        .card p {
+            max-width: 320px;
+            margin: 15px auto
+        }
+
+        h1 {
+            font-size: 22px
+        }
+
+        hr {
+            border: .5px solid #1272E2;
+            width: 180px
+        }
+
+        p.powered {
+            font-family: HelveticaNeue-Light;
+            font-size: 12px;
+            color: #333
+        }
+
+        @media (max-width:600px) {
+            .card {
+                width: 100%;
+                display: block
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Not Found</h1>
+            <hr>
+            <p>The page you're looking for does not exist, you may have mistyped the address or the page may have been
+                moved.</p>
+        </div>
+
+        <p class="powered">powered by <a href="https://gobuffalo.io">gobuffalo.io</a></p>
+    </div>
+</body>
+
+</html>
