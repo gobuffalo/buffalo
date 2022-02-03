@@ -42,7 +42,6 @@ func RequestLoggerFunc(h Handler) Handler {
 			}
 			irid = rs
 			c.Session().Set("requestor_id", irid)
-			c.Session().Save()
 		}
 
 		rid := irid.(string) + "-" + rs

@@ -63,13 +63,3 @@ func (a *App) getSession(r *http.Request, w http.ResponseWriter) *Session {
 		res:     w,
 	}
 }
-
-func sessionSaver(next Handler) Handler {
-	return func(c Context) error {
-		err := next(c)
-		if err != nil {
-			return err
-		}
-		return c.Session().Save()
-	}
-}

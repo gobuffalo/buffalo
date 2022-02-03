@@ -103,7 +103,6 @@ func (ri RouteInfo) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	events.EmitPayload(EvtRouteStarted, payload)
 	err := a.Middleware.handler(ri)(c)
-	c.Flash().persist(c.Session())
 
 	if err != nil {
 		status := http.StatusInternalServerError
