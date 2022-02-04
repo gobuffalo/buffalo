@@ -311,15 +311,15 @@ func Test_Router_Group_Middleware(t *testing.T) {
 
 	a := testApp()
 	a.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 5)
+	r.Len(a.Middleware.stack, 4)
 
 	g := a.Group("/api/v1")
-	r.Len(a.Middleware.stack, 5)
-	r.Len(g.Middleware.stack, 5)
+	r.Len(a.Middleware.stack, 4)
+	r.Len(g.Middleware.stack, 4)
 
 	g.Use(func(h Handler) Handler { return h })
-	r.Len(a.Middleware.stack, 5)
-	r.Len(g.Middleware.stack, 6)
+	r.Len(a.Middleware.stack, 4)
+	r.Len(g.Middleware.stack, 5)
 }
 
 func Test_Router_Redirect(t *testing.T) {
