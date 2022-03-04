@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"syscall"
 
 	"github.com/gobuffalo/buffalo/servers"
@@ -18,6 +19,8 @@ import (
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve(srvs ...servers.Server) error {
+	var wg sync.WaitGroup
+
 	a.Logger.Infof("Starting application at http://%s", a.Options.Addr)
 
 	payload := events.Payload{
@@ -42,31 +45,33 @@ func (a *App) Serve(srvs ...servers.Server) error {
 	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
 	defer cancel()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		// gracefully shut down the application when the context is cancelled
+		// this channel waiter should not be called any other place
 		<-ctx.Done()
 		a.Logger.Info("Shutting down application")
 
 		events.EmitError(EvtAppStop, ctx.Err(), payload)
-
 		if err := a.Stop(ctx.Err()); err != nil {
 			events.EmitError(EvtAppStopErr, err, payload)
-			a.Logger.Error(err)
+			a.Logger.Warn("shutting down application: ", err)
 		}
 
 		if !a.WorkerOff {
-			// stop the workers
 			a.Logger.Info("Shutting down worker")
 			events.EmitPayload(EvtWorkerStop, payload)
 			if err := a.Worker.Stop(); err != nil {
 				events.EmitError(EvtWorkerStopErr, err, payload)
-				a.Logger.Error(err)
+				a.Logger.Warn("shutting down worker: ", err)
 			}
 		}
 
+		a.Logger.Info("Shutting down servers")
 		for _, s := range srvs {
 			if err := s.Shutdown(ctx); err != nil {
-				a.Logger.Error(err)
+				a.Logger.Warn("shutting down server: ", err)
 			}
 		}
 
@@ -74,7 +79,9 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
+		wg.Add(1)
 		go func() {
+			defer wg.Done()
 			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
 				a.Stop(err)
@@ -84,23 +91,30 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	for _, s := range srvs {
 		s.SetAddr(a.Addr)
+		wg.Add(1)
 		go func(s servers.Server) {
+			defer wg.Done()
 			if err := s.Start(ctx, a); err != nil {
 				a.Stop(err)
 			}
 		}(s)
 	}
 
-	<-ctx.Done()
+	wg.Wait()
+	a.Logger.Info("Shutdown completed")
 
-	return a.Context.Err()
+	err := ctx.Err()
+	if errors.Is(err, context.Canceled) {
+		return nil
+	}
+	return err
 }
 
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
 	a.cancel()
 	if err != nil && !errors.Is(err, context.Canceled) {
-		a.Logger.Error(err)
+		a.Logger.Warn("stopping application: ", err)
 		return err
 	}
 	return nil

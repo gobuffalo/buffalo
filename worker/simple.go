@@ -44,6 +44,7 @@ type Simple struct {
 	cancel   context.CancelFunc
 	handlers map[string]Handler
 	moot     *sync.Mutex
+	wg       sync.WaitGroup
 }
 
 // Register Handler with the worker
@@ -65,14 +66,15 @@ func (w *Simple) Start(ctx context.Context) error {
 }
 
 // Stop the worker
-func (w Simple) Stop() error {
+func (w *Simple) Stop() error {
 	w.Logger.Info("Stopping Simple Background Worker")
+	w.wg.Wait()
 	w.cancel()
 	return nil
 }
 
 // Perform a job as soon as possibly using a goroutine.
-func (w Simple) Perform(job Job) error {
+func (w *Simple) Perform(job Job) error {
 	w.Logger.Debugf("Performing job %s", job)
 	if job.Handler == "" {
 		err := fmt.Errorf("no handler name given for %s", job)
@@ -82,7 +84,9 @@ func (w Simple) Perform(job Job) error {
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
+		w.wg.Add(1)
 		go func() {
+			defer w.wg.Done()
 			err := safe.RunE(func() error {
 				return h(job.Args)
 			})
@@ -100,13 +104,13 @@ func (w Simple) Perform(job Job) error {
 }
 
 // PerformAt performs a job at a particular time using a goroutine.
-func (w Simple) PerformAt(job Job, t time.Time) error {
+func (w *Simple) PerformAt(job Job, t time.Time) error {
 	return w.PerformIn(job, time.Until(t))
 }
 
 // PerformIn performs a job after waiting for a specified amount
 // using a goroutine.
-func (w Simple) PerformIn(job Job, d time.Duration) error {
+func (w *Simple) PerformIn(job Job, d time.Duration) error {
 	go func() {
 		select {
 		case <-time.After(d):
