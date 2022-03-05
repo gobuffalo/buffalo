@@ -195,7 +195,6 @@ var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
 // Redirect a request with the given status to the given URL.
 func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
 	if d.Session() != nil {
-		d.Flash().Clear()
 		d.Flash().persist(d.Session())
 		if err := d.Session().Save(); err != nil {
 			return HTTPError{Status: http.StatusInternalServerError, Cause: err}
