@@ -69,9 +69,10 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		}
 
 		a.Logger.Info("Shutting down servers")
+		graceful := context.Background()
 		for _, s := range srvs {
-			if err := s.Shutdown(ctx); err != nil {
-				a.Logger.Warn("shutting down server: ", err)
+			if err := s.Shutdown(graceful); err != nil {
+				a.Logger.Error("shutting down server: ", err)
 			}
 		}
 
