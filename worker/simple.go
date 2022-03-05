@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/events"
 	"github.com/markbates/safe"
 	"github.com/sirupsen/logrus"
 )
@@ -60,30 +61,38 @@ func (w *Simple) Register(name string, h Handler) error {
 
 // Start the worker
 func (w *Simple) Start(ctx context.Context) error {
-	w.Logger.Info("Starting Simple Background Worker")
+	events.EmitPayload(EvtWorkerStart, events.Payload{"worker": w})
+	w.Logger.Info("starting Simple background worker")
+
 	w.ctx, w.cancel = context.WithCancel(ctx)
 	return nil
 }
 
 // Stop the worker
 func (w *Simple) Stop() error {
-	w.Logger.Info("Stopping Simple Background Worker")
+	events.EmitPayload(EvtWorkerStop, events.Payload{"worker": w})
+	w.Logger.Info("stopping Simple background worker")
+
 	w.wg.Wait()
+	w.Logger.Info("all background jobs stopped completely")
 	w.cancel()
 	return nil
 }
 
 // Perform a job as soon as possibly using a goroutine.
 func (w *Simple) Perform(job Job) error {
-	w.Logger.Debugf("Performing job %s", job)
+	w.Logger.Debugf("performing job %s", job)
+
 	if job.Handler == "" {
 		err := fmt.Errorf("no handler name given for %s", job)
 		w.Logger.Error(err)
 		return err
 	}
+
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
+		// TODO: consider to implement timeout and/or cancellation
 		w.wg.Add(1)
 		go func() {
 			defer w.wg.Done()
@@ -94,10 +103,11 @@ func (w *Simple) Perform(job Job) error {
 			if err != nil {
 				w.Logger.Error(err)
 			}
-			w.Logger.Debugf("Completed job %s", job)
+			w.Logger.Debugf("completed job %s", job)
 		}()
 		return nil
 	}
+
 	err := fmt.Errorf("no handler mapped for name %s", job.Handler)
 	w.Logger.Error(err)
 	return err

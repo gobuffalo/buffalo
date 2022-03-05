@@ -8,8 +8,10 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/gobuffalo/buffalo/servers"
+	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
 	"github.com/markbates/sigtx"
@@ -21,7 +23,9 @@ import (
 func (a *App) Serve(srvs ...servers.Server) error {
 	var wg sync.WaitGroup
 
-	a.Logger.Infof("Starting application at http://%s", a.Options.Addr)
+	// TODO: this information is not correct.
+	// It needs to be fixed as we support multiple servers.
+	a.Logger.Infof("starting application at http://%s", a.Options.Addr)
 
 	payload := events.Payload{
 		"app": a,
@@ -47,35 +51,32 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	wg.Add(1)
 	go func() {
-		defer wg.Done()
 		// gracefully shut down the application when the context is cancelled
-		// this channel waiter should not be called any other place
+		defer wg.Done()
+		// channel waiter should not be called any other place
 		<-ctx.Done()
-		a.Logger.Info("Shutting down application")
 
-		events.EmitError(EvtAppStop, ctx.Err(), payload)
-		if err := a.Stop(ctx.Err()); err != nil {
-			events.EmitError(EvtAppStopErr, err, payload)
-			a.Logger.Warn("shutting down application: ", err)
+		a.Logger.Info("shutting down application")
+
+		// shutting down listeners first, to make sure no more new request
+		a.Logger.Info("shutting down servers")
+		for _, s := range srvs {
+			// TODO: implement shutdown timeout as an option
+			ctx, cfn := context.WithTimeout(context.Background(), 60*time.Second)
+			defer cfn()
+			if err := s.Shutdown(ctx); err != nil {
+				a.Logger.Error("shutting down server: ", err)
+			}
+			cfn()
 		}
 
 		if !a.WorkerOff {
-			a.Logger.Info("Shutting down worker")
-			events.EmitPayload(EvtWorkerStop, payload)
+			a.Logger.Info("shutting down worker")
 			if err := a.Worker.Stop(); err != nil {
-				events.EmitError(EvtWorkerStopErr, err, payload)
-				a.Logger.Warn("shutting down worker: ", err)
+				events.EmitError(worker.EvtWorkerStopErr, err, payload)
+				a.Logger.Error("error while shutting down worker: ", err)
 			}
 		}
-
-		a.Logger.Info("Shutting down servers")
-		graceful := context.Background()
-		for _, s := range srvs {
-			if err := s.Shutdown(graceful); err != nil {
-				a.Logger.Error("shutting down server: ", err)
-			}
-		}
-
 	}()
 
 	// if configured to do so, start the workers
@@ -83,7 +84,6 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
 				a.Stop(err)
 			}
@@ -95,14 +95,13 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		wg.Add(1)
 		go func(s servers.Server) {
 			defer wg.Done()
-			if err := s.Start(ctx, a); err != nil {
-				a.Stop(err)
-			}
+			// s.Start always returns non-nil error
+			a.Stop(s.Start(ctx, a))
 		}(s)
 	}
 
 	wg.Wait()
-	a.Logger.Info("Shutdown completed")
+	a.Logger.Info("shutdown completed")
 
 	err := ctx.Err()
 	if errors.Is(err, context.Canceled) {
@@ -113,11 +112,16 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
-	a.cancel()
-	if err != nil && !errors.Is(err, context.Canceled) {
-		a.Logger.Warn("stopping application: ", err)
-		return err
+	events.EmitError(EvtAppStop, err, events.Payload{"app": a})
+
+	ce := a.Context.Err()
+	if ce != nil {
+		a.Logger.Warn("application context has already been canceled: ", ce)
+		return errors.New("application has already been canceled")
 	}
+
+	a.Logger.Warn("stopping application: ", err)
+	a.cancel()
 	return nil
 }
 
