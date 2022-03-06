@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
 	"sync"
 	"syscall"
@@ -14,7 +15,6 @@ import (
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
-	"github.com/markbates/sigtx"
 )
 
 // Serve the application at the specified address/port and listen for OS
@@ -46,7 +46,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		}
 	}
 
-	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(a.Context, syscall.SIGTERM, os.Interrupt)
 	defer cancel()
 
 	wg.Add(1)

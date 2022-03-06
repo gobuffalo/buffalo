@@ -26,7 +26,6 @@ require (
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.12.0
 	github.com/markbates/safe v1.0.1
-	github.com/markbates/sigtx v1.0.0
 	github.com/monoculum/formam v3.5.5+incompatible
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef
 	github.com/sirupsen/logrus v1.8.1
