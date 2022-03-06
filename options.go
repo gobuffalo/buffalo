@@ -48,6 +48,10 @@ type Options struct {
 	// to "_buffalo_session".
 	SessionName string `json:"session_name"`
 
+	// Timeout in second for ongoing requests when shutdown the server.
+	// The default value is 60.
+	TimeoutSecondShutdown int `json:"timeout_second_shutdown"`
+
 	// Worker implements the Worker interface and can process tasks in the background.
 	// Default is "github.com/gobuffalo/worker.Simple.
 	Worker worker.Worker `json:"-"`
@@ -99,6 +103,7 @@ func optionsWithDefaults(opts Options) Options {
 		// TCP case
 		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, envy.Get("PORT", "3000")))
 	}
+	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
 
 	if opts.PreWares == nil {
 		opts.PreWares = []PreWare{}
@@ -176,12 +181,15 @@ func optionsWithDefaults(opts Options) Options {
 
 		opts.SessionStore = cookieStore
 	}
+	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
+
 	if opts.Worker == nil {
 		w := worker.NewSimpleWithContext(opts.Context)
 		w.Logger = opts.Logger
 		opts.Worker = w
 	}
-	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
-	opts.Host = defaults.String(opts.Host, envy.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", envy.Get("PORT", "3000"))))
+
+	opts.TimeoutSecondShutdown = defaults.Int(opts.TimeoutSecondShutdown, 60)
+
 	return opts
 }

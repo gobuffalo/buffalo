@@ -61,8 +61,8 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		// shutting down listeners first, to make sure no more new request
 		a.Logger.Info("shutting down servers")
 		for _, s := range srvs {
-			// TODO: implement shutdown timeout as an option
-			ctx, cfn := context.WithTimeout(context.Background(), 60*time.Second)
+			timeout := time.Duration(a.Options.TimeoutSecondShutdown) * time.Second
+			ctx, cfn := context.WithTimeout(context.Background(), timeout)
 			defer cfn()
 			if err := s.Shutdown(ctx); err != nil {
 				a.Logger.Error("shutting down server: ", err)
