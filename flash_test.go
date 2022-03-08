@@ -3,6 +3,7 @@ package buffalo
 import (
 	"net/http"
 	"testing"
+	"text/template"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
@@ -120,4 +121,30 @@ func Test_FlashRenderCustomKeyNotDefined(t *testing.T) {
 const customKeyTPL = `
 	{{#each flash.other as |k value|}}
 		{{value}}
-	{{/each}}`
+	{{/each}}
+`
+
+func Test_FlashNotClearedOnRedirect(t *testing.T) {
+	r := require.New(t)
+	a := New(Options{})
+	rr := render.New(render.Options{})
+
+	a.GET("/flash", func(c Context) error {
+		c.Flash().Add("success", "Antonio, you're welcome!")
+		return c.Redirect(http.StatusSeeOther, "/")
+	})
+
+	a.GET("/", func(c Context) error {
+		template := `Message: <%= flash["success"] %>`
+		return c.Render(http.StatusCreated, rr.String(template))
+	})
+
+	w := httptest.New(a)
+	res := w.HTML("/flash").Get()
+	r.Equal(res.Code, http.StatusSeeOther)
+	r.Equal(res.Location(), "/")
+
+	res = w.HTML("/").Get()
+	r.Contains(res.Body.String(), template.HTMLEscapeString("Antonio, you're welcome!"))
+
+}
