@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/servers"
-	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
 )
@@ -23,7 +22,7 @@ import (
 func (a *App) Serve(srvs ...servers.Server) error {
 	var wg sync.WaitGroup
 
-	// TODO: this information is not correct.
+	// FIXME: this information is not correct.
 	// It needs to be fixed as we support multiple servers.
 	a.Logger.Infof("starting application at http://%s", a.Options.Addr)
 
@@ -31,6 +30,8 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		"app": a,
 	}
 	if err := events.EmitPayload(EvtAppStart, payload); err != nil {
+		// just to make sure if events work properly?
+		a.Logger.Error("unable to emit event. something went wrong internally")
 		return err
 	}
 
@@ -64,7 +65,9 @@ func (a *App) Serve(srvs ...servers.Server) error {
 			timeout := time.Duration(a.Options.TimeoutSecondShutdown) * time.Second
 			ctx, cfn := context.WithTimeout(context.Background(), timeout)
 			defer cfn()
+			events.EmitPayload(EvtServerStop, payload)
 			if err := s.Shutdown(ctx); err != nil {
+				events.EmitError(EvtServerStopErr, err, payload)
 				a.Logger.Error("shutting down server: ", err)
 			}
 			cfn()
@@ -72,8 +75,9 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 		if !a.WorkerOff {
 			a.Logger.Info("shutting down worker")
+			events.EmitPayload(EvtWorkerStop, payload)
 			if err := a.Worker.Stop(); err != nil {
-				events.EmitError(worker.EvtWorkerStopErr, err, payload)
+				events.EmitError(EvtWorkerStopErr, err, payload)
 				a.Logger.Error("error while shutting down worker: ", err)
 			}
 		}
@@ -84,7 +88,9 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
+				events.EmitError(EvtWorkerStartErr, err, payload)
 				a.Stop(err)
 			}
 		}()
@@ -95,6 +101,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		wg.Add(1)
 		go func(s servers.Server) {
 			defer wg.Done()
+			events.EmitPayload(EvtServerStart, payload)
 			// s.Start always returns non-nil error
 			a.Stop(s.Start(ctx, a))
 		}(s)

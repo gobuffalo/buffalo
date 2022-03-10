@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gobuffalo/events"
 	"github.com/markbates/safe"
 	"github.com/sirupsen/logrus"
 )
@@ -61,7 +60,6 @@ func (w *Simple) Register(name string, h Handler) error {
 
 // Start the worker
 func (w *Simple) Start(ctx context.Context) error {
-	events.EmitPayload(EvtWorkerStart, events.Payload{"worker": w})
 	w.Logger.Info("starting Simple background worker")
 
 	w.ctx, w.cancel = context.WithCancel(ctx)
@@ -70,7 +68,6 @@ func (w *Simple) Start(ctx context.Context) error {
 
 // Stop the worker
 func (w *Simple) Stop() error {
-	events.EmitPayload(EvtWorkerStop, events.Payload{"worker": w})
 	w.Logger.Info("stopping Simple background worker")
 
 	w.wg.Wait()
