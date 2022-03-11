@@ -27,7 +27,6 @@ require (
 	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.12.0
 	github.com/markbates/safe v1.0.1
-	github.com/markbates/sigtx v1.0.0
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/monoculum/formam v3.5.5+incompatible
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef

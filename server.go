@@ -5,25 +5,33 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
+	"time"
 
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
 	"github.com/markbates/refresh/refresh/web"
-	"github.com/markbates/sigtx"
 )
 
 // Serve the application at the specified address/port and listen for OS
 // interrupt and kill signals and will attempt to stop the application
 // gracefully. This will also start the Worker process, unless WorkerOff is enabled.
 func (a *App) Serve(srvs ...servers.Server) error {
-	a.Logger.Infof("Starting application at http://%s", a.Options.Addr)
+	var wg sync.WaitGroup
+
+	// FIXME: this information is not correct.
+	// It needs to be fixed as we support multiple servers.
+	a.Logger.Infof("starting application at http://%s", a.Options.Addr)
 
 	payload := events.Payload{
 		"app": a,
 	}
 	if err := events.EmitPayload(EvtAppStart, payload); err != nil {
+		// just to make sure if events work properly?
+		a.Logger.Error("unable to emit event. something went wrong internally")
 		return err
 	}
 
@@ -39,44 +47,50 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		}
 	}
 
-	ctx, cancel := sigtx.WithCancel(a.Context, syscall.SIGTERM, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(a.Context, syscall.SIGTERM, os.Interrupt)
 	defer cancel()
 
+	wg.Add(1)
 	go func() {
 		// gracefully shut down the application when the context is cancelled
+		defer wg.Done()
+		// channel waiter should not be called any other place
 		<-ctx.Done()
-		a.Logger.Info("Shutting down application")
 
-		events.EmitError(EvtAppStop, ctx.Err(), payload)
+		a.Logger.Info("shutting down application")
 
-		if err := a.Stop(ctx.Err()); err != nil {
-			events.EmitError(EvtAppStopErr, err, payload)
-			a.Logger.Error(err)
+		// shutting down listeners first, to make sure no more new request
+		a.Logger.Info("shutting down servers")
+		for _, s := range srvs {
+			timeout := time.Duration(a.Options.TimeoutSecondShutdown) * time.Second
+			ctx, cfn := context.WithTimeout(context.Background(), timeout)
+			defer cfn()
+			events.EmitPayload(EvtServerStop, payload)
+			if err := s.Shutdown(ctx); err != nil {
+				events.EmitError(EvtServerStopErr, err, payload)
+				a.Logger.Error("shutting down server: ", err)
+			}
+			cfn()
 		}
 
 		if !a.WorkerOff {
-			// stop the workers
-			a.Logger.Info("Shutting down worker")
+			a.Logger.Info("shutting down worker")
 			events.EmitPayload(EvtWorkerStop, payload)
 			if err := a.Worker.Stop(); err != nil {
 				events.EmitError(EvtWorkerStopErr, err, payload)
-				a.Logger.Error(err)
+				a.Logger.Error("error while shutting down worker: ", err)
 			}
 		}
-
-		for _, s := range srvs {
-			if err := s.Shutdown(ctx); err != nil {
-				a.Logger.Error(err)
-			}
-		}
-
 	}()
 
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
+		wg.Add(1)
 		go func() {
+			defer wg.Done()
 			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
+				events.EmitError(EvtWorkerStartErr, err, payload)
 				a.Stop(err)
 			}
 		}()
@@ -84,25 +98,37 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	for _, s := range srvs {
 		s.SetAddr(a.Addr)
+		wg.Add(1)
 		go func(s servers.Server) {
-			if err := s.Start(ctx, a); err != nil {
-				a.Stop(err)
-			}
+			defer wg.Done()
+			events.EmitPayload(EvtServerStart, payload)
+			// s.Start always returns non-nil error
+			a.Stop(s.Start(ctx, a))
 		}(s)
 	}
 
-	<-ctx.Done()
+	wg.Wait()
+	a.Logger.Info("shutdown completed")
 
-	return a.Context.Err()
+	err := ctx.Err()
+	if errors.Is(err, context.Canceled) {
+		return nil
+	}
+	return err
 }
 
 // Stop the application and attempt to gracefully shutdown
 func (a *App) Stop(err error) error {
-	a.cancel()
-	if err != nil && !errors.Is(err, context.Canceled) {
-		a.Logger.Error(err)
-		return err
+	events.EmitError(EvtAppStop, err, events.Payload{"app": a})
+
+	ce := a.Context.Err()
+	if ce != nil {
+		a.Logger.Warn("application context has already been canceled: ", ce)
+		return errors.New("application has already been canceled")
 	}
+
+	a.Logger.Warn("stopping application: ", err)
+	a.cancel()
 	return nil
 }
 

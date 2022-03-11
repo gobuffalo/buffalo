@@ -44,6 +44,7 @@ type Simple struct {
 	cancel   context.CancelFunc
 	handlers map[string]Handler
 	moot     *sync.Mutex
+	wg       sync.WaitGroup
 }
 
 // Register Handler with the worker
@@ -59,30 +60,39 @@ func (w *Simple) Register(name string, h Handler) error {
 
 // Start the worker
 func (w *Simple) Start(ctx context.Context) error {
-	w.Logger.Info("Starting Simple Background Worker")
+	w.Logger.Info("starting Simple background worker")
+
 	w.ctx, w.cancel = context.WithCancel(ctx)
 	return nil
 }
 
 // Stop the worker
-func (w Simple) Stop() error {
-	w.Logger.Info("Stopping Simple Background Worker")
+func (w *Simple) Stop() error {
+	w.Logger.Info("stopping Simple background worker")
+
+	w.wg.Wait()
+	w.Logger.Info("all background jobs stopped completely")
 	w.cancel()
 	return nil
 }
 
 // Perform a job as soon as possibly using a goroutine.
-func (w Simple) Perform(job Job) error {
-	w.Logger.Debugf("Performing job %s", job)
+func (w *Simple) Perform(job Job) error {
+	w.Logger.Debugf("performing job %s", job)
+
 	if job.Handler == "" {
 		err := fmt.Errorf("no handler name given for %s", job)
 		w.Logger.Error(err)
 		return err
 	}
+
 	w.moot.Lock()
 	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
+		// TODO: consider to implement timeout and/or cancellation
+		w.wg.Add(1)
 		go func() {
+			defer w.wg.Done()
 			err := safe.RunE(func() error {
 				return h(job.Args)
 			})
@@ -90,23 +100,24 @@ func (w Simple) Perform(job Job) error {
 			if err != nil {
 				w.Logger.Error(err)
 			}
-			w.Logger.Debugf("Completed job %s", job)
+			w.Logger.Debugf("completed job %s", job)
 		}()
 		return nil
 	}
+
 	err := fmt.Errorf("no handler mapped for name %s", job.Handler)
 	w.Logger.Error(err)
 	return err
 }
 
 // PerformAt performs a job at a particular time using a goroutine.
-func (w Simple) PerformAt(job Job, t time.Time) error {
+func (w *Simple) PerformAt(job Job, t time.Time) error {
 	return w.PerformIn(job, time.Until(t))
 }
 
 // PerformIn performs a job after waiting for a specified amount
 // using a goroutine.
-func (w Simple) PerformIn(job Job, d time.Duration) error {
+func (w *Simple) PerformIn(job Job, d time.Duration) error {
 	go func() {
 		select {
 		case <-time.After(d):
