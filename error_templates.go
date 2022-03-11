@@ -1,7 +1,7 @@
 package buffalo
 
 import (
-	_ "embed"
+	_ "embed" // needed to embed the templates.
 )
 
 var (
