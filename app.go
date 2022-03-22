@@ -14,15 +14,13 @@ import (
 // Without an App you can't do much!
 type App struct {
 	Options
-	// Middleware returns the current MiddlewareStack for the App/Group.
-	Middleware    *MiddlewareStack `json:"-"`
-	ErrorHandlers ErrorHandlers    `json:"-"`
-	router        *mux.Router
-	moot          *sync.RWMutex
-	routes        RouteList
-	root          *App
-	children      []*App
-	filepaths     []string
+	// Middleware, ErrorHandlers, router, and filepaths are moved to Home.
+	Home
+	moot   *sync.RWMutex
+	routes RouteList
+	// TODO: to be deprecated #road-to-v1
+	root     *App
+	children []*App
 
 	// Routenamer for the app. This field provides the ability to override the
 	// base route namer for something more specific to the app.
@@ -44,11 +42,16 @@ func New(opts Options) *App {
 
 	a := &App{
 		Options: opts,
-		ErrorHandlers: ErrorHandlers{
-			http.StatusNotFound:            defaultErrorHandler,
-			http.StatusInternalServerError: defaultErrorHandler,
+		Home: Home{
+			name:   opts.Name,
+			host:   opts.Host,
+			prefix: opts.Prefix,
+			ErrorHandlers: ErrorHandlers{
+				http.StatusNotFound:            defaultErrorHandler,
+				http.StatusInternalServerError: defaultErrorHandler,
+			},
+			router: mux.NewRouter(),
 		},
-		router:   mux.NewRouter(),
 		moot:     &sync.RWMutex{},
 		routes:   RouteList{},
 		children: []*App{},
