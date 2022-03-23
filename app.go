@@ -58,6 +58,8 @@ func New(opts Options) *App {
 
 		RouteNamer: baseRouteNamer{},
 	}
+	a.Home.app = a     // replace root.
+	a.Home.appSelf = a // temporary, reverse reference to the group app.
 
 	dem := a.defaultErrorMiddleware
 	a.Middleware = newMiddlewareStack(dem)

@@ -20,6 +20,8 @@ const (
 	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
 
+// These method functions will be moved to Home structure.
+
 // GET maps an HTTP "GET" request to the path and the specified handler.
 func (a *App) GET(p string, h Handler) *RouteInfo {
 	return a.addRoute("GET", p, h)
@@ -92,17 +94,21 @@ func (a *App) Mount(p string, h http.Handler) {
 	a.Host("{subdomain:[a-z]+}.example.com")
 */
 func (a *App) Host(h string) *App {
+	// TODO: move this function to app.go or home.go eventually.
+	// in the end, it should return *Home.
 	g := New(a.Options)
 
+	g.host = h
 	g.router = a.router.Host(h).Subrouter()
 	g.RouteNamer = a.RouteNamer
 	g.Middleware = a.Middleware.clone()
 	g.ErrorHandlers = a.ErrorHandlers
-	g.root = a
 
-	if a.root != nil {
-		g.root = a.root
-	}
+	g.app = a.app  // will replace g.root
+	g.root = g.app // will be deprecated
+
+	// to be replaced with child Homes. currently, only used in grifts.
+	a.children = append(a.children, g)
 
 	return g
 }
@@ -228,6 +234,7 @@ func (a *App) Resource(p string, r Resource) *App {
 	g.DELETE(path.Join(spath), r.Destroy).ResourceName = resourceName
 
 	g.Prefix = path.Join(g.Prefix, spath)
+	g.prefix = g.Prefix
 
 	return g
 }
@@ -254,18 +261,26 @@ func (a *App) ANY(p string, h Handler) {
 	g.GET("/users/:user_id, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
+	// TODO: move this function to app.go or home.go eventually.
 	g := New(a.Options)
+	// keep them for v0 compatibility
 	g.Prefix = path.Join(a.Prefix, groupPath)
 	g.Name = g.Prefix
+
+	// for Home structure
+	g.prefix = path.Join(a.prefix, groupPath)
+	g.host = a.host
+	g.name = g.prefix
 
 	g.router = a.router
 	g.RouteNamer = a.RouteNamer
 	g.Middleware = a.Middleware.clone()
 	g.ErrorHandlers = a.ErrorHandlers
-	g.root = a
-	if a.root != nil {
-		g.root = a.root
-	}
+
+	g.app = a.app  // will replace g.root
+	g.root = g.app // will be deprecated
+
+	// to be replaced with child Homes. currently, only used in grifts.
 	a.children = append(a.children, g)
 	return g
 }
@@ -280,13 +295,15 @@ func (a *App) RouteHelpers() map[string]RouteHelperFunc {
 	return rh
 }
 
-func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
-	a.moot.Lock()
-	defer a.moot.Unlock()
+func (e *Home) addRoute(method string, url string, h Handler) *RouteInfo {
+	// NOTE: lock the root app (not this app). only the root has the affective
+	// routes list.
+	e.app.moot.Lock()
+	defer e.app.moot.Unlock()
 
-	url = path.Join(a.Prefix, url)
-	url = a.normalizePath(url)
-	name := a.RouteNamer.NameRoute(url)
+	url = path.Join(e.prefix, url)
+	url = e.app.normalizePath(url)
+	name := e.app.RouteNamer.NameRoute(url)
 
 	hs := funcKey(h)
 	r := &RouteInfo{
@@ -294,22 +311,19 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
-		App:         a,
+		App:         e.appSelf, // CHKME: to be replaced with Home
 		Aliases:     []string{},
 	}
 
-	r.MuxRoute = a.router.Handle(url, r).Methods(method)
+	r.MuxRoute = e.router.Handle(url, r).Methods(method)
 	r.Name(name)
 
-	routes := a.Routes()
+	routes := e.app.Routes()
 	routes = append(routes, r)
+	// do we really need to sort this?
 	sort.Sort(routes)
 
-	if a.root != nil {
-		a.root.routes = routes
-	} else {
-		a.routes = routes
-	}
+	e.app.routes = routes
 
 	return r
 }
