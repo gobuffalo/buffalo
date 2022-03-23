@@ -49,7 +49,7 @@ func (ri *RouteInfo) Alias(aliases ...string) *RouteInfo {
 func (ri *RouteInfo) Name(name string) *RouteInfo {
 	routeIndex := -1
 	for index, route := range ri.App.Routes() {
-		if route.Path == ri.Path && route.Method == ri.Method {
+		if route.App.host == ri.App.host && route.Path == ri.Path && route.Method == ri.Method {
 			routeIndex = index
 			break
 		}

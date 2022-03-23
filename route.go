@@ -11,6 +11,7 @@ import (
 // Routes returns a list of all of the routes defined
 // in this application.
 func (a *App) Routes() RouteList {
+	// CHKME: why this function is exported? can we deprecate it?
 	if a.root != nil {
 		return a.root.routes
 	}
