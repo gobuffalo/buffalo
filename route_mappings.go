@@ -85,33 +85,6 @@ func (a *App) Mount(p string, h http.Handler) {
 	a.ANY(path, WrapHandler(http.StripPrefix(prefix, h)))
 }
 
-// Host creates a new "*App" group that matches the domain passed.
-// This is useful for creating groups of end-points for different domains.
-/*
-	a.Host("www.example.com")
-	a.Host("{subdomain}.example.com")
-	a.Host("{subdomain:[a-z]+}.example.com")
-*/
-func (a *App) Host(h string) *App {
-	// TODO: move this function to app.go or home.go eventually.
-	// in the end, it should return *Home.
-	g := New(a.Options)
-
-	g.host = h
-	g.router = a.router.Host(h).Subrouter()
-	g.RouteNamer = a.RouteNamer
-	g.Middleware = a.Middleware.clone()
-	g.ErrorHandlers = a.ErrorHandlers
-
-	g.app = a.app  // will replace g.root
-	g.root = g.app // will be deprecated
-
-	// to be replaced with child Homes. currently, only used in grifts.
-	a.children = append(a.children, g)
-
-	return g
-}
-
 // ServeFiles maps an path to a directory on disk to serve static files.
 // Useful for JavaScript, images, CSS, etc...
 /*
@@ -288,6 +261,30 @@ func (a *App) Group(groupPath string) *App {
 
 	// to be replaced with child Homes. currently, only used in grifts.
 	a.children = append(a.children, g)
+	return g
+}
+
+// VirtualHost creates a new `*App` that inherits from it's parent `*App`.
+// All pre-configured things on the parent App such as middlewares will be
+// applied, and can be modified only for this child App.
+//
+// This is a multi-homing feature similar to the `VirtualHost` in Apache
+// or multiple `server`s in nginx. One important different behavior is that
+// there is no concept of the `default` host in buffalo (at least for now)
+// and the routing decision will be made with the "first match" manner.
+// (e.g. if you have already set the route for '/' for the root App before
+// setting up a virualhost, the route of the root App will be picked up
+// even if the client makes a request to the specified domain.)
+/*
+	a.VirtualHost("www.example.com")
+	a.VirtualHost("{subdomain}.example.com")
+	a.VirtualHost("{subdomain:[a-z]+}.example.com")
+*/
+func (a *App) VirtualHost(h string) *App {
+	g := a.Group("/")
+	g.host = h
+	g.router = a.router.Host(h).Subrouter()
+
 	return g
 }
 
