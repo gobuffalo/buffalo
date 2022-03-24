@@ -155,13 +155,13 @@ func Test_App_Routes_Resource(t *testing.T) {
 	}
 }
 
-func Test_App_Host(t *testing.T) {
+func Test_App_VirtualHost(t *testing.T) {
 	r := require.New(t)
 
 	a1 := New(Options{})
 	r.Nil(a1.root)
 
-	h1 := a1.Host("www.example.com")
+	h1 := a1.VirtualHost("www.example.com")
 	h1.GET("/foo", voidHandler)
 
 	routes := h1.Routes()
@@ -177,7 +177,7 @@ func Test_App_Host(t *testing.T) {
 	a2 := New(Options{})
 	r.Nil(a1.root)
 
-	h2 := a2.Host("{subdomain}.example.com")
+	h2 := a2.VirtualHost("{subdomain}.example.com")
 	h2.GET("/foo", voidHandler)
 	h2.GET("/foo/{id}", voidHandler).Name("fooID")
 
