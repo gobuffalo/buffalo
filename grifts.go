@@ -44,22 +44,24 @@ func printMiddleware(a *App) {
 
 func printMiddlewareByRoute(a *App) {
 	mws := map[string]string{}
+	// TODO: middleware is 'per App' can it be a loop for Apps?
 	for _, r := range a.Routes() {
-		if mws[r.App.Name] == "" {
-			pname := ""
+		key := r.App.host + r.App.name
+		if mws[key] == "" {
+			pname := r.App.host
 			if parent := getParentApp(r.App.root, r.App.Name); parent != nil {
-				pname = parent.Name
+				pname += parent.Name
 			}
 
-			mws[r.App.Name] = r.App.Middleware.String()
-			if mws[pname] != mws[r.App.Name] {
-				fmt.Printf("-> %s\n", r.App.Name)
-				printMiddlewareStackWithIndent(mws[r.App.Name])
+			mws[key] = r.App.Middleware.String()
+			if pname == key || mws[pname] != mws[key] {
+				fmt.Printf("-> %s\n", key)
+				printMiddlewareStackWithIndent(mws[key])
 			} else {
-				fmt.Printf("-> %s (see: %v)\n", r.App.Name, pname)
+				fmt.Printf("-> %s (see: %v)\n", key, pname)
 			}
 		}
-		s := "\n" + mws[r.App.Name]
+		s := "\n" + mws[key]
 		for k := range r.App.Middleware.skips {
 			mw := strings.Split(k, funcKeyDelimeter)[0]
 			h := strings.Split(k, funcKeyDelimeter)[1]
@@ -67,10 +69,10 @@ func printMiddlewareByRoute(a *App) {
 				s = strings.Replace(s, "\n"+mw, "", 1)
 			}
 		}
-		if "\n"+mws[r.App.Name] != s {
+		if "\n"+mws[key] != s {
 			ahn := strings.Split(r.HandlerName, "/")
 			hn := ahn[len(ahn)-1]
-			fmt.Printf("-> %s %s (by %s)\n", r.Method, r.Path, hn)
+			fmt.Printf("-> %s %s (by %s)\n", r.Method, r.App.host+r.Path, hn)
 			printMiddlewareStackWithIndent(s)
 		}
 	}
@@ -106,10 +108,10 @@ func routesGrift(a *App) {
 	grift.Add("routes", func(c *grift.Context) error {
 		routes := a.Routes()
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
-		fmt.Fprintln(w, "METHOD\t PATH\t ALIASES\t NAME\t HANDLER")
-		fmt.Fprintln(w, "------\t ----\t -------\t ----\t -------")
+		fmt.Fprintln(w, "METHOD\t HOST\t PATH\t ALIASES\t NAME\t HANDLER")
+		fmt.Fprintln(w, "------\t ----\t ----\t -------\t ----\t -------")
 		for _, r := range routes {
-			fmt.Fprintf(w, "%s\t %s\t %s\t %s\t %s\n", r.Method, r.Path, strings.Join(r.Aliases, " "), r.PathName, r.HandlerName)
+			fmt.Fprintf(w, "%s\t %s\t %s\t %s\t %s\t %s\n", r.Method, r.App.host, r.Path, strings.Join(r.Aliases, " "), r.PathName, r.HandlerName)
 		}
 		w.Flush()
 		return nil
