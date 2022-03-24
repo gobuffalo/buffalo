@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"reflect"
-	"sort"
 	"strings"
 
 	"github.com/gobuffalo/envy"
@@ -162,6 +161,11 @@ type editable interface {
 // to the appropriate RESTful mappings. Resource returns the *App
 // associated with this group of mappings so you can set middleware, etc...
 // on that group, just as if you had used the a.Group functionality.
+//
+// Resource automatically creates a URL `/resources/new` if the resource
+// has a function `New()`. So it could act as a restriction for the value
+// of `resource_id`. URL `/resources/new` will always show the resource
+// creation page instead of showing the resource called `new`.
 /*
 	a.Resource("/users", &UsersResource{})
 
@@ -170,12 +174,12 @@ type editable interface {
 	ur := &UsersResource{}
 	g := a.Group("/users")
 	g.GET("/", ur.List) // GET /users => ur.List
+	g.POST("/", ur.Create) // POST /users => ur.Create
 	g.GET("/new", ur.New) // GET /users/new => ur.New
 	g.GET("/{user_id}", ur.Show) // GET /users/{user_id} => ur.Show
+	g.PUT("/{user_id}", ur.Update) // PUT /users/{user_id} => ur.Update
+	g.DELETE("/{user_id}", ur.Destroy) // DELETE /users/{user_id} => ur.Destroy
 	g.GET("/{user_id}/edit", ur.Edit) // GET /users/{user_id}/edit => ur.Edit
-	g.POST("/", ur.Create) // POST /users => ur.Create
-	g.PUT("/{user_id}", ur.Update) PUT /users/{user_id} => ur.Update
-	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
 	g := a.Group(p)
@@ -208,9 +212,14 @@ func (a *App) Resource(p string, r Resource) *App {
 
 	spath := path.Join(p, "{"+paramName+"}")
 
+	// This order will become the order of route evaluation too.
 	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
 	g.GET(p, r.List).ResourceName = resourceName
 
+	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
+	g.POST(p, r.Create).ResourceName = resourceName
+
+	// NOTE: it makes restriction that resource id cannot be 'new'.
 	if n, ok := r.(newable); ok {
 		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
 		g.GET(path.Join(p, "new"), n.New).ResourceName = resourceName
@@ -219,19 +228,16 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
 	g.GET(path.Join(spath), r.Show).ResourceName = resourceName
 
-	if n, ok := r.(editable); ok {
-		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
-		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
-	}
-
-	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
-	g.POST(p, r.Create).ResourceName = resourceName
-
 	setFuncKey(r.Update, fmt.Sprintf(handlerName, "Update"))
 	g.PUT(path.Join(spath), r.Update).ResourceName = resourceName
 
 	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy).ResourceName = resourceName
+
+	if n, ok := r.(editable); ok {
+		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
+		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
+	}
 
 	g.Prefix = path.Join(g.Prefix, spath)
 	g.prefix = g.Prefix
@@ -320,8 +326,12 @@ func (e *Home) addRoute(method string, url string, h Handler) *RouteInfo {
 
 	routes := e.app.Routes()
 	routes = append(routes, r)
-	// do we really need to sort this?
-	sort.Sort(routes)
+	// NOTE: sorting is fancy but we lose the evaluation order information
+	// of routing decision. Let's keep the routes as registered order so
+	// developers can easily evaluate the order with `buffalo routes` and
+	// can debug any routing priority issue. (just keep the original line
+	// as history reference)
+	//sort.Sort(routes)
 
 	e.app.routes = routes
 
