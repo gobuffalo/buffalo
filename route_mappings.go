@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"reflect"
-	"sort"
 	"strings"
 
 	"github.com/gobuffalo/envy"
@@ -19,6 +18,8 @@ const (
 	// AssetsAgeVarName is the ENV variable used to specify max age when ServeFiles is used.
 	AssetsAgeVarName = "ASSETS_MAX_AGE"
 )
+
+// These method functions will be moved to Home structure.
 
 // GET maps an HTTP "GET" request to the path and the specified handler.
 func (a *App) GET(p string, h Handler) *RouteInfo {
@@ -84,29 +85,6 @@ func (a *App) Mount(p string, h http.Handler) {
 	a.ANY(path, WrapHandler(http.StripPrefix(prefix, h)))
 }
 
-// Host creates a new "*App" group that matches the domain passed.
-// This is useful for creating groups of end-points for different domains.
-/*
-	a.Host("www.example.com")
-	a.Host("{subdomain}.example.com")
-	a.Host("{subdomain:[a-z]+}.example.com")
-*/
-func (a *App) Host(h string) *App {
-	g := New(a.Options)
-
-	g.router = a.router.Host(h).Subrouter()
-	g.RouteNamer = a.RouteNamer
-	g.Middleware = a.Middleware.clone()
-	g.ErrorHandlers = a.ErrorHandlers
-	g.root = a
-
-	if a.root != nil {
-		g.root = a.root
-	}
-
-	return g
-}
-
 // ServeFiles maps an path to a directory on disk to serve static files.
 // Useful for JavaScript, images, CSS, etc...
 /*
@@ -156,6 +134,11 @@ type editable interface {
 // to the appropriate RESTful mappings. Resource returns the *App
 // associated with this group of mappings so you can set middleware, etc...
 // on that group, just as if you had used the a.Group functionality.
+//
+// Resource automatically creates a URL `/resources/new` if the resource
+// has a function `New()`. So it could act as a restriction for the value
+// of `resource_id`. URL `/resources/new` will always show the resource
+// creation page instead of showing the resource called `new`.
 /*
 	a.Resource("/users", &UsersResource{})
 
@@ -164,12 +147,12 @@ type editable interface {
 	ur := &UsersResource{}
 	g := a.Group("/users")
 	g.GET("/", ur.List) // GET /users => ur.List
+	g.POST("/", ur.Create) // POST /users => ur.Create
 	g.GET("/new", ur.New) // GET /users/new => ur.New
 	g.GET("/{user_id}", ur.Show) // GET /users/{user_id} => ur.Show
+	g.PUT("/{user_id}", ur.Update) // PUT /users/{user_id} => ur.Update
+	g.DELETE("/{user_id}", ur.Destroy) // DELETE /users/{user_id} => ur.Destroy
 	g.GET("/{user_id}/edit", ur.Edit) // GET /users/{user_id}/edit => ur.Edit
-	g.POST("/", ur.Create) // POST /users => ur.Create
-	g.PUT("/{user_id}", ur.Update) PUT /users/{user_id} => ur.Update
-	g.DELETE("/{user_id}", ur.Destroy) DELETE /users/{user_id} => ur.Destroy
 */
 func (a *App) Resource(p string, r Resource) *App {
 	g := a.Group(p)
@@ -202,9 +185,14 @@ func (a *App) Resource(p string, r Resource) *App {
 
 	spath := path.Join(p, "{"+paramName+"}")
 
+	// This order will become the order of route evaluation too.
 	setFuncKey(r.List, fmt.Sprintf(handlerName, "List"))
 	g.GET(p, r.List).ResourceName = resourceName
 
+	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
+	g.POST(p, r.Create).ResourceName = resourceName
+
+	// NOTE: it makes restriction that resource id cannot be 'new'.
 	if n, ok := r.(newable); ok {
 		setFuncKey(n.New, fmt.Sprintf(handlerName, "New"))
 		g.GET(path.Join(p, "new"), n.New).ResourceName = resourceName
@@ -213,21 +201,19 @@ func (a *App) Resource(p string, r Resource) *App {
 	setFuncKey(r.Show, fmt.Sprintf(handlerName, "Show"))
 	g.GET(path.Join(spath), r.Show).ResourceName = resourceName
 
-	if n, ok := r.(editable); ok {
-		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
-		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
-	}
-
-	setFuncKey(r.Create, fmt.Sprintf(handlerName, "Create"))
-	g.POST(p, r.Create).ResourceName = resourceName
-
 	setFuncKey(r.Update, fmt.Sprintf(handlerName, "Update"))
 	g.PUT(path.Join(spath), r.Update).ResourceName = resourceName
 
 	setFuncKey(r.Destroy, fmt.Sprintf(handlerName, "Destroy"))
 	g.DELETE(path.Join(spath), r.Destroy).ResourceName = resourceName
 
+	if n, ok := r.(editable); ok {
+		setFuncKey(n.Edit, fmt.Sprintf(handlerName, "Edit"))
+		g.GET(path.Join(spath, "edit"), n.Edit).ResourceName = resourceName
+	}
+
 	g.Prefix = path.Join(g.Prefix, spath)
+	g.prefix = g.Prefix
 
 	return g
 }
@@ -254,19 +240,51 @@ func (a *App) ANY(p string, h Handler) {
 	g.GET("/users/:user_id, APIUserShowHandler)
 */
 func (a *App) Group(groupPath string) *App {
+	// TODO: move this function to app.go or home.go eventually.
 	g := New(a.Options)
+	// keep them for v0 compatibility
 	g.Prefix = path.Join(a.Prefix, groupPath)
 	g.Name = g.Prefix
+
+	// for Home structure
+	g.prefix = path.Join(a.prefix, groupPath)
+	g.host = a.host
+	g.name = g.prefix
 
 	g.router = a.router
 	g.RouteNamer = a.RouteNamer
 	g.Middleware = a.Middleware.clone()
 	g.ErrorHandlers = a.ErrorHandlers
-	g.root = a
-	if a.root != nil {
-		g.root = a.root
-	}
+
+	g.app = a.app  // will replace g.root
+	g.root = g.app // will be deprecated
+
+	// to be replaced with child Homes. currently, only used in grifts.
 	a.children = append(a.children, g)
+	return g
+}
+
+// VirtualHost creates a new `*App` that inherits from it's parent `*App`.
+// All pre-configured things on the parent App such as middlewares will be
+// applied, and can be modified only for this child App.
+//
+// This is a multi-homing feature similar to the `VirtualHost` in Apache
+// or multiple `server`s in nginx. One important different behavior is that
+// there is no concept of the `default` host in buffalo (at least for now)
+// and the routing decision will be made with the "first match" manner.
+// (e.g. if you have already set the route for '/' for the root App before
+// setting up a virualhost, the route of the root App will be picked up
+// even if the client makes a request to the specified domain.)
+/*
+	a.VirtualHost("www.example.com")
+	a.VirtualHost("{subdomain}.example.com")
+	a.VirtualHost("{subdomain:[a-z]+}.example.com")
+*/
+func (a *App) VirtualHost(h string) *App {
+	g := a.Group("/")
+	g.host = h
+	g.router = a.router.Host(h).Subrouter()
+
 	return g
 }
 
@@ -280,13 +298,15 @@ func (a *App) RouteHelpers() map[string]RouteHelperFunc {
 	return rh
 }
 
-func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
-	a.moot.Lock()
-	defer a.moot.Unlock()
+func (e *Home) addRoute(method string, url string, h Handler) *RouteInfo {
+	// NOTE: lock the root app (not this app). only the root has the affective
+	// routes list.
+	e.app.moot.Lock()
+	defer e.app.moot.Unlock()
 
-	url = path.Join(a.Prefix, url)
-	url = a.normalizePath(url)
-	name := a.RouteNamer.NameRoute(url)
+	url = path.Join(e.prefix, url)
+	url = e.app.normalizePath(url)
+	name := e.app.RouteNamer.NameRoute(url)
 
 	hs := funcKey(h)
 	r := &RouteInfo{
@@ -294,22 +314,23 @@ func (a *App) addRoute(method string, url string, h Handler) *RouteInfo {
 		Path:        url,
 		HandlerName: hs,
 		Handler:     h,
-		App:         a,
+		App:         e.appSelf, // CHKME: to be replaced with Home
 		Aliases:     []string{},
 	}
 
-	r.MuxRoute = a.router.Handle(url, r).Methods(method)
+	r.MuxRoute = e.router.Handle(url, r).Methods(method)
 	r.Name(name)
 
-	routes := a.Routes()
+	routes := e.app.Routes()
 	routes = append(routes, r)
-	sort.Sort(routes)
+	// NOTE: sorting is fancy but we lose the evaluation order information
+	// of routing decision. Let's keep the routes as registered order so
+	// developers can easily evaluate the order with `buffalo routes` and
+	// can debug any routing priority issue. (just keep the original line
+	// as history reference)
+	//sort.Sort(routes)
 
-	if a.root != nil {
-		a.root.routes = routes
-	} else {
-		a.routes = routes
-	}
+	e.app.routes = routes
 
 	return r
 }

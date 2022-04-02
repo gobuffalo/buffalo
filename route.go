@@ -11,6 +11,7 @@ import (
 // Routes returns a list of all of the routes defined
 // in this application.
 func (a *App) Routes() RouteList {
+	// CHKME: why this function is exported? can we deprecate it?
 	if a.root != nil {
 		return a.root.routes
 	}
@@ -64,11 +65,20 @@ type RouteHelperFunc func(opts map[string]interface{}) (template.HTML, error)
 // and the name of the Handler defined to process that route.
 type RouteList []*RouteInfo
 
+var methodOrder = map[string]string{
+	"GET":    "1",
+	"POST":   "2",
+	"PUT":    "3",
+	"DELETE": "4",
+}
+
 func (a RouteList) Len() int      { return len(a) }
 func (a RouteList) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a RouteList) Less(i, j int) bool {
-	x := a[i].Path // + a[i].Method
-	y := a[j].Path // + a[j].Method
+	// NOTE: it was used for sorting of app.routes but we don't sort the routes anymore.
+	// keep it for compatibility but could be deprecated.
+	x := a[i].App.host + a[i].Path + methodOrder[a[i].Method]
+	y := a[j].App.host + a[j].Path + methodOrder[a[j].Method]
 	return x < y
 }
 
