@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/gobuffalo/envy v1.10.1
 	github.com/gobuffalo/events v1.4.2
-	github.com/gobuffalo/flect v0.2.4
+	github.com/gobuffalo/flect v0.2.5
 	github.com/gobuffalo/github_flavored_markdown v1.1.1
 	github.com/gobuffalo/helpers v0.6.4
 	github.com/gobuffalo/httptest v1.5.1
