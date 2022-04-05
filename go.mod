@@ -3,7 +3,7 @@ module github.com/gobuffalo/buffalo
 go 1.16
 
 require (
-	github.com/BurntSushi/toml v1.0.0
+	github.com/BurntSushi/toml v1.1.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.13.0
 	github.com/gobuffalo/envy v1.10.1
