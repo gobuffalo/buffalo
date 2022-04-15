@@ -30,7 +30,7 @@ func (h HTTPError) Unwrap() error {
 
 // Error returns the cause of the error as string.
 func (h HTTPError) Error() string {
-	return h.Cause.Error()
+	return fmt.Sprint(h.Cause)
 }
 
 // ErrorHandler interface for handling an error for a

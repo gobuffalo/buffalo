@@ -143,6 +143,18 @@ func Test_defaultErrorHandler_XML_production(t *testing.T) {
 	r.Contains(b, `</response>`)
 }
 
+func Test_defaultErrorHandler_nil_error(t *testing.T) {
+	r := require.New(t)
+	app := New(Options{})
+	app.GET("/", func(c Context) error {
+		return c.Error(http.StatusInternalServerError, nil)
+	})
+
+	w := httptest.New(app)
+	res := w.JSON("/").Get()
+	r.Equal(http.StatusInternalServerError, res.Code)
+}
+
 func Test_PanicHandler(t *testing.T) {
 	app := New(Options{})
 	app.GET("/string", func(c Context) error {
