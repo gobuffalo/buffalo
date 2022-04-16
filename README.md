@@ -34,9 +34,9 @@ Please visit [http://gobuffalo.io](http://gobuffalo.io) for the latest documenta
 
 ### Quick Start
 
-- [Installation](http://gobuffalo.io/docs/installation)
-- [Create a new project](http://gobuffalo.io/docs/new-project)
-- [Examples](http://gobuffalo.io/docs/examples)
+- [Installation](https://gobuffalo.io/documentation/getting_started/installation)
+- [Create a new project](https://gobuffalo.io/documentation/getting_started/new-project)
+- [Tutorials](https://gobuffalo.io/documentation/tutorials/)
 
 ## Shoulders of Giants
 

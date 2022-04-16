@@ -5,6 +5,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   tests-off:
     name: ${{ matrix.os }} - Go v${{ matrix.go-version }}
