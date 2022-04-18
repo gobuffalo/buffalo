@@ -2,6 +2,7 @@ package worker
 
 import (
 	"context"
+	"sync"
 	"testing"
 	"time"
 
@@ -160,15 +161,21 @@ func Test_Simple_PerformAt(t *testing.T) {
 	w := NewSimple()
 	r.NoError(w.Start(context.Background()))
 
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+
 	w.Register("x", func(Args) error {
 		hit = true
+		wg.Done()
 		return nil
 	})
 	w.PerformAt(Job{
 		Handler: "x",
 	}, time.Now().Add(5*time.Millisecond))
 
-	time.Sleep(10 * time.Millisecond)
+	// how long does the handler take for assignment? hmm,
+	time.Sleep(100 * time.Millisecond)
+	wg.Wait()
 	r.True(hit)
 
 	r.NoError(w.Stop())
@@ -181,15 +188,21 @@ func Test_Simple_PerformIn(t *testing.T) {
 	w := NewSimple()
 	r.NoError(w.Start(context.Background()))
 
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+
 	w.Register("x", func(Args) error {
 		hit = true
+		wg.Done()
 		return nil
 	})
 	w.PerformIn(Job{
 		Handler: "x",
 	}, 5*time.Millisecond)
 
-	time.Sleep(10 * time.Millisecond)
+	// how long does the handler take for assignment? hmm,
+	time.Sleep(100 * time.Millisecond)
+	wg.Wait()
 	r.True(hit)
 
 	r.NoError(w.Stop())
