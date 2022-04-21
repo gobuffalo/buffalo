@@ -143,6 +143,15 @@ func Test_DefaultContext_GetSet(t *testing.T) {
 	r.Equal("Mark", c.Value("name").(string))
 }
 
+func Test_DefaultContext_Set_Unconfigured(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{}
+
+	c.Set("name", "Yonghwan")
+	r.NotNil(c.Value("name"))
+	r.Equal("Yonghwan", c.Value("name").(string))
+}
+
 func Test_DefaultContext_Value(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()
@@ -151,7 +160,12 @@ func Test_DefaultContext_Value(t *testing.T) {
 	c.Set("name", "Mark")
 	r.NotNil(c.Value("name"))
 	r.Equal("Mark", c.Value("name").(string))
-	r.Equal("Mark", c.Value("name").(string))
+}
+
+func Test_DefaultContext_Value_Unconfigured(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{}
+	r.Nil(c.Value("name"))
 }
 
 func Test_DefaultContext_Render(t *testing.T) {
@@ -300,4 +314,69 @@ func Test_DefaultContext_Bind_JSON(t *testing.T) {
 	r.Equal(http.StatusCreated, res.Code)
 
 	r.Equal("Mark", user.FirstName)
+}
+
+func Test_DefaultContext_Data(t *testing.T) {
+	r := require.New(t)
+	c := basicContext()
+
+	r.EqualValues(map[string]interface{}{}, c.Data())
+}
+
+func Test_DefaultContext_Data_Unconfigured(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{}
+
+	r.EqualValues(map[string]interface{}{}, c.Data())
+}
+
+func Test_DefaultContext_String(t *testing.T) {
+	r := require.New(t)
+	c := basicContext()
+	c.Set("name", "Buffalo")
+	c.Set("language", "go")
+
+	r.EqualValues("language: go\n\nname: Buffalo", c.String())
+}
+
+func Test_DefaultContext_String_EmptyData(t *testing.T) {
+	r := require.New(t)
+	c := basicContext()
+	r.EqualValues("", c.String())
+}
+
+func Test_DefaultContext_String_EmptyData_Unconfigured(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{}
+
+	r.EqualValues("", c.String())
+}
+
+func Test_DefaultContext_MarshalJSON(t *testing.T) {
+	r := require.New(t)
+	c := basicContext()
+	c.Set("name", "Buffalo")
+	c.Set("language", "go")
+
+	jb, err := c.MarshalJSON()
+	r.NoError(err)
+	r.EqualValues(`{"language":"go","name":"Buffalo"}`, string(jb))
+}
+
+func Test_DefaultContext_MarshalJSON_EmptyData(t *testing.T) {
+	r := require.New(t)
+	c := basicContext()
+
+	jb, err := c.MarshalJSON()
+	r.NoError(err)
+	r.EqualValues(`{}`, string(jb))
+}
+
+func Test_DefaultContext_MarshalJSON_EmptyData_Unconfigured(t *testing.T) {
+	r := require.New(t)
+	c := DefaultContext{}
+
+	jb, err := c.MarshalJSON()
+	r.NoError(err)
+	r.EqualValues(`{}`, string(jb))
 }
