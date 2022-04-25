@@ -22,10 +22,6 @@ import (
 func (a *App) Serve(srvs ...servers.Server) error {
 	var wg sync.WaitGroup
 
-	// FIXME: this information is not correct.
-	// It needs to be fixed as we support multiple servers.
-	a.Logger.Infof("starting application at http://%s", a.Options.Addr)
-
 	payload := events.Payload{
 		"app": a,
 	}
@@ -35,6 +31,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		return err
 	}
 
+	// Add default server if necessary
 	if len(srvs) == 0 {
 		if strings.HasPrefix(a.Options.Addr, "unix:") {
 			tcp, err := servers.UnixSocket(a.Options.Addr[5:])
@@ -98,6 +95,8 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	for _, s := range srvs {
 		s.SetAddr(a.Addr)
+		a.Logger.Infof("starting server of type %T at %s",
+			s, s.Addr())
 		wg.Add(1)
 		go func(s servers.Server) {
 			defer wg.Done()
