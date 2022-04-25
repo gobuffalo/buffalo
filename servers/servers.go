@@ -8,6 +8,7 @@ import (
 
 // Server allows for custom server implementations
 type Server interface {
+	Addr() string
 	Shutdown(context.Context) error
 	Start(context.Context, http.Handler) error
 	SetAddr(string)

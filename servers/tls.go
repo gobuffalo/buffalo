@@ -19,6 +19,11 @@ func (s *TLS) SetAddr(addr string) {
 	}
 }
 
+// Addr gets the HTTP server address
+func (s *TLS) Addr() string {
+	return s.Server.Addr
+}
+
 // Start the server
 func (s *TLS) Start(c context.Context, h http.Handler) error {
 	s.Handler = h

@@ -17,6 +17,11 @@ func (s *Simple) SetAddr(addr string) {
 	}
 }
 
+// Addr gets the HTTP server address
+func (s *Simple) Addr() string {
+	return s.Server.Addr
+}
+
 // Start the server
 func (s *Simple) Start(c context.Context, h http.Handler) error {
 	s.Handler = h
