@@ -22,6 +22,8 @@ import (
 func (a *App) Serve(srvs ...servers.Server) error {
 	var wg sync.WaitGroup
 
+	a.Logger.Debug("starting application")
+
 	payload := events.Payload{
 		"app": a,
 	}
@@ -31,7 +33,6 @@ func (a *App) Serve(srvs ...servers.Server) error {
 		return err
 	}
 
-	// Add default server if necessary
 	if len(srvs) == 0 {
 		if strings.HasPrefix(a.Options.Addr, "unix:") {
 			tcp, err := servers.UnixSocket(a.Options.Addr[5:])
@@ -95,8 +96,7 @@ func (a *App) Serve(srvs ...servers.Server) error {
 
 	for _, s := range srvs {
 		s.SetAddr(a.Addr)
-		a.Logger.Infof("starting server of type %T at %s",
-			s, s.Addr())
+		a.Logger.Infof("starting %s", s)
 		wg.Add(1)
 		go func(s servers.Server) {
 			defer wg.Done()
