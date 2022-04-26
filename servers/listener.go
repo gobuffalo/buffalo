@@ -2,6 +2,7 @@ package servers
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 )
@@ -19,9 +20,9 @@ func (s *Listener) SetAddr(addr string) {
 	}
 }
 
-// Addr gets the HTTP server address
-func (s *Listener) Addr() string {
-	return s.Server.Addr
+// String returns a string representation of a Listener
+func (s *Listener) String() string {
+	return fmt.Sprintf("listener on %s", s.Server.Addr)
 }
 
 // Start the server

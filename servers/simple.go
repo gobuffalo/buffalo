@@ -2,6 +2,7 @@ package servers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -17,9 +18,9 @@ func (s *Simple) SetAddr(addr string) {
 	}
 }
 
-// Addr gets the HTTP server address
-func (s *Simple) Addr() string {
-	return s.Server.Addr
+// String returns a string representation of a Simple server
+func (s *Simple) String() string {
+	return fmt.Sprintf("simple server on %s", s.Server.Addr)
 }
 
 // Start the server
