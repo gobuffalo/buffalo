@@ -2,7 +2,7 @@ package buffalo
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"path"
@@ -98,7 +98,7 @@ func Test_Mount_Buffalo(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
+		b, _ := io.ReadAll(res.Body)
 		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
@@ -123,7 +123,7 @@ func Test_Mount_Buffalo_on_Group(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
+		b, _ := io.ReadAll(res.Body)
 		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
@@ -158,7 +158,7 @@ func Test_Mount_Handler(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
+		b, _ := io.ReadAll(res.Body)
 		r.Equal(fmt.Sprintf("%s - %s/", m, u), string(b))
 	}
 }
@@ -197,7 +197,7 @@ func Test_PreHandlers(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, err := ioutil.ReadAll(res.Body)
+		b, err := io.ReadAll(res.Body)
 		r.NoError(err)
 		r.Equal(v.Code, res.StatusCode)
 		r.Equal(v.Result, string(b))
@@ -242,7 +242,7 @@ func Test_PreWares(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, err := ioutil.ReadAll(res.Body)
+		b, err := io.ReadAll(res.Body)
 		r.NoError(err)
 		r.Equal(v.Code, res.StatusCode)
 		r.Equal(v.Result, string(b))
@@ -269,7 +269,7 @@ func Test_Router(t *testing.T) {
 		r.NoError(err)
 		res, err := http.DefaultClient.Do(req)
 		r.NoError(err)
-		b, _ := ioutil.ReadAll(res.Body)
+		b, _ := io.ReadAll(res.Body)
 		r.Equal(fmt.Sprintf("%s|/router/tests", v), string(b))
 	}
 }
@@ -552,7 +552,7 @@ func Test_Resource(t *testing.T) {
 			r.NoError(err)
 			res, err := c.Do(req)
 			r.NoError(err)
-			b, err := ioutil.ReadAll(res.Body)
+			b, err := io.ReadAll(res.Body)
 			r.NoError(err)
 			r.Equal(test.Result, string(b))
 		}
@@ -710,7 +710,7 @@ func Test_ResourceOnResource(t *testing.T) {
 		r.NoError(err)
 		res, err := c.Do(req)
 		r.NoError(err)
-		b, err := ioutil.ReadAll(res.Body)
+		b, err := io.ReadAll(res.Body)
 		r.NoError(err)
 		r.Equal(test.Result, string(b))
 	}
