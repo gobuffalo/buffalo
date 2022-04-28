@@ -2,7 +2,7 @@ package plugins
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -20,7 +20,7 @@ func TestAskBin_respectsTimeout(t *testing.T) {
 		return
 	}
 
-	if fileEntries, err := ioutil.ReadDir(from); err == nil {
+	if fileEntries, err := os.ReadDir(from); err == nil {
 		found := false
 		for _, e := range fileEntries {
 			if strings.HasPrefix(e.Name(), "buffalo-") {
