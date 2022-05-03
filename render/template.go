@@ -79,22 +79,8 @@ func (s *templateRenderer) updateAliases() error {
 			return nil
 		}
 
-		base := filepath.Base(path)
-		dir := filepath.Dir(path)
-
-		var exts []string
-		sep := strings.Split(base, ".")
-		if len(sep) >= 1 {
-			base = sep[0]
-		}
-		if len(sep) > 1 {
-			exts = sep[1:]
-		}
-
-		for _, ext := range exts {
-			pn := filepath.Join(dir, base+"."+ext)
-			s.aliases.Store(pn, path)
-		}
+		shortcut := strings.Replace(path, ".plush.", ".", 1)
+		s.aliases.Store(shortcut, path)
 
 		return nil
 	})
