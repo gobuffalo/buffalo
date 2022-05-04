@@ -1,4 +1,4 @@
 package runtime
 
 // Version is the current version of the buffalo binary
-var Version = "v0.18.6"
+var Version = "v0.18.7"
