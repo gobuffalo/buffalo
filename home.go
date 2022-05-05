@@ -14,7 +14,7 @@ import (
    could be strage.
 */
 
-// Home is a container for Domains and Groups that independantly serves a
+// Home is a container for Domains and Groups that independently serves a
 // group of pages with its own Middleware and ErrorHandlers. It is usually
 // a multi-homed server domain or group of paths under a certain prefix.
 //
