@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,7 +15,6 @@ import (
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
-	"github.com/karrick/godirwalk"
 	"github.com/markbates/oncer"
 	"github.com/sirupsen/logrus"
 )
@@ -100,32 +100,33 @@ func Available() (List, error) {
 				continue
 			}
 
-			err := godirwalk.Walk(p, &godirwalk.Options{
-				FollowSymbolicLinks: true,
-				Callback: func(path string, info *godirwalk.Dirent) error {
-					if err != nil {
-						// May indicate a permissions problem with the path, skip it
-						return nil
-					}
-					if info.IsDir() {
-						return nil
-					}
-					base := filepath.Base(path)
-					if strings.HasPrefix(base, "buffalo-") && !strings.HasPrefix(base, "buffalo-plugins") {
-						ctx, cancel := context.WithTimeout(context.Background(), timeout())
-						commands := askBin(ctx, path)
-						cancel()
-						for _, c := range commands {
-							bc := c.BuffaloCommand
-							if _, ok := list[bc]; !ok {
-								list[bc] = Commands{}
-							}
-							c.Binary = path
-							list[bc] = append(list[bc], c)
-						}
-					}
+			err := filepath.WalkDir(p, func(path string, d fs.DirEntry, err error) error {
+				if err != nil {
+					// May indicate a permissions problem with the path, skip it
 					return nil
-				},
+				}
+				if d.IsDir() {
+					return nil
+				}
+				if !strings.HasPrefix(d.Name(), "buffalo-") {
+					return nil
+				}
+				if strings.HasPrefix(d.Name(), "buffalo-plugins") {
+					return nil
+				}
+
+				ctx, cancel := context.WithTimeout(context.Background(), timeout())
+				commands := askBin(ctx, path)
+				cancel()
+				for _, c := range commands {
+					bc := c.BuffaloCommand
+					if _, ok := list[bc]; !ok {
+						list[bc] = Commands{}
+					}
+					c.Binary = path
+					list[bc] = append(list[bc], c)
+				}
+				return nil
 			})
 
 			if err != nil {
