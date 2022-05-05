@@ -22,7 +22,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/markbates/grift v1.5.0
-	github.com/markbates/oncer v1.0.0
 	github.com/markbates/refresh v1.12.0
 	github.com/markbates/safe v1.0.1
 	github.com/monoculum/formam v3.5.5+incompatible
@@ -30,5 +29,4 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.1
-	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 )

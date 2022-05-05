@@ -14,7 +14,6 @@ import (
 	"github.com/gobuffalo/pop/v6"
 	"github.com/gobuffalo/pop/v6/logging"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/oncer"
 )
 
 // Options are used to configure and define how your application should run.
@@ -29,9 +28,7 @@ type Options struct {
 	// Env is the "environment" in which the App is running. Default is "development".
 	Env string `json:"env"`
 
-	// LogLevel defaults to "debug". Deprecated use LogLvl instead
-	LogLevel string `json:"log_level"`
-	// LogLevl defaults to logger.DebugLvl.
+	// LogLvl defaults to logger.DebugLvl.
 	LogLvl logger.Level `json:"log_lvl"`
 	// Logger to be used with the application. A default one is provided.
 	Logger Logger `json:"-"`
@@ -125,14 +122,6 @@ func optionsWithDefaults(opts Options) Options {
 			}
 		}
 
-		if len(opts.LogLevel) > 0 {
-			var err error
-			oncer.Deprecate(0, "github.com/gobuffalo/buffalo#Options.LogLevel", "Use github.com/gobuffalo/buffalo#Options.LogLvl instead.")
-			opts.LogLvl, err = logger.ParseLevel(opts.LogLevel)
-			if err != nil {
-				opts.LogLvl = logger.DebugLevel
-			}
-		}
 		if opts.LogLvl == 0 {
 			opts.LogLvl = logger.DebugLevel
 		}
