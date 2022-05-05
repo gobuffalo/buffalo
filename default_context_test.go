@@ -143,7 +143,7 @@ func Test_DefaultContext_GetSet(t *testing.T) {
 	r.Equal("Mark", c.Value("name").(string))
 }
 
-func Test_DefaultContext_Set_Unconfigured(t *testing.T) {
+func Test_DefaultContext_Set_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 
@@ -162,7 +162,7 @@ func Test_DefaultContext_Value(t *testing.T) {
 	r.Equal("Mark", c.Value("name").(string))
 }
 
-func Test_DefaultContext_Value_Unconfigured(t *testing.T) {
+func Test_DefaultContext_Value_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 	r.Nil(c.Value("name"))
@@ -323,7 +323,7 @@ func Test_DefaultContext_Data(t *testing.T) {
 	r.EqualValues(map[string]interface{}{}, c.Data())
 }
 
-func Test_DefaultContext_Data_Unconfigured(t *testing.T) {
+func Test_DefaultContext_Data_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 
@@ -345,7 +345,7 @@ func Test_DefaultContext_String_EmptyData(t *testing.T) {
 	r.EqualValues("", c.String())
 }
 
-func Test_DefaultContext_String_EmptyData_Unconfigured(t *testing.T) {
+func Test_DefaultContext_String_EmptyData_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 
@@ -372,7 +372,7 @@ func Test_DefaultContext_MarshalJSON_EmptyData(t *testing.T) {
 	r.EqualValues(`{}`, string(jb))
 }
 
-func Test_DefaultContext_MarshalJSON_EmptyData_Unconfigured(t *testing.T) {
+func Test_DefaultContext_MarshalJSON_EmptyData_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 

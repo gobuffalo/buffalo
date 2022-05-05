@@ -16,9 +16,9 @@ import (
 // timing sensitive. Adjust this timing values if they are failing due to
 // timing issue.
 const (
-	WAIT_START   = 2
-	WAIT_RUN     = 2
-	CONSUMER_RUN = 8
+	waitStart   = 2
+	waitRun     = 2
+	consumerRun = 8
 )
 
 // startApp starts given buffalo app and check its exit status.
@@ -32,7 +32,7 @@ func startApp(app *App, wg *sync.WaitGroup, r *require.Assertions) {
 	}()
 	// wait until the server started.
 	// could be improved with connection test but that's too much...
-	time.Sleep(WAIT_START * time.Second)
+	time.Sleep(waitStart * time.Second)
 }
 
 func Test_Server_Simple(t *testing.T) {
@@ -55,7 +55,7 @@ var handlerDone = false
 
 // timeConsumer consumes about 10 minutes for processing its request
 func timeConsumer(c Context) error {
-	for i := 0; i < CONSUMER_RUN; i++ {
+	for i := 0; i < consumerRun; i++ {
 		fmt.Println("#")
 		time.Sleep(1 * time.Second)
 	}
@@ -89,7 +89,7 @@ func Test_Server_GracefulShutdownOngoingRequest(t *testing.T) {
 		firstQuery = true
 	}()
 	// make sure the request sent
-	time.Sleep(WAIT_RUN * time.Second)
+	time.Sleep(waitRun * time.Second)
 
 	app.cancel()
 	time.Sleep(1 * time.Second) // make sure the server started shutdown.
@@ -114,7 +114,7 @@ func Test_Server_GracefulShutdownOngoingRequest(t *testing.T) {
 var timerDone = false
 
 func timerWorker(args worker.Args) error {
-	for i := 0; i < CONSUMER_RUN; i++ {
+	for i := 0; i < consumerRun; i++ {
 		fmt.Println("%")
 		time.Sleep(1 * time.Second)
 	}

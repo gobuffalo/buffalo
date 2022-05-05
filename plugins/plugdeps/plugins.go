@@ -32,7 +32,7 @@ func (plugs *Plugins) Decode(r io.Reader) error {
 	tp := &tomlPlugins{
 		Plugins: []Plugin{},
 	}
-	if _, err := toml.DecodeReader(r, tp); err != nil {
+	if _, err := toml.NewDecoder(r).Decode(tp); err != nil {
 		return err
 	}
 	for _, p := range tp.Plugins {
