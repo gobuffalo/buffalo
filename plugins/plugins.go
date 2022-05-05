@@ -10,21 +10,24 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
-	"github.com/markbates/oncer"
 	"github.com/sirupsen/logrus"
 )
 
 const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
 
+var timeoutOnce sync.Once
+var availableOnce sync.Once
+
 var t = time.Second * 2
 
 func timeout() time.Duration {
-	oncer.Do("plugins.timeout", func() {
+	timeoutOnce.Do(func() {
 		rawTimeout, err := envy.MustGet(timeoutEnv)
 		if err == nil {
 			if parsed, err := time.ParseDuration(rawTimeout); err == nil {
@@ -64,7 +67,7 @@ var _list List
 // process.
 func Available() (List, error) {
 	var err error
-	oncer.Do("plugins.Available", func() {
+	availableOnce.Do(func() {
 		defer func() {
 			if err := saveCache(); err != nil {
 				logrus.Error(err)
