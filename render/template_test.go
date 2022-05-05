@@ -220,3 +220,111 @@ func Test_Template_resolve_UserLang_Mixed(t *testing.T) {
 	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
 }
 
+// support short language-only version of template e.g. index.plush.ko.html
+func Test_Template_resolve_FullLocale_ShortFile(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.plush.ko.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.plush.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko-KR", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_resolve_LangOnly_FullFile(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.plush.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_resolve_FullLocale_ShortFile_Legacy(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.ko.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko-KR", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_resolve_LangOnly_FullFile_Legacy(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.ko-kr.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_resolve_FullLocale_ShortFile_Mixed(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.plush.ko.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko-KR", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}
+
+func Test_Template_resolve_LangOnly_FullFile_Mixed(t *testing.T) {
+	r := require.New(t)
+
+	rootFS := memfs.New()
+	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
+	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+
+	e := NewEngine()
+	e.TemplatesFS = rootFS
+
+	re := e.Template("foo/bar", "index.html")
+	r.Equal("foo/bar", re.ContentType())
+
+	bb := &bytes.Buffer{}
+	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko", "en"}}))
+	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
+}

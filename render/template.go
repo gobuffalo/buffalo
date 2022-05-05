@@ -12,6 +12,7 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
+	"golang.org/x/text/language"
 )
 
 type templateRenderer struct {
@@ -79,8 +80,29 @@ func (s *templateRenderer) updateAliases() error {
 			return nil
 		}
 
+		// index.plush.ko-kr.html as index.ko-kr.html
 		shortcut := strings.Replace(path, ".plush.", ".", 1)
 		s.aliases.Store(shortcut, path)
+
+		// register short version (lang only) of shortcut
+		words := strings.Split(filepath.Base(shortcut), ".")
+		if len(words) > 2 {
+			for _, w := range words[1 : len(words)-1] {
+				if tag, err := language.Parse(w); err == nil {
+					base, confidence := tag.Base()
+					if confidence == language.Exact || confidence == language.High {
+						// index.plush.ko-kr.html as index.ko.html
+						shortcut := strings.Replace(shortcut, w, base.String(), 1)
+						s.aliases.Store(shortcut, path)
+
+						// index.plush.ko-kr.html as index.plush.ko.html
+						shortcut = strings.Replace(path, w, base.String(), 1)
+						s.aliases.Store(shortcut, path)
+					}
+				}
+
+			}
+		}
 
 		return nil
 	})
@@ -120,15 +142,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 	name = fixExtension(name, ct)
 
-	// Try to use localized version
-	templateName := s.localizedName(name, data)
-
-	// Set current_template to context
-	if _, ok := data["current_template"]; !ok {
-		data["current_template"] = templateName
-	}
-
-	source, err := s.resolve(templateName)
+	source, err := s.localizedResolve(name, data)
 	if err != nil {
 		return "", err
 	}
@@ -162,6 +176,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	return template.HTML(body), nil
 }
 
+// next step, deprecate if this is no longer required.
 func (s *templateRenderer) localizedName(name string, data Data) string {
 	templateName := name
 
@@ -191,6 +206,40 @@ func (s *templateRenderer) localizedName(name string, data Data) string {
 	}
 
 	return templateName
+}
+
+func (s *templateRenderer) localizedResolve(name string, data Data) ([]byte, error) {
+	languages, ok := data["languages"].([]string)
+	if !ok || len(languages) == 0 {
+		return s.resolve(name)
+	}
+
+	defaultLang := languages[len(languages)-1] // default language
+	ext := filepath.Ext(name)
+	rawName := strings.TrimSuffix(name, ext)
+
+	for _, lang := range languages {
+		if lang == defaultLang {
+			break
+		}
+
+		fullLower := strings.ToLower(lang)        // forms of ko-kr or ko
+		short := strings.Split(fullLower, "-")[0] // form of ko
+
+		fullLocale := rawName + "." + fullLower + ext
+		if source, err := s.resolve(fullLocale); err == nil {
+			return source, nil
+		}
+
+		if fullLower != short {
+			langOnly := rawName + "." + short + ext
+			if source, err := s.resolve(langOnly); err == nil {
+				return source, nil
+			}
+		}
+	}
+
+	return s.resolve(name)
 }
 
 func (s *templateRenderer) exts(name string) []string {
