@@ -48,6 +48,15 @@ func Test_FS_Prioritizes_Disk(t *testing.T) {
 	r.NoError(err)
 
 	r.Equal("This file is on disk.", string(b))
+
+	// should handle slash-separated path for all systems including Windows
+	f, err = fsys.Open("under/sub/subfile")
+	r.NoError(err)
+
+	b, err = io.ReadAll(f)
+	r.NoError(err)
+
+	r.Equal("This file is on disk/sub.", string(b))
 }
 
 func Test_FS_Uses_Embed_If_No_Disk(t *testing.T) {
@@ -63,6 +72,15 @@ func Test_FS_Uses_Embed_If_No_Disk(t *testing.T) {
 	r.NoError(err)
 
 	r.Equal("This file is embedded.", string(b))
+
+	// should handle slash-separated path for all systems including Windows
+	f, err = fsys.Open("under/sub/subfile")
+	r.NoError(err)
+
+	b, err = io.ReadAll(f)
+	r.NoError(err)
+
+	r.Equal("This file is on embedded/sub.", string(b))
 }
 
 func Test_FS_ReadDirFile(t *testing.T) {
@@ -87,11 +105,11 @@ func Test_FS_ReadDirFile(t *testing.T) {
 	r.LessOrEqual(len(entries), 1, "a call to ReadDir must at most return n entries")
 
 	// Second read should return at most 2 files
-	entries, err = dir.ReadDir(2)
+	entries, err = dir.ReadDir(3)
 	r.NoError(err)
 
-	// The actual len will be 2 (file.txt & file2.txt)
-	r.LessOrEqual(len(entries), 2, "a call to ReadDir must at most return n entries")
+	// The actual len will be 2 (file.txt & file2.txt + under/)
+	r.LessOrEqual(len(entries), 3, "a call to ReadDir must at most return n entries")
 
 	// trying to read next 2 files (none left)
 	entries, err = dir.ReadDir(2)
