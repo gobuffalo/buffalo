@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"io"
+	"path"
 	"path/filepath"
 
 	ht "github.com/gobuffalo/helpers/tags"
@@ -49,7 +50,7 @@ func assetPathFor(file string) string {
 	if filePath == "" || !ok {
 		filePath = file
 	}
-	return filepath.ToSlash(filepath.Join("/assets", filePath))
+	return path.Join("/assets", filePath)
 }
 
 func loadManifest(manifest io.Reader) error {
@@ -59,7 +60,9 @@ func loadManifest(manifest io.Reader) error {
 		return err
 	}
 	for k, v := range m {
-		assetMap.Store(k, v)
+		// I don't think v has backslash but if so, correct them when
+		// creating the map instead using the value in `assetPathFor()`.
+		assetMap.Store(k, filepath.ToSlash(v))
 	}
 	return nil
 }

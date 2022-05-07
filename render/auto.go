@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"path"
-	"path/filepath"
 	"reflect"
 	"strings"
 
@@ -117,10 +116,10 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 			}
 
 			if data["method"] == "PUT" {
-				return ir.HTML(filepath.Join(templatePrefix.String(), "edit.html")).Render(w, data)
+				return ir.HTML(path.Join(templatePrefix.String(), "edit.html")).Render(w, data)
 			}
 
-			return ir.HTML(filepath.Join(templatePrefix.String(), "new.html")).Render(w, data)
+			return ir.HTML(path.Join(templatePrefix.String(), "new.html")).Render(w, data)
 		}
 		return nil
 	}
@@ -128,7 +127,7 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	cp, ok := data["current_path"].(string)
 
 	defCase := func() error {
-		return ir.HTML(filepath.Join(templatePrefix.String(), "index.html")).Render(w, data)
+		return ir.HTML(path.Join(templatePrefix.String(), "index.html")).Render(w, data)
 	}
 
 	if !ok {
@@ -136,15 +135,15 @@ func (ir htmlAutoRenderer) Render(w io.Writer, data Data) error {
 	}
 
 	if strings.HasSuffix(cp, "/edit/") {
-		return ir.HTML(filepath.Join(templatePrefix.String(), "edit.html")).Render(w, data)
+		return ir.HTML(path.Join(templatePrefix.String(), "edit.html")).Render(w, data)
 	}
 
 	if strings.HasSuffix(cp, "/new/") {
-		return ir.HTML(filepath.Join(templatePrefix.String(), "new.html")).Render(w, data)
+		return ir.HTML(path.Join(templatePrefix.String(), "new.html")).Render(w, data)
 	}
 
 	if !isPlural {
-		return ir.HTML(filepath.Join(templatePrefix.String(), "show.html")).Render(w, data)
+		return ir.HTML(path.Join(templatePrefix.String(), "show.html")).Render(w, data)
 	}
 
 	return defCase()
