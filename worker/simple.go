@@ -36,6 +36,7 @@ func NewSimpleWithContext(ctx context.Context) *Simple {
 		cancel:   cancel,
 		handlers: map[string]Handler{},
 		moot:     &sync.Mutex{},
+		started:  false,
 	}
 }
 
@@ -48,6 +49,7 @@ type Simple struct {
 	handlers map[string]Handler
 	moot     *sync.Mutex
 	wg       sync.WaitGroup
+	started  bool
 }
 
 // Register Handler with the worker
@@ -70,7 +72,11 @@ func (w *Simple) Start(ctx context.Context) error {
 	// TODO(sio4): #road-to-v1 - define the purpose of Start clearly
 	w.Logger.Info("starting Simple background worker")
 
+	w.moot.Lock()
+	defer w.moot.Unlock()
+
 	w.ctx, w.cancel = context.WithCancel(ctx)
+	w.started = true
 	return nil
 }
 
@@ -91,6 +97,13 @@ func (w *Simple) Stop() error {
 
 // Perform a job as soon as possibly using a goroutine.
 func (w *Simple) Perform(job Job) error {
+	w.moot.Lock()
+	defer w.moot.Unlock()
+
+	if !w.started {
+		return fmt.Errorf("worker is not yet started")
+	}
+
 	// Perform should not allow a job submission if the worker is not running
 	if err := w.ctx.Err(); err != nil {
 		return fmt.Errorf("worker is not ready to perform a job: %v", err)
@@ -104,8 +117,6 @@ func (w *Simple) Perform(job Job) error {
 		return err
 	}
 
-	w.moot.Lock()
-	defer w.moot.Unlock()
 	if h, ok := w.handlers[job.Handler]; ok {
 		// TODO(sio4): #road-to-v1 - consider timeout and/or cancellation
 		w.wg.Add(1)
@@ -144,6 +155,19 @@ func (w *Simple) PerformIn(job Job, d time.Duration) error {
 	w.wg.Add(1) // waiting job also should be counted
 	go func() {
 		defer w.wg.Done()
+
+		for {
+			w.moot.Lock()
+			if w.started {
+				w.moot.Unlock()
+				break
+			}
+			w.moot.Unlock()
+
+			waiting := 100 * time.Millisecond
+			time.Sleep(waiting)
+			d = d - waiting
+		}
 
 		select {
 		case <-time.After(d):
