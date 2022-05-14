@@ -2,11 +2,11 @@ package worker
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"time"
 
-	"github.com/markbates/safe"
 	"github.com/sirupsen/logrus"
 )
 
@@ -122,7 +122,7 @@ func (w *Simple) Perform(job Job) error {
 		w.wg.Add(1)
 		go func() {
 			defer w.wg.Done()
-			err := safe.RunE(func() error {
+			err := safeRun(func() error {
 				return h(job.Args)
 			})
 
@@ -137,6 +137,22 @@ func (w *Simple) Perform(job Job) error {
 	err := fmt.Errorf("no handler mapped for name %s", job.Handler)
 	w.Logger.Error(err)
 	return err
+}
+
+// safeRun the function safely knowing that if it panics
+// the panic will be caught and returned as an error
+func safeRun(fn func() error) (err error) {
+	defer func() {
+		if ex := recover(); ex != nil {
+			if e, ok := ex.(error); ok {
+				err = e
+				return
+			}
+			err = errors.New(fmt.Sprint(ex))
+		}
+	}()
+
+	return fn()
 }
 
 // PerformAt performs a job at a particular time using a goroutine.

@@ -341,7 +341,6 @@ github.com/markbates/grift v1.5.0/go.mod h1:1ssFm5gSGmzTkhi3Wfh/nqlU74J73TlAjoDM
 github.com/markbates/oncer v1.0.0/go.mod h1:Z59JA581E9GP6w96jai+TGqafHPW+cPfRxz2aSZ0mcI=
 github.com/markbates/refresh v1.12.0 h1:vTgVPX4p77v26auBJhlgaTQ/adWAYSIcVYJvM63Nbpo=
 github.com/markbates/refresh v1.12.0/go.mod h1:Vpwi1+q+2U1VxE7C0Ilj6r2/+TigRzQcLez6XM3bPLc=
-github.com/markbates/safe v1.0.1 h1:yjZkbvRM6IzKj9tlu/zMJLS0n/V351OZWRnF3QfaUxI=
 github.com/markbates/safe v1.0.1/go.mod h1:nAqgmRi7cY2nqMc92/bSEeQA+R4OheNU2T1kNSCBdG0=
 github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-colorable v0.1.1/go.mod h1:FuOcm+DKB9mbwrcAfNl7/TZVBZ6rcnceauSikq3lYCQ=

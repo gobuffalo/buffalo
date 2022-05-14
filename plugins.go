@@ -11,7 +11,6 @@ import (
 	"github.com/gobuffalo/buffalo/plugins"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/events"
-	"github.com/markbates/safe"
 )
 
 var loadPlugins sync.Once
@@ -35,28 +34,23 @@ func LoadPlugins() error {
 					continue
 				}
 				err := func(c plugins.Command) error {
-					return safe.RunE(func() error {
-						n := fmt.Sprintf("[PLUGIN] %s %s", c.Binary, c.Name)
-						fn := func(e events.Event) {
-							b, err := json.Marshal(e)
-							if err != nil {
-								fmt.Println("error trying to marshal event", e, err)
-								return
-							}
-							cmd := exec.Command(c.Binary, c.UseCommand, string(b))
-							cmd.Stderr = os.Stderr
-							cmd.Stdout = os.Stdout
-							cmd.Stdin = os.Stdin
-							if err := cmd.Run(); err != nil {
-								fmt.Println("error trying to send event", strings.Join(cmd.Args, " "), err)
-							}
-						}
-						_, err := events.NamedListen(n, events.Filter(c.ListenFor, fn))
+					n := fmt.Sprintf("[PLUGIN] %s %s", c.Binary, c.Name)
+					fn := func(e events.Event) {
+						b, err := json.Marshal(e)
 						if err != nil {
-							return err
+							fmt.Println("error trying to marshal event", e, err)
+							return
 						}
-						return nil
-					})
+						cmd := exec.Command(c.Binary, c.UseCommand, string(b))
+						cmd.Stderr = os.Stderr
+						cmd.Stdout = os.Stdout
+						cmd.Stdin = os.Stdin
+						if err := cmd.Run(); err != nil {
+							fmt.Println("error trying to send event", strings.Join(cmd.Args, " "), err)
+						}
+					}
+					_, err := events.NamedListen(n, events.Filter(c.ListenFor, fn))
+					return err
 				}(c)
 				if err != nil {
 					errResult = err
