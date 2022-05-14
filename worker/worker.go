@@ -25,3 +25,15 @@ type Worker interface {
 	// Register a Handler
 	Register(string, Handler) error
 }
+
+/* TODO(sio4): #road-to-v1 - redefine Worker interface clearer
+1. The Start() functions of current implementations including Simple,
+   Gocraft Work Adapter do not block and immediately return the error.
+   However, App.Serve() calls them within a go routine.
+2. The Perform() family of functions can be called before the worker
+   was started once the worker configured. Could be fine but there should
+   be some guidiance for its usage.
+3. The Perform() function could be interpreted as "Do it" by its name but
+   their actual job is "Enqueue it" even though Simple worker has no clear
+   boundary between them. It could make confusion.
+*/
