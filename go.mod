@@ -17,12 +17,12 @@ require (
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.11
 	github.com/gobuffalo/pop/v6 v6.0.4
+	github.com/gobuffalo/refresh v1.13.1
 	github.com/gobuffalo/tags/v3 v3.1.2
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/markbates/grift v1.5.0
-	github.com/markbates/refresh v1.12.0
 	github.com/monoculum/formam v3.5.5+incompatible
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef
 	github.com/sirupsen/logrus v1.8.1
