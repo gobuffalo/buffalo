@@ -13,7 +13,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/servers"
 	"github.com/gobuffalo/events"
-	"github.com/markbates/refresh/refresh/web"
+	"github.com/gobuffalo/refresh/refresh/web"
 )
 
 // Serve the application at the specified address/port and listen for OS
@@ -131,6 +131,7 @@ func (a *App) Stop(err error) error {
 	return nil
 }
 
+// ServeHTTP implements http.Handler
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ws := &Response{
 		ResponseWriter: w,
