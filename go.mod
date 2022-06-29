@@ -26,7 +26,7 @@ require (
 	github.com/monoculum/formam v3.5.5+incompatible
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef
 	github.com/sirupsen/logrus v1.8.1
-	github.com/spf13/cobra v1.4.0
+	github.com/spf13/cobra v1.5.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/text v0.3.7
 )
