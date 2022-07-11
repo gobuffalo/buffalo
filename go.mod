@@ -18,7 +18,7 @@ require (
 	github.com/gobuffalo/plush/v4 v4.1.12
 	github.com/gobuffalo/pop/v6 v6.0.4
 	github.com/gobuffalo/refresh v1.13.1
-	github.com/gobuffalo/tags/v3 v3.1.2
+	github.com/gobuffalo/tags/v3 v3.1.3
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
