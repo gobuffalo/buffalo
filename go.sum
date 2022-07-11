@@ -121,8 +121,9 @@ github.com/gobuffalo/github_flavored_markdown v1.1.0/go.mod h1:TSpTKWcRTI0+v7W3x
 github.com/gobuffalo/github_flavored_markdown v1.1.1 h1:kUf8ginyBOTRXcKSTPsPAqlA25vQ80+xAspLIYaxmTU=
 github.com/gobuffalo/github_flavored_markdown v1.1.1/go.mod h1:yU32Pen+eorS58oxh/bNZx76zUOCJwmvyV5FBrvzOKQ=
 github.com/gobuffalo/helpers v0.6.0/go.mod h1:pncVrer7x/KRvnL5aJABLAuT/RhKRR9klL6dkUOhyv8=
-github.com/gobuffalo/helpers v0.6.4 h1:N9is8xgaotJzGIge1GoLYiWRpKZPqnS9RSty72OhIn8=
 github.com/gobuffalo/helpers v0.6.4/go.mod h1:m2aOKsTl3KB0RUwwpxf3tykaaitujQ3irivqrlNAcJ0=
+github.com/gobuffalo/helpers v0.6.5 h1:Quf1KAUae97sdDmm/QP5V9P/0XYpK+HrhnYXU+nf65M=
+github.com/gobuffalo/helpers v0.6.5/go.mod h1:LA4zcc89tkZsfKpJIWsXLibiqTgZQ4EvDszfxdqr9ZA=
 github.com/gobuffalo/here v0.4.0/go.mod h1:bTNk/uKZgycuB358iR0D32dI9kHBClBGpXjW2HVHkNo=
 github.com/gobuffalo/httptest v1.5.1 h1:WwCZrMYVDqkjTlxo7OasFOMvdaG4ysriidJoqcedv2M=
 github.com/gobuffalo/httptest v1.5.1/go.mod h1:uEeEFF2BRyTMNAATqFQAKYvpHrWWPNoJbIB3YPuANNM=
