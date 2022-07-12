@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/markbates/grift/grift"
+	"github.com/gobuffalo/grift/grift"
 )
 
 // Grifts decorates the app with tasks
