@@ -17,7 +17,7 @@ require (
 	github.com/gobuffalo/meta v0.3.2
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.13
-	github.com/gobuffalo/pop/v6 v6.0.5
+	github.com/gobuffalo/pop/v6 v6.0.6
 	github.com/gobuffalo/refresh v1.13.1
 	github.com/gobuffalo/tags/v3 v3.1.3
 	github.com/gorilla/handlers v1.5.1
