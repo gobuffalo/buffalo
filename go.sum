@@ -59,8 +59,9 @@ github.com/gobuffalo/meta v0.3.2/go.mod h1:qTZ/9n499kXeJ49PHHoSQr63R+kWNpQKiYD62
 github.com/gobuffalo/nulls v0.4.1 h1:k7QVCJfMplv9VRQQLb4N1d8tXUdGvcdMNfp4BfMnG2M=
 github.com/gobuffalo/nulls v0.4.1/go.mod h1:pp8e1hWTRJZFpMl4fj/CVbSMlaxjeGKkFq4RuBZi3w8=
 github.com/gobuffalo/packd v1.0.1/go.mod h1:PP2POP3p3RXGz7Jh6eYEf93S7vA2za6xM7QT85L4+VY=
-github.com/gobuffalo/plush/v4 v4.1.13 h1:tru7S39kYaefzM+dk+W1bib65ZVkS1nV+6ARB7yPWn0=
 github.com/gobuffalo/plush/v4 v4.1.13/go.mod h1:s3hUyj/JlwEiJ039OBJevojq9xT40D1pgekw0o88CVU=
+github.com/gobuffalo/plush/v4 v4.1.14 h1:F3IRVRHVBVJZA4g//zbq0lyF+QBjNtZIGC6e/2k86L8=
+github.com/gobuffalo/plush/v4 v4.1.14/go.mod h1:s3hUyj/JlwEiJ039OBJevojq9xT40D1pgekw0o88CVU=
 github.com/gobuffalo/pop/v6 v6.0.6 h1:M/CJ9RLibCTN0OtsgASmVtKqyEXJAreF8oamZrHscc4=
 github.com/gobuffalo/pop/v6 v6.0.6/go.mod h1:toTxNJnsSuSlyK6w0yGb4YXSNIHsi2chQYC2CjBF9Ac=
 github.com/gobuffalo/refresh v1.13.1 h1:P5/F+aGusF2Jg829tVf/SSGBmMyaFQekYGFG+0t90Xw=
