@@ -3,15 +3,16 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "daily"
-    target-branch: "development"
+      interval: "weekly"
+      day: "friday"
+    target-branch: "main"
     labels:
-      - "gomod"
+      - "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-    target-branch: "development"
+    target-branch: "main"
     labels:
-      - "github-actions"
+      - "process"

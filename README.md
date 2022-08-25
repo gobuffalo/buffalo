@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://pkg.go.dev/github.com/gobuffalo/buffalo"><img src="https://pkg.go.dev/badge/github.com/gobuffalo/buffalo" alt="PkgGoDev"></a>
-<img src="https://github.com/gobuffalo/buffalo/workflows/Tests/badge.svg" alt="Tests Status" />
+<a href="https://github.com/gobuffalo/buffalo/actions/workflows/standard-go-test.yml"><img src="https://github.com/gobuffalo/buffalo/actions/workflows/standard-go-test.yml/badge.svg"></a>
 <a href="https://goreportcard.com/report/github.com/gobuffalo/buffalo"><img src="https://goreportcard.com/badge/github.com/gobuffalo/buffalo" alt="Go Report Card" /></a>
 <a href="https://www.codetriage.com/gobuffalo/buffalo"><img src="https://www.codetriage.com/gobuffalo/buffalo/badges/users.svg" alt="Open Source Helpers" /></a>
 </p>
@@ -16,6 +16,14 @@ Buffalo helps you to generate a web project that already has everything from fro
 Buffalo **isn't just a framework**; it's a holistic web development environment and project structure that **lets developers get straight to the business** of, well, building their business.
 
 > I :heart: web dev in go again - Brian Ketelsen
+
+## Versions
+
+The current stable version of Buffalo core is v1 (`v1` branch).
+
+Versions (branches):
+* `main` is for the current mainstream development.
+* `v1` is the current stable release.
 
 ## ⚠️ Important
 
@@ -72,11 +80,19 @@ First, thank you so much for wanting to contribute! It means so much that you ca
 
 **Here are the core rules to respect**:
 
-- If you have any question, please consider using the [Slack channel](https://gobuffalo.io/docs/slack) (-#buffalo-, *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo). We use GitHub issues for **bug reports and feature requests only**.
-- All contributors of this project are working on their free time: be patient and kind. :-
-- Consider opening an issue **BEFORE** creating a Pull request (PR): you won't lose your -ime on fixing non-existing bugs, or fixing the wrong bug. Also we can help you to produce the best PR!
-- All PRs **MUST** be opened against the *development* branch. If you want to write an ho--fix, we'll first fix the *development* branch before moving the patch to *master* branch.
-
-**WE WILL CLOSE ANY ISSUE OR PR NOT FOLLOWING THESE CORE RULES**.
+- If you have any question, please consider using the
+  [Slack channel](https://gophers.slack.com/messages/buffalo/) (-#buffalo-,
+  *#buffalo_fr* or *#buffalo-dev* for contribution related questions) or
+  [Stack Overflow](https://stackoverflow.com/questions/tagged/buffalo).
+  We use GitHub issues for **bug reports and feature requests only**.
+- All contributors of this project are working on their free time: be patient
+  and kind. :-
+- Consider opening an issue **BEFORE** creating a Pull request (PR): you won't
+  lose your time on fixing non-existing bugs, or fixing the wrong bug. Also we
+  can help you to produce the best PR!
+- Open a PR against the `main` branch if your PR is for mainstrem or version
+  specific branch e.g. `v1` if your PR is for specific version.
+  Note that the valid branch for a new feature request PR should be `main`
+  while a PR against a version specific branch are allowed only for bugfixes.
 
 For the full contribution guidelines, please read [CONTRIBUTING](.github/CONTRIBUTING.md).
