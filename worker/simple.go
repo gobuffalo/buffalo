@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/robfig/cron"
 	"github.com/sirupsen/logrus"
 )
 
@@ -34,6 +35,7 @@ func NewSimpleWithContext(ctx context.Context) *Simple {
 		Logger:   l,
 		ctx:      ctx,
 		cancel:   cancel,
+		cron:     cron.New(),
 		handlers: map[string]Handler{},
 		moot:     &sync.Mutex{},
 		started:  false,
@@ -46,6 +48,7 @@ type Simple struct {
 	Logger   SimpleLogger
 	ctx      context.Context
 	cancel   context.CancelFunc
+	cron     *cron.Cron
 	handlers map[string]Handler
 	moot     *sync.Mutex
 	wg       sync.WaitGroup
@@ -76,6 +79,8 @@ func (w *Simple) Start(ctx context.Context) error {
 	defer w.moot.Unlock()
 
 	w.ctx, w.cancel = context.WithCancel(ctx)
+	w.cron.Start()
+
 	w.started = true
 	return nil
 }
@@ -89,6 +94,7 @@ func (w *Simple) Stop() error {
 	w.Logger.Info("stopping Simple background worker")
 
 	w.cancel()
+	w.cron.Stop()
 
 	w.wg.Wait()
 	w.Logger.Info("all background jobs stopped completely")
@@ -193,6 +199,30 @@ func (w *Simple) PerformIn(job Job, d time.Duration) error {
 			w.cancel()
 		}
 	}()
+	return nil
+}
+
+// RegisterPeriodic registers a job to be periodically executed accroding to the given cron specification
+func (w *Simple) RegisterPeriodic(cronSpec, name string, h Handler) error {
+	if name == "" || h == nil {
+		return fmt.Errorf("name or handler cannot be empty/nil")
+	}
+
+	w.moot.Lock()
+	defer w.moot.Unlock()
+	if _, ok := w.handlers[name]; ok {
+		return fmt.Errorf("handler already mapped for name %s", name)
+	}
+	w.handlers[name] = h
+
+	w.cron.AddFunc(cronSpec, func() {
+		w.Perform(Job{
+			Queue:   "system_cron",
+			Handler: name,
+			Args:    Args{},
+		})
+	})
+
 	return nil
 }
 

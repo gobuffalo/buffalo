@@ -24,6 +24,8 @@ type Worker interface {
 	PerformIn(Job, time.Duration) error
 	// Register a Handler
 	Register(string, Handler) error
+	// RegisterPeriodic performs a job periodically according to the provided cron spec
+	RegisterPeriodic(cronSpec, jobName string, h Handler) error
 }
 
 /* TODO(sio4): #road-to-v1 - redefine Worker interface clearer
