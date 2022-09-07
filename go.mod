@@ -6,6 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.2.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.13.0
+	github.com/gobuffalo/buffalo v1.0.0
 	github.com/gobuffalo/envy v1.10.1
 	github.com/gobuffalo/events v1.4.2
 	github.com/gobuffalo/flect v0.2.5
@@ -18,7 +19,7 @@ require (
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.14
 	github.com/gobuffalo/pop/v6 v6.0.6
-	github.com/gobuffalo/refresh v1.13.1
+	github.com/gobuffalo/refresh v1.13.2
 	github.com/gobuffalo/tags/v3 v3.1.3
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
