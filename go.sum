@@ -34,6 +34,8 @@ github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfC
 github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/gobuffalo/attrs v1.0.2/go.mod h1:tJ7wJj6XbMNhYwJ8fl2PFDpDcUfsG1spWdUJISvPAZQ=
+github.com/gobuffalo/buffalo v1.0.0 h1:qGMbMMcc9jaPBxFJ1s7nHAeTYDG3EFcFjP6h5l8+8GU=
+github.com/gobuffalo/buffalo v1.0.0/go.mod h1:tfl8MYNoDawYpPpOX+vnrqiQ4DjKdhdcG/FNyKi8Wlg=
 github.com/gobuffalo/envy v1.10.1 h1:ppDLoXv2feQ5nus4IcgtyMdHQkKng2lhJCIm33cblM0=
 github.com/gobuffalo/envy v1.10.1/go.mod h1:AWx4++KnNOW3JOeEvhSaq+mvgAvnMYOY1XSIin4Mago=
 github.com/gobuffalo/events v1.4.2 h1:9X4nBKGXOU/N/3AFRO0SxYvpL88lws8M7f5FODbWCm4=
@@ -56,8 +58,9 @@ github.com/gobuffalo/logger v1.0.6 h1:nnZNpxYo0zx+Aj9RfMPBm+x9zAU2OayFh/xrAWi34H
 github.com/gobuffalo/logger v1.0.6/go.mod h1:J31TBEHR1QLV2683OXTAItYIg8pv2JMHnF/quuAbMjs=
 github.com/gobuffalo/meta v0.3.2 h1:KA8PXNHZ+maS6SrE/om1UVyKbV0SjytQw0mAUGsiK1k=
 github.com/gobuffalo/meta v0.3.2/go.mod h1:qTZ/9n499kXeJ49PHHoSQr63R+kWNpQKiYD62C+AtHI=
-github.com/gobuffalo/nulls v0.4.1 h1:k7QVCJfMplv9VRQQLb4N1d8tXUdGvcdMNfp4BfMnG2M=
 github.com/gobuffalo/nulls v0.4.1/go.mod h1:pp8e1hWTRJZFpMl4fj/CVbSMlaxjeGKkFq4RuBZi3w8=
+github.com/gobuffalo/nulls v0.4.2 h1:GAqBR29R3oPY+WCC7JL9KKk9erchaNuV6unsOSZGQkw=
+github.com/gobuffalo/nulls v0.4.2/go.mod h1:EElw2zmBYafU2R9W4Ii1ByIj177wA/pc0JdjtD0EsH8=
 github.com/gobuffalo/packd v1.0.1/go.mod h1:PP2POP3p3RXGz7Jh6eYEf93S7vA2za6xM7QT85L4+VY=
 github.com/gobuffalo/plush/v4 v4.1.13/go.mod h1:s3hUyj/JlwEiJ039OBJevojq9xT40D1pgekw0o88CVU=
 github.com/gobuffalo/plush/v4 v4.1.14 h1:F3IRVRHVBVJZA4g//zbq0lyF+QBjNtZIGC6e/2k86L8=
@@ -175,8 +178,9 @@ github.com/mattn/go-isatty v0.0.14 h1:yVuAays6BHfxijgZPzw+3Zlu5yQgKGP2/hcQbHb7S9
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
 github.com/mattn/go-sqlite3 v1.14.6/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
 github.com/mattn/go-sqlite3 v1.14.9/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
-github.com/mattn/go-sqlite3 v1.14.14 h1:qZgc/Rwetq+MtyE18WhzjokPD93dNqLGNT3QJuLvBGw=
 github.com/mattn/go-sqlite3 v1.14.14/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
+github.com/mattn/go-sqlite3 v1.14.15 h1:vfoHhTN1af61xCRSWzFIWzx2YskyMTwHLrExkBOjvxI=
+github.com/mattn/go-sqlite3 v1.14.15/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/microcosm-cc/bluemonday v1.0.16 h1:kHmAq2t7WPWLjiGvzKa5o3HzSfahUKiOq7fAPUiMNIc=
 github.com/microcosm-cc/bluemonday v1.0.16/go.mod h1:Z0r70sCuXHig8YpBzCc5eGHAap2K7e/u082ZUpDRRqM=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
