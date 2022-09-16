@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strings"
 
-
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
