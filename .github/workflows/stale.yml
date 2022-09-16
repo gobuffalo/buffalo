@@ -25,6 +25,5 @@ jobs:
           days-before-pr-stale: 56
           days-before-pr-close: 14
           stale-issue-label: "no-issue-activity"
-          exempt-issue-labels: "help wanted,enhancement"
           stale-pr-label: "no-pr-activity"
-          exempt-pr-labels: "dependencies,awaiting-approval,work-in-progress"
+          exempt-labels: "dependency,security,s: accepted,s: blocked,s: hold,s: triage,s: in-progress"
