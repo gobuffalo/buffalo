@@ -13,7 +13,7 @@ require (
 	github.com/gobuffalo/grift v1.5.1
 	github.com/gobuffalo/helpers v0.6.5
 	github.com/gobuffalo/httptest v1.5.1
-	github.com/gobuffalo/logger v1.0.6
+	github.com/gobuffalo/logger v1.0.7
 	github.com/gobuffalo/meta v0.3.2
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.14
