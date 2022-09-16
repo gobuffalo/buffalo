@@ -6,15 +6,15 @@ require (
 	github.com/BurntSushi/toml v1.2.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.13.0
-	github.com/gobuffalo/envy v1.10.1
+	github.com/gobuffalo/envy v1.10.2
 	github.com/gobuffalo/events v1.4.2
-	github.com/gobuffalo/flect v0.2.5
+	github.com/gobuffalo/flect v0.3.0
 	github.com/gobuffalo/github_flavored_markdown v1.1.1
 	github.com/gobuffalo/grift v1.5.1
 	github.com/gobuffalo/helpers v0.6.5
 	github.com/gobuffalo/httptest v1.5.1
 	github.com/gobuffalo/logger v1.0.6
-	github.com/gobuffalo/meta v0.3.2
+	github.com/gobuffalo/meta v0.3.3
 	github.com/gobuffalo/nulls v0.4.1
 	github.com/gobuffalo/plush/v4 v4.1.14
 	github.com/gobuffalo/pop/v6 v6.0.6
