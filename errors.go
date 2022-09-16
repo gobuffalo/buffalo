@@ -11,10 +11,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/defaults"
-	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v4"
+
+	"github.com/gobuffalo/buffalo/internal/defaults"
+	"github.com/gobuffalo/buffalo/internal/httpx"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
@@ -174,7 +175,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
-	if env != nil && env.(string) == "production" {
+	if env != nil && env.(string) != "development" {
 		switch strings.ToLower(requestCT) {
 		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
 			defaultErrorResponse = &ErrorResponse{
