@@ -11,6 +11,7 @@ func Test_String(t *testing.T) {
 
 	a.Equal(String("", "foo"), "foo")
 	a.Equal(String("bar", "foo"), "bar")
+	a.Equal(String("", "", "foo-bar"), "foo-bar")
 	var s string
 	a.Equal(String(s, "foo"), "foo")
 }

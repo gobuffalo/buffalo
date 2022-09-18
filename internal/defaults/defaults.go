@@ -1,10 +1,15 @@
 package defaults
 
-func String(s1, s2 string) string {
-	if s1 == "" {
-		return s2
+func String(s ...string) string {
+	var r string
+	for _, s := range s {
+		if s != "" {
+			r = s
+			break
+		}
 	}
-	return s1
+
+	return r
 }
 
 func Int(i1, i2 int) int {
