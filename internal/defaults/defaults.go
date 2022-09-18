@@ -24,11 +24,16 @@ func Int(i ...int) int {
 	return r
 }
 
-func Int64(i1, i2 int64) int64 {
-	if i1 == 0 {
-		return i2
+func Int64(i ...int64) int64 {
+	var r int64
+	for _, i := range i {
+		if i != 0 {
+			r = i
+			break
+		}
 	}
-	return i1
+
+	return r
 }
 
 func Float32(i1, i2 float32) float32 {

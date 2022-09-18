@@ -31,6 +31,7 @@ func Test_Int64(t *testing.T) {
 
 	a.Equal(Int64(0, 1), int64(1))
 	a.Equal(Int64(2, 1), int64(2))
+	a.Equal(Int64(0, 0, 0, 3), int64(3))
 	var s int64
 	a.Equal(Int64(s, 1), int64(1))
 }
