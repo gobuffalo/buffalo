@@ -36,16 +36,26 @@ func Int64(i ...int64) int64 {
 	return r
 }
 
-func Float32(i1, i2 float32) float32 {
-	if i1 == 0.0 {
-		return i2
+func Float32(i ...float32) float32 {
+	var r float32
+	for _, i := range i {
+		if i != 0.0 {
+			r = i
+			break
+		}
 	}
-	return i1
+
+	return r
 }
 
-func Float64(i1, i2 float64) float64 {
-	if i1 == 0.0 {
-		return i2
+func Float64(i ...float64) float64 {
+	var r float64
+	for _, i := range i {
+		if i != 0.0 {
+			r = i
+			break
+		}
 	}
-	return i1
+
+	return r
 }

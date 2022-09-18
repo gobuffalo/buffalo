@@ -41,6 +41,7 @@ func Test_Float32(t *testing.T) {
 
 	a.Equal(Float32(0, 1), float32(1))
 	a.Equal(Float32(2, 1), float32(2))
+	a.Equal(Float32(0, 0, 0, 3), float32(3))
 	var s float32
 	a.Equal(Float32(s, 1), float32(1))
 }
@@ -50,6 +51,7 @@ func Test_Float64(t *testing.T) {
 
 	a.Equal(Float64(0, 1), float64(1))
 	a.Equal(Float64(2, 1), float64(2))
+	a.Equal(Float32(0, 0, 0, 3), float32(3))
 	var s float64
 	a.Equal(Float64(s, 1), float64(1))
 }
