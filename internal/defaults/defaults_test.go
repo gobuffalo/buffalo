@@ -21,6 +21,7 @@ func Test_Int(t *testing.T) {
 
 	a.Equal(Int(0, 1), 1)
 	a.Equal(Int(2, 1), 2)
+	a.Equal(Int(0, 0, 3), 3)
 	var s int
 	a.Equal(Int(s, 1), 1)
 }

@@ -12,11 +12,16 @@ func String(s ...string) string {
 	return r
 }
 
-func Int(i1, i2 int) int {
-	if i1 == 0 {
-		return i2
+func Int(i ...int) int {
+	var r int
+	for _, i := range i {
+		if i != 0 {
+			r = i
+			break
+		}
 	}
-	return i1
+
+	return r
 }
 
 func Int64(i1, i2 int64) int64 {
