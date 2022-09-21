@@ -90,7 +90,7 @@ First, thank you so much for wanting to contribute! It means so much that you ca
 - Consider opening an issue **BEFORE** creating a Pull request (PR): you won't
   lose your time on fixing non-existing bugs, or fixing the wrong bug. Also we
   can help you to produce the best PR!
-- Open a PR against the `main` branch if your PR is for mainstrem or version
+- Open a PR against the `main` branch if your PR is for mainstream or version
   specific branch e.g. `v1` if your PR is for specific version.
   Note that the valid branch for a new feature request PR should be `main`
   while a PR against a version specific branch are allowed only for bugfixes.

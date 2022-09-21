@@ -174,7 +174,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
-	if env != nil && env.(string) == "production" {
+	if env != nil && env.(string) != "development" {
 		switch strings.ToLower(requestCT) {
 		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
 			defaultErrorResponse = &ErrorResponse{

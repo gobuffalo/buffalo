@@ -66,81 +66,74 @@ func Test_defaultErrorHandler_Logger(t *testing.T) {
 }
 
 func Test_defaultErrorHandler_JSON_development(t *testing.T) {
-	r := require.New(t)
-	app := New(Options{})
-	app.GET("/", func(c Context) error {
-		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
-	})
-
-	w := httptest.New(app)
-	res := w.JSON("/").Get()
-	r.Equal(http.StatusUnauthorized, res.Code)
-	ct := res.Header().Get("content-type")
-	r.Equal("application/json", ct)
-	b := res.Body.String()
-	r.Contains(b, `"code":401`)
-	r.Contains(b, `"error":"boom"`)
-	r.Contains(b, `"trace":"`)
+	testDefaultErrorHandler(t, "application/json", "development")
 }
 
 func Test_defaultErrorHandler_XML_development(t *testing.T) {
-	r := require.New(t)
-	app := New(Options{})
-	app.GET("/", func(c Context) error {
-		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
-	})
+	testDefaultErrorHandler(t, "text/xml", "development")
+}
 
-	w := httptest.New(app)
-	res := w.XML("/").Get()
-	r.Equal(http.StatusUnauthorized, res.Code)
-	ct := res.Header().Get("content-type")
-	r.Equal("text/xml", ct)
-	b := res.Body.String()
-	r.Contains(b, `<response code="401">`)
-	r.Contains(b, `<error>boom</error>`)
-	r.Contains(b, `<trace>`)
-	r.Contains(b, `</trace>`)
-	r.Contains(b, `</response>`)
+func Test_defaultErrorHandler_JSON_staging(t *testing.T) {
+	testDefaultErrorHandler(t, "application/json", "staging")
+}
+
+func Test_defaultErrorHandler_XML_staging(t *testing.T) {
+	testDefaultErrorHandler(t, "text/xml", "staging")
 }
 
 func Test_defaultErrorHandler_JSON_production(t *testing.T) {
-	r := require.New(t)
-	app := New(Options{})
-	app.Env = "production"
-	app.GET("/", func(c Context) error {
-		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
-	})
-
-	w := httptest.New(app)
-	res := w.JSON("/").Get()
-	r.Equal(http.StatusUnauthorized, res.Code)
-	ct := res.Header().Get("content-type")
-	r.Equal("application/json", ct)
-	b := res.Body.String()
-	r.Contains(b, `"code":401`)
-	r.Contains(b, fmt.Sprintf(`"error":"%s"`, http.StatusText(http.StatusUnauthorized)))
-	r.NotContains(b, `"trace":"`)
+	testDefaultErrorHandler(t, "application/json", "production")
 }
 
 func Test_defaultErrorHandler_XML_production(t *testing.T) {
+	testDefaultErrorHandler(t, "text/xml", "production")
+}
+
+func testDefaultErrorHandler(t *testing.T, contentType, env string) {
 	r := require.New(t)
 	app := New(Options{})
-	app.Env = "production"
+	app.Env = env
 	app.GET("/", func(c Context) error {
 		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
 	})
 
 	w := httptest.New(app)
-	res := w.XML("/").Get()
+	var res *httptest.Response
+	if contentType == "application/json" {
+		res = w.JSON("/").Get().Response
+	} else {
+		res = w.XML("/").Get().Response
+	}
 	r.Equal(http.StatusUnauthorized, res.Code)
 	ct := res.Header().Get("content-type")
-	r.Equal("text/xml", ct)
+	r.Equal(contentType, ct)
 	b := res.Body.String()
-	r.Contains(b, `<response code="401">`)
-	r.Contains(b, fmt.Sprintf(`<error>%s</error>`, http.StatusText(http.StatusUnauthorized)))
-	r.NotContains(b, `<trace>`)
-	r.NotContains(b, `</trace>`)
-	r.Contains(b, `</response>`)
+
+	if env == "development" {
+		if contentType == "text/xml" {
+			r.Contains(b, `<response code="401">`)
+			r.Contains(b, `<error>boom</error>`)
+			r.Contains(b, `<trace>`)
+			r.Contains(b, `</trace>`)
+			r.Contains(b, `</response>`)
+		} else {
+			r.Contains(b, `"code":401`)
+			r.Contains(b, `"error":"boom"`)
+			r.Contains(b, `"trace":"`)
+		}
+	} else {
+		if contentType == "text/xml" {
+			r.Contains(b, `<response code="401">`)
+			r.Contains(b, fmt.Sprintf(`<error>%s</error>`, http.StatusText(http.StatusUnauthorized)))
+			r.NotContains(b, `<trace>`)
+			r.NotContains(b, `</trace>`)
+			r.Contains(b, `</response>`)
+		} else {
+			r.Contains(b, `"code":401`)
+			r.Contains(b, fmt.Sprintf(`"error":"%s"`, http.StatusText(http.StatusUnauthorized)))
+			r.NotContains(b, `"trace":"`)
+		}
+	}
 }
 
 func Test_defaultErrorHandler_nil_error(t *testing.T) {
