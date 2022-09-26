@@ -5,14 +5,14 @@ updates:
     schedule:
       interval: "weekly"
       day: "friday"
-    target-branch: "main"
+    target-branch: "v1"
     labels:
-      - "dependencies"
+      - "dependency"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-    target-branch: "main"
+    target-branch: "v1"
     labels:
       - "process"
