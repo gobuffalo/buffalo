@@ -1,0 +1,11 @@
+name: Standard Autocloser
+
+on:
+  schedule:
+    - cron: "30 1 * * *"
+
+jobs:
+  call-standard-autocloser:
+    name: Autocloser
+    uses: gobuffalo/.github/.github/workflows/stale.yml@v1
+    secrets: inherit
