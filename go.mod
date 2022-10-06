@@ -9,15 +9,15 @@ require (
 	github.com/gobuffalo/envy v1.10.2
 	github.com/gobuffalo/events v1.4.3
 	github.com/gobuffalo/flect v0.3.0
-	github.com/gobuffalo/github_flavored_markdown v1.1.2
+	github.com/gobuffalo/github_flavored_markdown v1.1.3
 	github.com/gobuffalo/grift v1.5.2
-	github.com/gobuffalo/helpers v0.6.6
+	github.com/gobuffalo/helpers v0.6.7
 	github.com/gobuffalo/httptest v1.5.2
 	github.com/gobuffalo/logger v1.0.7
 	github.com/gobuffalo/meta v0.3.3
 	github.com/gobuffalo/nulls v0.4.2
-	github.com/gobuffalo/plush/v4 v4.1.15
-	github.com/gobuffalo/pop/v6 v6.0.7
+	github.com/gobuffalo/plush/v4 v4.1.16
+	github.com/gobuffalo/pop/v6 v6.0.8
 	github.com/gobuffalo/refresh v1.13.2
 	github.com/gobuffalo/tags/v3 v3.1.4
 	github.com/gorilla/handlers v1.5.1
