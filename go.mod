@@ -18,7 +18,7 @@ require (
 	github.com/gobuffalo/nulls v0.4.2
 	github.com/gobuffalo/plush/v4 v4.1.16
 	github.com/gobuffalo/pop/v6 v6.0.8
-	github.com/gobuffalo/refresh v1.13.2
+	github.com/gobuffalo/refresh v1.13.3
 	github.com/gobuffalo/tags/v3 v3.1.4
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
@@ -26,7 +26,7 @@ require (
 	github.com/monoculum/formam v3.5.5+incompatible
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef
 	github.com/sirupsen/logrus v1.9.0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/text v0.3.7
 )
