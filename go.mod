@@ -5,7 +5,6 @@ go 1.16
 require (
 	github.com/BurntSushi/toml v1.2.0
 	github.com/dustin/go-humanize v1.0.0
-	github.com/fatih/color v1.13.0
 	github.com/gobuffalo/envy v1.10.2
 	github.com/gobuffalo/events v1.4.3
 	github.com/gobuffalo/flect v0.3.0
@@ -17,9 +16,9 @@ require (
 	github.com/gobuffalo/meta v0.3.3
 	github.com/gobuffalo/nulls v0.4.2
 	github.com/gobuffalo/plush/v4 v4.1.16
-	github.com/gobuffalo/pop/v6 v6.0.8
 	github.com/gobuffalo/refresh v1.13.2
 	github.com/gobuffalo/tags/v3 v3.1.4
+	github.com/gofrs/uuid v4.3.0+incompatible // indirect
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
