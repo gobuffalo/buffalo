@@ -6,13 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/logger"
-	"github.com/gobuffalo/pop/v6"
-	"github.com/gobuffalo/pop/v6/logging"
 	"github.com/gorilla/sessions"
 )
 
@@ -128,25 +125,6 @@ func optionsWithDefaults(opts Options) Options {
 
 		opts.Logger = logger.New(opts.LogLvl)
 	}
-
-	pop.SetLogger(func(level logging.Level, s string, args ...interface{}) {
-		if !pop.Debug {
-			return
-		}
-
-		l := opts.Logger
-		if len(args) > 0 {
-			for i, a := range args {
-				l = l.WithField(fmt.Sprintf("$%d", i+1), a)
-			}
-		}
-
-		if pop.Color {
-			s = color.YellowString(s)
-		}
-
-		l.Debug(s)
-	})
 
 	if opts.SessionStore == nil {
 		secret := envy.Get("SESSION_SECRET", "")
