@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"net/http"
 	"reflect"
 	"runtime"
 	"strings"
@@ -123,15 +124,38 @@ func (ms *MiddlewareStack) Replace(mw1 MiddlewareFunc, mw2 MiddlewareFunc) {
 	ms.stack = stack
 }
 
-func (ms *MiddlewareStack) handler(info RouteInfo) Handler {
-	h := info.Handler
-	if len(ms.stack) > 0 {
-		mh := func(_ Handler) Handler {
-			return h
+// assertMiddleware is a hidden middleware that works just befor and after the
+// actual handler runs to make it sure everything is OK with the Handler
+// specification.
+//
+// It writes response header with `http.StatusOK` if the request handler exited
+// without error but the response status is still zero. Setting response is the
+// responsibility of handler but this middleware make it sure the response
+// should be compatible with middleware specification.
+//
+// See also: https://github.com/gobuffalo/buffalo/issues/2339
+func assertMiddleware(handler Handler) Handler {
+	return func(c Context) error {
+		err := handler(c)
+		if err != nil {
+			return err
 		}
 
-		tstack := []MiddlewareFunc{mh}
+		if res, ok := c.Response().(*Response); ok {
+			if res.Status == 0 {
+				res.WriteHeader(http.StatusOK)
+				c.Logger().Debug("warning: handler exited without setting the response status. 200 OK will be used.")
+			}
+		}
 
+		return err
+	}
+}
+
+func (ms *MiddlewareStack) handler(info RouteInfo) Handler {
+	tstack := []MiddlewareFunc{assertMiddleware}
+
+	if len(ms.stack) > 0 {
 		sl := len(ms.stack) - 1
 		for i := sl; i >= 0; i-- {
 			mw := ms.stack[i]
@@ -140,12 +164,13 @@ func (ms *MiddlewareStack) handler(info RouteInfo) Handler {
 				tstack = append(tstack, mw)
 			}
 		}
-
-		for _, mw := range tstack {
-			h = mw(h)
-		}
-		return h
 	}
+
+	h := info.Handler
+	for _, mw := range tstack {
+		h = mw(h)
+	}
+
 	return h
 }
 
