@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -241,4 +242,68 @@ func Test_Middleware_Remove(t *testing.T) {
 	log = []string{}
 	_ = w.HTML("/no_log_autos/1").Get()
 	r.Len(log, 0)
+}
+
+func Test_AssertMiddleware_NilStatus200(t *testing.T) {
+	r := require.New(t)
+	var status int
+
+	a := New(Options{})
+	a.Use(func(h Handler) Handler {
+		return func(c Context) error {
+			err := h(c)
+
+			res, ok := c.Response().(*Response)
+			r.True(ok)
+			status = res.Status
+
+			return err
+		}
+	})
+
+	a.GET("/200", func(c Context) error {
+		c.Response().WriteHeader(http.StatusOK) // explicitly set
+		return nil
+	})
+
+	a.GET("/404", func(c Context) error {
+		c.Response().WriteHeader(http.StatusNotFound) //explicitly set
+		return nil
+	})
+
+	a.GET("/nil", func(c Context) error {
+		return nil // return nil without setting response status. should be OK
+	})
+
+	a.GET("/500", func(c Context) error {
+		return fmt.Errorf("error") // return error
+	})
+
+	a.GET("/502", func(c Context) error {
+		return HTTPError{Status: http.StatusBadGateway} // return HTTPError
+	})
+
+	a.GET("/panic", func(c Context) error {
+		panic("hoy hoy")
+	})
+
+	tests := []struct {
+		path   string
+		code   int
+		status int
+	}{
+		{"/200", http.StatusOK, http.StatusOK}, // when the handler set response code explicitly (e.g. 200, 404)
+		{"/404", http.StatusNotFound, http.StatusNotFound},
+		{"/nil", http.StatusOK, http.StatusOK},        // when the handler returns nil without setting status code
+		{"/502", http.StatusBadGateway, 0},            // set by defaultErrorHandler, when the handler just returns error
+		{"/500", http.StatusInternalServerError, 0},   // set by defaultErrorHandler, when the handler returns HTTPError
+		{"/panic", http.StatusInternalServerError, 0}, // set by PanicHandler
+	}
+	w := httptest.New(a)
+
+	for _, tc := range tests {
+		res := w.HTML(tc.path).Get()
+		r.Equal(tc.status, status)
+		r.Equal(tc.code, res.Code)
+	}
 }
