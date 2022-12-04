@@ -91,14 +91,15 @@ func (a *App) PanicHandler(next Handler) Handler {
 				default:
 					err = fmt.Errorf(fmt.Sprint(t))
 				}
-				events.EmitError(events.ErrPanic, err,
-					map[string]interface{}{
-						"context":    c,
-						"app":        a,
-						"stacktrace": string(debug.Stack()),
-						"error":      err,
-					},
-				)
+
+				payload := events.Payload{
+					"context":    c,
+					"app":        a,
+					"stacktrace": string(debug.Stack()),
+					"error":      err,
+				}
+				events.EmitError(events.ErrPanic, err, payload)
+
 				eh := a.ErrorHandlers.Get(http.StatusInternalServerError)
 				eh(http.StatusInternalServerError, err, c)
 			}
