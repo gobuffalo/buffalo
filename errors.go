@@ -247,7 +247,9 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	default:
 		c.Response().Header().Set("content-type", defaultErrorCT)
 		if err := c.Request().ParseForm(); err != nil {
-			trace = fmt.Sprintf("%s\n%s", err.Error(), trace)
+			trace = fmt.Sprintf("%s\n%s\n%s", err.Error(), origErr.Error(), trace)
+		} else {
+			trace = fmt.Sprintf("%s\n%s", origErr.Error(), trace)
 		}
 
 		routes := c.Value("routes")
