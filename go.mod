@@ -22,6 +22,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/monoculum/formam v3.5.5+incompatible
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/psanford/memfs v0.0.0-20210214183328-a001468d78ef
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1

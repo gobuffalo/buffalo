@@ -15,6 +15,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v4"
+	pkgError "github.com/pkg/errors"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
@@ -34,6 +35,16 @@ func (h HTTPError) Error() string {
 		return h.Cause.Error()
 	}
 	return "unknown cause"
+}
+
+func (h HTTPError) StackTrace() pkgError.StackTrace {
+	if h.Cause == nil {
+		return nil
+	}
+	if tracer, ok := h.Cause.(stackTracer); ok {
+		return tracer.StackTrace()
+	}
+	return nil
 }
 
 // ErrorHandler interface for handling an error for a
@@ -165,8 +176,27 @@ type ErrorResponse struct {
 
 const defaultErrorCT = "text/html; charset=utf-8"
 
-func defaultErrorHandler(status int, origErr error, c Context) error {
+type stackTracer interface {
+	StackTrace() pkgError.StackTrace
+}
+
+// Attempt to extract stacktrace error with stack if it implements stacktracer
+func getTrace(err error) string {
+
+	if errStack, ok := err.(stackTracer); ok {
+		return fmt.Sprintf("%+v", errStack.StackTrace())
+	} else {
+		return err.Error()
+	}
+}
+
+func isUnsafeEnvironment(c Context) bool {
 	env := c.Value("env")
+	return env != nil && env.(string) != "development" && env.(string) != "test"
+}
+
+func defaultErrorHandler(status int, origErr error, c Context) error {
+
 	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
 
 	var defaultErrorResponse *ErrorResponse
@@ -175,7 +205,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
-	if env != nil && env.(string) != "development" {
+	if isUnsafeEnvironment(c) {
 		switch strings.ToLower(requestCT) {
 		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
 			defaultErrorResponse = &ErrorResponse{
@@ -190,7 +220,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 	}
 
-	trace := origErr.Error()
+	trace := getTrace(origErr)
 	if cause := errors.Unwrap(origErr); cause != nil {
 		origErr = cause
 	}

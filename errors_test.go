@@ -1,7 +1,9 @@
 package buffalo
 
 import (
+	errors "errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -13,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-//testLoggerHook is useful to test whats being logged.
+// testLoggerHook is useful to test whats being logged.
 type testLoggerHook struct {
 	errors []*logrus.Entry
 }
@@ -65,6 +67,14 @@ func Test_defaultErrorHandler_Logger(t *testing.T) {
 	r.Equal(http.StatusUnauthorized, testHook.errors[0].Data["status"])
 }
 
+func Test_defaultErrorHandler_JSON_test(t *testing.T) {
+	testDefaultErrorHandler(t, "application/json", "test")
+}
+
+func Test_defaultErrorHandler_XML_test(t *testing.T) {
+	testDefaultErrorHandler(t, "text/xml", "test")
+}
+
 func Test_defaultErrorHandler_JSON_development(t *testing.T) {
 	testDefaultErrorHandler(t, "application/json", "development")
 }
@@ -94,7 +104,7 @@ func testDefaultErrorHandler(t *testing.T, contentType, env string) {
 	app := New(Options{})
 	app.Env = env
 	app.GET("/", func(c Context) error {
-		return c.Error(http.StatusUnauthorized, fmt.Errorf("boom"))
+		return c.Error(http.StatusUnauthorized, errors.New("boom"))
 	})
 
 	w := httptest.New(app)
@@ -108,18 +118,21 @@ func testDefaultErrorHandler(t *testing.T, contentType, env string) {
 	ct := res.Header().Get("content-type")
 	r.Equal(contentType, ct)
 	b := res.Body.String()
-
-	if env == "development" {
+	isDevOrTest := env == "development" || env == "test"
+	log.Printf(b)
+	if isDevOrTest {
 		if contentType == "text/xml" {
 			r.Contains(b, `<response code="401">`)
 			r.Contains(b, `<error>boom</error>`)
 			r.Contains(b, `<trace>`)
 			r.Contains(b, `</trace>`)
 			r.Contains(b, `</response>`)
+			r.Contains(b, "github.com") // making sure trace is not empty
 		} else {
 			r.Contains(b, `"code":401`)
 			r.Contains(b, `"error":"boom"`)
 			r.Contains(b, `"trace":"`)
+			r.Contains(b, "github.com") // making sure trace is not empty
 		}
 	} else {
 		if contentType == "text/xml" {

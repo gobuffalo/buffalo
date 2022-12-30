@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	pkgError "github.com/pkg/errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -196,7 +197,7 @@ func (d *DefaultContext) LogFields(values map[string]interface{}) {
 }
 
 func (d *DefaultContext) Error(status int, err error) error {
-	return HTTPError{Status: status, Cause: err}
+	return HTTPError{Status: status, Cause: pkgError.WithStack(err)}
 }
 
 var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
