@@ -3,7 +3,6 @@ package buffalo
 import (
 	errors "errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -119,7 +118,6 @@ func testDefaultErrorHandler(t *testing.T, contentType, env string) {
 	r.Equal(contentType, ct)
 	b := res.Body.String()
 	isDevOrTest := env == "development" || env == "test"
-	log.Printf(b)
 	if isDevOrTest {
 		if contentType == "text/xml" {
 			r.Contains(b, `<response code="401">`)
