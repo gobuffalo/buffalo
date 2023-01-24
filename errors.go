@@ -114,7 +114,10 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		if err == nil {
 			return nil
 		}
+
+		// 500 Internal Server Error by default
 		status := http.StatusInternalServerError
+
 		// unpack root err and check for HTTPError
 		if errors.Is(err, sql.ErrNoRows) {
 			status = http.StatusNotFound
@@ -123,9 +126,18 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		if errors.As(err, &h) {
 			status = h.Status
 		}
+
 		payload := events.Payload{
 			"context": c,
 			"app":     a,
+			"status":  status,
+			"error":   err,
+		}
+		if status >= http.StatusInternalServerError {
+			// we need the details (or stack trace) only for 5xx errors.
+			// pkg/errors supports '%+v' for stack trace.
+			// the other type of errors that support '%+v' is also supported.
+			payload["stacktrace"] = fmt.Sprintf("%+v", err)
 		}
 		events.EmitError(events.ErrGeneral, err, payload)
 
@@ -190,7 +202,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 	}
 
-	trace := origErr.Error()
+	trace := fmt.Sprintf("%+v", origErr)
 	if cause := errors.Unwrap(origErr); cause != nil {
 		origErr = cause
 	}
@@ -269,5 +281,5 @@ func (i inspectHeaders) String() string {
 		bb = append(bb, fmt.Sprintf("%s: %s", k, v))
 	}
 	sort.Strings(bb)
-	return strings.Join(bb, "\n\n")
+	return strings.Join(bb, "\n")
 }
