@@ -56,7 +56,9 @@ func New(opts Options) *App {
 		routes:   RouteList{},
 		children: []*App{},
 
-		RouteNamer: baseRouteNamer{},
+		RouteNamer: baseRouteNamer{
+			Prefix: opts.Prefix,
+		},
 	}
 	a.Home.app = a     // replace root.
 	a.Home.appSelf = a // temporary, reverse reference to the group app.
