@@ -17,9 +17,15 @@ type RouteNamer interface {
 }
 
 // BaseRouteNamer is the default route namer used by apps.
-type baseRouteNamer struct{}
+type baseRouteNamer struct {
+	Prefix string
+}
 
 func (drn baseRouteNamer) NameRoute(p string) string {
+	if drn.Prefix != "" {
+		p = strings.TrimPrefix(p, drn.Prefix)
+	}
+
 	if p == "/" || p == "" {
 		return "root"
 	}

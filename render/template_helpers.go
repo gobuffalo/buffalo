@@ -45,12 +45,12 @@ func (s *templateRenderer) addAssetsHelpers(helpers Helpers) Helpers {
 
 var assetMap = stringMap{}
 
-func assetPathFor(file string) string {
+func assetPathFor(prefix string, file string) string {
 	filePath, ok := assetMap.Load(file)
 	if filePath == "" || !ok {
 		filePath = file
 	}
-	return path.Join("/assets", filePath)
+	return path.Join(prefix, "/assets", filePath)
 }
 
 func loadManifest(manifest io.Reader) error {

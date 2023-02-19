@@ -266,18 +266,18 @@ func (s *templateRenderer) assetPath(file string) (string, error) {
 		if err != nil {
 			manifest, err = s.AssetsFS.Open("assets/manifest.json")
 			if err != nil {
-				return assetPathFor(file), nil
+				return assetPathFor(s.Prefix, file), nil
 			}
 		}
 		defer manifest.Close()
 
 		err = loadManifest(manifest)
 		if err != nil {
-			return assetPathFor(file), fmt.Errorf("your manifest.json is not correct: %s", err)
+			return assetPathFor(s.Prefix, file), fmt.Errorf("your manifest.json is not correct: %s", err)
 		}
 	}
 
-	return assetPathFor(file), nil
+	return assetPathFor(s.Prefix, file), nil
 }
 
 // Template renders the named files using the specified

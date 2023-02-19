@@ -32,4 +32,7 @@ type Options struct {
 	// DefaultContentType instructs the engine what it should fall back to if
 	// the "content-type" is unknown
 	DefaultContentType string
+
+	// Prefix inherits the global single prefix from buffalo.Options
+	Prefix string
 }
