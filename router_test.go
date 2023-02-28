@@ -581,6 +581,27 @@ func Test_Resource_ParamKey(t *testing.T) {
 	r.Contains(paths, "/foo/{bazKey}/edit/")
 }
 
+func Test_RouteNameWithPrefix(t *testing.T) {
+	r := require.New(t)
+	cases := map[string]string{
+		"/":          "root",
+		"/users":     "users",
+		"/users/new": "newUsers",
+	}
+
+	a := New(Options{Prefix: ""})
+	for input, expected := range cases {
+		actual := a.RouteNamer.NameRoute(input)
+		r.Equal(expected, actual, input)
+	}
+
+	a = New(Options{Prefix: "/prefix"})
+	for input, expected := range cases {
+		actual := a.RouteNamer.NameRoute(input)
+		r.Equal(expected, actual, input)
+	}
+}
+
 type mwResource struct {
 	WebResource
 }
