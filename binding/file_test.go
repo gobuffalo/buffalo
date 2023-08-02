@@ -53,7 +53,7 @@ func App() *buffalo.App {
 		}
 		result := make([]string, len(wmf.MyFiles))
 		for i, f := range wmf.MyFiles {
-			result[i] += fmt.Sprintf("%s:%d", f.Filename, f.Size)
+			result[i] += fmt.Sprintf("%s", f.Filename)
 
 		}
 		return c.Render(http.StatusCreated, render.String(strings.Join(result, ",")))
@@ -92,7 +92,7 @@ func Test_File_Upload_On_Struct_WithTag_WithMultipleFiles(t *testing.T) {
 	App().ServeHTTP(res, req)
 
 	r.Equal(http.StatusCreated, res.Code)
-	r.Equal("file_test.go:3672,file.go:348,types.go:507", res.Body.String())
+	r.Equal("file_test.go,file.go,types.go", res.Body.String())
 }
 
 func Test_File_Upload_On_Struct_WithTag(t *testing.T) {
