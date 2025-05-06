@@ -12,7 +12,6 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding"
@@ -36,7 +35,7 @@ type DefaultContext struct {
 	logger      Logger
 	session     *Session
 	contentType string
-	data        *sync.Map
+	data        *requestData
 	flash       *Flash
 }
 
@@ -71,16 +70,20 @@ func (d *DefaultContext) Param(key string) string {
 // will be automatically available in templates.
 func (d *DefaultContext) Set(key string, value interface{}) {
 	if d.data == nil {
-		d.data = &sync.Map{}
+		d.data = newRequestData()
 	}
-	d.data.Store(key, value)
+	d.data.moot.Lock()
+	defer d.data.moot.Unlock()
+	d.data.d[key] = value
 }
 
 // Value that has previously stored on the context.
 func (d *DefaultContext) Value(key interface{}) interface{} {
-	if k, ok := key.(string); ok && d.data != nil {
-		if v, ok := d.data.Load(k); ok {
-			return v
+	if k, ok := key.(string); ok && d.data != nil && d.data.moot != nil {
+		d.data.moot.RLock()
+		defer d.data.moot.RUnlock()
+		if val, ok := d.data.d[k]; ok {
+			return val
 		}
 	}
 	if d.Context == nil {
@@ -248,15 +251,12 @@ func (d *DefaultContext) Data() map[string]interface{} {
 	if d.data == nil {
 		return m
 	}
-
-	d.data.Range(func(k, v interface{}) bool {
-		s, ok := k.(string)
-		if !ok {
-			return false
-		}
-		m[s] = v
-		return true
-	})
+	d.data.moot.RLock()
+	defer d.data.moot.RUnlock()
+	m = make(map[string]interface{}, len(d.data.d))
+	for k, v := range d.data.d {
+		m[k] = v
+	}
 	return m
 }
 
