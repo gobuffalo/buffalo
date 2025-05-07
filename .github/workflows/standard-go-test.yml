@@ -2,11 +2,11 @@ name: Standard Test
 
 on:
   push:
-    branches: [ main v1 ]
+    branches: [main v1]
   pull_request:
 
 jobs:
   call-standard-test:
     name: Test
-    uses: gobuffalo/.github/.github/workflows/go-test.yml@v1
+    uses: gobuffalo/.github/.github/workflows/go-test.yml@main
     secrets: inherit
