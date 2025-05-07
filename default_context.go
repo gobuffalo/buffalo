@@ -79,11 +79,12 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 
 // Value that has previously stored on the context.
 func (d *DefaultContext) Value(key interface{}) interface{} {
-	if k, ok := key.(string); ok && d.data != nil && d.data.moot != nil {
+	if k, ok := key.(string); ok && d.data != nil {
 		d.data.moot.RLock()
 		defer d.data.moot.RUnlock()
-		if val, ok := d.data.d[k]; ok {
-			return val
+		if v, ok := d.data.d[k]; ok {
+
+			return v
 		}
 	}
 	if d.Context == nil {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"sync"
 
 	"github.com/gobuffalo/buffalo/binding"
 	"github.com/gobuffalo/buffalo/internal/httpx"
@@ -70,19 +69,20 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 
 	ct := httpx.ContentType(req)
 
-	data := &sync.Map{}
-
-	data.Store("app", a)
-	data.Store("env", a.Env)
-	data.Store("routes", a.Routes())
-	data.Store("current_route", info)
-	data.Store("current_path", req.URL.Path)
-	data.Store("contentType", ct)
-	data.Store("method", req.Method)
+	data := newRequestData()
+	data.d = map[string]interface{}{
+		"app":           a,
+		"env":           a.Env,
+		"routes":        a.Routes(),
+		"current_route": info,
+		"current_path":  req.URL.Path,
+		"contentType":   ct,
+		"method":        req.Method,
+	}
 
 	for _, route := range a.Routes() {
 		cRoute := route
-		data.Store(cRoute.PathName, cRoute.BuildPathHelper())
+		data.d[cRoute.PathName] = cRoute.BuildPathHelper()
 	}
 
 	return &DefaultContext{

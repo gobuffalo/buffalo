@@ -10,6 +10,6 @@ type requestData struct {
 func newRequestData() *requestData {
 	return &requestData{
 		d:    make(map[string]interface{}),
-		moot: new(sync.RWMutex),
+		moot: &sync.RWMutex{},
 	}
 }
