@@ -80,7 +80,7 @@ func WrapBuffaloHandlerFunc(h Handler) http.HandlerFunc {
 			request:     req,
 			params:      params,
 			flash:       &Flash{data: map[string][]string{}},
-			data:        newRequestData(),
+			data:        data,
 		}
 		h(c)
 	}
