@@ -5,7 +5,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"sync"
 	"testing"
 
 	"github.com/gobuffalo/buffalo/render"
@@ -18,7 +17,7 @@ func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
 		logger:  logger.New(logger.DebugLevel),
-		data:    &sync.Map{},
+		data:    newRequestData(),
 		flash:   &Flash{data: make(map[string][]string)},
 	}
 }

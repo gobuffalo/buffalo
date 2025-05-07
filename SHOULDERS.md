@@ -25,7 +25,7 @@ Thank you to the following **GIANTS**:
 * [github.com/gobuffalo/logger](https://godoc.org/github.com/gobuffalo/logger)
 * [github.com/gobuffalo/meta](https://godoc.org/github.com/gobuffalo/meta)
 * [github.com/gobuffalo/nulls](https://godoc.org/github.com/gobuffalo/nulls)
-* [github.com/gobuffalo/plush/v4](https://godoc.org/github.com/gobuffalo/plush/v4)
+* [github.com/gobuffalo/plush/v5](https://godoc.org/github.com/gobuffalo/plush/v5)
 * [github.com/gobuffalo/refresh](https://godoc.org/github.com/gobuffalo/refresh)
 * [github.com/gobuffalo/tags/v3](https://godoc.org/github.com/gobuffalo/tags/v3)
 * [github.com/gobuffalo/validate/v3](https://godoc.org/github.com/gobuffalo/validate/v3)
