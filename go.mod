@@ -2,7 +2,6 @@ module github.com/gobuffalo/buffalo
 
 go 1.21
 
-replace github.com/gobuffalo/helpers v0.6.7 => /home/mido/go/src/github.com/Mido-sys/helpers
 require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/dustin/go-humanize v1.0.1
@@ -11,7 +10,7 @@ require (
 	github.com/gobuffalo/flect v1.0.2
 	github.com/gobuffalo/github_flavored_markdown v1.1.3
 	github.com/gobuffalo/grift v1.5.2
-	github.com/gobuffalo/helpers v0.6.7
+	github.com/gobuffalo/helpers v0.6.8
 	github.com/gobuffalo/httptest v1.5.2
 	github.com/gobuffalo/logger v1.0.7
 	github.com/gobuffalo/meta v0.3.3
