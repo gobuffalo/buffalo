@@ -258,7 +258,6 @@ func (d *DefaultContext) Data() map[string]interface{} {
 	for k, v := range d.data.d {
 		m[k] = v
 	}
-
 	return m
 }
 
