@@ -1,8 +1,6 @@
 module github.com/gobuffalo/buffalo
 
-go 1.23.0
-
-toolchain go1.24.1
+go 1.21
 
 require (
 	github.com/BurntSushi/toml v1.2.1
