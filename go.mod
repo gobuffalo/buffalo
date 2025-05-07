@@ -1,6 +1,8 @@
 module github.com/gobuffalo/buffalo
 
-go 1.21
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/BurntSushi/toml v1.2.1
@@ -26,7 +28,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/text v0.6.0
+	golang.org/x/text v0.25.0
 )
 
 require (
