@@ -94,6 +94,6 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 		logger:      a.Logger,
 		session:     session,
 		flash:       newFlash(session),
-		data:        newRequestData(),
+		data:        data,
 	}
 }
