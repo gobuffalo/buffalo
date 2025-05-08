@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"unsafe"
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/text/language"
@@ -63,7 +64,8 @@ func (s *templateRenderer) Render(w io.Writer, data Data) error {
 		}
 		data["yield"] = body
 	}
-	_, err := w.Write([]byte(body))
+
+	_, err := w.Write(unsafe.Slice(unsafe.StringData(string(body)), len(body)))
 	return err
 }
 
