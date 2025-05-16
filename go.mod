@@ -15,7 +15,7 @@ require (
 	github.com/gobuffalo/logger v1.0.7
 	github.com/gobuffalo/meta v0.3.3
 	github.com/gobuffalo/nulls v0.4.2
-	github.com/gobuffalo/plush/v5 v5.0.3
+	github.com/gobuffalo/plush/v5 v5.0.4
 	github.com/gobuffalo/refresh v1.13.3
 	github.com/gobuffalo/tags/v3 v3.1.4
 	github.com/gorilla/handlers v1.5.1
