@@ -31,6 +31,8 @@ github.com/gobuffalo/grift v1.5.2 h1:mC0vHRs+nXz+JhkH3sv+rVnnTQRDXrUrOXOPYpgPjpo
 github.com/gobuffalo/grift v1.5.2/go.mod h1:Uf/3T2AR1Vv+t84EPmxCjqQ8oyJwXs0FAoLMFUn/JVs=
 github.com/gobuffalo/helpers v0.6.8 h1:/ipO7SV3Xvs31udqJ1ELOvqFp0crGXF5MeodNGdqRQ4=
 github.com/gobuffalo/helpers v0.6.8/go.mod h1:hScSAHLvUMSATy5uxUxxYITKTv1Hfkpldkd5Ik8vf7Y=
+github.com/gobuffalo/helpers v0.6.9 h1:jOpLfIK8HwdLrPHfJ4IYvoCxORw0I1OyuRw8ikDy8uM=
+github.com/gobuffalo/helpers v0.6.9/go.mod h1:hScSAHLvUMSATy5uxUxxYITKTv1Hfkpldkd5Ik8vf7Y=
 github.com/gobuffalo/here v0.6.7/go.mod h1:vuCfanjqckTuRlqAitJz6QC4ABNnS27wLb816UhsPcc=
 github.com/gobuffalo/httptest v1.5.2 h1:GpGy520SfY1QEmyPvaqmznTpG4gEQqQ82HtHqyNEreM=
 github.com/gobuffalo/httptest v1.5.2/go.mod h1:FA23yjsWLGj92mVV74Qtc8eqluc11VqcWr8/C1vxt4g=
