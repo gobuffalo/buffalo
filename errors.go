@@ -14,7 +14,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
-	"github.com/gobuffalo/plush/v4"
+	"github.com/gobuffalo/plush/v5"
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
@@ -91,14 +91,15 @@ func (a *App) PanicHandler(next Handler) Handler {
 				default:
 					err = fmt.Errorf(fmt.Sprint(t))
 				}
-				events.EmitError(events.ErrPanic, err,
-					map[string]interface{}{
-						"context":    c,
-						"app":        a,
-						"stacktrace": string(debug.Stack()),
-						"error":      err,
-					},
-				)
+
+				payload := events.Payload{
+					"context":    c,
+					"app":        a,
+					"stacktrace": string(debug.Stack()),
+					"error":      err,
+				}
+				events.EmitError(events.ErrPanic, err, payload)
+
 				eh := a.ErrorHandlers.Get(http.StatusInternalServerError)
 				eh(http.StatusInternalServerError, err, c)
 			}
@@ -113,7 +114,10 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		if err == nil {
 			return nil
 		}
+
+		// 500 Internal Server Error by default
 		status := http.StatusInternalServerError
+
 		// unpack root err and check for HTTPError
 		if errors.Is(err, sql.ErrNoRows) {
 			status = http.StatusNotFound
@@ -122,9 +126,18 @@ func (a *App) defaultErrorMiddleware(next Handler) Handler {
 		if errors.As(err, &h) {
 			status = h.Status
 		}
+
 		payload := events.Payload{
 			"context": c,
 			"app":     a,
+			"status":  status,
+			"error":   err,
+		}
+		if status >= http.StatusInternalServerError {
+			// we need the details (or stack trace) only for 5xx errors.
+			// pkg/errors supports '%+v' for stack trace.
+			// the other type of errors that support '%+v' is also supported.
+			payload["stacktrace"] = fmt.Sprintf("%+v", err)
 		}
 		events.EmitError(events.ErrGeneral, err, payload)
 
@@ -174,7 +187,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 	c.Logger().Error(origErr)
 	c.Response().WriteHeader(status)
 
-	if env != nil && env.(string) == "production" {
+	if env != nil && env.(string) != "development" {
 		switch strings.ToLower(requestCT) {
 		case "application/json", "text/json", "json", "application/xml", "text/xml", "xml":
 			defaultErrorResponse = &ErrorResponse{
@@ -189,7 +202,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		}
 	}
 
-	trace := origErr.Error()
+	trace := fmt.Sprintf("%+v", origErr)
 	if cause := errors.Unwrap(origErr); cause != nil {
 		origErr = cause
 	}
@@ -268,5 +281,5 @@ func (i inspectHeaders) String() string {
 		bb = append(bb, fmt.Sprintf("%s: %s", k, v))
 	}
 	sort.Strings(bb)
-	return strings.Join(bb, "\n\n")
+	return strings.Join(bb, "\n")
 }

@@ -61,9 +61,6 @@ func New(opts Options) *App {
 	a.Home.app = a     // replace root.
 	a.Home.appSelf = a // temporary, reverse reference to the group app.
 
-	dem := a.defaultErrorMiddleware
-	a.Middleware = newMiddlewareStack(dem)
-
 	notFoundHandler := func(errorf string, code int) http.HandlerFunc {
 		return func(res http.ResponseWriter, req *http.Request) {
 			c := a.newContext(RouteInfo{}, res, req)
@@ -78,8 +75,10 @@ func New(opts Options) *App {
 	if a.MethodOverride == nil {
 		a.MethodOverride = MethodOverride
 	}
+
+	a.Middleware = newMiddlewareStack(RequestLogger)
+	a.Use(a.defaultErrorMiddleware)
 	a.Use(a.PanicHandler)
-	a.Use(RequestLogger)
 
 	return a
 }

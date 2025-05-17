@@ -3,7 +3,7 @@ package render
 import (
 	"io/fs"
 
-	"github.com/gobuffalo/helpers/hctx"
+	"github.com/gobuffalo/plush/v5/helpers/hctx"
 )
 
 // Helpers to be included in all templates
