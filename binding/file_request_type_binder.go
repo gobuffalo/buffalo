@@ -52,17 +52,30 @@ func (ht FileRequestTypeBinder) BinderFunc() Binder {
 			if !f.IsValid() {
 				continue
 			}
-			if _, ok := f.Interface().(File); !ok {
+			if f.Kind() == reflect.Slice {
+				for _, fh := range req.MultipartForm.File[n] {
+					mf, err := fh.Open()
+					if err != nil {
+						return err
+					}
+
+					f.Set(reflect.Append(f, reflect.ValueOf(File{
+						File:       mf,
+						FileHeader: fh,
+					})))
+				}
 				continue
 			}
-			mf, mh, err := req.FormFile(n)
-			if err != nil {
-				return err
+			if _, ok := f.Interface().(File); ok {
+				mf, mh, err := req.FormFile(n)
+				if err != nil {
+					return err
+				}
+				f.Set(reflect.ValueOf(File{
+					File:       mf,
+					FileHeader: mh,
+				}))
 			}
-			f.Set(reflect.ValueOf(File{
-				File:       mf,
-				FileHeader: mh,
-			}))
 		}
 
 		return nil
