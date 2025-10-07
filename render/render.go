@@ -55,6 +55,10 @@ func New(opts Options) *Engine {
 		opts.DefaultContentType = "text/html; charset=utf-8"
 	}
 
+	if opts.TemplateMetadataKeys == nil {
+		opts.TemplateMetadataKeys = defaultTemplateMetadataKeys
+	}
+
 	e := &Engine{
 		Options: opts,
 	}

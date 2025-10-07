@@ -328,3 +328,110 @@ func Test_Template_resolve_LangOnly_FullFile_Mixed(t *testing.T) {
 	r.NoError(re.Render(bb, Data{"name": "Paul", "languages": []string{"ko", "en"}}))
 	r.Equal("korean Paul", strings.TrimSpace(bb.String()))
 }
+
+func Test_Template_extsAndBase(t *testing.T) {
+	r := require.New(t)
+
+	tests := []struct {
+		name         string
+		input        string
+		expectedExts []string
+		expectedBase string
+	}{
+		{
+			name:         "single extension",
+			input:        "index.html",
+			expectedExts: []string{"html"},
+			expectedBase: "index",
+		},
+		{
+			name:         "multiple extensions",
+			input:        "template.html.plush",
+			expectedExts: []string{"plush", "html"},
+			expectedBase: "template",
+		},
+		{
+			name:         "three extensions",
+			input:        "layout.md.html.plush",
+			expectedExts: []string{"plush", "md", "html"},
+			expectedBase: "layout",
+		},
+		{
+			name:         "no extension",
+			input:        "template",
+			expectedExts: []string{"html"},
+			expectedBase: "template",
+		},
+		{
+			name:         "empty string",
+			input:        "",
+			expectedExts: []string{"html"},
+			expectedBase: "",
+		},
+		{
+			name:         "extension with uppercase",
+			input:        "index.HTML",
+			expectedExts: []string{"html"},
+			expectedBase: "index",
+		},
+		{
+			name:         "mixed case extensions",
+			input:        "template.MD.HTML.PLUSH",
+			expectedExts: []string{"plush", "md", "html"},
+			expectedBase: "template",
+		},
+		{
+			name:         "path with directories",
+			input:        "layouts/application.html.plush",
+			expectedExts: []string{"plush", "html"},
+			expectedBase: "layouts/application",
+		},
+		{
+			name:         "nested path no extension",
+			input:        "views/users/index",
+			expectedExts: []string{"html"},
+			expectedBase: "views/users/index",
+		},
+		{
+			name:         "dotfile",
+			input:        ".gitignore",
+			expectedExts: []string{"gitignore"},
+			expectedBase: "",
+		},
+		{
+			name:         "dotfile with extension",
+			input:        ".env.local",
+			expectedExts: []string{"local", "env"},
+			expectedBase: "",
+		},
+		{
+			name:         "complex filename",
+			input:        "user-profile.en-US.html.plush",
+			expectedExts: []string{"plush", "html", "en-us"},
+			expectedBase: "user-profile",
+		},
+		{
+			name:         "only extension",
+			input:        ".html",
+			expectedExts: []string{"html"},
+			expectedBase: "",
+		},
+		{
+			name:         "locale and template extensions",
+			input:        "welcome.fr-FR.html.plush",
+			expectedExts: []string{"plush", "html", "fr-fr"},
+			expectedBase: "welcome",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			renderer := &templateRenderer{}
+
+			gotExts, gotBase := renderer.extsAndBase(tt.input)
+
+			r.Equal(tt.expectedExts, gotExts, "extensions should match")
+			r.Equal(tt.expectedBase, gotBase, "base name should match")
+		})
+	}
+}

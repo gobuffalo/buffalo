@@ -27,26 +27,30 @@ func (s *templateRenderer) ContentType() string {
 	return s.contentType
 }
 
-func (s *templateRenderer) resolve(name string) ([]byte, error) {
+func (s *templateRenderer) resolve(name string) ([]byte, fs.FileInfo, error) {
 	if s.TemplatesFS == nil {
-		return nil, fmt.Errorf("no templates fs defined")
+		return nil, nil, fmt.Errorf("no templates fs defined")
 	}
 
 	f, err := s.TemplatesFS.Open(name)
 	if err == nil {
-		return io.ReadAll(f)
+		contents, err := io.ReadAll(f)
+		ff, _ := f.Stat()
+		return contents, ff, err
 	}
 
 	v, ok := s.aliases.Load(name)
 	if !ok {
-		return nil, fmt.Errorf("could not find template %s", name)
+		return nil, nil, fmt.Errorf("could not find template %s", name)
 	}
 
 	f, err = s.TemplatesFS.Open(v.(string))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return io.ReadAll(f)
+	contents, err := io.ReadAll(f)
+	ff, _ := f.Stat()
+	return contents, ff, err
 }
 
 func (s *templateRenderer) Render(w io.Writer, data Data) error {
@@ -134,7 +138,7 @@ func (s *templateRenderer) partialFeeder(name string) (string, error) {
 	name = filepath.Join(d, "_"+f)
 	name = fixExtension(name, ct)
 
-	b, err := s.resolve(name)
+	b, _, err := s.resolve(name)
 	return string(b), err
 }
 
@@ -144,7 +148,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 
 	name = fixExtension(name, ct)
 
-	source, err := s.localizedResolve(name, data)
+	source, file, err := s.localizedResolve(name, data)
 	if err != nil {
 		return "", err
 	}
@@ -161,9 +165,10 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 	}
 
 	helpers = s.addAssetsHelpers(helpers)
-
+	exts, fileName := s.extsAndBase(name)
 	body := string(source)
-	for _, ext := range s.exts(name) {
+	for _, ext := range exts {
+		s.addTemplateMetadata(data, fileName, ext, file)
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
 			logrus.Errorf("could not find a template engine for %s", ext)
@@ -200,7 +205,7 @@ func (s *templateRenderer) localizedName(name string, data Data) string {
 		}
 
 		candidateName = rawName + "." + strings.ToLower(l) + ext
-		if _, err := s.resolve(candidateName); err == nil {
+		if _, _, err := s.resolve(candidateName); err == nil {
 			// Replace name with the existing suffixed version
 			templateName = candidateName
 			break
@@ -210,7 +215,7 @@ func (s *templateRenderer) localizedName(name string, data Data) string {
 	return templateName
 }
 
-func (s *templateRenderer) localizedResolve(name string, data Data) ([]byte, error) {
+func (s *templateRenderer) localizedResolve(name string, data Data) ([]byte, fs.FileInfo, error) {
 	languages, ok := data["languages"].([]string)
 	if !ok || len(languages) == 0 {
 		return s.resolve(name)
@@ -229,19 +234,65 @@ func (s *templateRenderer) localizedResolve(name string, data Data) ([]byte, err
 		short := strings.Split(fullLower, "-")[0] // form of ko
 
 		fullLocale := rawName + "." + fullLower + ext
-		if source, err := s.resolve(fullLocale); err == nil {
-			return source, nil
+		if source, file, err := s.resolve(fullLocale); err == nil {
+			return source, file, nil
 		}
 
 		if fullLower != short {
 			langOnly := rawName + "." + short + ext
-			if source, err := s.resolve(langOnly); err == nil {
-				return source, nil
+			if source, file, err := s.resolve(langOnly); err == nil {
+				return source, file, nil
 			}
 		}
 	}
 
 	return s.resolve(name)
+}
+
+func (s *templateRenderer) addTemplateMetadata(data Data, fileName, ext string, info fs.FileInfo) {
+	// Get metadata keys from options, fallback to defaults
+	metaKeys := s.TemplateMetadataKeys
+	if metaKeys == nil {
+		metaKeys = defaultTemplateMetadataKeys
+	}
+
+	// Map each metadata type to user-defined key
+	if templateFileKey, exists := metaKeys["template_file"]; exists && templateFileKey != "" {
+		data[templateFileKey] = filepath.Join(s.TemplateBaseDir, fileName) + "." + ext
+	}
+
+	// base_name and extension are derived from the name passed to exec
+	// last_modified is derived from the fs.FileInfo passed to exec
+	// if available
+	if baseNameKey, exists := metaKeys["base_name"]; exists && baseNameKey != "" {
+		data[baseNameKey] = fileName
+	}
+
+	if extensionKey, exists := metaKeys["extension"]; exists && extensionKey != "" {
+		data[extensionKey] = ext
+	}
+
+	if lastModKey, exists := metaKeys["last_modified"]; exists && lastModKey != "" {
+		data[lastModKey] = info.ModTime()
+	}
+}
+
+func (s *templateRenderer) extsAndBase(name string) ([]string, string) {
+	exts := []string{}
+	baseName := name
+	for {
+		ext := filepath.Ext(baseName)
+		if ext == "" {
+			break
+		}
+		baseName = strings.TrimSuffix(baseName, ext)
+		exts = append(exts, strings.ToLower(ext[1:]))
+	}
+	if len(exts) == 0 {
+		return []string{"html"}, baseName
+	}
+	sort.Sort(sort.Reverse(sort.StringSlice(exts)))
+	return exts, baseName
 }
 
 func (s *templateRenderer) exts(name string) []string {
