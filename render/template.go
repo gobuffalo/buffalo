@@ -273,9 +273,7 @@ func (s *templateRenderer) addTemplateMetadata(data Data, fileName, ext string, 
 	}
 
 	if lastModKey, exists := metaKeys["last_modified"]; exists && lastModKey != "" {
-
 		data[lastModKey] = info.ModTime()
-
 	}
 }
 
