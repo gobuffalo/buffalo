@@ -32,4 +32,18 @@ type Options struct {
 	// DefaultContentType instructs the engine what it should fall back to if
 	// the "content-type" is unknown
 	DefaultContentType string
+
+	// TemplateMetadataKeys allows users to specify custom keys for template metadata
+	// If nil, uses default Buffalo metadata approach
+	TemplateMetadataKeys map[string]string
+
+	TemplateBaseDir string
+}
+
+// Default metadata keys
+var defaultTemplateMetadataKeys = map[string]string{
+	"template_file": "_buffalo_template_file",
+	"base_name":     "_buffalo_base_name",
+	"extension":     "_buffalo_extension",
+	"last_modified": "_buffalo_last_modification",
 }
