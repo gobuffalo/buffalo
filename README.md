@@ -29,12 +29,7 @@ Versions (branches):
 
 Buffalo works only with Go [modules](https://blog.golang.org/using-go-modules). `GOPATH` mode is likely to break most of the functionality of the Buffalo eco-system. Please see [this blog post](https://blog.gobuffalo.io/the-road-to-1-0-requiring-modules-5672c6b015e5) for more information.
 
-Also, the Buffalo team actively gives support to the last 2 versions of Go, which at the moment are:
-
-- 1.16.x
-- 1.17.x
-
-While Buffalo `may` work on older versions, we encourage you to upgrade to latest 2 versions of Go for a better development experience.
+Also, the Buffalo team actively gives support to the last 2 versions of Go, which at the moment are Go 1.23 and 1.24. While Buffalo `may` work on older versions, we encourage you to upgrade to latest 2 versions of Go for a better development experience.
 
 ## Documentation
 
@@ -90,7 +85,7 @@ First, thank you so much for wanting to contribute! It means so much that you ca
 - Consider opening an issue **BEFORE** creating a Pull request (PR): you won't
   lose your time on fixing non-existing bugs, or fixing the wrong bug. Also we
   can help you to produce the best PR!
-- Open a PR against the `main` branch if your PR is for mainstrem or version
+- Open a PR against the `main` branch if your PR is for mainstream or version
   specific branch e.g. `v1` if your PR is for specific version.
   Note that the valid branch for a new feature request PR should be `main`
   while a PR against a version specific branch are allowed only for bugfixes.

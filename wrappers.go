@@ -3,7 +3,6 @@ package buffalo
 import (
 	"net/http"
 	"net/url"
-	"sync"
 
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gorilla/mux"
@@ -68,11 +67,12 @@ func WrapBuffaloHandlerFunc(h Handler) http.HandlerFunc {
 
 		ct := httpx.ContentType(req)
 
-		data := &sync.Map{}
-		data.Store("current_path", req.URL.Path)
-		data.Store("contentType", ct)
-		data.Store("method", req.Method)
-
+		data := newRequestData()
+		data.d = map[string]interface{}{
+			"current_path": req.URL.Path,
+			"contentType":  ct,
+			"method":       req.Method,
+		}
 		c := &DefaultContext{
 			Context:     req.Context(),
 			contentType: ct,

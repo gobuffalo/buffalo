@@ -4,7 +4,7 @@ import (
 	"github.com/gobuffalo/helpers"
 	"github.com/gobuffalo/helpers/forms"
 	"github.com/gobuffalo/helpers/forms/bootstrap"
-	"github.com/gobuffalo/plush/v4"
+	"github.com/gobuffalo/plush/v5"
 )
 
 // Engine used to power all defined renderers.
@@ -53,6 +53,10 @@ func New(opts Options) *Engine {
 
 	if opts.DefaultContentType == "" {
 		opts.DefaultContentType = "text/html; charset=utf-8"
+	}
+
+	if opts.TemplateMetadataKeys == nil {
+		opts.TemplateMetadataKeys = defaultTemplateMetadataKeys
 	}
 
 	e := &Engine{
