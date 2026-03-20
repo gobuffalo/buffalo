@@ -40,12 +40,12 @@ func Test_DefaultContext_Redirect_Helper(t *testing.T) {
 
 	table := []struct {
 		E string
-		I map[string]interface{}
+		I map[string]any
 		S int
 	}{
 		{
 			E: "/foo/baz/",
-			I: map[string]interface{}{"bar": "baz"},
+			I: map[string]any{"bar": "baz"},
 			S: http.StatusPermanentRedirect,
 		},
 		{
@@ -319,14 +319,14 @@ func Test_DefaultContext_Data(t *testing.T) {
 	r := require.New(t)
 	c := basicContext()
 
-	r.EqualValues(map[string]interface{}{}, c.Data())
+	r.EqualValues(map[string]any{}, c.Data())
 }
 
 func Test_DefaultContext_Data_not_configured(t *testing.T) {
 	r := require.New(t)
 	c := DefaultContext{}
 
-	r.EqualValues(map[string]interface{}{}, c.Data())
+	r.EqualValues(map[string]any{}, c.Data())
 }
 
 func Test_DefaultContext_String(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	plush.Helpers.Add("paginator", func(pagination interface{}, opts map[string]interface{}, help plush.HelperContext) (template.HTML, error) {
+	plush.Helpers.Add("paginator", func(pagination any, opts map[string]any, help plush.HelperContext) (template.HTML, error) {
 		if opts["path"] == nil {
 			if req, ok := help.Value("request").(*http.Request); ok {
 				opts["path"] = req.URL.String()

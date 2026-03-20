@@ -10,7 +10,7 @@ type JSONContentTypeBinder struct{}
 
 // BinderFunc returns the Binder for this JSONRequestTypeBinder
 func (js JSONContentTypeBinder) BinderFunc() Binder {
-	return func(req *http.Request, value interface{}) error {
+	return func(req *http.Request, value any) error {
 		return json.NewDecoder(req.Body).Decode(value)
 	}
 }

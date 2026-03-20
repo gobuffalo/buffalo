@@ -14,7 +14,7 @@ type Time struct {
 }
 
 // Scan implements the sql.Scanner interface.
-func (t *Time) Scan(value interface{}) error {
+func (t *Time) Scan(value any) error {
 	if value == nil {
 		t.Time, t.Valid = time.Time{}, false
 		return nil

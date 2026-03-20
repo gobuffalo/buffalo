@@ -20,12 +20,12 @@ func (s *Session) Save() error {
 }
 
 // Get a value from the current session.
-func (s *Session) Get(name interface{}) interface{} {
+func (s *Session) Get(name any) any {
 	return s.Session.Values[name]
 }
 
 // GetOnce gets a value from the current session and then deletes it.
-func (s *Session) GetOnce(name interface{}) interface{} {
+func (s *Session) GetOnce(name any) any {
 	if x, ok := s.Session.Values[name]; ok {
 		s.Delete(name)
 		return x
@@ -35,12 +35,12 @@ func (s *Session) GetOnce(name interface{}) interface{} {
 
 // Set a value onto the current session. If a value with that name
 // already exists it will be overridden with the new value.
-func (s *Session) Set(name, value interface{}) {
+func (s *Session) Set(name, value any) {
 	s.Session.Values[name] = value
 }
 
 // Delete a value from the current session.
-func (s *Session) Delete(name interface{}) {
+func (s *Session) Delete(name any) {
 	delete(s.Session.Values, name)
 }
 

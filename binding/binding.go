@@ -41,8 +41,8 @@ func buildFormDecoder() *formam.Decoder {
 		IgnoreUnknownKeys: true,
 	})
 
-	decoder.RegisterCustomType(decoders.TimeDecoderFn(), []interface{}{time.Time{}}, nil)
-	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(), []interface{}{nulls.Time{}}, nil)
+	decoder.RegisterCustomType(decoders.TimeDecoderFn(), []any{time.Time{}}, nil)
+	decoder.RegisterCustomType(decoders.NullTimeDecoderFn(), []any{nulls.Time{}}, nil)
 
 	return decoder
 }
@@ -55,8 +55,8 @@ func RegisterTimeFormats(layouts ...string) {
 
 // RegisterCustomDecoder allows to define custom decoders for certain types
 // In the request.
-func RegisterCustomDecoder(fn CustomTypeDecoder, types []interface{}, fields []interface{}) {
-	rawFunc := (func([]string) (interface{}, error))(fn)
+func RegisterCustomDecoder(fn CustomTypeDecoder, types []any, fields []any) {
+	rawFunc := (func([]string) (any, error))(fn)
 	formDecoder.RegisterCustomType(rawFunc, types, fields)
 }
 
@@ -71,6 +71,6 @@ func Register(contentType string, fn Binder) {
 // is "application/json" it will use "json.NewDecoder". If the type
 // is "application/xml" it will use "xml.NewDecoder". The default
 // binder is "https://github.com/monoculum/formam".
-func Exec(req *http.Request, value interface{}) error {
+func Exec(req *http.Request, value any) error {
 	return BaseRequestBinder.Exec(req, value)
 }

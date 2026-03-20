@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -102,7 +103,7 @@ func (a *App) fileServer(fs http.FileSystem) http.Handler {
 	fsh := http.FileServer(fs)
 	baseHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		f, err := fs.Open(path.Clean(r.URL.Path))
-		if os.IsNotExist(err) {
+		if errors.Is(err, os.ErrNotExist) {
 			eh := a.ErrorHandlers.Get(http.StatusNotFound)
 			eh(http.StatusNotFound, fmt.Errorf("could not find %s", r.URL.Path), a.newContext(RouteInfo{}, w, r))
 			return

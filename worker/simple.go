@@ -198,10 +198,10 @@ func (w *Simple) PerformIn(job Job, d time.Duration) error {
 
 // SimpleLogger is used by the Simple worker to write logs
 type SimpleLogger interface {
-	Debugf(string, ...interface{})
-	Infof(string, ...interface{})
-	Errorf(string, ...interface{})
-	Debug(...interface{})
-	Info(...interface{})
-	Error(...interface{})
+	Debugf(string, ...any)
+	Infof(string, ...any)
+	Errorf(string, ...any)
+	Debug(...any)
+	Info(...any)
+	Error(...any)
 }

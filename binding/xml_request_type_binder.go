@@ -10,7 +10,7 @@ type XMLRequestTypeBinder struct{}
 
 // BinderFunc returns the Binder for this RequestTypeBinder
 func (xm XMLRequestTypeBinder) BinderFunc() Binder {
-	return func(req *http.Request, value interface{}) error {
+	return func(req *http.Request, value any) error {
 		return xml.NewDecoder(req.Body).Decode(value)
 	}
 }

@@ -30,7 +30,7 @@ func (s stringRenderer) Render(w io.Writer, data Data) error {
 // String renderer that will run the string through
 // the github.com/gobuffalo/plush package and return
 // "text/plain" as the content type.
-func String(s string, args ...interface{}) Renderer {
+func String(s string, args ...any) Renderer {
 	e := New(Options{})
 	return e.String(s, args...)
 }
@@ -38,7 +38,7 @@ func String(s string, args ...interface{}) Renderer {
 // String renderer that will run the string through
 // the github.com/gobuffalo/plush package and return
 // "text/plain" as the content type.
-func (e *Engine) String(s string, args ...interface{}) Renderer {
+func (e *Engine) String(s string, args ...any) Renderer {
 	if len(args) > 0 {
 		s = fmt.Sprintf(s, args...)
 	}

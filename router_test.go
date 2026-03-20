@@ -418,11 +418,11 @@ func Test_App_NamedRoutes(t *testing.T) {
 	rr := render.New(render.Options{
 		HTMLLayout:  "application.plush.html",
 		TemplatesFS: os.DirFS("../templates"),
-		Helpers:     map[string]interface{}{},
+		Helpers:     map[string]any{},
 	})
 
 	sampleHandler := func(c Context) error {
-		c.Set("opts", map[string]interface{}{})
+		c.Set("opts", map[string]any{})
 		return c.Render(http.StatusOK, rr.String(`
 			1. <%= rootPath() %>
 			2. <%= userPath({user_id: 1}) %>
@@ -480,11 +480,11 @@ func Test_App_NamedRoutes_MissingParameter(t *testing.T) {
 	rr := render.New(render.Options{
 		HTMLLayout:  "application.plush.html",
 		TemplatesFS: os.DirFS("../templates"),
-		Helpers:     map[string]interface{}{},
+		Helpers:     map[string]any{},
 	})
 
 	sampleHandler := func(c Context) error {
-		c.Set("opts", map[string]interface{}{})
+		c.Set("opts", map[string]any{})
 		return c.Render(http.StatusOK, rr.String(`
 			<%= userPath(opts) %>
 		`))

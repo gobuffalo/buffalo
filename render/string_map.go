@@ -40,7 +40,7 @@ func (m *stringMap) LoadOrStore(key string, value string) (string, bool) {
 
 // Range over the string values in the map
 func (m *stringMap) Range(f func(key string, value string) bool) {
-	m.data.Range(func(k, v interface{}) bool {
+	m.data.Range(func(k, v any) bool {
 		key, ok := k.(string)
 		if !ok {
 			return false

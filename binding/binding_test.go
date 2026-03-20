@@ -17,7 +17,7 @@ type blogPost struct {
 func Test_Register(t *testing.T) {
 	r := require.New(t)
 
-	Register("foo/bar", func(*http.Request, interface{}) error {
+	Register("foo/bar", func(*http.Request, any) error {
 		return nil
 	})
 
@@ -47,13 +47,13 @@ func Test_Register(t *testing.T) {
 func Test_RegisterCustomDecoder(t *testing.T) {
 	r := require.New(t)
 
-	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+	RegisterCustomDecoder(func(vals []string) (any, error) {
 		return []string{"X"}, nil
-	}, []interface{}{[]string{}}, nil)
+	}, []any{[]string{}}, nil)
 
-	RegisterCustomDecoder(func(vals []string) (interface{}, error) {
+	RegisterCustomDecoder(func(vals []string) (any, error) {
 		return 0, nil
-	}, []interface{}{int(0)}, nil)
+	}, []any{int(0)}, nil)
 
 	post := blogPost{}
 	req, err := http.NewRequest("POST", "/", nil)

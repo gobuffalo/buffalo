@@ -72,7 +72,7 @@ func (ri *RouteInfo) Name(name string) *RouteInfo {
 // BuildPathHelper Builds a routeHelperfunc for a particular RouteInfo
 func (ri *RouteInfo) BuildPathHelper() RouteHelperFunc {
 	cRoute := ri
-	return func(opts map[string]interface{}) (template.HTML, error) {
+	return func(opts map[string]any) (template.HTML, error) {
 		pairs := []string{}
 		for k, v := range opts {
 			pairs = append(pairs, k)

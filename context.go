@@ -23,15 +23,15 @@ type Context interface {
 	Cookies() *Cookies
 	Params() ParamValues
 	Param(string) string
-	Set(string, interface{})
-	LogField(string, interface{})
-	LogFields(map[string]interface{})
+	Set(string, any)
+	LogField(string, any)
+	LogFields(map[string]any)
 	Logger() Logger
-	Bind(interface{}) error
+	Bind(any) error
 	Render(int, render.Renderer) error
 	Error(int, error) error
-	Redirect(int, string, ...interface{}) error
-	Data() map[string]interface{}
+	Redirect(int, string, ...any) error
+	Data() map[string]any
 	Flash() *Flash
 	File(string) (binding.File, error)
 }
@@ -70,7 +70,7 @@ func (a *App) newContext(info RouteInfo, res http.ResponseWriter, req *http.Requ
 	ct := httpx.ContentType(req)
 
 	data := newRequestData()
-	data.d = map[string]interface{}{
+	data.d = map[string]any{
 		"app":           a,
 		"env":           a.Env,
 		"routes":        a.Routes(),
