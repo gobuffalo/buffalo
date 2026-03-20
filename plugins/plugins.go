@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/internal/env"
+	"github.com/gobuffalo/buffalo/internal/meta"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/meta"
 	"github.com/sirupsen/logrus"
 )
 

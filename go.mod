@@ -10,7 +10,6 @@ require (
 	github.com/gobuffalo/helpers v0.6.10
 	github.com/gobuffalo/httptest v1.5.2
 	github.com/gobuffalo/logger v1.0.7
-	github.com/gobuffalo/meta v0.3.3
 	github.com/gobuffalo/plush/v5 v5.0.11
 	github.com/gobuffalo/refresh v1.13.3
 	github.com/gobuffalo/tags/v3 v3.1.4
@@ -32,7 +31,6 @@ require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/gobuffalo/envy v1.10.2 // indirect
 	github.com/gobuffalo/validate/v3 v3.3.3 // indirect
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/gorilla/css v1.0.1 // indirect
@@ -43,7 +41,6 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d // indirect
 	github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e // indirect
