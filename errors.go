@@ -2,6 +2,7 @@ package buffalo
 
 import (
 	"database/sql"
+	_ "embed"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -15,6 +16,17 @@ import (
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v5"
+)
+
+var (
+	//go:embed internal/templates/error.dev.html
+	devErrorTmpl string
+
+	//go:embed internal/templates/error.prod.html
+	prodErrorTmpl string
+
+	//go:embed internal/templates/notfound.prod.html
+	prodNotFoundTmpl string
 )
 
 // HTTPError a typed error returned by http Handlers and used for choosing error handlers
