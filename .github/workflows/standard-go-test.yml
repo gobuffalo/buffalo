@@ -5,8 +5,49 @@ on:
     branches: [main v1]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  call-standard-test:
-    name: Test
-    uses: gobuffalo/.github/.github/workflows/go-test.yml@main
-    secrets: inherit
+  dependency-review:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+
+  standard-go-test:
+    name: go${{ matrix.go-version }}/${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go-version:
+          - "1.25"
+          - "1.26"
+        os:
+          - "ubuntu-latest"
+          - "macos-latest"
+          - "windows-latest"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Test
+        if: ${{ matrix.os != 'windows-latest' }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 0
+        run: |
+          go test -v -p 1 -race -cover -tags "sqlite,integration" ./...
+
+      - name: Short Test
+        if: ${{ matrix.os == 'windows-latest' }}
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 0
+        run: |
+          go test -v -p 1 -tags "sqlite,integration" ./...
