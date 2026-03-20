@@ -3,7 +3,7 @@ package plugdeps
 import (
 	"encoding/json"
 
-	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/buffalo/internal/meta"
 )
 
 // Plugin represents a Go plugin for Buffalo applications

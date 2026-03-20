@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/gobuffalo/meta"
+	"github.com/gobuffalo/buffalo/internal/meta"
 	"github.com/stretchr/testify/require"
 )
 
