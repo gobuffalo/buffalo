@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"testing/fstest"
 
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,9 +15,16 @@ func Test_Template_Partial(t *testing.T) {
 	const part = `<%= partial("foo.html") %>`
 	const tmpl = "Foo > <%= name %>"
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte(tmpl), 0644))
-	r.NoError(rootFS.WriteFile("_foo.html", []byte(part), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte(tmpl),
+			Mode: 0644,
+		},
+		"_foo.html": &fstest.MapFile{
+			Data: []byte(part),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -32,9 +39,16 @@ func Test_Template_Partial(t *testing.T) {
 func Test_Template_PartialCustomFeeder(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("base.plush.html", []byte(`<%= partial("foo.plush.html") %>`), 0644))
-	r.NoError(rootFS.WriteFile("_foo.plush.html", []byte("other"), 0644))
+	rootFS := fstest.MapFS{
+		"base.plush.html": &fstest.MapFile{
+			Data: []byte(`<%= partial("foo.plush.html") %>`),
+			Mode: 0644,
+		},
+		"_foo.plush.html": &fstest.MapFile{
+			Data: []byte("other"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -68,9 +82,16 @@ func Test_Template_Partial_WithoutExtension(t *testing.T) {
 	const part = `<%= partial("foo") %>`
 	const tmpl = "Foo > <%= name %>"
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte(tmpl), 0644))
-	r.NoError(rootFS.WriteFile("_foo.html", []byte(part), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte(tmpl),
+			Mode: 0644,
+		},
+		"_foo.html": &fstest.MapFile{
+			Data: []byte(part),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -89,9 +110,16 @@ func Test_Template_Partial_Form(t *testing.T) {
 	const formHTML = `<%= f.InputTag("Name") %>`
 	const result = `<form action="/Mark" id="widget-form" method="POST"><div class="form-group"><label class="form-label" for="widget-Name">Name</label><input class="form-control" id="widget-Name" name="Name" type="text" value="Mark" /></div></form>`
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("new.html", []byte(newHTML), 0644))
-	r.NoError(rootFS.WriteFile("_form.html", []byte(formHTML), 0644))
+	rootFS := fstest.MapFS{
+		"new.html": &fstest.MapFile{
+			Data: []byte(newHTML),
+			Mode: 0644,
+		},
+		"_form.html": &fstest.MapFile{
+			Data: []byte(formHTML),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -111,9 +139,16 @@ func Test_Template_Partial_With_For(t *testing.T) {
 	const rowHTML = `Hi <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("for.html", []byte(forHTML), 0644))
-	r.NoError(rootFS.WriteFile("_row.html", []byte(rowHTML), 0644))
+	rootFS := fstest.MapFS{
+		"for.html": &fstest.MapFile{
+			Data: []byte(forHTML),
+			Mode: 0644,
+		},
+		"_row.html": &fstest.MapFile{
+			Data: []byte(rowHTML),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -139,9 +174,16 @@ func Test_Template_Partial_With_For_And_Local(t *testing.T) {
 	const rowHTML = `<%= say %> <%= user.Name %>, `
 	const result = `Hi Mark, Hi Yonghwan,`
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("for.html", []byte(forHTML), 0644))
-	r.NoError(rootFS.WriteFile("_row.html", []byte(rowHTML), 0644))
+	rootFS := fstest.MapFS{
+		"for.html": &fstest.MapFile{
+			Data: []byte(forHTML),
+			Mode: 0644,
+		},
+		"_row.html": &fstest.MapFile{
+			Data: []byte(rowHTML),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -167,9 +209,16 @@ func Test_Template_Partial_Recursive_With_Global_And_Local_Context(t *testing.T)
 	const fooHTML = `<%= other %>|<%= name %>`
 	const result = `Other|Mark`
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte(indexHTML), 0644))
-	r.NoError(rootFS.WriteFile("_foo.html", []byte(fooHTML), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte(indexHTML),
+			Mode: 0644,
+		},
+		"_foo.html": &fstest.MapFile{
+			Data: []byte(fooHTML),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -189,10 +238,20 @@ func Test_Template_Partial_With_Layout(t *testing.T) {
 	const fooHTML = "Foo > <%= name %>"
 	const result = `Layout > Foo > Mark`
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte(indexHTML), 0644))
-	r.NoError(rootFS.WriteFile("_layout.html", []byte(layoutHTML), 0644))
-	r.NoError(rootFS.WriteFile("_foo.html", []byte(fooHTML), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte(indexHTML),
+			Mode: 0644,
+		},
+		"_layout.html": &fstest.MapFile{
+			Data: []byte(layoutHTML),
+			Mode: 0644,
+		},
+		"_foo.html": &fstest.MapFile{
+			Data: []byte(fooHTML),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS

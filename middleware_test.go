@@ -302,7 +302,7 @@ func Test_AssertMiddleware_NilStatus200(t *testing.T) {
 	w := httptest.New(a)
 
 	for _, tc := range tests {
-		res := w.HTML(tc.path).Get()
+		res := w.HTML("%s", tc.path).Get()
 		r.Equal(tc.status, status)
 		r.Equal(tc.code, res.Code)
 	}

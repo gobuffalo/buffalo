@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"testing"
+	"testing/fstest"
 
 	"github.com/gobuffalo/tags/v3"
 	"github.com/stretchr/testify/require"
@@ -13,6 +14,8 @@ type tagHelper = func(string, tags.Options) (template.HTML, error)
 
 func tag(name string) (tagHelper, error) {
 	e := NewEngine()
+	// Use empty AssetsFS for these tests to avoid manifest lookup
+	e.AssetsFS = fstest.MapFS{}
 	tr := e.Template("").(*templateRenderer)
 
 	h := tr.addAssetsHelpers(Helpers{})

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"testing/fstest"
 
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,8 +16,12 @@ const htmlTemplate = "my-template.html"
 func Test_HTML_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -33,9 +37,16 @@ func Test_HTML_WithoutLayout(t *testing.T) {
 func Test_HTML_WithLayout(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+		htmlLayout: &fstest.MapFile{
+			Data: []byte("<body><%= yield %></body>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -52,10 +63,20 @@ func Test_HTML_WithLayout(t *testing.T) {
 func Test_HTML_WithLayout_Override(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
-	r.NoError(rootFS.WriteFile(htmlAltLayout, []byte("<html><%= yield %></html>"), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+		htmlLayout: &fstest.MapFile{
+			Data: []byte("<body><%= yield %></body>"),
+			Mode: 0644,
+		},
+		htmlAltLayout: &fstest.MapFile{
+			Data: []byte("<html><%= yield %></html>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -72,9 +93,16 @@ func Test_HTML_WithLayout_Override(t *testing.T) {
 func Test_HTML_LeadingSlash(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile(htmlLayout, []byte("<body><%= yield %></body>"), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+		htmlLayout: &fstest.MapFile{
+			Data: []byte("<body><%= yield %></body>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS

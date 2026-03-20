@@ -87,9 +87,9 @@ func (a *App) PanicHandler(next Handler) Handler {
 				case error:
 					err = t
 				case string:
-					err = fmt.Errorf(t)
+					err = fmt.Errorf("%s", t)
 				default:
-					err = fmt.Errorf(fmt.Sprint(t))
+					err = fmt.Errorf("%s", fmt.Sprint(t))
 				}
 
 				payload := events.Payload{

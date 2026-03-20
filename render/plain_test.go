@@ -3,16 +3,20 @@ package render
 import (
 	"bytes"
 	"testing"
+	"testing/fstest"
 
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_Plain(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("test.txt", []byte("<%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"test.txt": &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS

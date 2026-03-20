@@ -1,7 +1,9 @@
 package render
 
 import (
-	"github.com/psanford/memfs"
+	"os"
+	"testing"
+	"testing/fstest"
 )
 
 type Widget struct {
@@ -14,9 +16,21 @@ func (w Widget) ToPath() string {
 
 func NewEngine() *Engine {
 	return New(Options{
-		TemplatesFS: memfs.New(),
-		AssetsFS:    memfs.New(),
+		TemplatesFS: fstest.MapFS{},
+		AssetsFS:    fstest.MapFS{},
 	})
 }
 
 type rendFriend func(string, RendererFunc) Renderer
+
+func TestMain(m *testing.M) {
+	code := m.Run()
+	os.Exit(code)
+}
+
+func init() {
+	assetMap.Range(func(key, value string) bool {
+		assetMap.Delete(key)
+		return true
+	})
+}

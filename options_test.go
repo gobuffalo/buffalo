@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/stretchr/testify/require"
 )
 
@@ -27,9 +27,9 @@ func TestOptions_NewOptions(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			r := require.New(t)
-			envy.Temp(func() {
-				envy.Set("GO_ENV", test.env)
-				envy.Set("SESSION_SECRET", test.secret)
+			env.Temp(func() {
+				env.Set("GO_ENV", test.env)
+				env.Set("SESSION_SECRET", test.secret)
 
 				opts := NewOptions()
 

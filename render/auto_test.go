@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -71,9 +71,12 @@ func Test_Auto_XML(t *testing.T) {
 func Test_Auto_HTML_List(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/index.html", []byte("INDEX: <%= len(cars) %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/index.html": &fstest.MapFile{
+			Data: []byte("INDEX: <%= len(cars) %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.NewEngine()
 	re.TemplatesFS = rootFS
@@ -101,9 +104,12 @@ func Test_Auto_HTML_List_Plural(t *testing.T) {
 
 	type People []Person
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("people", 0755))
-	r.NoError(rootFS.WriteFile("people/index.html", []byte("INDEX: <%= len(people) %>"), 0644))
+	rootFS := fstest.MapFS{
+		"people/index.html": &fstest.MapFile{
+			Data: []byte("INDEX: <%= len(people) %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -126,9 +132,12 @@ func Test_Auto_HTML_List_Plural(t *testing.T) {
 func Test_Auto_HTML_Show(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/show.html", []byte("Show: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/show.html": &fstest.MapFile{
+			Data: []byte("Show: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -147,9 +156,12 @@ func Test_Auto_HTML_Show(t *testing.T) {
 func Test_Auto_HTML_New(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/new.html", []byte("New: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/new.html": &fstest.MapFile{
+			Data: []byte("New: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -168,9 +180,12 @@ func Test_Auto_HTML_New(t *testing.T) {
 func Test_Auto_HTML_Create(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/new.html", []byte("New: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/new.html": &fstest.MapFile{
+			Data: []byte("New: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -206,9 +221,12 @@ func Test_Auto_HTML_Create_Redirect(t *testing.T) {
 func Test_Auto_HTML_Create_Redirect_Error(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/new.html", []byte("Create: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/new.html": &fstest.MapFile{
+			Data: []byte("Create: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -267,9 +285,12 @@ func Test_Auto_HTML_Destroy_Nested_Redirect(t *testing.T) {
 func Test_Auto_HTML_Edit(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Edit: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/edit.html": &fstest.MapFile{
+			Data: []byte("Edit: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -288,9 +309,12 @@ func Test_Auto_HTML_Edit(t *testing.T) {
 func Test_Auto_HTML_Update(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Update: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/edit.html": &fstest.MapFile{
+			Data: []byte("Update: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -328,9 +352,12 @@ func Test_Auto_HTML_Update_Redirect(t *testing.T) {
 func Test_Auto_HTML_Update_Redirect_Error(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("cars", 0755))
-	r.NoError(rootFS.WriteFile("cars/edit.html", []byte("Update: <%= car.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"cars/edit.html": &fstest.MapFile{
+			Data: []byte("Update: <%= car.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -378,9 +405,12 @@ func Test_Auto_HTML_List_Plural_MultiWord(t *testing.T) {
 
 	type RoomProviders []RoomProvider
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("room_providers", 0755))
-	r.NoError(rootFS.WriteFile("room_providers/index.html", []byte("INDEX: <%= len(roomProviders) %>"), 0644))
+	rootFS := fstest.MapFS{
+		"room_providers/index.html": &fstest.MapFile{
+			Data: []byte("INDEX: <%= len(roomProviders) %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -409,9 +439,12 @@ func Test_Auto_HTML_List_Plural_MultiWord_Dashed(t *testing.T) {
 
 	type RoomProviders []RoomProvider
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("room_providers", 0755))
-	r.NoError(rootFS.WriteFile("room_providers/index.html", []byte("INDEX: <%= len(roomProviders) %>"), 0644))
+	rootFS := fstest.MapFS{
+		"room_providers/index.html": &fstest.MapFile{
+			Data: []byte("INDEX: <%= len(roomProviders) %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,
@@ -439,9 +472,12 @@ func Test_Auto_HTML_Show_MultiWord_Dashed(t *testing.T) {
 		Name string
 	}
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.MkdirAll("room_providers", 0755))
-	r.NoError(rootFS.WriteFile("room_providers/show.html", []byte("SHOW: <%= roomProvider.Name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"room_providers/show.html": &fstest.MapFile{
+			Data: []byte("SHOW: <%= roomProvider.Name %>"),
+			Mode: 0644,
+		},
+	}
 
 	re := render.New(render.Options{
 		TemplatesFS: rootFS,

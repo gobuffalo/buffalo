@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/meta"
 	"github.com/sirupsen/logrus"
 )
@@ -28,7 +28,7 @@ var t = time.Second * 2
 
 func timeout() time.Duration {
 	timeoutOnce.Do(func() {
-		rawTimeout, err := envy.MustGet(timeoutEnv)
+		rawTimeout, err := env.MustGet(timeoutEnv)
 		if err == nil {
 			if parsed, err := time.ParseDuration(rawTimeout); err == nil {
 				t = parsed
@@ -53,12 +53,12 @@ var _list List
 // environment variable.
 //
 // Requirements:
-// * file/command must be executable
-// * file/command must start with `buffalo-`
-// * file/command must respond to `available` and return JSON of
-//	 plugins.Commands{}
+//   - file/command must be executable
+//   - file/command must start with `buffalo-`
+//   - file/command must respond to `available` and return JSON of
+//     plugins.Commands{}
 //
-// Limit full path scan with direct plugin path
+// # Limit full path scan with direct plugin path
 //
 // If a file/command doesn't respond to being invoked with `available`
 // within one second, buffalo will assume that it is unable to load. This
@@ -83,9 +83,9 @@ func Available() (List, error) {
 
 		paths := []string{"plugins"}
 
-		from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
+		from, err := env.MustGet("BUFFALO_PLUGIN_PATH")
 		if err != nil {
-			from, err = envy.MustGet("GOPATH")
+			from, err = env.MustGet("GOPATH")
 			if err != nil {
 				return
 			}

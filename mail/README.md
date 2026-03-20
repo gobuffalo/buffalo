@@ -19,7 +19,7 @@ import (
     "net/http"
 
     "github.com/gobuffalo/buffalo/render"
-    "github.com/gobuffalo/envy"
+    "github.com/gobuffalo/buffalo/internal/env"
     "github.com/gobuffalo/plush"
     "github.com/gobuffalo/buffalo/mail"
     "errors"
@@ -32,10 +32,10 @@ var r *render.Engine
 func init() {
 
     //Pulling config from the env.
-    port := envy.Get("SMTP_PORT", "1025")
-    host := envy.Get("SMTP_HOST", "localhost")
-    user := envy.Get("SMTP_USER", "")
-    password := envy.Get("SMTP_PASSWORD", "")
+    port := env.Get("SMTP_PORT", "1025")
+    host := env.Get("SMTP_HOST", "localhost")
+    user := env.Get("SMTP_USER", "")
+    password := env.Get("SMTP_PASSWORD", "")
 
     var err error
     smtp, err = mail.NewSMTPSender(host, port, user, password)
@@ -105,12 +105,12 @@ If you're using Gmail or need to configure your SMTP connection you can use the 
 var smtp mail.Sender
 
 func init() {
-    port := envy.Get("SMTP_PORT", "465")
+    port := env.Get("SMTP_PORT", "465")
     // or 587 with TLS
 
-    host := envy.Get("SMTP_HOST", "smtp.gmail.com")
-    user := envy.Get("SMTP_USER", "your@email.com")
-    password := envy.Get("SMTP_PASSWORD", "yourp4ssw0rd")
+    host := env.Get("SMTP_HOST", "smtp.gmail.com")
+    user := env.Get("SMTP_USER", "your@email.com")
+    password := env.Get("SMTP_PASSWORD", "yourp4ssw0rd")
 
     var err error
     sender, err := mail.NewSMTPSender(host, port, user, password)

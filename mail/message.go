@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/render"
 )
 
-//Message represents an Email message
+// Message represents an Email message
 type Message struct {
 	Context     context.Context
 	From        string
@@ -70,7 +70,7 @@ func (m *Message) AddBodies(data render.Data, renderers ...render.Renderer) erro
 	return nil
 }
 
-//AddAttachment adds the attachment to the list of attachments the Message has.
+// AddAttachment adds the attachment to the list of attachments the Message has.
 func (m *Message) AddAttachment(name, contentType string, r io.Reader) error {
 	m.Attachments = append(m.Attachments, Attachment{
 		Name:        name,
@@ -82,7 +82,7 @@ func (m *Message) AddAttachment(name, contentType string, r io.Reader) error {
 	return nil
 }
 
-//AddEmbedded adds the attachment to the list of attachments
+// AddEmbedded adds the attachment to the list of attachments
 // the Message has and uses inline instead of attachement property.
 func (m *Message) AddEmbedded(name string, r io.Reader) error {
 	m.Attachments = append(m.Attachments, Attachment{

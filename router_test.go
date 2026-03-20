@@ -8,12 +8,12 @@ import (
 	"path"
 	"strings"
 	"testing"
+	"testing/fstest"
 
+	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/render"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/httptest"
 	"github.com/gorilla/mux"
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -333,8 +333,12 @@ func Test_Router_Redirect(t *testing.T) {
 func Test_Router_ServeFiles(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	rootFS.WriteFile("foo.png", []byte("foo"), 0644)
+	rootFS := fstest.MapFS{
+		"foo.png": &fstest.MapFile{
+			Data: []byte("foo"),
+			Mode: 0644,
+		},
+	}
 	a := New(Options{})
 	a.ServeFiles("/assets", http.FS(rootFS))
 
@@ -347,7 +351,7 @@ func Test_Router_ServeFiles(t *testing.T) {
 	r.NotEqual(res.Header().Get("ETag"), "")
 	r.Equal(res.Header().Get("Cache-Control"), "max-age=31536000")
 
-	envy.Set(AssetsAgeVarName, "3600")
+	env.Set(AssetsAgeVarName, "3600")
 	w = httptest.New(a)
 	res = w.HTML("/assets/foo.png").Get()
 
@@ -361,8 +365,12 @@ func Test_Router_ServeFiles(t *testing.T) {
 func Test_Router_InvalidURL(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	rootFS.WriteFile("foo.png", []byte("foo"), 0644)
+	rootFS := fstest.MapFS{
+		"foo.png": &fstest.MapFile{
+			Data: []byte("foo"),
+			Mode: 0644,
+		},
+	}
 	a := New(Options{})
 	a.ServeFiles("/", http.FS(rootFS))
 
@@ -809,7 +817,7 @@ func Test_Router_Matches_Trailing_Slash(t *testing.T) {
 			})
 
 			w := httptest.New(app)
-			res := w.HTML(tt.browser).Get()
+			res := w.HTML("%s", tt.browser).Get()
 
 			r.Equal(http.StatusOK, res.Code)
 			r.Equal(tt.expected, res.Body.String())

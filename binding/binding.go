@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gobuffalo/buffalo/binding/decoders"
-	"github.com/gobuffalo/nulls"
+	"github.com/gobuffalo/buffalo/internal/nulls"
 	"github.com/monoculum/formam"
 )
 

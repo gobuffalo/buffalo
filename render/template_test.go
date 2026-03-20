@@ -4,16 +4,20 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"testing/fstest"
 
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_Template(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		htmlTemplate: &fstest.MapFile{
+			Data: []byte("<%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -28,10 +32,14 @@ func Test_Template(t *testing.T) {
 func Test_AssetPath(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("manifest.json", []byte(`{
+	rootFS := fstest.MapFS{
+		"manifest.json": &fstest.MapFile{
+			Data: []byte(`{
 		"application.css": "application.aabbc123.css"
-	}`), 0644))
+	}`),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.AssetsFS = rootFS
@@ -44,8 +52,12 @@ func Test_AssetPath(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		rootFS := memfs.New()
-		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		rootFS := fstest.MapFS{
+			htmlTemplate: &fstest.MapFile{
+				Data: []byte("<%= assetPath(\"" + original + "\") %>"),
+				Mode: 0644,
+			},
+		}
 		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
@@ -67,8 +79,12 @@ func Test_AssetPathNoManifest(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		rootFS := memfs.New()
-		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		rootFS := fstest.MapFS{
+			htmlTemplate: &fstest.MapFile{
+				Data: []byte("<%= assetPath(\"" + original + "\") %>"),
+				Mode: 0644,
+			},
+		}
 		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
@@ -82,8 +98,12 @@ func Test_AssetPathNoManifest(t *testing.T) {
 func Test_AssetPathNoManifestCorrupt(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("manifest.json", []byte("//shdnn Corrupt!"), 0644))
+	rootFS := fstest.MapFS{
+		"manifest.json": &fstest.MapFile{
+			Data: []byte("//shdnn Corrupt!"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.AssetsFS = rootFS
@@ -94,8 +114,12 @@ func Test_AssetPathNoManifestCorrupt(t *testing.T) {
 	}
 
 	for original, expected := range cases {
-		rootFS := memfs.New()
-		r.NoError(rootFS.WriteFile(htmlTemplate, []byte("<%= assetPath(\""+original+"\") %>"), 0644))
+		rootFS := fstest.MapFS{
+			htmlTemplate: &fstest.MapFile{
+				Data: []byte("<%= assetPath(\"" + original + "\") %>"),
+				Mode: 0644,
+			},
+		}
 		e.TemplatesFS = rootFS
 
 		re := e.Template("text/html; charset=utf-8", htmlTemplate)
@@ -111,9 +135,16 @@ func Test_AssetPathNoManifestCorrupt(t *testing.T) {
 func Test_Template_resolve_DefaultLang_Plush(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -129,9 +160,16 @@ func Test_Template_resolve_DefaultLang_Plush(t *testing.T) {
 func Test_Template_resolve_UserLang_Plush(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -147,9 +185,16 @@ func Test_Template_resolve_UserLang_Plush(t *testing.T) {
 func Test_Template_resolve_DefaultLang_Legacy(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -165,9 +210,16 @@ func Test_Template_resolve_DefaultLang_Legacy(t *testing.T) {
 func Test_Template_resolve_UserLang_Legacy(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -183,9 +235,16 @@ func Test_Template_resolve_UserLang_Legacy(t *testing.T) {
 func Test_Template_resolve_DefaultLang_Mixed(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -203,9 +262,16 @@ func Test_Template_resolve_DefaultLang_Mixed(t *testing.T) {
 func Test_Template_resolve_UserLang_Mixed(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -224,9 +290,16 @@ func Test_Template_resolve_UserLang_Mixed(t *testing.T) {
 func Test_Template_resolve_FullLocale_ShortFile(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -242,9 +315,16 @@ func Test_Template_resolve_FullLocale_ShortFile(t *testing.T) {
 func Test_Template_resolve_LangOnly_FullFile(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -260,9 +340,16 @@ func Test_Template_resolve_LangOnly_FullFile(t *testing.T) {
 func Test_Template_resolve_FullLocale_ShortFile_Legacy(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.ko.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.ko.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -278,9 +365,16 @@ func Test_Template_resolve_FullLocale_ShortFile_Legacy(t *testing.T) {
 func Test_Template_resolve_LangOnly_FullFile_Legacy(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -296,9 +390,16 @@ func Test_Template_resolve_LangOnly_FullFile_Legacy(t *testing.T) {
 func Test_Template_resolve_FullLocale_ShortFile_Mixed(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -314,9 +415,16 @@ func Test_Template_resolve_FullLocale_ShortFile_Mixed(t *testing.T) {
 func Test_Template_resolve_LangOnly_FullFile_Mixed(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile("index.plush.html", []byte("default <%= name %>"), 0644))
-	r.NoError(rootFS.WriteFile("index.plush.ko-kr.html", []byte("korean <%= name %>"), 0644))
+	rootFS := fstest.MapFS{
+		"index.plush.html": &fstest.MapFile{
+			Data: []byte("default <%= name %>"),
+			Mode: 0644,
+		},
+		"index.plush.ko-kr.html": &fstest.MapFile{
+			Data: []byte("korean <%= name %>"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS

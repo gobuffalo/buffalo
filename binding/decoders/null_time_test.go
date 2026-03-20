@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gobuffalo/nulls"
+	"github.com/gobuffalo/buffalo/internal/nulls"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,14 +7,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAskBin_respectsTimeout(t *testing.T) {
 	r := require.New(t)
 
-	from, err := envy.MustGet("BUFFALO_PLUGIN_PATH")
+	from, err := env.MustGet("BUFFALO_PLUGIN_PATH")
 	if err != nil {
 		t.Skipf("BUFFALO_PLUGIN_PATH not set.")
 		return

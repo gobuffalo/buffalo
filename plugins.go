@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/plugins"
-	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/events"
 )
 
@@ -20,7 +20,7 @@ func LoadPlugins() error {
 	var errResult error
 	loadPlugins.Do(func() {
 		// don't send plugins events during testing
-		if envy.Get("GO_ENV", "development") == "test" {
+		if env.Get("GO_ENV", "development") == "test" {
 			return
 		}
 		plugs, err := plugins.Available()

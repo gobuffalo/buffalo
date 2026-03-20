@@ -48,9 +48,9 @@ func (r downloadRenderer) Render(w io.Writer, d Data) error {
 
 // Download renders a file attachment automatically setting following headers:
 //
-//   Content-Type
-//   Content-Length
-//   Content-Disposition
+//	Content-Type
+//	Content-Length
+//	Content-Disposition
 //
 // Content-Type is set using mime#TypeByExtension with the filename's extension. Content-Type will default to
 // application/octet-stream if using a filename with an unknown extension.
@@ -72,9 +72,9 @@ func Download(ctx context.Context, name string, r io.Reader) Renderer {
 
 // Download renders a file attachment automatically setting following headers:
 //
-//   Content-Type
-//   Content-Length
-//   Content-Disposition
+//	Content-Type
+//	Content-Length
+//	Content-Disposition
 //
 // Content-Type is set using mime#TypeByExtension with the filename's extension. Content-Type will default to
 // application/octet-stream if using a filename with an unknown extension.

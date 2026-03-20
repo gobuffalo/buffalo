@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"testing/fstest"
 
-	"github.com/psanford/memfs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,8 +16,12 @@ const jsTemplate = "my-template.js"
 func Test_JavaScript_WithoutLayout(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte("alert(<%= name %>)"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -33,9 +37,16 @@ func Test_JavaScript_WithoutLayout(t *testing.T) {
 func Test_JavaScript_WithLayout(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
-	r.NoError(rootFS.WriteFile(jsLayout, []byte("$(<%= yield %>)"), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte("alert(<%= name %>)"),
+			Mode: 0644,
+		},
+		jsLayout: &fstest.MapFile{
+			Data: []byte("$(<%= yield %>)"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -52,10 +63,20 @@ func Test_JavaScript_WithLayout(t *testing.T) {
 func Test_JavaScript_WithLayout_Override(t *testing.T) {
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte("alert(<%= name %>)"), 0644))
-	r.NoError(rootFS.WriteFile(jsLayout, []byte("$(<%= yield %>)"), 0644))
-	r.NoError(rootFS.WriteFile(jsAltLayout, []byte("_(<%= yield %>)"), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte("alert(<%= name %>)"),
+			Mode: 0644,
+		},
+		jsLayout: &fstest.MapFile{
+			Data: []byte("$(<%= yield %>)"),
+			Mode: 0644,
+		},
+		jsAltLayout: &fstest.MapFile{
+			Data: []byte("_(<%= yield %>)"),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -75,9 +96,16 @@ func Test_JavaScript_Partial_Without_Extension(t *testing.T) {
 
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
-	r.NoError(rootFS.WriteFile("_part.js", []byte(part), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte(tmpl),
+			Mode: 0644,
+		},
+		"_part.js": &fstest.MapFile{
+			Data: []byte(part),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -95,9 +123,16 @@ func Test_JavaScript_Partial(t *testing.T) {
 
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
-	r.NoError(rootFS.WriteFile("_part.js", []byte(part), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte(tmpl),
+			Mode: 0644,
+		},
+		"_part.js": &fstest.MapFile{
+			Data: []byte(part),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS
@@ -118,9 +153,16 @@ func Test_JavaScript_HTML_Partial(t *testing.T) {
 
 	r := require.New(t)
 
-	rootFS := memfs.New()
-	r.NoError(rootFS.WriteFile(jsTemplate, []byte(tmpl), 0644))
-	r.NoError(rootFS.WriteFile("_part.html", []byte(part), 0644))
+	rootFS := fstest.MapFS{
+		jsTemplate: &fstest.MapFile{
+			Data: []byte(tmpl),
+			Mode: 0644,
+		},
+		"_part.html": &fstest.MapFile{
+			Data: []byte(part),
+			Mode: 0644,
+		},
+	}
 
 	e := NewEngine()
 	e.TemplatesFS = rootFS

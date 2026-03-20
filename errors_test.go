@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-//testLoggerHook is useful to test whats being logged.
+// testLoggerHook is useful to test whats being logged.
 type testLoggerHook struct {
 	errors []*logrus.Entry
 }
@@ -172,7 +172,7 @@ func Test_PanicHandler(t *testing.T) {
 		t.Run(tt.path, func(st *testing.T) {
 			r := require.New(st)
 
-			res := w.HTML(tt.path).Get()
+			res := w.HTML("%s", tt.path).Get()
 			r.Equal(http.StatusInternalServerError, res.Code)
 
 			body := res.Body.String()

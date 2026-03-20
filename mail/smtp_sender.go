@@ -8,12 +8,12 @@ import (
 	gomail "github.com/gobuffalo/buffalo/mail/internal/mail"
 )
 
-//SMTPSender allows to send Emails by connecting to a SMTP server.
+// SMTPSender allows to send Emails by connecting to a SMTP server.
 type SMTPSender struct {
 	Dialer *gomail.Dialer
 }
 
-//Send a message using SMTP configuration or returns an error if something goes wrong.
+// Send a message using SMTP configuration or returns an error if something goes wrong.
 func (sm SMTPSender) Send(message Message) error {
 	return sm.Dialer.DialAndSend(sm.prepareMessage(message))
 }
@@ -84,7 +84,7 @@ func (sm SMTPSender) addAttachments(message Message, gm *gomail.Message) {
 	}
 }
 
-//NewSMTPSender builds a SMTP mail based in passed config.
+// NewSMTPSender builds a SMTP mail based in passed config.
 func NewSMTPSender(host string, port string, user string, password string) (SMTPSender, error) {
 	iport, err := strconv.Atoi(port)
 

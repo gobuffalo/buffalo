@@ -57,7 +57,7 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 	return path
 }
 
-//RouteHelperFunc represents the function that takes the route and the opts and build the path
+// RouteHelperFunc represents the function that takes the route and the opts and build the path
 type RouteHelperFunc func(opts map[string]interface{}) (template.HTML, error)
 
 // RouteList contains a mapping of the routes defined

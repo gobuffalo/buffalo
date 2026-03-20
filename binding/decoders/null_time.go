@@ -1,6 +1,6 @@
 package decoders
 
-import "github.com/gobuffalo/nulls"
+import "github.com/gobuffalo/buffalo/internal/nulls"
 
 // NullTimeDecoderFn is a custom type decoder func for null.Time fields
 func NullTimeDecoderFn() func([]string) (interface{}, error) {

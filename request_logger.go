@@ -3,10 +3,10 @@ package buffalo
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"net/http"
 	"time"
 
-	humanize "github.com/dustin/go-humanize"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 )
 
@@ -21,6 +21,20 @@ func randString(i int) (string, error) {
 	b := make([]byte, i)
 	_, err := rand.Read(b)
 	return hex.EncodeToString(b), err
+}
+
+// formatBytes converts bytes to human-readable format (e.g., "1.5 MB")
+func formatBytes(b uint64) string {
+	const unit = 1024
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := uint64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
 }
 
 // RequestLoggerFunc is the default implementation of the RequestLogger.
@@ -65,7 +79,7 @@ func RequestLoggerFunc(h Handler) Handler {
 				"path":       req.URL.String(),
 				"duration":   time.Since(start),
 				"size":       ws.Size,
-				"human_size": humanize.Bytes(uint64(ws.Size)),
+				"human_size": formatBytes(uint64(ws.Size)),
 				"status":     ws.Status,
 			})
 			c.Logger().Info(req.URL.String())
