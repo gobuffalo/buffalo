@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/url"
-	"sort"
+	"slices"
 	"strings"
 )
 
@@ -42,7 +42,7 @@ func addExtraParamsTo(path string, opts map[string]any) string {
 		}
 	}
 
-	sort.Strings(keys)
+	slices.Sort(keys)
 
 	for index, k := range keys {
 		format := "%v=%v"

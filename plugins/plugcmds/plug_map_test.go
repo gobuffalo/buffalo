@@ -3,7 +3,7 @@
 package plugcmds
 
 import (
-	"sort"
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -35,7 +35,7 @@ func Test_plugMap(t *testing.T) {
 		return true
 	})
 
-	sort.Strings(keys)
+	slices.Sort(keys)
 
 	r.Equal(sm.Keys(), keys)
 

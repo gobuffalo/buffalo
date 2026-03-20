@@ -3,6 +3,7 @@ package mail
 import (
 	"bytes"
 	"io"
+	"maps"
 	"os"
 	"path/filepath"
 	"time"
@@ -270,9 +271,7 @@ type FileSetting func(*file)
 // the email.
 func SetHeader(h map[string][]string) FileSetting {
 	return func(f *file) {
-		for k, v := range h {
-			f.Header[k] = v
-		}
+		maps.Copy(f.Header, h)
 	}
 }
 

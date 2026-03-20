@@ -119,9 +119,7 @@ func (w *Simple) Perform(job Job) error {
 
 	if h, ok := w.handlers[job.Handler]; ok {
 		// TODO(sio4): #road-to-v1 - consider timeout and/or cancellation
-		w.wg.Add(1)
-		go func() {
-			defer w.wg.Done()
+		w.wg.Go(func() {
 			err := safeRun(func() error {
 				return h(job.Args)
 			})
@@ -130,7 +128,7 @@ func (w *Simple) Perform(job Job) error {
 				w.Logger.Error(err)
 			}
 			w.Logger.Debugf("completed job %s", job)
-		}()
+		})
 		return nil
 	}
 
@@ -168,10 +166,7 @@ func (w *Simple) PerformIn(job Job, d time.Duration) error {
 		return fmt.Errorf("worker is not ready to perform a job: %v", err)
 	}
 
-	w.wg.Add(1) // waiting job also should be counted
-	go func() {
-		defer w.wg.Done()
-
+	w.wg.Go(func() { // waiting job also should be counted
 		for {
 			w.moot.Lock()
 			if w.started {
@@ -192,7 +187,7 @@ func (w *Simple) PerformIn(job Job, d time.Duration) error {
 			// TODO(sio4): #road-to-v1 - it should be guaranteed to be performed
 			w.cancel()
 		}
-	}()
+	})
 	return nil
 }
 

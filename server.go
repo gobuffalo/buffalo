@@ -48,10 +48,8 @@ func (a *App) Serve(srvs ...servers.Server) error {
 	ctx, cancel := signal.NotifyContext(a.Context, syscall.SIGTERM, os.Interrupt)
 	defer cancel()
 
-	wg.Add(1)
-	go func() {
+	wg.Go(func() {
 		// gracefully shut down the application when the context is cancelled
-		defer wg.Done()
 		// channel waiter should not be called any other place
 		<-ctx.Done()
 
@@ -79,31 +77,28 @@ func (a *App) Serve(srvs ...servers.Server) error {
 				a.Logger.Error("error while shutting down worker: ", err)
 			}
 		}
-	}()
+	})
 
 	// if configured to do so, start the workers
 	if !a.WorkerOff {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			events.EmitPayload(EvtWorkerStart, payload)
 			if err := a.Worker.Start(ctx); err != nil {
 				events.EmitError(EvtWorkerStartErr, err, payload)
 				a.Stop(err)
 			}
-		}()
+		})
 	}
 
 	for _, s := range srvs {
 		s.SetAddr(a.Addr)
 		a.Logger.Infof("starting %s", s)
-		wg.Add(1)
-		go func(s servers.Server) {
-			defer wg.Done()
+		server := s // capture loop variable
+		wg.Go(func() {
 			events.EmitPayload(EvtServerStart, payload)
-			// s.Start always returns non-nil error
-			a.Stop(s.Start(ctx, a))
-		}(s)
+			// server.Start always returns non-nil error
+			a.Stop(server.Start(ctx, a))
+		})
 	}
 
 	wg.Wait()

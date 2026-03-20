@@ -18,7 +18,6 @@ func Test_String(t *testing.T) {
 
 	var examples = []string{"Mark", "Jém"}
 	for _, example := range examples {
-		example := example
 		bb := &bytes.Buffer{}
 		err := re.Render(bb, map[string]any{"name": example})
 		r.NoError(err)

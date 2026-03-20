@@ -7,10 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"net/url"
 	"reflect"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 
@@ -254,10 +255,7 @@ func (d *DefaultContext) Data() map[string]any {
 	}
 	d.data.moot.RLock()
 	defer d.data.moot.RUnlock()
-	m = make(map[string]any, len(d.data.d))
-	for k, v := range d.data.d {
-		m[k] = v
-	}
+	m = maps.Clone(d.data.d)
 	return m
 }
 
@@ -270,7 +268,7 @@ func (d *DefaultContext) String() string {
 			bb = append(bb, fmt.Sprintf("%s: %s", k, v))
 		}
 	}
-	sort.Strings(bb)
+	slices.Sort(bb)
 	return strings.Join(bb, "\n\n")
 }
 

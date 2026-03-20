@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io"
 	"io/fs"
+	"maps"
 	"os"
 	"path/filepath"
 	"sort"
@@ -153,11 +154,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		return "", err
 	}
 
-	helpers := map[string]any{}
-
-	for k, v := range s.Helpers {
-		helpers[k] = v
-	}
+	helpers := maps.Clone(s.Helpers)
 
 	// Allows to specify custom partialFeeder
 	if helpers["partialFeeder"] == nil {
