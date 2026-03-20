@@ -4,81 +4,81 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-
-	gomail "github.com/gobuffalo/buffalo/mail/internal/mail"
 )
 
-// SMTPSender allows to send Emails by connecting to a SMTP server.
+// SMTPSender delivers emails via an SMTP server.
 type SMTPSender struct {
-	Dialer *gomail.Dialer
+	// Dialer configures the connection to the SMTP server.
+	Dialer *Dialer
 }
 
-// Send a message using SMTP configuration or returns an error if something goes wrong.
+// Send delivers a single message via SMTP.
 func (sm SMTPSender) Send(message Message) error {
-	return sm.Dialer.DialAndSend(sm.prepareMessage(message))
+	return sm.Dialer.dialAndSend(sm.prepareMessage(message))
 }
 
-// SendBatch of message with one connection, returns general error or errors specific for each message
+// SendBatch delivers multiple messages using a single SMTP connection.
+// Returns per-message errors and any general connection error.
 func (sm SMTPSender) SendBatch(messages ...Message) (errorsByMessages []error, generalError error) {
-	preparedMessages := make([]*gomail.Message, len(messages))
+	preparedMessages := make([]*smtpMessage, len(messages))
 	for i, message := range messages {
 		preparedMessages[i] = sm.prepareMessage(message)
 	}
 
-	s, err := sm.Dialer.Dial()
+	s, err := sm.Dialer.dial()
 	if err != nil {
 		return nil, err
 	}
 	defer s.Close()
 
-	return gomail.Send(s, preparedMessages...), nil
+	return sendSMTP(s, preparedMessages...), nil
 }
-func (sm SMTPSender) prepareMessage(message Message) *gomail.Message {
-	gm := gomail.NewMessage()
+func (sm SMTPSender) prepareMessage(message Message) *smtpMessage {
+	gm := newSMTPMessage()
 
-	gm.SetHeader("From", message.From)
-	gm.SetHeader("To", message.To...)
-	gm.SetHeader("Subject", message.Subject)
-	gm.SetHeader("Cc", message.CC...)
-	gm.SetHeader("Bcc", message.Bcc...)
+	gm.setHeader("From", message.From)
+	gm.setHeader("To", message.To...)
+	gm.setHeader("Subject", message.Subject)
+	gm.setHeader("Cc", message.CC...)
+	gm.setHeader("Bcc", message.Bcc...)
 
 	sm.addBodies(message, gm)
 	sm.addAttachments(message, gm)
 
 	for field, value := range message.Headers {
-		gm.SetHeader(field, value)
+		gm.setHeader(field, value)
 	}
 
 	return gm
 }
 
-func (sm SMTPSender) addBodies(message Message, gm *gomail.Message) {
+func (sm SMTPSender) addBodies(message Message, gm *smtpMessage) {
 	if len(message.Bodies) == 0 {
 		return
 	}
 
 	mainBody := message.Bodies[0]
-	gm.SetBody(mainBody.ContentType, mainBody.Content, gomail.SetPartEncoding(gomail.Unencoded))
+	gm.setBody(mainBody.ContentType, mainBody.Content, setPartEncoding(encodingUnencoded))
 
 	for i := 1; i < len(message.Bodies); i++ {
 		alt := message.Bodies[i]
-		gm.AddAlternative(alt.ContentType, alt.Content, gomail.SetPartEncoding(gomail.Unencoded))
+		gm.addAlternative(alt.ContentType, alt.Content, setPartEncoding(encodingUnencoded))
 	}
 }
 
-func (sm SMTPSender) addAttachments(message Message, gm *gomail.Message) {
+func (sm SMTPSender) addAttachments(message Message, gm *smtpMessage) {
 
 	for _, at := range message.Attachments {
 		currentAttachement := at
-		settings := gomail.SetCopyFunc(func(w io.Writer) error {
+		settings := setCopyFunc(func(w io.Writer) error {
 			_, err := io.Copy(w, currentAttachement.Reader)
 			return err
 		})
 
 		if currentAttachement.Embedded {
-			gm.Embed(currentAttachement.Name, settings)
+			gm.embed(currentAttachement.Name, settings)
 		} else {
-			gm.Attach(currentAttachement.Name, settings)
+			gm.attach(currentAttachement.Name, settings)
 		}
 
 	}
@@ -92,7 +92,7 @@ func NewSMTPSender(host string, port string, user string, password string) (SMTP
 		return SMTPSender{}, fmt.Errorf("invalid port for the SMTP mail")
 	}
 
-	dialer := &gomail.Dialer{
+	dialer := &Dialer{
 		Host: host,
 		Port: iport,
 	}

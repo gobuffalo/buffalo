@@ -1,50 +1,27 @@
+// Portions of this code are derived from the go-mail/mail project.
+// https://github.com/go-mail/mail (MIT License)
+
 package mail
 
 import (
 	"fmt"
-	"io"
 	stdmail "net/mail"
 	"slices"
 )
 
-// Sender is the interface that wraps the Send method.
-//
-// Send sends an email to the given addresses.
-type Sender interface {
-	Send(from string, to []string, msg io.WriterTo) error
-}
-
-// SendCloser is the interface that groups the Send and Close methods.
-type SendCloser interface {
-	Sender
-	Close() error
-}
-
-// A SendFunc is a function that sends emails to the given addresses.
-//
-// The SendFunc type is an adapter to allow the use of ordinary functions as
-// email senders. If f is a function with the appropriate signature, SendFunc(f)
-// is a Sender object that calls f.
-type SendFunc func(from string, to []string, msg io.WriterTo) error
-
-// Send calls f(from, to, msg).
-func (f SendFunc) Send(from string, to []string, msg io.WriterTo) error {
-	return f(from, to, msg)
-}
-
-// Send sends emails using the given Sender.
-func Send(s Sender, msg ...*Message) []error {
+// sendSMTP sends emails using the given Sender.
+func sendSMTP(s sender, msg ...*smtpMessage) []error {
 	errors := make([]error, len(msg))
 	for i, m := range msg {
-		if err := send(s, m); err != nil {
-			errors[i] = &SendError{Cause: err, Index: uint(i)}
+		if err := sendSingle(s, m); err != nil {
+			errors[i] = &sendError{Cause: err, Index: uint(i)}
 		}
 	}
 
 	return errors
 }
 
-func send(s Sender, m *Message) error {
+func sendSingle(s sender, m *smtpMessage) error {
 	from, err := m.getFrom()
 	if err != nil {
 		return err
@@ -62,7 +39,7 @@ func send(s Sender, m *Message) error {
 	return nil
 }
 
-func (m *Message) getFrom() (string, error) {
+func (m *smtpMessage) getFrom() (string, error) {
 	from := m.header["Sender"]
 	if len(from) == 0 {
 		from = m.header["From"]
@@ -74,7 +51,7 @@ func (m *Message) getFrom() (string, error) {
 	return parseAddress(from[0])
 }
 
-func (m *Message) getRecipients() ([]string, error) {
+func (m *smtpMessage) getRecipients() ([]string, error) {
 	n := 0
 	for _, field := range []string{"To", "Cc", "Bcc"} {
 		if addresses, ok := m.header[field]; ok {

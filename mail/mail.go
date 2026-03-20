@@ -1,3 +1,14 @@
+// Package mail provides email sending functionality for Buffalo applications.
+// It supports SMTP delivery with customizable configuration including TLS/SSL,
+// authentication, and batch sending capabilities.
+//
+// Portions of the SMTP implementation are derived from the go-mail/mail project
+// (https://github.com/go-mail/mail) under the MIT License.
+//
+// TODO: Properly encode filenames for non-ASCII characters.
+// TODO: Properly encode email addresses for non-ASCII characters.
+// TODO: Test embedded files and attachments for their existence before sending.
+// TODO: Allow supplying an io.Reader when embedding and attaching files.
 package mail
 
 import (
