@@ -6,10 +6,3 @@ Buffalo helps you to generate a web project that already has everything from fro
 Buffalo **isn't just a framework**, it's a holistic web development environment and project structure that **lets developers get straight to the business** of, well, building their business.
 */
 package buffalo
-
-// we need to import the runtime package
-// as its needed by `buffalo build` and without
-// this import the package doesn't get vendored
-// by go mod vendor or by dep. this import fixes
-// this problem.
-import _ "github.com/gobuffalo/buffalo/runtime" // Load the runtime package variables
