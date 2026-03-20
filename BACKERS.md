@@ -14,6 +14,8 @@ If you, or your company, use Buffalo, please consider supporting this effort to 
 
 * **[Gopher Guides](https://www.gopherguides.com)**
 * **[PaperCall.io](https://www.papercall.io)**
+* **[Wawandco](https://wawand.co)**
+* **[Symbolsecurity](https://symbolsecurity.com)**
 * [Your Company Here](http://patreon.com/buffalo)
 
 ### Gold Sponsors
