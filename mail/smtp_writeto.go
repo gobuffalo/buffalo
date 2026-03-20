@@ -1,3 +1,6 @@
+// Portions of this code are derived from the go-mail/mail project.
+// https://github.com/go-mail/mail (MIT License)
+
 package mail
 
 import (
@@ -11,19 +14,18 @@ import (
 	"time"
 )
 
-// WriteTo implements io.WriterTo. It dumps the whole message into w.
-func (m *Message) WriteTo(w io.Writer) (int64, error) {
+func (m *smtpMessage) WriteTo(w io.Writer) (int64, error) {
 	mw := &messageWriter{w: w}
 	mw.writeMessage(m)
 	return mw.n, mw.err
 }
 
-func (w *messageWriter) writeMessage(m *Message) {
+func (w *messageWriter) writeMessage(m *smtpMessage) {
 	if _, ok := m.header["MIME-Version"]; !ok {
 		w.writeString("MIME-Version: 1.0\r\n")
 	}
 	if _, ok := m.header["Date"]; !ok {
-		w.writeHeader("Date", m.FormatDate(now()))
+		w.writeHeader("Date", m.formatDate(now()))
 	}
 	w.writeHeaders(m.header)
 
@@ -56,15 +58,15 @@ func (w *messageWriter) writeMessage(m *Message) {
 	}
 }
 
-func (m *Message) hasMixedPart() bool {
+func (m *smtpMessage) hasMixedPart() bool {
 	return (len(m.parts) > 0 && len(m.attachments) > 0) || len(m.attachments) > 1
 }
 
-func (m *Message) hasRelatedPart() bool {
+func (m *smtpMessage) hasRelatedPart() bool {
 	return (len(m.parts) > 0 && len(m.embedded) > 0) || len(m.embedded) > 1
 }
 
-func (m *Message) hasAlternativePart() bool {
+func (m *smtpMessage) hasAlternativePart() bool {
 	return len(m.parts) > 1
 }
 
@@ -126,7 +128,7 @@ func (w *messageWriter) addFiles(files []*file, isAttachment bool) {
 		}
 
 		if _, ok := f.Header["Content-Transfer-Encoding"]; !ok {
-			f.setHeader("Content-Transfer-Encoding", string(Base64))
+			f.setHeader("Content-Transfer-Encoding", string(encodingBase64))
 		}
 
 		if _, ok := f.Header["Content-Disposition"]; !ok {
@@ -145,7 +147,7 @@ func (w *messageWriter) addFiles(files []*file, isAttachment bool) {
 			}
 		}
 		w.writeHeaders(f.Header)
-		w.writeBody(f.CopyFunc, Base64)
+		w.writeBody(f.CopyFunc, encodingBase64)
 	}
 }
 
@@ -161,7 +163,7 @@ func (w *messageWriter) Write(p []byte) (int, error) {
 }
 
 func (w *messageWriter) writeString(s string) {
-	if w.err != nil { // do nothing when in error
+	if w.err != nil {
 		return
 	}
 	var n int
@@ -177,13 +179,9 @@ func (w *messageWriter) writeHeader(k string, v ...string) {
 	}
 	w.writeString(": ")
 
-	// Max header line length is 78 characters in RFC 5322 and 76 characters
-	// in RFC 2047. So for the sake of simplicity we use the 76 characters
-	// limit.
 	charsLeft := 76 - len(k) - len(": ")
 
 	for i, s := range v {
-		// If the line is already too long, insert a newline right away.
 		if charsLeft < 1 {
 			if i == 0 {
 				w.writeString("\r\n ")
@@ -196,7 +194,6 @@ func (w *messageWriter) writeHeader(k string, v ...string) {
 			charsLeft -= 2
 		}
 
-		// While the header content is too long, fold it by inserting a newline.
 		for len(s) > charsLeft {
 			s = w.writeLine(s, charsLeft)
 			charsLeft = 75
@@ -212,7 +209,6 @@ func (w *messageWriter) writeHeader(k string, v ...string) {
 }
 
 func (w *messageWriter) writeLine(s string, charsLeft int) string {
-	// If there is already a newline before the limit. Write the line.
 	if i := strings.IndexByte(s, '\n'); i != -1 && i < charsLeft {
 		w.writeString(s[:i+1])
 		return s[i+1:]
@@ -226,8 +222,6 @@ func (w *messageWriter) writeLine(s string, charsLeft int) string {
 		}
 	}
 
-	// We could not insert a newline cleanly so look for a space or a newline
-	// even if it is after the limit.
 	for i := 75; i < len(s); i++ {
 		if s[i] == ' ' {
 			w.writeString(s[:i])
@@ -240,7 +234,6 @@ func (w *messageWriter) writeLine(s string, charsLeft int) string {
 		}
 	}
 
-	// Too bad, no space or newline in the whole string. Just write everything.
 	w.writeString(s)
 	return ""
 }
@@ -257,7 +250,7 @@ func (w *messageWriter) writeHeaders(h map[string][]string) {
 	}
 }
 
-func (w *messageWriter) writeBody(f func(io.Writer) error, enc Encoding) {
+func (w *messageWriter) writeBody(f func(io.Writer) error, enc encoding) {
 	var subWriter io.Writer
 	if w.depth == 0 {
 		w.writeString("\r\n")
@@ -266,11 +259,11 @@ func (w *messageWriter) writeBody(f func(io.Writer) error, enc Encoding) {
 		subWriter = w.partWriter
 	}
 
-	if enc == Base64 {
+	if enc == encodingBase64 {
 		wc := base64.NewEncoder(base64.StdEncoding, newBase64LineWriter(subWriter))
 		w.err = f(wc)
 		wc.Close()
-	} else if enc == Unencoded {
+	} else if enc == encodingUnencoded {
 		w.err = f(subWriter)
 	} else {
 		wc := newQPWriter(subWriter)
@@ -279,11 +272,8 @@ func (w *messageWriter) writeBody(f func(io.Writer) error, enc Encoding) {
 	}
 }
 
-// As required by RFC 2045, 6.7. (page 21) for quoted-printable, and
-// RFC 2045, 6.8. (page 25) for base64.
 const maxLineLen = 76
 
-// base64LineWriter limits text encoded in base64 to 76 characters per line
 type base64LineWriter struct {
 	w       io.Writer
 	lineLen int
@@ -309,5 +299,4 @@ func (w *base64LineWriter) Write(p []byte) (int, error) {
 	return n + len(p), nil
 }
 
-// Stubbed out for testing.
 var now = time.Now

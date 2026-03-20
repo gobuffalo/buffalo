@@ -1,3 +1,6 @@
+// Portions of this code are derived from the go-mail/mail project.
+// https://github.com/go-mail/mail (MIT License)
+
 package mail
 
 import (
@@ -10,19 +13,13 @@ import (
 	"time"
 )
 
-// A Dialer is a dialer to an SMTP server.
+// Dialer connects to an SMTP server and sends emails.
 type Dialer struct {
-	// Host represents the host of the SMTP server.
-	Host string
-	// Port represents the port of the SMTP server.
-	Port int
-	// Username is the username to use to authenticate to the SMTP server.
+	Host     string
+	Port     int
 	Username string
-	// Password is the password to use to authenticate to the SMTP server.
 	Password string
-	// Auth represents the authentication mechanism used to authenticate to the
-	// SMTP server.
-	Auth smtp.Auth
+	Auth     smtp.Auth
 	// SSL defines whether an SSL connection is used. It should be false in
 	// most cases since the authentication mechanism should use the STARTTLS
 	// extension instead.
@@ -30,13 +27,8 @@ type Dialer struct {
 	// TLSConfig represents the TLS configuration used for the TLS (when the
 	// STARTTLS extension is used) or SSL connection.
 	TLSConfig *tls.Config
-	// StartTLSPolicy represents the TLS security level required to
-	// communicate with the SMTP server.
-	//
-	// This defaults to OpportunisticStartTLS for backwards compatibility,
-	// but we recommend MandatoryStartTLS for all modern SMTP servers.
-	//
-	// This option has no effect if SSL is set to true.
+	// StartTLSPolicy represents the TLS security level required to communicate
+	// with the SMTP server. Defaults to opportunistic STARTTLS.
 	StartTLSPolicy StartTLSPolicy
 	// LocalName is the hostname sent to the SMTP server with the HELO command.
 	// By default, "localhost" is sent.
@@ -44,14 +36,11 @@ type Dialer struct {
 	// Timeout to use for read/write operations. Defaults to 10 seconds, can
 	// be set to 0 to disable timeouts.
 	Timeout time.Duration
-	// Whether we should retry mailing if the connection returned an error,
-	// defaults to true.
+	// Whether we should retry mailing if the connection returned an error.
 	RetryFailure bool
 }
 
-// NewDialer returns a new SMTP Dialer. The given parameters are used to connect
-// to the SMTP server.
-func NewDialer(host string, port int, username, password string) *Dialer {
+func newDialer(host string, port int, username, password string) *Dialer {
 	return &Dialer{
 		Host:         host,
 		Port:         port,
@@ -68,9 +57,7 @@ func NewDialer(host string, port int, username, password string) *Dialer {
 // proxy or other special behavior is needed.
 var NetDialTimeout = net.DialTimeout
 
-// Dial dials and authenticates to an SMTP server. The returned SendCloser
-// should be closed when done using it.
-func (d *Dialer) Dial() (SendCloser, error) {
+func (d *Dialer) dial() (sendCloser, error) {
 	conn, err := NetDialTimeout("tcp", addr(d.Host, d.Port), d.Timeout)
 	if err != nil {
 		return nil, err
@@ -95,11 +82,10 @@ func (d *Dialer) Dial() (SendCloser, error) {
 		}
 	}
 
-	if !d.SSL && d.StartTLSPolicy != NoStartTLS {
+	if !d.SSL && d.StartTLSPolicy != noStartTLS {
 		ok, _ := c.Extension("STARTTLS")
-		if !ok && d.StartTLSPolicy == MandatoryStartTLS {
-			err := StartTLSUnsupportedError{
-				Policy: d.StartTLSPolicy}
+		if !ok && d.StartTLSPolicy == mandatoryStartTLS {
+			err := startTLSUnsupportedError{Policy: d.StartTLSPolicy}
 			return nil, err
 		}
 
@@ -145,61 +131,49 @@ func (d *Dialer) tlsConfig() *tls.Config {
 	return d.TLSConfig
 }
 
-// StartTLSPolicy constants are valid values for Dialer.StartTLSPolicy.
+// StartTLSPolicy represents the TLS security level required to communicate
+// with an SMTP server.
 type StartTLSPolicy int
 
 const (
-	// OpportunisticStartTLS means that SMTP transactions are encrypted if
-	// STARTTLS is supported by the SMTP server. Otherwise, messages are
-	// sent in the clear. This is the default setting.
-	OpportunisticStartTLS StartTLSPolicy = iota
-	// MandatoryStartTLS means that SMTP transactions must be encrypted.
-	// SMTP transactions are aborted unless STARTTLS is supported by the
-	// SMTP server.
-	MandatoryStartTLS
-	// NoStartTLS means encryption is disabled and messages are sent in the
-	// clear.
-	NoStartTLS = -1
+	opportunisticStartTLS StartTLSPolicy = iota
+	mandatoryStartTLS
+	noStartTLS = -1
 )
 
 func (policy *StartTLSPolicy) String() string {
 	switch *policy {
-	case OpportunisticStartTLS:
+	case opportunisticStartTLS:
 		return "OpportunisticStartTLS"
-	case MandatoryStartTLS:
+	case mandatoryStartTLS:
 		return "MandatoryStartTLS"
-	case NoStartTLS:
+	case noStartTLS:
 		return "NoStartTLS"
 	default:
 		return fmt.Sprintf("StartTLSPolicy:%v", *policy)
 	}
 }
 
-// StartTLSUnsupportedError is returned by Dial when connecting to an SMTP
-// server that does not support STARTTLS.
-type StartTLSUnsupportedError struct {
+type startTLSUnsupportedError struct {
 	Policy StartTLSPolicy
 }
 
-func (e StartTLSUnsupportedError) Error() string {
-	return "gomail: " + e.Policy.String() + " required, but " +
-		"SMTP server does not support STARTTLS"
+func (e startTLSUnsupportedError) Error() string {
+	return "gomail: " + e.Policy.String() + " required, but SMTP server does not support STARTTLS"
 }
 
 func addr(host string, port int) string {
 	return fmt.Sprintf("%s:%d", host, port)
 }
 
-// DialAndSend opens a connection to the SMTP server, sends the given emails and
-// closes the connection.
-func (d *Dialer) DialAndSend(m ...*Message) error {
-	s, err := d.Dial()
+func (d *Dialer) dialAndSend(m ...*smtpMessage) error {
+	s, err := d.dial()
 	if err != nil {
 		return err
 	}
 	defer s.Close()
 
-	for _, err := range Send(s, m...) {
+	for _, err := range sendSMTP(s, m...) {
 		if err != nil {
 			return err
 		}
@@ -233,8 +207,7 @@ func (c *smtpSender) Send(from string, to []string, msg io.WriterTo) error {
 
 	if err := c.Mail(from); err != nil {
 		if c.retryError(err) {
-			// This is probably due to a timeout, so reconnect and try again.
-			sc, derr := c.d.Dial()
+			sc, derr := c.d.dial()
 			if derr == nil {
 				if s, ok := sc.(*smtpSender); ok {
 					*c = *s
@@ -287,4 +260,13 @@ type smtpClient interface {
 	Data() (io.WriteCloser, error)
 	Quit() error
 	Close() error
+}
+
+type sendCloser interface {
+	sender
+	Close() error
+}
+
+type sender interface {
+	Send(from string, to []string, msg io.WriterTo) error
 }
