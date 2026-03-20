@@ -35,14 +35,10 @@ func New(root string) App {
 		toml.DecodeFile(tomlPath, &app)
 	}
 
-	if !app.WithPop && fileExists(filepath.Join(root, "database.yml")) {
-		app.WithPop = true
+	if !app.WithPop {
+		_, err := os.Stat(filepath.Join(root, "database.yml"))
+		app.WithPop = err == nil
 	}
 
 	return app
-}
-
-func fileExists(path string) bool {
-	_, err := os.Stat(path)
-	return err == nil
 }
