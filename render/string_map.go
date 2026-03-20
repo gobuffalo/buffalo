@@ -68,3 +68,8 @@ func (m *stringMap) Keys() []string {
 	sort.Strings(keys)
 	return keys
 }
+
+// Clear removes all entries from the map
+func (m *stringMap) Clear() {
+	m.data.Clear()
+}

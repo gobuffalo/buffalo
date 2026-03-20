@@ -13,6 +13,9 @@ import (
 type tagHelper = func(string, tags.Options) (template.HTML, error)
 
 func tag(name string) (tagHelper, error) {
+	// Clear assetMap to ensure test isolation from other tests that may have loaded manifests
+	assetMap.Clear()
+
 	e := NewEngine()
 	// Use empty AssetsFS for these tests to avoid manifest lookup
 	e.AssetsFS = fstest.MapFS{}
