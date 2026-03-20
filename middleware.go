@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"maps"
 	"net/http"
 	"reflect"
 	"runtime"
@@ -50,9 +51,7 @@ func (ms MiddlewareStack) String() string {
 func (ms *MiddlewareStack) clone() *MiddlewareStack {
 	n := newMiddlewareStack()
 	n.stack = append(n.stack, ms.stack...)
-	for k, v := range ms.skips {
-		n.skips[k] = v
-	}
+	maps.Copy(n.skips, ms.skips)
 	return n
 }
 

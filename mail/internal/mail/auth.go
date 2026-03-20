@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/smtp"
+	"slices"
 )
 
 // loginAuth is an smtp.Auth that implements the LOGIN authentication mechanism.
@@ -15,14 +16,7 @@ type loginAuth struct {
 
 func (a *loginAuth) Start(server *smtp.ServerInfo) (string, []byte, error) {
 	if !server.TLS {
-		advertised := false
-		for _, mechanism := range server.Auth {
-			if mechanism == "LOGIN" {
-				advertised = true
-				break
-			}
-		}
-		if !advertised {
+		if !slices.Contains(server.Auth, "LOGIN") {
 			return "", nil, fmt.Errorf("gomail: unencrypted connection")
 		}
 	}

@@ -47,8 +47,8 @@ func (b BuildInfo) String() string {
 }
 
 var (
-	build BuildInfo
-	once  sync.Once
+	build     BuildInfo
+	buildOnce sync.Once
 )
 
 // Build returns the information about the current build of the application.
@@ -59,7 +59,7 @@ var (
 //
 // For backward compatibility, this function caches the build info after first call.
 func Build() BuildInfo {
-	once.Do(func() {
+	buildOnce.Do(func() {
 		build = loadBuildInfo()
 	})
 	return build

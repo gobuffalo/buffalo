@@ -1,7 +1,7 @@
 package render
 
 import (
-	"sort"
+	"slices"
 	"sync"
 )
 
@@ -65,7 +65,7 @@ func (m *stringMap) Keys() []string {
 		keys = append(keys, key)
 		return true
 	})
-	sort.Strings(keys)
+	slices.Sort(keys)
 	return keys
 }
 

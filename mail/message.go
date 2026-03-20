@@ -1,11 +1,11 @@
 package mail
 
 import (
+	"bytes"
 	"context"
 	"io"
+	"maps"
 	"sync"
-
-	"bytes"
 
 	"github.com/gobuffalo/buffalo/render"
 )
@@ -26,15 +26,10 @@ type Message struct {
 }
 
 func (m *Message) merge(data render.Data) render.Data {
-	d := render.Data{}
 	m.moot.Lock()
-	for k, v := range m.Data {
-		d[k] = v
-	}
+	d := maps.Clone(m.Data)
 	m.moot.Unlock()
-	for k, v := range data {
-		d[k] = v
-	}
+	maps.Copy(d, data)
 	return d
 }
 

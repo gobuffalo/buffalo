@@ -4,7 +4,7 @@
 package plugcmds
 
 import (
-	"sort"
+	"slices"
 	"sync"
 )
 
@@ -68,6 +68,6 @@ func (m *plugMap) Keys() []string {
 		keys = append(keys, key)
 		return true
 	})
-	sort.Strings(keys)
+	slices.Sort(keys)
 	return keys
 }

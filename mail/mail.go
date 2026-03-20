@@ -2,6 +2,7 @@ package mail
 
 import (
 	"context"
+	"maps"
 	"sync"
 
 	"github.com/gobuffalo/buffalo"
@@ -20,12 +21,8 @@ func NewMessage() Message {
 
 // NewFromData builds a new message with raw template data given
 func NewFromData(data render.Data) Message {
-	d := render.Data{}
-	for k, v := range data {
-		d[k] = v
-	}
 	m := NewMessage()
-	m.Data = d
+	m.Data = maps.Clone(data)
 	return m
 }
 

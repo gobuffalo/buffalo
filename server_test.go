@@ -24,12 +24,10 @@ const (
 // startApp starts given buffalo app and check its exit status.
 // The go routine emulates a buffalo app process.
 func startApp(app *App, wg *sync.WaitGroup, r *require.Assertions) {
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		err := app.Serve()
 		r.NoError(err)
-	}()
+	})
 	// wait until the server started.
 	// could be improved with connection test but that's too much...
 	time.Sleep(waitStart * time.Second)
@@ -55,7 +53,7 @@ var handlerDone = false
 
 // timeConsumer consumes about 10 minutes for processing its request
 func timeConsumer(c Context) error {
-	for i := 0; i < consumerRun; i++ {
+	for range consumerRun {
 		fmt.Println("#")
 		time.Sleep(1 * time.Second)
 	}
@@ -78,16 +76,14 @@ func Test_Server_GracefulShutdownOngoingRequest(t *testing.T) {
 	secondQuery := false
 	// This routine is the 1st client that GETs before Stop it
 	// The result should be successful even though the server shutting down.
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		resp, err := http.Get("http://127.0.0.1:3000")
 		r.NoError(err)
 		defer resp.Body.Close()
 		r.Equal(http.StatusOK, resp.StatusCode)
 		fmt.Println("the first query should be OK:", resp.Status)
 		firstQuery = true
-	}()
+	})
 	// make sure the request sent
 	time.Sleep(waitRun * time.Second)
 
@@ -96,14 +92,12 @@ func Test_Server_GracefulShutdownOngoingRequest(t *testing.T) {
 
 	// This routine is the 2nd client that GETs after Stop it
 	// The result should be connection refused even though app is still on.
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		_, err := http.Get("http://127.0.0.1:3000")
 		r.Contains(err.Error(), "refused")
 		fmt.Println("the second query should be refused:", err)
 		secondQuery = true
-	}()
+	})
 
 	wg.Wait()
 	r.Equal(true, handlerDone)
@@ -114,7 +108,7 @@ func Test_Server_GracefulShutdownOngoingRequest(t *testing.T) {
 var timerDone = false
 
 func timerWorker(args worker.Args) error {
-	for i := 0; i < consumerRun; i++ {
+	for range consumerRun {
 		fmt.Println("%")
 		time.Sleep(1 * time.Second)
 	}
@@ -143,12 +137,10 @@ func Test_Server_GracefulShutdownOngoingWorker(t *testing.T) {
 
 	// This routine is the 2nd client that GETs after Stop it
 	// The result should be connection refused even though app is still on.
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		_, err := http.Get("http://127.0.0.1:3000")
 		r.Contains(err.Error(), "refused")
-	}()
+	})
 
 	wg.Wait()
 	r.Equal(true, timerDone)

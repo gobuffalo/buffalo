@@ -26,7 +26,6 @@ func Test_Plain(t *testing.T) {
 
 	var examples = []string{"Mark", "Jém"}
 	for _, example := range examples {
-		example := example
 		bb := &bytes.Buffer{}
 		r.NoError(re.Render(bb, Data{"name": example}))
 		r.Equal(example, bb.String())

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
-	"sort"
+	"slices"
 	"strings"
 
 	"github.com/gobuffalo/buffalo/internal/defaults"
@@ -292,6 +292,6 @@ func (i inspectHeaders) String() string {
 	for k, v := range i {
 		bb = append(bb, fmt.Sprintf("%s: %s", k, v))
 	}
-	sort.Strings(bb)
+	slices.Sort(bb)
 	return strings.Join(bb, "\n")
 }

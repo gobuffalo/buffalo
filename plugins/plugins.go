@@ -21,26 +21,22 @@ import (
 
 const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
 
-var timeoutOnce sync.Once
 var availableOnce sync.Once
 
-var t = time.Second * 2
-
-func timeout() time.Duration {
-	timeoutOnce.Do(func() {
-		rawTimeout, err := env.MustGet(timeoutEnv)
-		if err == nil {
-			if parsed, err := time.ParseDuration(rawTimeout); err == nil {
-				t = parsed
-			} else {
-				logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, t, err)
-			}
+var timeout = sync.OnceValue(func() time.Duration {
+	t := time.Second * 2
+	rawTimeout, err := env.MustGet(timeoutEnv)
+	if err == nil {
+		if parsed, err := time.ParseDuration(rawTimeout); err == nil {
+			t = parsed
 		} else {
-			logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, t)
+			logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, t, err)
 		}
-	})
+	} else {
+		logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, t)
+	}
 	return t
-}
+})
 
 // List maps a Buffalo command to a slice of Command
 type List map[string]Commands

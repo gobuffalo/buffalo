@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	stdmail "net/mail"
+	"slices"
 )
 
 // Sender is the interface that wraps the Send method.
@@ -98,12 +99,9 @@ func (m *Message) getRecipients() ([]string, error) {
 }
 
 func addAddress(list []string, addr string) []string {
-	for _, a := range list {
-		if addr == a {
-			return list
-		}
+	if slices.Contains(list, addr) {
+		return list
 	}
-
 	return append(list, addr)
 }
 
