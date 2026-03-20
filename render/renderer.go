@@ -11,4 +11,4 @@ type Renderer interface {
 
 // Data type to be provided to the Render function on the
 // Renderer interface.
-type Data map[string]interface{}
+type Data map[string]any

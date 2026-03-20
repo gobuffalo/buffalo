@@ -68,7 +68,7 @@ func WrapBuffaloHandlerFunc(h Handler) http.HandlerFunc {
 		ct := httpx.ContentType(req)
 
 		data := newRequestData()
-		data.d = map[string]interface{}{
+		data.d = map[string]any{
 			"current_path": req.URL.Path,
 			"contentType":  ct,
 			"method":       req.Method,

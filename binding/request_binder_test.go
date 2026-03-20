@@ -13,7 +13,7 @@ func Test_RequestBinder_Exec(t *testing.T) {
 	r := require.New(t)
 
 	var used bool
-	BaseRequestBinder.Register("paganotoni/test", func(*http.Request, interface{}) error {
+	BaseRequestBinder.Register("paganotoni/test", func(*http.Request, any) error {
 		used = true
 		return nil
 	})
@@ -40,7 +40,7 @@ func Test_RequestBinder_Exec_BlankContentType(t *testing.T) {
 func Test_RequestBinder_Exec_Bindable(t *testing.T) {
 	r := require.New(t)
 
-	BaseRequestBinder.Register("paganotoni/orbison", func(req *http.Request, val interface{}) error {
+	BaseRequestBinder.Register("paganotoni/orbison", func(req *http.Request, val any) error {
 		switch v := val.(type) {
 		case orbison:
 			v.bound = false

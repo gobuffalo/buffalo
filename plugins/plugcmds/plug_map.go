@@ -43,7 +43,7 @@ func (m *plugMap) LoadOrStore(key string, value plug) (plug, bool) {
 
 // Range over the plug values in the map
 func (m *plugMap) Range(f func(key string, value plug) bool) {
-	m.data.Range(func(k, v interface{}) bool {
+	m.data.Range(func(k, v any) bool {
 		key, ok := k.(string)
 		if !ok {
 			return false

@@ -6,7 +6,7 @@ import (
 )
 
 type xmlRenderer struct {
-	value interface{}
+	value any
 }
 
 func (s xmlRenderer) ContentType() string {
@@ -22,12 +22,12 @@ func (s xmlRenderer) Render(w io.Writer, data Data) error {
 
 // XML renders the value using the "application/xml"
 // content type.
-func XML(v interface{}) Renderer {
+func XML(v any) Renderer {
 	return xmlRenderer{value: v}
 }
 
 // XML renders the value using the "application/xml"
 // content type.
-func (e *Engine) XML(v interface{}) Renderer {
+func (e *Engine) XML(v any) Renderer {
 	return XML(v)
 }

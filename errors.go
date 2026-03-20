@@ -250,7 +250,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 		delete(cd, "app")
 		delete(cd, "routes")
 
-		data := map[string]interface{}{
+		data := map[string]any{
 			"routes":      routes,
 			"error":       trace,
 			"status":      status,
@@ -259,7 +259,7 @@ func defaultErrorHandler(status int, origErr error, c Context) error {
 			"posted_form": c.Request().Form,
 			"context":     c,
 			"headers":     inspectHeaders(c.Request().Header),
-			"inspect": func(v interface{}) string {
+			"inspect": func(v any) string {
 				return fmt.Sprintf("%+v", v)
 			},
 		}

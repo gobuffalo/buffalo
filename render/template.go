@@ -153,7 +153,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		return "", err
 	}
 
-	helpers := map[string]interface{}{}
+	helpers := map[string]any{}
 
 	for k, v := range s.Helpers {
 		helpers[k] = v

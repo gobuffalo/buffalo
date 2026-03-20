@@ -36,7 +36,7 @@ func Test_App_Dev_NotFound_JSON(t *testing.T) {
 	res := w.JSON("/bad").Get()
 	r.Equal(http.StatusNotFound, res.Code)
 
-	jb := map[string]interface{}{}
+	jb := map[string]any{}
 	err := json.NewDecoder(res.Body).Decode(&jb)
 	r.NoError(err)
 	r.Equal(float64(http.StatusNotFound), jb["code"])

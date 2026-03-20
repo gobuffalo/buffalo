@@ -48,7 +48,7 @@ func RequestLoggerFunc(h Handler) Handler {
 		if err != nil {
 			return err
 		}
-		var irid interface{}
+		var irid any
 		if irid = c.Session().Get("requestor_id"); irid == nil {
 			rs, err := randString(10)
 			if err != nil {
@@ -74,7 +74,7 @@ func RequestLoggerFunc(h Handler) Handler {
 			if ct != "" {
 				c.LogField("content_type", ct)
 			}
-			c.LogFields(map[string]interface{}{
+			c.LogFields(map[string]any{
 				"method":     req.Method,
 				"path":       req.URL.String(),
 				"duration":   time.Since(start),

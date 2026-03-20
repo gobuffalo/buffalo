@@ -13,7 +13,7 @@ import (
 
 func Test_NewFromData(t *testing.T) {
 	r := require.New(t)
-	m := NewFromData(map[string]interface{}{
+	m := NewFromData(map[string]any{
 		"foo": "bar",
 	})
 	r.Equal("bar", m.Data["foo"])
@@ -36,7 +36,7 @@ func Test_New(t *testing.T) {
 	r.Equal("bar", m.Data["foo"])
 	rp, ok := m.Data["rootPath"].(buffalo.RouteHelperFunc)
 	r.True(ok)
-	x, err := rp(map[string]interface{}{})
+	x, err := rp(map[string]any{})
 	r.NoError(err)
 	r.Equal(template.HTML("/"), x)
 }

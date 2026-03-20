@@ -18,7 +18,7 @@ func (a *App) Routes() RouteList {
 	return a.routes
 }
 
-func addExtraParamsTo(path string, opts map[string]interface{}) string {
+func addExtraParamsTo(path string, opts map[string]any) string {
 	pendingParams := map[string]string{}
 	keys := []string{}
 	for k, v := range opts {
@@ -58,7 +58,7 @@ func addExtraParamsTo(path string, opts map[string]interface{}) string {
 }
 
 // RouteHelperFunc represents the function that takes the route and the opts and build the path
-type RouteHelperFunc func(opts map[string]interface{}) (template.HTML, error)
+type RouteHelperFunc func(opts map[string]any) (template.HTML, error)
 
 // RouteList contains a mapping of the routes defined
 // in the application. This listing contains, Method, Path,

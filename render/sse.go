@@ -7,8 +7,8 @@ import (
 )
 
 type sse struct {
-	Data interface{} `json:"data"`
-	Type string      `json:"type"`
+	Data any    `json:"data"`
+	Type string `json:"type"`
 }
 
 func (s *sse) String() string {
@@ -28,7 +28,7 @@ type EventSource struct {
 	fl http.Flusher
 }
 
-func (es *EventSource) Write(t string, d interface{}) error {
+func (es *EventSource) Write(t string, d any) error {
 	s := &sse{Type: t, Data: d}
 	_, err := es.w.Write(s.Bytes())
 	if err != nil {

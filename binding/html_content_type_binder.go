@@ -23,7 +23,7 @@ func (ht HTMLContentTypeBinder) ContentTypes() []string {
 
 // BinderFunc that will take care of the HTML binding
 func (ht HTMLContentTypeBinder) BinderFunc() Binder {
-	return func(req *http.Request, i interface{}) error {
+	return func(req *http.Request, i any) error {
 		err := req.ParseForm()
 		if err != nil {
 			return err

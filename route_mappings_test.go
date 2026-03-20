@@ -97,13 +97,13 @@ func Test_App_RouteHelpers(t *testing.T) {
 
 	f, ok := rh["fooPath"]
 	r.True(ok)
-	x, err := f(map[string]interface{}{})
+	x, err := f(map[string]any{})
 	r.NoError(err)
 	r.Equal("/foo/", string(x))
 
 	f, ok = rh["testPath"]
 	r.True(ok)
-	x, err = f(map[string]interface{}{
+	x, err = f(map[string]any{
 		"id": 1,
 	})
 	r.NoError(err)
@@ -196,7 +196,7 @@ func Test_App_VirtualHost(t *testing.T) {
 
 	f, ok := rh["fooPath"]
 	r.True(ok)
-	x, err := f(map[string]interface{}{
+	x, err := f(map[string]any{
 		"subdomain": "test",
 	})
 	r.NoError(err)
@@ -204,7 +204,7 @@ func Test_App_VirtualHost(t *testing.T) {
 
 	f, ok = rh["fooIDPath"]
 	r.True(ok)
-	x, err = f(map[string]interface{}{
+	x, err = f(map[string]any{
 		"subdomain": "test",
 		"id":        1,
 	})

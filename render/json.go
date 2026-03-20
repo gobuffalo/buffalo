@@ -6,7 +6,7 @@ import (
 )
 
 type jsonRenderer struct {
-	value interface{}
+	value any
 }
 
 func (s jsonRenderer) ContentType() string {
@@ -19,12 +19,12 @@ func (s jsonRenderer) Render(w io.Writer, data Data) error {
 
 // JSON renders the value using the "application/json"
 // content type.
-func JSON(v interface{}) Renderer {
+func JSON(v any) Renderer {
 	return jsonRenderer{value: v}
 }
 
 // JSON renders the value using the "application/json"
 // content type.
-func (e *Engine) JSON(v interface{}) Renderer {
+func (e *Engine) JSON(v any) Renderer {
 	return JSON(v)
 }

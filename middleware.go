@@ -181,7 +181,7 @@ func newMiddlewareStack(mws ...MiddlewareFunc) *MiddlewareStack {
 	}
 }
 
-func funcKey(funcs ...interface{}) string {
+func funcKey(funcs ...any) string {
 	names := []string{}
 	for _, f := range funcs {
 		if n, ok := f.(RouteInfo); ok {
@@ -216,7 +216,7 @@ func ptrName(ptr uintptr) string {
 	return n
 }
 
-func setFuncKey(f interface{}, name string) {
+func setFuncKey(f any, name string) {
 	rv := reflect.ValueOf(f)
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()

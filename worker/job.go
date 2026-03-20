@@ -3,7 +3,7 @@ package worker
 import "encoding/json"
 
 // Args are the arguments passed into a job
-type Args map[string]interface{}
+type Args map[string]any
 
 func (a Args) String() string {
 	b, _ := json.Marshal(a)

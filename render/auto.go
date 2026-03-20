@@ -41,7 +41,7 @@ POST /users - (redirect to /users/id or render user/new.html)
 PUT /users/edit - (redirect to /users/id or render user/edit.html)
 DELETE /users/id - redirect to /users
 */
-func Auto(ctx context.Context, i interface{}) Renderer {
+func Auto(ctx context.Context, i any) Renderer {
 	e := New(Options{})
 	return e.Auto(ctx, i)
 }
@@ -61,7 +61,7 @@ POST /users - (redirect to /users/id or render user/new.html)
 PUT /users/edit - (redirect to /users/id or render user/edit.html)
 DELETE /users/id - redirect to /users
 */
-func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
+func (e *Engine) Auto(ctx context.Context, i any) Renderer {
 	ct, _ := ctx.Value("contentType").(string)
 	if ct == "" {
 		ct = e.DefaultContentType
@@ -84,7 +84,7 @@ func (e *Engine) Auto(ctx context.Context, i interface{}) Renderer {
 
 type htmlAutoRenderer struct {
 	*Engine
-	model interface{}
+	model any
 }
 
 func (htmlAutoRenderer) ContentType() string {

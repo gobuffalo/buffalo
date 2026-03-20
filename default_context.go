@@ -68,7 +68,7 @@ func (d *DefaultContext) Param(key string) string {
 
 // Set a value onto the Context. Any value set onto the Context
 // will be automatically available in templates.
-func (d *DefaultContext) Set(key string, value interface{}) {
+func (d *DefaultContext) Set(key string, value any) {
 	if d.data == nil {
 		d.data = newRequestData()
 	}
@@ -78,7 +78,7 @@ func (d *DefaultContext) Set(key string, value interface{}) {
 }
 
 // Value that has previously stored on the context.
-func (d *DefaultContext) Value(key interface{}) interface{} {
+func (d *DefaultContext) Value(key any) any {
 	if k, ok := key.(string); ok && d.data != nil {
 		d.data.moot.RLock()
 		defer d.data.moot.RUnlock()
@@ -175,14 +175,14 @@ func (d *DefaultContext) Render(status int, rr render.Renderer) error {
 // is "application/json" it will use "json.NewDecoder". If the type
 // is "application/xml" it will use "xml.NewDecoder". See the
 // github.com/gobuffalo/buffalo/binding package for more details.
-func (d *DefaultContext) Bind(value interface{}) error {
+func (d *DefaultContext) Bind(value any) error {
 	return binding.Exec(d.Request(), value)
 }
 
 // LogField adds the key/value pair onto the Logger to be printed out
 // as part of the request logging. This allows you to easily add things
 // like metrics (think DB times) to your request.
-func (d *DefaultContext) LogField(key string, value interface{}) {
+func (d *DefaultContext) LogField(key string, value any) {
 	if d.logger == nil {
 		return
 	}
@@ -192,7 +192,7 @@ func (d *DefaultContext) LogField(key string, value interface{}) {
 // LogFields adds the key/value pairs onto the Logger to be printed out
 // as part of the request logging. This allows you to easily add things
 // like metrics (think DB times) to your request.
-func (d *DefaultContext) LogFields(values map[string]interface{}) {
+func (d *DefaultContext) LogFields(values map[string]any) {
 	if d.logger == nil {
 		return
 	}
@@ -203,10 +203,10 @@ func (d *DefaultContext) Error(status int, err error) error {
 	return HTTPError{Status: status, Cause: err}
 }
 
-var mapType = reflect.ValueOf(map[string]interface{}{}).Type()
+var mapType = reflect.ValueOf(map[string]any{}).Type()
 
 // Redirect a request with the given status to the given URL.
-func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) error {
+func (d *DefaultContext) Redirect(status int, url string, args ...any) error {
 	if d.Session() != nil {
 		d.Flash().persist(d.Session())
 		if err := d.Session().Save(); err != nil {
@@ -216,15 +216,15 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 
 	if strings.HasSuffix(url, "Path()") {
 		if len(args) > 1 {
-			return fmt.Errorf("you must pass only a map[string]interface{} to a route path: %T", args)
+			return fmt.Errorf("you must pass only a map[string]any to a route path: %T", args)
 		}
-		var m map[string]interface{}
+		var m map[string]any
 		if len(args) == 1 {
 			rv := reflect.Indirect(reflect.ValueOf(args[0]))
 			if !rv.Type().ConvertibleTo(mapType) {
-				return fmt.Errorf("you must pass only a map[string]interface{} to a route path: %T", args)
+				return fmt.Errorf("you must pass only a map[string]any to a route path: %T", args)
 			}
-			m = rv.Convert(mapType).Interface().(map[string]interface{})
+			m = rv.Convert(mapType).Interface().(map[string]any)
 		}
 		h, ok := d.Value(strings.TrimSuffix(url, "()")).(RouteHelperFunc)
 		if !ok {
@@ -246,15 +246,15 @@ func (d *DefaultContext) Redirect(status int, url string, args ...interface{}) e
 }
 
 // Data contains all the values set through Get/Set.
-func (d *DefaultContext) Data() map[string]interface{} {
-	m := map[string]interface{}{}
+func (d *DefaultContext) Data() map[string]any {
+	m := map[string]any{}
 
 	if d.data == nil {
 		return m
 	}
 	d.data.moot.RLock()
 	defer d.data.moot.RUnlock()
-	m = make(map[string]interface{}, len(d.data.d))
+	m = make(map[string]any, len(d.data.d))
 	for k, v := range d.data.d {
 		m[k] = v
 	}
@@ -290,7 +290,7 @@ func (d *DefaultContext) File(name string) (binding.File, error) {
 
 // MarshalJSON implements json marshaling for the context
 func (d *DefaultContext) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{}
+	m := map[string]any{}
 	data := d.Data()
 	for k, v := range data {
 		// don't try and marshal ourself
