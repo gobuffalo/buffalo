@@ -13,8 +13,8 @@ type BuildTags []string
 
 // App holds metadata about the Buffalo application.
 type App struct {
-	Root    string
-	WithPop bool
+	Root    string `toml:"-"`
+	WithPop bool   `toml:"with_pop"`
 }
 
 // New creates App metadata for the given root path.
@@ -32,12 +32,14 @@ func New(root string) App {
 
 	tomlPath := filepath.Join(root, "config", "buffalo-app.toml")
 	if _, err := os.Stat(tomlPath); err == nil {
+		// TOML config exists, use it and skip auto-detection
 		toml.DecodeFile(tomlPath, &app)
+		return app
 	}
 
-	if !app.WithPop {
-		_, err := os.Stat(filepath.Join(root, "database.yml"))
-		app.WithPop = err == nil
+	// No TOML config, auto-detect from filesystem
+	if _, err := os.Stat(filepath.Join(root, "database.yml")); err == nil {
+		app.WithPop = true
 	}
 
 	return app
