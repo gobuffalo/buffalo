@@ -1,7 +1,7 @@
 package buffalo
 
 import (
-	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/logger/v2"
 )
 
 // Logger interface is used throughout Buffalo

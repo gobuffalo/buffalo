@@ -9,7 +9,7 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/logger/v2"
 	"github.com/stretchr/testify/require"
 )
 

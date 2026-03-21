@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/gobuffalo/logger/v2"
 )
 
 var _ Worker = &Simple{}
@@ -26,9 +26,7 @@ func NewSimple() *Simple {
 func NewSimpleWithContext(ctx context.Context) *Simple {
 	ctx, cancel := context.WithCancel(ctx)
 
-	l := logrus.New()
-	l.Level = logrus.InfoLevel
-	l.Formatter = &logrus.TextFormatter{}
+	l := logger.New(logger.InfoLevel)
 
 	return &Simple{
 		Logger:   l,

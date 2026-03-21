@@ -13,9 +13,11 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/sirupsen/logrus"
+	"github.com/gobuffalo/logger/v2"
 	"golang.org/x/text/language"
 )
+
+var log logger.FieldLogger = logger.New(logger.InfoLevel)
 
 type templateRenderer struct {
 	*Engine
@@ -168,7 +170,7 @@ func (s *templateRenderer) exec(name string, data Data) (template.HTML, error) {
 		s.addTemplateMetadata(data, fileName, ext, file)
 		te, ok := s.TemplateEngines[ext]
 		if !ok {
-			logrus.Errorf("could not find a template engine for %s", ext)
+			log.Errorf("could not find a template engine for %s", ext)
 			continue
 		}
 		body, err = te(body, data, helpers)

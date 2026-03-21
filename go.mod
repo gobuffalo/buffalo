@@ -9,7 +9,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.1.4
 	github.com/gobuffalo/helpers v0.6.10
 	github.com/gobuffalo/httptest v1.5.2
-	github.com/gobuffalo/logger v1.0.7
+	github.com/gobuffalo/logger/v2 v2.0.0
 	github.com/gobuffalo/plush/v5 v5.0.11
 	github.com/gobuffalo/refresh v1.13.3
 	github.com/gobuffalo/tags/v3 v3.1.4
@@ -18,7 +18,6 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/joho/godotenv v1.4.0
 	github.com/monoculum/formam v3.5.5+incompatible
-	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/text v0.29.0
@@ -47,6 +46,5 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/net v0.45.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/term v0.35.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
