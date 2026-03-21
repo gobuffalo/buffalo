@@ -1,6 +1,7 @@
 package buffalo
 
 import (
+	"cmp"
 	"database/sql"
 	_ "embed"
 	"encoding/json"
@@ -12,7 +13,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/httpx"
 	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/plush/v5"
@@ -191,7 +191,7 @@ const defaultErrorCT = "text/html; charset=utf-8"
 
 func defaultErrorHandler(status int, origErr error, c Context) error {
 	env := c.Value("env")
-	requestCT := defaults.String(httpx.ContentType(c.Request()), defaultErrorCT)
+	requestCT := cmp.Or(httpx.ContentType(c.Request()), defaultErrorCT)
 
 	var defaultErrorResponse *ErrorResponse
 

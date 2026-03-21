@@ -1,30 +1,46 @@
+// Package httpx provides HTTP utility functions.
 package httpx
 
 import (
+	"mime"
 	"net/http"
 	"strings"
-
-	"github.com/gobuffalo/buffalo/internal/defaults"
 )
 
+// ContentType extracts the content type from the request.
+// It checks Content-Type header first, then falls back to Accept header.
+// Returns the media type without parameters (e.g., "application/json").
+// Empty string is returned if only wildcard "*/*" is present.
 func ContentType(req *http.Request) string {
-	ct := defaults.String(req.Header.Get("Content-Type"), req.Header.Get("Accept"))
-	ct = strings.TrimSpace(ct)
-	var cts []string
-	if strings.Contains(ct, ",") {
-		cts = strings.Split(ct, ",")
-	} else {
-		cts = strings.Split(ct, ";")
-	}
-	for _, c := range cts {
-		c = strings.TrimSpace(c)
-		if strings.HasPrefix(c, "*/*") {
-			continue
+	if ct := req.Header.Get("Content-Type"); ct != "" {
+		mediatype, _, err := mime.ParseMediaType(ct)
+		if err == nil && mediatype != "" {
+			return mediatype
 		}
-		return strings.ToLower(c)
 	}
-	if ct == "*/*" {
+
+	accept := req.Header.Get("Accept")
+	if accept == "" {
 		return ""
 	}
-	return ct
+
+	for part := range strings.SplitSeq(accept, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		mediatype, _, err := mime.ParseMediaType(part)
+		if err != nil {
+			continue
+		}
+
+		if mediatype == "*/*" || mediatype == "*" {
+			continue
+		}
+
+		return mediatype
+	}
+
+	return ""
 }

@@ -1,12 +1,12 @@
 package buffalo
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/worker"
 	"github.com/gobuffalo/logger"
@@ -82,8 +82,8 @@ func NewOptions() Options {
 }
 
 func optionsWithDefaults(opts Options) Options {
-	opts.Env = defaults.String(opts.Env, env.Get("GO_ENV", "development"))
-	opts.Name = defaults.String(opts.Name, "/")
+	opts.Env = cmp.Or(opts.Env, env.Get("GO_ENV", "development"))
+	opts.Name = cmp.Or(opts.Name, "/")
 	addr := "0.0.0.0"
 	if opts.Env == "development" {
 		addr = "127.0.0.1"
@@ -95,9 +95,9 @@ func optionsWithDefaults(opts Options) Options {
 		opts.Addr = envAddr
 	} else {
 		// TCP case
-		opts.Addr = defaults.String(opts.Addr, fmt.Sprintf("%s:%s", envAddr, env.Get("PORT", "3000")))
+		opts.Addr = cmp.Or(opts.Addr, fmt.Sprintf("%s:%s", envAddr, env.Get("PORT", "3000")))
 	}
-	opts.Host = defaults.String(opts.Host, env.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", env.Get("PORT", "3000"))))
+	opts.Host = cmp.Or(opts.Host, env.Get("HOST", fmt.Sprintf("http://127.0.0.1:%s", env.Get("PORT", "3000"))))
 
 	if opts.PreWares == nil {
 		opts.PreWares = []PreWare{}
@@ -148,7 +148,7 @@ func optionsWithDefaults(opts Options) Options {
 
 		opts.SessionStore = cookieStore
 	}
-	opts.SessionName = defaults.String(opts.SessionName, "_buffalo_session")
+	opts.SessionName = cmp.Or(opts.SessionName, "_buffalo_session")
 
 	if opts.Worker == nil {
 		w := worker.NewSimpleWithContext(opts.Context)
@@ -156,7 +156,7 @@ func optionsWithDefaults(opts Options) Options {
 		opts.Worker = w
 	}
 
-	opts.TimeoutSecondShutdown = defaults.Int(opts.TimeoutSecondShutdown, 60)
+	opts.TimeoutSecondShutdown = cmp.Or(opts.TimeoutSecondShutdown, 60)
 
 	return opts
 }

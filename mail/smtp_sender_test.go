@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/gobuffalo/buffalo/internal/fakesmtp"
 	"github.com/gobuffalo/buffalo/mail"
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/stretchr/testify/require"
@@ -12,13 +11,13 @@ import (
 
 var sender mail.Sender
 var rend *render.Engine
-var smtpServer *fakesmtp.Server
+var smtpServer *fakeSMTPServer
 
 const smtpPort = "2002"
 
 func init() {
 	rend = render.New(render.Options{})
-	smtpServer, _ = fakesmtp.New(smtpPort)
+	smtpServer, _ = newFakeSMTPServer(smtpPort)
 	sender, _ = mail.NewSMTPSender("127.0.0.1", smtpPort, "username", "password")
 
 	go smtpServer.Start(smtpPort)
