@@ -1,3 +1,5 @@
+// Package plugins provides functionality for discovering and managing
+// Buffalo CLI plugins.
 package plugins
 
 import (
@@ -16,8 +18,10 @@ import (
 	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/internal/meta"
 	"github.com/gobuffalo/buffalo/plugins/plugdeps"
-	"github.com/sirupsen/logrus"
+	"github.com/gobuffalo/logger/v2"
 )
+
+var plog = logger.Default()
 
 const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
 
@@ -30,10 +34,10 @@ var timeout = sync.OnceValue(func() time.Duration {
 		if parsed, err := time.ParseDuration(rawTimeout); err == nil {
 			t = parsed
 		} else {
-			logrus.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, t, err)
+			plog.Errorf("%q value is malformed assuming default %q: %v", timeoutEnv, t, err)
 		}
 	} else {
-		logrus.Debugf("%q not set, assuming default of %v", timeoutEnv, t)
+		plog.Debugf("%q not set, assuming default of %v", timeoutEnv, t)
 	}
 	return t
 })
@@ -66,7 +70,7 @@ func Available() (List, error) {
 	availableOnce.Do(func() {
 		defer func() {
 			if err := saveCache(); err != nil {
-				logrus.Error(err)
+				plog.Error(err)
 			}
 		}()
 
@@ -140,19 +144,19 @@ func Available() (List, error) {
 func askBin(ctx context.Context, path string) Commands {
 	start := time.Now()
 	defer func() {
-		logrus.Debugf("askBin %s=%.4f s", path, time.Since(start).Seconds())
+		plog.Debugf("askBin %s=%.4f s", path, time.Since(start).Seconds())
 	}()
 
 	commands := Commands{}
 	if cp, ok := findInCache(path); ok {
 		s := sum(path)
 		if s == cp.CheckSum {
-			logrus.Debugf("cache hit: %s", path)
+			plog.Debugf("cache hit: %s", path)
 			commands = cp.Commands
 			return commands
 		}
 	}
-	logrus.Debugf("cache miss: %s", path)
+	plog.Debugf("cache miss: %s", path)
 	if strings.HasPrefix(filepath.Base(path), "buffalo-no-sqlite") {
 		return commands
 	}
@@ -162,7 +166,7 @@ func askBin(ctx context.Context, path string) Commands {
 	cmd.Stdout = bb
 	err := cmd.Run()
 	if err != nil {
-		logrus.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
+		plog.Errorf("[PLUGIN] error loading plugin %s: %s\n", path, err)
 		return commands
 	}
 
@@ -177,7 +181,7 @@ func askBin(ctx context.Context, path string) Commands {
 		}
 		msg = msg[1:]
 	}
-	logrus.Errorf("[PLUGIN] error decoding plugin %s: %s\n%s\n", path, err, msg)
+	plog.Errorf("[PLUGIN] error decoding plugin %s: %s\n%s\n", path, err, msg)
 	return commands
 }
 

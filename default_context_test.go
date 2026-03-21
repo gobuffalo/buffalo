@@ -9,14 +9,14 @@ import (
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/httptest"
-	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/logger/v2"
 	"github.com/stretchr/testify/require"
 )
 
 func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
-		logger:  logger.New(logger.DebugLevel),
+		logger:  logger.Default(),
 		data:    newRequestData(),
 		flash:   &Flash{data: make(map[string][]string)},
 	}

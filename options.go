@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/buffalo/internal/defaults"
 	"github.com/gobuffalo/buffalo/internal/env"
 	"github.com/gobuffalo/buffalo/worker"
-	"github.com/gobuffalo/logger"
+	"github.com/gobuffalo/logger/v2"
 	"github.com/gorilla/sessions"
 )
 
@@ -124,6 +124,7 @@ func optionsWithDefaults(opts Options) Options {
 		}
 
 		opts.Logger = logger.New(opts.LogLvl)
+		logger.SetDefault(opts.Logger)
 	}
 
 	if opts.SessionStore == nil {
