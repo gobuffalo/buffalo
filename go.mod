@@ -9,7 +9,7 @@ require (
 	github.com/gobuffalo/github_flavored_markdown v1.1.4
 	github.com/gobuffalo/helpers v0.6.10
 	github.com/gobuffalo/httptest v1.5.2
-	github.com/gobuffalo/logger/v2 v2.0.0
+	github.com/gobuffalo/logger/v2 v2.0.1
 	github.com/gobuffalo/plush/v5 v5.0.11
 	github.com/gobuffalo/refresh v1.13.3
 	github.com/gobuffalo/tags/v3 v3.1.4

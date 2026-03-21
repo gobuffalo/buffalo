@@ -25,8 +25,8 @@ github.com/gobuffalo/helpers v0.6.10 h1:puKDCOrJ0EIq5ScnTRgKyvEZ05xQa+gwRGCpgoh6
 github.com/gobuffalo/helpers v0.6.10/go.mod h1:r52L6VSnByLJFOmURp1irvzgSakk7RodChi1YbGwk8I=
 github.com/gobuffalo/httptest v1.5.2 h1:GpGy520SfY1QEmyPvaqmznTpG4gEQqQ82HtHqyNEreM=
 github.com/gobuffalo/httptest v1.5.2/go.mod h1:FA23yjsWLGj92mVV74Qtc8eqluc11VqcWr8/C1vxt4g=
-github.com/gobuffalo/logger/v2 v2.0.0 h1:ta2ApubQ4poUddn3NPF0h1VxgnG0j8zp9G1QgcKckAk=
-github.com/gobuffalo/logger/v2 v2.0.0/go.mod h1:VKjrMWUWvBALWBWttrMAUNBqcbooxR5QZ0fPURxz03A=
+github.com/gobuffalo/logger/v2 v2.0.1 h1:0+Nn5ttjB2V9G9vsImv+4c1BVgmLOHIZ18ykbnoWo1k=
+github.com/gobuffalo/logger/v2 v2.0.1/go.mod h1:VKjrMWUWvBALWBWttrMAUNBqcbooxR5QZ0fPURxz03A=
 github.com/gobuffalo/plush/v5 v5.0.11 h1:FlThobIUreYx8fM4pH2Sug8TLXfNtmhqj6JO1Qs5jT8=
 github.com/gobuffalo/plush/v5 v5.0.11/go.mod h1:C08u/VEqzzPBXFF/yqs40P/5Cvc/zlZsMzhCxXyWJmU=
 github.com/gobuffalo/refresh v1.13.3 h1:HYQlI6RiqWUf2yzCXvUHAYqm9M9/teVnox+mjzo/9rQ=

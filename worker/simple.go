@@ -26,10 +26,8 @@ func NewSimple() *Simple {
 func NewSimpleWithContext(ctx context.Context) *Simple {
 	ctx, cancel := context.WithCancel(ctx)
 
-	l := logger.New(logger.InfoLevel)
-
 	return &Simple{
-		Logger:   l,
+		Logger:   logger.Default(),
 		ctx:      ctx,
 		cancel:   cancel,
 		handlers: map[string]Handler{},

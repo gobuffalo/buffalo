@@ -124,6 +124,7 @@ func optionsWithDefaults(opts Options) Options {
 		}
 
 		opts.Logger = logger.New(opts.LogLvl)
+		logger.SetDefault(opts.Logger)
 	}
 
 	if opts.SessionStore == nil {

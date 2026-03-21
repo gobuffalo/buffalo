@@ -21,7 +21,7 @@ import (
 	"github.com/gobuffalo/logger/v2"
 )
 
-var plog = logger.New(logger.InfoLevel)
+var plog = logger.Default()
 
 const timeoutEnv = "BUFFALO_PLUGIN_TIMEOUT"
 

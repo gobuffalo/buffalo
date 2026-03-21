@@ -17,7 +17,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-var log logger.FieldLogger = logger.New(logger.InfoLevel)
+var log logger.FieldLogger = logger.Default()
 
 type templateRenderer struct {
 	*Engine

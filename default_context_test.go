@@ -16,7 +16,7 @@ import (
 func basicContext() DefaultContext {
 	return DefaultContext{
 		Context: context.Background(),
-		logger:  logger.New(logger.DebugLevel),
+		logger:  logger.Default(),
 		data:    newRequestData(),
 		flash:   &Flash{data: make(map[string][]string)},
 	}
